@@ -4,8 +4,8 @@ import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
-import { filterAsyncRoutes } from '@/utils/asyncRouter.js'
-import { asyncRoutes } from '../router/base.router'
+import { getAsyncRoutes } from '@/utils/asyncRouter.js'
+import { errorPageRoutes } from '@/router/base.router'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 const whiteList = ['/login'] // no redirect whitelist
 
@@ -33,12 +33,15 @@ router.beforeEach(async (to, from, next) => {
           // get user info
           await store.dispatch('user/getInfo')
           // 获取用户角色
-          const roles = await store.state.user.roles
-          // // 通过用户角色，获取到角色路由表
-          const accessRoutes = filterAsyncRoutes(asyncRoutes, roles)
-          // 动态添加路由到router内
-          await store.dispatch('user/addRoutes', accessRoutes)
-          router.addRoute(...accessRoutes)
+          const userRoute = await store.state.user.routes
+          // 判断store中是否存在需要添加的路由
+          if (userRoute && userRoute.length) {
+            const accessRoutes = getAsyncRoutes(await store.state.user.routes)
+            // 动态添加路由到router内
+            router.addRoute(...accessRoutes)
+            // 动态添加错误页面路由
+            router.addRoute(...errorPageRoutes)
+          }
           next({ ...to, replace: true })
         } catch (error) {
           // remove token and go to login page to re-login

@@ -26,12 +26,6 @@ export default {
 </script>
 
 <style scoped>
-.app-main {
-  /*50 = navbar  */
-  height: calc(100vh - 90px);
-  position: relative;
-  overflow: hidden;
-}
 .fixed-header.app-main {
   height: calc(100vh - 125px);
 }

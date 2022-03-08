@@ -28,41 +28,6 @@ import apps from '@/router/app.router'
 * all roles can be accessed
 */
 
-// 定义需要动态添加的路由
-export const asyncRoutes = [
-  {
-    path: '/permission',
-    component: Layout,
-    redirect: '/permission/page',
-    alwaysShow: true,
-    name: 'Permission',
-    meta: {
-      title: 'Permission',
-      roles: ['admin', 'editor'] // 普通的用户角色
-    },
-    children: [
-      {
-        path: 'page',
-        component: () => import('@/views/permission/page.vue'),
-        name: 'PagePermission',
-        meta: {
-          title: 'Page',
-          roles: ['editor'] //  editor角色的用户才能访问该页面
-        }
-      },
-      {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
-        meta: {
-          title: 'Role',
-          roles: ['admin'] //  admin角色的用户才能访问该页面
-        }
-      }
-    ]
-  }
-]
-
 // 定义公共路由
 export const constantRoutes = [
   {
@@ -77,7 +42,10 @@ export const constantRoutes = [
     path: '/login',
     name: 'login',
     component: () => import('@/views/login/index')
-  },
+  }
+]
+
+export const errorPageRoutes = [
   {
     path: '*',
     component: Layout,

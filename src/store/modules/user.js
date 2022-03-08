@@ -6,7 +6,6 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: [],
     routes: []
   }
 }
@@ -26,9 +25,6 @@ const mutations = {
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
-  SET_ROLES: (state, roles) => {
-    state.roles = roles
-  },
   SET_ROUTES: (state, routes) => {
     state.routes = routes
   }
@@ -41,10 +37,6 @@ const actions = {
     setToken(token)
   },
 
-  addRoutes ({ commit }, routes) {
-    commit('SET_ROUTES', routes)
-  },
-
   // get user info
   getInfo ({ commit, state }) {
     return new Promise((resolve, reject) => {
@@ -55,10 +47,10 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar, roles } = data
+        const { name, avatar, routes } = data
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
-        commit('SET_ROLES', roles)
+        commit('SET_ROUTES', routes)
         resolve(data)
       }).catch(error => {
         reject(error)

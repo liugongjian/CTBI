@@ -35,4 +35,7 @@ export default {
 .el-header {
   padding: 0px;
 }
+.el-main {
+  height: calc(100vh - 50px);
+}
 </style>
