@@ -11,5 +11,12 @@ const createRouter = () => new VueRouter({
   routes: constantRoutes
 })
 const router = createRouter()
-
+export function resetRouter () {
+  const newRouter = new VueRouter({
+    mode: 'history',
+    base: process.env.BASE_URL,
+    scrollBehavior: () => ({ y: 0 })
+  })
+  router.matcher = newRouter.matcher // the relevant part
+}
 export default router

@@ -1,0 +1,356 @@
+{
+  "Pie": {
+    "tooltip": {
+      "trigger": "item"
+    },
+    "legend": {
+      "top": "5%",
+      "left": "center"
+    },
+    "series": [
+      {
+        "name": "Access From",
+        "type": "pie",
+        "radius": ["40%", "70%"],
+        "avoidLabelOverlap": false,
+        "itemStyle": {
+          "borderRadius": 10,
+          "borderColor": "#fff",
+          "borderWidth": 2
+        },
+        "label": {
+          "show": false,
+          "position": "center"
+        },
+        "emphasis": {
+          "label": {
+            "show": true,
+            "fontSize": "40",
+            "fontWeight": "bold"
+          }
+        },
+        "labelLine": {
+          "show": false
+        },
+        "data": [
+          { "value": 1048, "name": "Search Engine" },
+          { "value": 735, "name": "Direct" },
+          { "value": 580, "name": "Email" },
+          { "value": 484, "name": "Union Ads" },
+          { "value": 300, "name": "Video Ads" }
+        ]
+      }
+    ]
+  },
+  "InstrumentPanel": {
+    "series": [
+      {
+        "type": "gauge",
+        "min": 0,
+        "max": 100,
+        "axisLine": {
+          "lineStyle": {
+            "width": 18,
+            "color": [
+              [0.3, "#67e0e3"],
+              [0.7, "#37a2da"],
+              [1, "#fd666d"]
+            ]
+          }
+        },
+        "splitLine": {
+          "length": 15,
+          "distance": 10,
+          "lineStyle": {
+            "width": 2,
+            "color": "#999"
+          }
+        },
+        "axisTick": {
+          "show": true,
+          "distance": 10
+        },
+        "axisLabel": {
+          "show": true,
+          "distance": 25,
+          "color": "#999",
+          "fontSize": 16
+        },
+        "pointer": {
+          "offsetCenter": [0, 0],
+          "width": 8,
+          "icon": "triangle",
+          "length": "60%",
+          "itemStyle": {
+            "color": "#000",
+            "borderWidth": 1,
+            "borderColor": "#67e0e3"
+          }
+        },
+        "anchor": {
+          "show": true,
+          "size": 16,
+          "offsetCenter": [0, 0],
+          "icon": "roundRect",
+          "itemStyle": {
+            "borderWidth": 5,
+            "borderColor": "#67e0e3",
+            "color": "#fd666d"
+          }
+        },
+        "detail": {
+          "valueAnimation": true,
+          "fontSize": 50,
+          "offsetCenter": [0, "70%"]
+        },
+        "data": [
+          {
+            "value": 60,
+            "name": "仪表盘"
+          }
+        ]
+      }
+    ]
+  },
+  "Line": {
+    "tooltip": {
+      "trigger": "axis",
+      "axisPointer": {
+        "type": "cross"
+      }
+    },
+    "color": ["#6700D8", "#FF0034", "#56A3F1", "#FF917C"],
+    "legend": {
+      "data": ["Email", "Union Ads", "Video Ads", "Direct", "Search Engine"],
+      "orient": "horizontal",
+      "left": "middle",
+      "top": 0
+    },
+    "xAxis": {
+      "type": "category",
+      "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    },
+    "yAxis": {
+      "type": "value"
+    },
+    "series": [
+      {
+        "name": "Email",
+        "type": "line",
+        "stack": "Total",
+        "data": [120, 132, 101, 134, 90, 230, 210]
+      },
+      {
+        "name": "Union Ads",
+        "type": "line",
+        "stack": "Total",
+        "data": [220, 182, 191, 234, 290, 330, 310]
+      },
+      {
+        "name": "Video Ads",
+        "type": "line",
+        "stack": "Total",
+        "data": [150, 232, 201, 154, 190, 330, 410]
+      },
+      {
+        "name": "Direct",
+        "type": "line",
+        "stack": "Total",
+        "data": [320, 332, 301, 334, 390, 330, 320]
+      }
+    ]
+  },
+  "Aear": {
+    "tooltip": {
+      "trigger": "axis",
+      "axisPointer": {
+        "type": "cross"
+      }
+    },
+    "color": ["#6700D8", "#FF0034", "#56A3F1", "#FF917C"],
+    "legend": {
+      "data": ["Email", "Union Ads", "Video Ads", "Direct", "Search Engine"],
+      "orient": "horizontal",
+      "left": "middle",
+      "top": 0
+    },
+    "xAxis": {
+      "type": "category",
+      "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    },
+    "yAxis": {
+      "type": "value"
+    },
+    "series": [
+      {
+        "name": "Email",
+        "type": "line",
+        "areaStyle": {
+          "color": "#670018"
+        },
+        "stack": "Total",
+        "data": [120, 132, 101, 134, 90, 230, 210]
+      },
+      {
+        "name": "Union Ads",
+        "type": "line",
+        "areaStyle": {
+          "color": "#FF0034"
+        },
+        "stack": "Total",
+        "data": [220, 182, 191, 234, 290, 330, 310]
+      },
+      {
+        "name": "Video Ads",
+        "type": "line",
+        "areaStyle": {
+          "color": "#56A3F1"
+        },
+        "stack": "Total",
+        "data": [150, 232, 201, 154, 190, 330, 410]
+      },
+      {
+        "name": "Direct",
+        "type": "line",
+        "areaStyle": {
+          "color": "#FF917C"
+        },
+        "stack": "Total",
+        "data": [320, 332, 301, 334, 390, 330, 320]
+      }
+    ]
+  },
+  "Radar": {
+    "color": ["#6700D8", "#FF0034", "#56A3F1", "#FF917C"],
+    "legend": {
+      "orient": "horizontal",
+      "left": "middle",
+      "top": 0
+    },
+    "tooltip": {
+      "trigger": "item"
+    },
+    "radar": [
+      {
+        "indicator": [
+          { "name": "Indicator1", "max": 120 },
+          { "name": "Indicator2", "max": 10 },
+          { "name": "Indicator3", "max": 1 },
+          { "name": "Indicator4", "max": 100 },
+          { "name": "Indicator5", "max": 2000 },
+          { "name": "Indicator6", "max": 10 }
+        ],
+        "shape": "",
+        "axisName": {
+          "color": "#333"
+        },
+        "splitArea": {
+          "areaStyle": {
+            "color": ["#5ee7df", "#5ee7cf", "#5ee7bf", "#5ee7af", "#5ee79f"],
+            "shadowColor": "rgba(0, 0, 0, 0.2)",
+            "shadowBlur": 10
+          }
+        },
+        "axisLine": {
+          "lineStyle": {
+            "color": "rgba(255, 255, 0, 1)"
+          }
+        },
+        "splitLine": {
+          "lineStyle": {
+            "color": "rgba(255, 255, 250, 0.8)"
+          }
+        }
+      }
+    ],
+    "series": [
+      {
+        "type": "radar",
+        "emphasis": {
+          "lineStyle": {
+            "width": 4
+          }
+        },
+        "data": [
+          {
+            "value": [100, 8, 0.4, 50, 2000, 1],
+            "name": "Data A"
+          },
+          {
+            "value": [60, 5, 0.3, 80, 500, 10],
+            "name": "Data B"
+          }
+        ]
+      }
+    ]
+  },
+  "Histogram": {
+    "tooltip": {},
+    "xAxis": {
+      "name": "类型",
+      "data": [
+        "苹果",
+        "香蕉",
+        "橘子",
+        "葡萄",
+        "苹果1",
+        "香蕉1",
+        "橘子1",
+        "葡萄1"
+      ],
+      "show": true
+    },
+    "yAxis": {
+      "name": "数量",
+      "show": true,
+      "axisLine": {
+        "show": true
+      }
+    },
+    "series": [
+      {
+        "name": "销量",
+        "type": "bar",
+        "data": [50, 60, 45, 30, 50, 60, 45, 30],
+        "itemStyle": {
+          "normal": {
+            "color": {
+              "type": "linear",
+              "x": 0,
+              "y": 0,
+              "x2": 0,
+              "y2": 1,
+              "colorStops": [
+                {
+                  "offset": 0,
+                  "color": "#ff0000"
+                },
+                {
+                  "offset": 0.5,
+                  "color": "#ff6666"
+                },
+                {
+                  "offset": 0.7,
+                  "color": "#ffb3b3"
+                },
+                {
+                  "offset": 1,
+                  "color": "#ffe5e5"
+                }
+              ],
+              "global": false
+            },
+            "label": {
+              "show": true,
+              "position": "top",
+              "textStyle": {
+                "color": "#01ccfe",
+                "fontSize": 16
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

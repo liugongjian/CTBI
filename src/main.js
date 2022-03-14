@@ -17,9 +17,17 @@ import initDialogs from '@/config/dialog'
 initDialogs(Vue)
 // 引入echarts
 import * as echarts from 'echarts'
-
+// v-echarts
+import VECharts from 'vue-echarts'
+Vue.component('v-chart', VECharts)
 // 以阻止 vue 在启动时生成生产提示
 Vue.config.productionTip = false
+
+// 全局组件自动注册 icons中全局注册了svg-icon组件，打开此注册时需去除
+// import '@/components/autoRegister'
+// 自定义指令
+import directive from '@/utils/directive'
+directive(Vue)
 
 Vue.use(ElementUI)
 Vue.prototype.$echarts = echarts
