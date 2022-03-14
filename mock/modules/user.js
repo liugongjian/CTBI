@@ -16,33 +16,12 @@ const users = {
     name: 'Super Admin',
     routes: [
       {
-        'path': '/permission',
-        'component': 'Layout',
-        'redirect': '/permission/page',
-        'alwaysShow': 'true',
-        'name': 'Permission',
+        'path': '/index',
+        'component': 'permission/index',
+        'name': 'PagePermission',
         'meta': {
-          'title': 'Permission'
-        },
-        'children': [
-          {
-            'path': 'page',
-            'component': 'permission/page',
-            'name': 'PagePermission',
-            'meta': {
-              'title': 'Page'
-            }
-          },
-          {
-            'path': 'role',
-            'component': 'permission/role',
-            'name': 'RolePermission',
-            'meta': {
-              'title': 'Role'
-            }
-          }
-        ]
-      }
+          'title': 'Page'
+        } }
     ]
   },
   'editor-token': {

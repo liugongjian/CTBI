@@ -6,24 +6,15 @@
       type="text"
       @click="showDialog"
     >点击打开弹窗</el-button>
-    <my-chart />
-    <DoughnutChart :pie-data="chartData" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import myChart from '../../components/RadarChart/index.vue'
-import DoughnutChart from '../../components/DoughnutChart/index.vue'
 export default {
   name: 'Home',
-  components: {
-    myChart,
-    DoughnutChart
-  },
   data () {
     return {
-      chartData: {}
     }
   },
   computed: {

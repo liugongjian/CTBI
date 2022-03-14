@@ -6,6 +6,7 @@ import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import { getAsyncRoutes } from '@/utils/asyncRouter.js'
 import { errorPageRoutes } from '@/router/base.router'
+import { resetRouter } from '../router'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 const whiteList = ['/login'] // no redirect whitelist
 
@@ -38,10 +39,33 @@ router.beforeEach(async (to, from, next) => {
           if (userRoute && userRoute.length) {
             const accessRoutes = getAsyncRoutes(await store.state.user.routes)
             // 动态添加路由到router内
-            router.addRoute(...accessRoutes)
-            // 动态添加错误页面路由
-            router.addRoute(...errorPageRoutes)
+            const singleRoutes = []
+            const multiRoutes = []
+            for (var item of accessRoutes) {
+              if (item.children && item.children.length) {
+                multiRoutes.push(item)
+              } else {
+                singleRoutes.push(item)
+              }
+            }
+            if (singleRoutes.length) {
+              // 当不存在子路由时，将动态路由添加到'/'路由的子路由中
+              if (router.options.routes[0].path === '/') {
+                router.options.routes[0].children.push(...singleRoutes)
+                const routes = router.options.routes
+                // 重置路由 防止动态添加路由重复
+                resetRouter()
+                for (var ele of routes) {
+                  router.addRoute(ele)
+                }
+              }
+            }
+            if (multiRoutes.length) {
+              router.addRoute(...multiRoutes)
+            }
           }
+          // 动态添加错误页面路由
+          router.addRoute(...errorPageRoutes)
           next({ ...to, replace: true })
         } catch (error) {
           // remove token and go to login page to re-login
