@@ -20,32 +20,27 @@
       :h="item.h"
       :i="item.i"
     >
-      <!-- <component
-        :is="item.is"
-        :option="demoJSON[item.type]"
-        autoresize
-      /> -->
-      <div
-        style="width: 100%; height: 100%;cursor: pointer;"
-        @click="getOptions(item.i)"
-      >
-        <v-chart
+      <LazyRender @click="getOptions(item.i)">
+        <component
+          :is="item.is"
           :ref="item.i"
           :option="item.option"
           autoresize
         />
-      </div>
+      </LazyRender>
     </grid-item>
   </grid-layout>
 </template>
 
 <script>
 import VueGridLayout from 'vue-grid-layout'
+import LazyRender from '@/components/LazyRender'
 import store from '@/store'
 export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem
+    GridItem: VueGridLayout.GridItem,
+    LazyRender
   },
   computed: {
     layout () {
