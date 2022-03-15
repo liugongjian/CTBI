@@ -37,8 +37,8 @@
 import Widget from '@/components/FieldWidget/Widget.vue'
 import settings from './settings.vue'
 import store from '@/store'
-const DragPos = { 'x': 1, 'y': 1, 'w': 1, 'h': 1, 'i': null }
-const mouseXY = { 'x': 1, 'y': 1 }
+const mouseXY = { 'x': 0, 'y': 0 }
+const DragPos = { 'x': 0, 'y': 0, 'w': 12, 'h': 2, 'i': null }
 const demoJSON = {
   'pie': {
     'tooltip': {

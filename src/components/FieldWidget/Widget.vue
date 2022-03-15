@@ -53,7 +53,9 @@ export default {
   },
   methods: {
     getOptions (e) {
-      this.$bus.$emit('reloadOption', { id: e, option: this.$refs[e][0].getOption() })
+      if (this.$refs[e] && this.$refs[e].length > 0) {
+        this.$bus.$emit('reloadOption', { id: e, option: this.$refs[e][0].getOption() })
+      }
     },
     reflashChart (e) {
       const temp = store.state.app.layout.find(item => {
@@ -75,5 +77,6 @@ export default {
 .grid-item-box {
   box-sizing: border-box;
   touch-action: none;
+  overflow: hidden;
 }
 </style>
