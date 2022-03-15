@@ -52,5 +52,7 @@ export default {
   width: 100%;
   height: 100%;
   cursor: pointer;
+  box-sizing: border-box;
+  touch-action: none;
 }
 </style>
