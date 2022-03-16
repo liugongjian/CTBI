@@ -6,16 +6,16 @@
         <el-header class="header-tool">
           <div
             v-for="(item, index) in toolList"
-            :key="item + index"
+            :key="item.is + index"
             class="droppable-element"
             draggable="true"
             unselectable="on"
-            @click.stop="addItem(item)"
+            @click.stop="addItem(item.is, item.type)"
             @drag.stop="drag"
-            @dragend="dragend($event, item)"
+            @dragend="dragend($event, item.is, item.type)"
           >
             <svg-icon
-              :icon-class="`chart_${item}`"
+              :icon-class="`chart_${item.type}`"
               style="font-size: 30px;"
             />
           </div>
@@ -220,7 +220,8 @@ export default {
     return {
       // layout: [],
       layoutIndex: 100,
-      toolList: ['bar', 'line', 'pie'],
+      // toolList: ['bar', 'line', 'pie', 'table'],
+      toolList: [{ is: 'v-chart', type: 'bar' }, { is: 'v-chart', type: 'line' }, { is: 'v-chart', type: 'pie' }, { is: 'v-chart', type: 'table' }],
       demoJSON
     }
   },
@@ -241,7 +242,7 @@ export default {
     }, false)
   },
   methods: {
-    addItem: function (type) {
+    addItem: function (is, type) {
       // Add a new item. It must have a unique key!
       this.layout.push({
         x: (this.layout.length * 2) % (this.colNum || 12),
@@ -249,7 +250,7 @@ export default {
         w: 12,
         h: 2,
         i: type + this.layoutIndex,
-        is: 'v-chart',
+        is,
         option: demoJSON[type]
       })
       // Increment the counter to ensure key is always unique.
@@ -287,7 +288,7 @@ export default {
         }
       }
     },
-    dragend: function (e, type) {
+    dragend: function (e, is, type) {
       const parentRect = document.getElementById('content').getBoundingClientRect()
       let mouseInGrid = false
       if (((mouseXY.x > parentRect.left) && (mouseXY.x < parentRect.right)) && ((mouseXY.y > parentRect.top) && (mouseXY.y < parentRect.bottom))) {
@@ -303,7 +304,7 @@ export default {
         w: 12,
         h: 2,
         i: type + String(DragPos.i) + new Date().getTime(),
-        is: 'v-chart',
+        is,
         option: demoJSON[type]
       })
       this.$refs.gridlayout.$children[0].dragEvent('dragend', type + String(DragPos.i) + new Date().getTime(), DragPos.x, DragPos.y, 2, 12)
