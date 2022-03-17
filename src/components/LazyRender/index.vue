@@ -29,6 +29,8 @@ export default {
   created () {
     if (!this.immediately) {
       this.syncLoader()
+    } else {
+      this.show = true
     }
   },
   methods: {
