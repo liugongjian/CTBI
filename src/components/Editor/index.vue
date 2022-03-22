@@ -19,7 +19,7 @@
 <script>
 // import sqlFormatter from "./util/util";
 import { format } from 'sql-formatter'
-import SqlEditor from './sqlEditor/index.vue'
+import SqlEditor from '../SqlEditor/index.vue'
 
 export default {
   name: 'Editor',

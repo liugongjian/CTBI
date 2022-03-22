@@ -24,7 +24,7 @@ Vue.component('v-chart', VECharts)
 Vue.config.productionTip = false
 
 // 全局组件自动注册 icons中全局注册了svg-icon组件，打开此注册时需去除
-// import '@/components/autoRegister'
+import '@/components/autoRegister'
 // 自定义指令
 import directive from '@/utils/directive'
 directive(Vue)

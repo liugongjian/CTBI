@@ -18,6 +18,7 @@ require('codemirror/mode/sql/sql')
 require('codemirror/addon/hint/show-hint')
 require('codemirror/addon/hint/sql-hint')
 export default {
+  name: 'SqlEditor',
   props: {
     // 接收父组件传值
     value: {
@@ -59,6 +60,7 @@ export default {
 
   mounted () {
     const mime = 'text/x-mariadb'
+    // let theme = 'ambiance' //设置主题，不设置的会使用默认主题
     this.editor = CodeMirror.fromTextArea(this.$refs.mycode, {
       value: this.value, // 初始内容
       mode: mime, // 选择对应代码编辑器的语言，这里选择数据库
@@ -69,7 +71,7 @@ export default {
       cursorHeight: 1, // 光标高度
       lineWrapping: true, // 是否换行
       readOnly: false, // 是否只读
-      // theme: 'ambiance', // 设置主题主题地址：https://codemirror.net/theme/
+      // theme: ambiance, // 设置主题
       // autofocus: true, // 自动聚焦
       extraKeys: { Ctrl: 'autocomplete' }, // 自定义快捷键
       hintOptions: { // 自定义提示选项
