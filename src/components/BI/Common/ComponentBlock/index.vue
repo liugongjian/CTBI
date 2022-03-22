@@ -1,6 +1,6 @@
 <template>
   <div
-    style="width:100%;height:100%;"
+    style="width:100%;height:100%;display: flex;flex-direction: column;"
     @click="clickHandler"
   >
     <div
@@ -34,6 +34,7 @@ export default {
   },
   methods: {
     clickHandler () {
+      // 通知右侧重新渲染
       this.$bus.$emit('reloadOption', this.option.i)
     }
   }

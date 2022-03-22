@@ -29,7 +29,8 @@ export default {
   data () {
     return {
       layoutIndex: 100,
-      toolList: [{ is: 'v-chart', type: 'bar' }, { is: 'v-chart', type: 'line' }, { is: 'v-chart', type: 'pie' }, { is: 'TableChart', type: 'table' }]
+      // { is: 'v-chart', type: 'bar' }, { is: 'v-chart', type: 'line' },
+      toolList: [{ is: 'v-chart', type: 'pie' }, { is: 'TableChart', type: 'table' }]
     }
   },
   computed: {
@@ -81,12 +82,16 @@ export default {
         parentRect = val
       })
       // ///////////////////////
+
+      // 判断拖拽点是否在画布内
       let mouseInGrid = false
       if (((mouseXY.x > parentRect.left) && (mouseXY.x < parentRect.right)) && ((mouseXY.y > parentRect.top) && (mouseXY.y < parentRect.bottom))) {
         mouseInGrid = true
       }
       // 防止指向问题
       const option = JSON.parse(JSON.stringify(template['empty']))
+
+      // 生成画布上的虚拟节点
       if (mouseInGrid === true && (this.layout.findIndex(item => item.i === 'drop')) === -1) {
         this.layout.push({
           x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 12) : 0,
@@ -98,6 +103,8 @@ export default {
           i: 'drop'
         })
       }
+
+      // 虚拟节点在画布上拖拽
       const index = this.layout.findIndex(item => item.i === 'drop')
       if (index !== -1) {
         const el = parentGridLayout.$children[index]
@@ -127,8 +134,9 @@ export default {
         parentRect = val
       })
       // ///////////////////////
-      let mouseInGrid = false
+
       // 判断拖拽是否在节点内部
+      let mouseInGrid = false
       if (((mouseXY.x > parentRect.left) && (mouseXY.x < parentRect.right)) && ((mouseXY.y > parentRect.top) && (mouseXY.y < parentRect.bottom))) {
         mouseInGrid = true
       }
