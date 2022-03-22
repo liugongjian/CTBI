@@ -1,0 +1,133 @@
+// 字体样式整合
+// 包含字体大小、权重、拆分、是否隐藏
+//
+.f-f-yahei {
+  font-family: Microsoft YaHei;
+}
+.f-s-8 {
+  font-size: 8px;
+}
+.f-s-12 {
+  font-size: 12px;
+}
+.f-s-14 {
+  font-size: 14px;
+}
+.f-s-16 {
+  font-size: 16px;
+}
+.f-s-18 {
+  font-size: 18px;
+}
+.f-s-20 {
+  font-size: 20px;
+}
+.f-s-24 {
+  font-size: 24px;
+}
+.f-s-25 {
+  font-size: 25px;
+}
+.f-s-26 {
+  font-size: 26px;
+}
+.f-s-28 {
+  font-size: 28px;
+}
+.f-s-30 {
+  font-size: 30px;
+}
+.f-s-32 {
+  font-size: 32px;
+}
+.f-s-35 {
+  font-size: 35px;
+}
+.f-s-36 {
+  font-size: 36px;
+}
+.f-s-46 {
+  font-size: 46px;
+}
+.f-s-50 {
+  font-size: 50px;
+}
+.f-w-normal {
+  font-weight: normal;
+}
+.f-w-400 {
+  font-weight: 400;
+}
+.f-w-500 {
+  font-weight: 500;
+}
+.f-w-600 {
+  font-weight: 600;
+}
+.f-w-b {
+  font-weight: bold;
+}
+.t-o-e {
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+}
+.t-o-c {
+  text-overflow: clip;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+}
+.l-c-1 {
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+.l-c-2 {
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+.l-c-3 {
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+.l-c-4 {
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+}
+.l-c-5 {
+  -webkit-line-clamp: 4;
+  line-clamp: 5;
+}
+.l-c-6 {
+  -webkit-line-clamp: 5;
+  line-clamp: 6;
+}
+.l-c-7 {
+  -webkit-line-clamp: 6;
+  line-clamp: 7;
+}
+.l-c-8 {
+  -webkit-line-clamp: 8;
+  line-clamp: 8;
+}
+.l-c-9 {
+  -webkit-line-clamp: 9;
+  line-clamp: 9;
+}
+.l-c-10 {
+  -webkit-line-clamp: 10;
+  line-clamp: 10;
+}
+.t-i-2 {
+  text-indent: 2em;
+}
+.w-b-a {
+  word-break: break-all;
+}
+.f-r {
+  float: right;
+}
+.c-p {
+  cursor: pointer;
+}
