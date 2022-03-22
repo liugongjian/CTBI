@@ -29,8 +29,8 @@ export default {
   data () {
     return {
       layoutIndex: 100,
-      // { is: 'v-chart', type: 'bar' }, { is: 'v-chart', type: 'line' },
-      toolList: [{ is: 'v-chart', type: 'pie' }, { is: 'TableChart', type: 'table' }]
+      // { is: 'v-chart', type: 'bar' }, { is: 'v-chart', type: 'line' }, { is: 'TableChart', type: 'table' }
+      toolList: [{ is: 'v-chart', type: 'pie' }]
     }
   },
   computed: {
