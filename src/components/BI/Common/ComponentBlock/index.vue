@@ -4,14 +4,15 @@
     @click="clickHandler"
   >
     <div
-      v-show="option.option.Basic.Title.isShow"
-      :style="{color: option.option.Basic.Title.color || '#333' }"
-    >{{ option.option.Basic.Title.text }}</div>
+      v-show="$getParameter(option, 'Basic.Title.isShow')"
+      :style="{color: $getParameter(option, 'Basic.Title.color') || '#333' }"
+    >{{ $getParameter(option, 'Basic.Title.text') }}</div>
     <slot v-if="onLoad" />
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'ComponentBlock',
   props: {

@@ -71,6 +71,7 @@ export default {
     },
     // 画布拖拽中事件
     drag: function (e, type, is) {
+      // 获取画布节点
       let parentGridLayout = null
       this.$emit('getGridLayout', val => {
         parentGridLayout = val
@@ -79,12 +80,13 @@ export default {
       this.$emit('getParentRect', val => {
         parentRect = val
       })
+      // ///////////////////////
       let mouseInGrid = false
       if (((mouseXY.x > parentRect.left) && (mouseXY.x < parentRect.right)) && ((mouseXY.y > parentRect.top) && (mouseXY.y < parentRect.bottom))) {
         mouseInGrid = true
       }
       // 防止指向问题
-      const option = JSON.parse(JSON.stringify(template[type]))
+      const option = JSON.parse(JSON.stringify(template['empty']))
       if (mouseInGrid === true && (this.layout.findIndex(item => item.i === 'drop')) === -1) {
         this.layout.push({
           x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 12) : 0,
@@ -115,6 +117,7 @@ export default {
     },
     // 拖拽结束后事件
     dragend: function (e, type, is) {
+      // 获取画布节点
       let parentGridLayout = null
       this.$emit('getGridLayout', val => {
         parentGridLayout = val
@@ -123,6 +126,7 @@ export default {
       this.$emit('getParentRect', val => {
         parentRect = val
       })
+      // ///////////////////////
       let mouseInGrid = false
       // 判断拖拽是否在节点内部
       if (((mouseXY.x > parentRect.left) && (mouseXY.x < parentRect.right)) && ((mouseXY.y > parentRect.top) && (mouseXY.y < parentRect.bottom))) {
