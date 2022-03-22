@@ -23,7 +23,7 @@
       <ComponentBlock :option="item">
         <component
           :is="item.is"
-          :option="item.option.ComponentOption"
+          :option="$optionUtils[item.option.ComponentOption.ChartType](item.option.ComponentOption)"
           :identify="item.i"
           autoresize
         />

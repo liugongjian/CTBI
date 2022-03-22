@@ -15,6 +15,20 @@
           />
         </div>
       </el-collapse-item>
+      <el-collapse-item
+        title="图标样式"
+        name="2"
+      >
+        <div
+          v-for="(item,name,key) in option['ComponentOption']"
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option"
+          />
+        </div>
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>

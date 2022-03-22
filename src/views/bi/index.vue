@@ -35,9 +35,11 @@ export default {
     Widget, Settings, Tools
   },
   methods: {
+    // 获取画布父元素
     getGridLayout (callback) {
       callback(this.$refs.gridLayout.$children[0])
     },
+    // 获取画布边界
     getParentRect (callback) {
       const domRec = document.querySelector('#content').getBoundingClientRect()
       callback({
