@@ -28,7 +28,7 @@
 <script>
 import Settings from './Settings/index.vue'
 import Widget from './Widget/index.vue'
-import Tools from './tools'
+import Tools from './Tools'
 
 export default {
   components: {
