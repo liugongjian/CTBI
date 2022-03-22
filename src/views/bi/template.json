@@ -297,5 +297,9 @@
         }
       ]
     }
+  },
+  "empty": {
+    "Basic": {},
+    "ComponentOption": {}
   }
 }
