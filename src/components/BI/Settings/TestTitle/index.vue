@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-checkbox
-      v-model="testShow"
+      v-model="option.Basic.TestTitle.testShow"
       label="改变Title组件的多选框"
     />
   </div>
@@ -15,11 +15,6 @@ export default {
     option: {
       type: Object,
       default: () => { }
-    }
-  },
-  computed: {
-    testShow () {
-      return this.$getParameter(this.option, 'Basic.TestTitle.testShow')
     }
   }
 }

@@ -4,9 +4,9 @@
     @click="clickHandler"
   >
     <div
-      v-show="$getParameter(option, 'Basic.Title.isShow')"
-      :style="{color: $getParameter(option, 'Basic.Title.color') || '#333' }"
-    >{{ $getParameter(option, 'Basic.Title.text') }}</div>
+      v-show="$optionUtils.getParameter(option, 'Basic.Title.isShow')"
+      :style="{color: $optionUtils.getParameter(option, 'Basic.Title.color') || '#333' }"
+    >{{ $optionUtils.getParameter(option, 'Basic.Title.text') }}</div>
     <slot v-if="onLoad" />
   </div>
 </template>

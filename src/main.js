@@ -23,8 +23,8 @@ Vue.component('v-chart', VECharts)
 // 以阻止 vue 在启动时生成生产提示
 Vue.config.productionTip = false
 // 全局定义方法
-import { getParameter } from '@/utils/optionUtils'
-Vue.prototype.$getParameter = getParameter
+import optionUtils from '@/utils/optionUtils'
+Vue.prototype.$optionUtils = optionUtils
 
 // 全局组件自动注册 icons中全局注册了svg-icon组件，打开此注册时需去除
 import '@/components/autoRegister'
