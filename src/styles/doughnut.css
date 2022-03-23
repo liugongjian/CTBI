@@ -1,0 +1,8 @@
+#container{
+ width: 60%;
+  height: 400px; 
+  overflow: hidden;
+  resize: both;
+  box-shadow: 0 0 1px 1px #ddd;
+  border-radius: 2px;
+}

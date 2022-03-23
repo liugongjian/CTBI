@@ -1,0 +1,99 @@
+{
+  "pie": {
+    "Basic": {
+      "Title": {
+        "text": "饼图",
+        "color": "#333",
+        "show": true
+      },
+      "TestTitle": {
+        "testShow": false
+      },
+      "Mark": {
+        "show": false,
+        "position": "onChart",
+        "text": ""
+      },
+      "Footer": {
+        "show": false,
+        "text": ""
+      }
+    },
+    "ComponentOption": {
+      "Legend": {
+        "show": true,
+        "top": "auto",
+        "left": "center",
+        "orient": "horizontal"
+      },
+      "ChartType": "pie",
+      "ChartRadius": [
+        "0%",
+        "45%"
+      ]
+    }
+  },
+  "table": {
+    "Basic": {
+      "Title": {
+        "text": "表格",
+        "color": "#333",
+        "show": true
+      },
+      "TestTitle": {
+        "testShow": false
+      },
+      "Mark": {
+        "text": "",
+        "position": "afterTitle",
+        "show": false
+      },
+      "Footer": {
+        "show": false,
+        "text": ""
+      }
+    },
+    "ComponentOption": {
+      "labelProp": [
+        {
+          "label": "日期",
+          "prop": "date"
+        },
+        {
+          "label": "姓名",
+          "prop": "name"
+        },
+        {
+          "label": "省份",
+          "prop": "province"
+        },
+        {
+          "label": "市区",
+          "prop": "city"
+        },
+        {
+          "label": "地址",
+          "prop": "address"
+        },
+        {
+          "label": "邮编",
+          "prop": "zip"
+        }
+      ],
+      "detailsData": [
+        {
+          "date": "2016-05-02",
+          "name": "王小虎",
+          "province": "上海",
+          "city": "普陀区",
+          "address": "上海市普陀区金沙江路 1518 弄",
+          "zip": 200333
+        }
+      ]
+    }
+  },
+  "empty": {
+    "Basic": {},
+    "ComponentOption": {}
+  }
+}
