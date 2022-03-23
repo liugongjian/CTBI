@@ -53,11 +53,11 @@ export default {
   },
   methods: {
     // 图标点击添加组件到画布
-    addItem: function (type, is) {
+    addItem (type, is) {
       const i = type + this.layoutIndex + new Date().getTime()
       // 防止指向问题
       const option = JSON.parse(JSON.stringify(template[type]))
-      this.layout.push({
+      this.addLayout({
         x: (this.layout.length * 2) % (this.colNum || 12),
         y: this.layout.length + (this.colNum || 12), // puts it at the bottom
         w: 12,
@@ -66,12 +66,18 @@ export default {
         is: is,
         option
       })
-      // 呼叫右侧设置栏变更
-      this.$bus.$emit('reloadOption', i)
       this.layoutIndex++
     },
+    addLayout (obj) {
+      const temp = JSON.parse(JSON.stringify(obj))
+      // 更新当前id
+      store.dispatch('app/updateLayoutId', temp.i)
+      this.layout.push(temp)
+      // 呼叫右侧设置栏变更
+      this.$bus.$emit('reloadOption', obj.i)
+    },
     // 画布拖拽中事件
-    drag: function (e, type, is) {
+    drag (e, type, is) {
       // 获取画布节点
       let parentGridLayout = null
       this.$emit('getGridLayout', val => {
@@ -123,7 +129,7 @@ export default {
       }
     },
     // 拖拽结束后事件
-    dragend: function (e, type, is) {
+    dragend (e, type, is) {
       // 获取画布节点
       let parentGridLayout = null
       this.$emit('getGridLayout', val => {
@@ -146,7 +152,7 @@ export default {
         const i = type + String(DragPos.i) + new Date().getTime()
         // 防止指向问题
         const option = JSON.parse(JSON.stringify(template[type]))
-        this.layout.push({
+        this.addLayout({
           x: DragPos.x,
           y: DragPos.y,
           w: 12,
@@ -156,8 +162,6 @@ export default {
           option
         })
         parentGridLayout.dragEvent('dragend', i, DragPos.x, DragPos.y, 2, 12)
-        // 呼叫右侧设置栏变更
-        this.$bus.$emit('reloadOption', i)
       }
     }
   }

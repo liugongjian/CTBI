@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="editor-object-container">
     半径比例
     <el-select
       v-model="option.ComponentOption.ChartRadius[1]"

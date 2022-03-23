@@ -1,7 +1,8 @@
 const state = {
   menuPath: localStorage.getItem('menuPath')
     ? localStorage.getItem('menuPath') : '/home',
-  layout: []
+  layout: [],
+  currentLayoutId: ''
 }
 
 const mutations = {
@@ -11,6 +12,10 @@ const mutations = {
   },
   UPDATELAYOUT: (state, layout) => {
     state.layout = [...layout]
+  },
+  UPDATELAYOUTID: (state, id) => {
+    state.currentLayoutId = id
+    console.log(state.currentLayoutId)
   }
 }
 const actions = {
@@ -19,6 +24,9 @@ const actions = {
   },
   updateLayout ({ commit }, layout) {
     commit('UPDATELAYOUT', layout)
+  },
+  updateLayoutId ({ commit }, id) {
+    commit('UPDATELAYOUTID', id)
   }
 }
 

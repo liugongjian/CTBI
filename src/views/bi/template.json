@@ -8,6 +8,15 @@
       },
       "TestTitle": {
         "testShow": false
+      },
+      "Remark": {
+        "isShow": false,
+        "position": "onChart",
+        "text": ""
+      },
+      "Endnodes":{
+        "isShow":false,
+        "text":""
       }
     },
     "ComponentOption": {
@@ -33,6 +42,15 @@
       },
       "TestTitle": {
         "testShow": false
+      },
+      "Remark":{
+        "text":"",
+        "position":"afterTitle",
+        "isShow":false
+      },
+      "Endnodes":{
+        "isShow":false,
+        "text":""
       }
     },
     "ComponentOption": {

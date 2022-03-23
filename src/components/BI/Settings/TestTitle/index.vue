@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="editor-object-container">
     <el-checkbox
       v-model="option.Basic.TestTitle.testShow"
       label="改变Title组件的多选框"

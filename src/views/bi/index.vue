@@ -12,7 +12,10 @@
         </el-header>
         <!-- 画布主体 -->
         <el-main class="main-layout">
-          <div id="content">
+          <div
+            id="content"
+            @dragover="dragover"
+          >
             <widget ref="gridLayout" />
           </div>
         </el-main>
@@ -28,14 +31,17 @@
 <script>
 import Settings from './Settings/index.vue'
 import Widget from './Widget/index.vue'
-import Tools from './Tools'
+import Tools from './tools'
 
 export default {
   components: {
     Widget, Settings, Tools
   },
   methods: {
-    // 获取画布父元素
+    dragover (event) {
+      event.preventDefault()
+      event.dataTransfer.dropEffect = 'move'
+    },
     getGridLayout (callback) {
       callback(this.$refs.gridLayout.$children[0])
     },

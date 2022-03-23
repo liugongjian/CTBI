@@ -23,7 +23,7 @@
       <ComponentBlock :option="item">
         <component
           :is="item.is"
-          :option="$optionUtils[item.option.ComponentOption.ChartType](item.option.ComponentOption)"
+          :option="$optionUtils.transferOption(item.option.ComponentOption, item.option.ComponentOption.ChartType)"
           :identify="item.i"
           autoresize
         />
@@ -74,6 +74,7 @@ export default {
 .vue-grid-item .no-drag {
   height: 100%;
   width: 100%;
+  touch-action: none;
 }
 .vue-grid-item .minMax {
   font-size: 12px;

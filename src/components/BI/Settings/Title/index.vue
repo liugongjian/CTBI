@@ -1,21 +1,20 @@
 <template>
-  <div>
+  <div class="editor-object-container">
     <el-checkbox
-      v-model="option['Basic']['Title'].isShow"
+      v-model="option.Basic.Title.isShow"
       label="显示主标题"
     />
     <el-checkbox
-      v-if="option['Basic']['TestTitle'].testShow"
+      v-if="option.Basic.TestTitle.testShow"
       label="测试显示"
     />
-    <el-input
-      v-model="option['Basic']['Title'].text"
-      :disabled="!option['Basic']['Title'].isShow"
-    />
-    <el-input
-      v-model="option['Basic']['Title'].color"
-      :disabled="!option['Basic']['Title'].isShow"
-    />
+    <div
+      class="editor-item-container"
+      :class="{'box-disabled':!option.Basic.Title.isShow}"
+    >
+      <el-input v-model="option.Basic.Title.text" />
+      <el-input v-model="option.Basic.Title.color" />
+    </div>
   </div>
 </template>
 

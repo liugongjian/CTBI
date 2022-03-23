@@ -1,15 +1,18 @@
 <template>
-  <div>
+  <div class="editor-object-container">
     可视化样式
-    <el-radio-group v-model="option.ComponentOption.ChartRadius[0]">
-      <el-radio label="0%">饼图</el-radio>
-      <el-radio :label="rangLabel">环形图</el-radio>
-    </el-radio-group>
+    <div>
+      <el-radio-group v-model="option.ComponentOption.ChartRadius[0]">
+        <el-radio label="0%">饼图</el-radio>
+        <el-radio :label="rangLabel">环形图</el-radio>
+      </el-radio-group>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  name: 'PieChartType',
   props: {
     option: {
       type: Object,
