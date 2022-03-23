@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="editor-object-container">
     <div>
       显示图例
     </div>
-    <div>
+    <div class="editor-item-container">
       <el-button
         type="text"
         @click="changeHandler('none')"

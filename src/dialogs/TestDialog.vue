@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import dialogMinix from '@/dialogs/dialogMinix'
+import dialogMinix from '@/dialogs/dialogMixin'
 
 export default {
   name: 'TestDialog',

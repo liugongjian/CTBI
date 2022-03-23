@@ -4,10 +4,19 @@
       "Title": {
         "text": "饼图",
         "color": "#333",
-        "isShow": true
+        "show": true
       },
       "TestTitle": {
         "testShow": false
+      },
+      "Mark": {
+        "show": false,
+        "position": "onChart",
+        "text": ""
+      },
+      "Footer": {
+        "show": false,
+        "text": ""
       }
     },
     "ComponentOption": {
@@ -29,10 +38,19 @@
       "Title": {
         "text": "表格",
         "color": "#333",
-        "isShow": true
+        "show": true
       },
       "TestTitle": {
         "testShow": false
+      },
+      "Mark": {
+        "text": "",
+        "position": "afterTitle",
+        "show": false
+      },
+      "Footer": {
+        "show": false,
+        "text": ""
       }
     },
     "ComponentOption": {

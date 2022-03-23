@@ -11,7 +11,7 @@ const dialogs = require.context('@/dialogs', true, /.vue$/)
 export const initDialogs = (Vue) => {
   let instance
   Vue.prototype.$dialog = {
-    show: function show (dialog, data = {}, callback = undefined) {
+    show: function (dialog, data = {}, callback = undefined) {
       data = Object.assign({ dialogVisible: true, callback: callback }, data)
       let Contructor
       if (typeof dialog === 'string') {
@@ -31,6 +31,11 @@ export const initDialogs = (Vue) => {
       }).$mount() // 渲染组件
       // 注意，需要将组价挂载到body上，因为在切换组件时，提示框还有延迟，不会立刻消失
       document.body.appendChild(instance.$el)
+    },
+    close: function () {
+      if (instance) {
+        instance.distroy()
+      }
     }
   }
 }

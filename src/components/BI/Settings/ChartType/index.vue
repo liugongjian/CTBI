@@ -1,7 +1,7 @@
 <template>
   <!-- 转向特定的组件, 可拓展组件类型 -->
   <component
-    :is="option.ComponentOption.ChartType + 'ChartType'"
+    :is="`${option.ComponentOption.ChartType}ChartType`"
     :option="option"
   />
 </template>

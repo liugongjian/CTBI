@@ -23,7 +23,7 @@
       <ComponentBlock :option="item">
         <component
           :is="item.is"
-          :option="$optionUtils[item.option.ComponentOption.ChartType](item.option.ComponentOption)"
+          :option="$optionUtils.transferOption(item.option.ComponentOption, item.option.ComponentOption.ChartType)"
           :identify="item.i"
           autoresize
         />
@@ -51,7 +51,8 @@ export default {
 <style scoped>
 .vue-grid-item:not(.vue-grid-placeholder) {
   background: #fff;
-  border: 1px solid black;
+  box-sizing: border-box;
+  touch-action: none;
 }
 .vue-grid-item .resizing {
   opacity: 0.9;
@@ -74,6 +75,7 @@ export default {
 .vue-grid-item .no-drag {
   height: 100%;
   width: 100%;
+  touch-action: none;
 }
 .vue-grid-item .minMax {
   font-size: 12px;

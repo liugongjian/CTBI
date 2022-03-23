@@ -8,7 +8,7 @@ export default {
    */
   getParameter: function (item, keys) {
     let result = null
-    if (item || keys) {
+    if (item && keys) {
       const keyList = keys.split('.')
       // 无可用键直接退出
       if (keyList.length > 0) {
@@ -38,6 +38,19 @@ export default {
     for (var key in obj) {
       delete obj[key]
     }
+  },
+
+  /**
+   * 数据合并方法转发
+   * @param {Object} obj 需转换的组件数据
+   * @param {String} componentType 组件类型，同方法名对应
+   * @returns
+   */
+  transferOption (obj, componentType) {
+    if (typeof this[componentType] === 'function') {
+      return this[componentType](obj)
+    }
+    return obj
   },
 
   /**
