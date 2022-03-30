@@ -1,43 +1,43 @@
 <template>
   <div
     :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId},'com-block']"
-    @click="clickHandler"
+    @click.stop="clickHandler"
   >
     <div
-      v-show="$optionUtils.getParameter(option, 'Basic.Title.show')"
-      :style="{color: $optionUtils.getParameter(option, 'Basic.Title.color') || '#333' }"
-    >{{ $optionUtils.getParameter(option, 'Basic.Title.text') }}
+      v-show="getParameter(option, 'theme.Basic.Title.show')"
+      :style="{color: getParameter(option, 'theme.Basic.Title.color') || '#333' }"
+    >{{ getParameter(option, 'theme.Basic.Title.text') }}
       <!-- 当位置选择为紧跟标题时 -->
       <el-tooltip
-        v-show="$optionUtils.getParameter(option, 'Basic.Mark.show') && $optionUtils.getParameter(option, 'Basic.Mark.position') === 'afterTitle'"
+        v-show="getParameter(option, 'theme.Basic.Mark.show') && getParameter(option, 'theme.Basic.Mark.position') === 'afterTitle'"
         placement="bottom"
         effect="light"
       >
         <div
           slot="content"
-          v-html="$optionUtils.getParameter(option, 'Basic.Mark.text')"
+          v-html="getParameter(option, 'theme.Basic.Mark.text')"
         />
         <i class="el-icon-warning-outline m-l-10" />
       </el-tooltip>
     </div>
     <!-- 当位置选择为图表上方时 -->
     <div
-      v-show="$optionUtils.getParameter(option, 'Basic.Mark.show') && $optionUtils.getParameter(option, 'Basic.Mark.position') === 'onChart'"
+      v-show="getParameter(option, 'theme.Basic.Mark.show') && getParameter(option, 'theme.Basic.Mark.position') === 'onChart'"
       class="rich-text-content"
-      v-html="$optionUtils.getParameter(option, 'Basic.Mark.text')"
+      v-html="getParameter(option, 'theme.Basic.Mark.text')"
     />
     <slot v-if="onLoad" />
     <!-- 尾注内容 -->
     <div
-      v-show="$optionUtils.getParameter(option, 'Basic.Footer.show')"
+      v-show="getParameter(option, 'theme.Basic.Footer.show')"
       class="rich-text-content"
-      v-html="$optionUtils.getParameter(option, 'Basic.Footer.text')"
+      v-html="getParameter(option, 'theme.Basic.Footer.text')"
     />
   </div>
 </template>
 
 <script>
-
+import { getParameter } from '@/utils/optionUtils'
 export default {
   name: 'ComponentBlock',
   props: {
@@ -58,6 +58,7 @@ export default {
     })
   },
   methods: {
+    getParameter,
     clickHandler () {
       // 更新当前id
       this.$store.dispatch('app/updateLayoutId', this.option.i)

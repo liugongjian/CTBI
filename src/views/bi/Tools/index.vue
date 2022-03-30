@@ -1,17 +1,17 @@
 <template>
   <div class="header-tool">
     <div
-      v-for="(item, index) in toolList"
-      :key="item.type + index"
+      v-for="(item,name, index) in toolList"
+      :key="name + index"
       class="droppable-element"
       draggable="true"
       unselectable="on"
-      @click.stop="addItem(item.type, item.is)"
-      @drag.stop="drag($event, item.type, item.is)"
-      @dragend="dragend($event, item.type, item.is)"
+      @click.stop="addItem(name,item)"
+      @drag.stop="drag($event, name,item)"
+      @dragend="dragend($event, name,item)"
     >
       <svg-icon
-        :icon-class="`chart_${item.type}`"
+        :icon-class="name"
         style="font-size: 30px;"
       />
     </div>
@@ -21,7 +21,6 @@
 <script>
 const DragPos = { 'x': 1, 'y': 1, 'w': 1, 'h': 1, 'i': null }
 const mouseXY = { 'x': 1, 'y': 1 }
-import template from '@/views/bi/template'
 import store from '@/store'
 
 export default {
@@ -31,7 +30,117 @@ export default {
     return {
       layoutIndex: 100,
       // { is: 'v-chart', type: 'bar' }, { is: 'v-chart', type: 'line' }, { is: 'TableChart', type: 'table' }
-      toolList: [{ is: 'v-chart', type: 'pie' }]
+      toolList: {
+        'PieChart': {
+          'field': {},
+          'theme': {
+            'Basic': {
+              'Title': {
+                'text': '饼图',
+                'color': '#333',
+                'show': true,
+                'testShow': false // 根据TestTitle组件的显隐
+              },
+              'TestTitle': {
+                'testShow': false
+              },
+              'Mark': {
+                'show': false,
+                'position': 'onChart',
+                'text': ''
+              },
+              'Footer': {
+                'show': false,
+                'text': ''
+              }
+            },
+            'ComponentOption': {
+              'Legend': {
+                'show': true,
+                'top': 'auto',
+                'left': 'center',
+                'orient': 'horizontal'
+              },
+              'ChartRadius': [
+                '0%',
+                '45%'
+              ]
+            }
+          },
+          'advance': {},
+          'dataSource': {}
+        },
+        'BarChart': {
+          'field': {},
+          'theme': {
+            'Basic': {
+              'Title': {
+                'text': '柱形图',
+                'color': '#333',
+                'show': true,
+                'testShow': false
+              },
+              'TestTitle': {
+                'testShow': false
+              },
+              'Mark': {
+                'text': '',
+                'position': 'afterTitle',
+                'show': false
+              },
+              'Footer': {
+                'show': false,
+                'text': ''
+              }
+            },
+            'ComponentOption': {
+              'Legend': {
+                'show': true,
+                'top': 'auto',
+                'left': 'center',
+                'orient': 'horizontal'
+              }
+            }
+          },
+          'advance': {},
+          'dataSource': {}
+        },
+        'LineChart': {
+          'field': {},
+          'theme': {
+            'Basic': {
+              'Title': {
+                'text': '折线图',
+                'color': '#333',
+                'show': true,
+                'testShow': false
+              },
+              'TestTitle': {
+                'testShow': false
+              },
+              'Mark': {
+                'text': '',
+                'position': 'afterTitle',
+                'show': false
+              },
+              'Footer': {
+                'show': false,
+                'text': ''
+              }
+            },
+            'ComponentOption': {
+              'Legend': {
+                'show': true,
+                'top': 'auto',
+                'left': 'center',
+                'orient': 'horizontal'
+              }
+            }
+          },
+          'advance': {},
+          'dataSource': {}
+        }
+      }
     }
   },
   computed: {
@@ -54,17 +163,17 @@ export default {
   },
   methods: {
     // 图标点击添加组件到画布
-    addItem (type, is) {
-      const i = type + this.layoutIndex + new Date().getTime()
+    addItem (name, item) {
+      const i = name + this.layoutIndex + new Date().getTime()
       // 防止指向问题
-      const option = JSON.parse(JSON.stringify(template[type]))
+      const option = JSON.parse(JSON.stringify(item))
       this.addLayout({
         x: (this.layout.length * 2) % (this.colNum || 12),
         y: this.layout.length + (this.colNum || 12), // puts it at the bottom
         w: 12,
         h: 2,
         i,
-        is: is,
+        is: name,
         option
       })
       this.layoutIndex++
@@ -78,7 +187,7 @@ export default {
       this.$bus.$emit('reloadOption', obj.i)
     },
     // 画布拖拽中事件
-    drag (e, type, is) {
+    drag (e, name, item) {
       // 获取画布节点
       let parentGridLayout = null
       this.$emit('getGridLayout', val => {
@@ -96,7 +205,7 @@ export default {
         mouseInGrid = true
       }
       // 防止指向问题
-      const option = JSON.parse(JSON.stringify(template['empty']))
+      const option = JSON.parse(JSON.stringify(item))
 
       // 生成画布上的虚拟节点
       if (mouseInGrid === true && (this.layout.findIndex(item => item.i === 'drop')) === -1) {
@@ -105,7 +214,7 @@ export default {
           y: this.layout.length > 0 ? this.layout.length + (this.colNum || 12) : 0, // puts it at the bottom
           w: 12,
           h: 2,
-          is,
+          is: name,
           option,
           i: 'drop'
         })
@@ -130,7 +239,7 @@ export default {
       }
     },
     // 拖拽结束后事件
-    dragend (e, type, is) {
+    dragend (e, name, item) {
       // 获取画布节点
       let parentGridLayout = null
       this.$emit('getGridLayout', val => {
@@ -150,16 +259,16 @@ export default {
       if (mouseInGrid === true) {
         parentGridLayout.dragEvent('dragend', 'drop', DragPos.x, DragPos.y, 2, 12)
         this.layout = this.layout.filter(obj => obj.i !== 'drop')
-        const i = type + String(DragPos.i) + new Date().getTime()
+        const i = name + String(DragPos.i) + new Date().getTime()
         // 防止指向问题
-        const option = JSON.parse(JSON.stringify(template[type]))
+        const option = JSON.parse(JSON.stringify(item))
         this.addLayout({
           x: DragPos.x,
           y: DragPos.y,
           w: 12,
           h: 2,
           i,
-          is,
+          is: name,
           option
         })
         parentGridLayout.dragEvent('dragend', i, DragPos.x, DragPos.y, 2, 12)

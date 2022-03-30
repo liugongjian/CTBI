@@ -2,7 +2,7 @@
   <div class="editor-object-container">
     半径比例
     <el-select
-      v-model="option.ComponentOption.ChartRadius[1]"
+      v-model="option[1]"
       placeholder="请选择"
       @change="changeHandler"
     >
@@ -22,8 +22,8 @@ export default {
   components: {},
   props: {
     option: {
-      type: Object,
-      default: () => { }
+      type: Array,
+      default: () => []
     }
   },
   data () {
@@ -58,11 +58,11 @@ export default {
   methods: {
     changeHandler (n, o) {
       // 重新设置图形直径，如果内径为0则不做控制，否则默认直径-20
-      if (this.option.ComponentOption.ChartRadius[0] !== '0%') {
+      if (this.option[0] !== '0%') {
         // 去除百分号，将直径转成数字 直径最小35%
-        const maxLabel = this.option.ComponentOption.ChartRadius[1]
+        const maxLabel = this.option[1]
         const maxNumber = Number.parseInt(maxLabel.replace('%'))
-        this.option.ComponentOption.ChartRadius[0] = (maxNumber - 20) + '%'
+        this.option[0] = (maxNumber - 20) + '%'
       }
     }
   }

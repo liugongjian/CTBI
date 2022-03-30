@@ -1,12 +1,12 @@
 <template>
   <div class="editor-object-container">
     <el-checkbox
-      v-model="option.Basic.Mark.show"
+      v-model="option.show"
       label="备注"
     />
     <div
       class="editor-item-container"
-      :class="{'box-disabled':!option.Basic.Mark.show}"
+      :class="{'box-disabled':!option.show}"
     >
       <div><span>备注内容：</span>
         <span
@@ -16,7 +16,7 @@
         />
       </div>
       <div><span>位置</span>
-        <el-radio-group v-model="option.Basic.Mark.position">
+        <el-radio-group v-model="option.position">
           <el-radio label="afterTitle">紧跟标题</el-radio>
           <el-radio label="onChart">图表上方</el-radio>
         </el-radio-group>
@@ -38,11 +38,11 @@ export default {
     // 显示修改备注的弹窗
     showDialog () {
       const that = this
-      this.$dialog.show('RTDialog', { text: that.option.Basic.Mark.text, title: '备注内容' }, this.callback)
+      this.$dialog.show('RTDialog', { text: that.option.text, title: '备注内容' }, this.callback)
     },
     // 获取修改后的内容
     callback (val) {
-      this.option.Basic.Mark.text = val
+      this.option.text = val
     }
   }
 

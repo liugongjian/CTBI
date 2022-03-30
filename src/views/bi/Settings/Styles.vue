@@ -11,7 +11,7 @@
         >
           <component
             :is="name"
-            :option="option"
+            :option="option['Basic'][name]"
           />
         </div>
       </el-collapse-item>
@@ -25,7 +25,7 @@
         >
           <component
             :is="name"
-            :option="option"
+            :option="option['ComponentOption'][name]"
           />
         </div>
       </el-collapse-item>

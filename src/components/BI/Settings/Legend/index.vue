@@ -50,27 +50,27 @@ export default {
   methods: {
     changeHandler (type) {
       if (type === 'none') {
-        this.option.ComponentOption.Legend.show = false
+        this.option.show = false
       } else if (type === 'top') {
-        this.option.ComponentOption.Legend.show = true
-        this.option.ComponentOption.Legend.top = 'auto'
-        this.option.ComponentOption.Legend.left = 'center'
-        this.option.ComponentOption.Legend.orient = 'horizontal'
+        this.option.show = true
+        this.option.top = 'auto'
+        this.option.left = 'center'
+        this.option.orient = 'horizontal'
       } else if (type === 'bottom') {
-        this.option.ComponentOption.Legend.show = true
-        this.option.ComponentOption.Legend.top = 'bottom'
-        this.option.ComponentOption.Legend.left = 'center'
-        this.option.ComponentOption.Legend.orient = 'horizontal'
+        this.option.show = true
+        this.option.top = 'bottom'
+        this.option.left = 'center'
+        this.option.orient = 'horizontal'
       } else if (type === 'left') {
-        this.option.ComponentOption.Legend.show = true
-        this.option.ComponentOption.Legend.top = 'center'
-        this.option.ComponentOption.Legend.left = 'auto'
-        this.option.ComponentOption.Legend.orient = 'vertical'
+        this.option.show = true
+        this.option.top = 'center'
+        this.option.left = 'auto'
+        this.option.orient = 'vertical'
       } else if (type === 'right') {
-        this.option.ComponentOption.Legend.show = true
-        this.option.ComponentOption.Legend.top = 'center'
-        this.option.ComponentOption.Legend.left = 'right'
-        this.option.ComponentOption.Legend.orient = 'vertical'
+        this.option.show = true
+        this.option.top = 'center'
+        this.option.left = 'right'
+        this.option.orient = 'vertical'
       }
     }
   }

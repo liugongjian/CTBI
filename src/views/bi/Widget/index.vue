@@ -23,7 +23,6 @@
       <ComponentBlock :option="item">
         <component
           :is="item.is"
-          :option="$optionUtils.transferOption(item.option.ComponentOption, item.option.ComponentOption.ChartType)"
           :identify="item.i"
           autoresize
         />
