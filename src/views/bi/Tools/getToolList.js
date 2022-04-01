@@ -9,7 +9,10 @@ export function getToolList () {
   componentsContext.keys().forEach(item => {
     const itemName = path.basename(item, '.js')
     const componentConfig = componentsContext(item).default
-    dataJson[itemName] = componentConfig
+    // 过滤无需展示的组件
+    if (componentConfig.isShow) {
+      dataJson[itemName] = componentConfig
+    }
     return
   })
   return dataJson
