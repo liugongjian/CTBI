@@ -1,12 +1,12 @@
 <template>
   <div class="editor-object-container">
     <el-checkbox
-      v-model="option.Basic.Footer.show"
+      v-model="option.show"
       label="尾注"
     />
     <div
       class="editor-item-container"
-      :class="{'box-disabled':!option.Basic.Footer.show}"
+      :class="{'box-disabled':!option.show}"
     >
       <div><span>尾注内容：</span>
         <span
@@ -32,11 +32,11 @@ export default {
     // 显示修改尾注的弹窗
     showDialog () {
       const that = this
-      this.$dialog.show('RTDialog', { text: that.option.Basic.Footer.text, title: '尾注内容' }, this.callback)
+      this.$dialog.show('RTDialog', { text: that.option.text, title: '尾注内容' }, this.callback)
     },
     // 获取修改后的内容
     callback (val) {
-      this.option.Basic.Footer.text = val
+      this.option.text = val
     }
   }
 

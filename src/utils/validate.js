@@ -18,3 +18,17 @@ export function validUsername (str) {
   const valid_map = ['admin', 'editor']
   return valid_map.indexOf(str.trim()) >= 0
 }
+
+export function isNull (value) {
+  return (value === null) || (value === undefined)
+}
+
+export function isNotNull (value) {
+  return (value !== null) && (value !== undefined)
+}
+
+export function isEmptyStr (str) {
+  // return (str === undefined) || (!str) || (!/[^\s]/.test(str));
+  return (str === undefined) || (!str && (str !== 0) && (str !== '0')) || (!/[^\s]/.test(str))
+}
+

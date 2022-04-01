@@ -1,18 +1,17 @@
 <template>
-  <el-container>
-    <el-tabs
-      v-if="option"
-      v-model="activeNames"
-    >
+  <el-container v-if="JSON.stringify(option)!=='{}'">
+    <el-tabs v-model="activeNames">
       <el-tab-pane
         label="字段"
         name="1"
-      />
+      >
+        <data-panel :identify="layoutId" />
+      </el-tab-pane>
       <el-tab-pane
         label="样式"
         name="2"
       >
-        <Styles :option="option" />
+        <Styles :option="option.theme" />
       </el-tab-pane>
       <el-tab-pane
         label="高级"
@@ -26,10 +25,12 @@
 <script>
 import store from '@/store'
 import Styles from '@/views/bi/Settings/Styles'
+import DataPanel from './DataPanel.vue'
 export default {
   name: 'Settings',
   components: {
-    Styles
+    Styles,
+    DataPanel
   },
   data () {
     return {

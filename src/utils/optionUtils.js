@@ -1,103 +1,111 @@
+import store from '@/store'
+/**
+   * 对象清空工具
+   * @param {Object} obj
+   * @returns
+   */
+export const clearObj = function (obj) {
+  for (var key in obj) {
+    delete obj[key]
+  }
+}
 
-export default {
-  /**
+export const generateId = function () {
+  return Math.floor(Math.random() * 100000 + Math.random() * 20000 + Math.random() * 5000)
+}
+
+/**
+   * 深拷贝
+   * @param {Object} origin
+   * @returns {Object}
+   */
+export const deepClone = function (origin) {
+  if (origin === undefined) {
+    return undefined
+  }
+
+  return JSON.parse(JSON.stringify(origin))
+}
+
+/**
+   * 浅拷贝
+   * @param {Object} obj1
+   * @param {Object} obj2
+   * @returns {Object}
+   */
+export const overwriteObj = function (obj1, obj2) { /* 浅拷贝对象属性，obj2覆盖obj1 */
+  Object.keys(obj2).forEach(prop => {
+    obj1[prop] = obj2[prop]
+  })
+}
+
+export const addWindowResizeHandler = function (handler) {
+  const oldHandler = window.onresize
+  if (typeof window.onresize !== 'function') {
+    window.onresize = handler
+  } else {
+    window.onresize = function () {
+      oldHandler()
+      handler()
+    }
+  }
+}
+
+/**
    * 安全获取对象深度层级数据
    * @param {Object} item
    * @param {string} keys
    * @returns {Object}
    */
-  getParameter: function (item, keys) {
-    let result = null
-    if (item && keys) {
-      const keyList = keys.split('.')
-      // 无可用键直接退出
-      if (keyList.length > 0) {
-        if (item.option) {
-          result = item.option
-        } else {
-          result = item
-        }
-        // 可以换成递归
-        keyList.forEach(key => {
-          if (result === null || result === undefined) {
-            return
-          }
-          result = result[key]
-        })
+export const getParameter = function (item, keys) {
+  let result = null
+  if (item && keys) {
+    const keyList = keys.split('.')
+    // 无可用键直接退出
+    if (keyList.length > 0) {
+      if (item.option) {
+        result = item.option
+      } else {
+        result = item
       }
-    }
-    return result
-  },
-
-  /**
-   * 对象清空工具
-   * @param {Object} obj
-   * @returns
-   */
-  clearObj (obj) {
-    for (var key in obj) {
-      delete obj[key]
-    }
-  },
-
-  /**
-   * 数据合并方法转发
-   * @param {Object} obj 需转换的组件数据
-   * @param {String} componentType 组件类型，同方法名对应
-   * @returns
-   */
-  transferOption (obj, componentType) {
-    if (typeof this[componentType] === 'function') {
-      return this[componentType](obj)
-    }
-    return obj
-  },
-
-  /**
-   * 饼图的数据合并，生成echarts可识别的参数
-   * 这里最好做合并工作，最好不要直接赋值
-   * @param {Object} obj
-   * @returns {Object}
-   */
-  pie (obj) {
-    return {
-      'tooltip': obj.Tooltip,
-      'legend': obj.Legend,
-      'series': [
-        {
-          'type': obj.ChartType,
-          'radius': obj.ChartRadius,
-          'data': [
-            {
-              'value': 1048,
-              'name': 'Search Engine'
-            },
-            {
-              'value': 735,
-              'name': 'Direct'
-            },
-            {
-              'value': 580,
-              'name': 'Email'
-            },
-            {
-              'value': 484,
-              'name': 'Union Ads'
-            },
-            {
-              'value': 300,
-              'name': 'Video Ads'
-            }
-          ],
-          'emphasis': {
-            'itemStyle': {
-              'shadowBlur': 10,
-              'shadowOffsetX': 0,
-              'shadowColor': 'rgba(0, 0, 0, 0.5)'
-            }
-          }
+      // 可以换成递归
+      keyList.forEach(key => {
+        if (result === null || result === undefined) {
+          return
         }
-      ]
+        result = result[key]
+      })
     }
   }
+  return result
+}
+
+/**
+   * 通过id获取vuex中的layout数据
+   * @param {string} identify
+   * @returns {Object}
+   */
+export const getLayoutById = function (identify) {
+  const layout = store.state.app.layout
+  const obj = layout.find(item => {
+    return item.i === identify
+  })
+  return obj
+}
+
+/**
+   * 通过id获取vuex中的layout数据
+   * @param {string} identify
+   * @returns {Object}
+   */
+export const getLayoutOptionById = function (identify) {
+  const layout = store.state.app.layout
+  const obj = layout.find(item => {
+    return item.i === identify
+  })
+  if (obj && JSON.stringify(obj) !== '{}') {
+    return obj.option
+  }
+  console.warn(`获取 ${identify} 组件配置信息为空`)
+  return {}
 }

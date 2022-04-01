@@ -1,7 +1,7 @@
 <template>
   <div class="editor-object-container">
     <el-checkbox
-      v-model="option.Basic.TestTitle.testShow"
+      v-model="option.testShow"
       label="改变Title组件的多选框"
     />
   </div>

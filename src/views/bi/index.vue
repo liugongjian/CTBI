@@ -1,6 +1,9 @@
 <template>
   <el-container>
-    <el-header />
+    <el-header>
+      <!-- 设置栏 -->
+      <Dashboard />
+    </el-header>
     <el-container>
       <el-container>
         <!-- 工具栏 -->
@@ -32,10 +35,17 @@
 import Settings from './Settings/index.vue'
 import Widget from './Widget/index.vue'
 import Tools from './Tools'
-
+import Dashboard from './Dashboard'
 export default {
   components: {
-    Widget, Settings, Tools
+    Widget, Settings, Tools, Dashboard
+  },
+  mounted () {
+    // 获取本地layout，进行画布初始化
+    if (localStorage.getItem('layout')) {
+      const layout = JSON.parse(localStorage.getItem('layout'))
+      this.$store.state.app.layout = layout
+    }
   },
   methods: {
     dragover (event) {

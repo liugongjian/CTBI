@@ -11,12 +11,12 @@
         >
           <component
             :is="name"
-            :option="option"
+            :option="option['Basic'][name]"
           />
         </div>
       </el-collapse-item>
       <el-collapse-item
-        title="图标样式"
+        title="图表样式"
         name="2"
       >
         <div
@@ -25,7 +25,7 @@
         >
           <component
             :is="name"
-            :option="option"
+            :option="option['ComponentOption'][name]"
           />
         </div>
       </el-collapse-item>
