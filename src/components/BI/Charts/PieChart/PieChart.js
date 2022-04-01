@@ -1,7 +1,22 @@
 // 饼图配置项信息
+/**
+ * type: {
+ *    indicator: 指标,
+ *    table: 表格,
+ *    trend: 趋势，
+ *    comparator: 比较
+ *    distribution: 分布
+ *    relation: 关系
+ *    space: 空间
+ *    sequence: 时序
+ *    storyline: 故事线
+ *    other: 其他
+ *  }
+ * */
+
 export default {
-  'type': '', // 组件类型
-  'isShow': true, // 是否展示该组件
+  'type': 'distribution', // 组件类型, 用于管理组件类型集合,例如：指标、表格、趋势
+  'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
   'version': '', // 版本号
   'field': {}, // 字段
   'theme': { // 样式组件、配置合集
