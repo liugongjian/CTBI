@@ -11,8 +11,10 @@
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
+import barMixins from '@/components/BI/mixins/barMixins'
 export default {
   name: 'BarChart',
+  mixins: [barMixins],
   props: {
     identify: {
       type: String,

@@ -11,8 +11,10 @@
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
+import lineMixins from '@/components/BI/mixins/lineMixins'
 export default {
   name: 'LineChart',
+  mixins: [lineMixins],
   props: {
     identify: {
       type: String,

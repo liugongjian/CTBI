@@ -12,8 +12,10 @@
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
+import pieMixins from '@/components/BI/mixins/pieMixins'
 export default {
   name: 'PieChart',
+  mixins: [pieMixins],
   props: {
     identify: {
       type: String,

@@ -16,7 +16,7 @@
         </div>
       </el-collapse-item>
       <el-collapse-item
-        title="图标样式"
+        title="图表样式"
         name="2"
       >
         <div

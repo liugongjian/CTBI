@@ -22,125 +22,14 @@
 const DragPos = { 'x': 1, 'y': 1, 'w': 1, 'h': 1, 'i': null }
 const mouseXY = { 'x': 1, 'y': 1 }
 import store from '@/store'
-
+import { getToolList } from './getToolList'
 export default {
   name: 'Tools',
   components: {},
   data () {
     return {
       layoutIndex: 100,
-      // { is: 'v-chart', type: 'bar' }, { is: 'v-chart', type: 'line' }, { is: 'TableChart', type: 'table' }
-      toolList: {
-        'PieChart': {
-          'field': {},
-          'theme': {
-            'Basic': {
-              'Title': {
-                'text': '饼图',
-                'color': '#333',
-                'show': true,
-                'testShow': false // 根据TestTitle组件的显隐
-              },
-              'TestTitle': {
-                'testShow': false
-              },
-              'Mark': {
-                'show': false,
-                'position': 'onChart',
-                'text': ''
-              },
-              'Footer': {
-                'show': false,
-                'text': ''
-              }
-            },
-            'ComponentOption': {
-              'Legend': {
-                'show': true,
-                'top': 'auto',
-                'left': 'center',
-                'orient': 'horizontal'
-              },
-              'ChartRadius': [
-                '0%',
-                '45%'
-              ]
-            }
-          },
-          'advance': {},
-          'dataSource': {}
-        },
-        'BarChart': {
-          'field': {},
-          'theme': {
-            'Basic': {
-              'Title': {
-                'text': '柱形图',
-                'color': '#333',
-                'show': true,
-                'testShow': false
-              },
-              'TestTitle': {
-                'testShow': false
-              },
-              'Mark': {
-                'text': '',
-                'position': 'afterTitle',
-                'show': false
-              },
-              'Footer': {
-                'show': false,
-                'text': ''
-              }
-            },
-            'ComponentOption': {
-              'Legend': {
-                'show': true,
-                'top': 'auto',
-                'left': 'center',
-                'orient': 'horizontal'
-              }
-            }
-          },
-          'advance': {},
-          'dataSource': {}
-        },
-        'LineChart': {
-          'field': {},
-          'theme': {
-            'Basic': {
-              'Title': {
-                'text': '折线图',
-                'color': '#333',
-                'show': true,
-                'testShow': false
-              },
-              'TestTitle': {
-                'testShow': false
-              },
-              'Mark': {
-                'text': '',
-                'position': 'afterTitle',
-                'show': false
-              },
-              'Footer': {
-                'show': false,
-                'text': ''
-              }
-            },
-            'ComponentOption': {
-              'Legend': {
-                'show': true,
-                'top': 'auto',
-                'left': 'center',
-                'orient': 'horizontal'
-              }
-            }
-          },
-          'advance': {},
-          'dataSource': {}
-        }
-      }
+      toolList: {}
     }
   },
   computed: {
@@ -160,6 +49,9 @@ export default {
       mouseXY.x = e.clientX
       mouseXY.y = e.clientY
     }, false)
+
+    // 获取json文件中的配置项信息
+    this.toolList = getToolList()
   },
   methods: {
     // 图标点击添加组件到画布
