@@ -1,12 +1,13 @@
 <template>
-  <div>
-    <el-button
-      type="primary"
+  <div class="bi-header-container">
+    <button
+      class="bi-header-btn default"
       @click="saveCanvas"
-    >保存</el-button>
-    <el-button
+    >保存</button>
+    <button
+      class="bi-header-btn default"
       @click="clearCanvas"
-    >清空</el-button>
+    >清空</button>
   </div>
 </template>
 
@@ -32,6 +33,3 @@ export default {
   }
 }
 </script>
-
-<style>
-</style>

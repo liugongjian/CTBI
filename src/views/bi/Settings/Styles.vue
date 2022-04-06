@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tab-pane-content">
     <el-collapse v-model="activeNames">
       <el-collapse-item
         title="基础信息"

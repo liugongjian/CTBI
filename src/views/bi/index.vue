@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header>
+    <el-header class="bi-header">
       <!-- 设置栏 -->
       <Dashboard />
     </el-header>
@@ -24,9 +24,9 @@
         </el-main>
       </el-container>
       <!-- 配置项 -->
-      <el-aside>
+      <div>
         <Settings />
-      </el-aside>
+      </div>
     </el-container>
   </el-container>
 </template>
@@ -36,6 +36,8 @@ import Settings from './Settings/index.vue'
 import Widget from './Widget/index.vue'
 import Tools from './Tools'
 import Dashboard from './Dashboard'
+// 导入样式
+import '@/views/bi/index.scss'
 export default {
   components: {
     Widget, Settings, Tools, Dashboard
@@ -72,19 +74,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.tool-header {
-  padding: 10px 0px;
-  border: 1px dotted;
-}
-.main-layout {
-  border: 1px dotted;
-  padding: 0px;
-  height: calc(100vh - 240px);
-  background: #f0f2f5;
-}
-#content {
-  height: 100%;
-  overflow-x: hidden;
-}
-</style>

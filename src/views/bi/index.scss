@@ -1,0 +1,122 @@
+.bi-header{
+  display: flex;
+  box-sizing: border-box;
+  background-color: #081126;
+  user-select: none;
+  position: relative;
+  height: 50px !important;
+  line-height: 50px;
+  color: #fff;
+  width: 100%;
+  .bi-header-container {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    .bi-header-btn {
+    min-width: 108px;
+    height: 26px;
+    border-radius: 20px;
+    border: 1px solid #2e74ff;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 24px;
+    &.default {
+      background: transparent;
+    }
+  }
+  }
+}
+.tool-header{
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  position: relative;
+  align-items: center;
+  background: #2d3240;
+  height: 48px !important;
+  border-right: 1px solid hsla(0,0%,85%,.15);
+  width: 100%;
+}
+.main-layout {
+  padding: 0px;
+  height: calc(100vh - 190px);
+}
+#content {
+  height: 100%;
+  overflow-x: hidden;
+}
+.setting-panel {
+  position: relative;
+  display: flex;
+  width: 100%;
+  .setting-panel-wrapper-fold{
+    width: 240px;
+    .tab-pane-content{
+      height: calc(100vh - 245px);
+      overflow: auto;
+    }
+  }
+  .setting-panel-wrapper-unfold{
+    width: 40px;
+    background-color: #242833;
+    .config-item{
+      cursor: pointer;
+      display: flex;
+      height: 60px;
+      line-height: 40px;
+      text-align: center;
+      letter-spacing: 3px;
+      color: #fff;
+      font-size: 12px;
+      &:hover{
+        color: #2e74ff;
+      }
+      span{
+        display: inline-block;
+        writing-mode: vertical-lr;
+      }
+    }
+  }
+  .change-chart-type-menu{
+    height: 48px;
+    line-height: 48px;
+    background: #2d3240;
+    color: #fff;
+    font-size: 14px;
+    padding: 0 12px;
+    border-bottom: 1px solid rgba(49, 39, 39, 0.15);
+    position: relative;
+    box-sizing: border-box;
+    .panel-icon{
+      position: absolute;
+      right: 12px;
+      display: inline-flex;
+      margin-top: 14px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all .2s ease;
+      transform: rotate(180deg);
+    }
+  }
+  .data-panel{
+    border-left: 1px solid hsla(0,0%,85%,.15);
+    background-color: #242833;
+    z-index: 1;
+    color: #fff;
+    max-width: 240px;
+    position: relative;
+  }
+  .data-panel-fold{
+    width: 180px;
+  }
+  .data-panel-unfold{
+    width: 40px;
+  }
+}
+
+
+
+
