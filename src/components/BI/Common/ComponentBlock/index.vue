@@ -1,8 +1,23 @@
 <template>
-  <div
-    :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId},'com-block']"
-    @click.stop="clickHandler"
-  >
+  <div :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId},'com-block']">
+
+    <!-- 菜单模块 -->
+    <el-dropdown
+      trigger="click"
+      size="small"
+      @command="handleCommand"
+    >
+      <span class="el-dropdown-link">
+        <svg-icon
+          icon-class="menu"
+          style="font-size: 15px;"
+        />
+      </span>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item command="delete">删除</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+    <!-- 菜单模块END -->
     <div
       v-show="getParameter(option, 'theme.Basic.Title.show')"
       :style="{color: getParameter(option, 'theme.Basic.Title.color') || '#333' }"
@@ -20,6 +35,7 @@
         <i class="el-icon-warning-outline m-l-10" />
       </el-tooltip>
     </div>
+
     <!-- 当位置选择为图表上方时 -->
     <div
       class="rich-text-editor"
@@ -65,6 +81,15 @@ export default {
       onLoad: false
     }
   },
+  created () {
+    const that = this
+    document.onkeydown = function (e) {
+      if (e.code === 'Backspace') {
+        // 删除vuex的layout中对应的组件信息
+        that.$store.dispatch('app/deleteLayoutById', that.option.i)
+      }
+    }
+  },
   mounted () {
     // 防止宽高计算未完成就开始渲染组件
     this.$nextTick(() => {
@@ -73,18 +98,22 @@ export default {
   },
   methods: {
     getParameter,
-    clickHandler () {
-      // 更新当前id
-      this.$store.dispatch('app/updateLayoutId', this.option.i)
-      // 通知右侧重新渲染
-      this.$bus.$emit('reloadOption', this.option.i)
+
+    // 下拉菜单方法
+    handleCommand (command) {
+      if (command === 'delete') {
+        // 删除vuex的layout中对应的组件信息
+        this.$store.dispatch('app/deleteLayoutById', this.option.i)
+      }
     }
+
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .com-block {
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
@@ -97,8 +126,20 @@ export default {
     border: 1px solid #468cff;
     box-shadow: 0 0 1px 1px #468cff !important;
   }
+  &:hover .el-dropdown .el-dropdown-link {
+    display: block;
+  }
+  .el-dropdown {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    .el-dropdown-link {
+      display: none;
+      cursor: pointer;
+    }
+  }
 }
-.rich-text-footer{
+.rich-text-footer {
   flex-shrink: 0;
 }
 .rich-text-editor {

@@ -10,24 +10,26 @@
     :margin="[10, 10]"
     :use-css-transforms="true"
   >
-
-    <grid-item
+    <div
       v-for="item in layout"
       :key="item.i"
-      :x="item.x"
-      :y="item.y"
-      :w="item.w"
-      :h="item.h"
-      :i="item.i"
+      @click.stop="clickHandler(item.i)"
     >
-      <ComponentBlock :option="item">
-        <component
-          :is="item.is"
-          :identify="item.i"
-          autoresize
-        />
-      </ComponentBlock>
-    </grid-item>
+      <grid-item
+        :x="item.x"
+        :y="item.y"
+        :w="item.w"
+        :h="item.h"
+        :i="item.i"
+      >
+        <ComponentBlock :option="item">
+          <component
+            :is="item.is"
+            :identify="item.i"
+          />
+        </ComponentBlock>
+      </grid-item>
+    </div>
   </grid-layout>
 </template>
 
@@ -43,6 +45,26 @@ export default {
   computed: {
     layout () {
       return store.state.app.layout
+    }
+  },
+  created () {
+    const that = this
+    document.onkeydown = function (e) {
+      if (e.code === 'Backspace') {
+        const id = store.state.app.currentLayoutId
+        if (id) {
+          // 删除vuex的layout中对应的组件信息
+          that.$store.dispatch('app/deleteLayoutById', id)
+        }
+      }
+    }
+  },
+  methods: {
+    clickHandler (id) {
+      // 更新当前id
+      this.$store.dispatch('app/updateLayoutId', id)
+      // 通知右侧重新渲染
+      this.$bus.$emit('reloadOption', id)
     }
   }
 }
