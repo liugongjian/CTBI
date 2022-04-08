@@ -46,6 +46,19 @@
         />
       </div>
     </div>
+    <!-- 图表类型 -->
+    <div class="rich-text-footer">
+      <div
+        class="rich-text-editor"
+        style="max-height:100px"
+      >
+
+        <div
+          v-show="getParameter(option, 'theme.Basic.ChartType.show')"
+          class="rich-text-content"
+        />
+      </div>
+    </div>
 
   </div>
 </template>
