@@ -41,7 +41,7 @@ router.beforeEach(async (to, from, next) => {
             // 动态添加路由到router内
             const singleRoutes = []
             const multiRoutes = []
-            for (var item of accessRoutes) {
+            for (const item of accessRoutes) {
               if (item.children && item.children.length) {
                 multiRoutes.push(item)
               } else {
@@ -55,13 +55,15 @@ router.beforeEach(async (to, from, next) => {
                 const routes = router.options.routes
                 // 重置路由 防止动态添加路由重复
                 resetRouter()
-                for (var ele of routes) {
-                  router.addRoute(ele)
-                }
+                routes.forEach(item => {
+                  router.addRoute(item)
+                })
               }
             }
             if (multiRoutes.length) {
-              router.addRoute(...multiRoutes)
+              multiRoutes.forEach(item => {
+                router.addRoute(item)
+              })
             }
           }
           // 动态添加错误页面路由

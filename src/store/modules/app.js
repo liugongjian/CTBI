@@ -15,6 +15,17 @@ const mutations = {
   },
   UPDATELAYOUTID: (state, id) => {
     state.currentLayoutId = id
+  },
+  DELETELAYOUTBYID: (state, id) => {
+    if (id) {
+      // 删除layout对应id的组件
+      state.layout.splice(
+        state.layout.findIndex((item) => item.i === id),
+        1
+      )
+      // 清空currentLayoutId
+      state.currentLayoutId = ''
+    }
   }
 }
 const actions = {
@@ -26,6 +37,9 @@ const actions = {
   },
   updateLayoutId ({ commit }, id) {
     commit('UPDATELAYOUTID', id)
+  },
+  deleteLayoutById ({ commit }, id) {
+    commit('DELETELAYOUTBYID', id)
   }
 }
 
