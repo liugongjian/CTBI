@@ -1,8 +1,8 @@
 /**
 {
   "author": "huanglulu",
-  "time": "2022/04/07",
-  "description": "词云组件"
+  "time": "2022/04/11",
+  "description": "百分比堆叠面积图组件"
 }
  * */
 // 仪表盘配置项信息
@@ -21,14 +21,14 @@
  *  }
  * */
 export default {
-  'type': 'distribution', // 组件类型, 用于管理组件类型集合，例如：指标、表格、趋势
+  'type': 'trend', // 组件类型, 用于管理组件类型集合，例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
   'version': '', // 版本号
   'field': {}, // 字段
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
-        'text': '词云图', // 标题名称
+        'text': '百分比堆叠面积图', // 标题名称
         'color': '#333', // 标题颜色
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
@@ -44,6 +44,9 @@ export default {
       'Footer': { // 尾注
         'show': false, // 是否显示尾注
         'text': ''// 尾注信息
+      },
+      'ChartType': { // 图表类型
+        'type': 'PercentStackedAreaChart' // 1 线图 2 面积图 3 堆积面积图 4 百分比堆叠面积图
       }
     },
     'ComponentOption': { // 图表样式
@@ -53,18 +56,6 @@ export default {
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
-      },
-      'WordCloudShape': { // 词云形状
-        'shape': 'rectangle' // 矩形  椭圆 三角形 爱心
-      },
-      'TextDirection': { // 词云形状
-        'vertical': false // 矩形  椭圆 三角形 爱心
-      },
-      'WordCloudTextSize': { // 词大小范围
-        'maxValue': 0, // 默认0
-        'minValue': 0, // 默认0
-        'isMaxValue': true, // 默认选中取度量最大值
-        'isMinValue': false // 默认未选中取度量最小值
       }
     }
   },

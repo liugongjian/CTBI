@@ -37,6 +37,9 @@ export default {
       'Footer': { // 尾注
         'show': false, // 是否显示尾注
         'text': ''// 尾注信息
+      },
+      'ChartType': { // 图表类型
+        'type': 'LineChart' // 线图 面积图 堆积面积图 百分比堆叠面积图
       }
     },
     'ComponentOption': { // 图表样式

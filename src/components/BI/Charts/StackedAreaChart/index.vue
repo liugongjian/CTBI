@@ -12,10 +12,10 @@
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
-import areaMixins from '@/components/BI/mixins/areaMixins'
+import stackedAreaMixins from '@/components/BI/mixins/stackedAreaMixins'
 export default {
-  name: 'AreaChart',
-  mixins: [areaMixins],
+  name: 'StackedAreaChart',
+  mixins: [stackedAreaMixins],
   props: {
     identify: {
       type: String,
@@ -26,7 +26,7 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
-      type: 'AreaChart', // 1 线图 2 面积图 3 堆积面积图 4 百分比堆叠面积图
+      type: 'StackedAreaChart', // 1 线图 2 面积图 3 堆积面积图 4 百分比堆叠面积图
       //   dataValue: null
       dataValue: [
         ['date', '价格', '数量'],
@@ -76,6 +76,15 @@ export default {
       this.getSeries()
       this.chartOption = {
         legend: componentOption.Legend,
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
         xAxis: {
           type: 'category'
         },

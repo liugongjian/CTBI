@@ -46,7 +46,7 @@ export default {
         'text': ''// 尾注信息
       },
       'ChartType': { // 图表类型
-        'type': '2' // 1 线图 2 面积图 3 堆积面积图 4 百分比堆叠面积图
+        'type': 'AreaChart' // 1 线图 2 面积图 3 堆积面积图 4 百分比堆叠面积图
       }
     },
     'ComponentOption': { // 图表样式
