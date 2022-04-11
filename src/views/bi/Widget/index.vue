@@ -26,7 +26,6 @@
           <component
             :is="item.is"
             :identify="item.i"
-            autoresize
           />
         </ComponentBlock>
       </grid-item>
@@ -48,10 +47,12 @@ export default {
       return store.state.app.layout
     }
   },
-  created () {
+  mounted () {
     const that = this
     document.onkeydown = function (e) {
-      if (e.code === 'Backspace') {
+      const obj = e.target
+      const t = obj.type || obj.getAttribute('type')// 获取事件源类型
+      if (e.code === 'Backspace' && t !== 'password' && t !== 'text' && t !== 'textarea') {
         const id = store.state.app.currentLayoutId
         if (id) {
           // 删除vuex的layout中对应的组件信息
