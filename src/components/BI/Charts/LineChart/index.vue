@@ -11,7 +11,7 @@
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
-import lineMixins from '@/components/BI/mixins/linemixins'
+import lineMixins from '@/components/BI/mixins/lineMixins'
 export default {
   name: 'LineChart',
   mixins: [lineMixins],
@@ -46,10 +46,12 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
+      const axisTitle = componentOption.XAxis.showTitle ? componentOption.XAxis.title : ''
       this.chartOption = {
         'legend': componentOption.Legend,
         'xAxis': {
-          'type': 'category'
+          'type': 'category',
+          'name': axisTitle
         },
         'dataset': {
           'source': this.dataValue

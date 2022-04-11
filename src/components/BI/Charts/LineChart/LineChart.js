@@ -46,6 +46,11 @@ export default {
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
+      },
+      'XAxis': {
+        'show': true,
+        'title': '',
+        'showTitle': false
       }
     }
   },
