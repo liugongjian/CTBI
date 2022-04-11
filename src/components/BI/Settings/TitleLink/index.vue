@@ -30,6 +30,7 @@
           <el-input
             v-model="option.url"
             placeholder="https://"
+            @blur="completeUrl"
           />
         </div>
       </div>
@@ -54,19 +55,12 @@ export default {
       default: () => { }
     }
   },
-  data () {
-    return {
-      storeOption: this.option
-    }
-  },
-  watch: {
-    storeOption: {
-      handler (val) {
-        if (val.url.slice(0, 4) === 'www.') {
-          val.url = 'https://' + val.url
-        }
-      },
-      deep: true
+  methods: {
+    // 补齐url地址 当输入的网址为'www.'开头或者'.com'时失去焦点后补齐https前缀
+    completeUrl () {
+      if (this.option.url.indexOf('www.') === 0 || this.option.url.indexOf('.com') === 1) {
+        this.option.url = 'https://' + this.option.url
+      }
     }
   }
 }
