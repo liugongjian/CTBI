@@ -12,10 +12,10 @@
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
-import lineMixins from '@/components/BI/mixins/lineMixins'
+import stackedAreaMixins from '@/components/BI/mixins/stackedAreaMixins'
 export default {
-  name: 'LineChart',
-  mixins: [lineMixins],
+  name: 'StackedAreaChart',
+  mixins: [stackedAreaMixins],
   props: {
     identify: {
       type: String,
@@ -26,8 +26,8 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
-      // dataValue: null,
-      type: 'LineChart', // 线图 面积图 堆积面积图 百分比堆叠面积图
+      type: 'StackedAreaChart', // 1 线图 2 面积图 3 堆积面积图 4 百分比堆叠面积图
+      //   dataValue: null
       dataValue: [
         ['date', '价格', '数量'],
         ['Mon', 820, 410],
