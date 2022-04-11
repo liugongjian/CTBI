@@ -1,5 +1,7 @@
 <template>
-  <div :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId},'com-block']">
+  <div
+    :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId},'com-block']"
+  >
 
     <!-- 菜单模块 -->
     <el-dropdown
@@ -15,6 +17,10 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="delete">删除</el-dropdown-item>
+        <el-dropdown-item
+          command="delete"
+          divided
+        >删除</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
     <!-- 菜单模块END -->

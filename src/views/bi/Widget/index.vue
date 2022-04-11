@@ -26,6 +26,7 @@
           <component
             :is="item.is"
             :identify="item.i"
+            autoresize
           />
         </ComponentBlock>
       </grid-item>
