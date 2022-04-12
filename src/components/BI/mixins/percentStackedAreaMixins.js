@@ -7,16 +7,6 @@ export default {
       series: [],
       yAxis: {},
       tooltip: {}
-
-    //   tooltip: {
-    //     trigger: 'axis',
-    //     axisPointer: {
-    //       type: 'cross',
-    //       label: {
-    //         backgroundColor: '#6a7985'
-    //       }
-    //     }
-    //   },
     }
   },
   methods: {
@@ -42,6 +32,7 @@ export default {
           this.series.push({ type: 'line', stack: 'Total', areaStyle: {} })
         }
       } else if (this.type === 'PercentStackedAreaChart') {
+        this.valueToPercent()
         this.yAxis = {
           axisLabel: {
             show: true,
@@ -51,12 +42,28 @@ export default {
           show: true
         }
         this.tooltip = {
-          trigger: 'axis',
-          formatter: '{b0}<br/>{a0}: {c0}%<br/>{a1}: {c1}%'
+          trigger: 'axis'
         }
         this.series = []
         for (let i = 0; i < seriesLength; i++) {
           this.series.push({ type: 'line', stack: 'Total', areaStyle: {} })
+        }
+      }
+    },
+    // 将数据转换成百分比
+    valueToPercent () {
+      const sumArr = []
+      for (let ii = 0; ii < this.dataValue[0].length - 1; ii++) {
+        sumArr.push(0)
+      }
+      for (let i = 1; i < this.dataValue.length; i++) {
+        for (let j = 0; j < sumArr.length; j++) {
+          sumArr[j] += this.dataValue[i][j + 1]
+        }
+      }
+      for (let i = 1; i < this.dataValue.length; i++) {
+        for (let j = 0; j < sumArr.length; j++) {
+          this.dataValue[i][j + 1] = (this.dataValue[i][j + 1] / sumArr[j] * 100).toFixed(2)
         }
       }
     }

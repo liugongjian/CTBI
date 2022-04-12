@@ -38,6 +38,17 @@ export default {
       'Footer': { // 尾注
         'show': false, // 是否显示尾注
         'text': ''// 尾注信息
+      },
+      'TitleLink': { // 链接跳转组件
+        'text': '', // 文案
+        'url': '', // 链接地址
+        'show': false, // 是否展示链接地址
+        'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
+      },
+      'VisualStyle': { // 可视化样式
+        'style1': { 'name': '饼形', value: 'pie' }, // pie 饼形 ring 环形
+        'style2': { 'name': '环形', value: 'ring' }, // pie 饼形 ring 环形
+        'style': 'pie'
       }
     },
     'ComponentOption': { // 图表样式
