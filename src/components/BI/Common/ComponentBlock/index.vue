@@ -1,5 +1,8 @@
 <template>
-  <div :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId},'com-block']">
+  <div
+    :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId},'com-block']"
+    :style="styleObject"
+  >
 
     <div class="card-header-wrapper">
       <div
@@ -119,7 +122,32 @@ export default {
   },
   data () {
     return {
-      onLoad: false
+      onLoad: false,
+      imgSizeOption: {
+        'containLeft': ['contain', ' left center'],
+        'containMiddle': ['contain', 'center center'],
+        'containRight': ['contain', 'right center'],
+        'containClip': ['cover', 'center center'],
+        'cover': ['100% 100%', '']
+      }
+    }
+  },
+  computed: {
+
+    // 获取样式数据
+    styleObject () {
+      const styleObject = {}
+      // 是否显示自定义填充
+      if (getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.show')) {
+        styleObject['background-color'] = getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.color')
+        if (getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.showImg')) {
+          styleObject['background'] = `url(${getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.imgUrl')}) no-repeat`
+          styleObject['background-size'] = this.imgSizeOption[getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.imgSize')][0]
+          styleObject['background-position'] = this.imgSizeOption[getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.imgSize')][1]
+        }
+        return styleObject
+      }
+      return styleObject
     }
   },
   mounted () {
