@@ -73,6 +73,7 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
+      const axis = this.storeOption.theme.Axis
       this.getSeries()
       this.chartOption = {
         legend: componentOption.Legend,
@@ -86,7 +87,28 @@ export default {
           }
         },
         xAxis: {
-          type: 'category'
+          type: 'category',
+          show: axis.XAxis.show,
+          name: axis.XAxis.showTitle ? axis.XAxis.title : '',
+          axisTick: {
+            show: axis.XAxis.showTicks
+          },
+          axisLabel: {
+            show: axis.XAxis.showAxisLabel
+          },
+          axisLine: {
+            lineStyle: {
+              color: axis.XAxis.lineColor,
+              width: axis.XAxis.lineWidth
+            }
+          },
+          splitLine: {
+            show: axis.XAxis.showSplit,
+            lineStyle: {
+              width: axis.XAxis.splitWidth,
+              color: axis.XAxis.splitColor
+            }
+          }
         },
         yAxis: {},
         dataset: {
