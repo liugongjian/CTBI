@@ -1,11 +1,4 @@
-/**
-{
-  "author": "huanglulu",
-  "time": "2022/04/08",
-  "description": "面积图组件"
-}
- * */
-// 仪表盘配置项信息
+// 折线图配置项信息
 /**
  * type: {
  *    indicator: 指标,
@@ -21,14 +14,14 @@
  *  }
  * */
 export default {
-  'type': 'trend', // 组件类型, 用于管理组件类型集合，例如：指标、表格、趋势
+  'type': 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
   'version': '', // 版本号
   'field': {}, // 字段
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
-        'text': '面积图', // 标题名称
+        'text': '雷达图', // 标题名称
         'color': '#333', // 标题颜色
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
@@ -44,15 +37,6 @@ export default {
       'Footer': { // 尾注
         'show': false, // 是否显示尾注
         'text': ''// 尾注信息
-      },
-      'TitleLink': { // 链接跳转组件
-        'text': '', // 文案
-        'url': '', // 链接地址
-        'show': false, // 是否展示链接地址
-        'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
-      },
-      'ChartType': { // 图表类型
-        'type': 'AreaChart' // 线图 面积图 堆积面积图 百分比堆叠面积图
       }
     },
     'ComponentOption': { // 图表样式
@@ -62,10 +46,19 @@ export default {
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
+      },
+      'RadarChartShape': { // 雷达形状
+        'shape': 'polygon' // 多边形 圆形
+      },
+      'RadarLabel': {
+        'labelShow': '0' // 0不显示 1 智能显示 2 全部显示
+      },
+      'RadarColor': {
+        'color': [],
+        'areaStyle': false
       }
     }
   },
   'advance': {}, // 高级
   'dataSource': {}// 数据集
 }
-
