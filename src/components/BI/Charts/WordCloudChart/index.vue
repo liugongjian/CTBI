@@ -128,7 +128,6 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        debugger
         // 词云形状
         this.shape = val.theme.ComponentOption.WordCloudShape.shape
         // 词云文字方向
