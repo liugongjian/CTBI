@@ -46,6 +46,16 @@ export default {
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
+      },
+      'RadarChartShape': { // 雷达形状
+        'shape': 'polygon' // 多边形 圆形
+      },
+      'RadarLabel': {
+        'labelShow': '0' // 0不显示 1 智能显示 2 全部显示
+      },
+      'RadarColor': {
+        'color': [],
+        'areaStyle': false
       }
     }
   },

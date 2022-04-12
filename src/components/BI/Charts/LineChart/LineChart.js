@@ -37,6 +37,15 @@ export default {
       'Footer': { // 尾注
         'show': false, // 是否显示尾注
         'text': ''// 尾注信息
+      },
+      'TitleLink': { // 链接跳转组件
+        'text': '', // 文案
+        'url': '', // 链接地址
+        'show': false, // 是否展示链接地址
+        'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
+      },
+      'ChartType': { // 图表类型
+        'type': 'LineChart' // 线图 面积图 堆积面积图 百分比堆叠面积图
       }
     },
     'ComponentOption': { // 图表样式
@@ -46,6 +55,11 @@ export default {
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
+      },
+      'XAxis': {
+        'show': true,
+        'title': '',
+        'showTitle': false
       }
     }
   },

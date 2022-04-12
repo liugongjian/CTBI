@@ -116,6 +116,22 @@
     width: 40px;
   }
 }
+.page-config-panel{
+  width: 420px;
+  background: #2d3240;
+  display: flex;
+  flex-direction: column;
+  .page-config-top{
+    box-sizing: border-box;
+    height: 48px;
+    line-height: 48px;
+    background: #2d3240;
+    color: #fff;
+    font-size: 14px;
+    padding: 0 12px;
+    border-bottom: 1px solid hsla(0,0%,85%,.15);
+  }
+}
 
 
 

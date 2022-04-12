@@ -14,10 +14,13 @@
           />
         </el-header>
         <!-- 画布主体 -->
-        <el-main class="main-layout">
+        <el-main
+          class="main-layout"
+        >
           <div
             id="content"
             @dragover="dragover"
+            @click="clearCurrentLayoutId"
           >
             <widget ref="gridLayout" />
           </div>
@@ -56,6 +59,10 @@ export default {
     },
     getGridLayout (callback) {
       callback(this.$refs.gridLayout.$children[0])
+    },
+    // 清空CurrentLayoutId来显示页面配置
+    clearCurrentLayoutId () {
+      this.$store.state.app.currentLayoutId = ''
     },
     // 获取画布边界
     getParentRect (callback) {

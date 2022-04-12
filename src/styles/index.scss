@@ -25,11 +25,28 @@ html {
   height: 100%;
 }
 
+a{
+  text-decoration: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+}
+
+.flex-align-center{
+  display:flex;
+  align-items:center;
+}
+
 .editor-object-container {
-  margin: 10px 0px;
-  
+  margin: 10px 0px;  
   .editor-item-container {
     padding-left: 22px;
+    .editor-item-title{
+      margin: 4px 8px;
+      margin-left: 0;
+      line-height: 20px;
+      display: inline-block;
+    }
   }
   .box-disabled{
     cursor: not-allowed;
