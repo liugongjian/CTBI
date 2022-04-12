@@ -12,10 +12,10 @@
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
-import lineMixins from '@/components/BI/mixins/lineMixins'
+import percentStackedAreaMixins from '@/components/BI/mixins/percentStackedAreaMixins'
 export default {
-  name: 'LineChart',
-  mixins: [lineMixins],
+  name: 'PercentStackedAreaChart',
+  mixins: [percentStackedAreaMixins],
   props: {
     identify: {
       type: String,
@@ -26,8 +26,8 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
-      // dataValue: null,
-      type: 'LineChart', // 线图 面积图 堆积面积图 百分比堆叠面积图
+      type: 'PercentStackedAreaChart', // 1 线图 2 面积图 3 堆积面积图 4 百分比堆叠面积图
+      //   dataValue: null
       dataValue: [
         ['date', '价格', '数量'],
         ['Mon', 820, 410],
@@ -38,7 +38,6 @@ export default {
         ['Sat', 1330, 480],
         ['Sun', 1320, 460]
       ],
-      series: [],
       textMap: {
         'LineChart': '线图',
         'AreaChart': '面积图',
@@ -51,7 +50,6 @@ export default {
     storeOption: {
       handler (val) {
         this.type = val.theme.Basic.ChartType.type
-        val.theme.Basic.Title.text = this.textMap[this.type]
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (JSON.stringify(val.dataSource) !== '{}') {
           this.dataValue = val.dataSource
@@ -76,19 +74,11 @@ export default {
       this.getSeries()
       this.chartOption = {
         legend: componentOption.Legend,
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#6a7985'
-            }
-          }
-        },
+        tooltip: this.tooltip,
         xAxis: {
           type: 'category'
         },
-        yAxis: {},
+        yAxis: this.yAxis,
         dataset: {
           source: this.dataValue
         },
