@@ -17,7 +17,7 @@ const mutations = {
     state.currentLayoutId = id
   },
   DELETELAYOUTBYID: (state, id) => {
-    if (id) {
+    if (id && id.length) {
       // 删除layout对应id的组件
       state.layout.splice(
         state.layout.findIndex((item) => item.i === id),
