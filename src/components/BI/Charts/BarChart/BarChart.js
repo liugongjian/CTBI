@@ -41,7 +41,7 @@ export default {
       'TitleLink': { // 链接跳转组件
         'text': '', // 文案
         'url': '', // 链接地址
-        'show': '', // 是否展示链接地址
+        'show': false, // 是否展示链接地址
         'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
       }
     },
