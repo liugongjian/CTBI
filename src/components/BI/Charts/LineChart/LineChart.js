@@ -55,11 +55,22 @@ export default {
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
-      },
+      }
+    },
+    'Axis': {
       'XAxis': {
-        'show': true,
+        'cname': 'X轴',
         'title': '',
-        'showTitle': false
+        'unit': '',
+        'show': true,
+        'showTitle': false,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000'
       }
     }
   },
