@@ -61,6 +61,7 @@ export default {
       'XAxis': {
         'cname': 'X轴',
         'title': '',
+        'unit': '',
         'show': true,
         'showTitle': false,
         'showTicks': false,

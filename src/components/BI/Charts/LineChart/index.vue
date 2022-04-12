@@ -94,7 +94,8 @@ export default {
             show: axis.XAxis.showTicks
           },
           axisLabel: {
-            show: axis.XAxis.showAxisLabel
+            show: axis.XAxis.showAxisLabel,
+            formatter: `{value} ${axis.XAxis.unit}`
           },
           axisLine: {
             lineStyle: {
