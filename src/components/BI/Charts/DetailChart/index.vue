@@ -8,7 +8,7 @@
 import { getLayoutOptionById } from '@/utils/optionUtils'
 import dashboardMixins from '@/components/BI/mixins/dashboardMixins'
 export default {
-  name: 'DashboardChart',
+  name: 'DetailChart',
   mixins: [dashboardMixins],
   props: {
     identify: {

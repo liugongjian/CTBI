@@ -45,13 +45,9 @@ export default {
         'edition': 'newEdition' // 版本切换
       }
     },
-    'ComponentOption': { // 图表样式
-      'Legend': { // 图例
-        'show': true,
-        'top': 'auto',
-        'left': 'center',
-        'orient': 'horizontal',
-        'type': 'scroll'
+    'DisplayConfig': {
+      'TableTheme': {
+        'checked': false
       }
     }
   },
