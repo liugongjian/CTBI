@@ -1,11 +1,11 @@
 /**
 {
   "author": "ZhengJiale",
-  "time": "2022/04/11",
-  "description": "柱图组件"
+  "time": "2022/04/13",
+  "description": "百分比堆积柱状图组件"
 }
  * */
-// 柱图配置项信息
+// 百分比堆积柱状图配置项信息
 /**
  * type: {
  *    indicator: 指标,
@@ -28,7 +28,7 @@ export default {
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
-        'text': '柱图', // 标题名称
+        'text': '堆积柱状图', // 标题名称
         'color': '#333', // 标题颜色
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
@@ -59,7 +59,7 @@ export default {
         'imgSize': 'containRight' // 背景图片尺寸位置
       },
       'ChartType': { // 图表类型
-        'type': 'BarChart' // 1.柱图;2.堆积柱状图;3.百分比堆叠柱状图
+        'type': 'PercentStackedBarChart' // 1.柱图;2.堆积柱状图;3.百分比堆叠柱状图
       }
     },
     'ComponentOption': { // 图表样式
