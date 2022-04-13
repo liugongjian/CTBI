@@ -120,7 +120,7 @@ export default {
         value: 'containRight',
         label: '居右平铺（比例不变，图片缩放）'
       }, {
-        value: 'containClip',
+        value: 'coverClip',
         label: '裁剪以充满区域（图片缩放，两头裁剪）'
       }, {
         value: 'cover',

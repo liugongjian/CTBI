@@ -14,7 +14,7 @@
 import { getLayoutOptionById } from '@/utils/optionUtils'
 import barMixins from '@/components/BI/mixins/barMixins'
 export default {
-  name: 'BarChart',
+  name: 'PercentStackedBarChart',
   mixins: [barMixins],
   props: {
     identify: {
@@ -26,7 +26,7 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
-      type: 'BarChart', // 图表类型 1.柱图；2.堆积柱状图；3.百分比堆积柱状图
+      type: 'PercentStackedBarChart', // 图表类型 1.柱图；2.堆积柱状图；3.百分比堆积柱状图
       dataValue: null,
       series: [],
       textMap: {

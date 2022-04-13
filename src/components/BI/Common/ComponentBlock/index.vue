@@ -123,11 +123,11 @@ export default {
   data () {
     return {
       onLoad: false,
-      imgSizeOption: {
+      imgSizeOption: { // 图片尺寸及位置，格式："尺寸名":['图片尺寸','图片位置']
         'containLeft': ['contain', ' left center'],
         'containMiddle': ['contain', 'center center'],
         'containRight': ['contain', 'right center'],
-        'containClip': ['cover', 'center center'],
+        'coverClip': ['cover', 'center center'],
         'cover': ['100% 100%', '']
       }
     }
@@ -139,8 +139,10 @@ export default {
       const styleObject = {}
       // 是否显示自定义填充
       if (getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.show')) {
+        // 设置背景图片颜色
         styleObject['background-color'] = getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.color')
         if (getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.showImg')) {
+          // 设置背景图片及尺寸位置
           styleObject['background'] = `url(${getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.imgUrl')}) no-repeat`
           styleObject['background-size'] = this.imgSizeOption[getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.imgSize')][0]
           styleObject['background-position'] = this.imgSizeOption[getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.imgSize')][1]
