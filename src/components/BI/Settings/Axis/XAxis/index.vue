@@ -15,6 +15,23 @@
       label="显示坐标轴"
     />
     <div class="color-row">
+      <el-dropdown :disabled="!option.show" @command="handleAxisType">
+        <div class="dropdown-link" :class="!option.show ? 'disabled' : ''">
+          <svg-icon
+            :icon-class="`${option.lineType}-line`"
+            style="font-size: 15px;"
+          />
+          <i class="el-icon-arrow-down el-icon--right" />
+        </div>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-for="(type,index) in lineTypes" :key="index" :command="type">
+            <svg-icon
+              :icon-class="`${type}-line`"
+              style="font-size: 15px;"
+            />
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
       <el-select v-model="option.lineWidth" :disabled="!option.show">
         <el-option
           v-for="(item,key) in pixels"
@@ -34,6 +51,23 @@
       label="显示网格线"
     />
     <div class="color-row">
+      <el-dropdown :disabled="!option.showSplit" @command="handleSplitType">
+        <div class="dropdown-link" :class="!option.showSplit ? 'disabled' : ''">
+          <svg-icon
+            :icon-class="`${option.lineType}-line`"
+            style="font-size: 15px;"
+          />
+          <i class="el-icon-arrow-down el-icon--right" />
+        </div>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-for="(type,index) in lineTypes" :key="index" :command="type">
+            <svg-icon
+              :icon-class="`${type}-line`"
+              style="font-size: 15px;"
+            />
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
       <el-select v-model="option.splitWidth" :disabled="!option.showSplit">
         <el-option
           v-for="(item,key) in pixels"
@@ -52,7 +86,7 @@
 </template>
 
 <script>
-import { pixels } from '../dics/constants'
+import { pixels, lineTypes } from '../dics/constants'
 export default {
   name: 'XAxis',
   components: {},
@@ -64,13 +98,16 @@ export default {
   },
   data () {
     return {
-      pixels: pixels
+      pixels: pixels,
+      lineTypes: lineTypes
     }
   },
   methods: {
-    handleChange (val) {
-      this.option.title = val
-      console.log(val)
+    handleAxisType (type) {
+      this.option.lineType = type
+    },
+    handleSplitType (type) {
+      this.option.splitType = type
     }
   }
 }
@@ -80,6 +117,25 @@ export default {
     display: flex;
     &>div{
         margin: 2px 5px;
+    }
+    .el-dropdown{
+        min-width: 50px;
+        .disabled{
+            background: #F5F7FA;
+        }
+    }
+    .dropdown-link{
+        display: flex;
+        justify-content: center;
+        align-items:center;
+        border: 1px solid #DCDFE6;
+        padding: 0 2px;
+        border-radius: 5px;
+        height: 100%;
+        width: 100%;
+        i {
+            font:#DCDFE6
+        }
     }
 }
 </style>

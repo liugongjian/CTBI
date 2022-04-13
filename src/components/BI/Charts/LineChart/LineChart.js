@@ -67,10 +67,12 @@ export default {
         'showTicks': false,
         'lineWidth': 1,
         'lineColor': '#000',
+        'lineType': 'solid',
         'showAxisLabel': true,
         'showSplit': false,
         'splitWidth': 1,
-        'splitColor': '#000'
+        'splitColor': '#000',
+        'splitType': 'solid'
       }
     }
   },
