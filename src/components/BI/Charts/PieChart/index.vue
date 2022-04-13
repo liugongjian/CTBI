@@ -3,6 +3,7 @@
     <v-chart
       v-if="dataValue"
       :option="chartOption"
+      :update-options="{notMerge:true}"
       autoresize
     />
     <div v-else>数据为空</div>
@@ -54,10 +55,15 @@ export default {
         item = (parseInt(item) * parseInt(componentOption.ChartRadius[1]) / 100).toFixed('0') + '%'
         return item
       })
+
+      const { checkList, check, precision, labelShow } = this.storeOption.theme.ComponentOption.ChartLabel
       this.chartOption = {
         // 'tooltip': option.Tooltip,
         'tooltip': {
-          'trigger': 'item'
+          'trigger': 'item',
+          'formatter': (data) => {
+            return data.name + ': ' + data.value[1] + ', ' + data.percent.toFixed(precision) + '%'
+          }
         },
         'legend': componentOption.Legend,
         'dataset': {
@@ -74,6 +80,25 @@ export default {
                 'shadowOffsetX': 0,
                 'shadowColor': 'rgba(0, 0, 0, 0.5)'
               }
+            },
+            'label': {
+              'show': check,
+              'formatter': function (data) {
+                let formatter = ''
+                if (checkList.includes('维度')) {
+                  formatter += data.name + ' '
+                }
+                if (checkList.includes('度量')) {
+                  formatter += data.value[1] + ' '
+                }
+                if (checkList.includes('百分比')) {
+                  formatter += data.percent.toFixed(precision) + '%'
+                }
+                return formatter
+              }
+            },
+            'labelLayout': {
+              'hideOverlap': labelShow === 1
             }
           }
         ]
