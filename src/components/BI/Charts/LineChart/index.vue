@@ -100,14 +100,16 @@ export default {
           axisLine: {
             lineStyle: {
               color: axis.XAxis.lineColor,
-              width: axis.XAxis.lineWidth
+              width: axis.XAxis.lineWidth,
+              type: axis.XAxis.lineType
             }
           },
           splitLine: {
             show: axis.XAxis.showSplit,
             lineStyle: {
               width: axis.XAxis.splitWidth,
-              color: axis.XAxis.splitColor
+              color: axis.XAxis.splitColor,
+              type: axis.XAxis.splitType
             }
           }
         },
