@@ -13,6 +13,7 @@
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
 import barMixins from '@/components/BI/mixins/barMixins'
+import { deepClone } from '@/utils/optionUtils'
 export default {
   name: 'StackedBarChart',
   mixins: [barMixins],
@@ -43,7 +44,7 @@ export default {
         val.theme.Basic.Title.text = this.textMap[this.type]
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
+          this.dataValue = deepClone(val.dataSource)// 深拷贝，避免修改数据
           this.getOption()
         }
       },
