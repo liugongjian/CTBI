@@ -4,6 +4,9 @@ export default {
   mixins: [baseMixins],
   data: function () {
     return {
+      series: [],
+      yAxis: {},
+      tooltip: {}
     }
   },
   methods: {
@@ -27,6 +30,55 @@ export default {
         this.series = []
         for (let i = 0; i < seriesLength; i++) {
           this.series.push({ type: 'line', stack: 'Total', areaStyle: {} })
+        }
+      } else if (this.type === 'PercentStackedAreaChart') {
+        this.valueToPercent()
+        this.yAxis = {
+          axisLabel: {
+            show: true,
+            interval: 'auto',
+            formatter: '{value}%'
+          },
+          show: true
+        }
+        this.tooltip = {
+          trigger: 'axis'
+        }
+        this.series = []
+        for (let i = 0; i < seriesLength; i++) {
+          this.series.push({ type: 'line', stack: 'Total', areaStyle: {} })
+        }
+      }
+    },
+    // 将数据转换成百分比
+    valueToPercent () {
+      const sumArr = []
+      // for (let ii = 0; ii < this.dataValue[0].length - 1; ii++) {
+      //   sumArr.push(0)
+      // }
+      // for (let i = 1; i < this.dataValue.length; i++) {
+      //   debugger
+      //   for (let j = 0; j < sumArr.length; j++) {
+      //     debugger
+      //     sumArr[j] += this.dataValue[i][j + 1]
+      //   }
+      // }
+      // for (let i = 1; i < this.dataValue.length; i++) {
+      //   for (let j = 0; j < sumArr.length; j++) {
+      //     this.dataValue[i][j + 1] = (this.dataValue[i][j + 1] / sumArr[j] * 100).toFixed(2)
+      //   }
+      // }
+      for (let ii = 0; ii < this.dataValue.length - 1; ii++) {
+        sumArr.push(0)
+      }
+      for (let i = 1; i < this.dataValue[0].length; i++) {
+        for (let j = 0; j < sumArr.length; j++) {
+          sumArr[j] += this.dataValue[j + 1][i]
+        }
+      }
+      for (let i = 1; i < this.dataValue[0].length; i++) {
+        for (let j = 0; j < sumArr.length; j++) {
+          this.dataValue[j + 1][i] = (this.dataValue[j + 1][i] / sumArr[j] * 100).toFixed(2)
         }
       }
     }

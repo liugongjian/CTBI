@@ -22,22 +22,6 @@
           />
         </el-tooltip>
       </span>
-      <!-- <el-button
-        type="text"
-        @click="changeHandler('1')"
-      >线图</el-button>
-      <el-button
-        type="text"
-        @click="changeHandler('2')"
-      >面积图</el-button>
-      <el-button
-        type="text"
-        @click="changeHandler('3')"
-      >堆积面积图</el-button>
-      <el-button
-        type="text"
-        @click="changeHandler('4')"
-      >百分比堆叠面积图</el-button> -->
     </div>
   </div>
 </template>

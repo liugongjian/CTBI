@@ -14,14 +14,14 @@
  *  }
  * */
 export default {
-  'type': 'trend', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
+  'type': 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
   'version': '', // 版本号
   'field': {}, // 字段
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
-        'text': '折线图', // 标题名称
+        'text': '明细表', // 标题名称
         'color': '#333', // 标题颜色
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
@@ -38,41 +38,16 @@ export default {
         'show': false, // 是否显示尾注
         'text': ''// 尾注信息
       },
-      'TitleLink': { // 链接跳转组件
-        'text': '', // 文案
-        'url': '', // 链接地址
-        'show': false, // 是否展示链接地址
-        'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
+      'TitleLink': {
+        'show': false
       },
-      'ChartType': { // 图表类型
-        'type': 'LineChart' // 线图 面积图 堆积面积图 百分比堆叠面积图
+      'Edition': {
+        'edition': 'newEdition' // 版本切换
       }
     },
-    'ComponentOption': { // 图表样式
-      'Legend': { // 图例
-        'show': true,
-        'top': 'auto',
-        'left': 'center',
-        'orient': 'horizontal',
-        'type': 'scroll'
-      }
-    },
-    'Axis': {
-      'XAxis': {
-        'cname': 'X轴',
-        'title': '',
-        'unit': '',
-        'show': true,
-        'showTitle': false,
-        'showTicks': false,
-        'lineWidth': 1,
-        'lineColor': '#000',
-        'lineType': 'solid',
-        'showAxisLabel': true,
-        'showSplit': false,
-        'splitWidth': 1,
-        'splitColor': '#000',
-        'splitType': 'solid'
+    'DisplayConfig': {
+      'TableTheme': {
+        'checked': false
       }
     }
   },
