@@ -26,7 +26,8 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
-      dataValue: null
+      dataValue: null,
+      radius: []
     }
   },
   watch: {
@@ -35,8 +36,10 @@ export default {
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (JSON.stringify(val.dataSource) !== '{}') {
           this.dataValue = val.dataSource
-          this.getOption()
+          // this.getOption()
         }
+        this.radius = val.theme.Basic.VisualStyle.style === 'pie' ? ['0', '75%'] : ['30%', '75%']
+        this.getOption()
       },
       deep: true
     }
@@ -47,8 +50,15 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
+      const radius = this.radius.map(item => {
+        item = (parseInt(item) * parseInt(componentOption.ChartRadius[1]) / 100).toFixed('0') + '%'
+        return item
+      })
       this.chartOption = {
         // 'tooltip': option.Tooltip,
+        'tooltip': {
+          'trigger': 'item'
+        },
         'legend': componentOption.Legend,
         'dataset': {
           'source': this.dataValue
@@ -56,7 +66,8 @@ export default {
         'series': [
           {
             'type': 'pie',
-            'radius': componentOption.ChartRadius,
+            // 'radius': componentOption.ChartRadius,
+            'radius': radius,
             'emphasis': {
               'itemStyle': {
                 'shadowBlur': 10,
