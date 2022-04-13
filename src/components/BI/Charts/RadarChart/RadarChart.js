@@ -56,6 +56,13 @@ export default {
       'RadarColor': {
         'color': [],
         'areaStyle': false
+      },
+      'RadarCoordinates': {
+        'maxValue': 0, // 默认0
+        'minValue': 0,
+        'autoMaxValue': true,
+        'autoMinValue': true,
+        'showCoordinates': false
       }
     }
   },
