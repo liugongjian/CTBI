@@ -41,6 +41,7 @@ export default {
   created () { },
   mounted () {
     for (var item in this.option) {
+      console.log(this.option)
       if (typeof (this.option[item]) === 'object') {
         this.styleOptions.push(this.option[item])
       }

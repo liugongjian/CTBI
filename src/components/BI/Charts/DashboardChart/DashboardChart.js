@@ -37,6 +37,18 @@ export default {
       'Footer': { // 尾注
         'show': false, // 是否显示尾注
         'text': ''// 尾注信息
+      },
+      'TitleLink': { // 链接跳转组件
+        'text': '', // 文案
+        'url': '', // 链接地址
+        'show': false, // 是否展示链接地址
+        'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
+      },
+      'VisualStyle': { // 可视化样式
+        'style1': { 'name': '标准', value: 'standard' },
+        'style2': { 'name': '扇形', value: 'fan' },
+        'style3': { 'name': '刻度', value: 'calibration' },
+        'style': 'standard' // 默认配置
       }
     },
     'ComponentOption': { // 图表样式
