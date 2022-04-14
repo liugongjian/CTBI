@@ -34,7 +34,6 @@ export default {
       for (let i = 1; i < val + 2; i++) {
         aTemp[i] = [].concat([data[i - 1].name, data[i - 1].value])
       }
-      console.log('<<<<', data, aTemp)
       this.dataValue = aTemp
     }
   }

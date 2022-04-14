@@ -52,13 +52,6 @@ export default {
       }
     },
     'ComponentOption': { // 图表样式
-      'Legend': { // 图例
-        'show': true,
-        'top': 'auto',
-        'left': 'center',
-        'orient': 'horizontal',
-        'type': 'scroll'
-      },
       'ChartLabel': { // 标签样式
         'type': 'PieChart', // 饼图标签样式
         'check': true, // 选中显示标签
@@ -67,6 +60,10 @@ export default {
         'labelShow': 1 // 0不显示 1 智能显示 2 全部显示
       },
       'ChartRadius': ['0%', '45%'], // 饼图半径
+      'Color': { // 颜色设置
+        'title': '配色设置',
+        'color': []
+      },
       'MergeOther': { // 合并数据为其他
         'show': false, // 是否选中
         'num': null
@@ -75,6 +72,13 @@ export default {
         'show': false, // 是否选中
         'name': '总计', // 自定义的总计名字
         'value': 0 // 总计数量
+      },
+      'Legend': { // 图例
+        'show': true,
+        'top': 'auto',
+        'left': 'center',
+        'orient': 'horizontal',
+        'type': 'scroll'
       }
     }
   },

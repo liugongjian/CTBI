@@ -137,7 +137,7 @@ export default {
     left: 56px;
     background-color: #ffffff;
     .field {
-      min-width: 77px;
+      max-width: 77px;
       .item {
         display: flex;
       }

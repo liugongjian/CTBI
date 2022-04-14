@@ -29,6 +29,7 @@ export default {
     color: {
       handler (val) {
         this.option.color = val
+        console.log('data', this.option.color)
       },
       deep: true
     }
