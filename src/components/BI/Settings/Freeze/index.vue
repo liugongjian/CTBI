@@ -44,4 +44,7 @@ export default {
 .arrange-type {
   flex: 1
 }
+::v-deep .el-input-number {
+  width:80px
+}
 </style>

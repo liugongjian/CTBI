@@ -67,15 +67,34 @@ export default {
   },
   methods: {
     getOption () {
-      const componentOption = this.storeOption.theme.ComponentOption
+      const { Legend, Slider } = this.storeOption.theme.ComponentOption
+      const { XAxis } = this.storeOption.theme.Axis
       this.chartOption = {
         // 'tooltip': option.Tooltip,
-        'legend': componentOption.Legend,
-        xAxis: {},
+        'legend': Legend,
+        xAxis: [
+          {
+            'show': XAxis.show,
+            'axisLine': {
+              'lineStyle': {
+                'type': XAxis.lineType,
+                'width': XAxis.lineWidth,
+                'color': XAxis.lineColor
+              }
+            },
+            'axisLabel': {
+              'show': XAxis.showAxisLabel
+            },
+            'axisTick': {
+              'show': XAxis.showTicks
+            },
+            name: XAxis.showTitle && (XAxis.unit ? `${XAxis.title}(${XAxis.unit})` : XAxis.title)
+          }
+        ],
         yAxis: {},
         'series': [
           {
-            'symbolSize': componentOption.Slider.symbolSize,
+            'symbolSize': Slider.symbolSize,
             'type': 'scatter',
             'data': this.dataValue
           }
