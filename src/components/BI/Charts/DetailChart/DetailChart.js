@@ -14,7 +14,7 @@
  *  }
  * */
 export default {
-  'type': 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
+  'type': 'table', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
   'version': '', // 版本号
   'field': {}, // 字段
@@ -47,7 +47,26 @@ export default {
     },
     'DisplayConfig': {
       'TableTheme': {
-        'checked': false
+        'colorType': 'themeColor',
+        'show': false
+      },
+      'ListHeader': {
+        'head': false
+      },
+      'Sequence': {
+        'show': false
+      },
+      'MergeForm': {
+        'show': false
+      },
+      'Freeze': {
+        'show': false,
+        'freezeChoose': 'arrange',
+        'positive': 0,
+        'reverse': 0
+      },
+      'NewLine': {
+        'show': false
       }
     }
   },
