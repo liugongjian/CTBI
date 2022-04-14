@@ -16,6 +16,7 @@
         </div>
       </el-collapse-item>
       <el-collapse-item
+        v-if="option['ComponentOption']"
         title="图表样式"
         name="2"
       >
@@ -44,6 +45,7 @@
         </el-tabs>
       </el-collapse-item>
       <el-collapse-item
+        v-if="option['DisplayConfig']"
         title="展示型配置"
         name="4"
       >
