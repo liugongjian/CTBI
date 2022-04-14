@@ -11,6 +11,7 @@ const mutations = {
     localStorage.setItem('menuPath', menuPath)
   },
   UPDATELAYOUT: (state, layout) => {
+    console.log(layout, 'layout')
     state.layout = [...layout]
   },
   UPDATELAYOUTID: (state, id) => {
@@ -26,6 +27,16 @@ const mutations = {
       // 清空currentLayoutId
       state.currentLayoutId = ''
     }
+  },
+  // 更新某条数据
+  UPDATELAYOUTITEM: (state, { id, item }) => {
+    if (id && id.length) {
+      state.layout.splice(
+        state.layout.findIndex((item) => item.i === id),
+        1,
+        item
+      )
+    }
   }
 }
 const actions = {
@@ -40,6 +51,9 @@ const actions = {
   },
   deleteLayoutById ({ commit }, id) {
     commit('DELETELAYOUTBYID', id)
+  },
+  updateLayoutItem ({ commit }, data) {
+    commit('UPDATELAYOUTITEM', data)
   }
 }
 

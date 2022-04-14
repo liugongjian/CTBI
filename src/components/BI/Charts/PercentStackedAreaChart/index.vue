@@ -12,10 +12,10 @@
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
-import percentStackedAreaMixins from '@/components/BI/mixins/percentStackedAreaMixins'
+import lineMixins from '@/components/BI/mixins/lineMixins'
 export default {
   name: 'PercentStackedAreaChart',
-  mixins: [percentStackedAreaMixins],
+  mixins: [lineMixins],
   props: {
     identify: {
       type: String,

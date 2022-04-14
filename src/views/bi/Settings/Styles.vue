@@ -43,6 +43,20 @@
           </el-tab-pane>
         </el-tabs>
       </el-collapse-item>
+      <el-collapse-item
+        title="展示型配置"
+        name="4"
+      >
+        <div
+          v-for="(item,name,key) in option['DisplayConfig']"
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['DisplayConfig'][name]"
+          />
+        </div>
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
