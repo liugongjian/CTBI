@@ -1,12 +1,14 @@
 <template>
-  <div>
+  <div class="editor-object-container">
     <div>数据点大小</div>
-    <el-slider
-      v-model="option.symbolSize"
-      :min="option.minSize"
-      :max="option.maxSize"
-      @change="changeValue"
-    />
+    <div class="slider-container">
+      <el-slider
+        v-model="option.symbolSize"
+        :min="option.minSize"
+        :max="option.maxSize"
+        @change="changeValue"
+      />
+    </div>
   </div>
 </template>
 
@@ -28,5 +30,7 @@ export default {
 </script>
 
 <style scoped>
-
+.slider-container {
+  padding: 0 15px;
+}
 </style>
