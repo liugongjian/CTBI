@@ -128,23 +128,20 @@ export default {
         }
       })
     },
-    // setColor (color) {
-    //   this.dataValue.forEach(item => {
-    //     const isName = color.find((data) => { data.name === item.name })
-    //     if (isName) {
-    //       console.log(isName)
-    //       item.itemStyle.normal.color = isName.color
-    //     }
-    //   })
-    // },
+    setColor (color) {
+      this.dataValue.forEach(item => {
+        const data = color.find((data) => { return data.name === item.name })
+        if (data) {
+          item.itemStyle.normal.color = data.color
+        }
+      })
+    },
     getOption () {
-      console.log('重新渲染')
-      const { Legend, RadarChartShape, RadarLabel: { labelShow }, RadarColor: { areaStyle }, RadarCoordinates } =
+      const { Legend, RadarChartShape, RadarLabel: { labelShow }, RadarColor: { areaStyle, color }, RadarCoordinates } =
       this.storeOption.theme.ComponentOption
       const { maxValue, minValue, autoMaxValue, autoMinValue, showCoordinates } = RadarCoordinates
       this.setRadarConfig(areaStyle, labelShow)
-      // console.log(color, '颜色')
-      // this.setColor(color)
+      this.setColor(color)
       const shape = RadarChartShape.shape
       this.chartOption = {
         legend: Legend,
