@@ -21,7 +21,7 @@ export default {
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
-        'text': '雷达图', // 标题名称
+        'text': '明细表', // 标题名称
         'color': '#333', // 标题颜色
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
@@ -37,32 +37,17 @@ export default {
       'Footer': { // 尾注
         'show': false, // 是否显示尾注
         'text': ''// 尾注信息
+      },
+      'TitleLink': {
+        'show': false
+      },
+      'Edition': {
+        'edition': 'newEdition' // 版本切换
       }
     },
-    'ComponentOption': { // 图表样式
-      'Legend': { // 图例
-        'show': true,
-        'top': 'auto',
-        'left': 'center',
-        'orient': 'horizontal',
-        'type': 'scroll'
-      },
-      'RadarChartShape': { // 雷达形状
-        'shape': 'polygon' // 多边形 圆形
-      },
-      'RadarLabel': {
-        'labelShow': '0' // 0不显示 1 智能显示 2 全部显示
-      },
-      'RadarColor': {
-        'color': [],
-        'areaStyle': false
-      },
-      'RadarCoordinates': {
-        'maxValue': 0, // 默认0
-        'minValue': 0,
-        'autoMaxValue': true,
-        'autoMinValue': true,
-        'showCoordinates': false
+    'DisplayConfig': {
+      'TableTheme': {
+        'checked': false
       }
     }
   },
