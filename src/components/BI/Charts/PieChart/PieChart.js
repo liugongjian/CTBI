@@ -66,7 +66,16 @@ export default {
         'precision': 2, // 百分比保留位数 0位 1位 2位
         'labelShow': 1 // 0不显示 1 智能显示 2 全部显示
       },
-      'ChartRadius': ['0%', '45%'] // 饼图半径
+      'ChartRadius': ['0%', '45%'], // 饼图半径
+      'MergeOther': { // 合并数据为其他
+        'show': false, // 是否选中
+        'num': null
+      },
+      'TotalShow': { // 显示总计
+        'show': false, // 是否选中
+        'name': '总计', // 自定义的总计名字
+        'value': 0 // 总计数量
+      }
     }
   },
   'advance': {}, // 高级
