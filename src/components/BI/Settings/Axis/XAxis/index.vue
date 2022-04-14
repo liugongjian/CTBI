@@ -6,6 +6,7 @@
     <div @keydown.8.stop="">单位
       <el-input v-model="option.unit" />
     </div>
+    <slot name="unit" />
     <el-checkbox
       v-model="option.showTitle"
       label="显示标题和单位"
@@ -42,6 +43,7 @@
       </el-select>
       <el-color-picker v-model="option.lineColor" :disabled="!option.show" />
     </div>
+    <slot name="format" />
     <el-checkbox
       v-model="option.showAxisLabel"
       label="显示轴标签"

@@ -15,6 +15,5 @@ export function getToolList () {
     }
     return
   })
-  console.log('dataJson', dataJson)
   return dataJson
 }
