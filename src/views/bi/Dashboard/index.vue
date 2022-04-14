@@ -28,6 +28,7 @@ export default {
     // 清空画布
     clearCanvas () {
       this.$store.state.app.layout = []
+      this.$store.state.app.currentLayoutId = ''
       localStorage.removeItem('layout')
     }
   }

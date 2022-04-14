@@ -1,5 +1,8 @@
 <template>
-  <div :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId},'com-block']">
+  <div
+    :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId},'com-block']"
+    :style="styleObject"
+  >
 
     <div class="card-header-wrapper">
       <div
@@ -64,6 +67,20 @@
       </div>
     </div>
 
+    <!-- 是否展示总计 -->
+    <div
+      class="rich-text-total"
+      style="max-height:100px"
+    >
+      <div
+        v-show="getParameter(option, 'theme.ComponentOption.TotalShow.show')"
+        class="rich-text-content"
+      >
+        <span style="margin-right: 20px">{{ getParameter(option, 'theme.ComponentOption.TotalShow.name') }}</span>
+        <span>{{ getParameter(option, 'theme.ComponentOption.TotalShow.value') }}</span>
+      </div>
+    </div>
+
     <!-- 当备注位置选择为图表上方时 -->
     <div
       class="rich-text-editor"
@@ -90,19 +107,6 @@
         />
       </div>
     </div>
-    <!-- 图表类型 -->
-    <div class="rich-text-footer">
-      <div
-        class="rich-text-editor"
-        style="max-height:100px"
-      >
-
-        <div
-          v-show="getParameter(option, 'theme.Basic.ChartType.show')"
-          class="rich-text-content"
-        />
-      </div>
-    </div>
 
   </div>
 </template>
@@ -119,7 +123,34 @@ export default {
   },
   data () {
     return {
-      onLoad: false
+      onLoad: false,
+      imgSizeOption: { // 图片尺寸及位置，格式："尺寸名":['图片尺寸','图片位置']
+        'containLeft': ['contain', ' left center'],
+        'containMiddle': ['contain', 'center center'],
+        'containRight': ['contain', 'right center'],
+        'coverClip': ['cover', 'center center'],
+        'cover': ['100% 100%', '']
+      }
+    }
+  },
+  computed: {
+
+    // 获取样式数据
+    styleObject () {
+      const styleObject = {}
+      // 是否显示自定义填充
+      if (getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.show')) {
+        // 设置背景图片颜色
+        styleObject['background-color'] = getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.color')
+        if (getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.showImg')) {
+          // 设置背景图片及尺寸位置
+          styleObject['background'] = `url(${getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.imgUrl')}) no-repeat`
+          styleObject['background-size'] = this.imgSizeOption[getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.imgSize')][0]
+          styleObject['background-position'] = this.imgSizeOption[getParameter(this.option, 'theme.Basic.CustomBackgroundEnable.imgSize')][1]
+        }
+        return styleObject
+      }
+      return styleObject
     }
   },
   mounted () {

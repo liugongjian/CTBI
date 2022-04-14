@@ -29,6 +29,34 @@
           />
         </div>
       </el-collapse-item>
+      <el-collapse-item
+        v-if="option['Axis']"
+        title="坐标轴"
+        name="3"
+      >
+        <el-tabs v-model="activeName">
+          <el-tab-pane v-for="(item,name,key) in option['Axis']" :key="key" :label="item.cname" :name="key.toString()">
+            <component
+              :is="name"
+              :option="option['Axis'][name]"
+            />
+          </el-tab-pane>
+        </el-tabs>
+      </el-collapse-item>
+      <el-collapse-item
+        title="展示型配置"
+        name="4"
+      >
+        <div
+          v-for="(item,name,key) in option['DisplayConfig']"
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['DisplayConfig'][name]"
+          />
+        </div>
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
@@ -44,8 +72,15 @@ export default {
   },
   data () {
     return {
-      activeNames: '1'
+      activeNames: '1',
+      activeName: '0'
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+::v-deep .el-tabs__nav-scroll{
+    display: flex;
+    justify-content: center;
+}
+</style>

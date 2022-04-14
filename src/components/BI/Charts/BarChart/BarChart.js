@@ -1,4 +1,11 @@
-// 柱形图配置项信息
+/**
+{
+  "author": "ZhengJiale",
+  "time": "2022/04/11",
+  "description": "柱图组件"
+}
+ * */
+// 柱图配置项信息
 /**
  * type: {
  *    indicator: 指标,
@@ -21,7 +28,7 @@ export default {
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
-        'text': '柱形图', // 标题名称
+        'text': '柱图', // 标题名称
         'color': '#333', // 标题颜色
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
@@ -43,6 +50,16 @@ export default {
         'url': '', // 链接地址
         'show': false, // 是否展示链接地址
         'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
+      },
+      'CustomBackgroundEnable': { // 自定义背景填充
+        'color': '', // 卡片颜色
+        'show': false, // 是否使用自定义背景填充
+        'showImg': false, // 是否使用背景图片
+        'imgUrl': '', // 背景图片地址
+        'imgSize': 'containRight' // 背景图片尺寸位置
+      },
+      'ChartType': { // 图表类型
+        'type': 'BarChart' // 1.柱图;2.堆积柱状图;3.百分比堆叠柱状图
       }
     },
     'ComponentOption': { // 图表样式

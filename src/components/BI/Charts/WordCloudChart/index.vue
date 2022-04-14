@@ -12,10 +12,8 @@
 <script>
 import 'echarts-wordcloud'
 import { getLayoutOptionById } from '@/utils/optionUtils'
-import wordCloudMixins from '@/components/BI/mixins/wordCloudMixins'
 export default {
   name: 'WordCloudChart',
-  mixins: [wordCloudMixins],
   props: {
     identify: {
       type: String,

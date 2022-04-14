@@ -12,10 +12,10 @@
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
-import areaMixins from '@/components/BI/mixins/areaMixins'
+import lineMixins from '@/components/BI/mixins/lineMixins'
 export default {
   name: 'AreaChart',
-  mixins: [areaMixins],
+  mixins: [lineMixins],
   props: {
     identify: {
       type: String,

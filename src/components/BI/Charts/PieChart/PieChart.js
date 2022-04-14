@@ -38,6 +38,17 @@ export default {
       'Footer': { // 尾注
         'show': false, // 是否显示尾注
         'text': ''// 尾注信息
+      },
+      'TitleLink': { // 链接跳转组件
+        'text': '', // 文案
+        'url': '', // 链接地址
+        'show': false, // 是否展示链接地址
+        'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
+      },
+      'VisualStyle': { // 可视化样式
+        'style1': { 'name': '饼形', value: 'pie' }, // pie 饼形 ring 环形
+        'style2': { 'name': '环形', value: 'ring' }, // pie 饼形 ring 环形
+        'style': 'pie'
       }
     },
     'ComponentOption': { // 图表样式
@@ -48,7 +59,23 @@ export default {
         'orient': 'horizontal',
         'type': 'scroll'
       },
-      'ChartRadius': ['0%', '45%'] // 饼图半径
+      'ChartLabel': { // 标签样式
+        'type': 'PieChart', // 饼图标签样式
+        'check': true, // 选中显示标签
+        'checkList': ['维度', '百分比'],
+        'precision': 2, // 百分比保留位数 0位 1位 2位
+        'labelShow': 1 // 0不显示 1 智能显示 2 全部显示
+      },
+      'ChartRadius': ['0%', '45%'], // 饼图半径
+      'MergeOther': { // 合并数据为其他
+        'show': false, // 是否选中
+        'num': null
+      },
+      'TotalShow': { // 显示总计
+        'show': false, // 是否选中
+        'name': '总计', // 自定义的总计名字
+        'value': 0 // 总计数量
+      }
     }
   },
   'advance': {}, // 高级
