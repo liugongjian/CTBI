@@ -1,4 +1,4 @@
-// 饼图配置项信息
+// 玫瑰图配置项信息
 /**
  * type: {
  *    indicator: 指标,
@@ -22,7 +22,7 @@ export default {
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
-        'text': '饼图', // 标题名称
+        'text': '玫瑰图', // 标题名称
         'color': '#333', // 标题颜色
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
@@ -44,11 +44,6 @@ export default {
         'url': '', // 链接地址
         'show': false, // 是否展示链接地址
         'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
-      },
-      'VisualStyle': { // 可视化样式
-        'style1': { 'name': '饼形', value: 'pie' }, // pie 饼形 ring 环形
-        'style2': { 'name': '环形', value: 'ring' }, // pie 饼形 ring 环形
-        'style': 'pie'
       }
     },
     'ComponentOption': { // 图表样式
@@ -61,7 +56,7 @@ export default {
       },
       'ChartLabel': { // 标签样式
         'type': 'PieChart', // 饼图标签样式
-        'check': true, // 选中显示标签
+        'check': false, // 选中显示标签
         'checkList': ['维度', '百分比'],
         'precision': 2, // 百分比保留位数 0位 1位 2位
         'labelShow': 1 // 0不显示 1 智能显示 2 全部显示
@@ -81,3 +76,4 @@ export default {
   'advance': {}, // 高级
   'dataSource': {}// 数据集
 }
+
