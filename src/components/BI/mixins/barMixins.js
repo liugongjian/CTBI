@@ -22,8 +22,10 @@ export default {
         this.yAxis = {}
         this.dataValue = this.storeOption.dataSource
 
+        const label = {}
+        label.show = this.storeOption.theme.ComponentOption.BarLabel.show
         for (let i = 0; i < seriesLength; i++) {
-          this.series.push({ type: 'bar' })
+          this.series.push({ type: 'bar', label })
         }
       } else if (this.type === 'StackedBarChart') { // 为堆积柱状图时
         // 重置数据
@@ -32,10 +34,13 @@ export default {
         this.yAxis = {}
         this.dataValue = this.storeOption.dataSource
 
+        const label = {}
+        label.show = this.storeOption.theme.ComponentOption.BarLabel.show // 控制标签显示
+        // const isTotal = this.storeOption.theme.ComponentOption.BarLabel.labelValues.includes('总计')
         for (let i = 0; i < seriesLength; i++) {
-          this.series.push({ type: 'bar', stack: 'Ad' })
+          this.series.push({ type: 'bar', stack: 'Total', label })
         }
-      } else if (this.type === 'PercentStackedBarChart') { //
+      } else if (this.type === 'PercentStackedBarChart') { // 为百分比堆积柱状图时
         this.valueToPercent()
         this.yAxis = {
           axisLabel: {
@@ -50,8 +55,10 @@ export default {
           formatter: '{b0}<br/>{a0}: {c0}%<br/>{a1}: {c1}%'
         }
         this.series = []
+        const label = {}
+        label.show = this.storeOption.theme.ComponentOption.BarLabel.show
         for (let i = 0; i < seriesLength; i++) {
-          this.series.push({ type: 'bar', stack: 'Total' })
+          this.series.push({ type: 'bar', stack: 'Total', label })
         }
       }
     },
