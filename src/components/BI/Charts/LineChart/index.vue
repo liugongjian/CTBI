@@ -13,6 +13,8 @@
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
 import lineMixins from '@/components/BI/mixins/lineMixins'
+import { strWithKSeperator, addChineseUnit, addEnglishUnit } from '@/utils/numberUtils'
+
 export default {
   name: 'LineChart',
   mixins: [lineMixins],
@@ -86,39 +88,79 @@ export default {
             }
           }
         },
-        xAxis: {
-          type: 'category',
-          show: axis.XAxis.show,
-          name: axis.XAxis.showTitle ? axis.XAxis.title : '',
-          axisTick: {
-            show: axis.XAxis.showTicks
-          },
-          axisLabel: {
-            show: axis.XAxis.showAxisLabel,
-            formatter: `{value} ${axis.XAxis.unit}`
-          },
-          axisLine: {
-            lineStyle: {
-              color: axis.XAxis.lineColor,
-              width: axis.XAxis.lineWidth,
-              type: axis.XAxis.lineType
-            }
-          },
-          splitLine: {
-            show: axis.XAxis.showSplit,
-            lineStyle: {
-              width: axis.XAxis.splitWidth,
-              color: axis.XAxis.splitColor,
-              type: axis.XAxis.splitType
-            }
-          }
-        },
-        yAxis: {},
+        xAxis: this.generateAxisOptions('X', axis),
+        yAxis: this.generateAxisOptions('Y', axis),
         dataset: {
           source: this.dataValue
         },
         series: this.series
       }
+    },
+    generateAxisOptions (type, axis) {
+      const axisType = type + 'Axis'
+      const commonOptions = {
+        show: axis[axisType].show,
+        name: axis[axisType].showTitle ? axis[axisType].title : '',
+        axisTick: {
+          show: axis[axisType].showTicks
+        },
+        axisLabel: {
+          show: axis[axisType].showAxisLabel,
+          formatter: (value, index) => {
+            const { numberFormat, numberDigit, unit, kSeperator } = axis[axisType]
+            let res, temp
+            if (type === 'X') {
+              res = value + unit
+            } else {
+              switch (axis[axisType].formatType) {
+                case '1':
+                  debugger
+                  if (axis[axisType].lang === 'chinese-simplified') {
+                    res = addChineseUnit(value, true)
+                  }
+                  if (axis[axisType].lang === 'english') {
+                    res = addEnglishUnit(value)
+                  }
+                  if (axis[axisType].lang === 'chinese-complicated') {
+                    res = addChineseUnit(value, false)
+                  }
+                  console.log(typeof value)
+                  break
+                case '2':
+                  temp = (value * (numberFormat === 'percent' ? 100 : 1)).toFixed(numberDigit) + (numberFormat === 'percent' ? '%' : '') + unit
+                  res = kSeperator ? strWithKSeperator(temp) : temp
+                  break
+                case '3':
+                  break
+              }
+            }
+            return res
+          }
+        },
+        axisLine: {
+          lineStyle: {
+            color: axis[axisType].lineColor,
+            width: axis[axisType].lineWidth,
+            type: axis[axisType].lineType
+          }
+        },
+        splitLine: {
+          show: axis[axisType].showSplit,
+          lineStyle: {
+            width: axis[axisType].splitWidth,
+            color: axis[axisType].splitColor,
+            type: axis[axisType].splitType
+          }
+        }
+      }
+
+      return type === 'X'
+        ? { type: 'category', ...commonOptions }
+        : {
+          min: axis[axisType].autoMin ? 'dataMin' : axis.YAxis.min,
+          max: axis[axisType].autoMax ? 'dataMax' : axis.YAxis.max,
+          ...commonOptions
+        }
     }
   }
 }
