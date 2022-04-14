@@ -7,8 +7,11 @@
     <!-- 自定义总计名 -->
     <div v-show="option.show" class="editor-item-container flex-align-center">
       <div class="flex-align-center">
-        <el-input
+        <el-input-number
           v-model="option.num"
+          controls-position="right"
+          style="width: 100px"
+          :min="0"
           placeholder="合并为其他保留数量"
         />
       </div>

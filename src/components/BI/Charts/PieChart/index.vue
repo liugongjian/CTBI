@@ -66,16 +66,17 @@ export default {
       })
 
       const { checkList, check, precision, labelShow } = ComponentOption.ChartLabel
-      // const mergeShow = ComponentOption.MergeOther.show
-      // if (mergeShow) {
-      //   this.transfromData(ComponentOption.MergeOther.num)
-      // }
+      // 合并数据为其他
+      const { num } = ComponentOption.MergeOther
+      const mergeShow = ComponentOption.MergeOther.show
+      if (mergeShow && num) {
+        this.transfromData(ComponentOption.MergeOther.num)
+      }
       this.chartOption = {
-        // 'tooltip': option.Tooltip,
         tooltip: {
           trigger: 'item',
           formatter: (data) => {
-            return data.name + ': ' + data.value[1] + ', ' + data.percent.toFixed(precision) + '%'
+            return data.name + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
           }
         },
         legend: ComponentOption.Legend,
@@ -102,7 +103,7 @@ export default {
                   formatter += data.name + ' '
                 }
                 if (checkList.includes('度量')) {
-                  formatter += data.value[1] + ' '
+                  formatter += data.value[data.encode.value[0]] + ' '
                 }
                 if (checkList.includes('百分比')) {
                   formatter += data.percent.toFixed(precision) + '%'
@@ -110,47 +111,45 @@ export default {
                 return formatter
               }
             },
+            // 数据标签展示样式 todo
             labelLayout: {
               hideOverlap: labelShow === 1
             }
             // encode: {
             //   itemName: 'product',
-            //   value: this.dataValue[0][2]
+            //   // value: this.dataValue[0][2]
+            //   value: 2 // 除维度以外的第2列
             // }
-
           }
         ]
       }
     },
     // 合并数据为其他 val val为1 就是保留最大的一个数据 其他数据合并为其他
     transfromData (val) {
-      // sumArr 的长度为数据列数
-      // dataValue: [
-      //   ['date', '价格', '数量'],
-      //   ['Mon', 820, 410],
-      //   ['Tue', 932, 320],
-      //   ['Wed', 901, 300],
-      //   ['Thu', 934, 380],
-      //   ['Fri', 1290, 430],
-      //   ['Sat', 1330, 480],
-      //   ['Sun', 1320, 460]
-      // ],
-      const sumArr = []
-      for (let ii = 0; ii < this.dataValue[0].length - 1; ii++) {
-        sumArr.push(0)
-      }
+      // 取除维度以外的第1列为vlaue
+      let data = []
       for (let i = 1; i < this.dataValue.length; i++) {
-        debugger
-        for (let j = 0; j < sumArr.length; j++) {
-          debugger
-          sumArr[j] += this.dataValue[i][j + 1]
-        }
+        data.push({ name: this.dataValue[i][0], value: this.dataValue[i][1] })
       }
-      for (let i = 1; i < this.dataValue.length; i++) {
-        for (let j = 0; j < sumArr.length; j++) {
-          this.dataValue[i][j + 1] = (this.dataValue[i][j + 1] / sumArr[j] * 100).toFixed(2)
-        }
+      // 数据按数值从大到小排序
+      data = data.sort((a, b) => { return b.value - a.value })
+      const showCount = val // 单独显示的数据条数
+      if (data.length > showCount) {
+        // 数据大于9条时将前9条单独显示
+        const dataTemp = data.splice(0, showCount)
+        let leftSum = 0
+        // 剩余数据合并
+        data.forEach(d => { leftSum += d.value })
+        data = dataTemp.concat({ name: '其他合计', value: leftSum })
       }
+      const aTemp = []
+      aTemp[0] = [].concat(this.dataValue[0][0], this.dataValue[0][1])
+      //  val+2 行
+      for (let i = 1; i < val + 2; i++) {
+        aTemp[i] = [].concat([data[i - 1].name, data[i - 1].value])
+      }
+      console.log('<<<<', data, aTemp)
+      this.dataValue = aTemp
     }
   }
 }
