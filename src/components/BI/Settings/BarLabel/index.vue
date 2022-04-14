@@ -7,18 +7,14 @@
       />
       <div class="editor-item-container">
         <el-checkbox-group
-          v-show="option.showLabelValues"
-          v-model="option.labelValues"
+          v-show="option.showCheckBox"
+          v-model="option.checkList"
           :disabled="!option.show"
         >
-          <el-checkbox label="度量" />
           <el-checkbox
-            v-show="!option.isPercent"
-            label="总计"
-          />
-          <el-checkbox
-            v-show="option.isPercent"
-            label="百分比"
+            v-for="(item, index) in labelOptions"
+            :key="index"
+            :label="item.label"
           />
         </el-checkbox-group>
       </div>
@@ -26,7 +22,7 @@
     <div class="editor-object-container">
       <div>数据标签展示方式</div>
       <div class="editor-item-container">
-        <el-radio-group v-model="option.dataLabelShow">
+        <el-radio-group v-model="option.labelShow">
           <el-radio label="auto">智能显示</el-radio>
           <el-radio label="all">全量显示</el-radio>
         </el-radio-group>
@@ -43,6 +39,33 @@ export default {
     option: {
       type: Object,
       default: () => { }
+    }
+  },
+  data () {
+    return {
+      // 图表标签格式类型集合
+      checkListOptions: {
+        'StackedBarChart': [
+          {
+            label: '度量'
+          }, {
+            label: '总计'
+          }
+        ],
+        'PercentStackedBarChart': [
+          {
+            label: '度量'
+          }, {
+            label: '百分比'
+          }
+        ]
+      }
+    }
+  },
+  computed: {
+    // 根据Type返回对应的标签格式集合
+    labelOptions () {
+      return this.checkListOptions[this.option.type]
     }
   }
 }

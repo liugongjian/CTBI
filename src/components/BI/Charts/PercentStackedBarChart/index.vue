@@ -41,7 +41,7 @@ export default {
     storeOption: {
       handler (val) {
         this.type = val.theme.Basic.ChartType.type
-        val.theme.ComponentOption.BarLabel.showLabelValues = this.type !== 'BarChart'
+        val.theme.ComponentOption.BarLabel.showCheckBox = this.type !== 'BarChart'
         val.theme.ComponentOption.BarLabel.isPercent = this.type === 'PercentStackedBarChart'
         val.theme.Basic.Title.text = this.textMap[this.type]
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow

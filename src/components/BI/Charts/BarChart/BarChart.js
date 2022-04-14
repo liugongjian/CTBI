@@ -65,10 +65,10 @@ export default {
     'ComponentOption': { // 图表样式
       'BarLabel': { // 图表标签
         'show': false, // 是否展示图表标签
-        'showLabelValues': false, // 是否展示标签格式多选框
-        'labelValues': ['度量'], // 标签格式 1. 度量；2. 百分比；3. 总计
-        'isPercent': false, // 是否为百分比类型图表,来显示不同的标签格式多选框
-        'dataLabelShow': 'auto' // 数据标签展示方式 1.auto 智能显示；2.all 全量显示
+        'showCheckBox': false, // 是否展示标签格式多选框
+        'checkList': ['度量'], // 标签格式 1. 度量；2. 百分比；3. 总计
+        'type': 'BarChart', // 图表类型
+        'labelShow': 'auto' // 数据标签展示方式 1.auto 智能显示；2.all 全量显示
       },
       'Legend': { // 图例
         'show': true,
