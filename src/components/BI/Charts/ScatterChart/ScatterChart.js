@@ -40,6 +40,50 @@ export default {
         'minSize': 2, // 最小值
         'maxSize': 16 // 最大值
       }
+    },
+    'Axis': {
+      'XAxis': {
+        'cname': 'X轴',
+        'title': '',
+        'unit': '',
+        'show': true,
+        'showTitle': false,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'lineType': 'solid',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000',
+        'splitType': 'solid'
+      },
+      'YAxis': {
+        'cname': '左Y轴',
+        'title': '',
+        'unit': '',
+        'show': true,
+        'showTitle': false,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'lineType': 'solid',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000',
+        'splitType': 'solid',
+        'min': 0,
+        'max': 0,
+        'autoMin': true,
+        'autoMax': true,
+        'formatType': '1',
+        'lang': 'chinese-simplified',
+        'numberFormat': 'number',
+        'numberDigit': 0,
+        'kSeperator': false,
+        'formatRegx': ''
+      }
     }
   },
   'advance': {}, // 高级
