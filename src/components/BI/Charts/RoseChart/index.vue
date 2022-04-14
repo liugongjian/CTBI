@@ -15,7 +15,7 @@
 import { getLayoutOptionById } from '@/utils/optionUtils'
 import pieMixins from '@/components/BI/mixins/pieMixins'
 export default {
-  name: 'PieChart',
+  name: 'RoseChart',
   mixins: [pieMixins],
   props: {
     identify: {
@@ -28,7 +28,7 @@ export default {
       storeOption: {},
       chartOption: {},
       dataValue: null,
-      radius: []
+      radius: ['0', '75%']
     }
   },
   watch: {
@@ -58,8 +58,7 @@ export default {
   },
   methods: {
     getOption () {
-      const { ComponentOption, Basic } = this.storeOption.theme
-      this.radius = Basic.VisualStyle.style === 'pie' ? ['0', '75%'] : ['30%', '75%']
+      const { ComponentOption } = this.storeOption.theme
       const radius = this.radius.map(item => {
         item = (parseInt(item) * parseInt(ComponentOption.ChartRadius[1]) / 100).toFixed('0') + '%'
         return item
@@ -86,7 +85,7 @@ export default {
         series: [
           {
             type: 'pie',
-            // 'radius': ComponentOption.ChartRadius,
+            roseType: 'area',
             radius: radius,
             emphasis: {
               itemStyle: {

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import 'echarts-liquidfill'
+// import 'echarts-liquidfill'
 import { getLayoutOptionById } from '@/utils/optionUtils'
 import waterRippleMixins from '@/components/BI/mixins/waterRippleMixins'
 export default {

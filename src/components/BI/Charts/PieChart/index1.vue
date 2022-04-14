@@ -12,8 +12,10 @@
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
+import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import pieMixins from '@/components/BI/mixins/pieMixins'
+import { colorTheme } from '@/constants/color.js'
+import store from '@/store'
 export default {
   name: 'PieChart',
   mixins: [pieMixins],
@@ -28,13 +30,18 @@ export default {
       storeOption: {},
       chartOption: {},
       dataValue: null,
-      radius: []
+      radius: [],
+      color: []
     }
   },
   watch: {
     storeOption: {
       handler (val) {
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
+        if (JSON.stringify(val.dataSource) !== '{}') {
+          this.dataValue = val.dataSource
+          // this.getOption()
+        }
         // 显示总计
         const totalShow = val.theme.ComponentOption.TotalShow.show
         if (totalShow) {
@@ -44,10 +51,6 @@ export default {
           }
           val.theme.ComponentOption.TotalShow.value = sum
         }
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
-          // this.getOption()
-        }
         this.getOption()
       },
       deep: true
@@ -55,12 +58,39 @@ export default {
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
+    this.getInitColor()
   },
   methods: {
+    getInitColor () {
+      // 将图中的颜色和数据 添加到 vuex中
+      const temp = store.state.app.layout.find(item => {
+        return item.i === this.identify
+      })
+      const newTemp = deepClone(temp)
+      this.color = []
+      if (this.dataValue) {
+        this.dataValue.forEach((item, index) => {
+          if (index) {
+            const idx = (index) % colorTheme['defaultColor'].length
+            this.color.push({ name: item[0], color: colorTheme['defaultColor'][idx] })
+          }
+        })
+      } else {
+        colorTheme['defaultColor'].forEach((item, index) => {
+          this.color.push({ name: '', color: colorTheme['defaultColor'][index] })
+        })
+      }
+
+      newTemp.option.theme.ComponentOption.Color.color = this.color
+      store.dispatch('app/updateLayoutItem', { id: this.identify, item: newTemp })
+    },
     getOption () {
-      const { ComponentOption, Basic } = this.storeOption.theme
-      this.radius = Basic.VisualStyle.style === 'pie' ? ['0', '75%'] : ['30%', '75%']
-      const radius = this.radius.map(item => {
+      debugger
+      const that = this
+      that.getInitColor()
+      const { ComponentOption, Basic } = that.storeOption.theme
+      that.radius = Basic.VisualStyle.style === 'pie' ? ['0', '75%'] : ['30%', '75%']
+      const radius = that.radius.map(item => {
         item = (parseInt(item) * parseInt(ComponentOption.ChartRadius[1]) / 100).toFixed('0') + '%'
         return item
       })
@@ -70,9 +100,13 @@ export default {
       const { num } = ComponentOption.MergeOther
       const mergeShow = ComponentOption.MergeOther.show
       if (mergeShow && num) {
-        this.transfromData(ComponentOption.MergeOther.num)
+        that.transfromData(ComponentOption.MergeOther.num)
       }
-      this.chartOption = {
+
+      console.log('....111', that.color)
+      that.color = ComponentOption.Color.color
+      console.log('....222', that.color)
+      that.chartOption = {
         tooltip: {
           trigger: 'item',
           formatter: (data) => {
@@ -81,7 +115,7 @@ export default {
         },
         legend: ComponentOption.Legend,
         dataset: {
-          source: this.dataValue
+          source: that.dataValue
         },
         series: [
           {
@@ -93,6 +127,20 @@ export default {
                 shadowBlur: 10,
                 shadowOffsetX: 0,
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            },
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              normal: {
+                color: (data) => {
+                  // const index = (data.dataIndex) % colorTheme['defaultColor'].length
+                  // return colorTheme['defaultColor'][index]
+                  const colorTemp = that.color.find((item) => { return data.name === item.name })
+                  console.log('.....', that.color, data.name, colorTemp)
+                  return colorTemp.color
+                }
               }
             },
             label: {
@@ -117,7 +165,7 @@ export default {
             }
             // encode: {
             //   itemName: 'product',
-            //   // value: this.dataValue[0][2]
+            //   // value: that.dataValue[0][2]
             //   value: 2 // 除维度以外的第2列
             // }
           }
