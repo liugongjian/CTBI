@@ -67,6 +67,20 @@
       </div>
     </div>
 
+    <!-- 是否展示总计 -->
+    <div
+      class="rich-text-total"
+      style="max-height:100px"
+    >
+      <div
+        v-show="getParameter(option, 'theme.ComponentOption.TotalShow.show')"
+        class="rich-text-content"
+      >
+        <span style="margin-right: 20px">{{ getParameter(option, 'theme.ComponentOption.TotalShow.name') }}</span>
+        <span>{{ getParameter(option, 'theme.ComponentOption.TotalShow.value') }}</span>
+      </div>
+    </div>
+
     <!-- 当备注位置选择为图表上方时 -->
     <div
       class="rich-text-editor"
@@ -90,19 +104,6 @@
           v-show="getParameter(option, 'theme.Basic.Footer.show')"
           class="rich-text-content"
           v-html="getParameter(option, 'theme.Basic.Footer.text')"
-        />
-      </div>
-    </div>
-    <!-- 图表类型 -->
-    <div class="rich-text-footer">
-      <div
-        class="rich-text-editor"
-        style="max-height:100px"
-      >
-
-        <div
-          v-show="getParameter(option, 'theme.Basic.ChartType.show')"
-          class="rich-text-content"
         />
       </div>
     </div>
