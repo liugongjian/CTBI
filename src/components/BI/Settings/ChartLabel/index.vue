@@ -1,8 +1,15 @@
 <template>
   <div>
     <div class="editor-object-container">
-      <el-checkbox v-model="option.check" label="显示标签" />
-      <el-checkbox-group v-if="labelOptions.length>0" v-model="option.checkList" :disabled="!option.check" @change="handlerChange">
+      <el-checkbox
+        v-model="option.check"
+        label="显示标签"
+      />
+      <el-checkbox-group
+        v-if="labelOptions.length>0"
+        v-model="option.checkList"
+        :disabled="!option.check"
+      >
         <el-checkbox
           v-for="(item, index) in labelOptions"
           :key="index"
@@ -10,7 +17,10 @@
         />
       </el-checkbox-group>
     </div>
-    <div v-if="option.precisionShow" class="editor-object-container">
+    <div
+      v-if="option.precisionShow"
+      class="editor-object-container"
+    >
       <span>设置完成占比小数位数</span>
       <el-select
         v-model="option.precision"
@@ -24,10 +34,20 @@
         />
       </el-select>
     </div>
-    <div v-if="option.labelShow" class="editor-object-container" style="display: flex;align-items: center">
+    <div
+      v-if="option.labelShow"
+      class="editor-object-container"
+      style="display: flex;align-items: center"
+    >
       <span>数据标签展示方式</span>
-      <el-radio v-model="option.labelShow" :label="1">智能显示</el-radio>
-      <el-radio v-model="option.labelShow" :label="2">全量显示</el-radio>
+      <el-radio
+        v-model="option.labelShow"
+        :label="1"
+      >智能显示</el-radio>
+      <el-radio
+        v-model="option.labelShow"
+        :label="2"
+      >全量显示</el-radio>
     </div>
   </div>
 </template>
@@ -43,6 +63,7 @@ export default {
   },
   data () {
     return {
+      // 图表标签格式类型集合
       options: {
         'PieChart': [
           {
@@ -53,7 +74,21 @@ export default {
             label: '百分比'
           }
         ],
-        'BarChart': []
+        'BarChart': [],
+        'StackedBarChart': [
+          {
+            label: '度量'
+          }, {
+            label: '总计'
+          }
+        ],
+        'PercentStackedBarChart': [
+          {
+            label: '度量'
+          }, {
+            label: '百分比'
+          }
+        ]
       },
       precisionOptions: [
         {
@@ -79,9 +114,6 @@ export default {
   mounted () {
   },
   methods: {
-    handlerChange (val) {
-      this.option.checkList = val
-    }
   }
 
 }
@@ -89,6 +121,6 @@ export default {
 
 <style lang="scss" scoped>
 .label {
-  margin-top: 20px ;
+  margin-top: 20px;
 }
 </style>
