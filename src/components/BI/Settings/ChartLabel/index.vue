@@ -2,7 +2,7 @@
   <div>
     <div class="editor-object-container">
       <el-checkbox v-model="option.check" label="显示标签" />
-      <el-checkbox-group v-if="labelOptions.length>0" v-model="checkList" :disabled="!option.check" @change="handlerChange">
+      <el-checkbox-group v-if="labelOptions.length>0" v-model="option.checkList" :disabled="!option.check" @change="handlerChange">
         <el-checkbox
           v-for="(item, index) in labelOptions"
           :key="index"
@@ -43,9 +43,6 @@ export default {
   },
   data () {
     return {
-      checkListOptions: {
-        'PieChart': ['维度', '百分比']
-      },
       options: {
         'PieChart': [
           {
@@ -80,13 +77,10 @@ export default {
     }
   },
   mounted () {
-    // 根据type获取对应图表标签集合 默认选中的n
-    this.checkList = this.checkListOptions[this.option.type]
   },
   methods: {
     handlerChange (val) {
-      this.checkList = val
-      this.option.checkList = this.checkList
+      this.option.checkList = val
     }
   }
 
