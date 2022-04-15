@@ -1,5 +1,8 @@
 // 饼图的混入
 import baseMixins from './baseMixins'
+import { deepClone } from '@/utils/optionUtils'
+import { colorTheme } from '@/constants/color.js'
+import store from '@/store'
 export default {
   mixins: [baseMixins],
   data: function () {
@@ -35,6 +38,23 @@ export default {
         aTemp[i] = [].concat([data[i - 1].name, data[i - 1].value])
       }
       this.dataValue = aTemp
+    },
+    // 将图中的颜色和数据 添加到 vuex中
+    getInitColor () {
+      const temp = store.state.app.layout.find(item => {
+        return item.i === this.identify
+      })
+      const newTemp = deepClone(temp)
+      this.color = []
+      this.dataValue.forEach((item, index) => {
+        if (index) {
+          const idx = (index) % colorTheme['defaultColor'].length
+          this.color.push({ name: item[0], color: colorTheme['defaultColor'][idx].value })
+        }
+      })
+
+      newTemp.option.theme.ComponentOption.Color.color = this.color
+      store.dispatch('app/updateLayoutItem', { id: this.identify, item: newTemp })
     }
   }
 }

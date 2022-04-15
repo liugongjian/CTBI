@@ -15,7 +15,7 @@
         <label>字段项</label>
         <div>
           <div v-for="(item,index) in colorData" :key="index" class="item" :class="{active: active === index}" @click="changeActive(index)">
-            <span class="box" :style="{backgroundColor: item.color}" />
+            <span v-if="item.name" class="box" :style="{backgroundColor: item.color}" />
             {{ item.name }}
           </div>
         </div>
@@ -77,8 +77,11 @@ export default {
     },
     handleColor (item) {
       const data = deepClone(this.colorData)
-      data[this.active].color = item
-      this.$emit('update:color-data', data)
+      // 如果系列字段名不为空
+      if (data[0].name) {
+        data[this.active].color = item
+        this.$emit('update:color-data', data)
+      }
     },
     changeActive (index) {
       this.colorValue = null

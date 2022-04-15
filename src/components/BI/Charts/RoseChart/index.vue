@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
+import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import pieMixins from '@/components/BI/mixins/pieMixins'
 export default {
   name: 'RoseChart',
@@ -35,22 +35,18 @@ export default {
     storeOption: {
       handler (val) {
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        // 显示总计
-        const totalShow = val.theme.ComponentOption.TotalShow.show
-        if (totalShow) {
-          let sum = 0
-          for (let i = 1; i < this.dataValue.length; i++) {
-            sum += this.dataValue[i][1]
-          }
-          val.theme.ComponentOption.TotalShow.value = sum
-        }
         if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
+          this.dataValue = deepClone(val.dataSource)
           // this.getOption()
         }
         this.getOption()
       },
       deep: true
+    },
+    dataValue: {
+      handler (val) {
+        this.getInitColor()
+      }
     }
   },
   mounted () {
@@ -58,20 +54,38 @@ export default {
   },
   methods: {
     getOption () {
-      const { ComponentOption } = this.storeOption.theme
-      const radius = this.radius.map(item => {
+      const that = this
+      const { ComponentOption } = that.storeOption.theme
+
+      // 显示总计
+      const totalShow = ComponentOption.TotalShow.show
+      if (totalShow) {
+        let sum = 0
+        for (let i = 1; i < that.dataValue.length; i++) {
+          sum += that.dataValue[i][1]
+        }
+        ComponentOption.TotalShow.value = sum
+      }
+
+      // 半径变化
+      const radius = that.radius.map(item => {
         item = (parseInt(item) * parseInt(ComponentOption.ChartRadius[1]) / 100).toFixed('0') + '%'
         return item
       })
-
+      // 图表标签
       const { checkList, check, precision, labelShow } = ComponentOption.ChartLabel
+
       // 合并数据为其他
       const { num } = ComponentOption.MergeOther
       const mergeShow = ComponentOption.MergeOther.show
       if (mergeShow && num) {
-        this.transfromData(ComponentOption.MergeOther.num)
+        that.transfromData(ComponentOption.MergeOther.num)
       }
-      this.chartOption = {
+      // 取到颜色配置
+      const color = ComponentOption.Color.color
+
+      // 设置图表的option
+      that.chartOption = {
         tooltip: {
           trigger: 'item',
           formatter: (data) => {
@@ -80,7 +94,7 @@ export default {
         },
         legend: ComponentOption.Legend,
         dataset: {
-          source: this.dataValue
+          source: that.dataValue
         },
         series: [
           {
@@ -92,6 +106,22 @@ export default {
                 shadowBlur: 10,
                 shadowOffsetX: 0,
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            },
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              normal: {
+                color: (data) => {
+                  if (color[0].name) {
+                    const colorTemp = color.find((item) => { return data.name === item.name })
+                    return colorTemp.color
+                  } else {
+                    const index = (data.dataIndex) % color.length
+                    return color[index].value
+                  }
+                }
               }
             },
             label: {
