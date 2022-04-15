@@ -62,12 +62,15 @@ export default {
           show: true
         }
         this.tooltip = {
-          trigger: 'axis',
-          formatter: '{b0}<br/>{a0}: {c0}%<br/>{a1}: {c1}%<br/>{a2}: {c2}%'
+          trigger: 'axis'
         }
-        this.label.formatter = function (params) { // 这里就是控制显示的样式
-          return params.value
+        const that = this
+        this.label.formatter = function (params) {
+          const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
+          const isMeasure = that.checkList.includes('度量') ? `${that.storeOption.dataSource[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+          return isPercent + '\n' + isMeasure
         }
+        this.label.show = this.storeOption.theme.ComponentOption.BarLabel.show
         for (let i = 0; i < seriesLength; i++) {
           this.series.push({ type: 'bar', stack: 'Total', label: this.label, labelLayout: this.labelLayout })
         }
