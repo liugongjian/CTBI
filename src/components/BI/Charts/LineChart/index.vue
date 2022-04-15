@@ -124,7 +124,6 @@ export default {
                   if (axis[axisType].lang === 'chinese-complicated') {
                     res = addChineseUnit(value, false)
                   }
-                  console.log(typeof value)
                   break
                 case '2':
                   temp = (value * (numberFormat === 'percent' ? 100 : 1)).toFixed(numberDigit) + (numberFormat === 'percent' ? '%' : '') + unit
