@@ -59,6 +59,21 @@
           />
         </div>
       </el-collapse-item>
+      <el-collapse-item
+        v-if="option['StyleConfig']"
+        title="样式配置"
+        name="5"
+      >
+        <div
+          v-for="(item,name,key) in option['StyleConfig']"
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['StyleConfig'][name]"
+          />
+        </div>
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
