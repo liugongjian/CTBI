@@ -66,7 +66,7 @@ export default {
       'BarLabel': { // 图表标签
         'show': false, // 是否展示图表标签
         'showCheckBox': false, // 是否展示标签格式多选框
-        'checkList': ['度量'], // 标签格式 1. 度量；2. 百分比；3. 总计
+        'checkList': ['百分比'], // 标签格式 1. 度量；2. 百分比；3. 总计
         'type': 'PercentStackedBarChart', // 图表类型
         'labelShow': 'auto' // 数据标签展示方式 1.auto 智能显示；2.all 全量显示
       },
