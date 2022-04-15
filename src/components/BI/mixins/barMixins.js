@@ -56,16 +56,13 @@ export default {
         this.yAxis = {
           axisLabel: {
             show: true,
-            interval: 'auto'
-            // formatter: function (params) {
-            //   return `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%`
-            // }
+            interval: 'auto',
+            formatter: '{value}%'
           },
           show: true
         }
         this.tooltip = {
-          trigger: 'axis',
-          formatter: '{b0}<br/>{a0}: {c0}%<br/>{a1}: {c1}%<br/>{a2}: {c2}%'
+          trigger: 'axis'
         }
         const that = this
         this.label.formatter = function (params) {
