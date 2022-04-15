@@ -5,6 +5,7 @@ export default {
   mixins: [baseMixins],
   data () {
     return {
+      xAxis: { type: 'category' },
       yAxis: {},
       tooltip: {},
       label: {},
@@ -29,11 +30,20 @@ export default {
         this.label.position = 'top'
         for (let i = 0; i < seriesLength; i++) {
           this.series.push({ type: 'bar', label: this.label, labelLayout: this.labelLayout })
+          if (this.storeOption.theme.ComponentOption.TwisYAxis.show) {
+            const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
+            this.series[i].yAxisIndex = yAxisIndex
+          }
         }
       } else if (this.type === 'StackedBarChart') { // 为堆积柱状图时
         this.mixinItem()
         for (let i = 0; i < seriesLength; i++) {
           this.series.push({ type: 'bar', stack: 'Total', label: this.label, labelLayout: this.labelLayout })
+          if (this.storeOption.theme.ComponentOption.TwisYAxis.show) {
+            const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
+            this.series[i].yAxisIndex = yAxisIndex
+            this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
+          }
         }
 
         // 插入一个假数据用于生成总计的label
@@ -56,14 +66,17 @@ export default {
       } else if (this.type === 'PercentStackedBarChart') { // 为百分比堆积柱状图时
         this.mixinItem()
         this.valueToPercent()
-        this.yAxis = {
-          axisLabel: {
-            show: true,
-            interval: 'auto',
-            formatter: '{value}%'
-          },
-          show: true
+        if (!this.storeOption.theme.ComponentOption.TwisYAxis.show) {
+          this.yAxis = {
+            axisLabel: {
+              show: true,
+              interval: 'auto',
+              formatter: '{value}%'
+            },
+            show: true
+          }
         }
+
         this.tooltip = {
           trigger: 'axis'
         }
@@ -76,6 +89,11 @@ export default {
         this.label.show = this.storeOption.theme.ComponentOption.ChartLabel.check
         for (let i = 0; i < seriesLength; i++) {
           this.series.push({ type: 'bar', stack: 'Total', label: this.label, labelLayout: this.labelLayout })
+          if (this.storeOption.theme.ComponentOption.TwisYAxis.show) {
+            const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
+            this.series[i].yAxisIndex = yAxisIndex
+            this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
+          }
         }
       }
     },
@@ -85,7 +103,6 @@ export default {
       // 重置数据
       this.series = []
       this.tooltip = {}
-      this.yAxis = {}
       this.dataValue = deepClone(this.storeOption.dataSource)
 
       // 图表标签
@@ -93,6 +110,47 @@ export default {
       this.label.formatter = null
       this.labelLayout.hideOverlap = this.storeOption.theme.ComponentOption.ChartLabel.labelShow === 1
       this.label.position = ''
+
+      // 双Y轴设置
+      if (this.storeOption.theme.ComponentOption.TwisYAxis.show) {
+        const formatter = this.type === 'PercentStackedBarChart' ? '{value}%' : '{value}'
+        this.yAxis = [
+          {
+            type: 'value',
+            min: -10,
+            axisLine: {
+              show: true
+            },
+            splitLine: {
+              show: false
+            }
+          },
+          {
+            type: 'value',
+            min: 0,
+            splitLine: {
+              show: false
+            },
+            axisLine: {
+              show: true
+            },
+            axisLabel: {
+              formatter: formatter
+            }
+          }
+        ]
+        this.xAxis = [
+          {
+            type: 'category'
+          },
+          {
+            type: 'category'
+          }
+        ]
+      } else {
+        this.yAxis = {}
+        this.xAxis = { type: 'category' }
+      }
     },
 
     // 将数据转换成百分比

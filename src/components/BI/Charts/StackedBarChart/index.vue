@@ -61,9 +61,7 @@ export default {
       this.getSeries()
       this.chartOption = {
         'legend': componentOption.Legend,
-        'xAxis': {
-          'type': 'category'
-        },
+        'xAxis': this.xAxis,
         'tooltip': this.tooltip,
         'yAxis': this.yAxis,
         'dataset': {
