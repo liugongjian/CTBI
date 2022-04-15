@@ -1,10 +1,8 @@
 <template>
   <div>
     <div class="editor-object-container">
-      <div>
-        <el-checkbox v-model="option.check" label="显示标签" />
-      </div>
-      <el-checkbox-group v-model="checkList" :disabled="!option.check" @change="handlerChange">
+      <el-checkbox v-model="option.check" label="显示标签" />
+      <el-checkbox-group v-if="labelOptions.length>0" v-model="checkList" :disabled="!option.check" @change="handlerChange">
         <el-checkbox
           v-for="(item, index) in labelOptions"
           :key="index"
@@ -12,7 +10,7 @@
         />
       </el-checkbox-group>
     </div>
-    <div class="editor-object-container">
+    <div v-if="option.precisionShow" class="editor-object-container">
       <span>设置完成占比小数位数</span>
       <el-select
         v-model="option.precision"
@@ -57,7 +55,8 @@ export default {
           }, {
             label: '百分比'
           }
-        ]
+        ],
+        'BarChart': []
       },
       precisionOptions: [
         {
