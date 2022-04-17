@@ -42,11 +42,6 @@ export default {
         this.getOption()
       },
       deep: true
-    },
-    dataValue: {
-      handler (val) {
-        this.getInitColor()
-      }
     }
   },
   mounted () {
@@ -56,16 +51,6 @@ export default {
     getOption () {
       const that = this
       const { ComponentOption } = that.storeOption.theme
-
-      // 显示总计
-      const totalShow = ComponentOption.TotalShow.show
-      if (totalShow) {
-        let sum = 0
-        for (let i = 1; i < that.dataValue.length; i++) {
-          sum += that.dataValue[i][1]
-        }
-        ComponentOption.TotalShow.value = sum
-      }
 
       // 半径变化
       const radius = that.radius.map(item => {

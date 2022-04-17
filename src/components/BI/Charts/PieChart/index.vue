@@ -14,8 +14,6 @@
 <script>
 import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import pieMixins from '@/components/BI/mixins/pieMixins'
-// import { colorTheme } from '@/constants/color.js'
-// import store from '@/store'
 export default {
   name: 'PieChart',
   mixins: [pieMixins],
@@ -40,16 +38,12 @@ export default {
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (JSON.stringify(val.dataSource) !== '{}') {
           this.dataValue = deepClone(val.dataSource)
-          // this.getOption()
+          this.getOption()
         }
-        this.getOption()
+        console.log('storeOptionchange', this.dataValue)
+        // this.getOption()
       },
       deep: true
-    },
-    dataValue: {
-      handler (val) {
-        this.getInitColor()
-      }
     }
   },
   mounted () {
@@ -58,17 +52,7 @@ export default {
   methods: {
     getOption () {
       const that = this
-      const { ComponentOption, Basic } = that.storeOption.theme
-
-      // 显示总计
-      const totalShow = ComponentOption.TotalShow.show
-      if (totalShow) {
-        let sum = 0
-        for (let i = 1; i < that.dataValue.length; i++) {
-          sum += that.dataValue[i][1]
-        }
-        ComponentOption.TotalShow.value = sum
-      }
+      const { ComponentOption, Basic, SeriesSetting } = that.storeOption.theme
 
       // 半径变化
       that.radius = Basic.VisualStyle.style === 'pie' ? ['0', '75%'] : ['30%', '75%']
@@ -97,7 +81,16 @@ export default {
             return data.name + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
           }
         },
-        legend: ComponentOption.Legend,
+        legend: {
+          ...ComponentOption.Legend,
+          formatter: (name) => {
+            if (name === SeriesSetting.SeriesSelect.selectValue) {
+              return SeriesSetting.SeriesSelect.remark
+            } else {
+              return name
+            }
+          }
+        },
         dataset: {
           source: that.dataValue
         },
@@ -133,7 +126,11 @@ export default {
               formatter: function (data) {
                 let formatter = ''
                 if (checkList.includes('维度')) {
-                  formatter += data.name + ' '
+                  if (data.name === SeriesSetting.SeriesSelect.selectValue) {
+                    formatter += SeriesSetting.SeriesSelect.remark + ' '
+                  } else {
+                    formatter += data.name + ' '
+                  }
                 }
                 if (checkList.includes('度量')) {
                   formatter += data.value[data.encode.value[0]] + ' '

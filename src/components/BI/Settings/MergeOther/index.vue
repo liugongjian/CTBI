@@ -4,7 +4,7 @@
       v-model="option.show"
       label="合并数据为其他"
     />
-    <!-- 自定义总计名 -->
+    <!-- 合并数据 -->
     <div v-show="option.show" class="editor-item-container flex-align-center">
       <div class="flex-align-center">
         <el-input-number

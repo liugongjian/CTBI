@@ -59,6 +59,21 @@
           />
         </div>
       </el-collapse-item>
+      <el-collapse-item
+        v-if="option['SeriesSetting']"
+        title="系列设置"
+        name="5"
+      >
+        <div
+          v-for="(item,name,key) in option['SeriesSetting']"
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['SeriesSetting'][name]"
+          />
+        </div>
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
