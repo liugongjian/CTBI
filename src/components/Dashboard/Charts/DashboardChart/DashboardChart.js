@@ -58,6 +58,19 @@ export default {
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
+      },
+      'ConfigSize': { // 设置起点值 终点值
+        'start': 0,
+        'end': 100
+      }
+    },
+    'StyleConfig': { // 样式配置
+      'Label': {
+        'format': true, // true指针式 false 百分比
+        'decimal': 0,
+        'name': { 'color': '#333', fontSize: 13 },
+        'value': { 'color': '#333', fontSize: 16 },
+        'deputy': { 'show': true, 'color': '#333', fontSize: 16, decimal: 0 }
       }
     }
   },
