@@ -44,7 +44,7 @@ export default {
         val.theme.ComponentOption.ChartLabel.type = this.type
         val.theme.Basic.Title.text = this.textMap[this.type]
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        this.type = val.theme.ComponentOption.PercentStack.isStack ? 'StackedBarChart' : 'BarChart'
+        this.type = val.theme.ComponentOption.PercentStack.isStack ? 'StackedBarChart' : this.type
         this.type = val.theme.ComponentOption.PercentStack.isPercent ? 'PercentStackedBarChart' : this.type
         if (JSON.stringify(val.dataSource) !== '{}') {
           this.dataValue = deepClone(val.dataSource)// 深拷贝，避免修改数据

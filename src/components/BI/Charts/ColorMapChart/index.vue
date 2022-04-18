@@ -108,26 +108,25 @@ export default {
         legend: componentOption.Legend,
         visualMap: {
           show: true,
-          type: 'continuous',
+          type: 'piecewise',
+          orient: 'horizontal',
+          text: ['100', '0'],
           min: 0,
           max: 100,
           realtime: false,
           calculable: true
         },
-        geo: {
-          map: 'china',
-          zoom: 1,
-          roam: true,
-          itemStyle: {
-            borderColor: 'rgba(0, 0, 0, 0.2)',
-            areaColor: '#f2d5ad'
-          }
-        },
         series: [
           {
-            name: '地区分布',
             type: 'map',
-            geoIndex: 0,
+            map: 'china',
+            roam: true,
+            label: {
+              show: true
+            },
+            labelLayout: {
+              hideOverlap: true
+            },
             data: this.dataValue
           }
         ]
