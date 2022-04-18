@@ -69,8 +69,8 @@
 
     <!-- 是否展示总计 -->
     <div
-      style="height:300px"
-    >{{ getParameter(option, 'theme.ComponentOption.TotalShow') }}
+      style="max-height:100px"
+    >
       <div
         v-if="getParameter(option, 'theme.ComponentOption.TotalShow.show')"
         class="rich-text-content"
