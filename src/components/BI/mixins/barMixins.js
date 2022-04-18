@@ -173,7 +173,6 @@ export default {
             }
           }
         ]
-        console.log(this.yAxis)
         this.xAxis = [
           {
             type: 'category'

@@ -79,6 +79,10 @@ export default {
       'TwisYAxis': { // 双Y轴
         'show': false, // 是否显示双Y轴
         'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
+      },
+      'PercentStack': { // 百分比与堆积类型选择
+        isPercent: true, // 是否为百分比类型
+        isStack: true// 是否为堆积类型
       }
     }
   },
