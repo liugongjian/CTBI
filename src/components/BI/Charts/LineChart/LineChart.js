@@ -57,8 +57,8 @@ export default {
         'type': 'scroll'
       }
     },
-    'Axis': {
-      'XAxis': {
+    'Axis': { // 轴设置
+      'XAxis': { // X轴设置
         'cname': 'X轴',
         'title': '',
         'unit': '',
@@ -74,7 +74,7 @@ export default {
         'splitColor': '#000',
         'splitType': 'solid'
       },
-      'YAxis': {
+      'YAxis': { // y轴设置
         'cname': '左Y轴',
         'title': '',
         'unit': '',
@@ -100,6 +100,9 @@ export default {
         'kSeperator': false,
         'formatRegx': ''
       }
+    },
+    'FunctionalOption': {
+        
     }
   },
   'advance': {}, // 高级
