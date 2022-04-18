@@ -102,7 +102,11 @@ export default {
       }
     },
     'FunctionalOption': {
-        
+      'showDataZoom': 'auto',
+      'axisShowType': 'auto',
+      'nullResolve': 'skip',
+      'showFilter': false,
+      'filteredSery': ''
     }
   },
   'advance': {}, // 高级
