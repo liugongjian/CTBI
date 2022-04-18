@@ -71,6 +71,14 @@ export default {
         'name': { 'color': '#333', fontSize: 13 },
         'value': { 'color': '#333', fontSize: 16 },
         'deputy': { 'show': true, 'color': '#333', fontSize: 16, decimal: 0 }
+      },
+      'Scale': { // 显示刻度控制
+        'show': true,
+        'type': 'original' // original percentage
+      },
+      'Section': { // 区间设置 // 2022/04/18暂时先不做
+        'show': true,
+        'type': 'original' // original percentage
       }
     }
   },
