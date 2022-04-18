@@ -34,6 +34,7 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
+        console.log('变了凸(艹皿艹 )    ', val)
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         // 显示总计
         const totalShow = val.theme.ComponentOption.TotalShow.show
@@ -59,6 +60,7 @@ export default {
   methods: {
     getOption () {
       const { ComponentOption, Basic } = this.storeOption.theme
+      console.log('option 里面有东西变了：   ', this.storeOption.theme, this.storeOption)
       this.radius = Basic.VisualStyle.style === 'pie' ? ['0', '75%'] : ['30%', '75%']
       const radius = this.radius.map(item => {
         item = (parseInt(item) * parseInt(ComponentOption.ChartRadius[1]) / 100).toFixed('0') + '%'

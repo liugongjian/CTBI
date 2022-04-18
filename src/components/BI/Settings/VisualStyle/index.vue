@@ -41,7 +41,6 @@ export default {
   created () { },
   mounted () {
     for (var item in this.option) {
-      console.log(this.option)
       if (typeof (this.option[item]) === 'object') {
         this.styleOptions.push(this.option[item])
       }
@@ -50,6 +49,7 @@ export default {
   methods: {
     // 图标点击添加组件到画布
     changeHandler (val) {
+      console.log('what   ?    ', val)
       this.option.style = val
     }
   }
