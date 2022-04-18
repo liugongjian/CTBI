@@ -69,11 +69,10 @@
 
     <!-- 是否展示总计 -->
     <div
-      class="rich-text-total"
-      style="max-height:100px"
-    >
+      style="height:300px"
+    >{{ getParameter(option, 'theme.ComponentOption.TotalShow') }}
       <div
-        v-show="getParameter(option, 'theme.ComponentOption.TotalShow.show')"
+        v-if="getParameter(option, 'theme.ComponentOption.TotalShow.show')"
         class="rich-text-content"
       >
         <span style="margin-right: 20px">{{ getParameter(option, 'theme.ComponentOption.TotalShow.name') }}</span>

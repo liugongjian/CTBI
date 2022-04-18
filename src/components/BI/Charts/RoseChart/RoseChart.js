@@ -75,6 +75,15 @@ export default {
         'name': '总计', // 自定义的总计名字
         'value': 0 // 总计数量
       }
+    },
+    'SeriesSetting': { // 系列设置
+      'SeriesSelect': { // 选择系列
+        'label': '请选择系列',
+        'selectValue': '', // 默认选择的系列名字 第一个元素
+        'remarkShow': true, // 是否显示别名
+        'remark': '', // 别名默认是选择的系列名字 第一个元素
+        'seriesOption': [] // 从数据中拿到系列的名字
+      }
     }
   },
   'advance': {}, // 高级
