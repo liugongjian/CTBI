@@ -75,14 +75,7 @@ export default {
       const { check } = ComponentOption.ChartLabel
       this.series = this.series.map((item) => {
         item.label = {
-          show: check,
-          formatter: function (data) {
-            if (data.seriesName.indexOf('-') > -1) {
-              return data.seriesName.split('-')[0]
-            } else {
-              return data.seriesName
-            }
-          }
+          show: check
         }
         return item
       })
