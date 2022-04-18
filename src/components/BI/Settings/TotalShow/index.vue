@@ -4,7 +4,7 @@
       v-model="option.show"
       label="显示总计"
       @change="handleSum"
-    />{{ option }}
+    />
     <!-- 自定义总计名 -->
     <div v-show="option.show" class="editor-item-container flex-align-center">
       <div class="editor-item-title">自定义总计名</div>

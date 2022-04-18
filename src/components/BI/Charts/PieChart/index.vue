@@ -84,7 +84,7 @@ export default {
         legend: {
           ...ComponentOption.Legend,
           formatter: (name) => {
-            if (name === SeriesSetting.SeriesSelect.selectValue) {
+            if (SeriesSetting && name === SeriesSetting.SeriesSelect.selectValue) {
               return SeriesSetting.SeriesSelect.remark
             } else {
               return name
@@ -126,7 +126,7 @@ export default {
               formatter: function (data) {
                 let formatter = ''
                 if (checkList.includes('维度')) {
-                  if (data.name === SeriesSetting.SeriesSelect.selectValue) {
+                  if (SeriesSetting && data.name === SeriesSetting.SeriesSelect.selectValue) {
                     formatter += SeriesSetting.SeriesSelect.remark + ' '
                   } else {
                     formatter += data.name + ' '
