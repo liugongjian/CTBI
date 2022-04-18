@@ -12,7 +12,6 @@
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
 import dashboardMixins from '@/components/BI/mixins/dashboardMixins'
-import { text } from 'body-parser'
 export default {
   name: 'DashboardChart',
   mixins: [dashboardMixins],
@@ -77,8 +76,8 @@ export default {
           },
           axisLabel: {
             show: true,
-            distance: 25
-            // formatter: '' // 控制百分比 原始值
+            distance: 25,
+            formatter: null
           },
           title: {
             show: true,
@@ -156,15 +155,24 @@ export default {
       // 副标签控制
       this.title.textStyle.color = label.deputy.color
       this.title.textStyle.fontSize = label.deputy.fontSize
-      this.title.text = label.format ? `占比: ${(this.dataValue / data.max * 100).toFixed(label.deputy.decimal)}%` : `实际: ${this.dataValue}`
+      this.title.text = label.format ? `占比: ${(this.dataValue / data.max * 100).toFixed(label.deputy.decimal) | 0}%` : `实际: ${this.dataValue}`
+    },
+    setScale (scale, { end }) {
+      const data = this.series[0]
+      data.splitLine.show = scale.show
+      data.axisLabel.show = scale.show
+      data.axisLabel.formatter = function (value) {
+        return scale.type === 'original' ? value : (value / end * 100).toFixed(0) + '%'
+      }
     },
     getOption () {
       const { Basic: { VisualStyle: { style } }, ComponentOption, StyleConfig } = this.storeOption.theme
       const { ConfigSize } = ComponentOption
-      const { Label } = StyleConfig
+      const { Label, Scale } = StyleConfig
       this.setStyle(style)
       this.setConfigSize(ConfigSize)
       this.setConfigLabel(Label)
+      this.setScale(Scale, ConfigSize)
       this.chartOption = {
         tooltip: {
           formatter: '{a} <br/>{b} : {c}%'
