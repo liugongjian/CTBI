@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import { getLayoutById, deepClone } from '@/utils/optionUtils'
-import store from '@/store'
+import { getLayoutById } from '@/utils/optionUtils'
+// import store from '@/store'
 import { colorTheme } from '@/constants/color.js'
 export default {
   name: 'DataPanelField',
@@ -59,22 +59,19 @@ export default {
     getSeries (val) {
       const layout = getLayoutById(this.identify)
       const seriesOption = []
-      const newTemp = deepClone(layout)
       val.forEach((item, index) => {
         if (index) {
           seriesOption.push({ value: item[0], label: item[0] })
         }
       })
-      newTemp.option.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
-      newTemp.option.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
-      newTemp.option.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
-      store.dispatch('app/updateLayoutItem', { id: this.identify, item: newTemp })
+      layout.option.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
+      layout.option.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
+      layout.option.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
     },
     // 设置颜色的name 为 对应的系列名字
     getColor (val) {
       const layout = getLayoutById(this.identify)
       const color = []
-      const newTemp = deepClone(layout)
       val.forEach((item, index) => {
         if (index) {
           const idx = (index) % colorTheme['defaultColor'].length
@@ -82,8 +79,7 @@ export default {
         }
       })
 
-      newTemp.option.theme.ComponentOption.Color.color = color
-      store.dispatch('app/updateLayoutItem', { id: this.identify, item: newTemp })
+      layout.option.theme.ComponentOption.Color.color = color
     }
   }
 }

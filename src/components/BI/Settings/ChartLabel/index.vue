@@ -53,7 +53,8 @@ export default {
             label: '百分比'
           }
         ],
-        'BarChart': []
+        'BarChart': [],
+        'CombineChart': []
       },
       precisionOptions: [
         {

@@ -5,6 +5,7 @@
       :option="chartOption"
       :update-options="{notMerge:true}"
       autoresize
+      :change-delay="500"
     />
     <div v-else>数据为空</div>
   </div>
@@ -38,10 +39,9 @@ export default {
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (JSON.stringify(val.dataSource) !== '{}') {
           this.dataValue = deepClone(val.dataSource)
-          this.getOption()
+          // this.getOption()
         }
-        console.log('storeOptionchange', this.dataValue)
-        // this.getOption()
+        this.getOption()
       },
       deep: true
     }
@@ -67,7 +67,7 @@ export default {
       // 合并数据为其他
       const { num } = ComponentOption.MergeOther
       const mergeShow = ComponentOption.MergeOther.show
-      if (mergeShow && num) {
+      if (mergeShow && num > 0) {
         that.transfromData(ComponentOption.MergeOther.num)
       }
       // 取到颜色配置
@@ -113,7 +113,7 @@ export default {
                 color: (data) => {
                   if (color[0].name) {
                     const colorTemp = color.find((item) => { return data.name === item.name })
-                    return colorTemp.color
+                    return colorTemp ? colorTemp.color : 'red'
                   } else {
                     const index = (data.dataIndex) % color.length
                     return color[index].value

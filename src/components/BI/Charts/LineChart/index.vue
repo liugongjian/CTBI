@@ -115,7 +115,6 @@ export default {
             } else {
               switch (axis[axisType].formatType) {
                 case '1':
-                  debugger
                   if (axis[axisType].lang === 'chinese-simplified') {
                     res = addChineseUnit(value, true)
                   }

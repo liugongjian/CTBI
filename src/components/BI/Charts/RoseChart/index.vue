@@ -50,7 +50,7 @@ export default {
   methods: {
     getOption () {
       const that = this
-      const { ComponentOption } = that.storeOption.theme
+      const { ComponentOption, SeriesSetting } = that.storeOption.theme
 
       // 半径变化
       const radius = that.radius.map(item => {
@@ -63,7 +63,7 @@ export default {
       // 合并数据为其他
       const { num } = ComponentOption.MergeOther
       const mergeShow = ComponentOption.MergeOther.show
-      if (mergeShow && num) {
+      if (mergeShow && num > 1) {
         that.transfromData(ComponentOption.MergeOther.num)
       }
       // 取到颜色配置
@@ -77,7 +77,16 @@ export default {
             return data.name + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
           }
         },
-        legend: ComponentOption.Legend,
+        legend: {
+          ...ComponentOption.Legend,
+          formatter: (name) => {
+            if (SeriesSetting && name === SeriesSetting.SeriesSelect.selectValue) {
+              return SeriesSetting.SeriesSelect.remark
+            } else {
+              return name
+            }
+          }
+        },
         dataset: {
           source: that.dataValue
         },
@@ -101,7 +110,7 @@ export default {
                 color: (data) => {
                   if (color[0].name) {
                     const colorTemp = color.find((item) => { return data.name === item.name })
-                    return colorTemp.color
+                    return colorTemp ? colorTemp.color : 'red'
                   } else {
                     const index = (data.dataIndex) % color.length
                     return color[index].value
@@ -114,7 +123,11 @@ export default {
               formatter: function (data) {
                 let formatter = ''
                 if (checkList.includes('维度')) {
-                  formatter += data.name + ' '
+                  if (SeriesSetting && data.name === SeriesSetting.SeriesSelect.selectValue) {
+                    formatter += SeriesSetting.SeriesSelect.remark + ' '
+                  } else {
+                    formatter += data.name + ' '
+                  }
                 }
                 if (checkList.includes('度量')) {
                   formatter += data.value[data.encode.value[0]] + ' '

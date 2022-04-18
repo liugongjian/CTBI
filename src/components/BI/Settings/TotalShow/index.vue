@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     handleSum () {
-      // 显示总计
+      // // 显示总计
       const totalShow = this.option.show
       if (totalShow) {
         // 获取数据
