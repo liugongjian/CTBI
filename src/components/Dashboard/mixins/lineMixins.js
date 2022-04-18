@@ -53,21 +53,6 @@ export default {
     // 将数据转换成百分比
     valueToPercent () {
       const sumArr = []
-      // for (let ii = 0; ii < this.dataValue[0].length - 1; ii++) {
-      //   sumArr.push(0)
-      // }
-      // for (let i = 1; i < this.dataValue.length; i++) {
-      //   debugger
-      //   for (let j = 0; j < sumArr.length; j++) {
-      //     debugger
-      //     sumArr[j] += this.dataValue[i][j + 1]
-      //   }
-      // }
-      // for (let i = 1; i < this.dataValue.length; i++) {
-      //   for (let j = 0; j < sumArr.length; j++) {
-      //     this.dataValue[i][j + 1] = (this.dataValue[i][j + 1] / sumArr[j] * 100).toFixed(2)
-      //   }
-      // }
       for (let ii = 0; ii < this.dataValue.length - 1; ii++) {
         sumArr.push(0)
       }

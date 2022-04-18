@@ -13,7 +13,7 @@
  *    other: 其他
  *  }
  * */
-
+import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'distribution', // 组件类型, 用于管理组件类型集合,例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -63,7 +63,7 @@ export default {
       'ChartRadius': ['0%', '45%'], // 饼图半径
       'Color': { // 颜色设置
         'title': '配色设置',
-        'color': []
+        'color': colorTheme['defaultColor']
       },
       'MergeOther': { // 合并数据为其他
         'show': false, // 是否选中
@@ -72,7 +72,7 @@ export default {
       'TotalShow': { // 显示总计
         'show': false, // 是否选中
         'name': '总计', // 自定义的总计名字
-        'value': 0 // 总计数量
+        'value': null // 总计数量
       },
       'Legend': { // 图例
         'show': true,
@@ -80,6 +80,15 @@ export default {
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
+      }
+    },
+    'SeriesSetting': { // 系列设置
+      'SeriesSelect': { // 选择系列
+        'label': '请选择系列',
+        'selectValue': '', // 默认选择的系列名字 第一个元素
+        'remarkShow': true, // 是否显示别名
+        'remark': '', // 别名默认是选择的系列名字 第一个元素
+        'seriesOption': [] // 从数据中拿到系列的名字
       }
     }
   },

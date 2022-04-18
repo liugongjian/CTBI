@@ -1,4 +1,4 @@
-// 折线图配置项信息
+// 组合图配置项信息
 /**
  * type: {
  *    indicator: 指标,
@@ -21,7 +21,7 @@ export default {
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
-        'text': '折线图', // 标题名称
+        'text': '组合图', // 标题名称
         'color': '#333', // 标题颜色
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
@@ -44,11 +44,23 @@ export default {
         'show': false, // 是否展示链接地址
         'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
       },
-      'ChartType': { // 图表类型
-        'type': 'LineChart' // 线图 面积图 堆积面积图 百分比堆叠面积图
+      'CustomBackgroundEnable': { // 自定义背景填充
+        'color': '', // 卡片颜色
+        'show': false, // 是否使用自定义背景填充
+        'showImg': false, // 是否使用背景图片
+        'imgUrl': '', // 背景图片地址
+        'imgSize': 'containRight' // 背景图片尺寸位置
       }
     },
     'ComponentOption': { // 图表样式
+      'ChartLabel': { // 标签样式
+        'type': 'CombineChart', // 饼图标签样式
+        'check': false, // 选中显示标签
+        'checkList': [],
+        'precisionShow': false, // 是否显示百分比设置组件
+        'precision': 2, // 百分比保留位数 0位 1位 2位
+        'labelShow': 1 // 0不显示 1 智能显示 2 全部显示
+      },
       'Legend': { // 图例
         'show': true,
         'top': 'auto',
@@ -56,59 +68,9 @@ export default {
         'orient': 'horizontal',
         'type': 'scroll'
       }
-    },
-    'Axis': { // 轴设置
-      'XAxis': { // X轴设置
-        'cname': 'X轴',
-        'title': '',
-        'unit': '',
-        'show': true,
-        'showTitle': false,
-        'showTicks': false,
-        'lineWidth': 1,
-        'lineColor': '#000',
-        'lineType': 'solid',
-        'showAxisLabel': true,
-        'showSplit': false,
-        'splitWidth': 1,
-        'splitColor': '#000',
-        'splitType': 'solid'
-      },
-      'YAxis': { // y轴设置
-        'cname': '左Y轴',
-        'title': '',
-        'unit': '',
-        'show': true,
-        'showTitle': false,
-        'showTicks': false,
-        'lineWidth': 1,
-        'lineColor': '#000',
-        'lineType': 'solid',
-        'showAxisLabel': true,
-        'showSplit': false,
-        'splitWidth': 1,
-        'splitColor': '#000',
-        'splitType': 'solid',
-        'min': 0,
-        'max': 0,
-        'autoMin': true,
-        'autoMax': true,
-        'formatType': '1',
-        'lang': 'chinese-simplified',
-        'numberFormat': 'number',
-        'numberDigit': 0,
-        'kSeperator': false,
-        'formatRegx': ''
-      }
-    },
-    'FunctionalOption': {
-      'showDataZoom': 'auto',
-      'axisShowType': 'auto',
-      'nullResolve': 'skip',
-      'showFilter': false,
-      'filteredSery': ''
     }
   },
   'advance': {}, // 高级
   'dataSource': {}// 数据集
 }
+
