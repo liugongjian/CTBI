@@ -12,8 +12,8 @@ const apps = [
     meta: { title: 'SQl', icon: 'dashboard', affix: true }
   },
   {
-    path: '/bi',
-    name: 'bi',
+    path: '/dashboard',
+    name: 'dashboard',
     component: () => import('@/views/bi/index.vue'),
     meta: { title: '仪表盘', icon: 'dashboard', affix: true }
   },
