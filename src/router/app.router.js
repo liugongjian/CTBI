@@ -12,9 +12,9 @@ const apps = [
     meta: { title: 'SQl', icon: 'dashboard', affix: true }
   },
   {
-    path: '/dashboard',
+    path: '/dashboard/',
     name: 'dashboard',
-    component: () => import('@/views/bi/index.vue'),
+    component: () => import('@/views/dashboard/index.vue'),
     meta: { title: '仪表盘', icon: 'dashboard', affix: true }
   },
   {
