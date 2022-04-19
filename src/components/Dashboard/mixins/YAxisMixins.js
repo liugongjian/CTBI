@@ -13,7 +13,12 @@ export default {
       if (formatType === '1') { // 自动适配
         return isEnglish ? addEnglishUnit(value, 0) : addChineseUnit(value, lang === 'chinese-simplified', 0)
       } else if (formatType === '2') { // 自定义适配
-        console.log('自定义适配', numberFormat, numberDigit, kSeperator)
+        if (numberFormat === 'number') { // 数值
+          return kSeperator ? value.toLocaleString('en-IN', { minimumFractionDigits: numberDigit }) : value.toFixed(numberDigit)
+        } else if (numberFormat === 'percent') { // 百分比
+          return (value * 100).toFixed(numberDigit) + '%'
+        }
+        return value
       } else if (formatType === '3') { // 手动输入
         console.log('手动输入')
       }

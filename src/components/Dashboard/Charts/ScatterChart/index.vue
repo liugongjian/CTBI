@@ -27,7 +27,7 @@ export default {
       storeOption: {},
       chartOption: {},
       dataValue: [
-        [10.0, 800000004],
+        [10.0, 804],
         [8.07, 600],
         [13.0, 738],
         [9.05, 881],
