@@ -12,7 +12,6 @@
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
 import dashboardMixins from '@/components/Dashboard/mixins/dashboardMixins'
-import { text } from 'body-parser'
 export default {
   name: 'DashboardChart',
   mixins: [dashboardMixins],

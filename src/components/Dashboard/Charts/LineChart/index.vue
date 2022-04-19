@@ -88,8 +88,9 @@ export default {
             }
           }
         },
-        xAxis: this.generateAxisOptions('X', axis),
+        xAxis: { ...this.generateAxisOptions('X', axis), ...this.getAxisShowTypeOption() },
         yAxis: this.generateAxisOptions('Y', axis),
+        dataZoom: this.getDataZoomOption(),
         dataset: {
           source: this.dataValue
         },
@@ -114,7 +115,6 @@ export default {
             } else {
               switch (axis[axisType].formatType) {
                 case '1':
-                  debugger
                   if (axis[axisType].lang === 'chinese-simplified') {
                     res = addChineseUnit(value, true)
                   }
@@ -124,7 +124,6 @@ export default {
                   if (axis[axisType].lang === 'chinese-complicated') {
                     res = addChineseUnit(value, false)
                   }
-                  console.log(typeof value)
                   break
                 case '2':
                   temp = (value * (numberFormat === 'percent' ? 100 : 1)).toFixed(numberDigit) + (numberFormat === 'percent' ? '%' : '') + unit
@@ -161,6 +160,58 @@ export default {
           max: axis[axisType].autoMax ? 'dataMax' : axis.YAxis.max,
           ...commonOptions
         }
+    },
+    getDataZoomOption () {
+      const sdz = this.storeOption.theme.FunctionalOption.showDataZoom
+      const item = {
+        realtime: true,
+        start: 30,
+        end: 70,
+        xAxisIndex: [0, 1]
+      }
+      if (sdz === 'show') {
+        item.show = true
+      } else if (sdz === 'hide') {
+        item.show = false
+      } else {
+        // TODO：智能显示缩略轴
+        item.show = true
+      }
+      return [item]
+    },
+    getAxisShowTypeOption () {
+      const ast = this.storeOption.theme.FunctionalOption.axisShowType
+      const option = {
+        axisLabel: {
+          rotate: 0,
+          interval: 'auto'
+        }
+      }
+      if (ast === 'condense') {
+        option.axisLabel.rotate = 90
+      } else if (ast === 'sparse') {
+        option.axisLabel.interval = 3
+      }
+      return option
+    },
+    resolveNull () {
+      const ast = this.storeOption.theme.FunctionalOption.nullResolve
+      const series = {
+        connectNulls: false
+      }
+      if (ast === 'skip') {
+        series.connectNulls = true
+      } else if (ast === 'zero') {
+        this.dataValue = this.storeOption.dataSource.map(datas => {
+          return datas.map((data, index) => {
+            if ([null, undefined, NaN, '-'].includes(data)) {
+              return typeof data === 'number' ? 0 : '0'
+            }
+            return data
+          })
+        })
+      }
+      return [series]
     }
   }
 }

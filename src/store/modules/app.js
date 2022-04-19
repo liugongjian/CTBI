@@ -31,11 +31,7 @@ const mutations = {
   // 更新某条数据
   UPDATELAYOUTITEM: (state, { id, item }) => {
     if (id && id.length) {
-      state.layout.splice(
-        state.layout.findIndex((item) => item.i === id),
-        1,
-        item
-      )
+      state.layout[state.layout.findIndex((item) => item.i === id)] = item
     }
   }
 }

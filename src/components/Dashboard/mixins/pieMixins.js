@@ -4,9 +4,6 @@ export default {
   mixins: [baseMixins],
   data: function () {
     return {
-      series: [],
-      yAxis: {},
-      tooltip: {}
     }
   },
   methods: {
