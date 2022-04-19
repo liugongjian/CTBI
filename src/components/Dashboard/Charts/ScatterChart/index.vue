@@ -11,8 +11,11 @@
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
+import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
+
 export default {
   name: 'ScatterChart',
+  mixins: [YAxis],
   props: {
     identify: {
       type: String,
@@ -24,9 +27,9 @@ export default {
       storeOption: {},
       chartOption: {},
       dataValue: [
-        [10.0, 8004],
-        [8.07, 695],
-        [13.0, 758],
+        [10.0, 800000004],
+        [8.07, 600],
+        [13.0, 738],
         [9.05, 881],
         [11.0, 833],
         [14.0, 766],
@@ -34,10 +37,10 @@ export default {
         [10.0, 633],
         [14.0, 896],
         [12.5, 682],
-        [9.15, 72],
-        [11.5, 72],
+        [9.15, 720],
+        [11.5, 720],
         [3.03, 423],
-        [12.2, 783],
+        [12.2, 733],
         [2.02, 447],
         [1.05, 333],
         [4.05, 496],
@@ -106,7 +109,6 @@ export default {
         ],
         yAxis: [
           {
-            // 轴线显示与样式
             'axisLine': {
               'show': YAxis.show,
               'lineStyle': {
@@ -116,7 +118,10 @@ export default {
               }
             },
             'axisLabel': {
-              'show': YAxis.showAxisLabel
+              'show': YAxis.showAxisLabel,
+              formatter: (value, index) => {
+                return this.formatYLabel(value, YAxis)
+              }
             },
             'splitLine': {
               show: YAxis.showSplit,

@@ -58,7 +58,7 @@ export function strWithKSeperator (intStr) {
  * 4,00000000,00000000,00000000 => 4亿亿亿
  *
  * @param {number} number 输入数字.
- * @param {bool} flag true为简体，false为繁体
+ * @param {boolean} flag true为简体，false为繁体
  * @param {number} decimalDigit 小数点后最多位数，默认为2
  * @return {string} 加上单位后的数字
  */
