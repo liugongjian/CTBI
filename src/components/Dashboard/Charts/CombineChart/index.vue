@@ -58,24 +58,28 @@ export default {
   },
   methods: {
     getOption () {
-      this.dataValue = [
-        ['date', '价格-0', '数量-0', '温度-1'],
-        ['Mon', 820, 410, 36],
-        ['Tue', 932, 320, 36.3],
-        ['Wed', 901, 300, 35.6],
-        ['Thu', 934, 380, 36.6],
-        ['Fri', 1290, 430, 39.6],
-        ['Sat', 1330, 480, 37.6],
-        ['Sun', 1320, 460, 38]
-      ]
-      const { ComponentOption } = this.storeOption.theme
+      const { ComponentOption, SeriesSetting } = this.storeOption.theme
       this.getSeries()
 
-      // 图表标签
+      // const {SeriesSelect, SeriesChartLabel, SeriesMark, SeriesMaximum} = SeriesSetting
+      const { SeriesSelect, SeriesChartLabel, SeriesMark, SeriesLine } = SeriesSetting
+      // 显示最值 不清楚具体的效果是什么样子 SeriesMaximum.check
+
+      // 选择系列 设置标记样式、线条样式 以及标签字体颜色
       const { check } = ComponentOption.ChartLabel
       this.series = this.series.map((item) => {
         item.label = {
           show: check
+        }
+        if (SeriesMark?.markType && item.type === 'line') {
+          item.symbol = SeriesMark.markType
+          item.lineStyle = {
+            type: SeriesLine.lineType
+          }
+        }
+        if (SeriesSelect?.selectValue === item.name) {
+          item.label.show = SeriesChartLabel.check
+          item.label.color = SeriesChartLabel.color
         }
         return item
       })

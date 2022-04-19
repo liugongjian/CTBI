@@ -18,11 +18,9 @@ export default {
       this.series = []
       for (let i = 1; i <= seriesLength; i++) {
         if (this.dataValue[0][i].indexOf('-0') > -1) {
-          this.dataValue[0][i] = this.dataValue[0][i].split('-0')[0]
-          this.series.push({ type: 'bar' })
+          this.series.push({ type: 'bar', name: this.dataValue[0][i] })
         } else {
-          this.dataValue[0][i] = this.dataValue[0][i].split('-1')[0]
-          this.series.push({ type: 'line', yAxisIndex: 1 })
+          this.series.push({ type: 'line', yAxisIndex: 1, name: this.dataValue[0][i] })
         }
       }
       for (let i = 0; i < 2; i++) {
