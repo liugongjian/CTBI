@@ -104,6 +104,7 @@ export const getLayoutOptionById = function (identify) {
     return item.i === identify
   })
   if (obj && JSON.stringify(obj) !== '{}') {
+    console.log('哈哈哈哈:  ', obj.option)
     return obj.option
   }
   console.warn(`获取 ${identify} 组件配置信息为空`)
