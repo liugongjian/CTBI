@@ -39,7 +39,10 @@
           <el-radio-button label="number">#数值 </el-radio-button>
           <el-radio-button label="percent">%百分比 </el-radio-button>
         </el-radio-group>
-        <el-input-number v-model="option.numberDigit" controls-position="right" label="小数位数" :min="0" />
+        <div>
+          <span>小数位数</span>
+          <el-input-number v-model="option.numberDigit" controls-position="right" label="小数位数" :min="0" :max="5" />
+        </div>
         <el-checkbox v-model="option.kSeperator" label="使用千分位分隔符" />
       </div>
       <el-input v-if="option.formatType === '3'" v-model="option.formatRegx" />
