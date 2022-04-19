@@ -88,7 +88,8 @@ export default {
           }, {
             label: '百分比'
           }
-        ]
+        ],
+        'CombineChart': []
       },
       precisionOptions: [
         {

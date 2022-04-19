@@ -60,9 +60,34 @@
         </div>
       </el-collapse-item>
       <el-collapse-item
+        v-if="option['SeriesSetting']"
+        title="系列设置"
+        name="5"
+      >
+        <div
+          v-for="(item,name,key) in option['SeriesSetting']"
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['SeriesSetting'][name]"
+          />
+        </div>
+      </el-collapse-item>
+      <el-collapse-item
+        v-if="option['FunctionalOption']"
+        title="功能设置"
+        name="6"
+      >
+        <component
+          :is="'FunctionalOption'"
+          :option="option['FunctionalOption']"
+        />
+      </el-collapse-item>
+      <el-collapse-item
         v-if="option['StyleConfig']"
         title="样式配置"
-        name="5"
+        name="7"
       >
         <div
           v-for="(item,name,key) in option['StyleConfig']"
