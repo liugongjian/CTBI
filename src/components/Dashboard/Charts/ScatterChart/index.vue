@@ -24,28 +24,28 @@ export default {
       storeOption: {},
       chartOption: {},
       dataValue: [
-        [10.0, 8.04],
-        [8.07, 6.95],
-        [13.0, 7.58],
-        [9.05, 8.81],
-        [11.0, 8.33],
-        [14.0, 7.66],
-        [13.4, 6.81],
-        [10.0, 6.33],
-        [14.0, 8.96],
-        [12.5, 6.82],
-        [9.15, 7.2],
-        [11.5, 7.2],
-        [3.03, 4.23],
-        [12.2, 7.83],
-        [2.02, 4.47],
-        [1.05, 3.33],
-        [4.05, 4.96],
-        [6.03, 7.24],
-        [12.0, 6.26],
-        [12.0, 8.84],
-        [7.08, 5.82],
-        [5.02, 5.68]
+        [10.0, 8004],
+        [8.07, 695],
+        [13.0, 758],
+        [9.05, 881],
+        [11.0, 833],
+        [14.0, 766],
+        [13.4, 681],
+        [10.0, 633],
+        [14.0, 896],
+        [12.5, 682],
+        [9.15, 72],
+        [11.5, 72],
+        [3.03, 423],
+        [12.2, 783],
+        [2.02, 447],
+        [1.05, 333],
+        [4.05, 496],
+        [6.03, 724],
+        [12.0, 626],
+        [12.0, 884],
+        [7.08, 582],
+        [5.02, 568]
       ]
     }
   },
@@ -68,30 +68,71 @@ export default {
   methods: {
     getOption () {
       const { Legend, Slider } = this.storeOption.theme.ComponentOption
-      const { XAxis } = this.storeOption.theme.Axis
+      const { XAxis, YAxis } = this.storeOption.theme.Axis
       this.chartOption = {
         // 'tooltip': option.Tooltip,
         'legend': Legend,
         xAxis: [
           {
-            'show': XAxis.show,
+            // 轴线显示与样式
             'axisLine': {
+              'show': XAxis.show,
               'lineStyle': {
                 'type': XAxis.lineType,
                 'width': XAxis.lineWidth,
                 'color': XAxis.lineColor
               }
             },
+            // 轴标签
             'axisLabel': {
               'show': XAxis.showAxisLabel
             },
+            // 轴刻度线
             'axisTick': {
               'show': XAxis.showTicks
             },
+            // 网格线
+            'splitLine': {
+              show: XAxis.showSplit,
+              lineStyle: {
+                type: XAxis.splitType,
+                color: XAxis.splitColor,
+                width: XAxis.splitWidth
+              }
+            },
+            // 轴标题和单位
             name: XAxis.showTitle && (XAxis.unit ? `${XAxis.title}(${XAxis.unit})` : XAxis.title)
           }
         ],
-        yAxis: {},
+        yAxis: [
+          {
+            // 轴线显示与样式
+            'axisLine': {
+              'show': YAxis.show,
+              'lineStyle': {
+                'type': YAxis.lineType,
+                'width': YAxis.lineWidth,
+                'color': YAxis.lineColor
+              }
+            },
+            'axisLabel': {
+              'show': YAxis.showAxisLabel
+            },
+            'splitLine': {
+              show: YAxis.showSplit,
+              lineStyle: {
+                type: YAxis.splitType,
+                color: YAxis.splitColor,
+                width: YAxis.splitWidth
+              }
+            },
+            'axisTick': {
+              'show': YAxis.showTicks
+            },
+            // 轴标题和单位
+            name: YAxis.showTitle && (YAxis.unit ? `${YAxis.title}(${YAxis.unit})` : YAxis.title)
+          }
+        ],
         'series': [
           {
             'symbolSize': Slider.symbolSize,
