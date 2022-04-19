@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
+import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import pieMixins from '@/components/BI/mixins/pieMixins'
 export default {
   name: 'PieChart',
@@ -28,7 +28,8 @@ export default {
       storeOption: {},
       chartOption: {},
       dataValue: null,
-      radius: []
+      radius: [],
+      color: []
     }
   },
   watch: {
@@ -36,20 +37,12 @@ export default {
       handler (val) {
         console.log('变了凸(艹皿艹 )    ', val)
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        // 显示总计
-        const totalShow = val.theme.ComponentOption.TotalShow.show
-        if (totalShow) {
-          let sum = 0
-          for (let i = 1; i < this.dataValue.length; i++) {
-            sum += this.dataValue[i][1]
-          }
-          val.theme.ComponentOption.TotalShow.value = sum
-        }
         if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
-          // this.getOption()
+          this.dataValue = deepClone(val.dataSource)
+          this.getOption()
         }
-        this.getOption()
+        console.log('storeOptionchange', this.dataValue)
+        // this.getOption()
       },
       deep: true
     }
@@ -59,36 +52,59 @@ export default {
   },
   methods: {
     getOption () {
+<<<<<<< HEAD
       const { ComponentOption, Basic } = this.storeOption.theme
       console.log('option 里面有东西变了：   ', this.storeOption.theme, this.storeOption)
       this.radius = Basic.VisualStyle.style === 'pie' ? ['0', '75%'] : ['30%', '75%']
       const radius = this.radius.map(item => {
+=======
+      const that = this
+      const { ComponentOption, Basic, SeriesSetting } = that.storeOption.theme
+
+      // 半径变化
+      that.radius = Basic.VisualStyle.style === 'pie' ? ['0', '75%'] : ['30%', '75%']
+      const radius = that.radius.map(item => {
+>>>>>>> 47bef2d79688d873e49b5aec0f97d96a552492d8
         item = (parseInt(item) * parseInt(ComponentOption.ChartRadius[1]) / 100).toFixed('0') + '%'
         return item
       })
 
+      // 图表标签
       const { checkList, check, precision, labelShow } = ComponentOption.ChartLabel
+
       // 合并数据为其他
       const { num } = ComponentOption.MergeOther
       const mergeShow = ComponentOption.MergeOther.show
       if (mergeShow && num) {
-        this.transfromData(ComponentOption.MergeOther.num)
+        that.transfromData(ComponentOption.MergeOther.num)
       }
-      this.chartOption = {
+      // 取到颜色配置
+      const color = ComponentOption.Color.color
+
+      // 设置图表的option
+      that.chartOption = {
         tooltip: {
           trigger: 'item',
           formatter: (data) => {
             return data.name + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
           }
         },
-        legend: ComponentOption.Legend,
+        legend: {
+          ...ComponentOption.Legend,
+          formatter: (name) => {
+            if (SeriesSetting && name === SeriesSetting.SeriesSelect.selectValue) {
+              return SeriesSetting.SeriesSelect.remark
+            } else {
+              return name
+            }
+          }
+        },
         dataset: {
-          source: this.dataValue
+          source: that.dataValue
         },
         series: [
           {
             type: 'pie',
-            // 'radius': ComponentOption.ChartRadius,
             radius: radius,
             emphasis: {
               itemStyle: {
@@ -97,12 +113,32 @@ export default {
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
               }
             },
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              normal: {
+                color: (data) => {
+                  if (color[0].name) {
+                    const colorTemp = color.find((item) => { return data.name === item.name })
+                    return colorTemp.color
+                  } else {
+                    const index = (data.dataIndex) % color.length
+                    return color[index].value
+                  }
+                }
+              }
+            },
             label: {
               show: check,
               formatter: function (data) {
                 let formatter = ''
                 if (checkList.includes('维度')) {
-                  formatter += data.name + ' '
+                  if (SeriesSetting && data.name === SeriesSetting.SeriesSelect.selectValue) {
+                    formatter += SeriesSetting.SeriesSelect.remark + ' '
+                  } else {
+                    formatter += data.name + ' '
+                  }
                 }
                 if (checkList.includes('度量')) {
                   formatter += data.value[data.encode.value[0]] + ' '
@@ -119,7 +155,7 @@ export default {
             }
             // encode: {
             //   itemName: 'product',
-            //   // value: this.dataValue[0][2]
+            //   // value: that.dataValue[0][2]
             //   value: 2 // 除维度以外的第2列
             // }
           }

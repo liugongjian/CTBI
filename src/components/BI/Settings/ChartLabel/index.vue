@@ -1,10 +1,8 @@
 <template>
   <div>
     <div class="editor-object-container">
-      <div>
-        <el-checkbox v-model="option.check" label="显示标签" />
-      </div>
-      <el-checkbox-group v-model="checkList" :disabled="!option.check" @change="handlerChange">
+      <el-checkbox v-model="option.check" label="显示标签" />
+      <el-checkbox-group v-if="labelOptions.length>0" v-model="option.checkList" :disabled="!option.check" @change="handlerChange">
         <el-checkbox
           v-for="(item, index) in labelOptions"
           :key="index"
@@ -12,7 +10,7 @@
         />
       </el-checkbox-group>
     </div>
-    <div class="editor-object-container">
+    <div v-if="option.precisionShow" class="editor-object-container">
       <span>设置完成占比小数位数</span>
       <el-select
         v-model="option.precision"
@@ -45,9 +43,6 @@ export default {
   },
   data () {
     return {
-      checkListOptions: {
-        'PieChart': ['维度', '百分比']
-      },
       options: {
         'PieChart': [
           {
@@ -57,7 +52,8 @@ export default {
           }, {
             label: '百分比'
           }
-        ]
+        ],
+        'BarChart': []
       },
       precisionOptions: [
         {
@@ -81,13 +77,10 @@ export default {
     }
   },
   mounted () {
-    // 根据type获取对应图表标签集合 默认选中的n
-    this.checkList = this.checkListOptions[this.option.type]
   },
   methods: {
     handlerChange (val) {
-      this.checkList = val
-      this.option.checkList = this.checkList
+      this.option.checkList = val
     }
   }
 

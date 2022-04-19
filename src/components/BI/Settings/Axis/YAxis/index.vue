@@ -25,19 +25,14 @@
     <template v-slot:format>
       <div>轴标签显示格式设置</div>
       <el-radio-group v-model="option.formatType" size="small">
-        <el-radio label="1">自动适配</el-radio>
-        <el-radio label="2">自定义适配</el-radio>
-        <el-radio label="3">手动输入</el-radio>
+        <el-radio v-for="type in formatTypes" :key="type.label" :label="type.label">{{ type.cname }}</el-radio>
       </el-radio-group>
       <el-select v-if="option.formatType === '1'" v-model="option.lang" placeholder="请选择">
-        <el-option label="自动适配（中文）" value="chinese-simplified" />
-        <el-option label="自动适配（繁体）" value="chinese-complicated" />
-        <el-option label="自动适配（英文）" value="english" />
+        <el-option v-for="item in lang" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
       <div v-if="option.formatType === '2'">
         <el-radio-group v-model="option.numberFormat">
-          <el-radio-button label="number">#数值 </el-radio-button>
-          <el-radio-button label="percent">%百分比 </el-radio-button>
+          <el-radio-button v-for="formt in numberFormats" :key="formt.label" :label="formt.label">{{ formt.cname }} </el-radio-button>
         </el-radio-group>
         <el-input-number v-model="option.numberDigit" controls-position="right" label="小数位数" :min="0" />
         <el-checkbox v-model="option.kSeperator" label="使用千分位分隔符" />
@@ -49,6 +44,7 @@
 
 <script>
 import XAxis from '../XAxis/index.vue'
+import { formatTypes, lang, numberFormats } from '../dics/constants'
 
 export default {
   name: 'YAxis',
@@ -61,10 +57,10 @@ export default {
   },
   data () {
     return {
+      formatTypes: formatTypes,
+      lang: lang,
+      numberFormats: numberFormats
     }
-  },
-  mounted () {
-    console.log(this.option)
   },
   methods: {}
 

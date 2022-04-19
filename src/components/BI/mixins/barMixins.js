@@ -1,11 +1,19 @@
 // 柱图的混入
 import baseMixins from './baseMixins'
+import { deepClone } from '@/utils/optionUtils'
 export default {
   mixins: [baseMixins],
   data () {
     return {
       yAxis: {},
-      tooltip: {}
+      tooltip: {},
+      label: {},
+      labelLayout: {}
+    }
+  },
+  computed: {
+    checkList () {
+      return this.storeOption.theme.ComponentOption.BarLabel.checkList
     }
   },
   methods: {
@@ -16,26 +24,34 @@ export default {
         seriesLength = item.length - 1
       })
       if (this.type === 'BarChart') { // 为柱图时
-        // 重置数据
-        this.series = []
-        this.tooltip = {}
-        this.yAxis = {}
-        this.dataValue = this.storeOption.dataSource
-
+        this.mixinItem()
+        this.label.position = 'top'
         for (let i = 0; i < seriesLength; i++) {
-          this.series.push({ type: 'bar' })
+          this.series.push({ type: 'bar', label: this.label, labelLayout: this.labelLayout })
         }
       } else if (this.type === 'StackedBarChart') { // 为堆积柱状图时
-        // 重置数据
-        this.series = []
-        this.tooltip = {}
-        this.yAxis = {}
-        this.dataValue = this.storeOption.dataSource
-
+        this.mixinItem()
         for (let i = 0; i < seriesLength; i++) {
-          this.series.push({ type: 'bar', stack: 'Ad' })
+          this.series.push({ type: 'bar', stack: 'Total', label: this.label, labelLayout: this.labelLayout })
         }
-      } else if (this.type === 'PercentStackedBarChart') { //
+        this.dataValue[0].push('总计')
+        for (let i = 1; i < this.dataValue.length; i++) {
+          this.dataValue[i] = [...this.dataValue[i], 0]
+        }
+        this.series.push({ type: 'bar', stack: 'Total', label: this.label, labelLayout: this.labelLayout })
+        this.series[seriesLength]['label'] = {
+          show: this.checkList.includes('总计'),
+          position: 'top',
+          formatter: function (params) {
+            let dataTotal = 0
+            for (let i = 1; i < params.value.length; i++) {
+              dataTotal += params.value[i]
+            }
+            return dataTotal
+          }
+        }
+      } else if (this.type === 'PercentStackedBarChart') { // 为百分比堆积柱状图时
+        this.mixinItem()
         this.valueToPercent()
         this.yAxis = {
           axisLabel: {
@@ -46,14 +62,34 @@ export default {
           show: true
         }
         this.tooltip = {
-          trigger: 'axis',
-          formatter: '{b0}<br/>{a0}: {c0}%<br/>{a1}: {c1}%'
+          trigger: 'axis'
         }
-        this.series = []
+        const that = this
+        this.label.formatter = function (params) {
+          const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
+          const isMeasure = that.checkList.includes('度量') ? `${that.storeOption.dataSource[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+          return isPercent + '\n' + isMeasure
+        }
+        this.label.show = this.storeOption.theme.ComponentOption.BarLabel.show
         for (let i = 0; i < seriesLength; i++) {
-          this.series.push({ type: 'bar', stack: 'Total' })
+          this.series.push({ type: 'bar', stack: 'Total', label: this.label, labelLayout: this.labelLayout })
         }
       }
+    },
+
+    // 公共部分
+    mixinItem () {
+      // 重置数据
+      this.series = []
+      this.tooltip = {}
+      this.yAxis = {}
+      this.dataValue = deepClone(this.storeOption.dataSource)
+
+      // 图表标签
+      this.label.show = this.storeOption.theme.ComponentOption.BarLabel.show && this.checkList.includes('度量')
+      this.label.formatter = null
+      this.labelLayout.hideOverlap = this.storeOption.theme.ComponentOption.BarLabel.labelShow === 'auto'
+      this.label.position = ''
     },
 
     // 将数据转换成百分比

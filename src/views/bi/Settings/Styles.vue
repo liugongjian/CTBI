@@ -59,6 +59,16 @@
           />
         </div>
       </el-collapse-item>
+      <el-collapse-item
+        v-if="option['FunctionalOption']"
+        title="功能设置"
+        name="5"
+      >
+        <component
+          :is="'FunctionalOption'"
+          :option="option['FunctionalOption']"
+        />
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
