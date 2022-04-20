@@ -23,6 +23,21 @@
         </el-tooltip>
       </div>
       <div class="card-header-tail">
+        <!-- 指标筛选模块 -->
+        <el-select
+          v-if="getParameter(option, 'theme.FunctionalOption.ChartFilter.showFilter')"
+          v-model="filteredSery"
+          :disabled="!getParameter(option, 'theme.FunctionalOption.ChartFilter.showFilter')"
+          @change="handleIndicator"
+        >
+          <el-option
+            v-for="item in getParameter(option, 'theme.FunctionalOption.ChartFilter.indicatorOption')"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+
         <!-- 菜单模块 -->
         <el-dropdown
           trigger="click"
@@ -150,6 +165,13 @@ export default {
         return styleObject
       }
       return styleObject
+    },
+    filteredSery: {
+      get () {
+        return this.getParameter(this.option, 'theme.FunctionalOption.ChartFilter.filteredSery')
+      },
+      set () {
+      }
     }
   },
   mounted () {
@@ -172,6 +194,11 @@ export default {
     showDialog () {
       const that = this
       this.$dialog.show('RCDialog', { url: getParameter(that.option, 'theme.Basic.TitleLink.url') }, this.callback)
+    },
+
+    // 筛选指标方法
+    handleIndicator (val) {
+      this.option.option.theme.FunctionalOption.ChartFilter.filteredSery = val
     }
 
   }

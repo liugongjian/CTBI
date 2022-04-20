@@ -13,6 +13,7 @@
  *    other: 其他
  *  }
  * */
+import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'trend', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -72,6 +73,14 @@ export default {
       },
       'LineStyle': { // 线条样式
         'type': 2 // 1曲线 2直线
+      },
+      'TwisYAxis': { // 双Y轴
+        'show': false, // 是否显示双Y轴
+        'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
+      },
+      'Color': { // 颜色设置
+        'title': '配色设置',
+        'color': colorTheme['defaultColor']
       },
       'Legend': { // 图例
         'show': true,

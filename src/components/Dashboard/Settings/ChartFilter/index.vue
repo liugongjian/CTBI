@@ -4,9 +4,14 @@
       v-model="option.showFilter"
       label="开启指标筛选展示"
     />
-    <!-- TODO: 得到数据字段名 -->
+    <!-- 数据字段名 -->
     <el-select v-model="option.filteredSery" :disabled="!option.showFilter">
-      <el-option label="1" value="1" />
+      <el-option
+        v-for="item in option.indicatorOption"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
     </el-select>
   </div>
 </template>
@@ -23,7 +28,6 @@ export default {
   },
   data () {
     return {
-      seriesOption: null
     }
   },
   methods: {

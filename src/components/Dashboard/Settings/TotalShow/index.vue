@@ -3,7 +3,6 @@
     <el-checkbox
       v-model="option.show"
       label="显示总计"
-      @change="handleSum"
     />
     <!-- 自定义总计名 -->
     <div v-show="option.show" class="editor-item-container flex-align-center">
@@ -19,7 +18,6 @@
 </template>
 
 <script>
-import store from '@/store'
 export default {
   name: 'TotalShow',
   props: {
@@ -36,23 +34,6 @@ export default {
   mounted () {
   },
   methods: {
-    handleSum () {
-      // // 显示总计
-      const totalShow = this.option.show
-      if (totalShow) {
-        // 获取数据
-        store.state.app.layout.forEach(item => {
-          if (item.i === store.state.app.currentLayoutId) {
-            this.dataSource = item.option.dataSource
-          }
-        })
-        let sum = 0
-        for (let i = 1; i < this.dataSource.length; i++) {
-          sum += this.dataSource[i][1]
-        }
-        this.option.value = sum
-      }
-    }
   }
 }
 </script>

@@ -45,7 +45,7 @@ export default {
     selectSeries () {
       this.option.remark = this.option.selectValue
       store.state.app.layout.forEach(item => {
-        if (item.i === store.state.app.currentLayoutId) {
+        if (item.i === store.state.app.currentLayoutId && item.option.theme.SeriesSetting.SeriesMark && item.option.theme.SeriesSetting.SeriesLine) {
           // 是副轴 // 判断是否是主轴
           if (item.option.theme.SeriesSetting.SeriesSelect.selectValue.indexOf('-1') > -1) {
             item.option.theme.SeriesSetting.SeriesMark.show = true

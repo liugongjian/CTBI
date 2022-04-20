@@ -49,18 +49,18 @@ export default {
     reflashStore () {
       const layout = getLayoutById(this.identify)
       layout.option.dataSource = JSON.parse(this.val)
-      if (layout.option.theme.SeriesSetting) {
-        this.getSeries(layout.option.dataSource)
-      }
-      if (layout.option.theme.ComponentOption.Color) {
-        this.getColor(layout.option.dataSource)
-      }
+      // if (layout.option.theme.SeriesSetting) {
+      //   this.getSeries(layout.option.dataSource)
+      // }
+      // if (layout.option.theme.ComponentOption.Color) {
+      //   this.getColor(layout.option.dataSource)
+      // }
     },
     // 拿到数据中的系列名字
     getSeries (val) {
       const layout = getLayoutById(this.identify)
       const seriesOption = []
-      if (this.typeOption.includes(layout.option.theme.Basic.ChartType.type)) {
+      if (this.typeOption.includes(layout.option.theme.Basic.ChartType?.type)) {
         val[0].forEach((item, index) => {
           if (index) {
             seriesOption.push({ value: item, label: item })
@@ -82,7 +82,7 @@ export default {
     getColor (val) {
       const layout = getLayoutById(this.identify)
       const color = []
-      if (this.typeOption.includes(layout.option.theme.Basic.ChartType.type)) {
+      if (this.typeOption.includes(layout.option.theme.Basic.ChartType?.type)) {
         val[0].forEach((item, index) => {
           if (index) {
             const idx = (index) % colorTheme['defaultColor'].length

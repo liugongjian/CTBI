@@ -90,6 +90,13 @@ export default {
         'remark': '', // 别名默认是选择的系列名字 第一个元素
         'seriesOption': [] // 从数据中拿到系列的名字
       }
+    },
+    'FunctionalOption': { // 功能配置
+      'ChartFilter': {
+        'showFilter': true,
+        'filteredSery': '', // 选中的指标
+        'indicatorOption': [] // 指标集合
+      }
     }
   },
   'advance': {}, // 高级

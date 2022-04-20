@@ -37,11 +37,24 @@ export default {
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (JSON.stringify(val.dataSource) !== '{}') {
           this.dataValue = deepClone(val.dataSource)
-          // this.getOption()
+          this.getOption()
         }
-        this.getOption()
       },
       deep: true
+    },
+    'storeOption.dataSource': {
+      handler (val) {
+        if (JSON.stringify(val) !== '{}') {
+          this.dataValue = deepClone(val)
+          // 拿到数据中的系列名字
+          this.getSeriesOptions(this.dataValue)
+          // 拿到数据的系列名字 并设置颜色
+          this.getColor(this.dataValue)
+          // 拿到数据中的指标
+          this.getIndicatorOptions(this.dataValue)
+          this.getOption()
+        }
+      }
     }
   },
   mounted () {
@@ -50,7 +63,10 @@ export default {
   methods: {
     getOption () {
       const that = this
-      const { ComponentOption, SeriesSetting } = that.storeOption.theme
+      const { ComponentOption, SeriesSetting, FunctionalOption } = that.storeOption.theme
+
+      // 取到指标的下标 如 2015年 index为1
+      const indicatorIdx = that.dataValue[0].indexOf(FunctionalOption.ChartFilter.filteredSery) > -1 ? that.dataValue[0].indexOf(FunctionalOption.ChartFilter.filteredSery) : 1
 
       // 半径变化
       const radius = that.radius.map(item => {
@@ -64,10 +80,20 @@ export default {
       const { num } = ComponentOption.MergeOther
       const mergeShow = ComponentOption.MergeOther.show
       if (mergeShow && num > 1) {
-        that.transfromData(ComponentOption.MergeOther.num)
+        that.transfromData(ComponentOption.MergeOther.num, FunctionalOption.ChartFilter.filteredSery)
       }
       // 取到颜色配置
       const color = ComponentOption.Color.color
+      // // 显示总计
+      const totalShow = ComponentOption.TotalShow.show
+      if (totalShow) {
+        // 获取数据
+        let sum = 0
+        for (let i = 1; i < that.dataValue.length; i++) {
+          sum += that.dataValue[i][indicatorIdx]
+        }
+        ComponentOption.TotalShow.value = sum
+      }
 
       // 设置图表的option
       that.chartOption = {
@@ -141,12 +167,12 @@ export default {
             // 数据标签展示样式 todo
             labelLayout: {
               hideOverlap: labelShow === 1
+            },
+            encode: {
+              itemName: 'product',
+              // value: that.dataValue[0][2]
+              value: indicatorIdx // 除维度以外的第2列
             }
-            // encode: {
-            //   itemName: 'product',
-            //   // value: this.dataValue[0][2]
-            //   value: 2 // 除维度以外的第2列
-            // }
           }
         ]
       }
