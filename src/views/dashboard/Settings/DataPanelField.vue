@@ -27,7 +27,8 @@ export default {
   },
   data () {
     return {
-      val: ''
+      val: '',
+      typeOption: ['BarChart', 'StackedBarChart', 'PercentStackedBarChart']
     }
   },
   mounted () {
@@ -59,11 +60,20 @@ export default {
     getSeries (val) {
       const layout = getLayoutById(this.identify)
       const seriesOption = []
-      val.forEach((item, index) => {
-        if (index) {
-          seriesOption.push({ value: item[0], label: item[0] })
-        }
-      })
+      if (this.typeOption.includes(layout.option.theme.Basic.ChartType.type)) {
+        val[0].forEach((item, index) => {
+          if (index) {
+            seriesOption.push({ value: item, label: item })
+          }
+        })
+      } else {
+        val.forEach((item, index) => {
+          if (index) {
+            seriesOption.push({ value: item[0], label: item[0] })
+          }
+        })
+      }
+
       layout.option.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
       layout.option.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
       layout.option.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
@@ -72,12 +82,21 @@ export default {
     getColor (val) {
       const layout = getLayoutById(this.identify)
       const color = []
-      val.forEach((item, index) => {
-        if (index) {
-          const idx = (index) % colorTheme['defaultColor'].length
-          color.push({ name: item[0], color: colorTheme['defaultColor'][idx].value })
-        }
-      })
+      if (this.typeOption.includes(layout.option.theme.Basic.ChartType.type)) {
+        val[0].forEach((item, index) => {
+          if (index) {
+            const idx = (index) % colorTheme['defaultColor'].length
+            color.push({ name: item, color: colorTheme['defaultColor'][idx].value })
+          }
+        })
+      } else {
+        val.forEach((item, index) => {
+          if (index) {
+            const idx = (index) % colorTheme['defaultColor'].length
+            color.push({ name: item[0], color: colorTheme['defaultColor'][idx].value })
+          }
+        })
+      }
 
       layout.option.theme.ComponentOption.Color.color = color
     }

@@ -2,7 +2,8 @@ const state = {
   menuPath: localStorage.getItem('menuPath')
     ? localStorage.getItem('menuPath') : '/home',
   layout: [],
-  currentLayoutId: ''
+  currentLayoutId: '',
+  toolList: {}
 }
 
 const mutations = {
@@ -33,6 +34,9 @@ const mutations = {
     if (id && id.length) {
       state.layout[state.layout.findIndex((item) => item.i === id)] = item
     }
+  },
+  UPDATETOOLLIST: (state, toolList) => {
+    state.toolList = toolList
   }
 }
 const actions = {
@@ -50,6 +54,9 @@ const actions = {
   },
   updateLayoutItem ({ commit }, data) {
     commit('UPDATELAYOUTITEM', data)
+  },
+  updateToolList ({ commit }, toolList) {
+    commit('UPDATETOOLLIST', toolList)
   }
 }
 
