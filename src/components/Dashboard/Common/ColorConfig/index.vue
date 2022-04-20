@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div ref="colorConfig" class="container">
     <div class="color" @click="handleShowColor">
       <span class="label">{{ title }}</span>
       <div class="color-select">
@@ -135,6 +135,7 @@ export default {
     z-index: 999;
     width: 160px;
     left: 56px;
+    bottom: unset;
     background-color: #ffffff;
     .field {
       max-width: 77px;

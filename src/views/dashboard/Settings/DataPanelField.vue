@@ -57,6 +57,7 @@ export default {
     },
     // 拿到数据中的系列名字
     getSeries (val) {
+      console.log(val)
       const layout = getLayoutById(this.identify)
       const seriesOption = []
       val.forEach((item, index) => {
