@@ -45,6 +45,13 @@ module.exports = {
         pathRewrite: {
           '^/dev-api': '/'
         }
+      },
+      '/login-dev': {
+        target: 'http://127.0.0.1:4523',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/login-dev': '/mock/885805'
+        }
       }
     },
     before: process.env.NODE_ENV === 'development' ? require('./mock/mock-server.js') : (app) => { }
