@@ -92,11 +92,12 @@ export default {
 <style>
 .login {
   display: flex;
+  height:100%;
 }
 .login-item_image {
   position: relative;
-  width: 720px;
-  height: 900px;
+  width: 35%;
+  height: 100%;
 }
 .background {
   width: 100%;
@@ -104,13 +105,16 @@ export default {
 }
 .logo {
   position: absolute;
-  top: 397px;
-  left: 254.29px;
-  width: 211.42px;
+  top: calc(50% - 53px);
+  left: calc(50% - 105.7px);
+  width: 211.4px;
   height: 106px;
 }
 .login-item_input {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
 }
 .login-font {
@@ -148,10 +152,7 @@ export default {
   border:#f0914b
 }
 .form {
-  position: absolute;
   width: 330px;
-  top: 262.5px;
-  left: 195px;
 }
 .el-input {
   display: inline-block;
