@@ -74,7 +74,22 @@ export default {
         item.label = {
           show: check
         }
-        if (SeriesMark?.markType && item.type === 'line') {
+        // 图表样式的标记点
+        if (!ComponentOption.SeriesMark.check && item.type === 'line') {
+          item.symbol = 'none'
+        } else if (ComponentOption.SeriesMark.check && item.type === 'line') {
+          item.symbol = ComponentOption.SeriesMark.markType
+        }
+
+        // 图表样式曲线
+        if (ComponentOption.LineStyle.type === 1) {
+          item.smooth = true
+        } else {
+          item.smooth = false
+        }
+
+        // 系列设置里的标记点
+        if (SeriesMark?.check && SeriesMark?.markType && item.type === 'line') {
           item.symbol = SeriesMark.markType
           item.lineStyle = {
             type: SeriesLine.lineType
@@ -87,18 +102,22 @@ export default {
         return item
       })
 
+      const xAxis = {
+        type: 'category'
+      }
+
       this.chartOption = {
         legend: ComponentOption.Legend,
-        xAxis: {
-          type: 'category'
-        },
+        // xAxis: ComponentOption.ChartDirection.direction === 1 ? xAxis : this.yAxis,
+        xAxis: ComponentOption.ChartDirection.direction === 1 ? xAxis : xAxis,
         tooltip: {
           trigger: 'axis',
           axisPointer: {
             type: 'cross'
           }
         },
-        yAxis: this.yAxis,
+        // yAxis: ComponentOption.ChartDirection.direction === 1 ? this.yAxis : xAxis,
+        yAxis: ComponentOption.ChartDirection.direction === 1 ? this.yAxis : this.yAxis,
         dataset: {
           source: this.dataValue
         },
