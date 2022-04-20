@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import store from '@/store'
 export default {
   name: 'SeriesSelect',
   props: {
@@ -33,7 +34,6 @@ export default {
   },
   data () {
     return {
-      seriesOption: []
     }
   },
   computed: {
@@ -44,6 +44,18 @@ export default {
     // 选中某个系列名
     selectSeries () {
       this.option.remark = this.option.selectValue
+      store.state.app.layout.forEach(item => {
+        if (item.i === store.state.app.currentLayoutId) {
+          // 是副轴 // 判断是否是主轴
+          if (item.option.theme.SeriesSetting.SeriesSelect.selectValue.indexOf('-1') > -1) {
+            item.option.theme.SeriesSetting.SeriesMark.show = true
+            item.option.theme.SeriesSetting.SeriesLine.show = true
+          } else {
+            item.option.theme.SeriesSetting.SeriesMark.show = false
+            item.option.theme.SeriesSetting.SeriesLine.show = false
+          }
+        }
+      })
     }
   }
 

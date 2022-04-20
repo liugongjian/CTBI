@@ -76,6 +76,7 @@ export default {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
       const axis = this.storeOption.theme.Axis
+      this.series = this.resolveNull()
       this.getSeries()
       this.chartOption = {
         legend: componentOption.Legend,
@@ -195,7 +196,7 @@ export default {
       return option
     },
     resolveNull () {
-      const ast = this.storeOption.theme.FunctionalOption.nullResolve
+      const ast = this.storeOption.theme.FunctionalOption.emptyResolve
       const series = {
         connectNulls: false
       }

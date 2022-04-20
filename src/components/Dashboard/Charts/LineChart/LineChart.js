@@ -104,7 +104,7 @@ export default {
     'FunctionalOption': {
       'showDataZoom': 'auto',
       'axisShowType': 'auto',
-      'nullResolve': 'skip',
+      'emptyResolve': 'skip',
       'showFilter': false,
       'filteredSery': ''
     }
