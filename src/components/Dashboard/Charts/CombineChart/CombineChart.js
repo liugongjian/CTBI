@@ -61,6 +61,18 @@ export default {
         'precision': 2, // 百分比保留位数 0位 1位 2位
         'labelShow': 1 // 0不显示 1 智能显示 2 全部显示
       },
+      'ChartDirection': {
+        'direction': 1, // 1 水平 2 垂直
+        'alignment': 'left' // 1左对齐 2右对齐 只有图表方向是垂直的时候才有
+      },
+      'SeriesMark': { // 标记点
+        'show': true, // 这里一直是true 和系列中的标记区分
+        'check': false, // 默认未选中
+        'markType': 'circle'
+      },
+      'LineStyle': { // 线条样式
+        'type': 2 // 1曲线 2直线
+      },
       'Legend': { // 图例
         'show': true,
         'top': 'auto',

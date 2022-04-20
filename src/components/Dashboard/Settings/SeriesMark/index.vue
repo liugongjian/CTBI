@@ -2,10 +2,11 @@
   <div>
     <div class="editor-object-container">
       <div v-if="option.show" style="display: flex" class="color-row">
-        <span>显示标记点</span>
+        <el-checkbox v-model="option.check">显示标记点</el-checkbox>
         <el-select
           v-model="option.markType"
           placeholder="请输入内容"
+          :disabled="!option.check"
         >
           <svg-icon
             slot="prefix"
@@ -66,29 +67,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.color-row{
-    display: flex;
-    &>div{
-        margin: 2px 5px;
-    }
-    .el-dropdown{
-        min-width: 50px;
-        .disabled{
-            background: #F5F7FA;
-        }
-    }
-    .dropdown-link{
-        display: flex;
-        justify-content: center;
-        align-items:center;
-        border: 1px solid #DCDFE6;
-        padding: 0 2px;
-        border-radius: 5px;
-        height: 100%;
-        width: 100%;
-        i {
-            font:#DCDFE6
-        }
-    }
-}
 </style>
