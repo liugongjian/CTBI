@@ -58,6 +58,7 @@ export default {
     },
     // 拿到数据中的系列名字
     getSeries (val) {
+      console.log(val)
       const layout = getLayoutById(this.identify)
       const seriesOption = []
       if (this.typeOption.includes(layout.option.theme.Basic.ChartType?.type)) {

@@ -37,6 +37,25 @@ export default {
       'Footer': { // 尾注
         'show': false, // 是否显示尾注
         'text': ''// 尾注信息
+      },
+      'TitleLink': { // 链接跳转组件
+        'text': '', // 文案
+        'url': '', // 链接地址
+        'show': false, // 是否展示链接地址
+        'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
+      },
+      'CustomBackgroundEnable': { // 自定义背景填充
+        'color': '', // 卡片颜色
+        'show': false, // 是否使用自定义背景填充
+        'showImg': false, // 是否使用背景图片
+        'imgUrl': '', // 背景图片地址
+        'imgSize': 'containRight' // 背景图片尺寸位置
+      },
+      'VisualStyle': { // 可视化样式 value与组件name绑定
+        'style1': { 'name': '条形', value: 'barType' },
+        'style2': { 'name': '环形', value: 'annularType' },
+        'style3': { 'name': '水波图', value: 'waterWave' },
+        'style': 'barType' // 默认配置
       }
     },
     'ComponentOption': { // 图表样式
@@ -46,6 +65,20 @@ export default {
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
+      },
+      'progressStyle': { // 样式设置
+        'showNum': 1,
+        'indicators': [
+          { 'name': '名称', 'color': '#393f4d', 'fontSize': 16 },
+          { 'name': '数值', 'color': '#393f4d', 'fontSize': 16 }
+        ],
+        'value': {
+          'show': false,
+          'current': '实际',
+          'target': '目标',
+          'style': { 'color': '#393f4d', 'fontSize': 16 }
+        },
+        'color': []
       }
     }
   },
