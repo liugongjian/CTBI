@@ -60,8 +60,15 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.getSeries()
+      this.getSeries()// 获取Series
+
+      // 获取颜色设置
+      const colorOption = []
+      componentOption.Color.color.forEach(item => {
+        colorOption.push(item.color)
+      })
       this.chartOption = {
+        'color': colorOption,
         'legend': componentOption.Legend,
         'xAxis': this.xAxis,
         'tooltip': this.tooltip,

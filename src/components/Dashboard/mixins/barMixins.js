@@ -9,7 +9,8 @@ export default {
       yAxis: {},
       tooltip: {},
       label: {},
-      labelLayout: {}
+      labelLayout: {},
+      itemStyle: {}
     }
   },
   computed: {
@@ -18,28 +19,32 @@ export default {
     }
   },
   methods: {
+
     /* 获取不同图表类型的series */
     getSeries () {
+      const componentOption = this.storeOption.theme.ComponentOption
+      // const SeriesSelect = this.storeOption.theme.SeriesSetting.SeriesSelect
       let seriesLength = 0
       this.dataValue.forEach(item => {
         seriesLength = item.length - 1
       })
+
       if (this.type === 'BarChart') { // 为柱图时
-        this.mixinItem()
-        this.label.show = this.storeOption.theme.ComponentOption.ChartLabel.check
+        this.mixinItem(componentOption)
+        this.label.show = componentOption.ChartLabel.check
         this.label.position = 'top'
         for (let i = 0; i < seriesLength; i++) {
-          this.series.push({ type: 'bar', label: this.label, labelLayout: this.labelLayout })
-          if (this.storeOption.theme.ComponentOption.TwisYAxis.show) {
+          this.series.push({ type: 'bar', label: this.label, labelLayout: this.labelLayout, itemStyle: this.itemStyle })
+          if (componentOption.TwisYAxis.show) {
             const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
             this.series[i].yAxisIndex = yAxisIndex
           }
         }
       } else if (this.type === 'StackedBarChart') { // 为堆积柱状图时
-        this.mixinItem()
+        this.mixinItem(componentOption)
         for (let i = 0; i < seriesLength; i++) {
-          this.series.push({ type: 'bar', stack: 'Total', label: this.label, labelLayout: this.labelLayout })
-          if (this.storeOption.theme.ComponentOption.TwisYAxis.show) {
+          this.series.push({ type: 'bar', stack: 'Total', label: this.label, labelLayout: this.labelLayout, itemStyle: this.itemStyle })
+          if (componentOption.TwisYAxis.show) {
             const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
             this.series[i].yAxisIndex = yAxisIndex
             this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
@@ -51,9 +56,9 @@ export default {
         for (let i = 1; i < this.dataValue.length; i++) {
           this.dataValue[i] = [...this.dataValue[i], 0]
         }
-        this.series.push({ type: 'bar', stack: 'Total', label: this.label, labelLayout: this.labelLayout })
+        this.series.push({ type: 'bar', stack: 'Total', label: this.label, labelLayout: this.labelLayout, itemStyle: this.itemStyle })
         this.series[seriesLength]['label'] = {
-          show: this.storeOption.theme.ComponentOption.ChartLabel.check && this.checkList.includes('总计'),
+          show: componentOption.ChartLabel.check && this.checkList.includes('总计'),
           position: 'top',
           formatter: function (params) {
             let dataTotal = 0
@@ -64,9 +69,9 @@ export default {
           }
         }
       } else if (this.type === 'PercentStackedBarChart') { // 为百分比堆积柱状图时
-        this.mixinItem()
+        this.mixinItem(componentOption)
         this.valueToPercent()
-        if (!this.storeOption.theme.ComponentOption.TwisYAxis.show) {
+        if (!componentOption.TwisYAxis.show) {
           this.yAxis = {
             axisLabel: {
               show: true,
@@ -86,10 +91,10 @@ export default {
           const isMeasure = that.checkList.includes('度量') ? `${that.storeOption.dataSource[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
           return isPercent + '\n' + isMeasure
         }
-        this.label.show = this.storeOption.theme.ComponentOption.ChartLabel.check
+        this.label.show = componentOption.ChartLabel.check
         for (let i = 0; i < seriesLength; i++) {
-          this.series.push({ type: 'bar', stack: 'Total', label: this.label, labelLayout: this.labelLayout })
-          if (this.storeOption.theme.ComponentOption.TwisYAxis.show) {
+          this.series.push({ type: 'bar', stack: 'Total', label: this.label, labelLayout: this.labelLayout, itemStyle: this.itemStyle })
+          if (componentOption.TwisYAxis.show) {
             const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
             this.series[i].yAxisIndex = yAxisIndex
             this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
@@ -98,21 +103,21 @@ export default {
       }
     },
 
-    // 公共部分
-    mixinItem () {
+    // getSeries的公共部分
+    mixinItem (componentOption) {
       // 重置数据
       this.series = []
       this.tooltip = {}
       this.dataValue = deepClone(this.storeOption.dataSource)
 
       // 图表标签
-      this.label.show = this.storeOption.theme.ComponentOption.ChartLabel.check && this.checkList.includes('度量')
+      this.label.show = componentOption.ChartLabel.check && this.checkList.includes('度量')
       this.label.formatter = null
-      this.labelLayout.hideOverlap = this.storeOption.theme.ComponentOption.ChartLabel.labelShow === 1
+      this.labelLayout.hideOverlap = componentOption.ChartLabel.labelShow === 1
       this.label.position = ''
 
       // 双Y轴设置
-      if (this.storeOption.theme.ComponentOption.TwisYAxis.show) {
+      if (componentOption.TwisYAxis.show) {
         const formatter = this.type === 'PercentStackedBarChart' ? '{value}%' : '{value}'
 
         // 最大值和最小值暂时固定，后续需要修改
@@ -138,7 +143,7 @@ export default {
         this.yAxis = [
           {
             type: 'value',
-            // min: calcData1,
+            // min: minData1,
             // max: maxData1,
             min: minData1,
             max: maxData1,
@@ -158,8 +163,6 @@ export default {
             type: 'value',
             // min: calcData2,
             // max: maxData2,
-            min: minData2,
-            max: maxData2,
             // interval: that.storeOption.theme.ComponentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null,
             interval: intervalNum2,
             splitLine: {
@@ -179,13 +182,26 @@ export default {
 
           },
           {
-            type: 'category',
-            position: 'bottom'
+            type: 'category'
           }
         ]
       } else {
         this.yAxis = {}
         this.xAxis = { type: 'category' }
+      }
+
+      // 颜色设置
+      const color = componentOption.Color.color
+      this.itemStyle = {
+        color: (data) => {
+          if (color[0].name) {
+            const colorTemp = color.find((item) => { return data.seriesName === item.name })
+            return colorTemp ? colorTemp.color : 'red'
+          } else {
+            const index = (data.dataIndex) % color.length
+            return color[index].value
+          }
+        }
       }
     },
 
