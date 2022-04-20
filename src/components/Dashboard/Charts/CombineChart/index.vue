@@ -66,8 +66,11 @@ export default {
       // 显示最值 不清楚具体的效果是什么样子 SeriesMaximum.check
 
       // 选择系列 设置标记样式、线条样式 以及标签字体颜色
-      const { check } = ComponentOption.ChartLabel
+      const { check, labelShow } = ComponentOption.ChartLabel
       this.series = this.series.map((item) => {
+        item.labelLayout = {
+          hideOverlap: labelShow === 1
+        }
         item.label = {
           show: check
         }
