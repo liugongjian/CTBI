@@ -52,7 +52,7 @@ export default {
     document.onkeydown = function (e) {
       const obj = e.target
       const t = obj.type || obj.getAttribute('type')// 获取事件源类型
-      if (e.code === 'Backspace' && t !== 'password' && t !== 'text' && t !== 'textarea') {
+      if (e.code === 'Backspace' && t !== 'password' && t !== 'text' && t !== 'textarea' && t !== 'number') {
         const id = store.state.app.currentLayoutId
         if (id) {
           // 删除vuex的layout中对应的组件信息

@@ -52,6 +52,7 @@ export default {
 
     // 获取json文件中的配置项信息
     this.toolList = getToolList()
+    store.dispatch('app/updateToolList', this.toolList)
   },
   methods: {
     // 图标点击添加组件到画布

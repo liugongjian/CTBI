@@ -1,3 +1,10 @@
+/**
+{
+  "author": "ZhengJiale",
+  "time": "2022/04/18",
+  "description": "色彩地图组件"
+}
+ * */
 // 饼图配置项信息
 /**
  * type: {
@@ -38,9 +45,24 @@ export default {
       'Footer': { // 尾注
         'show': false, // 是否显示尾注
         'text': ''// 尾注信息
+      },
+      'TitleLink': { // 链接跳转组件
+        'text': '', // 文案
+        'url': '', // 链接地址
+        'show': false, // 是否展示链接地址
+        'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
+      },
+      MapStyleTemplates: { // 样式模板
+        type: 'defaultMap'// 模板类型 1.defaultMap 默认；2.simpleMap 极简底图； 3.3DMap 3D填充
       }
     },
     'ComponentOption': { // 图表样式
+      'ChartLabel': { // 图表标签
+        'check': false, // 是否展示图表标签
+        'checkList': ['维度'], // 标签格式 1. 维度；2. 度量；
+        'type': 'BarChart', // 图表类型
+        'labelShow': 1 // 数据标签展示方式 1 智能显示；2 全量显示
+      },
       'Legend': { // 图例
         'show': true,
         'top': 'auto',
