@@ -17,6 +17,19 @@
         />
       </el-checkbox-group>
     </div>
+    <div v-if="option.type==='FunnelChart'" class="editor-object-container">
+      <div
+        label="转换率计算方式"
+      />
+      <el-radio
+        v-model="option.funnelTransform"
+        :label="1"
+      >占上一层的百分比</el-radio>
+      <el-radio
+        v-model="option.funnelTransform"
+        :label="2"
+      >占第一层的百分比</el-radio>
+    </div>
     <div
       v-if="option.precisionShow"
       class="editor-object-container"
@@ -89,7 +102,16 @@ export default {
             label: '百分比'
           }
         ],
-        'CombineChart': []
+        'CombineChart': [],
+        'FunnelChart': [
+          {
+            label: '转化率'
+          }, {
+            label: '度量值'
+          }, {
+            label: '转化率+度量值'
+          }
+        ]
       },
       precisionOptions: [
         {
