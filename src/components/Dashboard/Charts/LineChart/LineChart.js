@@ -102,11 +102,44 @@ export default {
       }
     },
     'FunctionalOption': {
-      'showDataZoom': 'auto',
-      'axisShowType': 'auto',
-      'emptyResolve': 'skip',
-      'showFilter': false,
-      'filteredSery': ''
+      'DataZoom': {
+        'showDataZoom': 'hide'
+      },
+      'LabelShowType': {
+        'axisShowType': 'auto'
+      },
+      'NullProcess': {
+        'emptyResolve': 'skip'
+      },
+      'ChartFilter': {
+        'showFilter': false,
+        'filteredSery': ''
+      }
+    },
+    'SeriesSetting': { // 系列设置
+      'SeriesSelect': { // 选择系列
+        'label': '请选择系列',
+        'selectValue': '', // 默认选择的系列名字 第一个元素
+        'remarkShow': false, // 是否显示别名
+        'remark': '', // 别名默认是选择的系列名字 第一个元素
+        'seriesOption': [{ label: '价格', value: '价格-0' }, { label: '数量', value: '数量-0' }, { label: '温度', value: '温度-1' }] // 从数据中拿到系列的名字
+      },
+      'SeriesChartLabel': { // 某个系列显示图表标签
+        'check': false, // 默认未选中
+        'color': '' // 颜色
+      },
+      'SeriesMark': { // 标记点
+        'show': false, // 副轴才是true
+        'check': false, // 默认未选中
+        'markType': 'circle'
+      },
+      'SeriesMaximum': { // 最值
+        'check': false // 默认未选中
+      },
+      'SeriesLine': { // 线条样式
+        'show': false, // 副轴才是true
+        'lineType': 'solid' // 默认实线
+      }
     }
   },
   'advance': {}, // 高级

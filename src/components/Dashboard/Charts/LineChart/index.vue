@@ -163,7 +163,7 @@ export default {
         }
     },
     getDataZoomOption () {
-      const sdz = this.storeOption.theme.FunctionalOption.showDataZoom
+      const sdz = this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom
       const item = {
         realtime: true,
         start: 30,
@@ -181,7 +181,7 @@ export default {
       return [item]
     },
     getAxisShowTypeOption () {
-      const ast = this.storeOption.theme.FunctionalOption.axisShowType
+      const ast = this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType
       const option = {
         axisLabel: {
           rotate: 0,
@@ -196,7 +196,7 @@ export default {
       return option
     },
     resolveNull () {
-      const ast = this.storeOption.theme.FunctionalOption.emptyResolve
+      const ast = this.storeOption.theme.FunctionalOption.NullProcess.emptyResolve
       const series = {
         connectNulls: false
       }
