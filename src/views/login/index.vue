@@ -96,7 +96,7 @@ export default {
 }
 .login-item_image {
   position: relative;
-  width: 35%;
+  width: 50%;
   height: 100%;
 }
 .background {
