@@ -7,6 +7,8 @@
     <div class="login-item_input">
       <div class="form">
         <el-form
+          ref="loginForm"
+          :model="loginForm"
           label-position="left"
           :rules="loginRules"
         >
@@ -14,12 +16,15 @@
             <span class="login-item_title">欢迎来到</span>
             <span class="login-item_title-bi">BI</span>
           </div>
-          <el-form-item prop="username">
+          <el-form-item prop="userName">
             <span class="title-size">用户名</span>
             <el-input
-              v-model="loginForm.username"
+              ref="userName"
+              v-model="loginForm.userName"
+              name="userName"
               type="text"
               placeholder="请输入用户名"
+              auto-complete="on"
             />
           </el-form-item>
           <el-form-item prop="password">
@@ -30,17 +35,19 @@
               placeholder="请输入密码"
             />
           </el-form-item>
-          <el-form-item prop="verification">
+          <el-form-item prop="verifyCode">
             <span class="title-size">验证码</span>
             <el-input
-              v-model="loginForm.verification"
+              v-model="loginForm.verifyCode"
               type="text"
               placeholder="请输入验证码"
             />
           </el-form-item>
         </el-form>
         <div class="button-style">
-          <el-button class="button">
+          <el-button
+            class="button"
+          >
             登录
           </el-button>
           <div class="shadow" />
@@ -51,21 +58,32 @@
 </template>
 
 <script>
-// import { login } from '@/api/user'
+import { verify } from '@/api/user'
 export default {
   name: 'Login',
   data () {
     return {
       loginForm: {
-        username: '',
+        userName: '',
         password: '',
-        verification: ''
+        verifyCode: '',
+        from: 'platform'
       },
       loginRules: {
-        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+        userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-        verification: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
-      }
+        verifyCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
+      },
+      loading: false,
+      redirect: undefined
+    }
+  },
+  mounted () {
+    this.verifyGet()
+  },
+  methods: {
+    async verifyGet () {
+      await verify()
     }
   }
 }
