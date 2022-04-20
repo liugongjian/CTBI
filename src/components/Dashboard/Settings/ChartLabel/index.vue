@@ -18,9 +18,7 @@
       </el-checkbox-group>
     </div>
     <div v-if="option.type==='FunnelChart'" class="editor-object-container">
-      <div
-        label="转换率计算方式"
-      />
+      <div>转换率计算方式</div>
       <el-radio
         v-model="option.funnelTransform"
         :label="1"
