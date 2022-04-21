@@ -90,8 +90,24 @@ export default {
         'isStack': false// 是否为堆积类型
       }
     },
-    'Axis': {
-      'XAxis': {
+    'FunctionalOption': { // 功能配置
+      'DataZoom': {
+        'showDataZoom': 'hide'
+      },
+      'LabelShowType': {
+        'axisShowType': 'auto'
+      },
+      'NullProcess': {
+        'emptyResolve': 'skip'
+      },
+      'ChartFilter': { // 指标筛选指示
+        'showFilter': false,
+        'filteredSery': '', // 选中的指标
+        'indicatorOption': [] // 指标集合
+      }
+    },
+    'Axis': { // 轴设置
+      'XAxis': { // X轴设置
         'cname': 'X轴',
         'title': '',
         'unit': '',
@@ -107,7 +123,7 @@ export default {
         'splitColor': '#000',
         'splitType': 'solid'
       },
-      'YAxis': {
+      'YAxis': { // y轴设置
         'cname': '左Y轴',
         'title': '',
         'unit': '',
@@ -139,6 +155,13 @@ export default {
         'label': '请选择系列',
         'selectValue': '', // 默认选择的系列名字 第一个元素
         'seriesOption': [] // 从数据中拿到系列的名字
+      },
+      'SeriesChartLabel': { // 某个系列显示图表标签
+        'check': false, // 默认未选中
+        'color': '' // 颜色
+      },
+      'SeriesMaximum': { // 最值
+        'check': false // 默认未选中
       }
     }
   },
