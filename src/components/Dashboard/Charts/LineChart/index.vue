@@ -110,7 +110,6 @@ export default {
         },
         series: this.series
       }
-      console.log('this.chartOption:', this.chartOption)
     },
     generateAxisOptions (type, axis, id = '') {
       const axisType = type + 'Axis' + id

@@ -150,6 +150,9 @@ export default {
         'remark': '', // 别名默认是选择的系列名字 第一个元素
         'seriesOption': [{ label: '价格', value: '价格-0' }, { label: '数量', value: '数量-0' }, { label: '温度', value: '温度-1' }] // 从数据中拿到系列的名字
       },
+      'SeriesAxis': {
+        'type': 'default'
+      },
       'SeriesChartLabel': { // 某个系列显示图表标签
         'check': false, // 默认未选中
         'color': '' // 颜色
@@ -163,7 +166,7 @@ export default {
         'check': false // 默认未选中
       },
       'SeriesLine': { // 线条样式
-        'show': false, // 副轴才是true
+        'show': true, // 副轴才是true
         'lineType': 'solid' // 默认实线
       }
     }
