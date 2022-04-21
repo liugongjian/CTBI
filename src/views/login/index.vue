@@ -42,11 +42,13 @@
               type="text"
               placeholder="请输入验证码"
             />
+            <span v-html="verifyImg" />
           </el-form-item>
         </el-form>
         <div class="button-style">
           <el-button
             class="button"
+            @click="handleLogin"
           >
             登录
           </el-button>
@@ -75,7 +77,9 @@ export default {
         verifyCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
       },
       loading: false,
-      redirect: undefined
+      redirect: undefined,
+      verifyImg: '',
+      isValid: true
     }
   },
   mounted () {
@@ -83,8 +87,15 @@ export default {
   },
   methods: {
     async verifyGet () {
-      await verify()
+      const { data } = await verify()
+      this.verifyImg = data
+    },
+    handleLogin () {
+      // login().then( ) 是否激活
+      // vuex user
+      // 跳转
     }
+
   }
 }
 </script>
