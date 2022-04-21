@@ -22,7 +22,7 @@
               label="字段"
               name="1"
             >
-              <data-panel-field :identify="layoutId" />
+              <data-panel-field :identify="currentLayoutId" />
             </el-tab-pane>
             <el-tab-pane
               label="样式"
@@ -99,7 +99,6 @@ export default {
       showWrapper: true,
       showData: true,
       option: {},
-      layoutId: null,
       activeNames: '2'
     }
   },
@@ -118,7 +117,6 @@ export default {
         return item.i === id
       })
       this.option = temp.option
-      this.layoutId = id
     },
     // 展开面板并显示对应模块
     showItem (name) {

@@ -29,29 +29,32 @@ export default {
       chartOption: {},
       type: 'PercentStackedBarChart', // 图表类型 1.柱图；2.堆积柱状图；3.百分比堆积柱状图
       dataValue: null,
-      series: [],
-      textMap: {
-        'BarChart': '柱图',
-        'StackedBarChart': '堆积柱状图',
-        'PercentStackedBarChart': '百分比堆积柱状图'
-      }
+      series: []
     }
   },
   watch: {
     storeOption: {
       handler (val) {
         this.type = val.theme.Basic.ChartType.type
-        val.theme.ComponentOption.ChartLabel.type = this.type
-        val.theme.Basic.Title.text = this.textMap[this.type]
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        this.type = val.theme.ComponentOption.PercentStack.isStack ? 'StackedBarChart' : this.type
-        this.type = val.theme.ComponentOption.PercentStack.isPercent ? 'PercentStackedBarChart' : this.type
         if (JSON.stringify(val.dataSource) !== '{}') {
           this.dataValue = deepClone(val.dataSource)// 深拷贝，避免修改数据
           this.getOption()
         }
       },
       deep: true
+    },
+    'storeOption.dataSource': {
+      handler (val) {
+        if (JSON.stringify(val) !== '{}') {
+          this.dataValue = deepClone(val)
+          // 拿到数据中的系列名字
+          // this.getSeriesOptions(this.dataValue)
+          // 拿到数据的系列名字 并设置颜色
+          this.getColor(this.dataValue)
+          this.getOption()
+        }
+      }
     }
   },
   mounted () {
@@ -60,7 +63,7 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.getSeries()
+      this.getPercentStackSeries(componentOption)
       // 获取颜色设置
       const colorOption = []
       componentOption.Color.color.forEach(item => {
