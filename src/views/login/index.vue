@@ -83,7 +83,11 @@ export default {
   },
   methods: {
     async verifyGet () {
-      await verify()
+      const res = await verify()
+      const { data } = res
+      if (data) {
+        console.log(data)
+      }
     }
   }
 }

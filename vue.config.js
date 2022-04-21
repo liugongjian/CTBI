@@ -40,7 +40,7 @@ module.exports = {
     proxy: {
       // 配置跨域
       '/dev-api': {
-        target: '*',
+        target: '	http://localhost:4523/mock/825472',
         changeOrigin: true,
         pathRewrite: {
           '^/dev-api': '/'
