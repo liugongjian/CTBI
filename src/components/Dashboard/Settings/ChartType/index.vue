@@ -1,0 +1,109 @@
+<template>
+  <div class="editor-object-container">
+    <div>
+      图表类型
+    </div>
+    <div class="editor-item-container">
+      <span
+        v-for="(item, index) in typeOption"
+        :key="index"
+        style="cursor: pointer"
+      >
+        <el-tooltip
+          class="item"
+          effect="dark"
+          :content="item.name"
+          placement="top"
+        >
+          <svg-icon
+            :icon-class="item.value"
+            style="font-size: 30px;"
+            @click="changeHandler(item.value)"
+          />
+        </el-tooltip>
+      </span>
+    </div>
+  </div>
+</template>
+
+<script>
+import store from '@/store'
+import { getLayoutById } from '@/utils/optionUtils'
+export default {
+  name: 'ChartType',
+  props: {
+    option: {
+      type: Object,
+      default: () => { }
+    }
+  },
+  data () {
+    return {
+      typeOptions: [
+        [
+          {
+            name: '线图',
+            value: 'LineChart'
+          }, {
+            name: '面积图',
+            value: 'AreaChart'
+          }, {
+            name: '堆叠面积图',
+            value: 'StackedAreaChart'
+          }, {
+            name: '百分比堆叠面积图',
+            value: 'PercentStackedAreaChart'
+          }
+        ],
+        [
+          {
+            name: '柱图',
+            value: 'BarChart'
+          }, {
+            name: '堆积柱状图',
+            value: 'StackedBarChart'
+          }, {
+            name: '百分比堆积柱状图',
+            value: 'PercentStackedBarChart'
+          }
+        ]
+      ]
+    }
+  },
+  computed: {
+    // 根据type获取对应图表类型集合
+    typeOption () {
+      let typeOption = []
+      this.typeOptions.forEach(item => {
+        const isType = item.findIndex(ele => {
+          return ele.value === this.option.type
+        })
+        if (isType !== -1) {
+          typeOption = item
+        }
+      })
+      return typeOption
+    }
+  },
+  watch: {},
+  created () { },
+  mounted () {
+  },
+  methods: {
+    // 图标点击添加组件到画布
+    changeHandler (type) {
+      const storeOption = getLayoutById(store.state.app.currentLayoutId)
+      const dataSource = JSON.parse(JSON.stringify(storeOption.option.dataSource))
+      storeOption.option = JSON.parse(JSON.stringify(store.state.app.toolList[type]))
+      storeOption.option.dataSource = dataSource
+      storeOption.is = type
+      // 通知右侧重新渲染
+      this.$bus.$emit('reloadOption', store.state.app.currentLayoutId)
+    }
+  }
+
+}
+</script>
+
+<style>
+</style>

@@ -109,3 +109,15 @@ export const getLayoutOptionById = function (identify) {
   console.warn(`获取 ${identify} 组件配置信息为空`)
   return {}
 }
+
+export const getLinkageById = function (identify) {
+  const linkage = store.state.app.linkage
+  const obj = linkage.find(item => {
+    return item.id === identify
+  })
+  if (obj && JSON.stringify(obj) !== '{}') {
+    return obj
+  }
+  console.warn(`获取 ${identify} 组件配置信息为空`)
+  return {}
+}
