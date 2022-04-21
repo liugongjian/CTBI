@@ -90,48 +90,15 @@ export default {
         'isStack': true// 是否为堆积类型
       }
     },
-    'Axis': {
-      'XAxis': {
-        'cname': 'X轴',
-        'title': '',
-        'unit': '',
-        'show': true,
-        'showTitle': false,
-        'showTicks': false,
-        'lineWidth': 1,
-        'lineColor': '#000',
-        'lineType': 'solid',
-        'showAxisLabel': true,
-        'showSplit': false,
-        'splitWidth': 1,
-        'splitColor': '#000',
-        'splitType': 'solid'
+    'SeriesSetting': { // 系列设置
+      'SeriesSelect': { // 选择系列
+        'label': '请选择系列',
+        'selectValue': '', // 默认选择的系列名字 第一个元素
+        'seriesOption': [] // 从数据中拿到系列的名字
       },
-      'YAxis': {
-        'cname': '左Y轴',
-        'title': '',
-        'unit': '',
-        'show': true,
-        'showTitle': false,
-        'showTicks': false,
-        'lineWidth': 1,
-        'lineColor': '#000',
-        'lineType': 'solid',
-        'showAxisLabel': true,
-        'showSplit': false,
-        'splitWidth': 1,
-        'splitColor': '#000',
-        'splitType': 'solid',
-        'min': 0,
-        'max': 0,
-        'autoMin': true,
-        'autoMax': true,
-        'formatType': '1',
-        'lang': 'chinese-simplified',
-        'numberFormat': 'number',
-        'numberDigit': 0,
-        'kSeperator': false,
-        'formatRegx': ''
+      'SeriesChartLabel': { // 某个系列显示图表标签
+        'check': false, // 默认未选中
+        'color': '' // 颜色
       }
     }
   },

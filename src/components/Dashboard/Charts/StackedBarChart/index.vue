@@ -49,9 +49,11 @@ export default {
         if (JSON.stringify(val) !== '{}') {
           this.dataValue = deepClone(val)
           // 拿到数据中的系列名字
-          // this.getSeriesOptions(this.dataValue)
+          this.getSeriesOptions(this.dataValue)
           // 拿到数据的系列名字 并设置颜色
           this.getColor(this.dataValue)
+          // 拿到数据中的指标
+          this.getIndicatorOptions(this.dataValue)
           this.getOption()
         }
       }
@@ -72,6 +74,9 @@ export default {
       if (componentOption.PercentStack.isPercent) {
         this.getPercentStackSeries(componentOption)
       }
+
+      // 系列配置
+      this.setSeriesItem()
       // 获取颜色设置
       const colorOption = []
       componentOption.Color.color.forEach(item => {

@@ -51,6 +51,8 @@ export default {
           this.getSeriesOptions(this.dataValue)
           // 拿到数据的系列名字 并设置颜色
           this.getColor(this.dataValue)
+          // 拿到数据中的指标
+          this.getIndicatorOptions(this.dataValue)
           this.getOption()
         }
       }
@@ -64,12 +66,15 @@ export default {
       const componentOption = this.storeOption.theme.ComponentOption
       componentOption.ChartLabel.type = 'BarChart'
       this.getSeries(componentOption) // 获取Series
-      if (componentOption.PercentStack.isStack) {
+      if (componentOption.PercentStack.isStack && !componentOption.PercentStack.isPercent) {
         this.getStackSeries(componentOption)
       }
       if (componentOption.PercentStack.isPercent) {
         this.getPercentStackSeries(componentOption)
       }
+
+      // 系列配置
+      this.setSeriesItem()
       // 获取颜色设置-使图例颜色与图形颜色对应
       const colorOption = []
       componentOption.Color.color.forEach(item => {
@@ -81,6 +86,7 @@ export default {
         'xAxis': this.xAxis,
         'tooltip': this.tooltip,
         'yAxis': this.yAxis,
+        'markPoint': this.markPoint,
         'dataset': {
           'source': this.dataValue
         },
@@ -99,6 +105,7 @@ export default {
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'bar',
+          name: this.dataValue[0][i + 1],
           label: {
             show: componentOption.ChartLabel.check, // 标签显示
             position: 'top' // 标签位置

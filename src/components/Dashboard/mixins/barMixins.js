@@ -7,11 +7,7 @@ export default {
   data () {
     return {
       xAxis: { type: 'category' },
-      yAxis: {},
-      tooltip: {},
-      label: {},
-      labelLayout: {},
-      itemStyle: {}
+      yAxis: {}
     }
   },
   computed: {
@@ -62,6 +58,18 @@ export default {
         }
       }
     },
+    // 拿到数据中的指标
+    getIndicatorOptions (val) {
+      const indicatorOptions = []
+      val[0].forEach((item, index) => {
+        if (index) {
+          indicatorOptions.push({ value: item, label: item })
+        }
+      })
+
+      this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption = indicatorOptions
+      this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery = indicatorOptions[0].value
+    },
     // 双y轴设置
     twisYAxisConfig (componentOption) {
       if (componentOption.TwisYAxis.show) {
@@ -77,14 +85,11 @@ export default {
         this.yAxis = [
           {
             type: 'value',
-            // min: minData1,
-            // max: maxData1,
             min: minData1,
             max: maxData1,
             axisLine: {
               show: true
             },
-            // interval: that.storeOption.theme.ComponentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData1 - minData1) / 5 : null,
             interval: intervalNum1,
             splitLine: {
               show: false
@@ -95,9 +100,6 @@ export default {
           },
           {
             type: 'value',
-            // min: calcData2,
-            // max: maxData2,
-            // interval: that.storeOption.theme.ComponentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null,
             interval: intervalNum2,
             splitLine: {
               show: false
@@ -154,6 +156,7 @@ export default {
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'bar',
+          name: this.dataValue[0][i + 1],
           label: {
             show: componentOption.ChartLabel.check && this.checkList.includes('度量') // 标签显示
           },
@@ -219,6 +222,7 @@ export default {
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'bar',
+          name: this.dataValue[0][i + 1],
           label: {
             show: componentOption.ChartLabel.check, // 标签显示
             formatter: function (params) {
@@ -239,6 +243,27 @@ export default {
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
         }
       }
+    },
+
+    // 系列设置
+    setSeriesItem () {
+      const { SeriesSelect, SeriesChartLabel } = this.storeOption.theme.SeriesSetting
+      this.series = this.series.map((item) => {
+        if (SeriesSelect?.selectValue === item.name) {
+          item.label.show = SeriesChartLabel.check
+          item.label.color = SeriesChartLabel.color
+          if (this.storeOption.theme.SeriesSetting.SeriesMaximum.check) {
+            item.markPoint = {
+              symbol: 'pin',
+              data: [
+                { type: 'max', name: '最大值' },
+                { type: 'min', name: '最小值' }
+              ]
+            }
+          }
+        }
+        return item
+      })
     }
   }
 }
