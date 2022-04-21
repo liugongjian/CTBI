@@ -13,6 +13,8 @@
  *    other: 其他
  *  }
  * */
+
+import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'trend', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -49,12 +51,36 @@ export default {
       }
     },
     'ComponentOption': { // 图表样式
+      'ChartLabel': { // 标签样式
+        'type': 'LineChart', // 线图标签样式
+        'check': false, // 选中显示标签
+        'checkList': [],
+        'precisionShow': false, // 是否显示百分比设置组件
+        'precision': 2, // 百分比保留位数 0位 1位 2位
+        'labelShow': 1 // 0不显示 1 智能显示 2 全部显示
+      },
+      'SeriesMark': { // 标记点
+        'show': true, // 这里一直是true 和系列中的标记区分
+        'check': false, // 默认未选中
+        'markType': 'circle'
+      },
       'Legend': { // 图例
         'show': true,
         'top': 'auto',
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
+      },
+      'LineStyle': { // 线条样式
+        'type': 2 // 1曲线 2直线
+      },
+      'Color': { // 颜色设置
+        'title': '配色设置',
+        'color': colorTheme['defaultColor']
+      },
+      'TwisYAxis': { // 双Y轴
+        'show': false, // 是否显示双Y轴
+        'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
       }
     },
     'Axis': { // 轴设置

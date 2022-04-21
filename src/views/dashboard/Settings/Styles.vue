@@ -38,7 +38,7 @@
         <el-tabs v-model="activeName">
           <el-tab-pane v-for="(item,name,key) in option['Axis']" :key="key" :label="item.cname" :name="key.toString()">
             <component
-              :is="name"
+              :is="name.substr(0,5)"
               :option="option['Axis'][name]"
             />
           </el-tab-pane>
@@ -116,6 +116,22 @@ export default {
     return {
       activeNames: '1',
       activeName: '0'
+    }
+  },
+  watch: {
+    'option.ComponentOption.TwisYAxis.show': {
+      handler (val) {
+        if (val) {
+          const YAxis2 = JSON.parse(JSON.stringify(this.option.Axis.YAxis))
+          YAxis2.cname = '右Y轴'
+          this.$set(this.option.Axis, 'YAxis2', YAxis2)
+        } else {
+          if (this.option.Axis.YAxis2) {
+            this.$delete(this.option.Axis, 'YAxis2')
+          }
+        }
+      },
+      deep: true
     }
   }
 }
