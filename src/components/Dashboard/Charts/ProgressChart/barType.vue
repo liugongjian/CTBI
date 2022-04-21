@@ -5,7 +5,7 @@
       <div class="progress">
         <div class="box" :style="styleProgress" />
       </div>
-      <span :style="stylePercent">10%</span>
+      <span :style="stylePercent">{{ setProgress }}%</span>
     </div>
     <div v-if="getValueShow" class="desc" :style="styleDesc">
       <span>{{ option.value.current }} {{ data.value }}</span>
@@ -16,47 +16,10 @@
 </template>
 
 <script>
-
+import progressMixins from './progressMixins'
 export default {
   name: 'BarType',
-  props: {
-    option: {
-      type: Object,
-      default: () => ({})
-    },
-    data: {
-      type: Object,
-      default: () => ({})
-    }
-  },
-  computed: {
-    styleTitle () {
-      return JSON.stringify(this.option) === '{}' ? {} : {
-        color: this.option.indicators[0].color,
-        fontSize: `${this.option.indicators[0].fontSize}px`
-      }
-    },
-    styleProgress () {
-      return {
-        backgroundColor: this.data.color
-      }
-    },
-    stylePercent () {
-      return JSON.stringify(this.option) === '{}' ? {} : {
-        color: this.option.indicators[1].color,
-        fontSize: `${this.option.indicators[1].fontSize}px`
-      }
-    },
-    styleDesc () {
-      return JSON.stringify(this.option) === '{}' ? {} : {
-        color: this.option.value.style.color,
-        fontSize: `${this.option.value.style.fontSize}px`
-      }
-    },
-    getValueShow () {
-      return JSON.stringify(this.option) === '{}' ? false : this.option.value.show
-    }
-  }
+  mixins: [progressMixins]
 }
 </script>
 
@@ -64,6 +27,7 @@ export default {
 .container {
   margin-top: 15px;
   margin-right: 10px;
+  text-align: left;
   .picture {
     display: flex;
     align-items: center;

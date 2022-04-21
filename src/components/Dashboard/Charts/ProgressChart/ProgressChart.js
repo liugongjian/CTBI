@@ -80,6 +80,9 @@ export default {
         },
         'color': []
       }
+    },
+    'FunctionalOption': { // 功能配置
+      'cfgTarget': [] // 目标值
     }
   },
   'advance': {}, // 高级

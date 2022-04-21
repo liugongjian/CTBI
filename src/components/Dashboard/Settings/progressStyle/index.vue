@@ -83,14 +83,15 @@ export default {
     // 监听数据变化 变化后触发radar组件变化
     radarColor: {
       handler (val) {
-        store.dispatch('app/updateLinkage', { id: store.state.app.currentLayoutId, item: { colorConfig: val } })
+        this.option.color = val
       },
       deep: true
     }
   },
   methods: {
     getRadarColor () {
-      this.radarColor = store.state.app.linkage.find(item => store.state.app.currentLayoutId === item.id).colorConfig || []
+      const item = store.state.app.layout.find(item => store.state.app.currentLayoutId === item.i) || {}
+      this.radarColor = item.option.theme.ComponentOption.progressStyle.color
     }
   }
 }

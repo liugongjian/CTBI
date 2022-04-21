@@ -93,6 +93,18 @@ export default {
       },
       deep: true
     }
+    // 'storeOption.dataSource': {
+    //   handler (val) {
+    //     if (JSON.stringify(val) !== '{}') {
+    //       this.dataValue = deepClone(val)
+    //       // 拿到数据的系列名字 并设置颜色
+    //       this.getColor(this.dataValue)
+    //       // 拿到数据中的指标
+    //       // this.getIndicatorOptions(this.dataValue)
+    //       this.getOption()
+    //     }
+    //   }
+    // }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
@@ -179,55 +191,6 @@ export default {
             name: 'Budget vs spending',
             type: 'radar',
             data: this.dataValue
-            // data: [
-            //   {
-            //     value: [5000, 12000, 28888, 32020, 16000, 13000],
-            //     name: '2018-07',
-            //     // 设置区域边框和区域的颜色
-            //     itemStyle: {
-            //       normal: {
-            //         color: 'rgba(255,225,0,.3)',
-            //         lineStyle: {
-            //           color: 'rgba(255,225,0,.3)'
-            //         }
-            //       }
-            //     },
-            //     // areaStyle: {
-            //     //   color: 'rgba(255,225,0,.3)'
-            //     // },
-            //     // 在拐点处显示数值
-            //     label: {
-            //       normal: {
-            //         show: false,
-            //         formatter: (params) => {
-            //           return params.value
-            //         }
-            //       }
-            //     }
-            //   },
-            //   {
-            //     value: [4400, 10000, 18888, 22020, 46000, 23000],
-            //     name: '',
-            //     itemStyle: {
-            //       normal: {
-            //         color: 'rgba(60,135,213,.3)',
-            //         lineStyle: {
-            //           width: 1,
-            //           color: 'rgba(60,135,213,.3)'
-            //         }
-            //       }
-            //     },
-            //     // 在拐点处显示数值
-            //     label: {
-            //       normal: {
-            //         show: false,
-            //         formatter: (params) => {
-            //           return params.value
-            //         }
-            //       }
-            //     }
-            //   }
-            // ]
           }
         ]
       }
