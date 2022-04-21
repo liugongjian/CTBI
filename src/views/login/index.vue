@@ -5,7 +5,10 @@
       <img class="logo" src="../bi/Image/login-image/logo.png" alt="">
     </div>
     <div class="login-item_input">
-      <div class="form">
+      <div v-if="showActivate" class="activate">
+        激活
+      </div>
+      <div v-else class="form">
         <el-form
           ref="loginForm"
           :model="loginForm"
@@ -79,7 +82,7 @@ export default {
       loading: false,
       redirect: undefined,
       verifyImg: '',
-      isValid: true
+      showActivate: false
     }
   },
   mounted () {
@@ -91,6 +94,7 @@ export default {
       this.verifyImg = data
     },
     handleLogin () {
+      this.showActivate = true
       // login().then( ) 是否激活
       // vuex user
       // 跳转
