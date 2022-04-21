@@ -109,7 +109,8 @@ export default {
           }, {
             label: '转化率+度量值'
           }
-        ]
+        ],
+        'LineChart': []
       },
       precisionOptions: [
         {

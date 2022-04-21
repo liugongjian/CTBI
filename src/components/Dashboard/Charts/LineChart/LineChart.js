@@ -13,6 +13,8 @@
  *    other: 其他
  *  }
  * */
+
+import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'trend', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -49,12 +51,36 @@ export default {
       }
     },
     'ComponentOption': { // 图表样式
+      'ChartLabel': { // 标签样式
+        'type': 'LineChart', // 线图标签样式
+        'check': false, // 选中显示标签
+        'checkList': [],
+        'precisionShow': false, // 是否显示百分比设置组件
+        'precision': 2, // 百分比保留位数 0位 1位 2位
+        'labelShow': 1 // 0不显示 1 智能显示 2 全部显示
+      },
+      'SeriesMark': { // 标记点
+        'show': true, // 这里一直是true 和系列中的标记区分
+        'check': false, // 默认未选中
+        'markType': 'circle'
+      },
       'Legend': { // 图例
         'show': true,
         'top': 'auto',
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
+      },
+      'LineStyle': { // 线条样式
+        'type': 2 // 1曲线 2直线
+      },
+      'Color': { // 颜色设置
+        'title': '配色设置',
+        'color': colorTheme['defaultColor']
+      },
+      'TwisYAxis': { // 双Y轴
+        'show': false, // 是否显示双Y轴
+        'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
       }
     },
     'Axis': { // 轴设置
@@ -124,6 +150,9 @@ export default {
         'remark': '', // 别名默认是选择的系列名字 第一个元素
         'seriesOption': [{ label: '价格', value: '价格-0' }, { label: '数量', value: '数量-0' }, { label: '温度', value: '温度-1' }] // 从数据中拿到系列的名字
       },
+      'SeriesAxis': {
+        'type': 'default'
+      },
       'SeriesChartLabel': { // 某个系列显示图表标签
         'check': false, // 默认未选中
         'color': '' // 颜色
@@ -137,7 +166,7 @@ export default {
         'check': false // 默认未选中
       },
       'SeriesLine': { // 线条样式
-        'show': false, // 副轴才是true
+        'show': true, // 副轴才是true
         'lineType': 'solid' // 默认实线
       }
     }
