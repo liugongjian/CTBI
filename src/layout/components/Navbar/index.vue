@@ -3,7 +3,7 @@
     <div class="right-menu">
       <!-- 用户名称及其下拉框 -->
       <el-dropdown class="avatar-container">
-        <div class="d-f f-c-c c-p c-fff">
+        <div class="d-f f-c-c c-p">
           <div class="m-r-10">{{ name }}</div>
           <div><i class="el-icon-caret-bottom" /></div>
         </div>
@@ -16,11 +16,6 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <!-- 背景图片 -->
-      <img
-        src="@/assets/bg_head_r.svg"
-        class="bg-head-r"
-      >
     </div>
   </div>
 </template>
@@ -51,7 +46,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$bg: #001629;
+$bg: #424550;
 .navbar {
   height: 50px;
   overflow: hidden;
@@ -71,6 +66,7 @@ $bg: #001629;
     .avatar-container {
       z-index: 2;
       padding: 0 20px;
+      color: #a8adaf;
     }
   }
 
