@@ -52,19 +52,12 @@ export default {
   },
   methods: {
     getOption () {
-<<<<<<< HEAD
-      const { ComponentOption, Basic } = this.storeOption.theme
-      console.log('option 里面有东西变了：   ', this.storeOption.theme, this.storeOption)
-      this.radius = Basic.VisualStyle.style === 'pie' ? ['0', '75%'] : ['30%', '75%']
-      const radius = this.radius.map(item => {
-=======
       const that = this
       const { ComponentOption, Basic, SeriesSetting } = that.storeOption.theme
 
       // 半径变化
       that.radius = Basic.VisualStyle.style === 'pie' ? ['0', '75%'] : ['30%', '75%']
       const radius = that.radius.map(item => {
->>>>>>> 47bef2d79688d873e49b5aec0f97d96a552492d8
         item = (parseInt(item) * parseInt(ComponentOption.ChartRadius[1]) / 100).toFixed('0') + '%'
         return item
       })

@@ -76,7 +76,13 @@ export default {
         // 展示样式
         'default': true, // 默认样式
         'trapezoid': false, // 梯形
-        'rectangle': false // 矩形
+        'rectangle': false, // 矩形
+        // 显示类别标签
+        'labelPos': 'left',
+        // 显示数据标签
+        'dataLabel': 'conversion',
+        // 转化率计算方式
+        'calcMethod': 'last'
       }
     }
   },
