@@ -1,13 +1,15 @@
 <template>
   <div class="editor-object-container">
     <el-checkbox
-      v-model="option.show"
+      v-if="option.show"
+      v-model="option.check"
       label="显示双Y轴"
     />
+    <span v-else>显示双Y轴</span>
     <div class="editor-item-container">
       <el-radio-group
         v-model="option.twisType"
-        :disabled="!option.show"
+        :disabled="!option.check"
       >
         <div
           v-for="(item,index) in options"
@@ -28,7 +30,10 @@
             content="不同步下可能导致左右轴刻度不一致，并且无法保证0刻度对齐"
             placement="top"
           >
-            <i class="el-icon-warning-outline" style="font-size:14px" />
+            <i
+              class="el-icon-warning-outline"
+              style="font-size:14px"
+            />
           </el-tooltip>
         </div>
       </el-radio-group>

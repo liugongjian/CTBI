@@ -54,63 +54,18 @@ export default {
       ['Sat', 1330, 480, 37.6],
       ['Sun', 1320, 460, 38]
     ]
+    // const dataValue = [
+    //   { name: '一月份订单', value: '200', target: '300' },
+    //   { name: '二月份订单', value: '100', target: '200' },
+    //   { name: '三月份订单', value: '300', target: '600' },
+    //   { name: '四月份订单', value: '500', target: '580' }
+    // ]
     this.val = JSON.stringify(dataValue)
   },
   methods: {
     reflashStore () {
       const layout = getLayoutById(this.identify)
       layout.option.dataSource = JSON.parse(this.val)
-      // if (layout.option.theme.SeriesSetting) {
-      //   this.getSeries(layout.option.dataSource)
-      // }
-      // if (layout.option.theme.ComponentOption.Color) {
-      //   this.getColor(layout.option.dataSource)
-      // }
-    },
-    // 拿到数据中的系列名字
-    getSeries (val) {
-      console.log(val)
-      const layout = getLayoutById(this.identify)
-      const seriesOption = []
-      if (this.typeOption.includes(layout.option.theme.Basic.ChartType?.type)) {
-        val[0].forEach((item, index) => {
-          if (index) {
-            seriesOption.push({ value: item, label: item })
-          }
-        })
-      } else {
-        val.forEach((item, index) => {
-          if (index) {
-            seriesOption.push({ value: item[0], label: item[0] })
-          }
-        })
-      }
-
-      layout.option.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
-      layout.option.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
-      layout.option.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
-    },
-    // 设置颜色的name 为 对应的系列名字
-    getColor (val) {
-      const layout = getLayoutById(this.identify)
-      const color = []
-      if (this.typeOption.includes(layout.option.theme.Basic.ChartType?.type)) {
-        val[0].forEach((item, index) => {
-          if (index) {
-            const idx = (index) % colorTheme['defaultColor'].length
-            color.push({ name: item, color: colorTheme['defaultColor'][idx].value })
-          }
-        })
-      } else {
-        val.forEach((item, index) => {
-          if (index) {
-            const idx = (index) % colorTheme['defaultColor'].length
-            color.push({ name: item[0], color: colorTheme['defaultColor'][idx].value })
-          }
-        })
-      }
-
-      layout.option.theme.ComponentOption.Color.color = color
     }
   }
 }
