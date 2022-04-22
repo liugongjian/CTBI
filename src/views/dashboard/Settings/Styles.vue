@@ -38,7 +38,7 @@
         <el-tabs v-model="activeName">
           <el-tab-pane v-for="(item,name,key) in option['Axis']" :key="key" :label="item.cname" :name="key.toString()">
             <component
-              :is="name.substr(0,5)"
+              :is="name"
               :option="option['Axis'][name]"
             />
           </el-tab-pane>

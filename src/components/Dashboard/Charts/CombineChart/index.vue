@@ -83,7 +83,7 @@ export default {
         },
         yAxis: [
           ComponentOption.ChartDirection.direction === 1 ? { ...this.yAxis[0], ...this.generateAxisOptions('Y', Axis) } : { ...this.yAxis[0], ...this.generateAxisOptions('Y', Axis) },
-          ComponentOption.ChartDirection.direction === 1 ? { ...this.yAxis[1], ...this.generateAxisOptions('Y', Axis) } : { ...this.yAxis[1], ...this.generateAxisOptions('Y', Axis) }
+          ComponentOption.ChartDirection.direction === 1 ? { ...this.yAxis[1], ...this.generateAxisOptions('Y1', Axis) } : { ...this.yAxis[1], ...this.generateAxisOptions('Y1', Axis) }
         ],
         // yAxis: ComponentOption.ChartDirection.direction === 1 ? this.yAxis : xAxis,
         dataset: {
