@@ -82,7 +82,11 @@ export default {
       }
     },
     'FunctionalOption': { // 功能配置
-      'cfgTarget': [] // 目标值
+      'progressConfig': {
+        'cfgTarget': [], // 目标值
+        'cfgTargetOption': [], // 目标值数据集
+        'proportion': { type: 1, decimal: 0 }
+      }
     }
   },
   'advance': {}, // 高级

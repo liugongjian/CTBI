@@ -28,7 +28,13 @@ export default {
   computed: {
     // 0-1 占比
     setProgressData () {
-      return (this.data.value / this.data.target).toFixed(2)
+      const num = (this.data.value / this.target).toFixed(2)
+      return num > 1 ? 1 : num
+    }
+  },
+  watch: {
+    setProgressData () {
+      this.getInit()
     }
   },
   mounted () {

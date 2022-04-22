@@ -4,9 +4,18 @@ export default {
       type: Object,
       default: () => ({})
     },
+    progressConfig: {
+      type: Object,
+      default: () => ({})
+    },
     data: {
       type: Object,
       default: () => ({})
+    }
+  },
+  data () {
+    return {
+      target: null
     }
   },
   computed: {
@@ -17,7 +26,10 @@ export default {
       }
     },
     setProgress () {
-      return Number((this.data.value / this.data.target * 100).toFixed(0))
+      console.log(Number((this.data.value / this.target * 100).toFixed(this.progressConfig.proportion.decimal)), 'hah')
+      const item = this.progressConfig.cfgTargetOption.find(item => item.name === this.data.name) || {}
+      this.target = (item.type === 1 ? item.fixedVal : item.dynamicVal) || this.data.value
+      return (Number(this.data.value / this.target * 100)).toFixed(this.progressConfig.proportion.decimal)
     },
     getColor () {
       // name可能会出现重名,后期更换成id

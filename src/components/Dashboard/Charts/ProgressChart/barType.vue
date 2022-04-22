@@ -34,6 +34,7 @@ export default {
     .progress {
       flex: 1;
       height: 15px;
+      overflow: hidden;
       margin: 5px 5px 5px 0px;
       border-radius: 2px;
       background-color: #e5e7ee;

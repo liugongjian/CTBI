@@ -1,13 +1,8 @@
 <template>
   <div style="width:100%;height:100%;">
-    <!-- <v-chart
-      v-if="dataValue"
-      :option="chartOption"
-      autoresize
-    /> -->
     <div v-if="dataValue" class="box">
       <div v-for="(item,index) in dataValue" :key="index" class="item" :style="{width: showNumStyle}">
-        <component :is="isComponent" :data="item" :option="progressStyle" />
+        <component :is="isComponent" :data="item" :option="progressStyle" :progress-config="progressConfig" />
       </div>
     </div>
     <div v-else>数据为空</div>
@@ -38,8 +33,7 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
-      dataValue: [],
-      isComponent: 'barType'
+      dataValue: []
     }
   },
   computed: {
@@ -49,6 +43,12 @@ export default {
     },
     progressStyle () {
       return this.storeOption.theme?.ComponentOption?.progressStyle || {}
+    },
+    progressConfig () {
+      return this.storeOption.theme?.FunctionalOption.progressConfig || {}
+    },
+    isComponent () {
+      return this.storeOption.theme.Basic.VisualStyle.style || 'barType'
     }
   },
   watch: {
@@ -57,8 +57,8 @@ export default {
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (JSON.stringify(val.dataSource) !== '{}') {
           this.dataValue = deepClone(val.dataSource)
-          this.getOption()
         }
+        console.log('hah')
       },
       deep: true
     },
@@ -68,20 +68,14 @@ export default {
           this.dataValue = deepClone(val)
           // 拿到数据的系列名字 并设置颜色
           this.getColor(this.dataValue)
-          // 拿到数据中的指标
-          // this.getIndicatorOptions(this.dataValue)
-          this.getOption()
+          // 获取目标值
+          this.getCfgTargetOption(this.dataValue)
         }
       }
     }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
-  },
-  methods: {
-    getOption () {
-      this.isComponent = this.storeOption.theme.Basic.VisualStyle.style
-    }
   }
 }
 </script>

@@ -4,7 +4,7 @@
       type="circle"
       :stroke-width="13"
       :show-text="false"
-      :percentage="setProgress"
+      :percentage="checkSetProgress"
       :color="getColor"
       :width="150"
     />
@@ -26,7 +26,12 @@
 import progressMixins from './progressMixins'
 export default {
   name: 'AnnularType',
-  mixins: [progressMixins]
+  mixins: [progressMixins],
+  computed: {
+    checkSetProgress () {
+      return this.setProgress > 100 ? 100 : parseInt(this.setProgress)
+    }
+  }
 }
 </script>
 

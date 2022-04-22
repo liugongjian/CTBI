@@ -12,6 +12,14 @@ export default {
         color.push({ name: item.name, color: colorTheme['defaultColor'][index].value })
       })
       this.storeOption.theme.ComponentOption.progressStyle.color = color
+    },
+    // 获取设置目标值
+    getCfgTargetOption (val) {
+      const cfgTargetOption = []
+      val.forEach(item => {
+        cfgTargetOption.push({ name: item.name, value: item.value, fixedVal: item.value, dynamicVal: '', type: 1, aggregation: 1 })
+      })
+      this.storeOption.theme.FunctionalOption.progressConfig.cfgTargetOption = cfgTargetOption
     }
   }
 }

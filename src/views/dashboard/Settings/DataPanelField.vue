@@ -44,10 +44,10 @@ export default {
     //   ['Tea', 22.1, 73.4, 55.1]
     // ]
     const dataValue = [
-      { name: '一月份订单', value: '500', target: '700' },
-      { name: '二月份订单', value: '500', target: '800' },
-      { name: '三月份订单', value: '500', target: '1000' },
-      { name: '四月份订单', value: '500', target: '500' }
+      { name: '一月份订单', value: '200', target: '300' },
+      { name: '二月份订单', value: '100', target: '200' },
+      { name: '三月份订单', value: '300', target: '600' },
+      { name: '四月份订单', value: '500', target: '580' }
     ]
     this.val = JSON.stringify(dataValue)
   },

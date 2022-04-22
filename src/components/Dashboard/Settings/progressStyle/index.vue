@@ -49,7 +49,7 @@
         </el-select>
       </div>
     </div>
-    <div style="height:200px">
+    <div>
       <ColorConfig
         :color-data.sync="radarColor"
         @showColor="getRadarColor"
