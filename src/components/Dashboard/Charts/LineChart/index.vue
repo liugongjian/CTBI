@@ -76,8 +76,19 @@ export default {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
       const axis = this.storeOption.theme.Axis
-      this.series = this.resolveNull()
       this.getSeries()
+      this.series = this.series.map(item => ({
+        ...item,
+        ...this.resolveNull(),
+        label: {
+          show: componentOption.ChartLabel.check
+        },
+        labelLayout: {
+          hideOverlap: componentOption.ChartLabel.labelShow === 1
+        },
+        symbol: componentOption.SeriesMark.markType,
+        smooth: componentOption.LineStyle.type === 1
+      }))
       this.chartOption = {
         legend: componentOption.Legend,
         tooltip: {
@@ -90,7 +101,9 @@ export default {
           }
         },
         xAxis: { ...this.generateAxisOptions('X', axis), ...this.getAxisShowTypeOption() },
-        yAxis: this.generateAxisOptions('Y', axis),
+        yAxis: componentOption.TwisYAxis.show
+          ? [this.generateAxisOptions('Y', axis), this.generateAxisOptions('Y', axis, 2)]
+          : this.generateAxisOptions('Y', axis),
         dataZoom: this.getDataZoomOption(),
         dataset: {
           source: this.dataValue
@@ -98,8 +111,8 @@ export default {
         series: this.series
       }
     },
-    generateAxisOptions (type, axis) {
-      const axisType = type + 'Axis'
+    generateAxisOptions (type, axis, id = '') {
+      const axisType = type + 'Axis' + id
       const commonOptions = {
         show: axis[axisType].show,
         name: axis[axisType].showTitle && (axis[axisType].unit ? `${axis[axisType].title}(${axis[axisType].unit})` : axis[axisType].title),
@@ -153,10 +166,10 @@ export default {
           }
         }
       }
-
       return type === 'X'
         ? { type: 'category', ...commonOptions }
         : {
+          type: 'value',
           min: axis[axisType].autoMin ? 'dataMin' : axis.YAxis.min,
           max: axis[axisType].autoMax ? 'dataMax' : axis.YAxis.max,
           ...commonOptions
@@ -212,7 +225,7 @@ export default {
           })
         })
       }
-      return [series]
+      return series
     }
   }
 }

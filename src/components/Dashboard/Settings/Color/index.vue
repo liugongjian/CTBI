@@ -32,6 +32,7 @@ export default {
     // 监听数据变化 变化后触发radar组件变化
     color: {
       handler (val) {
+        console.log(this.color)
         this.option.color = val
       },
       deep: true
