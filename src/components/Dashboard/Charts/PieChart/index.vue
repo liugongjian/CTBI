@@ -137,15 +137,13 @@ export default {
               shadowBlur: 10,
               shadowOffsetX: 0,
               shadowColor: 'rgba(0, 0, 0, 0.5)',
-              normal: {
-                color: (data) => {
-                  if (color[0].name) {
-                    const colorTemp = color.find((item) => { return data.name === item.name })
-                    return colorTemp ? colorTemp.color : 'red'
-                  } else {
-                    const index = (data.dataIndex) % color.length
-                    return color[index].value
-                  }
+              color: (data) => {
+                if (color[0].name) {
+                  const colorTemp = color.find((item) => { return data.name === item.name })
+                  return colorTemp ? colorTemp.color : 'red'
+                } else {
+                  const index = (data.dataIndex) % color.length
+                  return color[index].value
                 }
               }
             },

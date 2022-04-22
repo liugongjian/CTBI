@@ -102,7 +102,7 @@ export default {
       const axisType = type + 'Axis'
       const commonOptions = {
         show: axis[axisType].show,
-        name: axis[axisType].showTitle ? axis[axisType].title : '',
+        name: axis[axisType].showTitle && (axis[axisType].unit ? `${axis[axisType].title}(${axis[axisType].unit})` : axis[axisType].title),
         axisTick: {
           show: axis[axisType].showTicks
         },
