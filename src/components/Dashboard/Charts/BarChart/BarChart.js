@@ -91,14 +91,11 @@ export default {
       }
     },
     'FunctionalOption': { // 功能配置
-      'DataZoom': {
-        'showDataZoom': 'hide'
+      'DataZoom': { // 缩略轴
+        'showDataZoom': 'hide' // 显示方式：1.auto 智能适配；2.show 显示；3.hide 不显示
       },
-      'LabelShowType': {
-        'axisShowType': 'auto'
-      },
-      'NullProcess': {
-        'emptyResolve': 'skip'
+      'LabelShowType': { // 坐标轴维度显示
+        'axisShowType': 'auto' // 1.auto 智能显示；2.sparse 强制稀疏；3.condense 最多显示
       },
       'ChartFilter': { // 指标筛选指示
         'showFilter': false,

@@ -64,17 +64,21 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      componentOption.ChartLabel.type = 'BarChart'
       this.getSeries(componentOption) // 获取Series
+
+      // 将图表转为堆积柱状图
       if (componentOption.PercentStack.isStack && !componentOption.PercentStack.isPercent) {
         this.getStackSeries(componentOption)
       }
+      // 将图表转为百分比堆积柱状图
       if (componentOption.PercentStack.isPercent) {
         this.getPercentStackSeries(componentOption)
       }
 
       // 系列配置
       this.setSeriesItem()
+      // 功能配置
+      this.setFunctionalOption()
       // 获取颜色设置-使图例颜色与图形颜色对应
       const colorOption = []
       componentOption.Color.color.forEach(item => {
@@ -90,6 +94,7 @@ export default {
         'dataset': {
           'source': this.dataValue
         },
+        'dataZoom': this.dataZoom,
         'series': this.series
       }
     },

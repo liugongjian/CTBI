@@ -1,5 +1,7 @@
 <template>
-  <div class="tab-pane-content">
+  <div
+    class="tab-pane-content"
+  >
     <el-collapse v-model="activeNames">
       <el-collapse-item
         title="基础信息"
@@ -36,7 +38,12 @@
         name="3"
       >
         <el-tabs v-model="activeName">
-          <el-tab-pane v-for="(item,name,key) in option['Axis']" :key="key" :label="item.cname" :name="key.toString()">
+          <el-tab-pane
+            v-for="(item,name,key) in option['Axis']"
+            :key="key"
+            :label="item.cname"
+            :name="key.toString()"
+          >
             <component
               :is="name"
               :option="option['Axis'][name]"
@@ -121,8 +128,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-::v-deep .el-tabs__nav-scroll{
-    display: flex;
-    justify-content: center;
+::v-deep .el-tabs__nav-scroll {
+  display: flex;
+  justify-content: center;
 }
 </style>

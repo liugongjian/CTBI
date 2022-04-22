@@ -66,6 +66,10 @@ export default {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
       this.getPercentStackSeries(componentOption)
+      // 系列配置
+      this.setSeriesItem()
+      // 功能配置
+      this.setFunctionalOption()
       // 获取颜色设置
       const colorOption = []
       componentOption.Color.color.forEach(item => {
@@ -80,6 +84,7 @@ export default {
         'dataset': {
           'source': this.dataValue
         },
+        'dataZoom': this.dataZoom,
         'series': this.series
       }
     }

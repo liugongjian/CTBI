@@ -7,7 +7,8 @@ export default {
   data () {
     return {
       xAxis: { type: 'category' },
-      yAxis: {}
+      yAxis: {},
+      dataZoom: {}
     }
   },
   computed: {
@@ -245,6 +246,27 @@ export default {
       }
     },
 
+    // 功能配置
+    setFunctionalOption () {
+      // 坐标维度配置
+      const ast = this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType
+      const axisLabel = {
+        rotate: ast === 'condense' ? 90 : 0,
+        interval: ast === 'sparse' ? 3 : 'auto'
+      }
+      this.xAxis.axisLabel = axisLabel// 需要判断双y轴时可能的双x轴，暂定
+
+      // 缩略轴配置
+      this.dataZoom = {
+        'type': 'slider',
+        'show': this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom !== 'hide',
+        'realtime': true,
+        'start': 30,
+        'end': 70,
+        'xAxisIndex': [0, 1]
+      }
+    },
+
     // 系列设置
     setSeriesItem () {
       const { SeriesSelect, SeriesChartLabel } = this.storeOption.theme.SeriesSetting
@@ -252,7 +274,7 @@ export default {
         if (SeriesSelect?.selectValue === item.name) {
           item.label.show = SeriesChartLabel.check
           item.label.color = SeriesChartLabel.color
-          if (this.storeOption.theme.SeriesSetting.SeriesMaximum.check) {
+          if (this.storeOption.theme.SeriesSetting.SeriesMaximum?.check) {
             item.markPoint = {
               symbol: 'pin',
               data: [

@@ -97,8 +97,6 @@ export default {
       storeOption.option = JSON.parse(JSON.stringify(store.state.app.toolList[type]))
       storeOption.option.dataSource = dataSource
       storeOption.is = type
-      // 通知右侧重新渲染
-      this.$bus.$emit('reloadOption', store.state.app.currentLayoutId)
     }
   }
 
