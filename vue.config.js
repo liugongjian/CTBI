@@ -50,11 +50,11 @@ module.exports = {
         target: 'http://127.0.0.1:4523',
         changeOrigin: true,
         pathRewrite: {
-          '^/login-dev': '/mock/885805'
+          '^/login-dev': '/mock/825472'
         }
       }
-    },
-    before: process.env.NODE_ENV === 'development' ? require('./mock/mock-server.js') : (app) => { }
+    }
+    // before: process.env.NODE_ENV === 'development' ? require('./mock/mock-server.js') : (app) => { }
   },
 
   configureWebpack: {
