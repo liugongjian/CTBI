@@ -220,15 +220,16 @@ export default {
     },
     async handleLogin () {
       this.loading = true
-      const { code, data } = await login(this.loginForm)
+      const { code } = await login(this.loginForm)
       if (code === 200) {
-        this.$store.dispatch('user/login', data.token).then(() => {
-          this.$router.push('/')
-          this.loading = false
-        }).catch(() => {
-          this.loading = false
-        })
-        console.log(data)
+        this.$router.push({ path: '/home' })
+        // this.$store.dispatch('user/login', data.token).then(() => {
+        //   this.$router.push('/')
+        //   this.loading = false
+        // }).catch(() => {
+        //   this.loading = false
+        // })
+        // console.log(data)
       } else if (code === 405) {
         this.isValid = false
       }

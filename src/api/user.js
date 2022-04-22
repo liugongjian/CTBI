@@ -5,7 +5,7 @@ export function login (data) {
 }
 
 export function getInfo (token) {
-  return http.get('/user/info', { token })
+  return http.get('/checkToken', { token })
 }
 
 export function logout () {
