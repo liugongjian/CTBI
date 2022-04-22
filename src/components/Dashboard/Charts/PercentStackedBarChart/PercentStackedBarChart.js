@@ -82,12 +82,70 @@ export default {
         'color': colorTheme['defaultColor']
       },
       'TwisYAxis': { // 双Y轴
-        'show': false, // 是否显示双Y轴
+        'show': false, // 是否必须显示双y轴
+        'check': true, // 是否显示双Y轴
         'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
       },
       'PercentStack': { // 百分比与堆积类型选择
         'isPercent': true, // 是否为百分比类型
         'isStack': true// 是否为堆积类型
+      }
+    },
+    'FunctionalOption': { // 功能配置
+      'DataZoom': { // 缩略轴
+        'showDataZoom': 'hide' // 显示方式：1.auto 智能适配；2.show 显示；3.hide 不显示
+      },
+      'LabelShowType': { // 坐标轴维度显示
+        'axisShowType': 'auto' // 1.auto 智能显示；2.sparse 强制稀疏；3.condense 最多显示
+      },
+      'ChartFilter': { // 指标筛选指示
+        'showFilter': false,
+        'filteredSery': '', // 选中的指标
+        'indicatorOption': [] // 指标集合
+      }
+    },
+    'Axis': { // 坐标轴配置
+      'XAxis': {
+        'cname': 'X轴',
+        'title': '',
+        'unit': '',
+        'show': true,
+        'showTitle': false,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'lineType': 'solid',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000',
+        'splitType': 'solid'
+      },
+      'YAxis': {
+        'cname': '左Y轴',
+        'title': '',
+        'unit': '',
+        'show': true,
+        'showTitle': false,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'lineType': 'solid',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000',
+        'splitType': 'solid',
+        'min': 0,
+        'max': 0,
+        'autoMin': true,
+        'autoMax': true,
+        'formatType': '1',
+        'lang': 'chinese-simplified',
+        'numberFormat': 'number',
+        'numberDigit': 0,
+        'kSeperator': false,
+        'formatRegx': ''
       }
     },
     'SeriesSetting': { // 系列设置

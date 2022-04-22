@@ -76,8 +76,6 @@ export default {
       // 更新当前id
       store.dispatch('app/updateLayoutId', temp.i)
       this.layout.push(temp)
-      // 呼叫右侧设置栏变更
-      this.$bus.$emit('reloadOption', obj.i)
     },
     // 画布拖拽中事件
     drag (e, name, item) {

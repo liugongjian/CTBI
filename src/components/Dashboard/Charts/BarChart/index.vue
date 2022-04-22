@@ -64,16 +64,18 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      componentOption.ChartLabel.type = 'BarChart'
       this.getSeries(componentOption) // 获取Series
+
+      // 将图表转为堆积柱状图
       if (componentOption.PercentStack.isStack && !componentOption.PercentStack.isPercent) {
         this.getStackSeries(componentOption)
       }
+      // 将图表转为百分比堆积柱状图
       if (componentOption.PercentStack.isPercent) {
         this.getPercentStackSeries(componentOption)
       }
 
-      // 系列配置
+      // 系列配置-图表标签相关
       this.setSeriesItem()
       // 获取颜色设置-使图例颜色与图形颜色对应
       const colorOption = []
@@ -90,6 +92,14 @@ export default {
         'dataset': {
           'source': this.dataValue
         },
+        'dataZoom': {
+          'type': 'slider',
+          'show': this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom !== 'hide',
+          'realtime': true,
+          'start': 0,
+          'end': 100,
+          'xAxisIndex': [0, 1]
+        },
         'series': this.series
       }
     },
@@ -99,6 +109,8 @@ export default {
       this.dataValue.forEach(item => {
         seriesLength = item.length - 1
       })
+      this.setAxis()
+
       // 双Y轴设置
       this.twisYAxisConfig(componentOption)
 
@@ -115,7 +127,7 @@ export default {
           },
           itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
         })
-        if (componentOption.TwisYAxis.show) {
+        if (componentOption.TwisYAxis.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
         }

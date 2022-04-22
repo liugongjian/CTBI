@@ -65,7 +65,6 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      componentOption.ChartLabel.type = 'StackedBarChart'
       this.getStackSeries(componentOption)
       if (componentOption.PercentStack.isPercent) {
         this.getPercentStackSeries(componentOption)
@@ -90,6 +89,14 @@ export default {
         'yAxis': this.yAxis,
         'dataset': {
           'source': this.dataValue
+        },
+        'dataZoom': {
+          'type': 'slider',
+          'show': this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom !== 'hide',
+          'realtime': true,
+          'start': 0,
+          'end': 100,
+          'xAxisIndex': [0, 1]
         },
         'series': this.series
       }

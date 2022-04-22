@@ -98,26 +98,22 @@ export default {
     return {
       showWrapper: true,
       showData: true,
-      option: {},
       activeNames: '2'
     }
   },
   computed: {
     currentLayoutId () {
       return store.state.app.currentLayoutId
+    },
+    option () {
+      const temp = store.state.app.layout.find(item => {
+        return item.i === this.currentLayoutId
+      })
+      return temp.option
     }
   },
-  mounted () {
-    this.$bus.$on('reloadOption', this.reloadOption)
-  },
+
   methods: {
-    // 通过id获取vuex中的layout数据
-    reloadOption (id) {
-      const temp = store.state.app.layout.find(item => {
-        return item.i === id
-      })
-      this.option = temp.option
-    },
     // 展开面板并显示对应模块
     showItem (name) {
       this.showWrapper = true
