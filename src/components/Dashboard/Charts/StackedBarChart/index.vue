@@ -76,8 +76,6 @@ export default {
 
       // 系列配置
       this.setSeriesItem()
-      // 功能配置
-      this.setFunctionalOption()
       // 获取颜色设置
       const colorOption = []
       componentOption.Color.color.forEach(item => {
@@ -92,7 +90,14 @@ export default {
         'dataset': {
           'source': this.dataValue
         },
-        'dataZoom': this.dataZoom,
+        'dataZoom': {
+          'type': 'slider',
+          'show': this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom !== 'hide',
+          'realtime': true,
+          'start': 0,
+          'end': 100,
+          'xAxisIndex': [0, 1]
+        },
         'series': this.series
       }
     }

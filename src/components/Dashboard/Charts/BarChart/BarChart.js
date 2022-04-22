@@ -103,8 +103,8 @@ export default {
         'indicatorOption': [] // 指标集合
       }
     },
-    'Axis': { // 轴设置
-      'XAxis': { // X轴设置
+    'Axis': { // 坐标轴配置
+      'XAxis': {
         'cname': 'X轴',
         'title': '',
         'unit': '',
@@ -120,7 +120,7 @@ export default {
         'splitColor': '#000',
         'splitType': 'solid'
       },
-      'YAxis': { // y轴设置
+      'YAxis': {
         'cname': '左Y轴',
         'title': '',
         'unit': '',

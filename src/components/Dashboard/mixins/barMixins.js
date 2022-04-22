@@ -1,14 +1,13 @@
 // 柱图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
-
+import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 export default {
-  mixins: [baseMixins],
+  mixins: [baseMixins, YAxis],
   data () {
     return {
       xAxis: { type: 'category' },
-      yAxis: {},
-      dataZoom: {}
+      yAxis: {}
     }
   },
   computed: {
@@ -73,6 +72,7 @@ export default {
     },
     // 双y轴设置
     twisYAxisConfig (componentOption) {
+      // 双y轴设置与坐标轴设置相关联，其中关于y轴模块暂时固定，后续需切换成坐标轴设置的值
       if (componentOption.TwisYAxis.show) {
         const formatter = this.type === 'PercentStackedBarChart' ? '{value}%' : '{value}'
 
@@ -113,18 +113,9 @@ export default {
             }
           }
         ]
-        this.xAxis = [
-          {
-            type: 'category'
-
-          },
-          {
-            type: 'category'
-          }
-        ]
+        this.xAxis.unshift({ type: 'category' })
       } else {
-        this.yAxis = {}
-        this.xAxis = { type: 'category' }
+        this.setAxis()
       }
     },
     // 将数据转换成百分比
@@ -152,6 +143,7 @@ export default {
       this.dataValue.forEach(item => {
         seriesLength = item.length - 1
       })
+      this.setAxis()
       // 双Y轴设置
       this.twisYAxisConfig(componentOption)
       for (let i = 0; i < seriesLength; i++) {
@@ -206,19 +198,13 @@ export default {
       this.dataValue.forEach(item => {
         seriesLength = item.length - 1
       })
+      this.setAxis()
       // 双Y轴设置
       this.twisYAxisConfig(componentOption)
       this.valueToPercent()
       const that = this
       if (!componentOption.TwisYAxis.show) {
-        this.yAxis = {
-          axisLabel: {
-            show: true,
-            interval: 'auto',
-            formatter: '{value}%'
-          },
-          show: true
-        }
+        this.yAxis[0].axisLabel.formatter = '{value}%'
       }
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
@@ -246,27 +232,6 @@ export default {
       }
     },
 
-    // 功能配置
-    setFunctionalOption () {
-      // 坐标维度配置
-      const ast = this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType
-      const axisLabel = {
-        rotate: ast === 'condense' ? 90 : 0,
-        interval: ast === 'sparse' ? 3 : 'auto'
-      }
-      this.xAxis.axisLabel = axisLabel// 需要判断双y轴时可能的双x轴，暂定
-
-      // 缩略轴配置
-      this.dataZoom = {
-        'type': 'slider',
-        'show': this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom !== 'hide',
-        'realtime': true,
-        'start': 30,
-        'end': 70,
-        'xAxisIndex': [0, 1]
-      }
-    },
-
     // 系列设置
     setSeriesItem () {
       const { SeriesSelect, SeriesChartLabel } = this.storeOption.theme.SeriesSetting
@@ -286,6 +251,79 @@ export default {
         }
         return item
       })
+    },
+
+    // 坐标轴配置
+    setAxis () {
+      const { XAxis, YAxis } = this.storeOption.theme.Axis
+      this.xAxis = [
+        {
+          type: 'category',
+          // 轴线显示与样式
+          'axisLine': {
+            'show': XAxis.show,
+            'lineStyle': {
+              'type': XAxis.lineType,
+              'width': XAxis.lineWidth,
+              'color': XAxis.lineColor
+            }
+          },
+          // 轴标签
+          'axisLabel': {
+            'show': XAxis.showAxisLabel,
+            rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
+            interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 'auto'
+          },
+          // 轴刻度线
+          'axisTick': {
+            'show': XAxis.showTicks
+          },
+          // 网格线
+          'splitLine': {
+            show: XAxis.showSplit,
+            lineStyle: {
+              type: XAxis.splitType,
+              color: XAxis.splitColor,
+              width: XAxis.splitWidth
+            }
+          },
+          // 轴标题和单位
+          name: XAxis.showTitle ? (XAxis.unit ? `${XAxis.title}(${XAxis.unit})` : XAxis.title) : ''
+        }
+      ]
+      this.yAxis = [
+        {
+          'axisLine': {
+            'show': YAxis.show,
+            'lineStyle': {
+              'type': YAxis.lineType,
+              'width': YAxis.lineWidth,
+              'color': YAxis.lineColor
+            }
+          },
+          'min': YAxis.autoMin ? null : YAxis.min,
+          'max': YAxis.autoMax ? null : YAxis.max,
+          'axisLabel': {
+            'show': YAxis.showAxisLabel,
+            formatter: (value, index) => {
+              return this.formatYLabel(value, YAxis)
+            }
+          },
+          'splitLine': {
+            show: YAxis.showSplit,
+            lineStyle: {
+              type: YAxis.splitType,
+              color: YAxis.splitColor,
+              width: YAxis.splitWidth
+            }
+          },
+          'axisTick': {
+            'show': YAxis.showTicks
+          },
+          // 轴标题和单位
+          name: YAxis.showTitle ? (YAxis.unit ? `${YAxis.title}(${YAxis.unit})` : YAxis.title) : ''
+        }
+      ]
     }
   }
 }

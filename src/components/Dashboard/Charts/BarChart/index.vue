@@ -75,10 +75,8 @@ export default {
         this.getPercentStackSeries(componentOption)
       }
 
-      // 系列配置
+      // 系列配置-图表标签相关
       this.setSeriesItem()
-      // 功能配置
-      this.setFunctionalOption()
       // 获取颜色设置-使图例颜色与图形颜色对应
       const colorOption = []
       componentOption.Color.color.forEach(item => {
@@ -94,7 +92,14 @@ export default {
         'dataset': {
           'source': this.dataValue
         },
-        'dataZoom': this.dataZoom,
+        'dataZoom': {
+          'type': 'slider',
+          'show': this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom !== 'hide',
+          'realtime': true,
+          'start': 0,
+          'end': 100,
+          'xAxisIndex': [0, 1]
+        },
         'series': this.series
       }
     },
@@ -104,6 +109,8 @@ export default {
       this.dataValue.forEach(item => {
         seriesLength = item.length - 1
       })
+      this.setAxis()
+
       // 双Y轴设置
       this.twisYAxisConfig(componentOption)
 
