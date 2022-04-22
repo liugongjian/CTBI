@@ -73,7 +73,7 @@ export default {
     // 双y轴设置
     twisYAxisConfig (componentOption) {
       // 双y轴设置与坐标轴设置相关联，其中关于y轴模块暂时固定，后续需切换成坐标轴设置的值
-      if (componentOption.TwisYAxis.show) {
+      if (componentOption.TwisYAxis.check) {
         const formatter = this.type === 'PercentStackedBarChart' ? '{value}%' : '{value}'
 
         // 最大值和最小值暂时固定，后续需要修改
@@ -159,7 +159,7 @@ export default {
           },
           itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
         })
-        if (componentOption.TwisYAxis.show) {
+        if (componentOption.TwisYAxis.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
@@ -203,7 +203,7 @@ export default {
       this.twisYAxisConfig(componentOption)
       this.valueToPercent()
       const that = this
-      if (!componentOption.TwisYAxis.show) {
+      if (!componentOption.TwisYAxis.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
       for (let i = 0; i < seriesLength; i++) {
@@ -224,7 +224,7 @@ export default {
           },
           itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
         })
-        if (componentOption.TwisYAxis.show) {
+        if (componentOption.TwisYAxis.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
