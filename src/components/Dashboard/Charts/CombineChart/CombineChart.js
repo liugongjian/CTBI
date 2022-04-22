@@ -75,7 +75,8 @@ export default {
         'type': 2 // 1曲线 2直线
       },
       'TwisYAxis': { // 双Y轴
-        'show': false, // 是否显示双Y轴
+        'show': false, // 是否显示双y轴复选框
+        'check': false, // 是否显示双Y轴
         'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
       },
       'Color': { // 颜色设置
@@ -109,6 +110,32 @@ export default {
       },
       'YAxis': { // y轴设置
         'cname': '左Y轴',
+        'title': '',
+        'unit': '',
+        'show': true,
+        'showTitle': true,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'lineType': 'solid',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000',
+        'splitType': 'solid',
+        'min': 0,
+        'max': 0,
+        'autoMin': true,
+        'autoMax': true,
+        'formatType': '1',
+        'lang': 'chinese-simplified',
+        'numberFormat': 'number',
+        'numberDigit': 0,
+        'kSeperator': false,
+        'formatRegx': ''
+      },
+      'Y1Axis': { // y轴设置
+        'cname': '右Y轴',
         'title': '',
         'unit': '',
         'show': true,

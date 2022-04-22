@@ -101,7 +101,7 @@ export default {
           }
         },
         xAxis: { ...this.generateAxisOptions('X', axis), ...this.getAxisShowTypeOption() },
-        yAxis: componentOption.TwisYAxis.show
+        yAxis: componentOption.TwisYAxis.check
           ? [this.generateAxisOptions('Y', axis), this.generateAxisOptions('Y', axis, 2)]
           : this.generateAxisOptions('Y', axis),
         dataZoom: this.getDataZoomOption(),
@@ -114,7 +114,6 @@ export default {
     generateAxisOptions (type, axis, id = '') {
       const axisType = type + 'Axis' + id
       const commonOptions = {
-        show: axis[axisType].show,
         name: axis[axisType].showTitle && (axis[axisType].unit ? `${axis[axisType].title}(${axis[axisType].unit})` : axis[axisType].title),
         axisTick: {
           show: axis[axisType].showTicks
@@ -155,7 +154,8 @@ export default {
             color: axis[axisType].lineColor,
             width: axis[axisType].lineWidth,
             type: axis[axisType].lineType
-          }
+          },
+          show: axis[axisType].show
         },
         splitLine: {
           show: axis[axisType].showSplit,

@@ -15,8 +15,6 @@
 
 <script>
 import { getLayoutById } from '@/utils/optionUtils'
-// import store from '@/store'
-import { colorTheme } from '@/constants/color.js'
 export default {
   name: 'DataPanelField',
   props: {
@@ -43,7 +41,7 @@ export default {
     //   ['Walnut Brownie', 72.4, 53.9, 39.1],
     //   ['Tea', 22.1, 73.4, 55.1]
     // ]
-    // 主轴-0标记 副轴-1标记
+    // 主轴-0标记 副轴-1标记 组合图专用数据
     const dataValue = [
       ['date', '价格-0', '数量-0', '温度-1'],
       ['Mon', 820, 410, 36],

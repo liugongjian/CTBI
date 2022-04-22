@@ -85,11 +85,11 @@ export default {
           ComponentOption.ChartDirection.direction === 1 ? { ...this.yAxis[0], ...this.generateAxisOptions('Y', Axis) } : { ...this.yAxis[0], ...this.generateAxisOptions('Y', Axis) },
           ComponentOption.ChartDirection.direction === 1 ? { ...this.yAxis[1], ...this.generateAxisOptions('Y1', Axis) } : { ...this.yAxis[1], ...this.generateAxisOptions('Y1', Axis) }
         ],
-        // yAxis: ComponentOption.ChartDirection.direction === 1 ? this.yAxis : xAxis,
+        // yAxis: ComponentOption.ChartDirection.direction === 1 ? this.yAxis : this.yAxis,
         dataset: {
           source: this.dataValue
         },
-        dataZoom: this.getDataZoomOption(),
+        // dataZoom: this.getDataZoomOption(),
         series: this.series
       }
     },
@@ -193,7 +193,6 @@ export default {
     generateAxisOptions (type, axis) {
       const axisType = type + 'Axis'
       const commonOptions = {
-        show: axis[axisType].show,
         name: axis[axisType].showTitle && (axis[axisType].unit ? `${axis[axisType].title}(${axis[axisType].unit})` : axis[axisType].title),
         axisTick: {
           show: axis[axisType].showTicks
@@ -234,7 +233,8 @@ export default {
             color: axis[axisType].lineColor,
             width: axis[axisType].lineWidth,
             type: axis[axisType].lineType
-          }
+          },
+          show: axis[axisType].show
         },
         splitLine: {
           show: axis[axisType].showSplit,
@@ -246,13 +246,25 @@ export default {
         }
       }
 
-      return type === 'X'
-        ? { type: 'category', ...commonOptions }
-        : {
-          min: axis[axisType].autoMin ? 'dataMin' : axis.YAxis.min,
-          max: axis[axisType].autoMax ? 'dataMax' : axis.YAxis.max,
-          ...commonOptions
+      if (type === 'X') {
+        return { type: 'category', ...commonOptions }
+      } else {
+        if (axis[axisType].autoMin && axis[axisType].autoMax) {
+          // 最大值 最小值自动
+          return { ...commonOptions }
+        } if (!axis[axisType].autoMin && !axis[axisType].autoMax && !axis.YAxis.min && !axis.YAxis.max) {
+          // 最大值 最小值均未自动 且最大值、最小值均为0
+          return { ...commonOptions }
+        } else if (!axis[axisType].autoMin && axis[axisType].autoMax) {
+          // 最大值自动 最小值写入
+          const min = axis.YAxis.min < 'dataMin' ? axis.YAxis.min : 'dataMin'
+          return { min: min, ...commonOptions }
+        } else if (axis[axisType].autoMin && !axis[axisType].autoMax) {
+          // 最小值自动 最大值写入
+          const max = axis.YAxis.max > 'dataMax' ? axis.YAxis.max : 'dataMax'
+          return { max: max, ...commonOptions }
         }
+      }
     },
     // 坐标轴维值显示
     getAxisShowTypeOption () {

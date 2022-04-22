@@ -9,7 +9,7 @@
     <div class="editor-item-container">
       <el-radio-group
         v-model="option.twisType"
-        :disabled="!option.check"
+        :disabled="option.show&&!option.check"
       >
         <div
           v-for="(item,index) in options"
