@@ -92,6 +92,7 @@ export default {
           formatter: '{b}<br />{a}: {c}'
         },
         xAxis: {
+          type: 'category',
           // 轴线显示与样式
           'axisLine': {
             'show': XAxis.show,
