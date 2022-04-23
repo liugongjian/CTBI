@@ -82,7 +82,9 @@ export default {
         // 显示数据标签
         'dataLabel': 'conversion',
         // 转化率计算方式
-        'calcMethod': 'last'
+        'calcMethod': 'last',
+        // 底部样式
+        'triangle': false
       }
     }
   },

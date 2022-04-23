@@ -49,7 +49,6 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        console.log('狗子你变了', val)
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (JSON.stringify(val.dataSource) !== '{}') {
           this.dataValue = val.dataSource
@@ -65,6 +64,7 @@ export default {
   },
   methods: {
     getOption () {
+      console.log('狗子变了')
       const componentOption = this.storeOption.theme.ComponentOption
       this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
       this.dataTransformer()
@@ -180,8 +180,8 @@ export default {
           }
         ]
       }
-      console.log('wanle')
     },
+    // 静态样式初始化
     displayStyleHandler (item) {
       // 默认情况下，无序、梯形
       if (item.default) {
@@ -243,6 +243,9 @@ export default {
           this.labelFormatter = '{c}'
         }
       }
+      // 底部梯形 or 三角形
+      this.minSize = item.triangle === 'true' ? '0' : '10%'
+      console.log('? ', this.minSize)
     },
     dataTransformer () {
       // 构建出 lastData\firstData 多个series叠加
