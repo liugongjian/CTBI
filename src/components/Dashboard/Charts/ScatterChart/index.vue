@@ -73,7 +73,15 @@ export default {
       const { Legend, Slider } = this.storeOption.theme.ComponentOption
       const { XAxis, YAxis } = this.storeOption.theme.Axis
       this.chartOption = {
-        // 'tooltip': option.Tooltip,
+        tooltip: {
+          show: true,
+          trigger: 'item',
+          axisPointer: {
+            type: 'cross',
+            show: true
+          },
+          formatter: '{b}<br />{a}: {c}'
+        },
         'legend': Legend,
         xAxis: [
           {
@@ -144,11 +152,15 @@ export default {
             name: YAxis.showTitle && (YAxis.unit ? `${YAxis.title}(${YAxis.unit})` : YAxis.title)
           }
         ],
+        dataset: {
+          source: this.dataValue
+        },
         'series': [
           {
             'symbolSize': Slider.symbolSize,
-            'type': 'scatter',
-            'data': this.dataValue
+            'type': 'scatter'
+            // 'data': this.dataValue,
+            // 'name': '图例'
           }
         ]
       }

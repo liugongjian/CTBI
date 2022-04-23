@@ -19,7 +19,7 @@ export default {
           return (value * 100).toFixed(numberDigit) + '%'
         }
         return value
-      } else if (formatType === '3') { // 手动输入，未完成
+      } else if (formatType === '3') { // 手动输入，TODO 功能未完成
         return value
       }
     }
