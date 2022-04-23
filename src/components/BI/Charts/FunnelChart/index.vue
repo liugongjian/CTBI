@@ -28,7 +28,8 @@ export default {
       left: '10%',
       width: '60%',
       height: '80%',
-      formatter: '{c}%',
+      labelFormatter: '{c}%',
+      tooltipFormatter: '',
       labelPos: '6%',
       dataValue: [{ value: 60, name: 'Visit' },
         { value: 40, name: 'Inquiry' },
@@ -40,7 +41,9 @@ export default {
         { value: 20, name: 'Order' },
         { value: 80, name: 'Click' },
         { value: 100, name: 'Show' }],
-      calcData: []
+      calcData: [],
+      lastData: [],
+      firstData: []
     }
   },
   watch: {
@@ -64,12 +67,21 @@ export default {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
       this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
+      this.dataTransformer()
+      const that = this
       this.chartOption = {
         animation: false,
         legend: componentOption.Legend,
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b} : {c}%'
+          formatter: function (params) {
+            const index = params.dataIndex
+            const firstline = that.lastData[index]['name'] + ' : ' + that.dataValue[index]['value']
+            const secondline = '占上一层的百分比 : ' + that.lastData[index]['value'] + '%'
+            const thirdline = '占第一层的百分比 : ' + that.firstData[index]['value'] + '%'
+            const tip = firstline + '<br/>' + secondline + '<br/>' + thirdline
+            return tip
+          }
         },
         series: [
           {
@@ -108,29 +120,63 @@ export default {
           {
             name: 'Actual',
             type: 'funnel',
-            left: this.left,
+            left: '58%',
             minSize: this.minSize,
             sort: this.sort,
-            width: this.width,
+            width: '5%',
+            // tooltip: {
+            //   trigger: 'item',
+            //   formatter: this.tooltipFormatter
+            // },
             label: {
               position: 'inside',
-              formatter: this.formatter,
+              formatter: this.labelFormatter,
               color: '#fff'
             },
             itemStyle: {
-              opacity: 0.5,
-              color: 'rgba(255, 255, 255, 0)',
+              opacity: 1,
+              color: 'rgba(255,111, 255, 0)',
               borderWidth: 0
-            },
-            emphasis: {
-              label: {
-                position: 'inside',
-                formatter: '{b}: {c}%'
-              }
             },
             data: this.calcData,
             // Ensure outer shape will not be over inner shape when hover.
             z: 100
+          },
+          {
+            name: 'lastData',
+            type: 'funnel',
+            left: '58%',
+            minSize: this.minSize,
+            sort: this.sort,
+            width: '5%',
+            label: {
+              show: false
+            },
+            itemStyle: {
+              opacity: 1,
+              color: 'rgba(111, 255, 255, 0)',
+              borderWidth: 0
+            },
+            data: this.lastData
+            // Ensure outer shape will not be over inner shape when hover.
+          },
+          {
+            name: 'firstData',
+            type: 'funnel',
+            left: '58%',
+            minSize: this.minSize,
+            sort: this.sort,
+            width: '5%',
+            label: {
+              show: false
+            },
+            itemStyle: {
+              opacity: 0.5,
+              color: 'rgba(1, 255, 255, 0)',
+              borderWidth: 0
+            },
+            data: this.firstData
+            // Ensure outer shape will not be over inner shape when hover.
           }
         ]
       }
@@ -184,19 +230,35 @@ export default {
         if (item.dataLabel === 'conversion') {
           // 转化率
           this.calcData = tmpPercent
-          this.formatter = '{c}%'
+          this.labelFormatter = '{c}%'
         } else if (item.dataLabel === 'metric') {
           // 度量值
           this.calcData = tmpValue
-          this.formatter = '{c}'
+          this.labelFormatter = '{c}'
         } else if (item.dataLabel === 'coMe') {
           // 转化率加度量值
           for (let i = 0; i < tmpPercent.length; i++) {
             this.calcData[i]['value'] = tmpValue[i]['value'] + ' (' + tmpPercent[i]['value'] + '%)'
           }
-          this.formatter = '{c}'
+          this.labelFormatter = '{c}'
         }
       }
+    },
+    dataTransformer () {
+      // 构建出 lastData\firstData 多个series叠加
+      const tmpLast = JSON.parse(JSON.stringify(this.transTmpData)) // 深克隆，防止数据相互影响
+      const tmpFirst = JSON.parse(JSON.stringify(this.transTmpData)) // 深克隆，防止数据相互影响
+      // 占上一层的百分比
+      for (let i = 1; i < tmpLast.length; i++) {
+        tmpLast[i]['value'] = (this.transTmpData[i]['value'] / this.transTmpData[i - 1]['value']).toFixed(3) * 100
+      }
+      tmpLast[0]['value'] = 100
+      this.lastData = tmpLast
+      // 占第一层的百分比
+      tmpFirst.map((item, index) => {
+        tmpFirst[index].value = ((item.value / tmpFirst[0]['value'])).toFixed(3) * 100
+      })
+      this.firstData = tmpFirst
     }
   }
 }
