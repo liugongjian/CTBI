@@ -134,6 +134,12 @@ export default {
             'axisTick': {
               'show': YAxis.showTicks
             },
+            min: YAxis.autoMin ? 0 : YAxis.min,
+            max: function (value) {
+              if (!YAxis.autoMax) {
+                return YAxis.max < value.max ? null : YAxis.max
+              }
+            },
             // 轴标题和单位
             name: YAxis.showTitle && (YAxis.unit ? `${YAxis.title}(${YAxis.unit})` : YAxis.title)
           }
