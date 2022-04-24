@@ -94,7 +94,8 @@ export default {
         }
         ComponentOption.TotalShow.value = sum
       }
-
+      // 设置图例与图表距离
+      this.setGrid(ComponentOption.Legend)
       // 设置图表的option
       that.chartOption = {
         tooltip: {
@@ -103,6 +104,7 @@ export default {
             return data.name + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
           }
         },
+        grid: this.grid,
         legend: {
           ...ComponentOption.Legend,
           formatter: (name) => {

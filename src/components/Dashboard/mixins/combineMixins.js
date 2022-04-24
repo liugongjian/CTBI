@@ -6,7 +6,8 @@ export default {
   data: function () {
     return {
       series: [],
-      yAxis: []
+      yAxis: [],
+      grid: {}
     }
   },
   methods: {
@@ -112,11 +113,31 @@ export default {
       val[0].forEach((item, index) => {
         if (index) {
           const idx = (index) % colorTheme['defaultColor'].length
-          color.push({ name: item.split('-')[0], color: colorTheme['defaultColor'][idx].value })
+          color.push({ name: item.split('-')[0], color: colorTheme['defaultColor'][idx].value, remark: item[0] })
         }
       })
 
       this.storeOption.theme.ComponentOption.Color.color = color
+    },
+    // 设置图例与图表距离
+    setGrid (legend) {
+      if (legend.top === 'auto' && legend.left === 'center') { // 图例在上
+        this.grid = {
+          top: 50
+        }
+      } else if (legend.top === 'bottom' && legend.left === 'center') { // 图例在下
+        this.grid = {
+          bottom: 50
+        }
+      } else if (legend.top === 'center' && legend.left === 'auto') { // 图例在左
+        this.grid = {
+          left: 120
+        }
+      } else if (legend.top === 'center' && legend.left === 'right') { // 图例在右
+        this.grid = {
+          right: 120
+        }
+      }
     }
   }
 }
