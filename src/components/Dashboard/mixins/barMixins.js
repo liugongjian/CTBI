@@ -7,7 +7,8 @@ export default {
   data () {
     return {
       xAxis: { type: 'category' },
-      yAxis: {}
+      yAxis: {},
+      grid: {}
     }
   },
   computed: {
@@ -340,6 +341,27 @@ export default {
           name: YAxis.showTitle ? (YAxis.unit ? `${YAxis.title}(${YAxis.unit})` : YAxis.title) : ''
         }
       ]
+    },
+
+    // 设置图例与图表距离
+    setGrid (legend) {
+      if (legend.top === 'auto' && legend.left === 'center') { // 图例在上
+        this.grid = {
+          top: 50
+        }
+      } else if (legend.top === 'bottom' && legend.left === 'center') { // 图例在下
+        this.grid = {
+          bottom: 50
+        }
+      } else if (legend.top === 'center' && legend.left === 'auto') { // 图例在左
+        this.grid = {
+          left: 120
+        }
+      } else if (legend.top === 'center' && legend.left === 'right') { // 图例在右
+        this.grid = {
+          right: 120
+        }
+      }
     }
   }
 }
