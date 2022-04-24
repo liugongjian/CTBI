@@ -48,7 +48,7 @@
               type="text"
               placeholder="请输入验证码"
             />
-            <span class="refresh"><svg-icon icon-class="refresh" /></span>
+            <span class="refresh" @click="verifyGet"><svg-icon icon-class="refresh" /></span>
             <span class="verifyImg" v-html="verifyImg" />
           </el-form-item>
         </el-form>
@@ -63,7 +63,9 @@
         </div>
       </div>
       <div v-else class="form">
-        <svg-icon icon-class="back" class="back" />
+        <span class="back" @click="back">
+          <svg-icon icon-class="back" />
+        </span>
         <el-form
           ref="validForm"
           :model="validForm"
@@ -118,15 +120,21 @@
             </span>
           </el-form-item>
         </el-form>
+        <div v-if="activate" class="activate">提交成功！</div>
         <div class="button-style">
           <el-button
             class="button"
+            :plain="true"
             @click="setUp"
           >
             确认
           </el-button>
           <div class="shadow" />
         </div>
+        <span class="warn">
+          <svg-icon icon-class="warn" />
+          <span class="warn-text">您尚未激活，请修改出场密码。</span>
+        </span>
       </div>
     </div>
   </div>
@@ -181,8 +189,9 @@ export default {
       loading: false,
       redirect: undefined,
       verifyImg: undefined,
-      isValid: true,
-      passwordType: ''
+      isValid: false,
+      passwordType: 'password',
+      activate: false
     }
   },
   mounted () {
@@ -198,6 +207,9 @@ export default {
       // this.$nextTick(() => {
       //   this.$refs.password.focus()
       // })
+    },
+    back () {
+      this.isValid = true
     },
     async verifyGet () {
       const { data } = await verify()
@@ -215,8 +227,9 @@ export default {
         }
       })
     },
-    setUp () {
-      console.log('激活')
+    async setUp () {
+      this.loading = true
+      this.activate = true
     },
     async handleLogin () {
       this.loading = true
@@ -239,9 +252,15 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .back {
-  width: 62px;
-  height: 62px;
+  display: inline-block;
+  font-size: 62px;
+  color:#6A6A6A;
   margin-bottom: 10%;
+  cursor: pointer
+  }
+
+.back:hover {
+  color: black;
 }
 .login {
   display: flex;
@@ -377,8 +396,32 @@ export default {
   right: 10px;
   top: 6px;
   font-size: 16px;
-  color: gray;
+  color: #6A6A6A;
   cursor: pointer;
   user-select: none;
+}
+.warn {
+  display: inline-block;
+  margin-top: 10%;
+}
+.warn-text {
+  margin-left: 5px;
+  font: 14px "PingFang SC";
+  color: #EB371F;
+}
+.activate {
+  position:absolute;
+  top: 50%;
+  left: 38%;
+  background: #FFF;
+  border: 1px solid #E6E6E6;
+  width: 117px;
+  height: 42px;
+  text-align: center;
+  box-shadow: 2px 4px 12px 0px rgba(0,0,0,0.09);
+  border-radius: 2px;
+  font: 500 16px/42px "PingFang SC";
+  color: #333333;
+  letter-spacing: 0.89px;
 }
 </style>
