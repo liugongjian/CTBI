@@ -13,7 +13,7 @@ export default {
       const seriesOption = []
       val.forEach((item, index) => {
         if (index) {
-          seriesOption.push({ value: item[0], label: item[0] })
+          seriesOption.push({ value: item[0], label: item[0], remark: item[0] })
         }
       })
 
@@ -27,7 +27,7 @@ export default {
       val.forEach((item, index) => {
         if (index) {
           const idx = (index) % colorTheme['defaultColor'].length
-          color.push({ name: item[0], color: colorTheme['defaultColor'][idx].value })
+          color.push({ name: item[0], color: colorTheme['defaultColor'][idx].value, remark: item[0] })
         }
       })
 

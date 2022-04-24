@@ -78,11 +78,21 @@ export default {
   },
   methods: {
     getOption () {
-      const { Legend } = this.storeOption.theme.ComponentOption
+      const { Legend, Slider } = this.storeOption.theme.ComponentOption
       const { XAxis, YAxis } = this.storeOption.theme.Axis
       this.chartOption = {
         'legend': Legend,
+        tooltip: {
+          show: true,
+          trigger: 'item',
+          axisPointer: {
+            type: 'cross',
+            show: true
+          },
+          formatter: '{b}<br />{a}: {c}'
+        },
         xAxis: {
+          type: 'category',
           // 轴线显示与样式
           'axisLine': {
             'show': XAxis.show,
@@ -146,7 +156,7 @@ export default {
             type: 'scatter',
             data: this.dataValue,
             symbolSize: function (data) {
-              return Math.sqrt(data[2]) * 2
+              return Math.sqrt(data[2]) * 0.1 * Slider.symbolSize
             }
           }
         ]

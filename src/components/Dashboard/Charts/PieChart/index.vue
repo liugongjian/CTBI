@@ -106,14 +106,30 @@ export default {
         tooltip: {
           trigger: 'item',
           formatter: (data) => {
-            return data.name + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
+            let nameTemp = ''
+            if (SeriesSetting) {
+              SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
+                if (item.value === data.name) {
+                  nameTemp = item.remark
+                }
+              })
+            } else {
+              nameTemp = data.name
+            }
+            return nameTemp + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
           }
         },
         legend: {
           ...ComponentOption.Legend,
           formatter: (name) => {
-            if (SeriesSetting && name === SeriesSetting.SeriesSelect.selectValue) {
-              return SeriesSetting.SeriesSelect.remark
+            if (SeriesSetting) {
+              let nameTemp = ''
+              SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
+                if (item.value === name) {
+                  nameTemp = item.remark
+                }
+              })
+              return nameTemp
             } else {
               return name
             }
@@ -152,8 +168,14 @@ export default {
               formatter: function (data) {
                 let formatter = ''
                 if (checkList.includes('维度')) {
-                  if (SeriesSetting && data.name === SeriesSetting.SeriesSelect.selectValue) {
-                    formatter += SeriesSetting.SeriesSelect.remark + ' '
+                  if (SeriesSetting) {
+                    let nameTemp = ''
+                    SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
+                      if (item.value === data.name) {
+                        nameTemp = item.remark
+                      }
+                    })
+                    formatter += nameTemp + ' '
                   } else {
                     formatter += data.name + ' '
                   }
