@@ -28,6 +28,7 @@
           v-if="getParameter(option, 'theme.FunctionalOption.ChartFilter.showFilter')"
           v-model="filteredSery"
           :disabled="!getParameter(option, 'theme.FunctionalOption.ChartFilter.showFilter')"
+          :multiple="getParameter(option, 'theme.FunctionalOption.ChartFilter.isMultiple')"
           @change="handleIndicator"
         >
           <el-option
@@ -83,9 +84,7 @@
     </div>
 
     <!-- 是否展示总计 -->
-    <div
-      style="max-height:100px"
-    >
+    <div style="max-height:100px">
       <div
         v-if="getParameter(option, 'theme.ComponentOption.TotalShow.show')"
         class="rich-text-content"

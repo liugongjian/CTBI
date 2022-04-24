@@ -133,7 +133,7 @@ export default {
           Y1Axis.cname = '右Y轴'
           this.$set(this.option.Axis, 'Y1Axis', Y1Axis)
         } else {
-          if (this.option.Axis.Y1Axis) {
+          if (this.option.Axis?.Y1Axis) {
             this.$delete(this.option.Axis, 'Y1Axis')
           }
         }

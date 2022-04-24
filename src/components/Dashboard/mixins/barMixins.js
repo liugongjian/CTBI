@@ -61,14 +61,15 @@ export default {
     // 拿到数据中的指标
     getIndicatorOptions (val) {
       const indicatorOptions = []
+      const filteredSery = []
       val[0].forEach((item, index) => {
         if (index) {
           indicatorOptions.push({ value: item, label: item })
+          filteredSery.push(item)
         }
       })
-
       this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption = indicatorOptions
-      this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery = indicatorOptions[0].value
+      this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery = filteredSery
     },
     // 双y轴设置
     twisYAxisConfig (componentOption) {
@@ -135,7 +136,22 @@ export default {
         }
       }
     },
-
+    transfromData (indicator) {
+      const data = []
+      for (let i = 1; i < this.dataValue.length; i++) {
+        data.push([this.dataValue[i][0]])
+      }
+      indicator.forEach(item => {
+      // 取到指标的下标 如 2015年 index为1
+        const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
+        // 取除维度以外的第1列为vlaue
+        for (let i = 1; i < this.dataValue.length; i++) {
+          data[i - 1].push(this.dataValue[i][indicatorIdx])
+        }
+      })
+      data.unshift([this.dataValue[0][0], ...indicator])
+      this.dataValue = data
+    },
     // 获取堆积柱状图
     getStackSeries (componentOption) {
       this.series = []
