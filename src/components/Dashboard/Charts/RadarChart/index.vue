@@ -12,7 +12,6 @@
 <script>
 import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import radarMixins from '@/components/Dashboard/mixins/radarMixins'
-import store from '@/store'
 export default {
   name: 'RadarChart',
   mixins: [radarMixins],
@@ -26,7 +25,8 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
-      dataValue: [
+      dataValue: null,
+      series: [
         {
           value: [4200, 3000, 20000, 35000, 50000, 18000],
           name: '分配预算',
@@ -92,42 +92,33 @@ export default {
         this.getOption()
       },
       deep: true
+    },
+    'storeOption.dataSource': {
+      handler (val) {
+        if (JSON.stringify(val) !== '{}') {
+          this.dataValue = deepClone(val)
+          // 拿到数据的系列名字 并设置颜色
+          this.getColor(this.dataValue)
+          this.setData()
+          this.getOption()
+        }
+      }
     }
-    // 'storeOption.dataSource': {
-    //   handler (val) {
-    //     if (JSON.stringify(val) !== '{}') {
-    //       this.dataValue = deepClone(val)
-    //       // 拿到数据的系列名字 并设置颜色
-    //       this.getColor(this.dataValue)
-    //       // 拿到数据中的指标
-    //       // this.getIndicatorOptions(this.dataValue)
-    //       this.getOption()
-    //     }
-    //   }
-    // }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
     this.getOption()
-    this.getInit()
   },
   methods: {
-    getInit () {
-      // 将雷达图中的颜色和数据 添加到 vuex中
-      const temp = store.state.app.layout.find(item => {
-        return item.i === this.identify
-      })
-      const newTemp = deepClone(temp)
-      const color = []
-      this.dataValue.forEach(item => {
-        color.push({ name: item.name, color: item.itemStyle.normal.color })
-      })
-      newTemp.option.theme.ComponentOption.RadarColor.color = color
-      store.dispatch('app/updateLayoutItem', { id: this.identify, item: newTemp })
+    setData () {
+      this.series[0].name = this.dataValue[0][0]
+      this.series[0].value = this.dataValue[0][1]
+      this.series[1].name = this.dataValue[1][0]
+      this.series[1].value = this.dataValue[1][1]
     },
     // 面积填充
     setRadarConfig (areaStyle, labelShow) {
-      this.dataValue.forEach((item, index) => {
+      this.series.forEach((item, index) => {
         item.areaStyle.normal.opacity = areaStyle ? 0.5 : 0
         if (Number(labelShow) === 0) {
           item.label.normal.show = false
@@ -141,7 +132,7 @@ export default {
       })
     },
     setColor (color) {
-      this.dataValue.forEach(item => {
+      this.series.forEach(item => {
         const data = color.find((data) => { return data.name === item.name })
         if (data) {
           item.itemStyle.normal.color = data.color
@@ -190,7 +181,7 @@ export default {
           {
             name: 'Budget vs spending',
             type: 'radar',
-            data: this.dataValue
+            data: this.series
           }
         ]
       }

@@ -28,12 +28,6 @@ const mutations = {
       state.currentLayoutId = ''
     }
   },
-  // 更新某条数据 废弃
-  UPDATELAYOUTITEM: (state, { id, item }) => {
-    if (id && id.length) {
-      state.layout[state.layout.findIndex((item) => item.i === id)] = item
-    }
-  },
   UPDATETOOLLIST: (state, toolList) => {
     state.toolList = toolList
   }
@@ -50,9 +44,6 @@ const actions = {
   },
   deleteLayoutById ({ commit }, id) {
     commit('DELETELAYOUTBYID', id)
-  },
-  updateLayoutItem ({ commit }, data) {
-    commit('UPDATELAYOUTITEM', data)
   },
   updateToolList ({ commit }, toolList) {
     commit('UPDATETOOLLIST', toolList)
