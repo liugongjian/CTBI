@@ -19,8 +19,8 @@ export default {
           return (value * 100).toFixed(numberDigit) + '%'
         }
         return value
-      } else if (formatType === '3') { // 手动输入
-        console.log('手动输入')
+      } else if (formatType === '3') { // 手动输入，TODO 功能未完成
+        return value
       }
     }
   }
