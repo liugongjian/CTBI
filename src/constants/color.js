@@ -4,14 +4,14 @@
 // }
 export const colorTheme = {
   defaultColor: [
-    { name: '', value: '#1a7dff' },
-    { name: '', value: '#ff751a' },
-    { name: '', value: '#16cad6' },
-    { name: '', value: '#ffae0f' },
-    { name: '', value: '#34ad8d' },
-    { name: '', value: '#f593ad' },
-    { name: '', value: '#8c90b8' },
-    { name: '', value: '#96b1fa' },
-    { name: '', value: '#ccb18f' }
+    { name: '', value: '#1a7dff', remark: '' },
+    { name: '', value: '#ff751a', remark: '' },
+    { name: '', value: '#16cad6', remark: '' },
+    { name: '', value: '#ffae0f', remark: '' },
+    { name: '', value: '#34ad8d', remark: '' },
+    { name: '', value: '#f593ad', remark: '' },
+    { name: '', value: '#8c90b8', remark: '' },
+    { name: '', value: '#96b1fa', remark: '' },
+    { name: '', value: '#ccb18f', remark: '' }
   ]
 }

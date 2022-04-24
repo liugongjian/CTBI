@@ -17,7 +17,7 @@
     </div>
     <div v-if="option.remarkShow" class="editor-object-container" style="display: flex;align-items: center">
       <span>别名</span>
-      <el-input v-model="option.remark" />
+      <el-input v-model="option.remark" @input="setRemark" />
     </div>
   </div>
 </template>
@@ -43,7 +43,16 @@ export default {
   methods: {
     // 选中某个系列名
     selectSeries () {
-      this.option.remark = this.option.selectValue
+      // this.option.remark = this.option.selectValue
+      store.state.app.layout.forEach(item => {
+        if (item.i === store.state.app.currentLayoutId) {
+          item.option.theme.SeriesSetting.SeriesSelect.seriesOption.forEach((j) => {
+            if (j.value === this.option.selectValue) {
+              this.option.remark = j.remark
+            }
+          })
+        }
+      })
       store.state.app.layout.forEach(item => {
         if (item.i === store.state.app.currentLayoutId && item.option.theme.SeriesSetting.SeriesMark && item.option.theme.SeriesSetting.SeriesLine) {
           // 是副轴 // 判断是否是主轴
@@ -56,7 +65,25 @@ export default {
           }
         }
       })
+    },
+    // 给选中的系列 设置别名
+    setRemark (val) {
+      store.state.app.layout.forEach(item => {
+        if (item.i === store.state.app.currentLayoutId) {
+          item.option.theme.SeriesSetting.SeriesSelect.seriesOption.forEach((j) => {
+            if (j.value === this.option.selectValue) {
+              j.remark = val
+            }
+          })
+          item.option.theme.ComponentOption.Color.color.forEach((j) => {
+            if (j.name === this.option.selectValue) {
+              j.remark = val
+            }
+          })
+        }
+      })
     }
+
   }
 
 }
