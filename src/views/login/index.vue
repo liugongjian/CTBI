@@ -1,8 +1,8 @@
 <template>
   <div class="login">
     <div class="login-item_image">
-      <img class="background" src="../../assets/Image/login-image/background.jpg" alt="">
-      <img class="logo" src="../../assets/Image/login-image/logo.png" alt="">
+      <img class="background" src="@/assets/Image/login-image/background.jpg" alt="">
+      <img class="logo" src="@/assets/Image/login-image/logo.png" alt="">
     </div>
     <div class="login-item_input">
       <div v-if="isValid" class="form">
@@ -236,12 +236,11 @@ export default {
       const { code, data } = await login(this.loginForm)
       if (code === 200) {
         this.$store.dispatch('user/login', data.token).then(() => {
-          this.$router.push('/')
+          this.$router.push('home').catch(err => console.log(err))
           this.loading = false
         }).catch(() => {
           this.loading = false
         })
-        console.log(data)
       } else if (code === 405) {
         this.isValid = false
       }
