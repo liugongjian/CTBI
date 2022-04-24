@@ -82,7 +82,10 @@ export default {
       componentOption.Color.color.forEach(item => {
         colorOption.push(item.color)
       })
+      // 设置图例与图表距离
+      this.setGrid(componentOption.Legend)
       this.chartOption = {
+        'grid': this.grid,
         'color': colorOption,
         'legend': componentOption.Legend,
         'xAxis': this.xAxis,
