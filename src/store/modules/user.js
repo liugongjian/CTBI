@@ -42,13 +42,13 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
-        if (!data) {
+        const { result, info } = data
+        if (!data || !result) {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar, routes } = data
-        commit('SET_NAME', name)
+        const { username, avatar, routes } = info
+        commit('SET_NAME', username)
         commit('SET_AVATAR', avatar)
         commit('SET_ROUTES', routes)
         resolve(data)
