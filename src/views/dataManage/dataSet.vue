@@ -41,7 +41,7 @@
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column prop="name" label="名称" width="200">
             <template slot-scope="scope">
-              <svg-icon iconClass="sql" v-if="scope.row.type !== 'dataSet'" style="margin-right: 8px"/>
+              <svg-icon iconClass="sql" v-if="!scope.row.isFolder" style="margin-right: 8px"/>
               <svg-icon v-else iconClass="floder" style="margin-right: 8px"/>
               <span>{{ scope.row.name }}</span>
             </template>
@@ -51,30 +51,30 @@
           <el-table-column prop="dataSource" label="数据源" width="120"> </el-table-column>
           <el-table-column label="操作" show-overflow-tooltip>
             <template slot-scope="scope">
-              <div v-if="scope.row.type === 'dataSet'" class="data-set-main-table-options">
-                <span @click="edit">编辑</span>
+              <div v-if="!scope.row.isFolder" class="data-set-main-table-options" :class="{'no-allowed': batchSelection}">
+                <span @click="edit(scope.row)">编辑</span>
                 <el-divider direction="vertical"></el-divider>
-                <span @click="createDashboard">新建仪表盘</span>
+                <span @click="createDashboard(scope.row)">新建仪表盘</span>
                 <el-divider direction="vertical"></el-divider>
-                <span @click="showAttribute">属性</span>
+                <span @click="showAttribute(scope.row)">属性</span>
                 <el-divider direction="vertical"></el-divider>
                 <el-tooltip placement="bottom" effect="light">
                   <ul slot="content" class="data-set-menu">
                     <li @click="moveTo">移动到</li>
-                    <li @click="deleteDataSet">删除</li>
+                    <li @click="deleteDataSet(scope.row)">删除</li>
                   </ul>
                   <span @click="showMore">更多</span>
                 </el-tooltip>
               </div>
               <div v-else class="data-set-main-table-options">
-                <span @click="rename">重命名</span>
+                <span @click="rename(scope.row)">重命名</span>
                 <el-divider direction="vertical"></el-divider>
-                <span @click="deleteFloder">删除</span>
+                <span @click="deleteFloder(scope.row)">删除</span>
               </div>
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination
+        <!-- <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="pagination.currentPage"
@@ -83,7 +83,7 @@
           layout="total, sizes, prev, pager, next, jumper"
           style="text-align: right; margin-top: 16px"
           :total="pagination.total">
-        </el-pagination>
+        </el-pagination> -->
       </div>
 
       <div class="data-set-main" v-else>
@@ -108,18 +108,18 @@
           <el-table-column prop="lastUpdatedTime" label="修改时间" width="150"> </el-table-column>
           <el-table-column prop="dataSource" label="数据源" width="120"> </el-table-column>
           <el-table-column label="操作" show-overflow-tooltip>
-            <template>
-              <div class="data-set-main-table-options">
-                <span @click="edit">编辑</span>
+            <template slot-scope="scope">
+              <div class="data-set-main-table-options" :class="{'no-allowed': batchSelection}">
+                <span @click="edit(scope.row)">编辑</span>
                 <el-divider direction="vertical"></el-divider>
-                <span @click="createDashboard">新建仪表盘</span>
+                <span @click="createDashboard(scope.row)">新建仪表盘</span>
                 <el-divider direction="vertical"></el-divider>
-                <span @click="showAttribute">属性</span>
+                <span @click="showAttribute(scope.row)">属性</span>
                 <el-divider direction="vertical"></el-divider>
                 <el-tooltip placement="bottom" effect="light">
                   <ul slot="content" class="data-set-menu">
                     <li @click="moveTo">移动到</li>
-                    <li @click="deleteDataSet">删除</li>
+                    <li @click="deleteDataSet(scope.row)">删除</li>
                   </ul>
                   <span @click="showMore">更多</span>
                 </el-tooltip>
@@ -127,7 +127,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination
+        <!-- <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="dataSetPagination.currentPage"
@@ -136,7 +136,7 @@
           layout="total, sizes, prev, pager, next, jumper"
           style="text-align: right; margin-top: 16px"
           :total="dataSetPagination.total">
-        </el-pagination>
+        </el-pagination> -->
       </div>
 
       <!-- 各种 弹窗 & 抽屉 -->
@@ -177,11 +177,11 @@
         >
         <div class="data-set-didlog-main">
           <span>数据集名称</span>
-          <el-input v-model="newFloderName" placeholder="请输入文件夹名称" class="data-set-didlog-main-input"> </el-input>
+          <el-input v-model="updateDataSetName" placeholder="请输入文件夹名称" class="data-set-didlog-main-input"> </el-input>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="editDataSetVisible = false">取 消</el-button>
-          <el-button style="background-color: #FA8334;color: #fff;" @click="hanleRenameFloder">确 定</el-button>
+          <el-button style="background-color: #FA8334;color: #fff;" @click="hanleEditFile">确 定</el-button>
         </span>
       </el-dialog>
 
@@ -247,7 +247,7 @@
               prefix-icon="el-icon-search"
               v-model="searchFloder">
             </el-input>
-            <div class="move-to-drawer-main-content">
+            <div class="move-to-drawer-main-content" v-loading="!floderList">
               <span class="move-to-drawer-main-content-root">根目录</span>
               <ul>
                 <li v-for="(item, i) in floderList" :key="i" @click="selectFloder(item)" :class="{'select-actived': selectFloderId == item._id }">
@@ -268,11 +268,13 @@
 </template>
 
 <script>
+import { createFloders, updateFolderName, delFolders, updateDataSet, delDataSet, moveDataSet2Folder, getFolderLists, getDataSetsFolders } from '@/api/dataSet'
 export default {
   name: 'DataSet',
   data () {
     return {
       serachName: '',
+      updateDataSetName: '',
       tableData: [
         {
           _id: 'XKxw5woOOWWHp',
@@ -280,7 +282,7 @@ export default {
           creatorId: 'xxx',
           lastUpdatedTime: '2022-4-18 14:42:30',
           dataSource: '',
-          type: 'floder',
+          isFolder: true,
           children: [
             {
               _id: 'wy1Vf5wAvVXrT2',
@@ -288,7 +290,7 @@ export default {
               creatorId: 'qqq',
               lastUpdatedTime: '2022-4-18 14:42:30',
               dataSource: 'qqq',
-              type: 'dataSet'
+              isFolder: false
             },
             {
               _id: 'wy1Vf5wAvVXrT3',
@@ -296,7 +298,7 @@ export default {
               creatorId: 'www',
               lastUpdatedTime: '2022-4-18 14:42:30',
               dataSource: 'www',
-              type: 'dataSet'
+              isFolder: false
             }
           ]
         },
@@ -306,7 +308,7 @@ export default {
           creatorId: 'ooo',
           lastUpdatedTime: '2022-4-18 14:42:30',
           dataSource: 'aaa',
-          type: 'dataSet'
+          isFolder: false
         }
       ],
       loading: false,
@@ -381,25 +383,79 @@ export default {
       }
     }
   },
+  computed: {
+    batchSelection: function () {
+      return this.multipleSelection.filter(item => !item.isFolder).length > 0
+    }
+  },
+  mounted () {
+    // this.init()
+  },
   methods: {
-    init () {},
+    init () {
+      this.getTableData()
+      this.curentFloder = null
+      this.cureentDataSet = null
+      this.searchFloder = ''
+      this.selectFloderId = ''
+      this.serachName = ''
+      this.multipleSelection = []
+    },
+    // 获取 tableData
+    async getTableData () {
+      try {
+        const data = await getDataSetsFolders()
+        data.forEach(item => {
+          if (item.isFolder) {
+            item.children = []
+          }
+        })
+        this.tableData = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
     // 新建文件夹
     createFolder () {
       this.createFloderVisible = true
     },
-    hanleCreateFloder () {
-      this.createFloderVisible = false
-      this.newFloderName = ''
+    async hanleCreateFloder () {
+      const data = {
+        type: 'dataSet',
+        name: this.newFloderName
+      }
+      try {
+        await createFloders(data)
+        this.createFloderVisible = false
+        this.newFloderName = ''
+        this.init()
+      } catch (error) {
+        console.log(error)
+      }
     },
     // 新建数据集
     createDataSet () {},
     // 查询
-    query () {
-      this.serachName = ''
+    async query () {
+      if (!this.serachName) {
+        return this.$message({
+          message: '请输入正确的数据集名称',
+          type: 'warning'
+        })
+      }
+      const searchkey = this.serachName
+      try {
+        const data = await getDataSetsFolders(searchkey)
+        this.dataSetData = data.filter(item => !item.isFolder)
+        this.serachName = ''
+      } catch (error) {
+        console.log(error)
+      }
     },
     // 重置
     reset () {
       this.serachName = ''
+      this.init()
     },
     // 多选
     handleSelectionChange (val) {
@@ -408,45 +464,142 @@ export default {
     // 取消选择
     clearSelection () {
       this.$refs.multipleTable.clearSelection()
+      this.multipleSelection = []
     },
     // table options
-    edit () {
+    edit (val) {
+      if (this.batchSelection) return false
+      this.cureentDataSet = val
       this.editDataSetVisible = true
+      this.updateDataSetName = val.name
     },
-    hanleEditFile () {
-      this.editDataSetVisible = false
+    async hanleEditFile () {
+      const id = this.curentFloder._id
+      const params = {
+        displayName: this.updateDataSetName
+      }
+      try {
+        await updateDataSet(id, params)
+        this.editDataSetVisible = false
+        this.curentFloder = null
+        this.init()
+      } catch (error) {
+        console.log(error)
+      }
     },
-    createDashboard () {},
-    showAttribute () {
+    createDashboard () {
+      if (this.batchSelection) return false
+    },
+    showAttribute (val) {
+      if (this.batchSelection) return false
       this.dataSetAttributeVisible = true
+      this.dataSetAttr.name = val.name
+      this.dataSetAttr.desc = val.comment
     },
-    hanleDataSetAttribute () {
-      this.dataSetAttributeVisible = false
+    async hanleDataSetAttribute () {
+      const id = this.cureentDataSet._id
+      const params = {
+        displayName: this.dataSetAttr.name,
+        comment: this.dataSetAttr.desc
+      }
+      try {
+        await updateDataSet(id, params)
+        this.dataSetAttributeVisible = false
+        this.cureentDataSet = null
+        this.init()
+      } catch (error) {
+        console.log(error)
+      }
     },
     showMore () {},
-    rename () {
+    rename (val) {
+      if (this.batchSelection) return false
+      this.curentFloder = val
       this.renameFolderVisible = true
+      this.editFloderName = val.name
     },
-    hanleRenameFloder () {
+    async hanleRenameFloder () {
+      const id = this.curentFloder._id
+      try {
+        await updateFolderName(id, this.editFloderName)
+        this.editFloderName = ''
+        this.curentFloder = null
+        this.init()
+      } catch (error) {
+        console.log(error)
+      }
       this.renameFolderVisible = false
     },
-    deleteFloder () {
+    deleteFloder (val) {
+      if (this.batchSelection) return false
+      this.curentFloder = val
       this.deleteFolderVisible = true
     },
-    hanleDeleteFolder () {
-      this.deleteFolderVisible = false
+    async hanleDeleteFolder () {
+      const id = this.curentFloder._id
+      try {
+        await delFolders(id)
+        this.deleteFolderVisible = false
+        this.curentFloder = null
+        this.init()
+      } catch (error) {
+        console.log(error)
+      }
     },
-    deleteDataSet () {
+    deleteDataSet (val) {
+      if (this.batchSelection) return false
+      this.cureentDataSet = val
       this.deleteDataSetVisible = true
     },
-    hanleDeleteDataSet () {
-      this.deleteDataSetVisible = false
+    async hanleDeleteDataSet () {
+      const id = this.cureentDataSet._id
+      try {
+        await delDataSet(id)
+        this.deleteDataSetVisible = false
+        this.cureentDataSet = null
+        this.init()
+      } catch (error) {
+        console.log(error)
+      }
     },
-    moveTo () {
+    async moveTo () {
+      if (this.batchSelection) return false
+      if (this.multipleSelection.some(item => item.isFolder)) {
+        return this.$message({
+          message: '移动操作暂且只支持数据集不支持文件夹',
+          type: 'warning'
+        })
+      }
       this.moveToVisible = true
+      try {
+        const data = await getFolderLists()
+        this.floderList = data.result
+      } catch (error) {
+        console.log(error)
+      }
     },
-    handleMoveTo () {
-      this.moveToVisible = false
+    async handleMoveTo () {
+      const ids = []
+      const folderId = this.selectFloderId
+      this.multipleSelection.forEach(item => {
+        if (!item.isFolder) {
+          ids.push(item._id)
+        }
+      })
+      if (!ids.length) return false
+      try {
+        await moveDataSet2Folder({
+          ids,
+          folderId
+        })
+        this.multipleSelection = null
+        this.selectFloderId = ''
+        this.$refs.multipleTable.clearSelection()
+        this.moveToVisible = false
+        this.init()
+      } catch (error) {
+        console.log(error)
+      }
     },
     selectFloder (item) {
       this.selectFloderId = item._id
@@ -457,8 +610,25 @@ export default {
     handleCurrentChange (val) {
       console.log(`当前页: ${val}`)
     },
-    handleExpandChange (row, expandedRows) {
-      console.log(row, expandedRows)
+    async handleExpandChange (row, expandedRows) {
+      if (!expandedRows || !row.isFolder) return false
+      const tmp = this.tableData.slice()
+      const folderId = row._id
+      try {
+        const data = await getDataSetsFolders({ folderId })
+        tmp.forEach(item => {
+          if (item._id === folderId) {
+            item.children = data
+            return true
+          }
+        })
+        this.tableData = tmp
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    handleUpdateDataSetName () {
+      this.editDataSetVisible = false
     }
   }
 }
@@ -539,6 +709,10 @@ export default {
       cursor: pointer;
     }
   }
+}
+
+.no-allowed > span {
+  cursor: not-allowed;
 }
 
 .data-set-didlog {

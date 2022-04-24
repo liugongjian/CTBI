@@ -12,7 +12,7 @@ const service = axios.create({
 
 // request interceptor
 service.interceptors.request.use(
-  config => {
+  (config) => {
     // do something before request is sent
 
     if (store.getters.token) {
@@ -23,7 +23,7 @@ service.interceptors.request.use(
     }
     return config
   },
-  error => {
+  (error) => {
     // do something with request error
     console.log(error) // for debug
     return Promise.reject(error)
@@ -35,14 +35,14 @@ service.interceptors.response.use(
   /**
    * If you want to get http information such as headers or status
    * Please return  response => response
-  */
+   */
 
   /**
    * Determine the request status by custom code
    * Here is just an example
    * You can also judge the status by HTTP Status Code
    */
-  response => {
+  (response) => {
     const res = response.data
 
     // if the custom code is not 20000, it is judged as an error.
@@ -71,7 +71,7 @@ service.interceptors.response.use(
       return res
     }
   },
-  error => {
+  (error) => {
     console.log('err' + error) // for debug
     Message({
       message: error.message,
@@ -84,49 +84,56 @@ service.interceptors.response.use(
 
 export const http = {
   // get请求
-  get (url, params) {
+  get(url, params) {
     return new Promise((resolve, reject) => {
       service({
         method: 'get',
         url,
         params
-      }).then(res => { // axios返回的是一个promise对象
-        resolve(res) // resolve在promise执行器内部
-      }).catch(err => {
-        reject(err)
       })
+        .then((res) => {
+          // axios返回的是一个promise对象
+          resolve(res) // resolve在promise执行器内部
+        })
+        .catch((err) => {
+          reject(err)
+        })
     })
   },
   // post请求
-  post (url, data) {
+  post(url, data) {
     return new Promise((resolve, reject) => {
       service({
         method: 'post',
         url,
         data
-      }).then(res => {
-        resolve(res)
-      }).catch(err => {
-        reject(err)
       })
+        .then((res) => {
+          resolve(res)
+        })
+        .catch((err) => {
+          reject(err)
+        })
     })
   },
   // delete请求
-  delete (url, data) {
+  delete(url, data) {
     return new Promise((resolve, reject) => {
       service({
         method: 'delete',
         url,
         data
-      }).then(res => {
-        resolve(res)
-      }).catch(err => {
-        reject(err)
       })
+        .then((res) => {
+          resolve(res)
+        })
+        .catch((err) => {
+          reject(err)
+        })
     })
   },
   // POST 文件上传
-  blobStream (url, data) {
+  blobStream(url, data) {
     const headerConfig = {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -139,15 +146,17 @@ export const http = {
         headers: headerConfig.headers,
         url,
         data
-      }).then(res => {
-        resolve(res)
-      }).catch(err => {
-        reject(err)
       })
+        .then((res) => {
+          resolve(res)
+        })
+        .catch((err) => {
+          reject(err)
+        })
     })
   },
-  blobDownload (url, params) {
-    return new Promise(resolve => {
+  blobDownload(url, params) {
+    return new Promise((resolve) => {
       axios({
         method: 'get',
         url: url,
@@ -156,13 +165,15 @@ export const http = {
         },
         params,
         responseType: 'blob'
-      }).then(res => {
+      }).then((res) => {
         if (!res) {
           resolve(false)
         }
-        const url = window.URL.createObjectURL(new Blob([res], {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        }))
+        const url = window.URL.createObjectURL(
+          new Blob([res], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          })
+        )
         const link = document.createElement('a')
         link.style.display = 'none'
         link.href = url
@@ -171,6 +182,23 @@ export const http = {
         link.click()
         resolve()
       })
+    })
+  },
+  // put请求 参数为body
+  put(url, data) {
+    return new Promise((resolve, reject) => {
+      service
+        .put({
+          method: 'put',
+          url,
+          data
+        })
+        .then((res) => {
+          resolve(res)
+        })
+        .catch((err) => {
+          reject(err)
+        })
     })
   }
 }
