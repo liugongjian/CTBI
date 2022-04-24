@@ -22,6 +22,7 @@
         <el-input-number
           v-model="option.minValue"
           controls-position="right"
+          :disabled="option.isMinValue"
           style="width: 100px"
         />
         <el-checkbox

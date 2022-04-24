@@ -53,13 +53,6 @@ export default {
       }
     },
     'ComponentOption': { // 图表样式
-      'Legend': { // 图例
-        'show': true,
-        'top': 'auto',
-        'left': 'center',
-        'orient': 'horizontal',
-        'type': 'scroll'
-      },
       'WordCloudShape': { // 词云形状
         'shape': 'rectangle' // 矩形  椭圆 三角形 爱心
       },

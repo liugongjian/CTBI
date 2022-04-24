@@ -11,8 +11,7 @@
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
-import { deepClone } from '@/utils/optionUtils'
+import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import combineMixins from '@/components/Dashboard/mixins/combineMixins'
 import { strWithKSeperator, addChineseUnit, addEnglishUnit } from '@/utils/numberUtils'
 export default {
@@ -69,9 +68,11 @@ export default {
       ComponentOption.Color.color.forEach(item => {
         color.push(item.color)
       })
+      this.setGrid(ComponentOption.Legend)
 
       this.chartOption = {
         color: color, // 图例颜色
+        grid: this.grid,
         legend: ComponentOption.Legend,
         // xAxis: ComponentOption.ChartDirection.direction === 1 ? xAxis : yAxis,
         xAxis: ComponentOption.ChartDirection.direction === 1 ? { ...this.generateAxisOptions('X', Axis), ...this.getAxisShowTypeOption() } : { ...this.generateAxisOptions('X', Axis), ...this.getAxisShowTypeOption() },
@@ -123,6 +124,7 @@ export default {
             }
           }
         }
+        // 空值处理
         item.connectNulls = false // 直接断开
         if (ast === 'skip') { // 直接跨过
           item.connectNulls = true
@@ -176,8 +178,8 @@ export default {
       const sdz = this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom
       const item = {
         realtime: true,
-        start: 30,
-        end: 70,
+        start: 0,
+        end: 100,
         xAxisIndex: [0, 1]
       }
       if (sdz === 'show') { // 显示缩略轴
@@ -282,27 +284,6 @@ export default {
         option.axisLabel.interval = 3
       }
       return option
-    },
-    // 空值处理
-    resolveNull () {
-      const ast = this.storeOption.theme.FunctionalOption.NullProcess.emptyResolve
-      this.series.connectNulls = false
-      // const series = {
-      //   connectNulls: false
-      // }
-      if (ast === 'skip') {
-        this.series.connectNulls = true
-      } else if (ast === 'zero') {
-        this.dataValue = this.dataValue.map(datas => {
-          return datas.map((data, index) => {
-            if ([null, undefined, NaN, '-'].includes(data)) {
-              return typeof data === 'number' ? 0 : '0'
-            }
-            return data
-          })
-        })
-      }
-      // return [series]
     }
   }
 }
