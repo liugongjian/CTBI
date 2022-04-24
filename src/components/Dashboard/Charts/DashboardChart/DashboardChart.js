@@ -60,8 +60,16 @@ export default {
         'type': 'scroll'
       },
       'ConfigSize': { // 设置起点值 终点值
+        'startType': 'fixed',
+        'endType': 'fixed',
         'start': 0,
-        'end': 100
+        'end': 100,
+        'dynamicStart': {
+          'field': 1, 'type': 1
+        },
+        'dynamicEnd': {
+          'field': 1, 'type': 1
+        }
       }
     },
     'StyleConfig': { // 样式配置
