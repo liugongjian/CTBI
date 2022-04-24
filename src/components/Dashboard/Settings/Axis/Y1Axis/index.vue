@@ -54,7 +54,7 @@
 import XAxis from '../XAxis/index.vue'
 
 export default {
-  name: 'YAxis',
+  name: 'Y1Axis',
   components: { XAxis },
   props: {
     option: {

@@ -82,7 +82,8 @@ export default {
         'color': colorTheme['defaultColor']
       },
       'TwisYAxis': { // 双Y轴
-        'show': false, // 是否显示双Y轴
+        'show': true, // 是否必须显示双y轴
+        'check': false, // 是否显示双Y轴
         'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
       },
       'PercentStack': { // 百分比与堆积类型选择
@@ -90,7 +91,21 @@ export default {
         'isStack': true// 是否为堆积类型
       }
     },
-    'Axis': {
+    'FunctionalOption': { // 功能配置
+      'DataZoom': { // 缩略轴
+        'showDataZoom': 'hide' // 显示方式：1.auto 智能适配；2.show 显示；3.hide 不显示
+      },
+      'LabelShowType': { // 坐标轴维度显示
+        'axisShowType': 'auto' // 1.auto 智能显示；2.sparse 强制稀疏；3.condense 最多显示
+      },
+      'ChartFilter': { // 指标筛选指示
+        'showFilter': false,
+        'isMultiple': true, // 是否多选
+        'filteredSery': [], // 选中的指标
+        'indicatorOption': [] // 指标集合
+      }
+    },
+    'Axis': { // 坐标轴配置
       'XAxis': {
         'cname': 'X轴',
         'title': '',
@@ -132,6 +147,17 @@ export default {
         'numberDigit': 0,
         'kSeperator': false,
         'formatRegx': ''
+      }
+    },
+    'SeriesSetting': { // 系列设置
+      'SeriesSelect': { // 选择系列
+        'label': '请选择系列',
+        'selectValue': '', // 默认选择的系列名字 第一个元素
+        'seriesOption': [] // 从数据中拿到系列的名字
+      },
+      'SeriesChartLabel': { // 某个系列显示图表标签
+        'check': false, // 默认未选中
+        'color': '' // 颜色
       }
     }
   },

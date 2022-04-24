@@ -65,8 +65,6 @@ export default {
     clickHandler (id) {
       // 更新当前id
       this.$store.dispatch('app/updateLayoutId', id)
-      // 通知右侧重新渲染
-      this.$bus.$emit('reloadOption', id)
     }
   }
 }

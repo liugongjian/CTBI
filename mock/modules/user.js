@@ -49,7 +49,7 @@ module.exports = [
       }
 
       return {
-        code: 20000,
+        code: 200,
         data: token
       }
     }
@@ -72,7 +72,7 @@ module.exports = [
       }
 
       return {
-        code: 20000,
+        code: 200,
         data: info
       }
     }
@@ -84,7 +84,7 @@ module.exports = [
     type: 'post',
     response: () => {
       return {
-        code: 20000,
+        code: 200,
         data: 'success'
       }
     }
