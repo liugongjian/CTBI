@@ -15,8 +15,8 @@
         <label>字段项</label>
         <div>
           <div v-for="(item,index) in colorData" :key="index" class="item" :class="{active: active === index}" @click="changeActive(index)">
-            <span class="box" :style="{backgroundColor: item.color}" />
-            {{ item.name }}
+            <span v-if="item.remark" class="box" :style="{backgroundColor: item.color}" />
+            {{ item.remark }}
           </div>
         </div>
       </div>

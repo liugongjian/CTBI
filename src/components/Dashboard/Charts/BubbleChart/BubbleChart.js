@@ -37,8 +37,8 @@ export default {
       },
       'Slider': { // 数据点大小
         'symbolSize': 8, // 默认大小
-        'minSize': 2, // 最小值
-        'maxSize': 16 // 最大值
+        'minSize': 1, // 最小值
+        'maxSize': 40 // 最大值
       }
     },
     'Axis': {

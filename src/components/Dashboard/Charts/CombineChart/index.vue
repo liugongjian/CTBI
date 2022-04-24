@@ -89,7 +89,7 @@ export default {
         dataset: {
           source: this.dataValue
         },
-        // dataZoom: this.getDataZoomOption(),
+        dataZoom: this.getDataZoomOption(),
         series: this.series
       }
     },
@@ -139,16 +139,17 @@ export default {
         item.labelLayout = {
           hideOverlap: labelShow === 1
         }
-        item.label = {
-          show: check
-        }
         // 图表样式的标记点
         if (!ComponentOption.SeriesMark.check && item.type === 'line') {
-          item.symbol = 'none'
+          item.symbol = 'circle'
+          item.hoverAnimation = false
+          item.symbolSize = 1
         } else if (ComponentOption.SeriesMark.check && item.type === 'line') {
           item.symbol = ComponentOption.SeriesMark.markType
         }
-
+        item.label = {
+          show: check
+        }
         // 图表样式曲线
         if (ComponentOption.LineStyle.type === 1) {
           item.smooth = true
@@ -164,7 +165,7 @@ export default {
           }
         }
         if (SeriesSelect?.selectValue === item.name) {
-          item.label.show = SeriesChartLabel.check
+          item.label.show = SeriesChartLabel.check || check
           item.label.color = SeriesChartLabel.color
         }
         return item
