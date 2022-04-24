@@ -65,6 +65,7 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
+      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery)
       this.getStackSeries(componentOption)
       if (componentOption.PercentStack.isPercent) {
         this.getPercentStackSeries(componentOption)

@@ -5,7 +5,11 @@
       label="开启指标筛选展示"
     />
     <!-- 数据字段名 -->
-    <el-select v-model="option.filteredSery" :disabled="!option.showFilter">
+    <el-select
+      v-model="option.filteredSery"
+      :disabled="!option.showFilter"
+      :multiple="option.isMultiple"
+    >
       <el-option
         v-for="item in option.indicatorOption"
         :key="item.value"
@@ -23,7 +27,7 @@ export default {
   props: {
     option: {
       type: Object,
-      default: () => {}
+      default: () => { }
     }
   },
   data () {
