@@ -126,15 +126,15 @@ export default {
     }
   },
   watch: {
-    'option.ComponentOption.TwisYAxis.show': {
+    'option.ComponentOption.TwisYAxis.check': {
       handler (val) {
         if (val) {
-          const YAxis2 = JSON.parse(JSON.stringify(this.option.Axis.YAxis))
-          YAxis2.cname = '右Y轴'
-          this.$set(this.option.Axis, 'YAxis2', YAxis2)
+          const Y1Axis = JSON.parse(JSON.stringify(this.option.Axis.YAxis))
+          Y1Axis.cname = '右Y轴'
+          this.$set(this.option.Axis, 'Y1Axis', Y1Axis)
         } else {
-          if (this.option.Axis.YAxis2) {
-            this.$delete(this.option.Axis, 'YAxis2')
+          if (this.option.Axis.Y1Axis) {
+            this.$delete(this.option.Axis, 'Y1Axis')
           }
         }
       },
