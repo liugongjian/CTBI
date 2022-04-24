@@ -11,7 +11,7 @@ import '@/config/permission'
 // global css
 import '@/styles/index.scss'
 // 引入全局过滤器
-import '@/filters/index'
+import filters from '@/filters/index'
 // 引入弹窗指令化
 import initDialogs from '@/config/dialog'
 initDialogs(Vue)
@@ -37,3 +37,7 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+Object.keys(filters).forEach((key) => {
+  Vue.filter(key, filters[key])
+})
