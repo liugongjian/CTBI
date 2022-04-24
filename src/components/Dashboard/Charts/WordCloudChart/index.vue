@@ -85,7 +85,7 @@ export default {
         },
         series: [
           {
-            name: '运输成本', // 后面根据维度修改
+            name: '运输成本', // 后面根据维度修改 TODO
             type: 'wordCloud',
             gridSize: 2,
             sizeRange: [this.minValue, this.maxValue],
