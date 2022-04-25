@@ -49,3 +49,23 @@ export function delDataSet(id) {
 export function moveDataSet2Folder(body) {
   return http.put(`/dataSets/move`, body)
 }
+
+// 运行sql
+export function runtimeForSql(body) {
+  return http.post(`/sql/exec`, body)
+}
+
+// sql的运行记录
+export function getSqlRunningLogs(id) {
+  return http.get(`/sql/${id}/history`)
+}
+
+// 预览数据
+export function getPreviewData(body) {
+  return http.post(`/dataSets/preview`, body)
+}
+
+// 解析sql参数
+export function getSqlVariables(body) {
+  return http.post(`/sql/extractVariables`, body)
+}

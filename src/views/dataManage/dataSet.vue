@@ -37,6 +37,7 @@
           row-key="_id"
           @selection-change="handleSelectionChange"
           @expand-change="handleExpandChange"
+          @row-click="handleRowClick"
         >
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column prop="name" label="名称" width="200">
@@ -434,7 +435,22 @@ export default {
       }
     },
     // 新建数据集
-    createDataSet () {},
+    createDataSet () {
+      const query = {
+        _id: '',
+        displayName: '',
+        comment: '',
+        sqlId: '',
+        fields: [],
+        creatorId: '',
+        dataSourceId: '',
+        dataSourceName: ''
+      }
+      this.$router.push({
+        path: '/dataSet/edit',
+        query
+      })
+    },
     // 查询
     async query () {
       if (!this.serachName) {
@@ -629,6 +645,13 @@ export default {
     },
     handleUpdateDataSetName () {
       this.editDataSetVisible = false
+    },
+    handleRowClick (row) {
+      const query = row
+      this.$router.push({
+        path: '/dataSet/edit',
+        query
+      })
     }
   }
 }

@@ -1,11 +1,16 @@
 <template>
   <div class="edit-sql-wrap">
-    <SqlEditor />
+    <SqlEditor
+      ref="sqleditor"
+      :value="basicInfoForm.sqlMain"
+      @changeTextarea="changeTextarea($event)"
+    />
   </div>
 </template>
 
 <script>
 import SqlEditor from '@/components/SqlEditor/index.vue'
+import { format } from 'sql-formatter'
 export default {
   name: 'EditSql',
   components: {
@@ -15,6 +20,24 @@ export default {
     sqlString: {
       type: String,
       default: ''
+    }
+  },
+  data () {
+    return {
+      basicInfoForm: {
+        sqlMain: ''
+      }
+    }
+  },
+  methods: {
+    // 拿到sql编辑器内容
+    changeTextarea (val) {
+      this.$set(this.basicInfoForm, 'sqlMain', val)
+    },
+    // 格式化sql
+    formaterSql (val) {
+      const dom = this.$refs.sqleditor
+      dom.editor.setValue(format(this.basicInfoForm.sqlMain))
     }
   }
 }
