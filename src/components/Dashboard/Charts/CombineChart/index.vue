@@ -13,10 +13,10 @@
 <script>
 import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import combineMixins from '@/components/Dashboard/mixins/combineMixins'
-import { strWithKSeperator, addChineseUnit, addEnglishUnit } from '@/utils/numberUtils'
+import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 export default {
   name: 'CombineChart',
-  mixins: [combineMixins],
+  mixins: [combineMixins, YAxis],
   props: {
     identify: {
       type: String,
@@ -97,9 +97,7 @@ export default {
     // 拿到option设置里面的series设置
     getOptionSeries () {
       const { ComponentOption, SeriesSetting, FunctionalOption } = this.storeOption.theme
-      // const {SeriesSelect, SeriesChartLabel, SeriesMark, SeriesMaximum} = SeriesSetting
-      const { SeriesSelect, SeriesChartLabel, SeriesMark, SeriesLine } = SeriesSetting
-      // 显示最值 不清楚具体的效果是什么样子 SeriesMaximum.check TODO
+      const { SeriesSelect, SeriesChartLabel, SeriesMark, SeriesLine, SeriesMaximum } = SeriesSetting
 
       // 选择系列 设置标记样式、线条样式 以及标签字体颜色
       const { check, labelShow } = ComponentOption.ChartLabel
@@ -169,6 +167,15 @@ export default {
         if (SeriesSelect?.selectValue === item.name) {
           item.label.show = SeriesChartLabel.check || check
           item.label.color = SeriesChartLabel.color
+          if (SeriesMaximum?.check) {
+            item.markPoint = {
+              symbol: 'pin',
+              data: [
+                { type: 'max', name: '最大值' },
+                { type: 'min', name: '最小值' }
+              ]
+            }
+          }
         }
         return item
       })
@@ -203,32 +210,7 @@ export default {
         axisLabel: {
           show: axis[axisType].showAxisLabel,
           formatter: (value, index) => {
-            const { numberFormat, numberDigit, unit, kSeperator } = axis[axisType]
-            let res, temp
-            if (type === 'X') {
-              res = value + unit
-            } else {
-              switch (axis[axisType].formatType) {
-                case '1':
-                  if (axis[axisType].lang === 'chinese-simplified') {
-                    res = addChineseUnit(value, true)
-                  }
-                  if (axis[axisType].lang === 'english') {
-                    res = addEnglishUnit(value)
-                  }
-                  if (axis[axisType].lang === 'chinese-complicated') {
-                    res = addChineseUnit(value, false)
-                  }
-                  break
-                case '2':
-                  temp = (value * (numberFormat === 'percent' ? 100 : 1)).toFixed(numberDigit) + (numberFormat === 'percent' ? '%' : '') + unit
-                  res = kSeperator ? strWithKSeperator(temp) : temp
-                  break
-                case '3':
-                  break
-              }
-            }
-            return res
+            return this.formatYLabel(value, axis[axisType])
           }
         },
         axisLine: {
@@ -252,20 +234,10 @@ export default {
       if (type === 'X') {
         return { type: 'category', ...commonOptions }
       } else {
-        if (axis[axisType].autoMin && axis[axisType].autoMax) {
-          // 最大值 最小值自动
-          return { ...commonOptions }
-        } if (!axis[axisType].autoMin && !axis[axisType].autoMax && !axis.YAxis.min && !axis.YAxis.max) {
-          // 最大值 最小值均未自动 且最大值、最小值均为0
-          return { ...commonOptions }
-        } else if (!axis[axisType].autoMin && axis[axisType].autoMax) {
-          // 最大值自动 最小值写入
-          const min = axis.YAxis.min < 'dataMin' ? axis.YAxis.min : 'dataMin'
-          return { min: min, ...commonOptions }
-        } else if (axis[axisType].autoMin && !axis[axisType].autoMax) {
-          // 最小值自动 最大值写入
-          const max = axis.YAxis.max > 'dataMax' ? axis.YAxis.max : 'dataMax'
-          return { max: max, ...commonOptions }
+        return {
+          max: axis[axisType].autoMax ? null : !axis.YAxis.max,
+          min: axis[axisType].autoMin ? null : !axis.YAxis.min,
+          ...commonOptions
         }
       }
     },
