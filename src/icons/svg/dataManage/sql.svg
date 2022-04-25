@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 25备份 9</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-25备份-9" fill-rule="nonzero">
+            <path d="M14.9268293,0 C16.6390244,0 18,1.36097561 18,3.07317073 L18,14.9268293 C18,16.6390244 16.6390244,18 14.9268293,18 L3.07317073,18 C1.36097561,18 0,16.6390244 0,14.9268293 L0,3.07317073 C0,1.36097561 1.36097561,0 3.07317073,0 C9,0 9,0 14.9268293,0 Z" id="路径备份-3" fill="#7284F8"></path>
+            <text id="SQL" fill="#FFFFFF" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal">
+                <tspan x="1" y="12">SQL</tspan>
+            </text>
+        </g>
+    </g>
+</svg>
