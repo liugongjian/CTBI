@@ -1,11 +1,17 @@
 // 柱图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
+import { getLayoutOptionById } from '@/utils/optionUtils'
+import { deepClone } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 export default {
   mixins: [baseMixins, YAxis],
   data () {
     return {
+      storeOption: {},
+      chartOption: {},
+      dataValue: null,
+      series: [],
       xAxis: { type: 'category' },
       yAxis: {},
       grid: {}
@@ -16,6 +22,35 @@ export default {
       return this.storeOption.theme.ComponentOption.ChartLabel.checkList
     }
   },
+  watch: {
+    storeOption: {
+      handler (val) {
+        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
+        if (JSON.stringify(val.dataSource) !== '{}') {
+          this.dataValue = deepClone(val.dataSource)// 深拷贝，避免修改数据
+          this.getOption()
+        }
+      },
+      deep: true
+    },
+    'storeOption.dataSource': {
+      handler (val) {
+        if (JSON.stringify(val) !== '{}') {
+          this.dataValue = deepClone(val)
+          // 拿到数据中的系列名字
+          this.getSeriesOptions(this.dataValue)
+          // 拿到数据的系列名字 并设置颜色
+          this.getColor(this.dataValue)
+          // 拿到数据中的指标
+          this.getIndicatorOptions(this.dataValue)
+          this.getOption()
+        }
+      }
+    }
+  },
+  mounted () {
+    this.storeOption = getLayoutOptionById(this.identify)
+  },
   methods: {
 
     // 拿到数据中的系列名字
@@ -23,13 +58,12 @@ export default {
       const seriesOption = []
       val[0].forEach((item, index) => {
         if (index) {
-          seriesOption.push({ value: item, label: item })
+          seriesOption.push({ value: item, label: item, showLabel: false, color: null, showMax: false })
         }
       })
 
       this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
       this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
-      this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
     },
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
@@ -37,7 +71,7 @@ export default {
       val[0].forEach((item, index) => {
         if (index) {
           const idx = (index) % colorTheme['defaultColor'].length
-          color.push({ name: item, color: colorTheme['defaultColor'][idx].value })
+          color.push({ name: item, color: colorTheme['defaultColor'][idx].value, remark: item })
         }
       })
 
@@ -137,6 +171,8 @@ export default {
         }
       }
     },
+
+    // 根据筛选的指标获取对应数据
     transfromData (indicator) {
       const data = []
       for (let i = 1; i < this.dataValue.length; i++) {
@@ -153,6 +189,7 @@ export default {
       data.unshift([this.dataValue[0][0], ...indicator])
       this.dataValue = data
     },
+
     // 获取堆积柱状图
     getStackSeries (componentOption) {
       this.series = []
@@ -251,12 +288,12 @@ export default {
 
     // 系列设置
     setSeriesItem () {
-      const { SeriesSelect, SeriesChartLabel } = this.storeOption.theme.SeriesSetting
+      const { SeriesSelect } = this.storeOption.theme.SeriesSetting
       this.series = this.series.map((item) => {
         if (SeriesSelect?.selectValue === item.name) {
-          item.label.show = SeriesChartLabel.check
-          item.label.color = SeriesChartLabel.color
-          if (this.storeOption.theme.SeriesSetting.SeriesMaximum?.check) {
+          item.label.show = SeriesSelect.SeriesChartLabel.check
+          item.label.color = SeriesSelect.SeriesChartLabel.color
+          if (SeriesSelect.SeriesMaximum?.check) {
             item.markPoint = {
               symbol: 'pin',
               data: [

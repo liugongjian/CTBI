@@ -153,14 +153,14 @@ export default {
       'SeriesSelect': { // 选择系列
         'label': '请选择系列',
         'selectValue': '', // 默认选择的系列名字 第一个元素
-        'seriesOption': [] // 从数据中拿到系列的名字
-      },
-      'SeriesChartLabel': { // 某个系列显示图表标签
-        'check': false, // 默认未选中
-        'color': '' // 颜色
-      },
-      'SeriesMaximum': { // 最值
-        'check': false // 默认未选中
+        'seriesOption': [], // 从数据中拿到系列的名字
+        'SeriesChartLabel': { // 某个系列显示图表标签
+          'check': false, // 默认未选中
+          'color': '' // 颜色
+        },
+        'SeriesMaximum': { // 最值
+          'check': false // 默认未选中
+        }
       }
     }
   },

@@ -82,8 +82,8 @@ export default {
         'color': colorTheme['defaultColor']
       },
       'TwisYAxis': { // 双Y轴
-        'show': false, // 是否必须显示双y轴
-        'check': true, // 是否显示双Y轴
+        'show': true, // 是否必须显示双y轴的复选框
+        'check': false, // 是否显示双Y轴
         'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
       },
       'PercentStack': { // 百分比与堆积类型选择
@@ -153,11 +153,11 @@ export default {
       'SeriesSelect': { // 选择系列
         'label': '请选择系列',
         'selectValue': '', // 默认选择的系列名字 第一个元素
-        'seriesOption': [] // 从数据中拿到系列的名字
-      },
-      'SeriesChartLabel': { // 某个系列显示图表标签
-        'check': false, // 默认未选中
-        'color': '' // 颜色
+        'seriesOption': [], // 从数据中拿到系列的名字
+        'SeriesChartLabel': { // 某个系列显示图表标签
+          'check': false, // 默认未选中
+          'color': '' // 颜色
+        }
       }
     }
   },
