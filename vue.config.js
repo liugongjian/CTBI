@@ -47,10 +47,10 @@ module.exports = {
         }
       },
       '/login-dev': {
-        target: 'http://127.0.0.1:4523',
+        target: 'http://52c2m87072.qicp.vip',
         changeOrigin: true,
         pathRewrite: {
-          '^/login-dev': '/mock/825472'
+          '^/login-dev': '/'
         }
       }
     }

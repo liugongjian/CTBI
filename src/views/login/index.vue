@@ -142,6 +142,7 @@
 
 <script>
 import { verify, login } from '@/api/user'
+import { encryptAes } from '@/utils/encrypt'
 export default {
   name: 'Login',
   data () {
@@ -212,7 +213,7 @@ export default {
       this.isValid = true
     },
     async verifyGet () {
-      const { data } = await verify()
+      const data = await verify()
       if (data) {
         this.verifyImg = data
       }
@@ -233,7 +234,10 @@ export default {
     },
     async handleLogin () {
       this.loading = true
-      const { code, data } = await login(this.loginForm)
+      const { password } = this.loginForm
+      const encryptedPswd = encryptAes(password)
+      const { code, data } = await login({ ...this.loginForm, password: encryptedPswd })
+      // const { code, data } = await login(this.loginForm)
       if (code === 200) {
         this.$store.dispatch('user/login', data.token).then(() => {
           this.$router.push('home').catch(err => console.log(err))
@@ -384,6 +388,7 @@ export default {
     }
 }
 .refresh {
+  cursor: pointer;
   position:absolute;
   display: inline-block;
   height: 30px;
