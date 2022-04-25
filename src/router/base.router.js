@@ -40,7 +40,6 @@ export const constantRoutes = [
   },
   {
     path: '/login',
-    name: 'loginpages',
     component: () => import('@/views/login/index'),
     children: [
       {

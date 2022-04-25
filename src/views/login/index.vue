@@ -1,8 +1,8 @@
 <template>
   <div class="login">
     <div class="login-item_image">
-      <img class="background" src="@/assets/Image/login-image/background.jpg" alt="">
-      <img class="logo" src="@/assets/Image/login-image/logo.png" alt="">
+      <img class="background" :src="background" alt="">
+      <img class="logo" :src="logo" alt="">
     </div>
     <div class="login-item_input">
       <router-view />
@@ -12,7 +12,13 @@
 
 <script>
 export default {
-  name: 'Login'
+  name: 'Login',
+  data () {
+    return {
+      background: require('@/assets/Image/login-image/background.jpg'),
+      logo: require('@/assets/Image/login-image/logo.png')
+    }
+  }
 }
 </script>
 

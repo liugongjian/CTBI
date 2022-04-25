@@ -97,12 +97,6 @@ export default {
       }
     }
     return {
-      loginForm: {
-        userName: '',
-        password: '',
-        verifyCode: '',
-        from: 'platform'
-      },
       validForm: {
         oldPassword: '',
         newPassword: '',
@@ -114,11 +108,6 @@ export default {
           { validator: validatePass, trigger: 'blur' }],
         checkPassword: [{ required: true, message: '请再次输入新密码', trigger: 'blur' },
           { validator: validatePass2, trigger: 'blur' }]
-      },
-      loginRules: {
-        userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-        verifyCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
       },
       loading: false,
       redirect: undefined,

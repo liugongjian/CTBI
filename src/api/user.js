@@ -15,3 +15,6 @@ export function logout () {
 export function verify () {
   return http.get('/verify')
 }
+export function testTimeout () {
+  return http.get('/login/test')
+}

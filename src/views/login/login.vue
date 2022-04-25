@@ -48,6 +48,7 @@
     </el-form>
     <div class="button-style">
       <el-button
+        v-loading="loading"
         class="button"
         @click="validateLogin"
       >
@@ -65,41 +66,12 @@ import { encryptAes } from '@/utils/encrypt'
 export default {
   name: 'Login',
   data () {
-    const validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Please input the password'))
-      } else {
-        if (this.validForm.checkPassword !== '') {
-          this.$refs.validForm.validateField('checkPassword')
-        }
-        callback()
-      }
-    }
-    const validatePass2 = (rule, value, callback) => {
-      if (value !== this.validForm.newPassword) {
-        callback(new Error('两次输入密码不一致'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
         userName: '',
         password: '',
         verifyCode: '',
         from: 'platform'
-      },
-      validForm: {
-        oldPassword: '',
-        newPassword: '',
-        checkPassword: ''
-      },
-      validRules: {
-        oldPassword: [{ required: true, message: '请输入旧密码', trigger: 'blur' }],
-        newPassword: [{ required: true, message: '请输入新密码', trigger: 'blur' },
-          { validator: validatePass, trigger: 'blur' }],
-        checkPassword: [{ required: true, message: '请再次输入新密码', trigger: 'blur' },
-          { validator: validatePass2, trigger: 'blur' }]
       },
       loginRules: {
         userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -109,7 +81,6 @@ export default {
       loading: false,
       redirect: undefined,
       verifyImg: undefined,
-      isValid: false,
       passwordType: 'password',
       activate: false
     }
@@ -127,9 +98,6 @@ export default {
       // this.$nextTick(() => {
       //   this.$refs.password.focus()
       // })
-    },
-    back () {
-      this.isValid = true
     },
     async verifyGet () {
       const data = await verify()
@@ -161,19 +129,18 @@ export default {
         // const { code, data } = await login(this.loginForm)
         if (code === 200) {
           this.$store.dispatch('user/login', data.token).then(() => {
-            this.$router.push('home').catch(err => console.log(err))
+            const { redirect } = this.$route.query
+            this.$router.push(redirect || 'home').catch(err => { console.log(err) })
             this.loading = false
           }).catch(() => {
             this.loading = false
           })
-        } else if (code === 1036) {
-          this.isValid = false
         }
       } catch (err) {
-        if (err.message === '1036') {
+        this.loading = false
+        if (err.code === 1036) {
           this.$router.push('/login/activate')
         }
-        console.log(err)
       }
     }
   }
