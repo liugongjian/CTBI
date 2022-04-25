@@ -74,3 +74,13 @@ export function getSqlVariables(body) {
 export function getDataSourceLData() {
   return http.get(`/dataSources`)
 }
+
+// 创建/更新sql
+export function createUpdateSql(body) {
+  return http.post(`/sql`, body)
+}
+
+// 创建数据集
+export function createDataSets(body) {
+  return http.post(`/dataSets`, body)
+}

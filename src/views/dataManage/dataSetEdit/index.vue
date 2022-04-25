@@ -3,11 +3,11 @@
     <!-- header -->
     <div class="data-set-edit-wrap-header">
       <div class="data-set-edit-wrap-header-l">
-        <i class="el-icon-arrow-left"></i>
-        <span>未命名</span>
+        <i class="el-icon-arrow-left" @click="toDataSetPage" style="margin-right: 8px"></i>
+        <span>{{ dataSourceName ? dataSourceName : '未命名' }}</span>
       </div>
       <div class="data-set-edit-wrap-header-r">
-        <div class="data-set-edit-wrap-header-r-btn">保存</div>
+        <div class="data-set-edit-wrap-header-r-btn" @click="onSave">保存</div>
       </div>
     </div>
 
@@ -47,7 +47,7 @@
           <div v-else class="side-top-main">
             <div><span>选择数据源</span></div>
             <div>
-              <el-select v-model="selectedDataSource" placeholder="请选择" >
+              <el-select v-model="currentDataSourceId" placeholder="请选择" >
                 <el-option
                   v-for="item in dataSourceOptions"
                   :key="item.value"
@@ -90,6 +90,7 @@
           <EditSql
             ref="sqlEdit"
             :sqlStatement="sqlStatement"
+            @sqlStatementChange="sqlStatementChange"
             v-else
           />
         </div>
@@ -171,7 +172,7 @@
 
 <script>
 import EditSql from './components/editSql/index.vue'
-import { runtimeForSql, getDataSourceData } from '@/api/dataSet'
+import { runtimeForSql, getDataSourceData, createUpdateSql, createDataSets } from '@/api/dataSet'
 import ResultPreview from './components/resultPreview/index.vue'
 import Clipboard from '@/utils/clipboard.js'
 export default {
@@ -183,14 +184,15 @@ export default {
   mounted () {
     const data = this.$route.query
     console.log(data, 'data')
-    this.dataSourceName = data.dataSourceName
+    this.dataSourceName = data.dataSourceName || ''
     this.creatorName = data.creatorName
+    this.currentDataSourceId = data.dataSourceId || ''
+    this.current_id = data._id || ''
   },
   data () {
     return {
       isEdit: false,
       isShrink: false,
-      selectedDataSource: '',
       dataSourceOptions: [],
       activedTag: 'first',
       sqlName: '',
@@ -235,7 +237,9 @@ export default {
       dataSourceName: '',
       creatorName: '',
       currentSqlStatement: '',
-      sqlStatement: 'select * from users where telephone = ${telephone}'
+      sqlStatement: 'select * from users where telephone = ${telephone}',
+      currentDataSourceId: '',
+      current_id: ''
     }
   },
   methods: {
@@ -247,7 +251,7 @@ export default {
       this.$refs.sqlEdit.formaterSql()
     },
     // 参数设置
-    settingParam () {
+    async settingParam () {
       this.settingParamVisiable = true
       // const body = {}
       // const keys = ['type', 'name', 'dataType', 'useInGlobal', 'defaultValue']
@@ -271,15 +275,44 @@ export default {
     // 运行
     async runSql () {
       // dataSourceId & sql语句  必须
+      const body = {}
+      body.sql = this.currentSqlStatement
+      body.dataSourceId = this.currentDataSourceId
+      body.sqlVariables = this.sqlVariables
+      this.current_id && (body._id = this.current_id)
+      if (this.sqlVariables && this.sqlVariables.length > 0) {
+        body.sqlVariables = this.sqlVariables
+      }
+      console.log('run sql body', body)
       try {
-        const data = await runtimeForSql()
+        const data = await runtimeForSql(body)
         this.runResultData = data
+        if (this.current_id !== data._id) {
+          this.current_id = data._id
+        }
       } catch (error) {
         console.log(error)
       }
     },
     // 确认编辑
-    confirmEdit () {},
+    async confirmEdit () {
+      try {
+        const body = {}
+        body.sql = this.currentSqlStatement
+        body.dataSourceId = this.currentDataSourceId
+        body.sqlVariables = this.sqlVariables
+        this.current_id && (body._id = this.current_id)
+        if (this.sqlVariables && this.sqlVariables.length > 0) {
+          body.sqlVariables = this.sqlVariables
+        }
+        const data = createUpdateSql(body)
+        if (this.current_id !== data._id) {
+          this.current_id = data._id
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
     // 删除
     deleteSqlVariable () {},
     // 获取数据源列表
@@ -303,6 +336,27 @@ export default {
     handleCopy (val, event) {
       const str = val.displayName
       Clipboard(str, event)
+    },
+    // 获取改变的sql语句
+    sqlStatementChange (sql) {
+      console.log('获取改变的sql语句', sql)
+      this.currentSqlStatement = sql
+    },
+    toDataSetPage() {
+      this.$router.push({
+        path: '/dataSet'
+      })
+    },
+    // 保存数据
+    async onSave() {
+      try {
+        const body = {}
+
+        const data = await createDataSets(body)
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
