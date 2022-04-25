@@ -11,8 +11,6 @@
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
-import { deepClone } from '@/utils/optionUtils'
 import barMixins from '@/components/Dashboard/mixins/barMixins'
 export default {
   name: 'BarChart',
@@ -25,58 +23,83 @@ export default {
   },
   data () {
     return {
-      storeOption: {},
-      chartOption: {},
-      type: 'BarChart', // 图表类型 1.柱图；2.堆积柱状图；3.百分比堆积柱状图
-      dataValue: null,
-      series: [],
-      textMap: {
-        'BarChart': '柱图',
-        'StackedBarChart': '堆积柱状图',
-        'PercentStackedBarChart': '百分比堆积柱状图'
-      }
+      type: 'BarChart'// 图表类型 1.柱图；2.堆积柱状图；3.百分比堆积柱状图
     }
-  },
-  watch: {
-    storeOption: {
-      handler (val) {
-        this.type = val.theme.Basic.ChartType.type
-        val.theme.ComponentOption.ChartLabel.type = this.type
-        val.theme.Basic.Title.text = this.textMap[this.type]
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        this.type = val.theme.ComponentOption.PercentStack.isStack ? 'StackedBarChart' : this.type
-        this.type = val.theme.ComponentOption.PercentStack.isPercent ? 'PercentStackedBarChart' : this.type
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = deepClone(val.dataSource)// 深拷贝，避免修改数据
-          this.getOption()
-        }
-      },
-      deep: true
-    }
-  },
-  mounted () {
-    this.storeOption = getLayoutOptionById(this.identify)
   },
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.getSeries()// 获取Series
+      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery)
+      this.getSeries(componentOption) // 获取Series
 
-      // 获取颜色设置
+      // 将图表转为堆积柱状图
+      if (componentOption.PercentStack.isStack && !componentOption.PercentStack.isPercent) {
+        this.getStackSeries(componentOption)
+      }
+      // 将图表转为百分比堆积柱状图
+      if (componentOption.PercentStack.isPercent) {
+        this.getPercentStackSeries(componentOption)
+      }
+
+      // 系列配置-图表标签相关
+      this.setSeriesItem()
+      // 获取颜色设置-使图例颜色与图形颜色对应
       const colorOption = []
       componentOption.Color.color.forEach(item => {
         colorOption.push(item.color)
       })
+      // 设置图例与图表距离
+      this.setGrid(componentOption.Legend)
       this.chartOption = {
+        'grid': this.grid,
         'color': colorOption,
         'legend': componentOption.Legend,
         'xAxis': this.xAxis,
         'tooltip': this.tooltip,
         'yAxis': this.yAxis,
+        'markPoint': this.markPoint,
         'dataset': {
           'source': this.dataValue
         },
+        'dataZoom': {
+          'type': 'slider',
+          'show': this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom !== 'hide',
+          'realtime': true,
+          'start': 0,
+          'end': 100,
+          'xAxisIndex': [0, 1]
+        },
         'series': this.series
+      }
+    },
+    getSeries (componentOption) {
+      this.series = []
+      let seriesLength = 0
+      this.dataValue.forEach(item => {
+        seriesLength = item.length - 1
+      })
+      this.setAxis()
+
+      // 双Y轴设置
+      this.twisYAxisConfig(componentOption)
+
+      for (let i = 0; i < seriesLength; i++) {
+        this.series.push({
+          type: 'bar',
+          name: this.dataValue[0][i + 1],
+          label: {
+            show: componentOption.ChartLabel.check, // 标签显示
+            position: 'top' // 标签位置
+          },
+          labelLayout: {
+            hideOverlap: componentOption.ChartLabel.labelShow === 1 // 1.智能显示，2.全量显示 标签
+          },
+          itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
+        })
+        if (componentOption.TwisYAxis.check) {
+          const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
+          this.series[i].yAxisIndex = yAxisIndex
+        }
       }
     }
   }

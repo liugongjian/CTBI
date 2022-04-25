@@ -46,6 +46,7 @@ export default {
       store.state.app.layout.forEach(item => {
         if (item.i === store.state.app.currentLayoutId) {
           this.radarColor = item.option.theme.ComponentOption.RadarColor.color
+          console.log(this.radarColor)
         }
       })
     },

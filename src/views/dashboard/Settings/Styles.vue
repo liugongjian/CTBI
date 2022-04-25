@@ -1,5 +1,7 @@
 <template>
-  <div class="tab-pane-content">
+  <div
+    class="tab-pane-content"
+  >
     <el-collapse v-model="activeNames">
       <el-collapse-item
         title="基础信息"
@@ -36,7 +38,12 @@
         name="3"
       >
         <el-tabs v-model="activeName">
-          <el-tab-pane v-for="(item,name,key) in option['Axis']" :key="key" :label="item.cname" :name="key.toString()">
+          <el-tab-pane
+            v-for="(item,name,key) in option['Axis']"
+            :key="key"
+            :label="item.cname"
+            :name="key.toString()"
+          >
             <component
               :is="name"
               :option="option['Axis'][name]"
@@ -117,12 +124,28 @@ export default {
       activeNames: '1',
       activeName: '0'
     }
+  },
+  watch: {
+    'option.ComponentOption.TwisYAxis.check': {
+      handler (val) {
+        if (val) {
+          const Y1Axis = JSON.parse(JSON.stringify(this.option.Axis.YAxis))
+          Y1Axis.cname = '右Y轴'
+          this.$set(this.option.Axis, 'Y1Axis', Y1Axis)
+        } else {
+          if (this.option.Axis?.Y1Axis) {
+            this.$delete(this.option.Axis, 'Y1Axis')
+          }
+        }
+      },
+      deep: true
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
-::v-deep .el-tabs__nav-scroll{
-    display: flex;
-    justify-content: center;
+::v-deep .el-tabs__nav-scroll {
+  display: flex;
+  justify-content: center;
 }
 </style>

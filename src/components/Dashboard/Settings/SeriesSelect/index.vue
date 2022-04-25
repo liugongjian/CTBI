@@ -5,7 +5,6 @@
       <el-select
         v-model="option.selectValue"
         placeholder="请选择"
-        @change="selectSeries"
       >
         <el-option
           v-for="item in option.seriesOption"
@@ -15,9 +14,41 @@
         />
       </el-select>
     </div>
-    <div v-if="option.remarkShow" class="editor-object-container" style="display: flex;align-items: center">
+    <div
+      v-if="option.remarkShow"
+      class="editor-object-container flex-align-center"
+    >
       <span>别名</span>
-      <el-input v-model="option.remark" />
+      <el-input
+        v-model="option.remark"
+        @input="setRemark"
+      />
+    </div>
+    <div
+      v-if="option.SeriesChartLabel"
+      class="editor-object-container flex-align-center"
+    >
+      <el-checkbox
+        v-model="option.SeriesChartLabel.check"
+        label="显示图表标签"
+      />
+      <el-color-picker
+        v-model="option.color"
+        show-alpha
+        :predefine="predefineColors"
+        :disabled="!option.SeriesChartLabel.check"
+      />
+    </div>
+    <div
+      v-if="option.SeriesMaximum"
+      class="editor-object-container"
+    >
+      <div>
+        <el-checkbox
+          v-model="option.SeriesMaximum.check"
+          label="显示最值"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -34,6 +65,8 @@ export default {
   },
   data () {
     return {
+      // 颜色集合
+      predefineColors: ['#1a7dff', '#ff751a', '#16cad6', '#ffae0f', '#34ad8d', '#f593ad', '#8c90b8', '#96b1fa', '#ccb18f']
     }
   },
   computed: {
@@ -43,7 +76,18 @@ export default {
   methods: {
     // 选中某个系列名
     selectSeries () {
-      this.option.remark = this.option.selectValue
+      // this.option.remark = this.option.selectValue
+      store.state.app.layout.forEach(item => {
+        if (item.i === store.state.app.currentLayoutId) {
+          item.option.theme.SeriesSetting.SeriesSelect.seriesOption.forEach((j) => {
+            if (j.value === this.option.selectValue) {
+              this.option.remark = j.remark
+              this.option.SeriesChartLabel.check = j.labelShow
+              this.option.SeriesMaximum.check = j.isMax
+            }
+          })
+        }
+      })
       store.state.app.layout.forEach(item => {
         if (item.i === store.state.app.currentLayoutId && item.option.theme.SeriesSetting.SeriesMark && item.option.theme.SeriesSetting.SeriesLine) {
           // 是副轴 // 判断是否是主轴
@@ -56,7 +100,25 @@ export default {
           }
         }
       })
+    },
+    // 给选中的系列 设置别名
+    setRemark (val) {
+      store.state.app.layout.forEach(item => {
+        if (item.i === store.state.app.currentLayoutId) {
+          item.option.theme.SeriesSetting.SeriesSelect.seriesOption.forEach((j) => {
+            if (j.value === this.option.selectValue) {
+              j.remark = val
+            }
+          })
+          item.option.theme.ComponentOption.Color.color.forEach((j) => {
+            if (j.name === this.option.selectValue) {
+              j.remark = val
+            }
+          })
+        }
+      })
     }
+
   }
 
 }
@@ -64,6 +126,6 @@ export default {
 
 <style lang="scss" scoped>
 .label {
-  margin-top: 20px ;
+  margin-top: 20px;
 }
 </style>

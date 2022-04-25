@@ -75,7 +75,8 @@ export default {
         'type': 2 // 1曲线 2直线
       },
       'TwisYAxis': { // 双Y轴
-        'show': false, // 是否显示双Y轴
+        'show': false, // 是否显示双y轴复选框
+        'check': false, // 是否显示双Y轴
         'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
       },
       'Color': { // 颜色设置
@@ -90,13 +91,95 @@ export default {
         'type': 'scroll'
       }
     },
+    'Axis': { // 轴设置
+      'XAxis': { // X轴设置
+        'cname': 'X轴',
+        'title': '',
+        'unit': '',
+        'show': true,
+        'showTitle': true,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'lineType': 'solid',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000',
+        'splitType': 'solid'
+      },
+      'YAxis': { // y轴设置
+        'cname': '左Y轴',
+        'title': '',
+        'unit': '',
+        'show': true,
+        'showTitle': true,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'lineType': 'solid',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000',
+        'splitType': 'solid',
+        'min': 0,
+        'max': 0,
+        'autoMin': true,
+        'autoMax': true,
+        'formatType': '1',
+        'lang': 'chinese-simplified',
+        'numberFormat': 'number',
+        'numberDigit': 0,
+        'kSeperator': false,
+        'formatRegx': ''
+      },
+      'Y1Axis': { // y轴设置
+        'cname': '右Y轴',
+        'title': '',
+        'unit': '',
+        'show': true,
+        'showTitle': true,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'lineType': 'solid',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000',
+        'splitType': 'solid',
+        'min': 0,
+        'max': 0,
+        'autoMin': true,
+        'autoMax': true,
+        'formatType': '1',
+        'lang': 'chinese-simplified',
+        'numberFormat': 'number',
+        'numberDigit': 0,
+        'kSeperator': false,
+        'formatRegx': ''
+      }
+    },
+    'FunctionalOption': {
+      'DataZoom': {
+        'showDataZoom': 'hide'
+      },
+      'LabelShowType': {
+        'axisShowType': 'auto'
+      },
+      'NullProcess': {
+        'emptyResolve': 'skip'
+      }
+    },
     'SeriesSetting': { // 系列设置
       'SeriesSelect': { // 选择系列
         'label': '请选择系列',
         'selectValue': '', // 默认选择的系列名字 第一个元素
         'remarkShow': false, // 是否显示别名
         'remark': '', // 别名默认是选择的系列名字 第一个元素
-        'seriesOption': [{ label: '价格', value: '价格-0' }, { label: '数量', value: '数量-0' }, { label: '温度', value: '温度-1' }] // 从数据中拿到系列的名字
+        'seriesOption': []
+        // 'seriesOption': [{ label: '价格', value: '价格-0' }, { label: '数量', value: '数量-0' }, { label: '温度', value: '温度-1' }] // 从数据中拿到系列的名字
       },
       'SeriesChartLabel': { // 某个系列显示图表标签
         'check': false, // 默认未选中

@@ -27,8 +27,8 @@
 </template>
 
 <script>
-// import store from '@/store'
-// import { getLayoutById } from '@/utils/optionUtils'
+import store from '@/store'
+import { getLayoutById } from '@/utils/optionUtils'
 export default {
   name: 'ChartType',
   props: {
@@ -92,12 +92,11 @@ export default {
   methods: {
     // 图标点击添加组件到画布
     changeHandler (type) {
-      this.option.type = type
-      // const storeOption = getLayoutById(store.state.app.currentLayoutId)
-      // const dataSource = JSON.parse(JSON.stringify(storeOption.option.dataSource))
-      // storeOption.option = store.state.app.toolList[type]
-      // storeOption.option.dataSource = dataSource
-      // storeOption.is = type
+      const storeOption = getLayoutById(store.state.app.currentLayoutId)
+      const dataSource = JSON.parse(JSON.stringify(storeOption.option.dataSource))
+      storeOption.option = JSON.parse(JSON.stringify(store.state.app.toolList[type]))
+      storeOption.option.dataSource = dataSource
+      storeOption.is = type
     }
   }
 

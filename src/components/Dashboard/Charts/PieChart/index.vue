@@ -100,20 +100,38 @@ export default {
         }
         ComponentOption.TotalShow.value = sum
       }
-
+      // 设置图例与图表距离
+      this.setGrid(ComponentOption.Legend)
       // 设置图表的option
       that.chartOption = {
         tooltip: {
           trigger: 'item',
           formatter: (data) => {
-            return data.name + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
+            let nameTemp = ''
+            if (SeriesSetting) {
+              SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
+                if (item.value === data.name) {
+                  nameTemp = item.remark
+                }
+              })
+            } else {
+              nameTemp = data.name
+            }
+            return nameTemp + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
           }
         },
+        grid: this.grid,
         legend: {
           ...ComponentOption.Legend,
           formatter: (name) => {
-            if (SeriesSetting && name === SeriesSetting.SeriesSelect.selectValue) {
-              return SeriesSetting.SeriesSelect.remark
+            if (SeriesSetting) {
+              let nameTemp = ''
+              SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
+                if (item.value === name) {
+                  nameTemp = item.remark
+                }
+              })
+              return nameTemp
             } else {
               return name
             }
@@ -137,15 +155,13 @@ export default {
               shadowBlur: 10,
               shadowOffsetX: 0,
               shadowColor: 'rgba(0, 0, 0, 0.5)',
-              normal: {
-                color: (data) => {
-                  if (color[0].name) {
-                    const colorTemp = color.find((item) => { return data.name === item.name })
-                    return colorTemp ? colorTemp.color : 'red'
-                  } else {
-                    const index = (data.dataIndex) % color.length
-                    return color[index].value
-                  }
+              color: (data) => {
+                if (color[0].name) {
+                  const colorTemp = color.find((item) => { return data.name === item.name })
+                  return colorTemp ? colorTemp.color : 'red'
+                } else {
+                  const index = (data.dataIndex) % color.length
+                  return color[index].value
                 }
               }
             },
@@ -154,8 +170,14 @@ export default {
               formatter: function (data) {
                 let formatter = ''
                 if (checkList.includes('维度')) {
-                  if (SeriesSetting && data.name === SeriesSetting.SeriesSelect.selectValue) {
-                    formatter += SeriesSetting.SeriesSelect.remark + ' '
+                  if (SeriesSetting) {
+                    let nameTemp = ''
+                    SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
+                      if (item.value === data.name) {
+                        nameTemp = item.remark
+                      }
+                    })
+                    formatter += nameTemp + ' '
                   } else {
                     formatter += data.name + ' '
                   }

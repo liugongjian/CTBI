@@ -11,9 +11,7 @@
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
 import barMixins from '@/components/Dashboard/mixins/barMixins'
-import { deepClone } from '@/utils/optionUtils'
 export default {
   name: 'StackedBarChart',
   mixins: [barMixins],
@@ -25,49 +23,33 @@ export default {
   },
   data () {
     return {
-      storeOption: {},
-      chartOption: {},
-      type: 'StackedBarChart', // 图表类型 1.柱图；2.堆积柱状图；3.百分比堆积柱状图
-      dataValue: null,
-      series: [],
-      textMap: {
-        'BarChart': '柱图',
-        'StackedBarChart': '堆积柱状图',
-        'PercentStackedBarChart': '百分比堆积柱状图'
-      }
+      type: 'StackedBarChart' // 图表类型 1.柱图；2.堆积柱状图；3.百分比堆积柱状图
     }
-  },
-  watch: {
-    storeOption: {
-      handler (val) {
-        this.type = val.theme.Basic.ChartType.type
-        val.theme.ComponentOption.ChartLabel.type = this.type
-        val.theme.Basic.Title.text = this.textMap[this.type]
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        this.type = val.theme.ComponentOption.PercentStack.isStack ? 'StackedBarChart' : this.type
-        this.type = val.theme.ComponentOption.PercentStack.isPercent ? 'PercentStackedBarChart' : this.type
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = deepClone(val.dataSource)// 深拷贝，避免修改数据
-          this.getOption()
-        }
-      },
-      deep: true
-    }
-  },
-  mounted () {
-    this.storeOption = getLayoutOptionById(this.identify)
   },
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.getSeries()
+      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery)
+      this.getStackSeries(componentOption)
+      if (componentOption.PercentStack.isPercent) {
+        this.getPercentStackSeries(componentOption)
+      }
+      // 如果选择百分比，转为百分比堆积柱状图
+      if (componentOption.PercentStack.isPercent) {
+        this.getPercentStackSeries(componentOption)
+      }
 
+      // 系列配置
+      this.setSeriesItem()
       // 获取颜色设置
       const colorOption = []
       componentOption.Color.color.forEach(item => {
         colorOption.push(item.color)
       })
+      // 设置图例与图表距离
+      this.setGrid(componentOption.Legend)
       this.chartOption = {
+        'grid': this.grid,
         'color': colorOption,
         'legend': componentOption.Legend,
         'xAxis': this.xAxis,
@@ -75,6 +57,14 @@ export default {
         'yAxis': this.yAxis,
         'dataset': {
           'source': this.dataValue
+        },
+        'dataZoom': {
+          'type': 'slider',
+          'show': this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom !== 'hide',
+          'realtime': true,
+          'start': 0,
+          'end': 100,
+          'xAxisIndex': [0, 1]
         },
         'series': this.series
       }
