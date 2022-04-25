@@ -9,7 +9,7 @@ export function getInfo (token) {
 }
 
 export function logout () {
-  return http.post('/user/logout')
+  return http.post('/logout')
 }
 
 export function verify () {
