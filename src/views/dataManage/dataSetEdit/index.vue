@@ -17,7 +17,7 @@
         <div>
           <svg-icon iconClass="sql" style="margin-right: 8px"/>
         </div>
-        <el-input v-model="sqlName" placeholder="未命名SQL"></el-input>
+        <el-input v-model="sqlName"  placeholder="未命名SQL"></el-input>
       </div>
       <div class="data-set-edit-wrap-toptool-r">
         <el-button @click="formatSqlData">格式化</el-button>
@@ -40,14 +40,14 @@
 
         <!-- top -->
         <div class="side-top">
-          <div v-if="isEdit" class="side-top-main">
+          <div v-if="!isEdit" class="side-top-main">
             <div><span>当前数据源</span></div>
-            <div><span></span></div>
+            <div><span>{{ dataSourceName }}</span></div>
           </div>
           <div v-else class="side-top-main">
             <div><span>选择数据源</span></div>
             <div>
-              <el-select v-model="selectedDataSource" placeholder="请选择">
+              <el-select v-model="selectedDataSource" placeholder="请选择" >
                 <el-option
                   v-for="item in dataSourceOptions"
                   :key="item.value"
@@ -63,8 +63,19 @@
         <div class="side-bottom">
           <el-tabs v-model="activedTag">
             <el-tab-pane label="数据表" name="first">
-              <div v-for="(table, i) in dataTables" :key="i" class="side-bottom-main">
-                <div><span>{{ table.name }}</span></div>
+              <div v-for="(table, i) in dataSourceList" :key="i" class="side-bottom-main">
+                <div style="display: flex;justify-content: space-between;align-items: center;" class="side-bottom-main-list">
+                  <div>
+                    <svg-icon iconClass="table" style="margin-right: 8px"/>
+                    <span>{{ table.displayName }}</span>
+                  </div>
+                  <div>
+                    <el-tooltip content="复制" placement="top" effect="light">
+                      <i class="el-icon-document" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;" @click="handleCopy(table, $event)"></i>
+                    </el-tooltip>
+                    <i class="el-icon-info" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;" ></i>
+                  </div>
+                </div>
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -74,9 +85,12 @@
       <!-- content -->
       <div class="data-set-edit-wrap-main-content">
         <!-- top -->
-        <div class="sql-edit">
+        <div class="sql-edit" v-on:dblclick="isEdit = true">
+          <span v-if="!isEdit">{{ sqlStatement }}</span>
           <EditSql
             ref="sqlEdit"
+            :sqlStatement="sqlStatement"
+            v-else
           />
         </div>
 
@@ -147,8 +161,8 @@
           </el-table>
         </div>
         <div class="set-param-drawer-footer">
-            <el-button @click="settingParamVisiable = false; sqlVariables = []; sqlVariablesTableData = [] ">取 消</el-button>
-            <el-button style="background-color: #FA8334;color: #fff;" @click="settingParamVisiable = false; sqlVariables = sqlVariablesTableData.slice(); sqlVariablesTableData = [] ">确 定</el-button>
+          <el-button @click="settingParamVisiable = false; sqlVariables = []; sqlVariablesTableData = [] ">取 消</el-button>
+          <el-button style="background-color: #FA8334;color: #fff;" @click="settingParamVisiable = false; sqlVariables = sqlVariablesTableData.slice(); sqlVariablesTableData = [] ">确 定</el-button>
         </div>
       </div>
     </el-drawer>
@@ -157,13 +171,20 @@
 
 <script>
 import EditSql from './components/editSql/index.vue'
-import { runtimeForSql } from '@/api/dataSet'
+import { runtimeForSql, getDataSourceData } from '@/api/dataSet'
 import ResultPreview from './components/resultPreview/index.vue'
+import Clipboard from '@/utils/clipboard.js'
 export default {
   name: 'DataSetEdit',
   components: {
     EditSql,
     ResultPreview
+  },
+  mounted () {
+    const data = this.$route.query
+    console.log(data, 'data')
+    this.dataSourceName = data.dataSourceName
+    this.creatorName = data.creatorName
   },
   data () {
     return {
@@ -173,12 +194,12 @@ export default {
       dataSourceOptions: [],
       activedTag: 'first',
       sqlName: '',
-      dataTables: [
-        { name: 'cmswing_action' },
-        { name: 'cmswing_action' },
-        { name: 'cmswing_action' },
-        { name: 'cmswing_action' },
-        { name: 'cmswing_action' }
+      dataSourceList: [
+        { displayName: 'cmswing_action' },
+        { displayName: 'cmswing_action' },
+        { displayName: 'cmswing_action' },
+        { displayName: 'cmswing_action' },
+        { displayName: 'cmswing_action' }
       ],
       runResultData: {
         tableData: [],
@@ -210,11 +231,17 @@ export default {
         }
       ],
       sqlVariablesTableData: [],
-      sqlVariables: []
+      sqlVariables: [],
+      dataSourceName: '',
+      creatorName: '',
+      currentSqlStatement: '',
+      sqlStatement: 'select * from users where telephone = ${telephone}'
     }
   },
   methods: {
-    init () {},
+    init () {
+      this.getDataSourceList()
+    },
     // 格式化 sql 编辑器
     formatSqlData () {
       this.$refs.sqlEdit.formaterSql()
@@ -254,7 +281,29 @@ export default {
     // 确认编辑
     confirmEdit () {},
     // 删除
-    deleteSqlVariable () {}
+    deleteSqlVariable () {},
+    // 获取数据源列表
+    async getDataSourceList () {
+      try {
+        const data = await getDataSourceData()
+        this.dataSourceList = data.slice()
+        const options = []
+        data.foreEach(i => {
+          const o = {}
+          o.label = i.displayName
+          o.value = i._id
+          options.push(o)
+        })
+        this.dataSourceOptions = options.slice()
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // 复制数据源列表
+    handleCopy (val, event) {
+      const str = val.displayName
+      Clipboard(str, event)
+    }
   }
 }
 </script>
@@ -353,6 +402,12 @@ export default {
 .side-bottom {
   &-main {
     padding: 0 20px;
+    &-list:hover {
+      background: #FEF5EE;
+      margin: 0 -20px;
+      padding: 0 20px;
+      margin-bottom: 8px;
+    }
   }
 
   ::v-deep .el-tabs__nav-scroll {

@@ -17,15 +17,20 @@ export default {
     SqlEditor
   },
   props: {
-    sqlString: {
+    sqlStatement: {
       type: String,
       default: ''
+    }
+  },
+  watch: {
+    sqlStatement: function(newVal, oldVal) {
+      this.basicInfoForm.sqlMain = newVal
     }
   },
   data () {
     return {
       basicInfoForm: {
-        sqlMain: ''
+        sqlMain: this.sqlStatement
       }
     }
   },

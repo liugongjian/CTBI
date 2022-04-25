@@ -37,14 +37,14 @@
           row-key="_id"
           @selection-change="handleSelectionChange"
           @expand-change="handleExpandChange"
-          @row-click="handleRowClick"
+          @cell-click="handleCellClick"
         >
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column prop="name" label="名称" width="200">
             <template slot-scope="scope">
               <svg-icon iconClass="sql" v-if="!scope.row.isFolder" style="margin-right: 8px"/>
               <svg-icon v-else iconClass="floder" style="margin-right: 8px"/>
-              <span>{{ scope.row.name }}</span>
+              <span>{{ scope.row.name || scope.row.displayName }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorId" label="创建者" width="120"> </el-table-column>
@@ -310,6 +310,84 @@ export default {
           lastUpdatedTime: '2022-4-18 14:42:30',
           dataSource: 'aaa',
           isFolder: false
+        },
+        {
+          _id: 'BnJLUVUO2PV0p',
+          status: 1,
+          version: '1.0',
+          displayName: 'huym-0422',
+          comment: '这是备注',
+          sqlId: 'FwWlNdQ4N7JBs',
+          fields: [
+            {
+              attributes: {
+                isHidden: true,
+                dataType: 'number'
+              },
+              status: 1,
+              type: 'Measure',
+              column: 'id',
+              displayColumn: 'id',
+              comment: 'id',
+              _id: 'd2ZIiiSrmOKTr'
+            },
+            {
+              attributes: {
+                isHidden: false,
+                dataType: 'number'
+              },
+              status: 1,
+              type: 'Measure',
+              column: 'id',
+              displayColumn: 'id_cp',
+              comment: 'id',
+              _id: 'ofno3idEh98HM'
+            },
+            {
+              attributes: {
+                isHidden: false,
+                dataType: 'text'
+              },
+              status: -1,
+              type: 'Dimension',
+              column: 'name',
+              displayColumn: 'name',
+              comment: 'name',
+              _id: '9DoQFxAnPWX4p'
+            },
+            {
+              attributes: {
+                isHidden: true,
+                dataType: 'text'
+              },
+              status: 1,
+              type: 'Dimension',
+              column: 'telephone',
+              displayColumn: 'telephone',
+              comment: 'telephone',
+              _id: '9sRMN8KfO74dQ'
+            },
+            {
+              attributes: {
+                isHidden: true,
+                dataType: 'text'
+              },
+              status: 1,
+              type: 'Dimension',
+              column: 'address',
+              displayColumn: 'address',
+              comment: 'address',
+              _id: 'Ewp5qgoOFYprq'
+            }
+          ],
+          creatorId: 'huym',
+          dataSourceId: 'bUGgsUrXIe7I0',
+          createdTime: '2022-04-22T06:38:11.769Z',
+          lastUpdatedTime: '2022-04-22T09:02:22.514Z',
+          folderId: null,
+          isFolder: false,
+          dataSourceName: 'huym-test',
+          creatorName: 'huyimiao'
         }
       ],
       loading: false,
@@ -487,7 +565,7 @@ export default {
       if (this.batchSelection) return false
       this.cureentDataSet = val
       this.editDataSetVisible = true
-      this.updateDataSetName = val.name
+      this.updateDataSetName = val.displayName
     },
     async hanleEditFile () {
       const id = this.curentFloder._id
@@ -509,7 +587,7 @@ export default {
     showAttribute (val) {
       if (this.batchSelection) return false
       this.dataSetAttributeVisible = true
-      this.dataSetAttr.name = val.name
+      this.dataSetAttr.name = val.displayName
       this.dataSetAttr.desc = val.comment
     },
     async hanleDataSetAttribute () {
@@ -646,7 +724,8 @@ export default {
     handleUpdateDataSetName () {
       this.editDataSetVisible = false
     },
-    handleRowClick (row) {
+    handleCellClick (row, column) {
+      if (column.label !== '名称') return false
       const query = row
       this.$router.push({
         path: '/dataSet/edit',

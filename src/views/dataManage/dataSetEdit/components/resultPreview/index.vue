@@ -119,7 +119,76 @@
             </div>
           </el-tab-pane>
           <el-tab-pane label="批量配置" name="batchConfiguration">
-            <div></div>
+            <div style="width: 65vw">
+              <el-table
+                :data="batchConfigTableData"
+                style="width: 100%;"
+                row-key="_id"
+                tooltip-effect="dark"
+                default-expand-all
+                :tree-props="{children: 'children'}"
+              >
+                <el-table-column
+                  prop="column"
+                  label="名称字段"
+                  width="180">
+                </el-table-column>
+                <el-table-column
+                  prop="displayColumn"
+                  label="物理字段名"
+                  width="180">
+                </el-table-column>
+                <el-table-column
+                  label="字段类型"
+                  width="180">
+                  <template slot-scope="scope">
+                    <div v-if="scope.row.column === '维度' || scope.row.column === '度量'"></div>
+                    <div v-else>
+                      <el-select v-model="scope.row.attributes.dataType" placeholder="请选择">
+                        <el-option
+                          v-for="item in batchConfigurationDataTypeOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="address"
+                  label="默认聚合"
+                  width="180">
+                </el-table-column>
+                <el-table-column
+                  prop="address"
+                  label="数值展示格式"
+                  width="180">
+                </el-table-column>
+                <el-table-column
+                  label="字段描述"
+                  width="180">
+                  <template slot-scope="scope">
+                    <div v-if="scope.row.column === '维度' || scope.row.column === '度量'"></div>
+                    <div v-else>
+                      <el-input v-model="scope.row.comment" placeholder="请输入内容"></el-input>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" min-width="200">
+                  <template slot-scope="scope">
+                    <div v-if="scope.row.column === '维度' || scope.row.column === '度量'"></div>
+                    <div v-else class="result-preview-batch-configuration-table-options">
+                      <span @click="copyBatchConfiguration(scope.row)">复制</span>
+                      <el-divider direction="vertical"></el-divider>
+                      <span @click="deleteBatchConfiguration(scope.row)">删除</span>
+                      <el-divider direction="vertical"></el-divider>
+                      <span @click="hideBatchConfiguration(scope.row)">隐藏</span>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -151,58 +220,12 @@ export default {
   },
   mounted () {
     this.dataSetInfo = this.$route.query
-    const fields = [
-      {
-        attributes: {
-          isHidden: false,
-          dataType: 'number'
-        },
-        status: 1,
-        type: 'Measure',
-        column: 'id',
-        displayColumn: 'id',
-        comment: 'id',
-        _id: 'd2ZIiiSrmOKTr'
-      },
-      {
-        attributes: {
-          isHidden: false,
-          dataType: 'text'
-        },
-        status: 1,
-        type: 'Dimension',
-        column: 'name',
-        displayColumn: 'name',
-        comment: 'name',
-        _id: '9DoQFxAnPWX4p'
-      },
-      {
-        attributes: {
-          isHidden: false,
-          dataType: 'text'
-        },
-        status: 1,
-        type: 'Dimension',
-        column: 'telephone',
-        displayColumn: 'telephone',
-        comment: 'telephone',
-        _id: '9sRMN8KfO74dQ'
-      },
-      {
-        attributes: {
-          isHidden: false,
-          dataType: 'text'
-        },
-        status: 1,
-        type: 'Dimension',
-        column: 'address',
-        displayColumn: 'address',
-        comment: 'address',
-        _id: 'Ewp5qgoOFYprq'
-      }
-    ]
-    this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(fields)))
-    this.dimensionMeasureTableColumns = fields
+    console.log(this.dataSetInfo, 'this.dataSetInfo')
+    const fields = this.dataSetInfo.fields.slice()
+    this.dataSetFields = fields.slice()
+    this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(fields.slice())))
+    this.dimensionMeasureTableColumns = fields.slice()
+    this.batchConfigTableData = this.getBatchConfigTableData(fields.slice())
   },
   computed: {
     formatRunResultData: function () {
@@ -234,9 +257,11 @@ export default {
       historyLogTableData: [],
       inputFieldName: '',
       dimensionMeasure: [{
+        _id: 1,
         label: '维度',
         children: []
       }, {
+        _id: 2,
         label: '度量',
         children: []
       }],
@@ -245,7 +270,32 @@ export default {
         label: 'label'
       },
       dimensionMeasureTableData: [],
-      dimensionMeasureTableColumns: []
+      dimensionMeasureTableColumns: [],
+      batchConfigTableData: [
+        {
+          column: '维度',
+          children: []
+        },
+        {
+          column: '度量',
+          children: []
+        }
+      ],
+      batchConfigurationDataTypeOptions: [
+        {
+          value: 'number',
+          label: '数字'
+        },
+        {
+          value: 'text',
+          label: '文本'
+        },
+        {
+          value: 'date',
+          label: '日期'
+        }
+      ],
+      dataSetFields: []
     }
   },
   methods: {
@@ -277,9 +327,11 @@ export default {
     getDimensionMeasureData (fields) {
       if (!fields) return []
       const res = [{
+        _id: 1,
         label: '维度',
         children: []
       }, {
+        _id: 2,
         label: '度量',
         children: []
       }]
@@ -304,6 +356,69 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    // 获取批量配置数据
+    getBatchConfigTableData(fields) {
+      const res = [
+        {
+          column: '维度',
+          children: []
+        },
+        {
+          column: '度量',
+          children: []
+        }
+      ]
+      if (!fields) return res
+      const tmp = fields.filter(i => i.attributes.isHidden && i.status === 1)
+      tmp.forEach(i => {
+        if (i.type === 'Measure') {
+          res[1].children.push(i)
+        } else {
+          res[0].children.push(i)
+        }
+      })
+      return res
+    },
+    // 隐藏
+    hideBatchConfiguration(val) {
+      const tmp = this.dataSetFields.slice()
+      tmp.forEach(i => {
+        if (i._id === val._id) {
+          i.attributes.isHidden = false
+        }
+      })
+      this.dataSetFields = tmp.slice()
+      this.batchConfigTableData = this.getBatchConfigTableData(tmp.slice()).slice()
+    },
+    // 删除
+    deleteBatchConfiguration(val) {
+      const tmp = this.dataSetFields.slice()
+      tmp.forEach(i => {
+        if (i._id === val._id) {
+          i.status = -1
+        }
+      })
+      this.dataSetFields = tmp.slice()
+      this.batchConfigTableData = this.getBatchConfigTableData(tmp.slice()).slice()
+    },
+    // 复制
+    copyBatchConfiguration(val) {
+      const tmp = this.dataSetFields.slice()
+      let copy = {}
+      // let idx = 0
+      tmp.forEach((item, i) => {
+        if (item._id === val._id) {
+          // idx = i
+          copy = JSON.parse(JSON.stringify(item))
+        }
+      })
+      if (!copy) return false
+      const id = copy._id
+      copy._id = id + 'rd' + Math.ceil(Math.random() * 100)
+      tmp.push(copy)
+      this.dataSetFields = tmp.slice()
+      this.batchConfigTableData = this.getBatchConfigTableData(tmp.slice()).slice()
     }
   }
 }
@@ -337,5 +452,14 @@ export default {
       flex: 1;
     }
   }
+}
+
+.result-preview-batch-configuration-table-options {
+  color: #fa8334;
+  text-align: left;
+  font-weight: 400;
+}
+.result-preview-batch-configuration-table-options > span {
+  cursor: pointer;
 }
 </style>
