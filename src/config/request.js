@@ -117,17 +117,27 @@ export const http = {
     })
   },
   // 返回一个Promise(发送put请求)
-  put (url, param, config = {}) {
+  put(url, param, config = {}) {
     return new Promise((resolve, reject) => {
-      axios.put(url, {
-        ...param
-      }, config).then((response) => {
-        resolve(response)
-      }, (err) => {
-        reject(err)
-      }).catch((error) => {
-        reject(error)
-      })
+      axios
+        .put(
+          url,
+          {
+            ...param
+          },
+          config
+        )
+        .then(
+          (response) => {
+            resolve(response)
+          },
+          (err) => {
+            reject(err)
+          }
+        )
+        .catch((error) => {
+          reject(error)
+        })
     })
   },
   // delete请求
@@ -199,7 +209,7 @@ export const http = {
     })
   },
   // put请求 参数为body
-  put(url, data) {
+  putDataSet(url, data) {
     return new Promise((resolve, reject) => {
       service
         .put({
