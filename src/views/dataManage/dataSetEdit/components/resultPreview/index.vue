@@ -1,51 +1,52 @@
 <template>
   <div class="result-preview-wrap">
     <!-- 存在两种 一种为编辑状态下（运行结果+历史记录） 二为展示状态下（数据预览+批量配置） -->
-    <div class="result-preview-wrap-main" v-if="isEdit">
+    <div v-if="isEdit" class="result-preview-wrap-main">
       <el-tabs v-model="activeFirstTagName" type="card" @tab-click="handleClickTagsFirst">
         <el-tab-pane label="运行结果" name="runResult">
           <!-- 成功为table -->
           <template v-if="formatRunResultData.type =='success'">
             <el-table
               :data="formatRunResultData.tableData"
-              style="width: 100%">
+              style="width: 100%"
+            >
               <el-table-column
                 label="序号"
                 type="index"
-                width="50">
-              </el-table-column>
+                width="50"
+              />
               <el-table-column
                 v-for="(k,i) in formatRunResultData"
                 :key="i"
                 :prop="k"
                 :label="k"
-                width="180">
-              </el-table-column>
+                width="180"
+              />
             </el-table>
           </template>
           <!-- 失败 -->
-          <template v-eles></template>
+          <template v-eles />
         </el-tab-pane>
         <el-tab-pane label="历史记录" name="historyLog">
           <el-table
             :data="historyLogTableData"
-            style="width: 100%">
+            style="width: 100%"
+          >
             <el-table-column
               prop="createdTime"
               label="开始时间"
-              width="180">
-            </el-table-column>
+              width="180"
+            />
             <el-table-column
               prop="sqlText"
               label="SQL语句"
-              width="180">
-            </el-table-column>
+              width="180"
+            />
             <el-table-column
               prop="costTime"
               label="耗时（ms）"
               width="180"
-            >
-            </el-table-column>
+            />
             <el-table-column
               prop="result"
               label="运行结果"
@@ -72,38 +73,39 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div class="result-preview-wrap-main" v-else>
+    <div v-else class="result-preview-wrap-main">
       <div class="result-preview-wrap-main-c">
         <div class="result-preview-wrap-main-c-top">
           <el-input
+            v-model="inputFieldName"
             placeholder="请输入字段名称"
             prefix-icon="el-icon-search"
-            v-model="inputFieldName"
-            style="margin-right: 24px">
-          </el-input>
-          <el-button type="primary" @click="refreshPreview" icon="el-icon-refresh">刷新预览</el-button>
+            style="margin-right: 24px"
+          />
+          <el-button type="primary" icon="el-icon-refresh" @click="refreshPreview">刷新预览</el-button>
         </div>
         <el-tabs v-model="activeSecondTagName" @tab-click="handleClickTagsSecond">
           <el-tab-pane label="数据预览" name="dataPreview">
             <div class="data-preview">
               <!-- left -->
               <div class="data-preview-left">
-                <el-tree :data="dimensionMeasure" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+                <el-tree :data="dimensionMeasure" :props="defaultProps" @node-click="handleNodeClick" />
               </div>
 
               <!-- right -->
               <div class="data-preview-right">
                 <el-table
                   :data="dimensionMeasureTableData"
-                  style="width: 100%">
+                  style="width: 100%"
+                >
                   <el-table-column label="维度">
                     <el-table-column
                       v-for="(v,i) in dimensionMeasureTableColumns.filter(i => i.type === 'Dimension')"
                       :key="i"
                       :prop="v.displayColumn"
                       :label="v.column"
-                      min-width="120">
-                    </el-table-column>
+                      min-width="120"
+                    />
                   </el-table-column>
                   <el-table-column label="度量">
                     <el-table-column
@@ -111,15 +113,15 @@
                       :key="i"
                       :prop="v.displayColumn"
                       :label="v.column"
-                      min-width="120">
-                    </el-table-column>
+                      min-width="120"
+                    />
                   </el-table-column>
                 </el-table>
               </div>
             </div>
           </el-tab-pane>
           <el-tab-pane label="批量配置" name="batchConfiguration">
-            <div></div>
+            <div />
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -147,6 +149,50 @@ export default {
     isEdit: {
       type: Boolean,
       default: false
+    }
+  },
+  data () {
+    return {
+      dataSetInfo: null,
+      activeFirstTagName: 'runResult',
+      activeSecondTagName: 'dataPreview',
+      historyLogTableData: [],
+      inputFieldName: '',
+      dimensionMeasure: [{
+        label: '维度',
+        children: []
+      }, {
+        label: '度量',
+        children: []
+      }],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      },
+      dimensionMeasureTableData: [],
+      dimensionMeasureTableColumns: []
+    }
+  },
+  computed: {
+    formatRunResultData: function () {
+      // success == true 为成功的结果
+      if (this.runResultData.success) {
+        const _res = {
+          columns: [],
+          tableData: [],
+          type: 'success'
+        }
+        this.runResultData.result['columns'].forEach(item => {
+          _res.push(item.name)
+        })
+        _res.tableData = this.runResultData.result['data'].slice()
+        return _res
+      } else {
+        const _res = {
+          type: 'fail'
+        }
+        return _res
+      }
     }
   },
   mounted () {
@@ -203,50 +249,6 @@ export default {
     ]
     this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(fields)))
     this.dimensionMeasureTableColumns = fields
-  },
-  computed: {
-    formatRunResultData: function () {
-      // success == true 为成功的结果
-      if (this.runResultData.success) {
-        const _res = {
-          columns: [],
-          tableData: [],
-          type: 'success'
-        }
-        this.runResultData.result['columns'].forEach(item => {
-          _res.push(item.name)
-        })
-        _res.tableData = this.runResultData.result['data'].slice()
-        return _res
-      } else {
-        const _res = {
-          type: 'fail'
-        }
-        return _res
-      }
-    }
-  },
-  data () {
-    return {
-      dataSetInfo: null,
-      activeFirstTagName: 'runResult',
-      activeSecondTagName: 'dataPreview',
-      historyLogTableData: [],
-      inputFieldName: '',
-      dimensionMeasure: [{
-        label: '维度',
-        children: []
-      }, {
-        label: '度量',
-        children: []
-      }],
-      defaultProps: {
-        children: 'children',
-        label: 'label'
-      },
-      dimensionMeasureTableData: [],
-      dimensionMeasureTableColumns: []
-    }
   },
   methods: {
     init () {},

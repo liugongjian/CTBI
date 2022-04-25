@@ -84,7 +84,7 @@ service.interceptors.response.use(
 
 export const http = {
   // get请求
-  get(url, params) {
+  get (url, params) {
     return new Promise((resolve, reject) => {
       service({
         method: 'get',
@@ -101,7 +101,7 @@ export const http = {
     })
   },
   // post请求
-  post(url, data) {
+  post (url, data) {
     return new Promise((resolve, reject) => {
       service({
         method: 'post',
@@ -117,7 +117,7 @@ export const http = {
     })
   },
   // 返回一个Promise(发送put请求)
-  put(url, param, config = {}) {
+  put (url, param, config = {}) {
     return new Promise((resolve, reject) => {
       axios
         .put(
@@ -141,7 +141,7 @@ export const http = {
     })
   },
   // delete请求
-  delete(url, data) {
+  delete (url, data) {
     return new Promise((resolve, reject) => {
       service({
         method: 'delete',
@@ -157,7 +157,7 @@ export const http = {
     })
   },
   // POST 文件上传
-  blobStream(url, data) {
+  blobStream (url, data) {
     const headerConfig = {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -179,7 +179,7 @@ export const http = {
         })
     })
   },
-  blobDownload(url, params) {
+  blobDownload (url, params) {
     return new Promise((resolve) => {
       axios({
         method: 'get',
@@ -209,7 +209,7 @@ export const http = {
     })
   },
   // put请求 参数为body
-  putDataSet(url, data) {
+  putDataSet (url, data) {
     return new Promise((resolve, reject) => {
       service
         .put({
