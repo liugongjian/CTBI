@@ -65,14 +65,14 @@ export default {
       this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery)
       this.getSeries(ComponentOption)
 
-      // 将图表转为堆积柱状图
-      if (ComponentOption.PercentStack.isStack && !ComponentOption.PercentStack.isPercent) {
-        this.getStackSeries(ComponentOption)
-      }
-      // 将图表转为百分比堆积柱状图
-      if (ComponentOption.PercentStack.isPercent) {
-        this.getPercentStackSeries(ComponentOption)
-      }
+      // // 将图表转为堆积柱状图
+      // if (ComponentOption.PercentStack.isStack && !ComponentOption.PercentStack.isPercent) {
+      //   this.getStackSeries(ComponentOption)
+      // }
+      // // 将图表转为百分比堆积柱状图
+      // if (ComponentOption.PercentStack.isPercent) {
+      //   this.getPercentStackSeries(ComponentOption)
+      // }
 
       // 系列配置-图表标签相关
       this.setSeriesItem()

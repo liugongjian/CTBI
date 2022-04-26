@@ -57,7 +57,7 @@ export default {
       const seriesOption = []
       val[0].forEach((item, index) => {
         if (index) {
-          seriesOption.push({ value: item.split('-')[0], label: item.split('-')[0] })
+          seriesOption.push({ value: item, label: item })
         }
       })
 
@@ -201,12 +201,13 @@ export default {
     },
     // 系列设置
     setSeriesItem () {
-      const { SeriesSelect, SeriesChartLabel } = this.storeOption.theme.SeriesSetting
+      const { SeriesSelect } = this.storeOption.theme.SeriesSetting
+      const { SeriesChartLabel, SeriesMaximum } = SeriesSelect
       this.series = this.series.map((item) => {
         if (SeriesSelect?.selectValue === item.name) {
           item.label.show = SeriesChartLabel.check
           item.label.color = SeriesChartLabel.color
-          if (this.storeOption.theme.SeriesSetting.SeriesMaximum?.check) {
+          if (SeriesMaximum?.check) {
             item.markPoint = {
               symbol: 'pin',
               data: [
@@ -226,6 +227,7 @@ export default {
       return {
         color: (data) => {
           if (color[0].name) {
+            console.log(',,,,dad', data.seriesName, color)
             const colorTemp = color.find((item) => { return data.seriesName === item.name })
             return colorTemp ? colorTemp.color : 'red'
           } else {

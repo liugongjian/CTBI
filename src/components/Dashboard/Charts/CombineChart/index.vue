@@ -97,8 +97,8 @@ export default {
     // 拿到option设置里面的series设置
     getOptionSeries () {
       const { ComponentOption, SeriesSetting, FunctionalOption } = this.storeOption.theme
-      const { SeriesSelect, SeriesChartLabel, SeriesMark, SeriesLine, SeriesMaximum } = SeriesSetting
-
+      const { SeriesSelect } = SeriesSetting
+      const { SeriesChartLabel, SeriesMark, SeriesLine, SeriesMaximum } = SeriesSelect
       // 选择系列 设置标记样式、线条样式 以及标签字体颜色
       const { check, labelShow } = ComponentOption.ChartLabel
       // 取到颜色配置
@@ -164,8 +164,8 @@ export default {
             type: SeriesLine.lineType
           }
         }
-        if (SeriesSelect?.selectValue === item.name) {
-          item.label.show = SeriesChartLabel.check || check
+        if (SeriesSelect?.selectValue.split('-')[0] === item.name) {
+          item.label.show = SeriesChartLabel.check && check
           item.label.color = SeriesChartLabel.color
           if (SeriesMaximum?.check) {
             item.markPoint = {
