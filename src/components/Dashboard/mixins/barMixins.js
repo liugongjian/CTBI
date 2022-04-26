@@ -297,7 +297,7 @@ export default {
         })
         if (option) {
           const { labelColor, showLabel, showMax } = option
-          item.label.show = item.label.show || showLabel
+          item.label.show = showLabel
           item.label.color = labelColor
           if (showMax) {
             item.markPoint = {
