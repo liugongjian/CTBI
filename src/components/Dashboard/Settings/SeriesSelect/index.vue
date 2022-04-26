@@ -153,6 +153,21 @@ export default {
     }
   },
   computed: {
+    // showLabel: {
+    //   get () {
+    //     let topShowLabel = false
+    //     store.state.app.layout.forEach(item => {
+    //       if (item.i === store.state.app.currentLayoutId) {
+    //         topShowLabel = item.option.theme.ComponentOption.ChartLabel.check
+    //       }
+    //     })
+    //     console.log('....', topShowLabel && this.option.SeriesChartLabel.check)
+    //     return topShowLabel && this.option.SeriesChartLabel.check
+    //   },
+    //   set (val) {
+    //     return val
+    //   }
+    // }
   },
   mounted () {
   },

@@ -56,7 +56,6 @@ export default {
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
       // 为空时，进行初始化
-      console.log(this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption)
       if (this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption.length === 0) {
         const seriesOption = []
         val[0].forEach((item, index) => {
