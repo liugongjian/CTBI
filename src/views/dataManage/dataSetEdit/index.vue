@@ -3,11 +3,11 @@
     <!-- header -->
     <div class="data-set-edit-wrap-header">
       <div class="data-set-edit-wrap-header-l">
-        <i class="el-icon-arrow-left" />
-        <span>未命名</span>
+        <i class="el-icon-arrow-left" style="margin-right: 8px" @click="toDataSetPage" />
+        <span>{{ dataSourceName ? dataSourceName : '未命名' }}</span>
       </div>
       <div class="data-set-edit-wrap-header-r">
-        <div class="data-set-edit-wrap-header-r-btn">保存</div>
+        <div class="data-set-edit-wrap-header-r-btn" @click="onSave">保存</div>
       </div>
     </div>
 
@@ -40,14 +40,14 @@
 
         <!-- top -->
         <div class="side-top">
-          <div v-if="isEdit" class="side-top-main">
+          <div v-if="!isEdit" class="side-top-main">
             <div><span>当前数据源</span></div>
-            <div><span /></div>
+            <div><span>{{ dataSourceName }}</span></div>
           </div>
           <div v-else class="side-top-main">
             <div><span>选择数据源</span></div>
             <div>
-              <el-select v-model="selectedDataSource" placeholder="请选择">
+              <el-select v-model="currentDataSourceId" placeholder="请选择">
                 <el-option
                   v-for="item in dataSourceOptions"
                   :key="item.value"
@@ -63,8 +63,19 @@
         <div class="side-bottom">
           <el-tabs v-model="activedTag">
             <el-tab-pane label="数据表" name="first">
-              <div v-for="(table, i) in dataTables" :key="i" class="side-bottom-main">
-                <div><span>{{ table.name }}</span></div>
+              <div v-for="(table, i) in dataSourceList" :key="i" class="side-bottom-main">
+                <div style="display: flex;justify-content: space-between;align-items: center;" class="side-bottom-main-list">
+                  <div>
+                    <svg-icon icon-class="table" style="margin-right: 8px" />
+                    <span>{{ table.displayName }}</span>
+                  </div>
+                  <div>
+                    <el-tooltip content="复制" placement="top" effect="light">
+                      <i class="el-icon-document" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;" @click="handleCopy(table, $event)" />
+                    </el-tooltip>
+                    <i class="el-icon-info" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;" />
+                  </div>
+                </div>
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -74,9 +85,13 @@
       <!-- content -->
       <div class="data-set-edit-wrap-main-content">
         <!-- top -->
-        <div class="sql-edit">
+        <div class="sql-edit" @dblclick="isEdit = true">
+          <span v-if="!isEdit">{{ sqlStatement }}</span>
           <EditSql
+            v-else
             ref="sqlEdit"
+            :sql-statement="sqlStatement"
+            @sqlStatementChange="sqlStatementChange"
           />
         </div>
 
@@ -162,8 +177,9 @@
 
 <script>
 import EditSql from './components/editSql/index.vue'
-import { runtimeForSql } from '@/api/dataSet'
+import { runtimeForSql, getDataSourceData, createUpdateSql, createDataSets } from '@/api/dataSet'
 import ResultPreview from './components/resultPreview/index.vue'
+import Clipboard from '@/utils/clipboard.js'
 export default {
   name: 'DataSetEdit',
   components: {
@@ -174,16 +190,15 @@ export default {
     return {
       isEdit: false,
       isShrink: false,
-      selectedDataSource: '',
       dataSourceOptions: [],
       activedTag: 'first',
       sqlName: '',
-      dataTables: [
-        { name: 'cmswing_action' },
-        { name: 'cmswing_action' },
-        { name: 'cmswing_action' },
-        { name: 'cmswing_action' },
-        { name: 'cmswing_action' }
+      dataSourceList: [
+        { displayName: 'cmswing_action' },
+        { displayName: 'cmswing_action' },
+        { displayName: 'cmswing_action' },
+        { displayName: 'cmswing_action' },
+        { displayName: 'cmswing_action' }
       ],
       runResultData: {
         tableData: [],
@@ -215,17 +230,33 @@ export default {
         }
       ],
       sqlVariablesTableData: [],
-      sqlVariables: []
+      sqlVariables: [],
+      dataSourceName: '',
+      creatorName: '',
+      currentSqlStatement: '',
+      sqlStatement: 'select * from users where telephone = ${telephone}',
+      currentDataSourceId: '',
+      current_id: ''
     }
   },
+  mounted () {
+    const data = this.$route.query
+    console.log(data, 'data')
+    this.dataSourceName = data.dataSourceName || ''
+    this.creatorName = data.creatorName
+    this.currentDataSourceId = data.dataSourceId || ''
+    this.current_id = data._id || ''
+  },
   methods: {
-    init () {},
+    init () {
+      this.getDataSourceList()
+    },
     // 格式化 sql 编辑器
     formatSqlData () {
       this.$refs.sqlEdit.formaterSql()
     },
     // 参数设置
-    settingParam () {
+    async settingParam () {
       this.settingParamVisiable = true
       // const body = {}
       // const keys = ['type', 'name', 'dataType', 'useInGlobal', 'defaultValue']
@@ -249,17 +280,89 @@ export default {
     // 运行
     async runSql () {
       // dataSourceId & sql语句  必须
+      const body = {}
+      body.sql = this.currentSqlStatement
+      body.dataSourceId = this.currentDataSourceId
+      body.sqlVariables = this.sqlVariables
+      this.current_id && (body._id = this.current_id)
+      if (this.sqlVariables && this.sqlVariables.length > 0) {
+        body.sqlVariables = this.sqlVariables
+      }
+      console.log('run sql body', body)
       try {
-        const data = await runtimeForSql()
+        const data = await runtimeForSql(body)
         this.runResultData = data
+        if (this.current_id !== data._id) {
+          this.current_id = data._id
+        }
       } catch (error) {
         console.log(error)
       }
     },
     // 确认编辑
-    confirmEdit () {},
+    async confirmEdit () {
+      try {
+        const body = {}
+        body.sql = this.currentSqlStatement
+        body.dataSourceId = this.currentDataSourceId
+        body.sqlVariables = this.sqlVariables
+        this.current_id && (body._id = this.current_id)
+        if (this.sqlVariables && this.sqlVariables.length > 0) {
+          body.sqlVariables = this.sqlVariables
+        }
+        const data = createUpdateSql(body)
+        if (this.current_id !== data._id) {
+          this.current_id = data._id
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
     // 删除
-    deleteSqlVariable () {}
+    deleteSqlVariable () {},
+    // 获取数据源列表
+    async getDataSourceList () {
+      try {
+        const data = await getDataSourceData()
+        this.dataSourceList = data.slice()
+        const options = []
+        data.foreEach(i => {
+          const o = {}
+          o.label = i.displayName
+          o.value = i._id
+          options.push(o)
+        })
+        this.dataSourceOptions = options.slice()
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // 复制数据源列表
+    handleCopy (val, event) {
+      const str = val.displayName
+      Clipboard(str, event)
+    },
+    // 获取改变的sql语句
+    sqlStatementChange (sql) {
+      console.log('获取改变的sql语句', sql)
+      this.currentSqlStatement = sql
+    },
+    toDataSetPage() {
+      this.$router.push({
+        path: '/dataSet'
+      })
+    },
+    // 保存数据
+    async onSave() {
+      try {
+        const body = {}
+
+        const data = await createDataSets(body)
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 }
 </script>
@@ -358,6 +461,12 @@ export default {
 .side-bottom {
   &-main {
     padding: 0 20px;
+    &-list:hover {
+      background: #FEF5EE;
+      margin: 0 -20px;
+      padding: 0 20px;
+      margin-bottom: 8px;
+    }
   }
 
   ::v-deep .el-tabs__nav-scroll {
