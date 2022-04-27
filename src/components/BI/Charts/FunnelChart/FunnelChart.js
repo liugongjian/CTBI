@@ -86,6 +86,10 @@ export default {
         // 底部样式
         'triangle': false
       }
+    },
+    'LabelOption': {
+      // 系列设置
+      'aliasName': String
     }
   },
   'advance': {}, // 高级
