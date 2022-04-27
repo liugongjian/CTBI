@@ -34,6 +34,7 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
+        console.log('变了凸(艹皿艹 )    ', val)
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (JSON.stringify(val.dataSource) !== '{}') {
           this.dataValue = deepClone(val.dataSource)
