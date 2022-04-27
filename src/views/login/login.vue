@@ -148,7 +148,7 @@ export default {
           })
         }
       } catch (err) {
-        console.log('err', err)
+        this.verifyGet()
         this.loading = false
         if (err.code === 1036) {
           const userName = err.data._id
