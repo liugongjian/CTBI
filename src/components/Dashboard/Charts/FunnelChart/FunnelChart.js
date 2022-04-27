@@ -58,8 +58,10 @@ export default {
         'imgUrl': '', // 背景图片地址
         'imgSize': 'containRight' // 背景图片尺寸位置
       },
-      'ChartType': { // 图表类型
-        'type': 'BarChart' // 1.柱图;2.堆积柱状图;3.百分比堆叠柱状图
+      'VisualStyle': { // 可视化样式
+        'style1': { 'name': '标准', value: 'funnel-standard' }, // 漏斗图 标准
+        'style2': { 'name': '转化分析', value: 'funnel-horizontal' }, // 漏斗图 转化分析
+        'style': 'funnel'
       }
     },
     'ComponentOption': { // 图表样式
@@ -69,6 +71,20 @@ export default {
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
+      },
+      'DisplayStyle': {
+        // 展示样式
+        'default': true, // 默认样式
+        'trapezoid': false, // 梯形
+        'rectangle': false, // 矩形
+        // 显示类别标签
+        'labelPos': 'left',
+        // 显示数据标签
+        'dataLabel': 'conversion',
+        // 转化率计算方式
+        'calcMethod': 'last',
+        // 底部样式
+        'triangle': false
       }
     }
   },
