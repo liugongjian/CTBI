@@ -1,8 +1,8 @@
 import { http } from '@/config/request'
 
 // 创建文件夹
-export function createFloders(body) {
-  return http.post('/folders', body)
+export function createFloders(data) {
+  return http.post('/folders', data)
 }
 
 // 获取 数据集 & 文件夹 列表
@@ -11,13 +11,13 @@ export function createFloders(body) {
  * 如无查询条件，列表包含文件夹、数据集
  * 如有查询条件，列表返回数据集
  **/
-export function getDataSetsFolders(searchkey = '', folderId = '') {
-  return http.get('/dataSets', { searchkey, folderId })
+export function getDataSetsFolders(data = {}) {
+  return http.get('/dataSets', data)
 }
 
 // 重命名文件夹 更新
-export function updateFolderName(id, name) {
-  return http.put(`/folders/${id}`, name)
+export function updateFolderName(id, body) {
+  return http.putDataSet(`/folders/${id}`, body)
 }
 
 // 删除文件夹
@@ -37,7 +37,7 @@ export function getFolderLists(
 
 // 更新数据集
 export function updateDataSet(id, params) {
-  return http.put(`/dataSets/${id}`, params)
+  return http.putDataSet(`/dataSets/${id}`, params)
 }
 
 // 删除数据集
@@ -47,7 +47,7 @@ export function delDataSet(id) {
 
 // 移动数据集到文件夹
 export function moveDataSet2Folder(body) {
-  return http.put(`/dataSets/move`, body)
+  return http.putDataSet(`/dataSets/move`, body)
 }
 
 // 运行sql
@@ -71,7 +71,7 @@ export function getSqlVariables(body) {
 }
 
 // 获取数据源列表
-export function getDataSourceLData() {
+export function getDataSourceData() {
   return http.get(`/dataSources`)
 }
 

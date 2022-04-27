@@ -7,7 +7,7 @@ import { getToken } from '@/utils/auth'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 50000000 // request timeout
+  timeout: 5000 // request timeout
 })
 
 // request interceptor
@@ -19,7 +19,7 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
+      // config.headers['X-Token'] = getToken()
     }
     return config
   },
@@ -101,12 +101,13 @@ export const http = {
     })
   },
   // post请求
-  post(url, data) {
+  post(url, data, config = {}) {
     return new Promise((resolve, reject) => {
       service({
         method: 'post',
         url,
-        data
+        data,
+        ...config
       })
         .then((res) => {
           resolve(res)
@@ -209,14 +210,14 @@ export const http = {
     })
   },
   // put请求 参数为body
-  putDataSet(url, data) {
+  putDataSet(url, data, config = {}) {
     return new Promise((resolve, reject) => {
-      service
-        .put({
-          method: 'put',
-          url,
-          data
-        })
+      service({
+        method: 'put',
+        url,
+        data,
+        ...config
+      })
         .then((res) => {
           resolve(res)
         })

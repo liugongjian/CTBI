@@ -24,7 +24,7 @@
         <el-button @click="settingParam">参数配置</el-button>
         <el-button @click="runSql" type="primary">运行</el-button>
         <el-button @click="confirmEdit" type="primary">确认编辑</el-button>
-        <div style="margin-left: 8px" @click="isEdit=false"><i class="el-icon-close"></i></div>
+        <div style="margin-left: 8px" @click="leaveDialogVisible=true"><i class="el-icon-close"></i></div>
       </div>
     </div>
 
@@ -97,7 +97,7 @@
 
         <!-- bottom -->
         <div class="result-preview">
-          <ResultPreview :runResultData='runResultData' :isEdit="isEdit"/>
+          <ResultPreview :runResultData='runResultData' :isEdit="isEdit" :fields="currentFields"/>
         </div>
       </div>
     </div>
@@ -167,6 +167,21 @@
         </div>
       </div>
     </el-drawer>
+
+    <!-- 离开的弹窗 -->
+    <el-dialog
+      title="提示"
+      :visible.sync="leaveDialogVisible"
+      width="480px">
+      <div>
+        <svg-icon iconClass="tip" style="margin-right: 8px"/>
+        <span>您还未对此次代码的编辑进行确认，若此时返回，本次编辑内 容将不被保存，请问您是否确认返回？</span>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="leaveDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleLeave">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -188,6 +203,7 @@ export default {
     this.creatorName = data.creatorName
     this.currentDataSourceId = data.dataSourceId || ''
     this.current_id = data._id || ''
+    this.currentFields = data.fields || []
   },
   data () {
     return {
@@ -239,7 +255,10 @@ export default {
       currentSqlStatement: '',
       sqlStatement: 'select * from users where telephone = ${telephone}',
       currentDataSourceId: '',
-      current_id: ''
+      current_id: '',
+      leaveDialogVisible: false,
+      currentFields: [],
+      currentSql: {}
     }
   },
   methods: {
@@ -305,7 +324,8 @@ export default {
         if (this.sqlVariables && this.sqlVariables.length > 0) {
           body.sqlVariables = this.sqlVariables
         }
-        const data = createUpdateSql(body)
+        const { data } = createUpdateSql(body)
+        this.currentFields = data.fields
         if (this.current_id !== data._id) {
           this.current_id = data._id
         }
@@ -357,6 +377,11 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    // 离开
+    handleLeave() {
+      this.isEdit = false
+      this.leaveDialogVisible = false
     }
   }
 }

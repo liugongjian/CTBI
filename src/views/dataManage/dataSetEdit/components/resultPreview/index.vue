@@ -85,7 +85,7 @@
         </div>
         <el-tabs v-model="activeSecondTagName" @tab-click="handleClickTagsSecond">
           <el-tab-pane label="数据预览" name="dataPreview">
-            <div class="data-preview">
+            <div class="data-preview" style="width: 65vw">
               <!-- left -->
               <div class="data-preview-left">
                 <el-tree :data="dimensionMeasure" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
@@ -123,18 +123,26 @@
               <el-table
                 :data="batchConfigTableData"
                 style="width: 100%;"
-                row-key="_id"
+                row-key="displayColumn"
                 tooltip-effect="dark"
                 default-expand-all
                 :tree-props="{children: 'children'}"
               >
                 <el-table-column
-                  prop="column"
                   label="名称字段"
-                  width="180">
+                  prop="displayColumn"
+                  width="360">
+                  <template slot-scope="scope">
+                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'">
+                      <span>{{ scope.row.displayColumn }}</span>
+                    </div>
+                    <div v-else>
+                      <el-input v-model="scope.row.displayColumn" ></el-input>
+                    </div>
+                  </template>
                 </el-table-column>
                 <el-table-column
-                  prop="displayColumn"
+                  prop="column"
                   label="物理字段名"
                   width="180">
                 </el-table-column>
@@ -142,7 +150,7 @@
                   label="字段类型"
                   width="180">
                   <template slot-scope="scope">
-                    <div v-if="scope.row.column === '维度' || scope.row.column === '度量'"></div>
+                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
                     <div v-else>
                       <el-select v-model="scope.row.attributes.dataType" placeholder="请选择">
                         <el-option
@@ -155,21 +163,33 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                   prop="address"
                   label="默认聚合"
                   width="180">
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
-                  prop="address"
                   label="数值展示格式"
                   width="180">
+                  <template slot-scope="scope">
+                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
+                    <div v-else>
+                      <el-select v-model="scope.row.format" placeholder="请选择">
+                        <el-option
+                          v-for="item in numberDisplayFormatOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </template>
                 </el-table-column>
                 <el-table-column
                   label="字段描述"
                   width="180">
                   <template slot-scope="scope">
-                    <div v-if="scope.row.column === '维度' || scope.row.column === '度量'"></div>
+                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
                     <div v-else>
                       <el-input v-model="scope.row.comment" placeholder="请输入内容"></el-input>
                     </div>
@@ -177,13 +197,13 @@
                 </el-table-column>
                 <el-table-column label="操作" min-width="200">
                   <template slot-scope="scope">
-                    <div v-if="scope.row.column === '维度' || scope.row.column === '度量'"></div>
+                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
                     <div v-else class="result-preview-batch-configuration-table-options">
                       <span @click="copyBatchConfiguration(scope.row)">复制</span>
                       <el-divider direction="vertical"></el-divider>
                       <span @click="deleteBatchConfiguration(scope.row)">删除</span>
                       <el-divider direction="vertical"></el-divider>
-                      <span @click="hideBatchConfiguration(scope.row)">隐藏</span>
+                      <span @click="hideBatchConfiguration(scope.row)">{{ scope.row.attributes.isHidden ? '取消隐藏' : '隐藏' }}</span>
                     </div>
                   </template>
                 </el-table-column>
@@ -197,6 +217,7 @@
 </template>
 
 <script>
+import Clipboard from '@/utils/clipboard.js'
 import { getSqlRunningLogs, getPreviewData } from '@/api/dataSet'
 export default {
   name: 'ResultPreview',
@@ -213,6 +234,12 @@ export default {
         return {}
       }
     },
+    fields: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
     isEdit: {
       type: Boolean,
       default: false
@@ -221,7 +248,7 @@ export default {
   mounted () {
     this.dataSetInfo = this.$route.query
     console.log(this.dataSetInfo, 'this.dataSetInfo')
-    const fields = this.dataSetInfo.fields.slice()
+    const fields = this.fields.slice()
     this.dataSetFields = fields.slice()
     this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(fields.slice())))
     this.dimensionMeasureTableColumns = fields.slice()
@@ -249,6 +276,14 @@ export default {
       }
     }
   },
+  watch: {
+    fields: function(newVal, oldVal) {
+      this.dataSetFields = newVal.slice()
+      this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
+      this.dimensionMeasureTableColumns = newVal.slice()
+      this.batchConfigTableData = this.getBatchConfigTableData(newVal.slice())
+    }
+  },
   data () {
     return {
       dataSetInfo: null,
@@ -273,11 +308,13 @@ export default {
       dimensionMeasureTableColumns: [],
       batchConfigTableData: [
         {
-          column: '维度',
+          _id: '',
+          displayColumn: '维度',
           children: []
         },
         {
-          column: '度量',
+          _id: '',
+          displayColumn: '度量',
           children: []
         }
       ],
@@ -295,7 +332,37 @@ export default {
           label: '日期'
         }
       ],
-      dataSetFields: []
+      dataSetFields: [],
+      numberDisplayFormatOptions: [
+        {
+          label: '自动',
+          value: 'auto'
+        },
+        {
+          label: '整数',
+          value: '#,##0'
+        },
+        {
+          label: '保留1位小数',
+          value: '#,##0.0'
+        },
+        {
+          label: '保留2位小数',
+          value: '#,##0.00'
+        },
+        {
+          label: '百分比',
+          value: '#,##0%'
+        },
+        {
+          label: '百分比1位小数',
+          value: '#,##0.0%'
+        },
+        {
+          label: '百分比2位小数',
+          value: '#,##0.00%'
+        }
+      ]
     }
   },
   methods: {
@@ -316,8 +383,9 @@ export default {
       console.log(tab.name)
     },
     // 复制
-    copyHistoryLog (val) {
-      console.log(val)
+    copyHistoryLog (val, event) {
+      const str = val.sqlText
+      Clipboard(str, event)
     },
     // 点击节点
     handleNodeClick (data) {
@@ -361,16 +429,16 @@ export default {
     getBatchConfigTableData(fields) {
       const res = [
         {
-          column: '维度',
+          displayColumn: '维度',
           children: []
         },
         {
-          column: '度量',
+          displayColumn: '度量',
           children: []
         }
       ]
       if (!fields) return res
-      const tmp = fields.filter(i => i.attributes.isHidden && i.status === 1)
+      const tmp = fields.slice()
       tmp.forEach(i => {
         if (i.type === 'Measure') {
           res[1].children.push(i)
@@ -380,12 +448,12 @@ export default {
       })
       return res
     },
-    // 隐藏
+    // 隐藏 & 取消隐藏
     hideBatchConfiguration(val) {
       const tmp = this.dataSetFields.slice()
       tmp.forEach(i => {
         if (i._id === val._id) {
-          i.attributes.isHidden = false
+          i.attributes.isHidden = !i.attributes.isHidden
         }
       })
       this.dataSetFields = tmp.slice()
@@ -394,28 +462,37 @@ export default {
     // 删除
     deleteBatchConfiguration(val) {
       const tmp = this.dataSetFields.slice()
-      tmp.forEach(i => {
+      let _idx = 0
+      tmp.forEach((i, idx) => {
         if (i._id === val._id) {
-          i.status = -1
+          _idx = idx
         }
       })
+      tmp.splice(_idx, 1)
       this.dataSetFields = tmp.slice()
       this.batchConfigTableData = this.getBatchConfigTableData(tmp.slice()).slice()
     },
     // 复制
     copyBatchConfiguration(val) {
       const tmp = this.dataSetFields.slice()
+      const displayColumnList = []
       let copy = {}
       // let idx = 0
       tmp.forEach((item, i) => {
+        displayColumnList.push(item.displayColumn)
         if (item._id === val._id) {
           // idx = i
           copy = JSON.parse(JSON.stringify(item))
         }
       })
       if (!copy) return false
-      const id = copy._id
-      copy._id = id + 'rd' + Math.ceil(Math.random() * 100)
+      copy._id = ''
+      let _displayColumn = val.displayColumn
+      _displayColumn += '_副本'
+      while (displayColumnList.indexOf(_displayColumn) > -1) {
+        _displayColumn = val.displayColumn + '_副本' + (Number(_displayColumn.slice(_displayColumn.lastIndexOf('_副本') + 3)) + 1)
+      }
+      copy.displayColumn = _displayColumn
       tmp.push(copy)
       this.dataSetFields = tmp.slice()
       this.batchConfigTableData = this.getBatchConfigTableData(tmp.slice()).slice()
