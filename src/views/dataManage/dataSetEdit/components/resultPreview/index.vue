@@ -335,7 +335,7 @@ export default {
       }
     },
     // 获取批量配置数据
-    getBatchConfigTableData(fields) {
+    getBatchConfigTableData (fields) {
       const res = [
         {
           column: '维度',
@@ -358,7 +358,7 @@ export default {
       return res
     },
     // 隐藏
-    hideBatchConfiguration(val) {
+    hideBatchConfiguration (val) {
       const tmp = this.dataSetFields.slice()
       tmp.forEach(i => {
         if (i._id === val._id) {
@@ -369,7 +369,7 @@ export default {
       this.batchConfigTableData = this.getBatchConfigTableData(tmp.slice()).slice()
     },
     // 删除
-    deleteBatchConfiguration(val) {
+    deleteBatchConfiguration (val) {
       const tmp = this.dataSetFields.slice()
       tmp.forEach(i => {
         if (i._id === val._id) {
@@ -380,7 +380,7 @@ export default {
       this.batchConfigTableData = this.getBatchConfigTableData(tmp.slice()).slice()
     },
     // 复制
-    copyBatchConfiguration(val) {
+    copyBatchConfiguration (val) {
       const tmp = this.dataSetFields.slice()
       let copy = {}
       // let idx = 0

@@ -347,13 +347,13 @@ export default {
       console.log('获取改变的sql语句', sql)
       this.currentSqlStatement = sql
     },
-    toDataSetPage() {
+    toDataSetPage () {
       this.$router.push({
         path: '/dataSet'
       })
     },
     // 保存数据
-    async onSave() {
+    async onSave () {
       try {
         const body = {}
 
