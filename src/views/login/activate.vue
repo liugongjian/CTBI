@@ -57,7 +57,6 @@
         </span>
       </el-form-item>
     </el-form>
-    <div v-if="activate" class="activate">提交成功！</div>
     <div class="button-style">
       <el-button
         class="button"
@@ -76,6 +75,8 @@
 </template>
 
 <script>
+import { activate } from '@/api/user'
+import { encryptAes } from '@/utils/encrypt'
 export default {
   name: 'Login',
   data () {
@@ -113,8 +114,7 @@ export default {
       redirect: undefined,
       verifyImg: undefined,
       isValid: false,
-      passwordType: 'password',
-      activate: false
+      passwordType: 'password'
     }
   },
   mounted () {
@@ -136,7 +136,22 @@ export default {
 
     async setUp () {
       this.loading = true
-      this.activate = true
+      const oldPassword = encryptAes(this.validForm.oldPassword)
+      const newPassword = encryptAes(this.validForm.newPassword)
+      const data = {
+        _id: this.$route.query.userName,
+        oldPassword: oldPassword,
+        newPassword: newPassword
+      }
+      console.log('-id----------', data)
+      console.log(data)
+      const res = await activate(data)
+      if (res.code === 200) {
+        this.$message({
+          message: '提交成功!',
+          iconClass: 'activate'
+        })
+      }
     }
 
   }
@@ -155,15 +170,11 @@ export default {
 .back:hover {
   color: black;
 }
-.activate {
-  position:absolute;
-  top: 50%;
-  left: 38%;
-  background: #FFF;
-  border: 1px solid #E6E6E6;
-  width: 117px;
-  height: 42px;
-  text-align: center;
+</style>
+<style>
+.el-message {
+  background-color:#FFF;
+  border-color:#E6E6E6;
   box-shadow: 2px 4px 12px 0px rgba(0,0,0,0.09);
   border-radius: 2px;
   font: 500 16px/42px "PingFang SC";
@@ -171,3 +182,4 @@ export default {
   letter-spacing: 0.89px;
 }
 </style>
+

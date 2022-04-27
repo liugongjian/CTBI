@@ -113,6 +113,21 @@ export const http = {
       })
     })
   },
+  // put请求
+  put (url, data) {
+    console.log('url----', url, data)
+    return new Promise((resolve, reject) => {
+      service({
+        method: 'put',
+        url,
+        data
+      }).then(res => {
+        resolve(res)
+      }).catch(err => {
+        reject(err)
+      })
+    })
+  },
   // delete请求
   delete (url, data) {
     return new Promise((resolve, reject) => {

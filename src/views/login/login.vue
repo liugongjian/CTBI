@@ -56,6 +56,14 @@
       </el-button>
       <div class="shadow" />
     </div>
+    <span v-if="logout" class="warn">
+      <svg-icon icon-class="warn" />
+      <span class="warn-text">您的账号已被注销，请联系系统管理员！</span>
+    </span>
+    <span v-if="freeze" class="warn">
+      <svg-icon icon-class="warn" />
+      <span class="warn-text">您长时间未登录，账号已被冻结。<br><span class="warn-freeze">请联系系统管理员进行解冻!</span></span>
+    </span>
   </div>
 
 </template>
@@ -82,7 +90,9 @@ export default {
       redirect: undefined,
       verifyImg: undefined,
       passwordType: 'password',
-      activate: false
+      activate: false,
+      logout: false,
+      freeze: false
     }
   },
   mounted () {
@@ -129,6 +139,7 @@ export default {
         // const { code, data } = await login(this.loginForm)
         if (code === 200) {
           this.$store.dispatch('user/login', data.token).then(() => {
+            console.log('datapppp', data)
             const { redirect } = this.$route.query
             this.$router.push(redirect || 'home').catch(err => { console.log(err) })
             this.loading = false
@@ -137,9 +148,15 @@ export default {
           })
         }
       } catch (err) {
+        console.log('err', err)
         this.loading = false
         if (err.code === 1036) {
-          this.$router.push('/login/activate')
+          const userName = err.data._id
+          this.$router.push({ path: '/login/activate', query: { userName } })
+        } else if (err.code === 1034) {
+          this.logout = true
+        } else if (err.code === 1035) {
+          this.freeze = true
         }
       }
     }
@@ -167,5 +184,8 @@ export default {
   height: 30px;
   width: 30px;
   left: 230px
+}
+.warn-freeze {
+  padding-left: 1.5em;
 }
 </style>
