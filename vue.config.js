@@ -40,14 +40,21 @@ module.exports = {
     proxy: {
       // 配置跨域
       '/dev-api': {
-        target: '*',
+        target: '	http://localhost:4523/mock/825472',
         changeOrigin: true,
         pathRewrite: {
           '^/dev-api': '/'
         }
+      },
+      '/login-dev': {
+        target: 'http://52c2m87072.qicp.vip',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/login-dev': '/'
+        }
       }
-    },
-    before: process.env.NODE_ENV === 'development' ? require('./mock/mock-server.js') : (app) => { }
+    }
+    // before: process.env.NODE_ENV === 'development' ? require('./mock/mock-server.js') : (app) => { }
   },
 
   configureWebpack: {

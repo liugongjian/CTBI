@@ -8,7 +8,7 @@ import { getAsyncRoutes } from '@/utils/asyncRouter.js'
 import { errorPageRoutes } from '@/router/base.router'
 import { resetRouter } from '../router'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login', '/login/activate'] // no redirect whitelist
 
 router.beforeEach(async (to, from, next) => {
   // start progress bar
@@ -21,7 +21,7 @@ router.beforeEach(async (to, from, next) => {
   const hasToken = getToken()
 
   if (hasToken) {
-    if (to.path === '/login') {
+    if (to.path.indexOf('/login') > -1) {
       // if is logged in, redirect to the home page
       next({ path: '/' })
       NProgress.done()

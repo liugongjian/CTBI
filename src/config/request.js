@@ -44,40 +44,41 @@ service.interceptors.response.use(
    */
   (response) => {
     const res = response.data
-
-    // if the custom code is not 200, it is judged as an error.
+    if (response.headers['content-type'] === 'image/svg+xml' && response.status === 200) {
+      return res
+    }
+    // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 200) {
       Message({
-        message: res.message || 'Error',
+        message: res.msg || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
-
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-        // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
-        })
-      }
-      return Promise.reject(new Error(res.message || 'Error'))
+      return Promise.reject(res)
     } else {
       return res
     }
   },
   (error) => {
     console.log('err' + error) // for debug
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
+    if (error?.response?.status === 401) {
+      // to re-login
+      MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
+        confirmButtonText: 'Re-Login',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        store.dispatch('user/resetToken').then(() => {
+          location.reload()
+        })
+      })
+    } else {
+      Message({
+        message: error.message,
+        type: 'error',
+        duration: 5 * 1000
+      })
+    }
     return Promise.reject(error)
   }
 )
@@ -102,6 +103,7 @@ export const http = {
   },
   // post请求
   post (url, data) {
+    console.log(url, data)
     return new Promise((resolve, reject) => {
       service({
         method: 'post',
@@ -116,28 +118,19 @@ export const http = {
         })
     })
   },
-  // 返回一个Promise(发送put请求)
-  put (url, param, config = {}) {
+  // put请求
+  put (url, data) {
+    console.log('url----', url, data)
     return new Promise((resolve, reject) => {
-      axios
-        .put(
-          url,
-          {
-            ...param
-          },
-          config
-        )
-        .then(
-          (response) => {
-            resolve(response)
-          },
-          (err) => {
-            reject(err)
-          }
-        )
-        .catch((error) => {
-          reject(error)
-        })
+      service({
+        method: 'put',
+        url,
+        data
+      }).then(res => {
+        resolve(res)
+      }).catch(err => {
+        reject(err)
+      })
     })
   },
   // delete请求
