@@ -14,7 +14,8 @@ const getDefaultState = () => {
         'name': 'PagePermission',
         'meta': {
           'title': 'Page'
-        } }
+        }
+      }
     ]
   }
 }
@@ -44,8 +45,10 @@ const mutations = {
 
 const actions = {
   // user login
-  login ({ commit }, token) {
+  login ({ commit }, { token, user }) {
     commit('SET_TOKEN', token)
+    commit('SET_USER', user)
+    commit('SET_NAME', user.username)
     setToken(token)
   },
 
@@ -59,11 +62,9 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        // const { username, avatar, routes } = info
+        const { username } = info
         commit('SET_USER', info)
-        // commit('SET_NAME', username)
-        // commit('SET_AVATAR', avatar)
-        // commit('SET_ROUTES', routes)
+        commit('SET_NAME', username)
         resolve(data)
       }).catch(error => {
         reject(error)

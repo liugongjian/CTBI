@@ -39,22 +39,14 @@ module.exports = {
     },
     proxy: {
       // 配置跨域
-      '/dev-api': {
-        target: '	http://localhost:4523/mock/825472',
+      '/api': {
+        target: 'http://139.196.10.0:888/ctbibackend/',
         changeOrigin: true,
         pathRewrite: {
-          '^/dev-api': '/'
-        }
-      },
-      '/login-dev': {
-        target: 'http://52c2m87072.qicp.vip',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/login-dev': '/'
+          '^/api': '/'
         }
       }
     }
-    // before: process.env.NODE_ENV === 'development' ? require('./mock/mock-server.js') : (app) => { }
   },
 
   configureWebpack: {
@@ -107,7 +99,7 @@ module.exports = {
             .plugin('ScriptExtHtmlWebpackPlugin')
             .after('html')
             .use('script-ext-html-webpack-plugin', [{
-            // `runtime` must same as runtimeChunk name. default is `runtime`
+              // `runtime` must same as runtimeChunk name. default is `runtime`
               inline: /runtime\..*\.js$/
             }])
             .end()

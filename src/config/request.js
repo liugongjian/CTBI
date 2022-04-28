@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+// import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -19,7 +19,7 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
+      // config.headers['X-Token'] = getToken()
     }
     return config
   },
@@ -94,7 +94,7 @@ export const http = {
       })
         .then((res) => {
           // axios返回的是一个promise对象
-          resolve(res) // resolve在promise执行器内部
+          resolve(res.data || res) // resolve在promise执行器内部
         })
         .catch((err) => {
           reject(err)
@@ -103,7 +103,6 @@ export const http = {
   },
   // post请求
   post (url, data) {
-    console.log(url, data)
     return new Promise((resolve, reject) => {
       service({
         method: 'post',
@@ -111,7 +110,7 @@ export const http = {
         data
       })
         .then((res) => {
-          resolve(res)
+          resolve(res.data || res)
         })
         .catch((err) => {
           reject(err)
@@ -127,7 +126,7 @@ export const http = {
         url,
         data
       }).then(res => {
-        resolve(res)
+        resolve(res.data || res)
       }).catch(err => {
         reject(err)
       })
@@ -142,27 +141,27 @@ export const http = {
         data
       })
         .then((res) => {
-          resolve(res)
+          resolve(res.data || res)
         })
         .catch((err) => {
           reject(err)
         })
     })
   },
-  // POST 文件上传
-  blobStream (url, data) {
+  // POST 文件上传 onUploadProgress => 上传中回调事件，用于进度条控制
+  blobStream (url, data, onUploadProgress) {
     const headerConfig = {
       headers: {
         'Content-Type': 'multipart/form-data'
-      },
-      responseType: 'arraybuffer'
+      }
     }
     return new Promise((resolve, reject) => {
       service({
         method: 'post',
         headers: headerConfig.headers,
         url,
-        data
+        data,
+        onUploadProgress
       })
         .then((res) => {
           resolve(res)
@@ -172,14 +171,11 @@ export const http = {
         })
     })
   },
-  blobDownload (url, params) {
+  blobDownload (url, params, method) {
     return new Promise((resolve) => {
-      axios({
-        method: 'get',
-        url: url,
-        headers: {
-          Authorization: 'Bearer ' + getToken()
-        },
+      service({
+        method: method || 'get',
+        url,
         params,
         responseType: 'blob'
       }).then((res) => {
@@ -187,14 +183,21 @@ export const http = {
           resolve(false)
         }
         const url = window.URL.createObjectURL(
-          new Blob([res], {
+          new Blob([res.data], {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
           })
         )
+
+        const fileNameCode =
+          res.headers['content-disposition'].split("filename*=utf-8''")[1] ||
+          res.headers['content-disposition'].split('filename=')[1] ||
+          '导出文件.xlsx'
+
+        const fileName = decodeURI(fileNameCode)
         const link = document.createElement('a')
         link.style.display = 'none'
         link.href = url
-        link.setAttribute('download', '导出数据.xlsx')
+        link.setAttribute('download', fileName)
         document.body.appendChild(link)
         link.click()
         resolve()
@@ -211,7 +214,7 @@ export const http = {
           data
         })
         .then((res) => {
-          resolve(res)
+          resolve(res.data || res)
         })
         .catch((err) => {
           reject(err)

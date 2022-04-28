@@ -27,6 +27,7 @@
           v-model="loginForm.password"
           :type="passwordType"
           placeholder="请输入密码"
+          @keyup.enter.native="validateLogin"
         />
         <span
           class="show-pwd"
@@ -41,9 +42,18 @@
           v-model="loginForm.verifyCode"
           type="text"
           placeholder="请输入验证码"
+          @keyup.enter.native="validateLogin"
         />
-        <span class="refresh" @click="verifyGet"><svg-icon icon-class="refresh" /></span>
-        <span class="verifyImg" v-html="verifyImg" />
+        <span
+          class="refresh"
+          @click="verifyGet"
+        >
+          <svg-icon icon-class="refresh" />
+        </span>
+        <span
+          class="verifyImg"
+          v-html="verifyImg"
+        />
       </el-form-item>
     </el-form>
     <div class="button-style">
@@ -56,11 +66,17 @@
       </el-button>
       <div class="shadow" />
     </div>
-    <span v-if="logout" class="warn">
+    <span
+      v-if="logout"
+      class="warn"
+    >
       <svg-icon icon-class="warn" />
       <span class="warn-text">您的账号已被注销，请联系系统管理员！</span>
     </span>
-    <span v-if="freeze" class="warn">
+    <span
+      v-if="freeze"
+      class="warn"
+    >
       <svg-icon icon-class="warn" />
       <span class="warn-text">您长时间未登录，账号已被冻结。<br><span class="warn-freeze">请联系系统管理员进行解冻!</span></span>
     </span>
@@ -76,8 +92,8 @@ export default {
   data () {
     return {
       loginForm: {
-        userName: '',
-        password: '',
+        userName: 'admin',
+        password: '1bfLNfNPiUKKqZhw',
         verifyCode: '',
         from: 'platform'
       },
@@ -134,19 +150,16 @@ export default {
       const { password } = this.loginForm
       const encryptedPswd = encryptAes(password)
       try {
-        const { code, data } = await login({ ...this.loginForm, password: encryptedPswd })
-
-        // const { code, data } = await login(this.loginForm)
-        if (code === 200) {
-          this.$store.dispatch('user/login', data.token).then(() => {
-            console.log('datapppp', data)
-            const { redirect } = this.$route.query
-            this.$router.push(redirect || 'home').catch(err => { console.log(err) })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
-        }
+        // 执行登录接口
+        const res = await login({ ...this.loginForm, password: encryptedPswd })
+        // 存储本地token，同时存储vuex + cookie
+        this.$store.dispatch('user/login', res).then(() => {
+          const { redirect } = this.$route.query
+          this.$router.push(redirect || 'home').catch(err => { console.log(err) })
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+        })
       } catch (err) {
         this.verifyGet()
         this.loading = false
@@ -166,24 +179,24 @@ export default {
 
 <style lang="scss" scoped>
 .verifyImg {
-  position:absolute;
+  position: absolute;
   display: inline-block;
   width: 90.63px;
   height: 46px;
   left: 250px;
   top: -10px;
-  ::v-deep svg{
+  ::v-deep svg {
     width: 100%;
     height: 100%;
   }
 }
 .refresh {
   cursor: pointer;
-  position:absolute;
+  position: absolute;
   display: inline-block;
   height: 30px;
   width: 30px;
-  left: 230px
+  left: 230px;
 }
 .warn-freeze {
   padding-left: 1.5em;
