@@ -55,7 +55,6 @@ export default {
   methods: {
     // 图标点击添加组件到画布
     changeHandler (val) {
-      console.log('what   ?    ', val)
       this.option.style = val
     }
   }
