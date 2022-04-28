@@ -5,8 +5,18 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: '',
-    routes: []
+    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+    userData: {},
+    routes: [
+      {
+        'path': '/index',
+        'component': 'permission/index',
+        'name': 'PagePermission',
+        'meta': {
+          'title': 'Page'
+        }
+      }
+    ]
   }
 }
 
@@ -16,9 +26,6 @@ const mutations = {
   RESET_STATE: (state) => {
     Object.assign(state, getDefaultState())
   },
-  SET_TOKEN: (state, token) => {
-    state.token = token
-  },
   SET_NAME: (state, name) => {
     state.name = name
   },
@@ -27,13 +34,17 @@ const mutations = {
   },
   SET_ROUTES: (state, routes) => {
     state.routes = routes
+  },
+  SET_USER: (state, userData) => {
+    state.userData = userData
   }
 }
 
 const actions = {
   // user login
-  login ({ commit }, token) {
-    commit('SET_TOKEN', token)
+  login ({ commit }, { token, user }) {
+    commit('SET_USER', user)
+    commit('SET_NAME', user.username)
     setToken(token)
   },
 
@@ -42,15 +53,14 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
-        if (!data) {
+        const { result, info } = data
+        if (!data || !result) {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar, routes } = data
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit('SET_ROUTES', routes)
+        const { username } = info
+        commit('SET_USER', info)
+        commit('SET_NAME', username)
         resolve(data)
       }).catch(error => {
         reject(error)

@@ -2,6 +2,7 @@
   <div class="home">
     <h1>{{ name }}</h1>
     <el-button type="primary">测试样式切换按钮</el-button>
+    <el-button type="primary" @click="testTimeout">测试登陆超时</el-button>
     <el-button
       type="text"
       @click="showDialog"
@@ -11,6 +12,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { testTimeout } from '@/api/user'
 export default {
   name: 'Home',
   data () {
@@ -23,6 +25,9 @@ export default {
     ])
   },
   methods: {
+    async testTimeout () {
+      await testTimeout()
+    },
     showDialog () {
       this.$dialog.show('TestDialog', {}, this.callback)
     },
