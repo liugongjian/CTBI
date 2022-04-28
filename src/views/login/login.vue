@@ -92,8 +92,8 @@ export default {
   data () {
     return {
       loginForm: {
-        userName: 'admin',
-        password: '1bfLNfNPiUKKqZhw',
+        userName: '',
+        password: '',
         verifyCode: '',
         from: 'platform'
       },

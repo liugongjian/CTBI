@@ -26,9 +26,6 @@ const mutations = {
   RESET_STATE: (state) => {
     Object.assign(state, getDefaultState())
   },
-  SET_TOKEN: (state, token) => {
-    state.token = token
-  },
   SET_NAME: (state, name) => {
     state.name = name
   },
@@ -46,7 +43,6 @@ const mutations = {
 const actions = {
   // user login
   login ({ commit }, { token, user }) {
-    commit('SET_TOKEN', token)
     commit('SET_USER', user)
     commit('SET_NAME', user.username)
     setToken(token)
