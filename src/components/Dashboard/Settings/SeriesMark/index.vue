@@ -2,7 +2,7 @@
   <div>
     <div class="editor-object-container">
       <div v-if="option.show" style="display: flex" class="color-row">
-        <el-checkbox v-model="option.check">显示标记点</el-checkbox>
+        <el-checkbox v-model="option.check" @change="handleSeriesMark">显示标记点</el-checkbox>
         <el-select
           v-model="option.markType"
           placeholder="请输入内容"
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import store from '@/store'
 export default {
   name: 'SeriesMark',
   props: {
@@ -61,6 +62,19 @@ export default {
   mounted () {
   },
   methods: {
+    // 联动改变 系列选择中的显示标记点复选框值
+    handleSeriesMark(val) {
+      store.state.app.layout.forEach(item => {
+        if (item.i === store.state.app.currentLayoutId) {
+          if (item.option.theme.SeriesSetting.SeriesSelect.SeriesMark) {
+            item.option.theme.SeriesSetting.SeriesSelect.seriesOption.map((item) => {
+              item.showMark = val
+            })
+            item.option.theme.SeriesSetting.SeriesSelect.SeriesMark.check = val
+          }
+        }
+      })
+    }
   }
 
 }

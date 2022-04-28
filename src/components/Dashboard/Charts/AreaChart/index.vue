@@ -61,18 +61,18 @@ export default {
   },
   methods: {
     getOption () {
-      const { ComponentOption } = this.storeOption.theme
-      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery)
-      this.getSeries(ComponentOption)
+      const { ComponentOption, FunctionalOption } = this.storeOption.theme
+      this.transfromData(FunctionalOption.ChartFilter.filteredSery)
+      this.getSeries(ComponentOption, FunctionalOption)
 
-      // // 将图表转为堆积柱状图
-      // if (ComponentOption.PercentStack.isStack && !ComponentOption.PercentStack.isPercent) {
-      //   this.getStackSeries(ComponentOption)
-      // }
-      // // 将图表转为百分比堆积柱状图
-      // if (ComponentOption.PercentStack.isPercent) {
-      //   this.getPercentStackSeries(ComponentOption)
-      // }
+      // 将图表转为堆积柱状图
+      if (ComponentOption.PercentStack.isStack && !ComponentOption.PercentStack.isPercent) {
+        this.getStackSeries(ComponentOption, FunctionalOption)
+      }
+      // 将图表转为百分比堆积柱状图
+      if (ComponentOption.PercentStack.isPercent) {
+        this.getPercentStackSeries(ComponentOption, FunctionalOption)
+      }
 
       // 系列配置-图表标签相关
       this.setSeriesItem()
@@ -88,7 +88,15 @@ export default {
         color: colorOption,
         legend: ComponentOption.Legend,
         xAxis: this.xAxis,
-        tooltip: this.tooltip,
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
         yAxis: this.yAxis,
         markPoint: this.markPoint,
         dataset: {
@@ -96,7 +104,7 @@ export default {
         },
         dataZoom: {
           type: 'slider',
-          show: this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom !== 'hide',
+          show: FunctionalOption.DataZoom.showDataZoom !== 'hide',
           realtime: true,
           start: 0,
           end: 100,
@@ -105,7 +113,7 @@ export default {
         series: this.series
       }
     },
-    getSeries (ComponentOption) {
+    getSeries (ComponentOption, FunctionalOption) {
       this.series = []
       let seriesLength = 0
       this.dataValue.forEach(item => {
@@ -127,6 +135,7 @@ export default {
           labelLayout: {
             hideOverlap: ComponentOption.ChartLabel.labelShow === 1 // 1.智能显示，2.全量显示 标签
           },
+          connectNulls: this.resolveNull(FunctionalOption),
           itemStyle: this.getItemStyle(ComponentOption)// 图形样式配置-颜色
         })
         if (ComponentOption.TwisYAxis.check) {
