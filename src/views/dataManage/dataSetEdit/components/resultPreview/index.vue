@@ -5,9 +5,9 @@
       <el-tabs v-model="activeFirstTagName" type="card" @tab-click="handleClickTagsFirst">
         <el-tab-pane label="运行结果" name="runResult">
           <!-- 成功为table -->
-          <template v-if="formatRunResultData.type =='success'">
+          <template v-if="resultData.type =='success'">
             <el-table
-              :data="formatRunResultData.tableData"
+              :data="resultData.data"
               style="width: 100%">
               <el-table-column
                 label="序号"
@@ -15,7 +15,7 @@
                 width="50">
               </el-table-column>
               <el-table-column
-                v-for="(k,i) in formatRunResultData"
+                v-for="(k,i) in resultData.columns"
                 :key="i"
                 :prop="k"
                 :label="k"
@@ -65,7 +65,7 @@
               width="100"
             >
               <template slot-scope="scope">
-                <span @click="copyHistoryLog(scope.row)">复制</span>
+                <span @click="copyHistoryLog(scope.row, $event)">复制</span>
               </template>
             </el-table-column>
           </el-table>
@@ -126,6 +126,7 @@
                 row-key="displayColumn"
                 tooltip-effect="dark"
                 default-expand-all
+                class="batch-config-table-data"
                 :tree-props="{children: 'children'}"
               >
                 <el-table-column
@@ -240,9 +241,19 @@ export default {
         return []
       }
     },
+    sqlId: {
+      type: String,
+      default: ''
+    },
     isEdit: {
       type: Boolean,
       default: false
+    },
+    sqlVarData: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   mounted () {
@@ -254,34 +265,21 @@ export default {
     this.dimensionMeasureTableColumns = fields.slice()
     this.batchConfigTableData = this.getBatchConfigTableData(fields.slice())
   },
-  computed: {
-    formatRunResultData: function () {
-      // success == true 为成功的结果
-      if (this.runResultData.success) {
-        const _res = {
-          columns: [],
-          tableData: [],
-          type: 'success'
-        }
-        this.runResultData.result['columns'].forEach(item => {
-          _res.push(item.name)
-        })
-        _res.tableData = this.runResultData.result['data'].slice()
-        return _res
-      } else {
-        const _res = {
-          type: 'fail'
-        }
-        return _res
-      }
-    }
-  },
+  computed: {},
   watch: {
     fields: function(newVal, oldVal) {
       this.dataSetFields = newVal.slice()
       this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
       this.dimensionMeasureTableColumns = newVal.slice()
       this.batchConfigTableData = this.getBatchConfigTableData(newVal.slice())
+    },
+    runResultData: function(newVal, oldVal) {
+      if (this.currentSqlId !== newVal._id) {
+        this.currentSqlId = newVal._id
+      }
+      const data = this.formatRunResultData(newVal)
+      console.log(data)
+      this.resultData = JSON.parse(JSON.stringify(data))
     }
   },
   data () {
@@ -362,7 +360,9 @@ export default {
           label: '百分比2位小数',
           value: '#,##0.00%'
         }
-      ]
+      ],
+      resultData: {},
+      currentSqlId: this.sqlId
     }
   },
   methods: {
@@ -370,9 +370,10 @@ export default {
     // 切换tags触发的事件
     async handleClickTagsFirst (tab) {
       if (tab.name === 'historyLog') {
-        const sqlId = this.$route.query.sqlId
+        const sqlId = this.currentSqlId
         try {
-          const data = await getSqlRunningLogs(sqlId)
+          const { data } = await getSqlRunningLogs(sqlId)
+          console.log(data)
           this.historyLogTableData = data.slice()
         } catch (error) {
           console.log(error)
@@ -415,10 +416,19 @@ export default {
     // 刷新预览
     async refreshPreview () {
       this.activeSecondTagName = 'dataPreview'
+      const sql = {}
+      sql._id = this.sqlParams._id
+      sql.dataSourceId = this.sqlParams.dataSourceId
+      sql.sql = this.sqlParams.sql
+      sql.sqlVariables = this.sqlParams.sqlVariables
       const body = {}
-      body.sqlId = this.dataSetInfo.sqlId
+      body.sql = sql
+      body.sqlVarData = this.sqlParams.sqlVarData
+      body.fields = this.fields
+      body.sqlVarData = this.sqlVarData
+      console.log('body', body)
       try {
-        const data = await getPreviewData(body)
+        const { data } = await getPreviewData(body)
         this.dimensionMeasureTableData = data.data.slice()
         this.dimensionMeasureTableColumns = data.fields.slice()
       } catch (error) {
@@ -496,6 +506,27 @@ export default {
       tmp.push(copy)
       this.dataSetFields = tmp.slice()
       this.batchConfigTableData = this.getBatchConfigTableData(tmp.slice()).slice()
+    },
+    // 格式化 运行结果
+    formatRunResultData (val) {
+      // success == true 为成功的结果
+      if (val.success) {
+        const _res = {
+          columns: [],
+          data: [],
+          type: 'success'
+        }
+        val.result['columns'].forEach(item => {
+          _res.columns.push(item.name)
+        })
+        _res.data = val.result['data'].slice()
+        return _res
+      } else {
+        const _res = {
+          type: 'fail'
+        }
+        return _res
+      }
     }
   }
 }
@@ -538,5 +569,13 @@ export default {
 }
 .result-preview-batch-configuration-table-options > span {
   cursor: pointer;
+}
+.batch-config-table-data {
+  ::v-deep .el-table td.el-table__cell div {
+    display: flex;
+  }
+}
+::v-deep .el-table td.el-table__cell div {
+  display: flex;
 }
 </style>

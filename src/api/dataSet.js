@@ -84,3 +84,13 @@ export function createUpdateSql(body) {
 export function createDataSets(body) {
   return http.post(`/dataSets`, body)
 }
+
+// 获取 sql 相关所有数据
+export function getSqlAllData(id) {
+  return http.get(`/sql/${id}`)
+}
+
+// 确认编辑 sql
+export function confirmEditSql(body) {
+  return http.post(`/sql/confirm`, body)
+}
