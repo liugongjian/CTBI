@@ -178,10 +178,14 @@ export default {
               this.option.SeriesMark.check = item.showMark || false
               this.option.SeriesMark.markType = item.markType || 'circle'
               this.option.SeriesLine.lineType = item.lineType || 'solid'
-            } else {
-              this.option.SeriesMark.show = false
-              this.option.SeriesLine.show = false
             }
+          }
+
+          if (this.option.SeriesMark && this.option.SeriesLine && this.option.SeriesMark.show && this.option.SeriesLine.show) {
+            // 普通折线图
+            this.option.SeriesMark.check = item.showMark || false
+            this.option.SeriesMark.markType = item.markType || 'circle'
+            this.option.SeriesLine.lineType = item.lineType || 'solid'
           }
         }
       })

@@ -11,9 +11,8 @@
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
+import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import lineMixins from '@/components/Dashboard/mixins/lineMixins'
-import { strWithKSeperator, addChineseUnit, addEnglishUnit } from '@/utils/numberUtils'
 
 export default {
   name: 'LineChart',
@@ -28,69 +27,59 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
-      // dataValue: null,
-      type: 'LineChart', // 线图 面积图 堆积面积图 百分比堆叠面积图
-      dataValue: [
-        ['date', '价格', '数量'],
-        ['Mon', 820, 410],
-        ['Tue', 932, 320],
-        ['Wed', 901, 300],
-        ['Thu', 934, 380],
-        ['Fri', 1290, 430],
-        ['Sat', 1330, 480],
-        ['Sun', 1320, 460]
-      ],
-      series: [],
-      textMap: {
-        'LineChart': '线图',
-        'AreaChart': '面积图',
-        'StackedAreaChart': '堆叠面积图',
-        'PercentStackedAreaChart': '百分比堆叠面积图'
-      }
+      dataValue: null,
+      series: []
     }
   },
   watch: {
     storeOption: {
       handler (val) {
-        this.type = val.theme.Basic.ChartType.type
-        val.theme.Basic.Title.text = this.textMap[this.type]
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
+          this.dataValue = deepClone(val.dataSource)
           this.getOption()
         }
       },
       deep: true
     },
-    type: {
+    'storeOption.dataSource': {
       handler (val) {
-        this.getOption()
+        if (JSON.stringify(val) !== '{}') {
+          this.dataValue = deepClone(val)
+          // 拿到数据中的系列名字
+          this.getSeriesOptions(this.dataValue)
+          // 拿到数据的系列名字 并设置颜色
+          this.getColor(this.dataValue)
+          // 拿到数据中的指标
+          this.getIndicatorOptions(this.dataValue)
+          this.getOption()
+        }
       }
     }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
-    this.getOption()
   },
   methods: {
     getOption () {
-      const componentOption = this.storeOption.theme.ComponentOption
-      const axis = this.storeOption.theme.Axis
-      this.getSeries()
-      this.series = this.series.map(item => ({
-        ...item,
-        ...this.resolveNull(),
-        label: {
-          show: componentOption.ChartLabel.check
-        },
-        labelLayout: {
-          hideOverlap: componentOption.ChartLabel.labelShow === 1
-        },
-        symbol: componentOption.SeriesMark.markType,
-        smooth: componentOption.LineStyle.type === 1
-      }))
+      const { ComponentOption, FunctionalOption } = this.storeOption.theme
+      this.transfromData(FunctionalOption.ChartFilter.filteredSery)
+      this.getSeries(ComponentOption, FunctionalOption)
+
+      // 系列配置-图表标签相关
+      this.setSeriesItem()
+      // 获取颜色设置-使图例颜色与图形颜色对应
+      const colorOption = []
+      ComponentOption.Color.color.forEach(item => {
+        colorOption.push(item.color)
+      })
+      // 设置图例与图表距离
+      this.setGrid(ComponentOption.Legend)
       this.chartOption = {
-        legend: componentOption.Legend,
+        grid: this.grid,
+        color: colorOption,
+        legend: ComponentOption.Legend,
+        xAxis: this.xAxis,
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -100,132 +89,60 @@ export default {
             }
           }
         },
-        xAxis: { ...this.generateAxisOptions('X', axis), ...this.getAxisShowTypeOption() },
-        yAxis: componentOption.TwisYAxis.check
-          ? [this.generateAxisOptions('Y', axis), this.generateAxisOptions('Y', axis, 2)]
-          : this.generateAxisOptions('Y', axis),
-        dataZoom: this.getDataZoomOption(),
+        yAxis: this.yAxis,
+        markPoint: this.markPoint,
         dataset: {
           source: this.dataValue
+        },
+        dataZoom: {
+          type: 'slider',
+          show: FunctionalOption.DataZoom.showDataZoom !== 'hide',
+          realtime: true,
+          start: 0,
+          end: 100,
+          xAxisIndex: [0, 1]
         },
         series: this.series
       }
     },
-    generateAxisOptions (type, axis, id = '') {
-      const axisType = type + 'Axis' + id
-      const commonOptions = {
-        name: axis[axisType].showTitle && (axis[axisType].unit ? `${axis[axisType].title}(${axis[axisType].unit})` : axis[axisType].title),
-        axisTick: {
-          show: axis[axisType].showTicks
-        },
-        axisLabel: {
-          show: axis[axisType].showAxisLabel,
-          formatter: (value, index) => {
-            const { numberFormat, numberDigit, unit, kSeperator } = axis[axisType]
-            let res, temp
-            if (type === 'X') {
-              res = value + unit
-            } else {
-              switch (axis[axisType].formatType) {
-                case '1':
-                  if (axis[axisType].lang === 'chinese-simplified') {
-                    res = addChineseUnit(value, true)
-                  }
-                  if (axis[axisType].lang === 'english') {
-                    res = addEnglishUnit(value)
-                  }
-                  if (axis[axisType].lang === 'chinese-complicated') {
-                    res = addChineseUnit(value, false)
-                  }
-                  break
-                case '2':
-                  temp = (value * (numberFormat === 'percent' ? 100 : 1)).toFixed(numberDigit) + (numberFormat === 'percent' ? '%' : '') + unit
-                  res = kSeperator ? strWithKSeperator(temp) : temp
-                  break
-                case '3':
-                  break
-              }
-            }
-            return res
-          }
-        },
-        axisLine: {
-          lineStyle: {
-            color: axis[axisType].lineColor,
-            width: axis[axisType].lineWidth,
-            type: axis[axisType].lineType
+    getSeries (ComponentOption, FunctionalOption) {
+      this.series = []
+      let seriesLength = 0
+      this.dataValue.forEach(item => {
+        seriesLength = item.length - 1
+      })
+      this.setAxis()
+
+      // 双Y轴设置
+      this.twisYAxisConfig(ComponentOption)
+
+      for (let i = 0; i < seriesLength; i++) {
+        this.series.push({
+          type: 'line',
+          name: this.dataValue[0][i + 1],
+          label: {
+            show: ComponentOption.ChartLabel.check, // 标签显示
+            position: 'top' // 标签位置
           },
-          show: axis[axisType].show
-        },
-        splitLine: {
-          show: axis[axisType].showSplit,
-          lineStyle: {
-            width: axis[axisType].splitWidth,
-            color: axis[axisType].splitColor,
-            type: axis[axisType].splitType
-          }
-        }
-      }
-      return type === 'X'
-        ? { type: 'category', ...commonOptions }
-        : {
-          type: 'value',
-          min: axis[axisType].autoMin ? 'dataMin' : axis.YAxis.min,
-          max: axis[axisType].autoMax ? 'dataMax' : axis.YAxis.max,
-          ...commonOptions
-        }
-    },
-    getDataZoomOption () {
-      const sdz = this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom
-      const item = {
-        realtime: true,
-        start: 30,
-        end: 70,
-        xAxisIndex: [0, 1]
-      }
-      if (sdz === 'show') {
-        item.show = true
-      } else if (sdz === 'hide') {
-        item.show = false
-      } else {
-        // TODO：智能显示缩略轴
-        item.show = true
-      }
-      return [item]
-    },
-    getAxisShowTypeOption () {
-      const ast = this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType
-      const option = {
-        axisLabel: {
-          rotate: 0,
-          interval: 'auto'
-        }
-      }
-      if (ast === 'condense') {
-        option.axisLabel.rotate = 90
-      } else if (ast === 'sparse') {
-        option.axisLabel.interval = 3
-      }
-      return option
-    },
-    resolveNull () {
-      const ast = this.storeOption.theme.FunctionalOption.NullProcess.emptyResolve
-      const series = {
-        connectNulls: false
-      }
-      if (ast === 'skip') {
-        series.connectNulls = true
-      } else if (ast === 'zero') {
-        this.dataValue = this.storeOption.dataSource.map(datas => {
-          return datas.map((data, index) => {
-            if ([null, undefined, NaN, '-'].includes(data)) {
-              return typeof data === 'number' ? 0 : '0'
-            }
-            return data
-          })
+          labelLayout: {
+            hideOverlap: ComponentOption.ChartLabel.labelShow === 1 // 1.智能显示，2.全量显示 标签
+          },
+          smooth: ComponentOption.LineStyle.type === 1,
+          connectNulls: this.resolveNull(FunctionalOption),
+          itemStyle: this.getItemStyle(ComponentOption)// 图形样式配置-颜色
         })
+        if (ComponentOption.TwisYAxis.check) {
+          const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
+          this.series[i].yAxisIndex = yAxisIndex
+        }
+        if (!ComponentOption.SeriesMark.check) {
+          this.series[i].symbol = 'circle'
+          this.series[i].hoverAnimation = false
+          this.series[i].symbolSize = 1
+        } else {
+          this.series[i].symbol = ComponentOption.SeriesMark.markType
+        }
       }
-      return series
     }
   }
 }
