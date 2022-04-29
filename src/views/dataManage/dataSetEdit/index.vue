@@ -361,7 +361,7 @@ export default {
         sql
       }
       try {
-        const { data } = await getSqlVariables(body)
+        const data = await getSqlVariables(body)
         this.sqlVariablesTableData = data.slice()
       } catch (error) {
         console.log(error)
@@ -377,7 +377,7 @@ export default {
         body.sqlVariables = this.sqlVariables
       }
       try {
-        const { data } = await runtimeForSql(body)
+        const data = await runtimeForSql(body)
         this.runResultData = data
         if (this.currentSqlId !== data._id) {
           this.currentSqlId = data._id
@@ -396,7 +396,7 @@ export default {
         if (this.sqlVariables && this.sqlVariables.length > 0) {
           body.sqlVariables = this.sqlVariables
         }
-        const { data } = confirmEditSql(body)
+        const data = confirmEditSql(body)
         this.currentFields = data.fields
         this.currentSqlData = data.sql
         this.currentSqlId = data.sql._id
@@ -424,7 +424,7 @@ export default {
     // 获取数据源列表
     async getDataSourceList () {
       try {
-        const { data } = await getDataSourceData()
+        const data = await getDataSourceData()
         const options = []
         data.foreEach(i => {
           const o = {}
@@ -464,7 +464,7 @@ export default {
         body.sql = this.currentSqlData
         body.displayName = this.dataSetDisplayName
         console.log(body, 'body')
-        const { data } = await createDataSets(body)
+        const data = await createDataSets(body)
         console.log(data)
       } catch (error) {
         console.log(error)
@@ -478,7 +478,7 @@ export default {
     // 根据sqlId 获取sql相关的所有数据
     async getSqlData(sqlId) {
       try {
-        const { data } = await getSqlAllData(sqlId)
+        const data = await getSqlAllData(sqlId)
         console.log('currentSqlData', data)
         this.currentSqlData = data
         this.currentSqlStatement = data.sql
@@ -496,7 +496,7 @@ export default {
     // 获取 folderList
     async getFolderList() {
       try {
-        const { data } = await getFolderLists()
+        const data = await getFolderLists()
         this.floderList = data.result
       } catch (error) {
         console.log(error)
@@ -509,7 +509,7 @@ export default {
     //
     async handleChangeDataSource(val) {
       try {
-        const { data } = await getDataTable(val)
+        const data = await getDataTable(val)
         this.dataTableList = data.list
       } catch (error) {
         console.log(error)

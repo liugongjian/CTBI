@@ -382,7 +382,7 @@ export default {
       if (tab.name === 'historyLog') {
         const sqlId = this.currentSqlId
         try {
-          const { data } = await getSqlRunningLogs(sqlId)
+          const data = await getSqlRunningLogs(sqlId)
           console.log(data)
           this.historyLogTableData = data.slice()
         } catch (error) {
@@ -438,7 +438,7 @@ export default {
       body.sqlVarData = this.sqlVarData
       console.log('body', body)
       try {
-        const { data } = await getPreviewData(body)
+        const data = await getPreviewData(body)
         this.dimensionMeasureTableData = data.data.slice()
         this.dimensionMeasureTableColumns = data.fields.slice()
       } catch (error) {
