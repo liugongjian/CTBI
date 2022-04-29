@@ -204,7 +204,7 @@
                       <el-divider direction="vertical"></el-divider>
                       <span @click="deleteBatchConfiguration(scope.row)">删除</span>
                       <el-divider direction="vertical"></el-divider>
-                      <span @click="hideBatchConfiguration(scope.row)">{{ scope.row.attributes.isHidden ? '取消隐藏' : '隐藏' }}</span>
+                      <span @click="hideBatchConfiguration(scope.row)">{{ scope.row.attributes[0].isHidden ? '取消隐藏' : '隐藏' }}</span>
                     </div>
                   </template>
                 </el-table-column>
@@ -280,6 +280,13 @@ export default {
       const data = this.formatRunResultData(newVal)
       console.log(data)
       this.resultData = JSON.parse(JSON.stringify(data))
+    },
+    dataSetFields: {
+      handler(newVal, oldVal) {
+        // 这里 dataSetFields 等同于 父级的 fields 字段，子级有变化通知父级更改（合并的策略由父级处理）
+        this.$emit('dataSetFieldsChange', newVal)
+      },
+      deep: true
     }
   },
   data () {
@@ -424,7 +431,7 @@ export default {
       const body = {}
       body.sql = sql
       body.sqlVarData = this.sqlParams.sqlVarData
-      body.fields = this.fields
+      body.fields = this.dataSetFields
       body.sqlVarData = this.sqlVarData
       console.log('body', body)
       try {
@@ -463,7 +470,12 @@ export default {
       const tmp = this.dataSetFields.slice()
       tmp.forEach(i => {
         if (i._id === val._id) {
-          i.attributes.isHidden = !i.attributes.isHidden
+          i.attributes.forEach((item, idx) => {
+            if (!idx) {
+              item.isHidden = !item.isHidden
+            }
+          })
+          console.log(i.attributes)
         }
       })
       this.dataSetFields = tmp.slice()

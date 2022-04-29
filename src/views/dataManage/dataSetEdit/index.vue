@@ -97,7 +97,7 @@
 
         <!-- bottom -->
         <div class="result-preview">
-          <ResultPreview :runResultData='runResultData' :isEdit="isEdit" :fields="currentFields" :sqlId="currentSqlId" :sqlParams="currentSqlData"/>
+          <ResultPreview :runResultData='runResultData' :isEdit="isEdit" :fields="currentFields" :sqlId="currentSqlId" :sqlParams="currentSqlData" @dataSetFieldsChange="dataSetFieldsChange"/>
         </div>
       </div>
     </div>
@@ -496,6 +496,10 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    // 子级更改更新父级的fields
+    dataSetFieldsChange(val) {
+      console.log(val, 'dataSetFieldsChange')
     }
   }
 }
