@@ -27,7 +27,7 @@
       </div>
 
       <!-- main -->
-      <div class="data-set-main" v-if="isAllDataShow">
+      <div v-if="isAllDataShow" class="data-set-main">
         <el-table
           ref="multipleTable"
           lazy
@@ -35,11 +35,11 @@
           tooltip-effect="dark"
           style="width: 100%"
           row-key="_id"
+          :load="loadDataSet"
+          :tree-props="{children: 'children', hasChildren: 'isFolder'}"
           @selection-change="handleSelectionChange"
           @expand-change="handleExpandChange"
           @cell-click="handleCellClick"
-          :load="loadDataSet"
-          :tree-props="{children: 'children', hasChildren: 'isFolder'}"
         >
           <el-table-column type="selection" width="55" />
           <el-table-column prop="name" label="名称" width="200">
@@ -49,13 +49,13 @@
               <span>{{ scope.row.name }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorId" label="创建者" width="120"> </el-table-column>
+          <el-table-column prop="creatorId" label="创建者" width="120" />
           <el-table-column prop="lastUpdatedTime" label="修改时间" width="150">
             <template slot-scope="scope">
               {{ scope.row.lastUpdatedTime | dateFilter }}
             </template>
           </el-table-column>
-          <el-table-column prop="dataSourceName" label="数据源" width="120"> </el-table-column>
+          <el-table-column prop="dataSourceName" label="数据源" width="120" />
           <el-table-column label="操作" show-overflow-tooltip>
             <template slot-scope="scope">
               <div v-if="!scope.row.isFolder" class="data-set-main-table-options" :class="{'no-allowed': batchSelection}">
@@ -64,7 +64,7 @@
                 <span @click="createDashboard(scope.row)">新建仪表盘</span>
                 <el-divider direction="vertical" />
                 <span @click="showAttribute(scope.row)">属性</span>
-                <el-divider direction="vertical"></el-divider>
+                <el-divider direction="vertical" />
                 <el-tooltip placement="bottom" effect="light" :disabled="moreToolTipDisabled">
                   <ul slot="content" class="data-set-menu">
                     <li @click="moveTo(scope.row)">移动到</li>
@@ -122,7 +122,7 @@
                 <span @click="createDashboard(scope.row)">新建仪表盘</span>
                 <el-divider direction="vertical" />
                 <span @click="showAttribute(scope.row)">属性</span>
-                <el-divider direction="vertical"></el-divider>
+                <el-divider direction="vertical" />
                 <el-tooltip placement="bottom" effect="light" :disabled="moreToolTipDisabled">
                   <ul slot="content" class="data-set-menu">
                     <li @click="moveTo(scope.row)">移动到</li>
@@ -154,7 +154,7 @@
       >
         <div class="create-floder">
           <div style="line-height: 32px; width: 70px"><span>文件名称</span></div>
-          <el-input v-model="newFloderName" placeholder="请输入文件名称" style="margin-left: 12px;height: 32px"> </el-input>
+          <el-input v-model="newFloderName" placeholder="请输入文件名称" style="margin-left: 12px;height: 32px" />
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="createFloderVisible = false; newFloderName = ''">取 消</el-button>
@@ -253,9 +253,9 @@
               v-model="searchFloder"
               placeholder="请输入"
               prefix-icon="el-icon-search"
-              @change="searchFloderList">
-            </el-input>
-            <div class="move-to-drawer-main-content" v-loading="!floderList">
+              @change="searchFloderList"
+            />
+            <div v-loading="!floderList" class="move-to-drawer-main-content">
               <span class="move-to-drawer-main-content-root">根目录</span>
               <ul>
                 <li v-for="(item, i) in floderList" :key="i" :class="{'select-actived': selectFloderId == item._id }" @click="selectFloder(item)">

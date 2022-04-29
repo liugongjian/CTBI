@@ -107,8 +107,7 @@ export const http = {
       service({
         method: 'post',
         url,
-        data,
-        ...config
+        data
       })
         .then((res) => {
           resolve(res.data || res)
@@ -213,8 +212,7 @@ export const http = {
       service({
         method: 'put',
         url,
-        data,
-        ...config
+        data
       })
         .then((res) => {
           resolve(res.data || res)

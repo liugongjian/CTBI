@@ -3,7 +3,7 @@
     <!-- header -->
     <div class="data-set-edit-wrap-header">
       <div class="data-set-edit-wrap-header-l">
-        <i class="el-icon-arrow-left" @click="noSaveLeaveDialogVisible = true" style="margin-right: 8px; cursor: pointer"></i>
+        <i class="el-icon-arrow-left" style="margin-right: 8px; cursor: pointer" @click="noSaveLeaveDialogVisible = true" />
         <span>{{ dataSourceName ? dataSourceName : '未命名' }}</span>
       </div>
       <div class="data-set-edit-wrap-header-r">
@@ -17,14 +17,14 @@
         <div>
           <svg-icon icon-class="sql" style="margin-right: 8px" />
         </div>
-        <el-input v-model="dataSetDisplayName"  placeholder="未命名SQL"></el-input>
+        <el-input v-model="dataSetDisplayName" placeholder="未命名SQL" />
       </div>
       <div class="data-set-edit-wrap-toptool-r">
         <el-button @click="formatSqlData">格式化</el-button>
         <el-button @click="settingParam">参数配置</el-button>
-        <el-button @click="runSql" type="primary">运行</el-button>
-        <el-button @click="confirmEdit" type="primary">确认编辑</el-button>
-        <div style="margin-left: 8px" @click="leaveDialogVisible=true"><i class="el-icon-close"></i></div>
+        <el-button type="primary" @click="runSql">运行</el-button>
+        <el-button type="primary" @click="confirmEdit">确认编辑</el-button>
+        <div style="margin-left: 8px" @click="leaveDialogVisible=true"><i class="el-icon-close" /></div>
       </div>
     </div>
 
@@ -97,7 +97,7 @@
 
         <!-- bottom -->
         <div class="result-preview">
-          <ResultPreview :runResultData='runResultData' :isEdit="isEdit" :fields="currentFields" :sqlId="currentSqlId" :sqlParams="currentSqlData" @dataSetFieldsChange="dataSetFieldsChange"/>
+          <ResultPreview :run-result-data="runResultData" :is-edit="isEdit" :fields="currentFields" :sql-id="currentSqlId" :sql-params="currentSqlData" @dataSetFieldsChange="dataSetFieldsChange" />
         </div>
       </div>
     </div>
@@ -106,7 +106,8 @@
     <el-drawer
       title="参数配置"
       :before-close="handleCloseSettingParam"
-      :visible.sync="settingParamVisiable">
+      :visible.sync="settingParamVisiable"
+    >
       <div class="set-param-drawer">
         <div class="set-param-drawer-main">
           <el-table
@@ -177,9 +178,10 @@
     <el-dialog
       title="提示"
       :visible.sync="leaveDialogVisible"
-      width="480px">
+      width="480px"
+    >
       <div>
-        <svg-icon iconClass="tip" style="margin-right: 8px"/>
+        <svg-icon icon-class="tip" style="margin-right: 8px" />
         <span>您还未对此次代码的编辑进行确认，若此时返回，本次编辑内 容将不被保存，请问您是否确认返回？</span>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -192,9 +194,10 @@
     <el-dialog
       title="提示"
       :visible.sync="noSaveLeaveDialogVisible"
-      width="480px">
+      width="480px"
+    >
       <div>
-        <svg-icon iconClass="tip" style="margin-right: 8px"/>
+        <svg-icon icon-class="tip" style="margin-right: 8px" />
         <span>您还未对此次代码的编辑进行确认，若此时返回，本次编辑内 容将不被保存，请问您是否确认返回？</span>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -207,12 +210,13 @@
     <el-dialog
       title="保存数据集"
       :visible.sync="saveDataSetDialogVisible"
-      width="480px">
+      width="480px"
+    >
       <div class="on-save-content">
         <div style="display: flex; align-items: flex-start;">
           <div class="on-save-content-label" style="margin-top: 9px"><span>数据集</span></div>
           <div class="on-save-content-main" style="width: 320px">
-            <el-input v-model="dataSetDisplayName" placeholder="请输入数据集名称"></el-input>
+            <el-input v-model="dataSetDisplayName" placeholder="请输入数据集名称" />
             <div style="margin-top:8px;font-size: 12px;color: rgba(0, 0, 0, 0.45);">
               <span>名称只能由中英文、数字及下划线(_)、斜线(/)、反斜线(\)、竖线(I)、 小括号(())、中括号([])组成，不超过50个字符。</span>
             </div>
@@ -221,14 +225,14 @@
         <div style="display: flex; align-items: center; margin-top: 24px">
           <div class="on-save-content-label"><span>位置</span></div>
           <div class="on-save-content-main">
-              <el-select v-model="currentFloderId" placeholder="请选择" style="width: 320px">
-                <el-option
-                  v-for="item in floderList"
-                  :key="item._id"
-                  :label="item.name"
-                  :value="item._id">
-                </el-option>
-              </el-select>
+            <el-select v-model="currentFloderId" placeholder="请选择" style="width: 320px">
+              <el-option
+                v-for="item in floderList"
+                :key="item._id"
+                :label="item.name"
+                :value="item._id"
+              />
+            </el-select>
           </div>
         </div>
       </div>
@@ -250,33 +254,6 @@ export default {
   components: {
     EditSql,
     ResultPreview
-  },
-  mounted () {
-    this.getFolderList()
-    const data = this.$route.query
-    console.log(data, 'data')
-    // 如果都为空则表示新建的数据集，直接进入编辑状态
-    if (!data._id) {
-      this.isEdit = true
-    }
-    this.currentDataSet = data
-    if (data.sqlId) {
-      this.currentSqlId = data.sqlId
-      this.getSqlData(data.sqlId)
-    }
-    this.creatorName = data.creatorName
-    this.currentDataSourceId = data.dataSourceId || ''
-    this.current_id = data._id || ''
-    this.currentFields = data.fields || []
-    this.dataSetDisplayName = this.currentDataSet.displayName || ''
-  },
-  computed: {
-    dataSourceName: function() {
-      return this.currentDataSet.dataSourceName || ''
-    },
-    sqlStatement: function() {
-      return this.currentSqlData.sql || ''
-    }
   },
   data () {
     return {
@@ -336,13 +313,32 @@ export default {
       dataSetDisplayName: ''
     }
   },
+  computed: {
+    dataSourceName: function() {
+      return this.currentDataSet.dataSourceName || ''
+    },
+    sqlStatement: function() {
+      return this.currentSqlData.sql || ''
+    }
+  },
   mounted () {
+    this.getFolderList()
     const data = this.$route.query
     console.log(data, 'data')
-    this.dataSourceName = data.dataSourceName || ''
+    // 如果都为空则表示新建的数据集，直接进入编辑状态
+    if (!data._id) {
+      this.isEdit = true
+    }
+    this.currentDataSet = data
+    if (data.sqlId) {
+      this.currentSqlId = data.sqlId
+      this.getSqlData(data.sqlId)
+    }
     this.creatorName = data.creatorName
     this.currentDataSourceId = data.dataSourceId || ''
     this.current_id = data._id || ''
+    this.currentFields = data.fields || []
+    this.dataSetDisplayName = this.currentDataSet.displayName || ''
   },
   methods: {
     init () {

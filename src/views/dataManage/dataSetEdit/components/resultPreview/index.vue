@@ -8,7 +8,8 @@
           <template v-if="resultData.type =='success'">
             <el-table
               :data="resultData.data"
-              style="width: 100%">
+              style="width: 100%"
+            >
               <el-table-column
                 label="序号"
                 type="index"
@@ -133,13 +134,14 @@
                 <el-table-column
                   label="名称字段"
                   prop="displayColumn"
-                  width="360">
+                  width="360"
+                >
                   <template slot-scope="scope">
                     <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'">
                       <span>{{ scope.row.displayColumn }}</span>
                     </div>
                     <div v-else>
-                      <el-input v-model="scope.row.displayColumn" ></el-input>
+                      <el-input v-model="scope.row.displayColumn" />
                     </div>
                   </template>
                 </el-table-column>
@@ -153,7 +155,7 @@
                   width="180"
                 >
                   <template slot-scope="scope">
-                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
+                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
                     <div v-else>
                       <el-select v-model="scope.row.attributes.dataType" placeholder="请选择">
                         <el-option
@@ -173,17 +175,18 @@
                 </el-table-column> -->
                 <el-table-column
                   label="数值展示格式"
-                  width="180">
+                  width="180"
+                >
                   <template slot-scope="scope">
-                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
+                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
                     <div v-else>
                       <el-select v-model="scope.row.format" placeholder="请选择">
                         <el-option
                           v-for="item in numberDisplayFormatOptions"
                           :key="item.value"
                           :label="item.label"
-                          :value="item.value">
-                        </el-option>
+                          :value="item.value"
+                        />
                       </el-select>
                     </div>
                   </template>
@@ -193,7 +196,7 @@
                   width="180"
                 >
                   <template slot-scope="scope">
-                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
+                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
                     <div v-else>
                       <el-input v-model="scope.row.comment" placeholder="请输入内容" />
                     </div>
@@ -201,12 +204,12 @@
                 </el-table-column>
                 <el-table-column label="操作" min-width="200">
                   <template slot-scope="scope">
-                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
+                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
                     <div v-else class="result-preview-batch-configuration-table-options">
                       <span @click="copyBatchConfiguration(scope.row)">复制</span>
                       <el-divider direction="vertical" />
                       <span @click="deleteBatchConfiguration(scope.row)">删除</span>
-                      <el-divider direction="vertical"></el-divider>
+                      <el-divider direction="vertical" />
                       <span @click="hideBatchConfiguration(scope.row)">{{ scope.row.attributes[0].isHidden ? '取消隐藏' : '隐藏' }}</span>
                     </div>
                   </template>
@@ -257,39 +260,6 @@ export default {
       default: () => {
         return {}
       }
-    }
-  },
-  mounted () {
-    this.dataSetInfo = this.$route.query
-    console.log(this.dataSetInfo, 'this.dataSetInfo')
-    const fields = this.fields.slice()
-    this.dataSetFields = fields.slice()
-    this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(fields.slice())))
-    this.dimensionMeasureTableColumns = fields.slice()
-    this.batchConfigTableData = this.getBatchConfigTableData(fields.slice())
-  },
-  computed: {},
-  watch: {
-    fields: function(newVal, oldVal) {
-      this.dataSetFields = newVal.slice()
-      this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
-      this.dimensionMeasureTableColumns = newVal.slice()
-      this.batchConfigTableData = this.getBatchConfigTableData(newVal.slice())
-    },
-    runResultData: function(newVal, oldVal) {
-      if (this.currentSqlId !== newVal._id) {
-        this.currentSqlId = newVal._id
-      }
-      const data = this.formatRunResultData(newVal)
-      console.log(data)
-      this.resultData = JSON.parse(JSON.stringify(data))
-    },
-    dataSetFields: {
-      handler(newVal, oldVal) {
-        // 这里 dataSetFields 等同于 父级的 fields 字段，子级有变化通知父级更改（合并的策略由父级处理）
-        this.$emit('dataSetFieldsChange', newVal)
-      },
-      deep: true
     }
   },
   data () {
@@ -374,6 +344,39 @@ export default {
       resultData: {},
       currentSqlId: this.sqlId
     }
+  },
+  computed: {},
+  watch: {
+    fields: function(newVal, oldVal) {
+      this.dataSetFields = newVal.slice()
+      this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
+      this.dimensionMeasureTableColumns = newVal.slice()
+      this.batchConfigTableData = this.getBatchConfigTableData(newVal.slice())
+    },
+    runResultData: function(newVal, oldVal) {
+      if (this.currentSqlId !== newVal._id) {
+        this.currentSqlId = newVal._id
+      }
+      const data = this.formatRunResultData(newVal)
+      console.log(data)
+      this.resultData = JSON.parse(JSON.stringify(data))
+    },
+    dataSetFields: {
+      handler(newVal, oldVal) {
+        // 这里 dataSetFields 等同于 父级的 fields 字段，子级有变化通知父级更改（合并的策略由父级处理）
+        this.$emit('dataSetFieldsChange', newVal)
+      },
+      deep: true
+    }
+  },
+  mounted () {
+    this.dataSetInfo = this.$route.query
+    console.log(this.dataSetInfo, 'this.dataSetInfo')
+    const fields = this.fields.slice()
+    this.dataSetFields = fields.slice()
+    this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(fields.slice())))
+    this.dimensionMeasureTableColumns = fields.slice()
+    this.batchConfigTableData = this.getBatchConfigTableData(fields.slice())
   },
   methods: {
     init () {},
