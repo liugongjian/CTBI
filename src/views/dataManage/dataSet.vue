@@ -27,10 +27,10 @@
       </div>
 
       <!-- main -->
-      <div v-if="!serachName" class="data-set-main">
+      <div class="data-set-main" v-if="isAllDataShow">
         <el-table
           ref="multipleTable"
-          v-loading="loading"
+          lazy
           :data="tableData"
           tooltip-effect="dark"
           style="width: 100%"
@@ -38,6 +38,8 @@
           @selection-change="handleSelectionChange"
           @expand-change="handleExpandChange"
           @cell-click="handleCellClick"
+          :load="loadDataSet"
+          :tree-props="{children: 'children', hasChildren: 'isFolder'}"
         >
           <el-table-column type="selection" width="55" />
           <el-table-column prop="name" label="名称" width="200">
@@ -47,9 +49,13 @@
               <span>{{ scope.row.name }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="creatorId" label="创建者" width="120" />
-          <el-table-column prop="lastUpdatedTime" label="修改时间" width="150" />
-          <el-table-column prop="dataSource" label="数据源" width="120" />
+          <el-table-column prop="creatorId" label="创建者" width="120"> </el-table-column>
+          <el-table-column prop="lastUpdatedTime" label="修改时间" width="150">
+            <template slot-scope="scope">
+              {{ scope.row.lastUpdatedTime | dateFilter }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="dataSourceName" label="数据源" width="120"> </el-table-column>
           <el-table-column label="操作" show-overflow-tooltip>
             <template slot-scope="scope">
               <div v-if="!scope.row.isFolder" class="data-set-main-table-options" :class="{'no-allowed': batchSelection}">
@@ -58,16 +64,16 @@
                 <span @click="createDashboard(scope.row)">新建仪表盘</span>
                 <el-divider direction="vertical" />
                 <span @click="showAttribute(scope.row)">属性</span>
-                <el-divider direction="vertical" />
-                <el-tooltip placement="bottom" effect="light">
+                <el-divider direction="vertical"></el-divider>
+                <el-tooltip placement="bottom" effect="light" :disabled="moreToolTipDisabled">
                   <ul slot="content" class="data-set-menu">
-                    <li @click="moveTo">移动到</li>
+                    <li @click="moveTo(scope.row)">移动到</li>
                     <li @click="deleteDataSet(scope.row)">删除</li>
                   </ul>
                   <span @click="showMore">更多</span>
                 </el-tooltip>
               </div>
-              <div v-else class="data-set-main-table-options">
+              <div v-else class="data-set-main-table-options" :class="{'no-allowed': batchSelection}">
                 <span @click="rename(scope.row)">重命名</span>
                 <el-divider direction="vertical" />
                 <span @click="deleteFloder(scope.row)">删除</span>
@@ -116,10 +122,10 @@
                 <span @click="createDashboard(scope.row)">新建仪表盘</span>
                 <el-divider direction="vertical" />
                 <span @click="showAttribute(scope.row)">属性</span>
-                <el-divider direction="vertical" />
-                <el-tooltip placement="bottom" effect="light">
+                <el-divider direction="vertical"></el-divider>
+                <el-tooltip placement="bottom" effect="light" :disabled="moreToolTipDisabled">
                   <ul slot="content" class="data-set-menu">
-                    <li @click="moveTo">移动到</li>
+                    <li @click="moveTo(scope.row)">移动到</li>
                     <li @click="deleteDataSet(scope.row)">删除</li>
                   </ul>
                   <span @click="showMore">更多</span>
@@ -146,12 +152,12 @@
         :visible.sync="createFloderVisible"
         width="30%"
       >
-        <div>
-          <span>文件名称</span>
-          <el-input v-model="newFloderName" placeholder="请输入文件名称" style="margin-right: 12px" />
+        <div class="create-floder">
+          <div style="line-height: 32px; width: 70px"><span>文件名称</span></div>
+          <el-input v-model="newFloderName" placeholder="请输入文件名称" style="margin-left: 12px;height: 32px"> </el-input>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="createFloderVisible = false">取 消</el-button>
+          <el-button @click="createFloderVisible = false; newFloderName = ''">取 消</el-button>
           <el-button style="background-color: #FA8334;color: #fff;" @click="hanleCreateFloder">确 定</el-button>
         </span>
       </el-dialog>
@@ -247,8 +253,9 @@
               v-model="searchFloder"
               placeholder="请输入"
               prefix-icon="el-icon-search"
-            />
-            <div v-loading="!floderList" class="move-to-drawer-main-content">
+              @change="searchFloderList">
+            </el-input>
+            <div class="move-to-drawer-main-content" v-loading="!floderList">
               <span class="move-to-drawer-main-content-root">根目录</span>
               <ul>
                 <li v-for="(item, i) in floderList" :key="i" :class="{'select-actived': selectFloderId == item._id }" @click="selectFloder(item)">
@@ -269,7 +276,9 @@
 </template>
 
 <script>
+// import qs from 'qs'
 import { createFloders, updateFolderName, delFolders, updateDataSet, delDataSet, moveDataSet2Folder, getFolderLists, getDataSetsFolders } from '@/api/dataSet'
+import { getDateTime } from '@/utils/optionUtils'
 export default {
   name: 'DataSet',
   data () {
@@ -282,7 +291,7 @@ export default {
           name: 'xxx-floder',
           creatorId: 'xxx',
           lastUpdatedTime: '2022-4-18 14:42:30',
-          dataSource: '',
+          dataSourceName: '',
           isFolder: true,
           children: [
             {
@@ -290,7 +299,7 @@ export default {
               name: 'qqq-data-set',
               creatorId: 'qqq',
               lastUpdatedTime: '2022-4-18 14:42:30',
-              dataSource: 'qqq',
+              dataSourceName: 'qqq',
               isFolder: false
             },
             {
@@ -298,7 +307,7 @@ export default {
               name: 'www-data-set',
               creatorId: 'www',
               lastUpdatedTime: '2022-4-18 14:42:30',
-              dataSource: 'www',
+              dataSourceName: 'www',
               isFolder: false
             }
           ]
@@ -308,7 +317,7 @@ export default {
           name: 'ooo-data-set',
           creatorId: 'ooo',
           lastUpdatedTime: '2022-4-18 14:42:30',
-          dataSource: 'aaa',
+          dataSourceName: 'aaa',
           isFolder: false
         },
         {
@@ -391,7 +400,7 @@ export default {
         }
       ],
       loading: false,
-      dataSetLoading: false,
+      dataSetLoading: true,
       multipleSelection: [],
       createFloderVisible: false,
       newFloderName: '',
@@ -425,7 +434,7 @@ export default {
           children: []
         }
       ],
-      curentFloder: null,
+      currentFloder: null,
       cureentDataSet: null,
       moveToVisible: false,
       searchFloder: '',
@@ -455,6 +464,8 @@ export default {
           type: 'dataSet'
         }
       ],
+      moreToolTipDisabled: true,
+      isAllDataShow: true,
       dataSetPagination: {
         currentPage: 1,
         pageSize: 10,
@@ -468,28 +479,31 @@ export default {
     }
   },
   mounted () {
-    // this.init()
+    this.init()
   },
   methods: {
     init () {
       this.getTableData()
-      this.curentFloder = null
+      this.currentFloder = null
       this.cureentDataSet = null
       this.searchFloder = ''
       this.selectFloderId = ''
       this.serachName = ''
       this.multipleSelection = []
+      this.isAllDataShow = true
     },
     // 获取 tableData
     async getTableData () {
       try {
-        const data = await getDataSetsFolders()
-        data.forEach(item => {
-          if (item.isFolder) {
-            item.children = []
-          }
-        })
+        const { data } = await getDataSetsFolders()
+        // data.forEach(item => {
+        //   if (item.isFolder) {
+        //     item.children = []
+        //   }
+        // })
         this.tableData = data
+        console.log(this.tableData)
+        this.loading = false
       } catch (error) {
         console.log(error)
       }
@@ -499,12 +513,13 @@ export default {
       this.createFloderVisible = true
     },
     async hanleCreateFloder () {
-      const data = {
+      const body = {
         type: 'dataSet',
         name: this.newFloderName
       }
       try {
-        await createFloders(data)
+        const { data } = await createFloders(body)
+        console.log('createFloders data', data)
         this.createFloderVisible = false
         this.newFloderName = ''
         this.init()
@@ -514,15 +529,20 @@ export default {
     },
     // 新建数据集
     createDataSet () {
+      const currentTime = getDateTime()
       const query = {
         _id: '',
         displayName: '',
         comment: '',
         sqlId: '',
         fields: [],
+        folderId: null,
+        isFolder: false,
         creatorId: '',
         dataSourceId: '',
-        dataSourceName: ''
+        dataSourceName: '',
+        creatorName: '',
+        createdTime: currentTime
       }
       this.$router.push({
         path: '/dataSet/edit',
@@ -532,27 +552,29 @@ export default {
     // 查询
     async query () {
       if (!this.serachName) {
+        this.isAllDataShow = true
         return this.$message({
           message: '请输入正确的数据集名称',
           type: 'warning'
         })
       }
+      this.isAllDataShow = false
       const searchkey = this.serachName
       try {
-        const data = await getDataSetsFolders(searchkey)
+        const { data } = await getDataSetsFolders({ searchkey })
         this.dataSetData = data.filter(item => !item.isFolder)
-        this.serachName = ''
+        this.dataSetLoading = false
       } catch (error) {
         console.log(error)
       }
     },
     // 重置
     reset () {
-      this.serachName = ''
       this.init()
     },
     // 多选
     handleSelectionChange (val) {
+      console.log(val, '多选')
       this.multipleSelection = val
     },
     // 取消选择
@@ -568,14 +590,16 @@ export default {
       this.updateDataSetName = val.displayName
     },
     async hanleEditFile () {
-      const id = this.curentFloder._id
+      console.log(this.cureentDataSet)
+      const id = this.cureentDataSet._id
       const params = {
         displayName: this.updateDataSetName
       }
       try {
-        await updateDataSet(id, params)
+        const { data } = await updateDataSet(id, params)
+        console.log(data)
         this.editDataSetVisible = false
-        this.curentFloder = null
+        this.currentFloder = null
         this.init()
       } catch (error) {
         console.log(error)
@@ -586,6 +610,7 @@ export default {
     },
     showAttribute (val) {
       if (this.batchSelection) return false
+      this.cureentDataSet = val
       this.dataSetAttributeVisible = true
       this.dataSetAttr.name = val.displayName
       this.dataSetAttr.desc = val.comment
@@ -597,7 +622,8 @@ export default {
         comment: this.dataSetAttr.desc
       }
       try {
-        await updateDataSet(id, params)
+        const { data } = await updateDataSet(id, params)
+        console.log(data)
         this.dataSetAttributeVisible = false
         this.cureentDataSet = null
         this.init()
@@ -605,19 +631,27 @@ export default {
         console.log(error)
       }
     },
-    showMore () {},
+    showMore () {
+      if (this.batchSelection) return false
+      this.moreToolTipDisabled = false
+    },
     rename (val) {
       if (this.batchSelection) return false
-      this.curentFloder = val
+      this.currentFloder = val
       this.renameFolderVisible = true
       this.editFloderName = val.name
     },
     async hanleRenameFloder () {
-      const id = this.curentFloder._id
+      const id = this.currentFloder._id
+      const body = {
+        name: this.editFloderName
+      }
       try {
-        await updateFolderName(id, this.editFloderName)
+        const { data } = await updateFolderName(id, body)
+        console.log(data)
         this.editFloderName = ''
-        this.curentFloder = null
+        this.currentFloder = null
+        this.loading = true
         this.init()
       } catch (error) {
         console.log(error)
@@ -626,15 +660,17 @@ export default {
     },
     deleteFloder (val) {
       if (this.batchSelection) return false
-      this.curentFloder = val
+      this.currentFloder = val
       this.deleteFolderVisible = true
     },
     async hanleDeleteFolder () {
-      const id = this.curentFloder._id
+      const id = this.currentFloder._id
       try {
-        await delFolders(id)
+        const { data } = await delFolders(id)
+        console.log(data)
         this.deleteFolderVisible = false
-        this.curentFloder = null
+        this.currentFloder = null
+        this.loading = true
         this.init()
       } catch (error) {
         console.log(error)
@@ -648,25 +684,31 @@ export default {
     async hanleDeleteDataSet () {
       const id = this.cureentDataSet._id
       try {
-        await delDataSet(id)
+        const { data } = await delDataSet(id)
+        console.log(data)
         this.deleteDataSetVisible = false
         this.cureentDataSet = null
+        this.loading = true
+        this.dataSetLoading = true
         this.init()
       } catch (error) {
         console.log(error)
       }
     },
-    async moveTo () {
-      if (this.batchSelection) return false
+    async moveTo (val) {
       if (this.multipleSelection.some(item => item.isFolder)) {
         return this.$message({
           message: '移动操作暂且只支持数据集不支持文件夹',
           type: 'warning'
         })
       }
+      if (val) {
+        this.multipleSelection.push(val)
+      }
       this.moveToVisible = true
       try {
-        const data = await getFolderLists()
+        const { data } = await getFolderLists()
+        console.log(data)
         this.floderList = data.result
       } catch (error) {
         console.log(error)
@@ -682,15 +724,19 @@ export default {
       })
       if (!ids.length) return false
       try {
-        await moveDataSet2Folder({
+        const { code } = await moveDataSet2Folder({
           ids,
           folderId
         })
-        this.multipleSelection = null
-        this.selectFloderId = ''
-        this.$refs.multipleTable.clearSelection()
-        this.moveToVisible = false
-        this.init()
+        if (code === 200) {
+          this.multipleSelection = null
+          this.selectFloderId = ''
+          this.$refs.multipleTable.clearSelection()
+          this.moveToVisible = false
+          this.$router.go(0)
+        } else {
+          return false
+        }
       } catch (error) {
         console.log(error)
       }
@@ -709,7 +755,7 @@ export default {
       const tmp = this.tableData.slice()
       const folderId = row._id
       try {
-        const data = await getDataSetsFolders({ folderId })
+        const { data } = await getDataSetsFolders({ folderId })
         tmp.forEach(item => {
           if (item._id === folderId) {
             item.children = data
@@ -725,12 +771,33 @@ export default {
       this.editDataSetVisible = false
     },
     handleCellClick (row, column) {
-      if (column.label !== '名称') return false
+      if (column.label !== '名称' || row.isFolder) return false
       const query = row
       this.$router.push({
         path: '/dataSet/edit',
         query
       })
+    },
+    async loadDataSet (tree, treeNode, resolve) {
+      const folderId = tree._id
+      try {
+        const { data } = await getDataSetsFolders({ folderId })
+        console.log(data)
+        resolve(data)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // 搜索数据集
+    async searchFloderList() {
+      const searchkey = this.searchFloder
+      try {
+        const { data } = await getFolderLists({ searchkey })
+        console.log(data)
+        this.floderList = data.result
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
@@ -779,6 +846,8 @@ export default {
   &-btn {
     height: 32px;
     font-size: 12px;
+    padding: 0 20px;
+    line-height: 32px;
   }
 }
 
@@ -911,5 +980,12 @@ export default {
 }
 ::v-deep .el-dialog__footer {
   padding: 0px;
+}
+
+.create-floder {
+  display: flex;
+  ::v-deep .el-input__inner {
+    height: 32px;
+  }
 }
 </style>
