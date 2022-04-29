@@ -26,7 +26,6 @@ export default {
       }
     },
     setProgress () {
-      console.log(Number((this.data.value / this.target * 100).toFixed(this.progressConfig.proportion.decimal)), 'hah')
       const item = this.progressConfig.cfgTargetOption.find(item => item.name === this.data.name) || {}
       this.target = (item.type === 1 ? item.fixedVal : item.dynamicVal) || this.data.value
       return (Number(this.data.value / this.target * 100)).toFixed(this.progressConfig.proportion.decimal)

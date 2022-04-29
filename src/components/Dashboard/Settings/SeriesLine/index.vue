@@ -3,23 +3,6 @@
     <div class="editor-object-container">
       <div v-if="option.show" style="display: flex" class="color-row">
         <span>线条样式</span>
-        <!-- <el-dropdown trigger="click" @command="handleAxisType">
-          <div class="dropdown-link">
-            <svg-icon
-              :icon-class="`${option.lineType}-line`"
-              style="font-size: 15px;"
-            />
-            <i class="el-icon-arrow-down el-icon--right" />
-          </div>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(type,index) in lineTypes" :key="index" :command="type">
-              <svg-icon
-                :icon-class="`${type}-line`"
-                style="font-size: 15px;"
-              />
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown> -->
         <el-select
           v-model="option.lineType"
           placeholder="请输入内容"

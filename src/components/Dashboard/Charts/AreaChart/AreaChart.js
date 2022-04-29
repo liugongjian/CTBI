@@ -20,6 +20,7 @@
  *    other: 其他
  *  }
  * */
+import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'trend', // 组件类型, 用于管理组件类型集合，例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -56,12 +57,110 @@ export default {
       }
     },
     'ComponentOption': { // 图表样式
+      'ChartLabel': { // 标签样式
+        'type': 'AreaChart', // 饼图标签样式
+        'check': false, // 选中显示标签
+        'checkList': [],
+        'precisionShow': false, // 是否显示百分比设置组件
+        'precision': 2, // 百分比保留位数 0位 1位 2位
+        'labelShow': 1 // 0不显示 1 智能显示 2 全部显示
+      },
       'Legend': { // 图例
         'show': true,
         'top': 'auto',
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
+      },
+      'Color': { // 颜色设置
+        'title': '配色设置',
+        'color': colorTheme['defaultColor']
+      },
+      'TwisYAxis': { // 双Y轴
+        'show': true, // 是否必须显示双y轴的复选框
+        'check': false, // 是否显示双Y轴
+        'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
+      },
+      'PercentStack': { // 百分比与堆积类型选择
+        'isPercent': false, // 是否为百分比类型
+        'isStack': false// 是否为堆积类型
+      }
+    },
+    'FunctionalOption': { // 功能配置
+      'DataZoom': { // 缩略轴
+        'showDataZoom': 'hide' // 显示方式：1.auto 智能适配；2.show 显示；3.hide 不显示
+      },
+      'LabelShowType': { // 坐标轴维度显示
+        'axisShowType': 'auto' // 1.auto 智能显示；2.sparse 强制稀疏；3.condense 最多显示
+      },
+      'NullProcess': {
+        'emptyResolve': 'skip'
+      },
+      'ChartFilter': { // 指标筛选指示
+        'showFilter': false,
+        'isMultiple': true, // 是否多选
+        'filteredSery': [], // 选中的指标
+        'indicatorOption': [] // 指标集合
+      }
+    },
+    'Axis': { // 坐标轴配置
+      'XAxis': {
+        'cname': 'X轴',
+        'title': '',
+        'unit': '',
+        'show': true,
+        'showTitle': false,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'lineType': 'solid',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000',
+        'splitType': 'solid'
+      },
+      'YAxis': {
+        'cname': '左Y轴',
+        'title': '',
+        'unit': '',
+        'show': true,
+        'showTitle': false,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'lineType': 'solid',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000',
+        'splitType': 'solid',
+        'min': 0,
+        'max': 0,
+        'autoMin': true,
+        'autoMax': true,
+        'formatType': '1',
+        'lang': 'chinese-simplified',
+        'numberFormat': 'number',
+        'numberDigit': 0,
+        'kSeperator': false,
+        'formatRegx': ''
+      }
+    },
+    'SeriesSetting': { // 系列设置
+      'SeriesSelect': { // 选择系列
+        'label': '请选择系列',
+        'selectValue': '', // 默认选择的系列名字 第一个元素
+        'remarkShow': false, // 是否显示别名
+        'remark': '', // 别名默认是选择的系列名字 第一个元素
+        'seriesOption': [],
+        'SeriesChartLabel': { // 某个系列显示图表标签
+          'check': false, // 默认未选中
+          'color': '' // 颜色
+        },
+        'SeriesMaximum': { // 最值
+          'check': false // 默认未选中
+        }
       }
     }
   },

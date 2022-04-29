@@ -22,16 +22,16 @@ export default {
       default: ''
     }
   },
-  watch: {
-    sqlStatement: function(newVal, oldVal) {
-      this.basicInfoForm.sqlMain = newVal
-    }
-  },
   data () {
     return {
       basicInfoForm: {
         sqlMain: this.sqlStatement
       }
+    }
+  },
+  watch: {
+    sqlStatement: function (newVal, oldVal) {
+      this.basicInfoForm.sqlMain = newVal
     }
   },
   methods: {

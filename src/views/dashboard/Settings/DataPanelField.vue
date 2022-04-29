@@ -47,16 +47,26 @@ export default {
     //   ['Mon', 820, 410, 36],
     //   ['Tue', 932, 320, 36.3],
     //   ['Wed', 901, 300, 36.6],
-    //   ['Thu', 934, 380, undefined],
+    //   ['Thu', 934, 380, 34],
     //   ['Fri', 1290, 430, 39.6],
     //   ['Sat', 1330, 480, 37.6],
     //   ['Sun', 1320, 460, 38]
     // ]
-    // 雷达图
     const dataValue = [
-      ['实际支出', [5000, 14000, 28000, 26000, 42000, 21000]],
-      ['分配预算', [4200, 3000, 20000, 35000, 50000, 18000]]
+      ['date', '价格', '数量', '温度'],
+      ['Mon', 820, 410, 36],
+      ['Tue', 932, 320, 36.3],
+      ['Wed', 901, 300, 36.6],
+      ['Thu', 934, 380, undefined],
+      ['Fri', 1290, 430, 39.6],
+      ['Sat', 1330, 480, 37.6],
+      ['Sun', 1320, 460, 38]
     ]
+    // 雷达图
+    // const dataValue = [
+    //   ['实际支出', [5000, 14000, 28000, 26000, 42000, 21000]],
+    //   ['分配预算', [4200, 3000, 20000, 35000, 50000, 18000]]
+    // ]
     // 进度条
     // 词云数据
     // const dataValue = [
@@ -71,11 +81,33 @@ export default {
     //   { name: 'Rita Ora', value: 360 }, { name: 'Serena Williams', value: 282 },
     //   { name: 'NCAA baseball tournament', value: 273 }, { name: 'Point Break', value: 265 }
     // ]
+    // 看板
     // const dataValue = [
-    //   { name: '一月份订单', value: '200', target: '300' },
-    //   { name: '二月份订单', value: '100', target: '200' },
-    //   { name: '三月份订单', value: '300', target: '600' },
-    //   { name: '四月份订单', value: '500', target: '580' }
+    //   {
+    //     'name': '东北',
+    //     data: [
+    //       { title: '单价', value: '4.45万' },
+    //       { title: '利润金额', value: '4.45万' }
+    //     ]
+    //   }, {
+    //     'name': '华东',
+    //     data: [
+    //       { title: '单价', value: '4.45万' },
+    //       { title: '利润金额', value: '4.45万' }
+    //     ]
+    //   }, {
+    //     'name': '华北',
+    //     data: [
+    //       { title: '单价', value: '4.45万' },
+    //       { title: '利润金额', value: '4.45万' }
+    //     ]
+    //   }, {
+    //     'name': '华南',
+    //     data: [
+    //       { title: '单价', value: '4.45万' },
+    //       { title: '利润金额', value: '4.45万' }
+    //     ]
+    //   }
     // ]
     this.val = JSON.stringify(dataValue)
   },

@@ -99,7 +99,7 @@ export default {
       const seriesOption = []
       val[0].forEach((item, index) => {
         if (index) {
-          seriesOption.push({ value: item.split('-')[0], label: item.split('-')[0] })
+          seriesOption.push({ value: item, label: item.split('-')[0] })
         }
       })
 

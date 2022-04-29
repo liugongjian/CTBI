@@ -46,6 +46,18 @@ export default {
           this.getOption()
         }
       }
+    },
+    'storeOption.theme.ComponentOption.PercentStack': {
+      handler(val) {
+        if (val.isStack && !val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'StackedBarChart'
+        }
+        if (val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'PercentStackedBarChart'
+        }
+      },
+      deep: true
+
     }
   },
   mounted () {
@@ -55,15 +67,17 @@ export default {
 
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
-      const seriesOption = []
-      val[0].forEach((item, index) => {
-        if (index) {
-          seriesOption.push({ value: item, label: item, showLabel: false, color: null, showMax: false })
-        }
-      })
-
-      this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
-      this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
+      // 为空时，进行初始化
+      if (this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption.length === 0) {
+        const seriesOption = []
+        val[0].forEach((item, index) => {
+          if (index) {
+            seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false })
+          }
+        })
+        this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
+        this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
+      }
     },
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
@@ -290,10 +304,14 @@ export default {
     setSeriesItem () {
       const { SeriesSelect } = this.storeOption.theme.SeriesSetting
       this.series = this.series.map((item) => {
-        if (SeriesSelect?.selectValue === item.name) {
-          item.label.show = SeriesSelect.SeriesChartLabel.check
-          item.label.color = SeriesSelect.SeriesChartLabel.color
-          if (SeriesSelect.SeriesMaximum?.check) {
+        const option = SeriesSelect.seriesOption.find(ele => {
+          return ele.value === item.name
+        })
+        if (option) {
+          const { labelColor, showLabel, showMax } = option
+          item.label.show = showLabel
+          item.label.color = labelColor
+          if (showMax) {
             item.markPoint = {
               symbol: 'pin',
               data: [

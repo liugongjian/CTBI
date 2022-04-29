@@ -1,7 +1,7 @@
 <template>
   <div class="result-preview-wrap">
     <!-- 存在两种 一种为编辑状态下（运行结果+历史记录） 二为展示状态下（数据预览+批量配置） -->
-    <div class="result-preview-wrap-main" v-if="isEdit">
+    <div v-if="isEdit" class="result-preview-wrap-main">
       <el-tabs v-model="activeFirstTagName" type="card" @tab-click="handleClickTagsFirst">
         <el-tab-pane label="运行结果" name="runResult">
           <!-- 成功为table -->
@@ -12,40 +12,40 @@
               <el-table-column
                 label="序号"
                 type="index"
-                width="50">
-              </el-table-column>
+                width="50"
+              />
               <el-table-column
                 v-for="(k,i) in resultData.columns"
                 :key="i"
                 :prop="k"
                 :label="k"
-                width="180">
-              </el-table-column>
+                width="180"
+              />
             </el-table>
           </template>
           <!-- 失败 -->
-          <template v-eles></template>
+          <template v-eles />
         </el-tab-pane>
         <el-tab-pane label="历史记录" name="historyLog">
           <el-table
             :data="historyLogTableData"
-            style="width: 100%">
+            style="width: 100%"
+          >
             <el-table-column
               prop="createdTime"
               label="开始时间"
-              width="180">
-            </el-table-column>
+              width="180"
+            />
             <el-table-column
               prop="sqlText"
               label="SQL语句"
-              width="180">
-            </el-table-column>
+              width="180"
+            />
             <el-table-column
               prop="costTime"
               label="耗时（ms）"
               width="180"
-            >
-            </el-table-column>
+            />
             <el-table-column
               prop="result"
               label="运行结果"
@@ -72,38 +72,39 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div class="result-preview-wrap-main" v-else>
+    <div v-else class="result-preview-wrap-main">
       <div class="result-preview-wrap-main-c">
         <div class="result-preview-wrap-main-c-top">
           <el-input
+            v-model="inputFieldName"
             placeholder="请输入字段名称"
             prefix-icon="el-icon-search"
-            v-model="inputFieldName"
-            style="margin-right: 24px">
-          </el-input>
-          <el-button type="primary" @click="refreshPreview" icon="el-icon-refresh">刷新预览</el-button>
+            style="margin-right: 24px"
+          />
+          <el-button type="primary" icon="el-icon-refresh" @click="refreshPreview">刷新预览</el-button>
         </div>
         <el-tabs v-model="activeSecondTagName" @tab-click="handleClickTagsSecond">
           <el-tab-pane label="数据预览" name="dataPreview">
             <div class="data-preview" style="width: 65vw">
               <!-- left -->
               <div class="data-preview-left">
-                <el-tree :data="dimensionMeasure" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+                <el-tree :data="dimensionMeasure" :props="defaultProps" @node-click="handleNodeClick" />
               </div>
 
               <!-- right -->
               <div class="data-preview-right">
                 <el-table
                   :data="dimensionMeasureTableData"
-                  style="width: 100%">
+                  style="width: 100%"
+                >
                   <el-table-column label="维度">
                     <el-table-column
                       v-for="(v,i) in dimensionMeasureTableColumns.filter(i => i.type === 'Dimension')"
                       :key="i"
                       :prop="v.displayColumn"
                       :label="v.column"
-                      min-width="120">
-                    </el-table-column>
+                      min-width="120"
+                    />
                   </el-table-column>
                   <el-table-column label="度量">
                     <el-table-column
@@ -111,8 +112,8 @@
                       :key="i"
                       :prop="v.displayColumn"
                       :label="v.column"
-                      min-width="120">
-                    </el-table-column>
+                      min-width="120"
+                    />
                   </el-table-column>
                 </el-table>
               </div>
@@ -145,11 +146,12 @@
                 <el-table-column
                   prop="column"
                   label="物理字段名"
-                  width="180">
-                </el-table-column>
+                  width="180"
+                />
                 <el-table-column
                   label="字段类型"
-                  width="180">
+                  width="180"
+                >
                   <template slot-scope="scope">
                     <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
                     <div v-else>
@@ -158,8 +160,8 @@
                           v-for="item in batchConfigurationDataTypeOptions"
                           :key="item.value"
                           :label="item.label"
-                          :value="item.value">
-                        </el-option>
+                          :value="item.value"
+                        />
                       </el-select>
                     </div>
                   </template>
@@ -188,11 +190,12 @@
                 </el-table-column>
                 <el-table-column
                   label="字段描述"
-                  width="180">
+                  width="180"
+                >
                   <template slot-scope="scope">
                     <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
                     <div v-else>
-                      <el-input v-model="scope.row.comment" placeholder="请输入内容"></el-input>
+                      <el-input v-model="scope.row.comment" placeholder="请输入内容" />
                     </div>
                   </template>
                 </el-table-column>
@@ -201,7 +204,7 @@
                     <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
                     <div v-else class="result-preview-batch-configuration-table-options">
                       <span @click="copyBatchConfiguration(scope.row)">复制</span>
-                      <el-divider direction="vertical"></el-divider>
+                      <el-divider direction="vertical" />
                       <span @click="deleteBatchConfiguration(scope.row)">删除</span>
                       <el-divider direction="vertical"></el-divider>
                       <span @click="hideBatchConfiguration(scope.row)">{{ scope.row.attributes[0].isHidden ? '取消隐藏' : '隐藏' }}</span>
@@ -443,7 +446,7 @@ export default {
       }
     },
     // 获取批量配置数据
-    getBatchConfigTableData(fields) {
+    getBatchConfigTableData (fields) {
       const res = [
         {
           displayColumn: '维度',
@@ -482,7 +485,7 @@ export default {
       this.batchConfigTableData = this.getBatchConfigTableData(tmp.slice()).slice()
     },
     // 删除
-    deleteBatchConfiguration(val) {
+    deleteBatchConfiguration (val) {
       const tmp = this.dataSetFields.slice()
       let _idx = 0
       tmp.forEach((i, idx) => {
@@ -495,7 +498,7 @@ export default {
       this.batchConfigTableData = this.getBatchConfigTableData(tmp.slice()).slice()
     },
     // 复制
-    copyBatchConfiguration(val) {
+    copyBatchConfiguration (val) {
       const tmp = this.dataSetFields.slice()
       const displayColumnList = []
       let copy = {}

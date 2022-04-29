@@ -10,26 +10,25 @@
       <!-- header -->
       <div class="data-set-header">
         <div class="data-set-header-l">
-          <el-button class="data-set-header-btn" style="background: #fa8334; color: #fff" @click="createFolder"><i class="el-icon-plus"></i>新建文件夹</el-button>
-          <el-button @click="createDataSet" class="data-set-header-btn" style="color: rgba(0, 0, 0, 0.65)">新建数据集</el-button>
+          <el-button class="data-set-header-btn" style="background: #fa8334; color: #fff" @click="createFolder"><i class="el-icon-plus" />新建文件夹</el-button>
+          <el-button class="data-set-header-btn" style="color: rgba(0, 0, 0, 0.65)" @click="createDataSet">新建数据集</el-button>
         </div>
         <div class="data-set-header-r">
-          <el-input v-model="serachName" placeholder="请输入文件/数据集名称" style="margin-right: 12px"> </el-input>
-          <el-button @click="query" class="data-set-header-btn" style="background: #fa8334; color: #fff">查询</el-button>
-          <el-button @click="reset" class="data-set-header-btn" style="color: rgba(0, 0, 0, 0.65)">重置</el-button>
+          <el-input v-model="serachName" placeholder="请输入文件/数据集名称" style="margin-right: 12px" />
+          <el-button class="data-set-header-btn" style="background: #fa8334; color: #fff" @click="query">查询</el-button>
+          <el-button class="data-set-header-btn" style="color: rgba(0, 0, 0, 0.65)" @click="reset">重置</el-button>
         </div>
       </div>
 
-      <div class="data-set-multiple" v-show="multipleSelection && multipleSelection.length > 0">
+      <div v-show="multipleSelection && multipleSelection.length > 0" class="data-set-multiple">
         <span>已选{{ multipleSelection.length }}项</span>
-        <span @click="moveTo" style="cursor: pointer;">移动到</span>
+        <span style="cursor: pointer;" @click="moveTo">移动到</span>
         <span @click="clearSelection">取消选择</span>
       </div>
 
       <!-- main -->
       <div class="data-set-main" v-if="isAllDataShow">
         <el-table
-          v-loading="loading"
           ref="multipleTable"
           lazy
           :data="tableData"
@@ -42,12 +41,12 @@
           :load="loadDataSet"
           :tree-props="{children: 'children', hasChildren: 'isFolder'}"
         >
-          <el-table-column type="selection" width="55"></el-table-column>
+          <el-table-column type="selection" width="55" />
           <el-table-column prop="name" label="名称" width="200">
             <template slot-scope="scope">
-              <svg-icon iconClass="sql" v-if="!scope.row.isFolder" style="margin-right: 8px"/>
-              <svg-icon v-else iconClass="floder" style="margin-right: 8px"/>
-              <span>{{ scope.row.name || scope.row.displayName }}</span>
+              <svg-icon v-if="!scope.row.isFolder" icon-class="sql" style="margin-right: 8px" />
+              <svg-icon v-else icon-class="floder" style="margin-right: 8px" />
+              <span>{{ scope.row.name }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorId" label="创建者" width="120"> </el-table-column>
@@ -61,9 +60,9 @@
             <template slot-scope="scope">
               <div v-if="!scope.row.isFolder" class="data-set-main-table-options" :class="{'no-allowed': batchSelection}">
                 <span @click="edit(scope.row)">编辑</span>
-                <el-divider direction="vertical"></el-divider>
+                <el-divider direction="vertical" />
                 <span @click="createDashboard(scope.row)">新建仪表盘</span>
-                <el-divider direction="vertical"></el-divider>
+                <el-divider direction="vertical" />
                 <span @click="showAttribute(scope.row)">属性</span>
                 <el-divider direction="vertical"></el-divider>
                 <el-tooltip placement="bottom" effect="light" :disabled="moreToolTipDisabled">
@@ -76,7 +75,7 @@
               </div>
               <div v-else class="data-set-main-table-options" :class="{'no-allowed': batchSelection}">
                 <span @click="rename(scope.row)">重命名</span>
-                <el-divider direction="vertical"></el-divider>
+                <el-divider direction="vertical" />
                 <span @click="deleteFloder(scope.row)">删除</span>
               </div>
             </template>
@@ -94,34 +93,34 @@
         </el-pagination> -->
       </div>
 
-      <div class="data-set-main" v-else>
+      <div v-else class="data-set-main">
         <el-table
-          v-loading="dataSetLoading"
           ref="multipleTable"
+          v-loading="dataSetLoading"
           :data="dataSetData"
           tooltip-effect="dark"
           style="width: 100%"
           row-key="_id"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" width="55"></el-table-column>
+          <el-table-column type="selection" width="55" />
           <el-table-column prop="name" label="名称" width="200">
             <template slot-scope="scope">
-              <svg-icon iconClass="sql" style="margin-right: 8px"/>
+              <svg-icon icon-class="sql" style="margin-right: 8px" />
               <span>{{ scope.row.name }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="root" label="文件路径" width="150"> </el-table-column>
-          <el-table-column prop="creatorId" label="创建者" width="120"> </el-table-column>
-          <el-table-column prop="lastUpdatedTime" label="修改时间" width="150"> </el-table-column>
-          <el-table-column prop="dataSource" label="数据源" width="120"> </el-table-column>
+          <el-table-column prop="root" label="文件路径" width="150" />
+          <el-table-column prop="creatorId" label="创建者" width="120" />
+          <el-table-column prop="lastUpdatedTime" label="修改时间" width="150" />
+          <el-table-column prop="dataSource" label="数据源" width="120" />
           <el-table-column label="操作" show-overflow-tooltip>
             <template slot-scope="scope">
               <div class="data-set-main-table-options" :class="{'no-allowed': batchSelection}">
                 <span @click="edit(scope.row)">编辑</span>
-                <el-divider direction="vertical"></el-divider>
+                <el-divider direction="vertical" />
                 <span @click="createDashboard(scope.row)">新建仪表盘</span>
-                <el-divider direction="vertical"></el-divider>
+                <el-divider direction="vertical" />
                 <span @click="showAttribute(scope.row)">属性</span>
                 <el-divider direction="vertical"></el-divider>
                 <el-tooltip placement="bottom" effect="light" :disabled="moreToolTipDisabled">
@@ -167,10 +166,10 @@
         title="文件夹重命名"
         :visible.sync="renameFolderVisible"
         width="480px"
-        >
+      >
         <div class="data-set-didlog-main">
           <span>文件夹名称</span>
-          <el-input v-model="editFloderName" placeholder="请输入文件夹名称" class="data-set-didlog-main-input"> </el-input>
+          <el-input v-model="editFloderName" placeholder="请输入文件夹名称" class="data-set-didlog-main-input" />
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="renameFolderVisible = false">取 消</el-button>
@@ -182,10 +181,10 @@
         title="编辑数据集"
         :visible.sync="editDataSetVisible"
         width="480px"
-        >
+      >
         <div class="data-set-didlog-main">
           <span>数据集名称</span>
-          <el-input v-model="updateDataSetName" placeholder="请输入文件夹名称" class="data-set-didlog-main-input"> </el-input>
+          <el-input v-model="updateDataSetName" placeholder="请输入文件夹名称" class="data-set-didlog-main-input" />
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="editDataSetVisible = false">取 消</el-button>
@@ -197,9 +196,9 @@
         title="删除提示"
         :visible.sync="deleteFolderVisible"
         width="480px"
-        >
+      >
         <div class="data-set-didlog-del">
-          <svg-icon iconClass="warning" style="margin-right: 16px"/>
+          <svg-icon icon-class="warning" style="margin-right: 16px" />
           <span>确定删除文件夹吗？</span>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -212,9 +211,9 @@
         title="删除提示"
         :visible.sync="deleteDataSetVisible"
         width="480px"
-        >
+      >
         <div class="data-set-didlog-del">
-          <svg-icon iconClass="warning" style="margin-right: 16px"/>
+          <svg-icon icon-class="warning" style="margin-right: 16px" />
           <span>确定删除数据集吗？</span>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -227,14 +226,14 @@
         title="属性"
         :visible.sync="dataSetAttributeVisible"
         width="480px"
-        >
+      >
         <div class="data-set-didlog-main">
           <el-form :model="dataSetAttr" style="padding: 0px">
             <el-form-item label="名称" label-width="80px">
-              <el-input v-model="dataSetAttr.name" autocomplete="off" style="width: 360px"></el-input>
+              <el-input v-model="dataSetAttr.name" autocomplete="off" style="width: 360px" />
             </el-form-item>
             <el-form-item label="描述" label-width="80px">
-              <el-input type="textarea" v-model="dataSetAttr.desc" style="width: 360px"></el-input>
+              <el-input v-model="dataSetAttr.desc" type="textarea" style="width: 360px" />
             </el-form-item>
           </el-form>
         </div>
@@ -251,16 +250,16 @@
         <div class="move-to-drawer">
           <div class="move-to-drawer-main">
             <el-input
+              v-model="searchFloder"
               placeholder="请输入"
               prefix-icon="el-icon-search"
-              v-model="searchFloder"
               @change="searchFloderList">
             </el-input>
             <div class="move-to-drawer-main-content" v-loading="!floderList">
               <span class="move-to-drawer-main-content-root">根目录</span>
               <ul>
-                <li v-for="(item, i) in floderList" :key="i" @click="selectFloder(item)" :class="{'select-actived': selectFloderId == item._id }">
-                  <svg-icon iconClass="floder" style="margin-right: 8px"/>
+                <li v-for="(item, i) in floderList" :key="i" :class="{'select-actived': selectFloderId == item._id }" @click="selectFloder(item)">
+                  <svg-icon icon-class="floder" style="margin-right: 8px" />
                   {{ item.name }}
                 </li>
               </ul>

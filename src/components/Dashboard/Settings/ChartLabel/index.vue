@@ -4,6 +4,7 @@
       <el-checkbox
         v-model="option.check"
         label="显示标签"
+        @change="handleSeriesLabel"
       />
       <el-checkbox-group
         v-if="labelOptions.length>0"
@@ -64,6 +65,7 @@
 </template>
 
 <script>
+import store from '@/store'
 export default {
   name: 'ChartLabel',
   props: {
@@ -110,7 +112,8 @@ export default {
             label: '转化率+度量值'
           }
         ],
-        'LineChart': []
+        'LineChart': [],
+        'AreaChart': []
       },
       precisionOptions: [
         {
@@ -136,6 +139,19 @@ export default {
   mounted () {
   },
   methods: {
+    // 联动改变 系列选择中的图表标签复选框值
+    handleSeriesLabel (val) {
+      store.state.app.layout.forEach(item => {
+        if (item.i === store.state.app.currentLayoutId) {
+          if (item.option.theme.SeriesSetting.SeriesSelect.SeriesChartLabel) {
+            item.option.theme.SeriesSetting.SeriesSelect.seriesOption.map((item) => {
+              item.showLabel = val
+            })
+            item.option.theme.SeriesSetting.SeriesSelect.SeriesChartLabel.check = val
+          }
+        }
+      })
+    }
   }
 
 }

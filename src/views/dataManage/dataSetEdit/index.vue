@@ -12,10 +12,10 @@
     </div>
 
     <!-- edit toptool -->
-    <div class="data-set-edit-wrap-toptool" v-show="isEdit">
+    <div v-show="isEdit" class="data-set-edit-wrap-toptool">
       <div class="data-set-edit-wrap-toptool-l">
         <div>
-          <svg-icon iconClass="sql" style="margin-right: 8px"/>
+          <svg-icon icon-class="sql" style="margin-right: 8px" />
         </div>
         <el-input v-model="dataSetDisplayName"  placeholder="未命名SQL"></el-input>
       </div>
@@ -34,8 +34,8 @@
       <!-- side -->
       <div class="data-set-edit-wrap-main-side" :class="{ 'data-set-edit-wrap-main-side-shrinked': isShrink }">
         <div class="data-set-edit-wrap-main-side-btn" @click="isShrink = !isShrink">
-          <i class="el-icon-arrow-right" style="color: #B2B2B2" v-if="isShrink"></i>
-          <i class="el-icon-arrow-left" style="color: #B2B2B2" v-else></i>
+          <i v-if="isShrink" class="el-icon-arrow-right" style="color: #B2B2B2" />
+          <i v-else class="el-icon-arrow-left" style="color: #B2B2B2" />
         </div>
 
         <!-- top -->
@@ -47,13 +47,13 @@
           <div v-else class="side-top-main">
             <div><span>选择数据源</span></div>
             <div>
-              <el-select v-model="currentDataSourceId" placeholder="请选择" >
+              <el-select v-model="currentDataSourceId" placeholder="请选择">
                 <el-option
                   v-for="item in dataSourceOptions"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
-                </el-option>
+                  :value="item.value"
+                />
               </el-select>
             </div>
           </div>
@@ -66,14 +66,14 @@
               <div v-for="(table, i) in dataSourceList" :key="i" class="side-bottom-main">
                 <div style="display: flex;justify-content: space-between;align-items: center;" class="side-bottom-main-list">
                   <div>
-                    <svg-icon iconClass="table" style="margin-right: 8px"/>
+                    <svg-icon icon-class="table" style="margin-right: 8px" />
                     <span>{{ table.displayName }}</span>
                   </div>
                   <div>
                     <el-tooltip content="复制" placement="top" effect="light">
-                      <i class="el-icon-document" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;" @click="handleCopy(table, $event)"></i>
+                      <i class="el-icon-document" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;" @click="handleCopy(table, $event)" />
                     </el-tooltip>
-                    <i class="el-icon-info" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;" ></i>
+                    <i class="el-icon-info" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;" />
                   </div>
                 </div>
               </div>
@@ -85,13 +85,13 @@
       <!-- content -->
       <div class="data-set-edit-wrap-main-content">
         <!-- top -->
-        <div class="sql-edit" v-on:dblclick="isEdit = true">
+        <div class="sql-edit" @dblclick="isEdit = true">
           <span v-if="!isEdit">{{ sqlStatement }}</span>
           <EditSql
-            ref="sqlEdit"
-            :sqlStatement="sqlStatement"
-            @sqlStatementChange="sqlStatementChange"
             v-else
+            ref="sqlEdit"
+            :sql-statement="sqlStatement"
+            @sqlStatementChange="sqlStatementChange"
           />
         </div>
 
@@ -111,34 +111,37 @@
         <div class="set-param-drawer-main">
           <el-table
             :data="sqlVariablesTableData"
-            style="width: 100%">
+            style="width: 100%"
+          >
             <el-table-column
               prop="type"
               label="类型"
-              min-width="120">
-            </el-table-column>
+              min-width="120"
+            />
             <el-table-column
               prop="name"
               label="变量名"
-              min-width="120">
-            </el-table-column>
+              min-width="120"
+            />
             <el-table-column
               label="变量类型"
-              min-width="120">
+              min-width="120"
+            >
               <template slot-scope="scope">
                 <el-select v-model="scope.row.dataType" placeholder="请选择">
                   <el-option
                     v-for="item in variableTypeOptions"
                     :key="item.value"
                     :label="item.label"
-                    :value="item.value">
-                  </el-option>
+                    :value="item.value"
+                  />
                 </el-select>
               </template>
             </el-table-column>
             <el-table-column
               label="查询默认值"
-              min-width="360">
+              min-width="360"
+            >
               <template slot-scope="scope">
                 <div style="display: flex">
                   <el-select v-model="scope.row.useInGlobal" placeholder="请选择">
@@ -146,18 +149,19 @@
                       v-for="item in queryDefaultOptions"
                       :key="item.value"
                       :label="item.label"
-                      :value="item.value">
-                    </el-option>
+                      :value="item.value"
+                    />
                   </el-select>
-                  <el-input v-model="scope.row.defaultValue" placeholder="请输入内容"></el-input>
+                  <el-input v-model="scope.row.defaultValue" placeholder="请输入内容" />
                 </div>
               </template>
             </el-table-column>
             <el-table-column
               label="操作"
-              min-width="80">
+              min-width="80"
+            >
               <template slot-scope="scope">
-                <svg-icon iconClass="delete" @click="deleteSqlVariable(scope.row)"/>
+                <svg-icon icon-class="delete" @click="deleteSqlVariable(scope.row)" />
               </template>
             </el-table-column>
           </el-table>
@@ -331,6 +335,14 @@ export default {
       saveDataSetDialogVisible: false,
       dataSetDisplayName: ''
     }
+  },
+  mounted () {
+    const data = this.$route.query
+    console.log(data, 'data')
+    this.dataSourceName = data.dataSourceName || ''
+    this.creatorName = data.creatorName
+    this.currentDataSourceId = data.dataSourceId || ''
+    this.current_id = data._id || ''
   },
   methods: {
     init () {
