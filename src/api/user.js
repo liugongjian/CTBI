@@ -1,13 +1,25 @@
 import { http } from '@/config/request'
 
 export function login (data) {
-  return http.post('/user/login', data)
+  return http.post('/login', data)
 }
 
 export function getInfo (token) {
-  return http.get('/user/info', { token })
+  return http.post('/checkToken', { token })
 }
 
 export function logout () {
-  return http.post('/user/logout')
+  return http.post('/logout')
+}
+
+export function verify () {
+  return http.get('/verify')
+}
+
+export function testTimeout () {
+  return http.get('/login/test')
+}
+
+export function activate (data) {
+  return http.put('/login/activeUser', data)
 }

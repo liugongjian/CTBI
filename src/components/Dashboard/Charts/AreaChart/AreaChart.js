@@ -93,6 +93,9 @@ export default {
       'LabelShowType': { // 坐标轴维度显示
         'axisShowType': 'auto' // 1.auto 智能显示；2.sparse 强制稀疏；3.condense 最多显示
       },
+      'NullProcess': {
+        'emptyResolve': 'skip'
+      },
       'ChartFilter': { // 指标筛选指示
         'showFilter': false,
         'isMultiple': true, // 是否多选

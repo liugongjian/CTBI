@@ -7,51 +7,10 @@ export default {
   data: function () {
     return {
       series: [],
-      yAxis: {},
-      tooltip: {}
+      yAxis: {}
     }
   },
   methods: {
-    /* 获取不同图表类型的series */
-    // getSeries () {
-    //   let seriesLength = 0
-    //   this.dataValue.forEach(item => {
-    //     seriesLength = item.length - 1
-    //   })
-    //   if (this.type === 'LineChart') {
-    //     this.series = []
-    //     for (let i = 0; i < seriesLength; i++) {
-    //       this.series.push({ type: 'line' })
-    //     }
-    //   } else if (this.type === 'AreaChart') {
-    //     this.series = []
-    //     for (let i = 0; i < seriesLength; i++) {
-    //       this.series.push({ type: 'line', areaStyle: {} })
-    //     }
-    //   } else if (this.type === 'StackedAreaChart') {
-    //     this.series = []
-    //     for (let i = 0; i < seriesLength; i++) {
-    //       this.series.push({ type: 'line', stack: 'Total', areaStyle: {} })
-    //     }
-    //   } else if (this.type === 'PercentStackedAreaChart') {
-    //     this.valueToPercent()
-    //     this.yAxis = {
-    //       axisLabel: {
-    //         show: true,
-    //         interval: 'auto',
-    //         formatter: '{value}%'
-    //       },
-    //       show: true
-    //     }
-    //     this.tooltip = {
-    //       trigger: 'axis'
-    //     }
-    //     this.series = []
-    //     for (let i = 0; i < seriesLength; i++) {
-    //       this.series.push({ type: 'line', stack: 'Total', areaStyle: {} })
-    //     }
-    //   }
-    // },
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
       const seriesOption = []
@@ -202,12 +161,20 @@ export default {
     // 系列设置
     setSeriesItem () {
       const { SeriesSelect } = this.storeOption.theme.SeriesSetting
-      const { SeriesChartLabel, SeriesMaximum } = SeriesSelect
+      // const { SeriesChartLabel, SeriesMaximum } = SeriesSelect
+
       this.series = this.series.map((item) => {
-        if (SeriesSelect?.selectValue === item.name) {
-          item.label.show = SeriesChartLabel.check
-          item.label.color = SeriesChartLabel.color
-          if (SeriesMaximum?.check) {
+        const option = SeriesSelect.seriesOption.find(ele => {
+          return ele.value === item.name
+        })
+        if (option) {
+          const { labelColor, showLabel, showMax, showMark, markType, lineType } = option
+          item.label.show = showLabel
+          item.label.color = labelColor
+          item.lineStyle = {
+            type: lineType
+          }
+          if (showMax) {
             item.markPoint = {
               symbol: 'pin',
               data: [
@@ -215,6 +182,13 @@ export default {
                 { type: 'min', name: '最小值' }
               ]
             }
+          }
+          if (showMark) {
+            item.symbol = markType
+          } else {
+            item.symbol = 'circle'
+            item.hoverAnimation = false
+            item.symbolSize = 1
           }
         }
         return item
@@ -227,7 +201,6 @@ export default {
       return {
         color: (data) => {
           if (color[0].name) {
-            console.log(',,,,dad', data.seriesName, color)
             const colorTemp = color.find((item) => { return data.seriesName === item.name })
             return colorTemp ? colorTemp.color : 'red'
           } else {
@@ -236,6 +209,25 @@ export default {
           }
         }
       }
+    },
+    // 空值处理
+    resolveNull (FunctionalOption) {
+      const ast = FunctionalOption.NullProcess.emptyResolve
+      let connectNulls = false
+      if (ast === 'skip') {
+        connectNulls = true
+      } else if (ast === 'zero') {
+        this.dataValue = this.storeOption.dataSource.map(datas => {
+          return datas.map((data, index) => {
+            connectNulls = false
+            if ([null, undefined, NaN, '-'].includes(data)) {
+              return typeof data === 'number' ? 0 : '0'
+            }
+            return data
+          })
+        })
+      }
+      return connectNulls
     },
     transfromData (indicator) {
       const data = []
@@ -253,8 +245,8 @@ export default {
       data.unshift([this.dataValue[0][0], ...indicator])
       this.dataValue = data
     },
-    // 获取堆积柱状图
-    getStackSeries (ComponentOption) {
+    // 获取堆积图
+    getStackSeries (ComponentOption, FunctionalOption) {
       this.series = []
       let seriesLength = 0
       this.dataValue.forEach(item => {
@@ -268,13 +260,15 @@ export default {
           type: 'line',
           name: this.dataValue[0][i + 1],
           label: {
-            show: ComponentOption.ChartLabel.check && this.checkList.includes('度量') // 标签显示
+            show: ComponentOption.ChartLabel.check // 标签显示
           },
           stack: 'Total',
+          areaStyle: {},
           labelLayout: {
             hideOverlap: ComponentOption.ChartLabel.labelShow === 1 // 1.智能显示，2.全量显示 标签
           },
-          itemStyle: this.getItemStyle(ComponentOption) // 图形样式配置-颜色
+          connectNulls: this.resolveNull(FunctionalOption),
+          itemStyle: this.getItemStyle(ComponentOption)// 图形样式配置-颜色
         })
         if (ComponentOption.TwisYAxis.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
@@ -282,34 +276,10 @@ export default {
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
         }
       }
-      // 插入一个假数据用于生成总计的label
-      this.dataValue[0].push('总计')
-      for (let i = 1; i < this.dataValue.length; i++) {
-        this.dataValue[i] = [...this.dataValue[i], 0]
-      }
-      this.series.push({
-        type: 'line',
-        label: {
-          show: ComponentOption.ChartLabel.check && this.checkList.includes('总计'), // 标签显示
-          position: 'top',
-          formatter: function (params) {
-            let dataTotal = 0
-            for (let i = 1; i < params.value.length; i++) {
-              dataTotal += params.value[i]
-            }
-            return dataTotal
-          }
-        },
-        stack: 'Total',
-        labelLayout: {
-          hideOverlap: ComponentOption.ChartLabel.labelShow === 1 // 1.智能显示，2.全量显示 标签
-        },
-        itemStyle: this.getItemStyle(ComponentOption) // 图形样式配置-颜色
-      })
     },
 
     // 获取百分比堆积柱状图
-    getPercentStackSeries (ComponentOption) {
+    getPercentStackSeries (ComponentOption, FunctionalOption) {
       this.series = []
       let seriesLength = 0
       this.dataValue.forEach(item => {
@@ -319,7 +289,7 @@ export default {
       // 双Y轴设置
       this.twisYAxisConfig(ComponentOption)
       this.valueToPercent()
-      const that = this
+      // const that = this
       if (!ComponentOption.TwisYAxis.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
@@ -328,18 +298,21 @@ export default {
           type: 'line',
           name: this.dataValue[0][i + 1],
           label: {
-            show: ComponentOption.ChartLabel.check, // 标签显示
-            formatter: function (params) {
-              const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
-              const isMeasure = that.checkList.includes('度量') ? `${that.storeOption.dataSource[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
-              return isPercent + '\n' + isMeasure
-            }
+            show: ComponentOption.ChartLabel.check // 标签显示
+            // TODO
+            // formatter: function (params) {
+            //   const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
+            //   const isMeasure = that.checkList.includes('度量') ? `${that.storeOption.dataSource[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+            //   return isPercent + '\n' + isMeasure
+            // }
           },
           stack: 'Total',
+          areaStyle: {},
           labelLayout: {
             hideOverlap: ComponentOption.ChartLabel.labelShow === 1 // 1.智能显示，2.全量显示 标签
           },
-          itemStyle: this.getItemStyle(ComponentOption) // 图形样式配置-颜色
+          connectNulls: this.resolveNull(FunctionalOption),
+          itemStyle: this.getItemStyle(ComponentOption)// 图形样式配置-颜色
         })
         if (ComponentOption.TwisYAxis.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
@@ -354,7 +327,7 @@ export default {
       if (componentOption.TwisYAxis.check) {
         const formatter = this.type === 'PercentStackedBarChart' ? '{value}%' : '{value}'
 
-        // 最大值和最小值暂时固定，后续需要修改
+        // 最大值和最小值暂时固定，后续需要修改 TODO
         const minData1 = componentOption.TwisYAxis.twisType === 'syncAll' ? minData2 : -10
         const minData2 = 0
         const maxData2 = 100

@@ -17,7 +17,7 @@ export default {
     SqlEditor
   },
   props: {
-    sqlString: {
+    sqlStatement: {
       type: String,
       default: ''
     }
@@ -25,14 +25,20 @@ export default {
   data () {
     return {
       basicInfoForm: {
-        sqlMain: ''
+        sqlMain: this.sqlStatement
       }
+    }
+  },
+  watch: {
+    sqlStatement: function (newVal, oldVal) {
+      this.basicInfoForm.sqlMain = newVal
     }
   },
   methods: {
     // 拿到sql编辑器内容
     changeTextarea (val) {
       this.$set(this.basicInfoForm, 'sqlMain', val)
+      this.$emit('sqlStatementChange', val)
     },
     // 格式化sql
     formaterSql (val) {
