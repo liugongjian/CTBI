@@ -93,6 +93,12 @@ export default {
         type: 'static', // img static
         setSvg: []
       }
+    },
+    SeriesSetting: {
+      kanBanSeries: {
+        dataSeries: [],
+        series: '' // 所选系列
+      }
     }
   },
   advance: {}, // 高级

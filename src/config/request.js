@@ -85,7 +85,7 @@ service.interceptors.response.use(
 
 export const http = {
   // get请求
-  get (url, params) {
+  get(url, params) {
     return new Promise((resolve, reject) => {
       service({
         method: 'get',
@@ -102,7 +102,7 @@ export const http = {
     })
   },
   // post请求
-  post (url, data) {
+  post(url, data) {
     return new Promise((resolve, reject) => {
       service({
         method: 'post',
@@ -118,22 +118,24 @@ export const http = {
     })
   },
   // put请求
-  put (url, data) {
+  put(url, data) {
     console.log('url----', url, data)
     return new Promise((resolve, reject) => {
       service({
         method: 'put',
         url,
         data
-      }).then(res => {
-        resolve(res.data || res)
-      }).catch(err => {
-        reject(err)
       })
+        .then((res) => {
+          resolve(res.data || res)
+        })
+        .catch((err) => {
+          reject(err)
+        })
     })
   },
   // delete请求
-  delete (url, data) {
+  delete(url, data) {
     return new Promise((resolve, reject) => {
       service({
         method: 'delete',
@@ -149,7 +151,7 @@ export const http = {
     })
   },
   // POST 文件上传 onUploadProgress => 上传中回调事件，用于进度条控制
-  blobStream (url, data, onUploadProgress) {
+  blobStream(url, data, onUploadProgress) {
     const headerConfig = {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -171,7 +173,7 @@ export const http = {
         })
     })
   },
-  blobDownload (url, params, method) {
+  blobDownload(url, params, method) {
     return new Promise((resolve) => {
       service({
         method: method || 'get',
@@ -205,14 +207,13 @@ export const http = {
     })
   },
   // put请求 参数为body
-  putDataSet (url, data) {
+  putDataSet(url, data) {
     return new Promise((resolve, reject) => {
-      service
-        .put({
-          method: 'put',
-          url,
-          data
-        })
+      service({
+        method: 'put',
+        url,
+        data
+      })
         .then((res) => {
           resolve(res.data || res)
         })
