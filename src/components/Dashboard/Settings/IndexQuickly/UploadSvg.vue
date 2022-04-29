@@ -15,7 +15,7 @@
               @click="handlerClick(item)"
             >
               <div class="img-url">
-                <SvgIcon :class="item" />
+                <SvgIcon :icon-class="item" />
                 <!-- <img
                   :src="item.url"
                   style="max-width:100%;height:100%;"
@@ -48,7 +48,7 @@
               <div
                 slot="tip"
                 class="el-upload__tip"
-              >只支持jpg,png,gif格式最大1M</div>
+              >只支持svg,png,gif格式最大1M</div>
             </el-upload>
           </div>
           <div>
@@ -67,7 +67,7 @@
       </el-tab-pane>
     </el-tabs>
 
-    <div class="footer">
+    <!-- <div class="footer">
       <div>显示方式</div>
       <div>
         <el-select
@@ -90,7 +90,7 @@
           </el-tooltip>
         </el-select>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -103,6 +103,10 @@ export default {
     option: {
       type: Object,
       default: () => { }
+    },
+    svgValue: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -112,22 +116,6 @@ export default {
       imgUrl: '',
       fileList: [],
       isUpload: false,
-      imgSizeOptions: [{
-        value: 'containLeft',
-        label: '居左平铺（比例不变，图片缩放）'
-      }, {
-        value: 'containMiddle',
-        label: '居中平铺（比例不变，图片缩放）'
-      }, {
-        value: 'containRight',
-        label: '居右平铺（比例不变，图片缩放）'
-      }, {
-        value: 'coverClip',
-        label: '裁剪以充满区域（图片缩放，两头裁剪）'
-      }, {
-        value: 'cover',
-        label: '拉伸以充满区域（比例变化，图片缩放）'
-      }],
       value: this.option.imgSize
     }
   },
@@ -152,15 +140,20 @@ export default {
     ]
   },
   methods: {
-    // 选择背景图片
+    // 选择svg
     handlerClick(url) {
-      this.option.imgUrl = url
+      this.option.setSvg.forEach(item => {
+        if (item.name === this.svgValue) {
+          item.svg = url
+        }
+      })
     },
     // 上传图片前钩子
     beforeUpload(file) {
-      const imgType = ['image/jpeg', 'image/png', 'image/gif']
+      console.log(file)
+      const imgType = ['image/svg+xml']
       const isType = imgType.includes(file.type)
-      const isLt1M = file.size / 1024 / 1024 <script 1
+      const isLt1M = file.size / 1024 / 1024
       if (!isType) {
         this.$message.error('图片上传格式错误!')
       }
@@ -180,7 +173,7 @@ export default {
       } else if (window.webkitURL !== undefined) {
         url = window.webkitURL.createObjectURL(event.raw)
       }
-      this.option.imgUrl = url
+      this.handlerClick(url)
     },
     // 图片上传成功后
     onSuccess(res) {
@@ -208,17 +201,18 @@ export default {
       display: flex;
       flex-wrap: wrap;
       .img-item {
-        width: 116px;
-        height: 57px;
+        width: 40px;
+        height: 40px;
         background-color: #fff;
         list-style: none;
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-right: 5px;
         cursor: pointer;
         .img-url {
-          height: 48px;
-          width: 107px;
+          width: 100%;
+          line-height: 40px;
           border-radius: 2px;
           background: #1f2841;
           text-align: center;

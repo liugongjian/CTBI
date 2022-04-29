@@ -112,14 +112,14 @@
         <div v-else class="dimension">
           <el-select v-model="svgValue" class="w-select" placeholder="请选择">
             <el-option
-              v-for="item in option.setSvg"
-              :key="item.svg"
+              v-for="(item,index) in option.setSvg"
+              :key="index"
               :label="item.name"
-              :value="item.svg"
+              :value="item.name"
             >
               <div class="svgValue">
                 <span>{{ item.name }}</span>
-                <SvgIcon :icon-class="item.svg" />
+                <ImgIcon :data="item.svg" />
               </div>
             </el-option>
           </el-select>
@@ -128,30 +128,32 @@
             width="365"
             trigger="click"
           >
-            <!-- <upload-img-inner :option="option" /> -->
+            <UploadSvg :option="option" :svg-value="svgValue" />
             <div
               slot="reference"
               class="upload-img-wrapper"
             >
-              <SvgIcon :icon-class="svgValue" />
+              <!-- <SvgIcon :icon-class="svgValue" /> -->
+              <ImgIcon :data="getSvgVal" />
             </div>
           </el-popover>
         </div>
       </template>
-
     </div>
   </div>
 </template>
 
 <script>
 import ColorConfig from '@/components/Dashboard/Common/ColorConfig'
+import UploadSvg from './UploadSvg.vue'
 import store from '@/store'
-import SvgIcon from '@/components/SvgIcon/index.vue'
+import ImgIcon from '@/components/Dashboard/Common/ImgIcon'
 export default {
   name: 'IndexQuickly',
   components: {
     ColorConfig,
-    SvgIcon
+    UploadSvg,
+    ImgIcon
   },
   props: {
     option: {
@@ -166,6 +168,11 @@ export default {
       colorData: [],
       options: [],
       fontSizeOptions: [12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
+    }
+  },
+  computed: {
+    getSvgVal() {
+      return this.option.setSvg.find(item => item.name === this.svgValue)?.svg || ''
     }
   },
   watch: {
@@ -245,10 +252,11 @@ export default {
     align-items: center;
   }
   .upload-img-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 40px;
     width: 40px;
-    text-align: center;
-    line-height: 40px;
     background-color: #686e6e;
   }
 </style>
