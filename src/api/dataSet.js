@@ -94,3 +94,8 @@ export function getSqlAllData(id) {
 export function confirmEditSql(body) {
   return http.post(`/sql/confirm`, body)
 }
+
+// 获取指定数据源的 数据表
+export function getDataTable(id) {
+  return http.get(`/dataSources/${id}/tables`)
+}

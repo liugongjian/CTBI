@@ -53,6 +53,7 @@
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
+                  @change="handleChangeDataSource"
                 />
               </el-select>
             </div>
@@ -63,11 +64,11 @@
         <div class="side-bottom">
           <el-tabs v-model="activedTag">
             <el-tab-pane label="数据表" name="first">
-              <div v-for="(table, i) in dataSourceList" :key="i" class="side-bottom-main">
+              <div v-for="(table, i) in dataTableList" :key="i" class="side-bottom-main">
                 <div style="display: flex;justify-content: space-between;align-items: center;" class="side-bottom-main-list">
                   <div>
                     <svg-icon icon-class="table" style="margin-right: 8px" />
-                    <span>{{ table.displayName }}</span>
+                    <span>{{ table.name }}</span>
                   </div>
                   <div>
                     <el-tooltip content="复制" placement="top" effect="light">
@@ -242,7 +243,7 @@
 
 <script>
 import EditSql from './components/editSql/index.vue'
-import { runtimeForSql, getDataSourceData, confirmEditSql, createDataSets, getSqlAllData, getSqlVariables, getFolderLists } from '@/api/dataSet'
+import { runtimeForSql, getDataSourceData, confirmEditSql, createDataSets, getSqlAllData, getSqlVariables, getFolderLists, getDataTable } from '@/api/dataSet'
 import ResultPreview from './components/resultPreview/index.vue'
 import Clipboard from '@/utils/clipboard.js'
 export default {
@@ -252,6 +253,7 @@ export default {
     ResultPreview
   },
   mounted () {
+    this.getDataSourceList()
     this.getFolderList()
     const data = this.$route.query
     console.log(data, 'data')
@@ -284,12 +286,12 @@ export default {
       isShrink: false,
       dataSourceOptions: [],
       activedTag: 'first',
-      dataSourceList: [
-        { displayName: 'cmswing_action' },
-        { displayName: 'cmswing_action' },
-        { displayName: 'cmswing_action' },
-        { displayName: 'cmswing_action' },
-        { displayName: 'cmswing_action' }
+      dataTableList: [
+        { name: 'cmswing_action' },
+        { name: 'cmswing_action' },
+        { name: 'cmswing_action' },
+        { name: 'cmswing_action' },
+        { name: 'cmswing_action' }
       ],
       runResultData: {},
       settingParamVisiable: false,
@@ -335,14 +337,6 @@ export default {
       saveDataSetDialogVisible: false,
       dataSetDisplayName: ''
     }
-  },
-  mounted () {
-    const data = this.$route.query
-    console.log(data, 'data')
-    this.dataSourceName = data.dataSourceName || ''
-    this.creatorName = data.creatorName
-    this.currentDataSourceId = data.dataSourceId || ''
-    this.current_id = data._id || ''
   },
   methods: {
     init () {
@@ -430,13 +424,12 @@ export default {
     // 获取数据源列表
     async getDataSourceList () {
       try {
-        const data = await getDataSourceData()
-        this.dataSourceList = data.slice()
+        const { data } = await getDataSourceData()
         const options = []
         data.foreEach(i => {
           const o = {}
-          o.label = i.displayName
-          o.value = i._id
+          o.label = i.db
+          o.value = i.id
           options.push(o)
         })
         this.dataSourceOptions = options.slice()
@@ -446,7 +439,7 @@ export default {
     },
     // 复制数据源列表
     handleCopy (val, event) {
-      const str = val.displayName
+      const str = val.name
       Clipboard(str, event)
     },
     // 获取改变的sql语句
@@ -512,6 +505,15 @@ export default {
     // 子级更改更新父级的fields
     dataSetFieldsChange(val) {
       console.log(val, 'dataSetFieldsChange')
+    },
+    //
+    async handleChangeDataSource(val) {
+      try {
+        const { data } = await getDataTable(val)
+        this.dataTableList = data.list
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
