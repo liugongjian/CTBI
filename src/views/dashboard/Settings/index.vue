@@ -64,6 +64,7 @@
       >
         <!-- 顶部菜单模块 -->
         <div class="change-chart-type-menu">
+          <span v-show="showData">数据</span>
           <span
             class="panel-icon"
             @click="toggleDataFold"
@@ -71,6 +72,17 @@
             <svg-icon :icon-class="showData?'panel-fold':'panel-unfold'" />
           </span>
         </div>
+        <div
+          v-show="showData===false"
+          style="height:calc(100vh - 190px)"
+        >
+          <!-- showItem展开面板，1:字段；2：样式；3：高级 -->
+          <div
+            class="config-item"
+            @click="showData=true"
+          ><span>数据</span></div>
+        </div>
+        <data-panel v-show="showData" style="height:calc(100vh - 190px)" />
       </div>
     </div>
 
@@ -88,11 +100,13 @@
 import store from '@/store'
 import Styles from '@/views/dashboard/Settings/Styles'
 import DataPanelField from './DataPanelField.vue'
+import DataPanel from './DataPanel.vue'
 export default {
   name: 'Settings',
   components: {
     Styles,
-    DataPanelField
+    DataPanelField,
+    DataPanel
   },
   data () {
     return {
