@@ -46,6 +46,18 @@ export default {
           this.getOption()
         }
       }
+    },
+    'storeOption.theme.ComponentOption.PercentStack': {
+      handler(val) {
+        if (val.isStack && !val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'StackedBarChart'
+        }
+        if (val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'PercentStackedBarChart'
+        }
+      },
+      deep: true
+
     }
   },
   mounted () {

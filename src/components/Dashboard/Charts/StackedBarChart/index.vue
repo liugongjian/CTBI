@@ -31,9 +31,6 @@ export default {
       const componentOption = this.storeOption.theme.ComponentOption
       this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery)
       this.getStackSeries(componentOption)
-      if (componentOption.PercentStack.isPercent) {
-        this.getPercentStackSeries(componentOption)
-      }
       // 如果选择百分比，转为百分比堆积柱状图
       if (componentOption.PercentStack.isPercent) {
         this.getPercentStackSeries(componentOption)
