@@ -4,20 +4,21 @@
       <div class="item" :style="getItem">
         <div v-show="option.dimension" class="title" :style="getDimension">
           <span v-show="option.modified" class="round" :style="getRound(item.name)">
-            <svg-icon
+            <!-- <svg-icon
               :icon-class="getSvgIcon(item.name)"
-            />
+            /> -->
+            <ImgIcon :data="getSvgIcon(item.name)" />
           </span>
           {{ item.name }}
         </div>
         <div v-for="(subItem, i) in item.data" :key="i" class="content">
           <template v-if="i === 0 && option.relation === 'deputy'">
             <span v-show="option.indicators" :style="getRelation">{{ subItem.title }}</span>
-            <span :style="getRelationVal">{{ subItem.value }}</span>
+            <span :style="getRelationVal">{{ getSeries(subItem) }}</span>
           </template>
           <template v-else>
             <span :style="getTarget">{{ subItem.title }}</span>
-            <span :style="getTargetVal" class="num">{{ subItem.value }}1</span>
+            <span :style="getTargetVal" class="num">{{ getSeries(subItem) }}</span>
           </template>
         </div>
       </div>
@@ -27,8 +28,12 @@
 </template>
 
 <script>
+import ImgIcon from '@/components/Dashboard/Common/ImgIcon'
 export default {
   name: 'Subregion',
+  components: {
+    ImgIcon
+  },
   props: {
     data: {
       type: Array,
@@ -37,9 +42,29 @@ export default {
     option: {
       type: Object,
       default: () => ({})
+    },
+    series: {
+      type: Object,
+      default: () => ({})
     }
   },
   computed: {
+    getSeries() {
+      return function({ title, value }) {
+        const { prefix, suffix } = this.series.dataSeries.find(item => item.title === title) || {}
+        return `${prefix}${value}${suffix}`
+      }
+    },
+    getPrefix() {
+      return function(name) {
+        return this.series.dataSeries.find(item => item.title === name)?.prefix || ''
+      }
+    },
+    getSuffix() {
+      return function(name) {
+        return this.series.dataSeries.find(item => item.title === name)?.suffix || ''
+      }
+    },
     getSvgIcon () {
       return function(name) {
         return this.option.setSvg.find(item => item.name === name).svg

@@ -10,6 +10,11 @@ export default {
       yAxis: {}
     }
   },
+  computed: {
+    checkList () {
+      return this.storeOption.theme.ComponentOption.ChartLabel.checkList
+    }
+  },
   methods: {
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
@@ -161,7 +166,6 @@ export default {
     // 系列设置
     setSeriesItem () {
       const { SeriesSelect } = this.storeOption.theme.SeriesSetting
-      // const { SeriesChartLabel, SeriesMaximum } = SeriesSelect
 
       this.series = this.series.map((item) => {
         const option = SeriesSelect.seriesOption.find(ele => {
@@ -169,7 +173,8 @@ export default {
         })
         if (option) {
           const { labelColor, showLabel, showMax, showMark, markType, lineType } = option
-          item.label.show = showLabel
+          const ChartLabel = this.storeOption.theme.ComponentOption.ChartLabel
+          item.label.show = item.label.show = ChartLabel.type === 'StackedBarChart' ? this.checkList.includes('度量') && ChartLabel.check && showLabel : ChartLabel.check && showLabel
           item.label.color = labelColor
           item.lineStyle = {
             type: lineType
@@ -260,7 +265,7 @@ export default {
           type: 'line',
           name: this.dataValue[0][i + 1],
           label: {
-            show: ComponentOption.ChartLabel.check // 标签显示
+            show: ComponentOption.ChartLabel.check && this.checkList.includes('度量') // 标签显示
           },
           stack: 'Total',
           areaStyle: {},
@@ -289,7 +294,7 @@ export default {
       // 双Y轴设置
       this.twisYAxisConfig(ComponentOption)
       this.valueToPercent()
-      // const that = this
+      const that = this
       if (!ComponentOption.TwisYAxis.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
@@ -298,13 +303,12 @@ export default {
           type: 'line',
           name: this.dataValue[0][i + 1],
           label: {
-            show: ComponentOption.ChartLabel.check // 标签显示
-            // TODO
-            // formatter: function (params) {
-            //   const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
-            //   const isMeasure = that.checkList.includes('度量') ? `${that.storeOption.dataSource[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
-            //   return isPercent + '\n' + isMeasure
-            // }
+            show: ComponentOption.ChartLabel.check, // 标签显示
+            formatter: function (params) {
+              const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
+              const isMeasure = that.checkList.includes('度量') ? `${that.storeOption.dataSource[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+              return isPercent + '\n' + isMeasure
+            }
           },
           stack: 'Total',
           areaStyle: {},

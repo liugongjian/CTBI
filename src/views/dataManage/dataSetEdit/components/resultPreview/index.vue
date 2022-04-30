@@ -8,7 +8,8 @@
           <template v-if="resultData.type =='success'">
             <el-table
               :data="resultData.data"
-              style="width: 100%">
+              style="width: 100%"
+            >
               <el-table-column
                 label="序号"
                 type="index"
@@ -133,13 +134,14 @@
                 <el-table-column
                   label="名称字段"
                   prop="displayColumn"
-                  width="360">
+                  width="360"
+                >
                   <template slot-scope="scope">
                     <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'">
                       <span>{{ scope.row.displayColumn }}</span>
                     </div>
                     <div v-else>
-                      <el-input v-model="scope.row.displayColumn"></el-input>
+                      <el-input v-model="scope.row.displayColumn" />
                     </div>
                   </template>
                 </el-table-column>
@@ -153,7 +155,7 @@
                   width="180"
                 >
                   <template slot-scope="scope">
-                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
+                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
                     <div v-else>
                       <el-select v-model="scope.row.attributes[0].dataType" placeholder="请选择">
                         <el-option
@@ -173,17 +175,18 @@
                 </el-table-column> -->
                 <el-table-column
                   label="数值展示格式"
-                  width="180">
+                  width="180"
+                >
                   <template slot-scope="scope">
-                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
+                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
                     <div v-else>
                       <el-select v-model="scope.row.attributes[0].format" placeholder="请选择">
                         <el-option
                           v-for="item in formatMap[scope.row.attributes[0].dataType]"
                           :key="item.value"
                           :label="item.label"
-                          :value="item.value">
-                        </el-option>
+                          :value="item.value"
+                        />
                       </el-select>
                     </div>
                   </template>
@@ -193,7 +196,7 @@
                   width="180"
                 >
                   <template slot-scope="scope">
-                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
+                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
                     <div v-else>
                       <el-input v-model="scope.row.comment" placeholder="请输入内容" />
                     </div>
@@ -201,12 +204,12 @@
                 </el-table-column>
                 <el-table-column label="操作" min-width="200">
                   <template slot-scope="scope">
-                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
+                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
                     <div v-else class="result-preview-batch-configuration-table-options">
                       <span @click="copyBatchConfiguration(scope.row)">复制</span>
                       <el-divider direction="vertical" />
                       <span @click="deleteBatchConfiguration(scope.row)">删除</span>
-                      <el-divider direction="vertical"></el-divider>
+                      <el-divider direction="vertical" />
                       <span @click="hideBatchConfiguration(scope.row)">{{ scope.row.attributes[0].isHidden ? '取消隐藏' : '隐藏' }}</span>
                     </div>
                   </template>
