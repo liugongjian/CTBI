@@ -46,7 +46,7 @@
             <template slot-scope="scope">
               <svg-icon v-if="!scope.row.isFolder" icon-class="sql" style="margin-right: 8px" />
               <svg-icon v-else icon-class="floder" style="margin-right: 8px" />
-              <span>{{ scope.row.name }}</span>
+              <span>{{ scope.row.name ? scope.row.name : scope.row.displayName }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorId" label="创建者" width="120"> </el-table-column>
@@ -107,7 +107,7 @@
           <el-table-column prop="name" label="名称" width="200">
             <template slot-scope="scope">
               <svg-icon icon-class="sql" style="margin-right: 8px" />
-              <span>{{ scope.row.name }}</span>
+              <span>{{ scope.row.displayName }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="root" label="文件路径" width="150" />
@@ -329,10 +329,10 @@ export default {
           sqlId: 'FwWlNdQ4N7JBs',
           fields: [
             {
-              attributes: {
+              attributes: [{
                 isHidden: true,
                 dataType: 'number'
-              },
+              }],
               status: 1,
               type: 'Measure',
               column: 'id',
@@ -341,10 +341,10 @@ export default {
               _id: 'd2ZIiiSrmOKTr'
             },
             {
-              attributes: {
-                isHidden: false,
+              attributes: [{
+                isHidden: true,
                 dataType: 'number'
-              },
+              }],
               status: 1,
               type: 'Measure',
               column: 'id',
@@ -353,10 +353,10 @@ export default {
               _id: 'ofno3idEh98HM'
             },
             {
-              attributes: {
-                isHidden: false,
-                dataType: 'text'
-              },
+              attributes: [{
+                isHidden: true,
+                dataType: 'number'
+              }],
               status: -1,
               type: 'Dimension',
               column: 'name',
@@ -365,10 +365,10 @@ export default {
               _id: '9DoQFxAnPWX4p'
             },
             {
-              attributes: {
+              attributes: [{
                 isHidden: true,
-                dataType: 'text'
-              },
+                dataType: 'number'
+              }],
               status: 1,
               type: 'Dimension',
               column: 'telephone',
@@ -377,10 +377,10 @@ export default {
               _id: '9sRMN8KfO74dQ'
             },
             {
-              attributes: {
+              attributes: [{
                 isHidden: true,
-                dataType: 'text'
-              },
+                dataType: 'number'
+              }],
               status: 1,
               type: 'Dimension',
               column: 'address',
@@ -483,7 +483,7 @@ export default {
   },
   methods: {
     init () {
-      this.getTableData()
+      // this.getTableData()
       this.currentFloder = null
       this.cureentDataSet = null
       this.searchFloder = ''

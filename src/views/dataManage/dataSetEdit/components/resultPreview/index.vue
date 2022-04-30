@@ -101,8 +101,8 @@
                     <el-table-column
                       v-for="(v,i) in dimensionMeasureTableColumns.filter(i => i.type === 'Dimension')"
                       :key="i"
-                      :prop="v.displayColumn"
-                      :label="v.column"
+                      :prop="v.column"
+                      :label="v.displayColumn"
                       min-width="120"
                     />
                   </el-table-column>
@@ -110,8 +110,8 @@
                     <el-table-column
                       v-for="(v,i) in dimensionMeasureTableColumns.filter(i => i.type === 'Measure')"
                       :key="i"
-                      :prop="v.displayColumn"
-                      :label="v.column"
+                      :prop="v.column"
+                      :label="v.displayColumn"
                       min-width="120"
                     />
                   </el-table-column>
@@ -139,7 +139,7 @@
                       <span>{{ scope.row.displayColumn }}</span>
                     </div>
                     <div v-else>
-                      <el-input v-model="scope.row.displayColumn" ></el-input>
+                      <el-input v-model="scope.row.displayColumn"></el-input>
                     </div>
                   </template>
                 </el-table-column>
@@ -155,7 +155,7 @@
                   <template slot-scope="scope">
                     <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
                     <div v-else>
-                      <el-select v-model="scope.row.attributes.dataType" placeholder="请选择">
+                      <el-select v-model="scope.row.attributes[0].dataType" placeholder="请选择">
                         <el-option
                           v-for="item in batchConfigurationDataTypeOptions"
                           :key="item.value"
@@ -177,9 +177,9 @@
                   <template slot-scope="scope">
                     <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"></div>
                     <div v-else>
-                      <el-select v-model="scope.row.format" placeholder="请选择">
+                      <el-select v-model="scope.row.attributes[0].format" placeholder="请选择">
                         <el-option
-                          v-for="item in numberDisplayFormatOptions"
+                          v-for="item in formatMap[scope.row.attributes[0].dataType]"
                           :key="item.value"
                           :label="item.label"
                           :value="item.value">
@@ -265,7 +265,7 @@ export default {
     const fields = this.fields.slice()
     this.dataSetFields = fields.slice()
     this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(fields.slice())))
-    this.dimensionMeasureTableColumns = fields.slice()
+    this.dimensionMeasureTableColumns = fields.slice().filter(i => !i.attributes[0].isHidden)
     this.batchConfigTableData = this.getBatchConfigTableData(fields.slice())
   },
   computed: {},
@@ -273,7 +273,7 @@ export default {
     fields: function(newVal, oldVal) {
       this.dataSetFields = newVal.slice()
       this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
-      this.dimensionMeasureTableColumns = newVal.slice()
+      this.dimensionMeasureTableColumns = newVal.slice().filter(i => !i.attributes[0].isHidden)
       this.batchConfigTableData = this.getBatchConfigTableData(newVal.slice())
     },
     runResultData: function(newVal, oldVal) {
@@ -287,6 +287,8 @@ export default {
     dataSetFields: {
       handler(newVal, oldVal) {
         // 这里 dataSetFields 等同于 父级的 fields 字段，子级有变化通知父级更改（合并的策略由父级处理）
+        this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
+        this.dimensionMeasureTableColumns = newVal.slice().filter(i => !i.attributes[0].isHidden)
         this.$emit('dataSetFieldsChange', newVal)
       },
       deep: true
@@ -336,41 +338,46 @@ export default {
           label: '文本'
         },
         {
-          value: 'date',
-          label: '日期'
+          value: 'time',
+          label: '时间'
         }
       ],
       dataSetFields: [],
-      numberDisplayFormatOptions: [
-        {
-          label: '自动',
-          value: 'auto'
-        },
-        {
-          label: '整数',
-          value: '#,##0'
-        },
-        {
-          label: '保留1位小数',
-          value: '#,##0.0'
-        },
-        {
-          label: '保留2位小数',
-          value: '#,##0.00'
-        },
-        {
-          label: '百分比',
-          value: '#,##0%'
-        },
-        {
-          label: '百分比1位小数',
-          value: '#,##0.0%'
-        },
-        {
-          label: '百分比2位小数',
-          value: '#,##0.00%'
-        }
-      ],
+      formatMap: {
+        text: [],
+        number: [
+          {
+            label: '整数',
+            value: '#,##0'
+          },
+          {
+            label: '保留1位小数',
+            value: '#,##0.0'
+          },
+          {
+            label: '保留2位小数',
+            value: '#,##0.00'
+          },
+          {
+            label: '百分比',
+            value: '#,##0%'
+          },
+          {
+            label: '百分比1位小数',
+            value: '#,##0.0%'
+          },
+          {
+            label: '百分比2位小数',
+            value: '#,##0.00%'
+          }
+        ],
+        time: [
+          {
+            label: '年-月-日 时-分秒',
+            value: 'YYYY-MM-DD HH:mm:ss'
+          }
+        ]
+      },
       resultData: {},
       currentSqlId: this.sqlId
     }
@@ -415,10 +422,12 @@ export default {
         children: []
       }]
       fields.forEach(item => {
-        if (item.type === 'Dimension') {
-          res[0].children.push({ label: item.column })
-        } else {
-          res[1].children.push({ label: item.column })
+        if (!item.attributes[0].isHidden) {
+          if (item.type === 'Dimension') {
+            res[0].children.push({ label: item.displayColumn })
+          } else {
+            res[1].children.push({ label: item.displayColumn })
+          }
         }
       })
       return res
@@ -440,7 +449,7 @@ export default {
       try {
         const data = await getPreviewData(body)
         this.dimensionMeasureTableData = data.data.slice()
-        this.dimensionMeasureTableColumns = data.fields.slice()
+        this.dimensionMeasureTableColumns = data.fields.slice().filter(i => !i.attributes[0].isHidden)
       } catch (error) {
         console.log(error)
       }
@@ -461,6 +470,9 @@ export default {
       const tmp = fields.slice()
       tmp.forEach(i => {
         if (i.type === 'Measure') {
+          if (!i.attributes) {
+            i.attributes = [{}]
+          }
           res[1].children.push(i)
         } else {
           res[0].children.push(i)

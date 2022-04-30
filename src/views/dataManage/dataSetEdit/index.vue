@@ -465,7 +465,16 @@ export default {
         body.displayName = this.dataSetDisplayName
         console.log(body, 'body')
         const data = await createDataSets(body)
-        console.log(data)
+        if (data.code === '创建成功') {
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+          this.saveDataSetDialogVisible = false
+          this.$router.push({
+            path: '/dataSet'
+          })
+        }
       } catch (error) {
         console.log(error)
       }
