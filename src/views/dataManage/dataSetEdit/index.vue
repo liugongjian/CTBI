@@ -47,13 +47,12 @@
           <div v-else class="side-top-main">
             <div><span>选择数据源</span></div>
             <div>
-              <el-select v-model="currentDataSourceId" placeholder="请选择">
+              <el-select v-model="currentDataSourceId" placeholder="请选择"  @change="handleChangeDataSource">
                 <el-option
                   v-for="item in dataSourceOptions"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
-                  @change="handleChangeDataSource"
                 />
               </el-select>
             </div>
@@ -74,7 +73,16 @@
                     <el-tooltip content="复制" placement="top" effect="light">
                       <i class="el-icon-document" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;" @click="handleCopy(table, $event)" />
                     </el-tooltip>
-                    <i class="el-icon-info" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;" />
+                    <el-popover
+                      placement="right"
+                      width="200"
+                      trigger="click">
+                      <el-table :data="currentTableInfo.columns">
+                        <el-table-column width="80" property="columnName" label="字段名"></el-table-column>
+                        <el-table-column width="120" property="columnType" label="字段类型"></el-table-column>
+                      </el-table>
+                      <i class="el-icon-info" slot="reference" @click="handleTableInfo(table.name)" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;"/>
+                    </el-popover>
                   </div>
                 </div>
               </div>
@@ -247,7 +255,7 @@
 
 <script>
 import EditSql from './components/editSql/index.vue'
-import { runtimeForSql, getDataSourceData, confirmEditSql, createDataSets, getSqlAllData, getSqlVariables, getFolderLists, getDataTable } from '@/api/dataSet'
+import { runtimeForSql, getDataSourceData, confirmEditSql, createDataSets, getSqlAllData, getSqlVariables, getFolderLists, getDataTable, getTableInfo } from '@/api/dataSet'
 import ResultPreview from './components/resultPreview/index.vue'
 import Clipboard from '@/utils/clipboard.js'
 export default {
@@ -275,6 +283,9 @@ export default {
     this.current_id = data._id || ''
     this.currentFields = data.fields || []
     this.dataSetDisplayName = this.currentDataSet.displayName || ''
+    if (this.currentDataSourceId) {
+      this.handleTableInfo(this.currentDataSourceId)
+    }
   },
   computed: {
     dataSourceName: function() {
@@ -339,7 +350,8 @@ export default {
       floderList: [],
       currentFloderId: '',
       saveDataSetDialogVisible: false,
-      dataSetDisplayName: ''
+      dataSetDisplayName: '',
+      currentTableInfo: {}
     }
   },
   methods: {
@@ -428,14 +440,15 @@ export default {
     // 获取数据源列表
     async getDataSourceList () {
       try {
-        const data = await getDataSourceData()
+        const { list } = await getDataSourceData()
         const options = []
-        data.foreEach(i => {
+        list.forEach(i => {
           const o = {}
-          o.label = i.db
-          o.value = i.id
+          o.label = i.displayName
+          o.value = i._id
           options.push(o)
         })
+        console.log('options', options)
         this.dataSourceOptions = options.slice()
       } catch (error) {
         console.log(error)
@@ -445,6 +458,16 @@ export default {
     handleCopy (val, event) {
       const str = val.name
       Clipboard(str, event)
+    },
+    async handleTableInfo(tableName) {
+      const id = this.currentDataSourceId
+      console.log(id)
+      try {
+        const data = await getTableInfo(id, tableName)
+        this.currentTableInfo = data
+      } catch (error) {
+        console.log(error)
+      }
     },
     // 获取改变的sql语句
     sqlStatementChange (sql) {
@@ -522,6 +545,7 @@ export default {
     //
     async handleChangeDataSource(val) {
       try {
+        this.currentDataSourceId = val
         const data = await getDataTable(val)
         this.dataTableList = data.list
       } catch (error) {

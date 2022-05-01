@@ -99,3 +99,8 @@ export function confirmEditSql(body) {
 export function getDataTable(id) {
   return http.get(`/dataSources/${id}/tables`)
 }
+
+// 查表详情
+export function getTableInfo(id, tableName) {
+  return http.get(`/dataSources/${id}/table/info`, { tableName })
+}
