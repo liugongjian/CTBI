@@ -66,6 +66,18 @@ export default {
             name: '百分比堆积柱状图',
             value: 'PercentStackedBarChart'
           }
+        ],
+        [
+          {
+            name: '条形图',
+            value: 'HorizontalBarChart'
+          }, {
+            name: '堆积条形图',
+            value: 'StackedHorizontalBarChart'
+          }, {
+            name: '百分比堆积条形图',
+            value: 'PSHorizontalBarChart'
+          }
         ]
       ]
     }

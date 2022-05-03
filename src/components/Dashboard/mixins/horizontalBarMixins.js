@@ -1,4 +1,4 @@
-// 柱图的混入
+// 条形图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
 import { getLayoutOptionById } from '@/utils/optionUtils'
@@ -12,8 +12,8 @@ export default {
       chartOption: {},
       dataValue: null,
       series: [],
-      xAxis: { type: 'category' },
-      yAxis: {},
+      xAxis: {},
+      yAxis: { type: 'category' },
       grid: {}
     }
   },
@@ -51,10 +51,10 @@ export default {
       handler(val) {
         this.storeOption.theme.ComponentOption.ChartLabel.type = this.type
         if (val.isStack && !val.isPercent) {
-          this.storeOption.theme.ComponentOption.ChartLabel.type = 'StackedBarChart'
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'StackedHorizontalBarChart'
         }
         if (val.isPercent) {
-          this.storeOption.theme.ComponentOption.ChartLabel.type = 'PercentStackedBarChart'
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'PSHorizontalBarChart'
         }
       },
       deep: true
@@ -125,7 +125,7 @@ export default {
     twisYAxisConfig (componentOption) {
       // 双y轴设置与坐标轴设置相关联，其中关于y轴模块暂时固定，后续需切换成坐标轴设置的值
       if (componentOption.TwisYAxis.check) {
-        const formatter = this.type === 'PercentStackedBarChart' ? '{value}%' : '{value}'
+        const formatter = this.type === 'PSHorizontalBarChart' ? '{value}%' : '{value}'
 
         // 最大值和最小值暂时固定，后续需要修改
         const minData1 = componentOption.TwisYAxis.twisType === 'syncAll' ? minData2 : -10
@@ -134,7 +134,7 @@ export default {
         const maxData1 = componentOption.TwisYAxis.twisType === 'syncAll' ? maxData2 : 100
         const intervalNum1 = componentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData1 - minData1) / 5 : null
         const intervalNum2 = componentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null
-        this.yAxis = [
+        this.xAxis = [
           {
             type: 'value',
             min: minData1,
@@ -164,7 +164,7 @@ export default {
             }
           }
         ]
-        this.xAxis.unshift({ type: 'category' })
+        this.yAxis.unshift({ type: 'category' })
       } else {
         this.setAxis()
       }
@@ -205,7 +205,7 @@ export default {
       this.dataValue = data
     },
 
-    // 获取堆积柱状图
+    // 获取堆积条形图
     getStackSeries (componentOption) {
       this.series = []
       let seriesLength = 0
@@ -229,9 +229,9 @@ export default {
           itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
         })
         if (componentOption.TwisYAxis.check) {
-          const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
-          this.series[i].yAxisIndex = yAxisIndex
-          this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
+          const xAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
+          this.series[i].xAxisIndex = xAxisIndex
+          this.series[i].stack = xAxisIndex === 1 ? 'other' : 'Total'
         }
       }
       // 插入一个假数据用于生成总计的label
@@ -260,7 +260,7 @@ export default {
       })
     },
 
-    // 获取百分比堆积柱状图
+    // 获取百分比堆积条形图
     getPercentStackSeries (componentOption) {
       this.series = []
       let seriesLength = 0
@@ -273,7 +273,7 @@ export default {
       this.valueToPercent()
       const that = this
       if (!componentOption.TwisYAxis.check) {
-        this.yAxis[0].axisLabel.formatter = '{value}%'
+        this.xAxis[0].axisLabel.formatter = '{value}%'
       }
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
@@ -294,9 +294,9 @@ export default {
           itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
         })
         if (componentOption.TwisYAxis.check) {
-          const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
-          this.series[i].yAxisIndex = yAxisIndex
-          this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
+          const xAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
+          this.series[i].xAxisIndex = xAxisIndex
+          this.series[i].stack = xAxisIndex === 1 ? 'other' : 'Total'
         }
       }
     },
@@ -311,11 +311,13 @@ export default {
         if (option) {
           const { labelColor, showLabel, showMax } = option
           const ChartLabel = this.storeOption.theme.ComponentOption.ChartLabel
-          item.label.show = ChartLabel.type === 'StackedBarChart' ? this.checkList.includes('度量') && ChartLabel.check && showLabel : ChartLabel.check && showLabel
+          item.label.show = ChartLabel.type === 'StackedHorizontalBarChart' ? this.checkList.includes('度量') && ChartLabel.check && showLabel : ChartLabel.check && showLabel
+          console.log(ChartLabel.type)
           item.label.color = labelColor
           if (showMax) {
             item.markPoint = {
               symbol: 'pin',
+              symbolRotate: -90,
               data: [
                 { type: 'max', name: '最大值' },
                 { type: 'min', name: '最小值' }
@@ -330,7 +332,7 @@ export default {
     // 坐标轴配置
     setAxis () {
       const { XAxis, YAxis } = this.storeOption.theme.Axis
-      this.xAxis = [
+      this.yAxis = [
         {
           type: 'category',
           // 轴线显示与样式
@@ -345,28 +347,30 @@ export default {
           // 轴标签
           'axisLabel': {
             'show': XAxis.showAxisLabel,
-            rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
-            interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 'auto'
+            'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
+            'interval': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 'auto'
           },
+          'position': this.storeOption.theme.ComponentOption.ChartAlign.align === 'left' ? 'left' : 'right',
           // 轴刻度线
           'axisTick': {
             'show': XAxis.showTicks
           },
           // 网格线
           'splitLine': {
-            show: XAxis.showSplit,
-            lineStyle: {
-              type: XAxis.splitType,
-              color: XAxis.splitColor,
-              width: XAxis.splitWidth
+            'show': XAxis.showSplit,
+            'lineStyle': {
+              'type': XAxis.splitType,
+              'color': XAxis.splitColor,
+              'width': XAxis.splitWidth
             }
           },
           // 轴标题和单位
           name: XAxis.showTitle ? (XAxis.unit ? `${XAxis.title}(${XAxis.unit})` : XAxis.title) : ''
         }
       ]
-      this.yAxis = [
+      this.xAxis = [
         {
+          'inverse': this.storeOption.theme.ComponentOption.ChartAlign.align === 'right',
           'axisLine': {
             'show': YAxis.show,
             'lineStyle': {
