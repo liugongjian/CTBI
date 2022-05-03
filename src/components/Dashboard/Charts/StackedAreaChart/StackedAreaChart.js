@@ -58,7 +58,7 @@ export default {
     },
     'ComponentOption': { // 图表样式
       'ChartLabel': { // 标签样式
-        'type': 'StackedBarChart', // 图表类型
+        'type': 'StackedAreaChart', // 图表类型
         'check': false, // 选中显示标签
         'checkList': ['度量'],
         'precisionShow': false, // 是否显示百分比设置组件

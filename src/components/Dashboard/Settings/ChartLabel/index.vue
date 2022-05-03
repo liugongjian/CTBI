@@ -117,6 +117,20 @@ export default {
         ],
         'LineChart': [],
         'AreaChart': [],
+        'StackedAreaChart': [
+          {
+            label: '度量'
+          }, {
+            label: '总计'
+          }
+        ],
+        'PercentStackedAreaChart': [
+          {
+            label: '度量'
+          }, {
+            label: '百分比'
+          }
+        ],
         'HorizontalBarChart': [],
         'StackedHorizontalBarChart': [
           {

@@ -27,7 +27,8 @@ export default {
       storeOption: {},
       chartOption: {},
       dataValue: null,
-      series: []
+      series: [],
+      type: 'StackedAreaChart'
     }
   },
   watch: {
@@ -54,6 +55,18 @@ export default {
           this.getOption()
         }
       }
+    },
+    'storeOption.theme.ComponentOption.PercentStack': {
+      handler(val) {
+        this.storeOption.theme.ComponentOption.ChartLabel.type = this.type
+        if (val.isStack && !val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'StackedAreaChart'
+        }
+        if (val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'PercentStackedAreaChart'
+        }
+      },
+      deep: true
     }
   },
   mounted () {

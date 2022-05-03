@@ -27,7 +27,8 @@ export default {
       storeOption: {},
       chartOption: {},
       dataValue: null,
-      series: []
+      series: [],
+      type: 'PercentStackedAreaChart'// 图表类型 1.线图；2.面积图; 3.堆叠面积图；4.百分比堆叠图
     }
   },
   watch: {
@@ -54,6 +55,18 @@ export default {
           this.getOption()
         }
       }
+    },
+    'storeOption.theme.ComponentOption.PercentStack': {
+      handler(val) {
+        this.storeOption.theme.ComponentOption.ChartLabel.type = this.type
+        if (val.isStack && !val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'StackedAreaChart'
+        }
+        if (val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'PercentStackedAreaChart'
+        }
+      },
+      deep: true
     }
   },
   mounted () {
