@@ -79,10 +79,19 @@ export default {
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
 
+      // 获取指标筛选中的图例数据
+      const legendData = []
+      this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
+        legendData.push({ name: item.value })
+      })
+
       this.chartOption = {
         grid: this.grid,
         color: colorOption,
-        legend: ComponentOption.Legend,
+        legend: {
+          ...ComponentOption.Legend,
+          data: legendData
+        },
         xAxis: this.xAxis,
         tooltip: {
           trigger: 'axis',
