@@ -1,7 +1,7 @@
 /**
 {
   "author": "ZhengJiale",
-  "time": "2022/04/",30
+  "time": "2022/04/30",
   "description": "条形图组件"
 }
  * */

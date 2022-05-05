@@ -243,7 +243,7 @@ export default {
         type: 'bar',
         label: {
           show: componentOption.ChartLabel.check && this.checkList.includes('总计'), // 标签显示
-          position: 'top',
+          position: 'right',
           formatter: function (params) {
             let dataTotal = 0
             for (let i = 1; i < params.value.length; i++) {
@@ -311,8 +311,7 @@ export default {
         if (option) {
           const { labelColor, showLabel, showMax } = option
           const ChartLabel = this.storeOption.theme.ComponentOption.ChartLabel
-          item.label.show = ChartLabel.type === 'StackedHorizontalBarChart' ? this.checkList.includes('度量') && ChartLabel.check && showLabel : ChartLabel.check && showLabel
-          console.log(ChartLabel.type)
+          item.label.show = ChartLabel.type === 'StackedHorizontalBarChart' ? (this.checkList.includes('度量') && ChartLabel.check) || showLabel : ChartLabel.check || showLabel
           item.label.color = labelColor
           if (showMax) {
             item.markPoint = {
