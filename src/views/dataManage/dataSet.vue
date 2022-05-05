@@ -46,7 +46,7 @@
             <template slot-scope="scope">
               <svg-icon v-if="!scope.row.isFolder" icon-class="sql" style="margin-right: 8px" />
               <svg-icon v-else icon-class="floder" style="margin-right: 8px" />
-              <span>{{ scope.row.name }}</span>
+              <span>{{ scope.row.name ? scope.row.name : scope.row.displayName }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="creatorId" label="创建者" width="120" />
@@ -107,7 +107,7 @@
           <el-table-column prop="name" label="名称" width="200">
             <template slot-scope="scope">
               <svg-icon icon-class="sql" style="margin-right: 8px" />
-              <span>{{ scope.row.name }}</span>
+              <span>{{ scope.row.displayName }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="root" label="文件路径" width="150" />
@@ -329,10 +329,10 @@ export default {
           sqlId: 'FwWlNdQ4N7JBs',
           fields: [
             {
-              attributes: {
+              attributes: [{
                 isHidden: true,
                 dataType: 'number'
-              },
+              }],
               status: 1,
               type: 'Measure',
               column: 'id',
@@ -341,10 +341,10 @@ export default {
               _id: 'd2ZIiiSrmOKTr'
             },
             {
-              attributes: {
-                isHidden: false,
+              attributes: [{
+                isHidden: true,
                 dataType: 'number'
-              },
+              }],
               status: 1,
               type: 'Measure',
               column: 'id',
@@ -353,10 +353,10 @@ export default {
               _id: 'ofno3idEh98HM'
             },
             {
-              attributes: {
-                isHidden: false,
-                dataType: 'text'
-              },
+              attributes: [{
+                isHidden: true,
+                dataType: 'number'
+              }],
               status: -1,
               type: 'Dimension',
               column: 'name',
@@ -365,10 +365,10 @@ export default {
               _id: '9DoQFxAnPWX4p'
             },
             {
-              attributes: {
+              attributes: [{
                 isHidden: true,
-                dataType: 'text'
-              },
+                dataType: 'number'
+              }],
               status: 1,
               type: 'Dimension',
               column: 'telephone',
@@ -377,10 +377,10 @@ export default {
               _id: '9sRMN8KfO74dQ'
             },
             {
-              attributes: {
+              attributes: [{
                 isHidden: true,
-                dataType: 'text'
-              },
+                dataType: 'number'
+              }],
               status: 1,
               type: 'Dimension',
               column: 'address',
@@ -483,7 +483,7 @@ export default {
   },
   methods: {
     init () {
-      this.getTableData()
+      // this.getTableData()
       this.currentFloder = null
       this.cureentDataSet = null
       this.searchFloder = ''
@@ -495,7 +495,7 @@ export default {
     // 获取 tableData
     async getTableData () {
       try {
-        const { data } = await getDataSetsFolders()
+        const data = await getDataSetsFolders()
         // data.forEach(item => {
         //   if (item.isFolder) {
         //     item.children = []
@@ -518,7 +518,7 @@ export default {
         name: this.newFloderName
       }
       try {
-        const { data } = await createFloders(body)
+        const data = await createFloders(body)
         console.log('createFloders data', data)
         this.createFloderVisible = false
         this.newFloderName = ''
@@ -561,7 +561,7 @@ export default {
       this.isAllDataShow = false
       const searchkey = this.serachName
       try {
-        const { data } = await getDataSetsFolders({ searchkey })
+        const data = await getDataSetsFolders({ searchkey })
         this.dataSetData = data.filter(item => !item.isFolder)
         this.dataSetLoading = false
       } catch (error) {
@@ -596,7 +596,7 @@ export default {
         displayName: this.updateDataSetName
       }
       try {
-        const { data } = await updateDataSet(id, params)
+        const data = await updateDataSet(id, params)
         console.log(data)
         this.editDataSetVisible = false
         this.currentFloder = null
@@ -622,7 +622,7 @@ export default {
         comment: this.dataSetAttr.desc
       }
       try {
-        const { data } = await updateDataSet(id, params)
+        const data = await updateDataSet(id, params)
         console.log(data)
         this.dataSetAttributeVisible = false
         this.cureentDataSet = null
@@ -647,7 +647,7 @@ export default {
         name: this.editFloderName
       }
       try {
-        const { data } = await updateFolderName(id, body)
+        const data = await updateFolderName(id, body)
         console.log(data)
         this.editFloderName = ''
         this.currentFloder = null
@@ -666,7 +666,7 @@ export default {
     async hanleDeleteFolder () {
       const id = this.currentFloder._id
       try {
-        const { data } = await delFolders(id)
+        const data = await delFolders(id)
         console.log(data)
         this.deleteFolderVisible = false
         this.currentFloder = null
@@ -684,7 +684,7 @@ export default {
     async hanleDeleteDataSet () {
       const id = this.cureentDataSet._id
       try {
-        const { data } = await delDataSet(id)
+        const data = await delDataSet(id)
         console.log(data)
         this.deleteDataSetVisible = false
         this.cureentDataSet = null
@@ -707,7 +707,7 @@ export default {
       }
       this.moveToVisible = true
       try {
-        const { data } = await getFolderLists()
+        const data = await getFolderLists()
         console.log(data)
         this.floderList = data.result
       } catch (error) {
@@ -724,7 +724,7 @@ export default {
       })
       if (!ids.length) return false
       try {
-        const { code } = await moveDataSet2Folder({
+        const code = await moveDataSet2Folder({
           ids,
           folderId
         })
@@ -755,7 +755,7 @@ export default {
       const tmp = this.tableData.slice()
       const folderId = row._id
       try {
-        const { data } = await getDataSetsFolders({ folderId })
+        const data = await getDataSetsFolders({ folderId })
         tmp.forEach(item => {
           if (item._id === folderId) {
             item.children = data
@@ -781,7 +781,7 @@ export default {
     async loadDataSet (tree, treeNode, resolve) {
       const folderId = tree._id
       try {
-        const { data } = await getDataSetsFolders({ folderId })
+        const data = await getDataSetsFolders({ folderId })
         console.log(data)
         resolve(data)
       } catch (error) {
@@ -792,7 +792,7 @@ export default {
     async searchFloderList() {
       const searchkey = this.searchFloder
       try {
-        const { data } = await getFolderLists({ searchkey })
+        const data = await getFolderLists({ searchkey })
         console.log(data)
         this.floderList = data.result
       } catch (error) {

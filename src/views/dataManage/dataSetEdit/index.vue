@@ -47,7 +47,7 @@
           <div v-else class="side-top-main">
             <div><span>选择数据源</span></div>
             <div>
-              <el-select v-model="currentDataSourceId" placeholder="请选择">
+              <el-select v-model="currentDataSourceId" placeholder="请选择"  @change="handleChangeDataSource">
                 <el-option
                   v-for="item in dataSourceOptions"
                   :key="item.value"
@@ -63,17 +63,26 @@
         <div class="side-bottom">
           <el-tabs v-model="activedTag">
             <el-tab-pane label="数据表" name="first">
-              <div v-for="(table, i) in dataSourceList" :key="i" class="side-bottom-main">
+              <div v-for="(table, i) in dataTableList" :key="i" class="side-bottom-main">
                 <div style="display: flex;justify-content: space-between;align-items: center;" class="side-bottom-main-list">
                   <div>
                     <svg-icon icon-class="table" style="margin-right: 8px" />
-                    <span>{{ table.displayName }}</span>
+                    <span>{{ table.name }}</span>
                   </div>
                   <div>
                     <el-tooltip content="复制" placement="top" effect="light">
                       <i class="el-icon-document" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;" @click="handleCopy(table, $event)" />
                     </el-tooltip>
-                    <i class="el-icon-info" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;" />
+                    <el-popover
+                      placement="right"
+                      width="200"
+                      trigger="click">
+                      <el-table :data="currentTableInfo.columns">
+                        <el-table-column width="80" property="columnName" label="字段名"></el-table-column>
+                        <el-table-column width="120" property="columnType" label="字段类型"></el-table-column>
+                      </el-table>
+                      <i class="el-icon-info" slot="reference" @click="handleTableInfo(table.name)" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;"/>
+                    </el-popover>
                   </div>
                 </div>
               </div>
@@ -246,7 +255,7 @@
 
 <script>
 import EditSql from './components/editSql/index.vue'
-import { runtimeForSql, getDataSourceData, confirmEditSql, createDataSets, getSqlAllData, getSqlVariables, getFolderLists } from '@/api/dataSet'
+import { runtimeForSql, getDataSourceData, confirmEditSql, createDataSets, getSqlAllData, getSqlVariables, getFolderLists, getDataTable, getTableInfo } from '@/api/dataSet'
 import ResultPreview from './components/resultPreview/index.vue'
 import Clipboard from '@/utils/clipboard.js'
 export default {
@@ -255,18 +264,49 @@ export default {
     EditSql,
     ResultPreview
   },
+  mounted () {
+    this.getDataSourceList()
+    this.getFolderList()
+    const data = this.$route.query
+    console.log(data, 'data')
+    // 如果都为空则表示新建的数据集，直接进入编辑状态
+    if (!data._id) {
+      this.isEdit = true
+    }
+    this.currentDataSet = data
+    if (data.sqlId) {
+      this.currentSqlId = data.sqlId
+      this.getSqlData(data.sqlId)
+    }
+    this.creatorName = data.creatorName
+    this.currentDataSourceId = data.dataSourceId || ''
+    this.current_id = data._id || ''
+    this.currentFields = data.fields || []
+    this.dataSetDisplayName = this.currentDataSet.displayName || ''
+    if (this.currentDataSourceId) {
+      this.handleTableInfo(this.currentDataSourceId)
+    }
+  },
+  computed: {
+    dataSourceName: function() {
+      return this.currentDataSet.dataSourceName || ''
+    },
+    sqlStatement: function() {
+      return this.currentSqlData.sql || ''
+    }
+  },
   data () {
     return {
       isEdit: false,
       isShrink: false,
       dataSourceOptions: [],
       activedTag: 'first',
-      dataSourceList: [
-        { displayName: 'cmswing_action' },
-        { displayName: 'cmswing_action' },
-        { displayName: 'cmswing_action' },
-        { displayName: 'cmswing_action' },
-        { displayName: 'cmswing_action' }
+      dataTableList: [
+        { name: 'cmswing_action' },
+        { name: 'cmswing_action' },
+        { name: 'cmswing_action' },
+        { name: 'cmswing_action' },
+        { name: 'cmswing_action' }
       ],
       runResultData: {},
       settingParamVisiable: false,
@@ -310,35 +350,9 @@ export default {
       floderList: [],
       currentFloderId: '',
       saveDataSetDialogVisible: false,
-      dataSetDisplayName: ''
+      dataSetDisplayName: '',
+      currentTableInfo: {}
     }
-  },
-  computed: {
-    dataSourceName: function() {
-      return this.currentDataSet.dataSourceName || ''
-    },
-    sqlStatement: function() {
-      return this.currentSqlData.sql || ''
-    }
-  },
-  mounted () {
-    this.getFolderList()
-    const data = this.$route.query
-    console.log(data, 'data')
-    // 如果都为空则表示新建的数据集，直接进入编辑状态
-    if (!data._id) {
-      this.isEdit = true
-    }
-    this.currentDataSet = data
-    if (data.sqlId) {
-      this.currentSqlId = data.sqlId
-      this.getSqlData(data.sqlId)
-    }
-    this.creatorName = data.creatorName
-    this.currentDataSourceId = data.dataSourceId || ''
-    this.current_id = data._id || ''
-    this.currentFields = data.fields || []
-    this.dataSetDisplayName = this.currentDataSet.displayName || ''
   },
   methods: {
     init () {
@@ -363,7 +377,7 @@ export default {
         sql
       }
       try {
-        const { data } = await getSqlVariables(body)
+        const data = await getSqlVariables(body)
         this.sqlVariablesTableData = data.slice()
       } catch (error) {
         console.log(error)
@@ -379,7 +393,7 @@ export default {
         body.sqlVariables = this.sqlVariables
       }
       try {
-        const { data } = await runtimeForSql(body)
+        const data = await runtimeForSql(body)
         this.runResultData = data
         if (this.currentSqlId !== data._id) {
           this.currentSqlId = data._id
@@ -398,7 +412,7 @@ export default {
         if (this.sqlVariables && this.sqlVariables.length > 0) {
           body.sqlVariables = this.sqlVariables
         }
-        const { data } = confirmEditSql(body)
+        const data = confirmEditSql(body)
         this.currentFields = data.fields
         this.currentSqlData = data.sql
         this.currentSqlId = data.sql._id
@@ -426,15 +440,15 @@ export default {
     // 获取数据源列表
     async getDataSourceList () {
       try {
-        const data = await getDataSourceData()
-        this.dataSourceList = data.slice()
+        const { list } = await getDataSourceData()
         const options = []
-        data.foreEach(i => {
+        list.forEach(i => {
           const o = {}
           o.label = i.displayName
           o.value = i._id
           options.push(o)
         })
+        console.log('options', options)
         this.dataSourceOptions = options.slice()
       } catch (error) {
         console.log(error)
@@ -442,8 +456,18 @@ export default {
     },
     // 复制数据源列表
     handleCopy (val, event) {
-      const str = val.displayName
+      const str = val.name
       Clipboard(str, event)
+    },
+    async handleTableInfo(tableName) {
+      const id = this.currentDataSourceId
+      console.log(id)
+      try {
+        const data = await getTableInfo(id, tableName)
+        this.currentTableInfo = data
+      } catch (error) {
+        console.log(error)
+      }
     },
     // 获取改变的sql语句
     sqlStatementChange (sql) {
@@ -467,8 +491,17 @@ export default {
         body.sql = this.currentSqlData
         body.displayName = this.dataSetDisplayName
         console.log(body, 'body')
-        const { data } = await createDataSets(body)
-        console.log(data)
+        const data = await createDataSets(body)
+        if (data.code === '创建成功') {
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+          this.saveDataSetDialogVisible = false
+          this.$router.push({
+            path: '/dataSet'
+          })
+        }
       } catch (error) {
         console.log(error)
       }
@@ -481,7 +514,7 @@ export default {
     // 根据sqlId 获取sql相关的所有数据
     async getSqlData(sqlId) {
       try {
-        const { data } = await getSqlAllData(sqlId)
+        const data = await getSqlAllData(sqlId)
         console.log('currentSqlData', data)
         this.currentSqlData = data
         this.currentSqlStatement = data.sql
@@ -499,7 +532,7 @@ export default {
     // 获取 folderList
     async getFolderList() {
       try {
-        const { data } = await getFolderLists()
+        const data = await getFolderLists()
         this.floderList = data.result
       } catch (error) {
         console.log(error)
@@ -508,6 +541,16 @@ export default {
     // 子级更改更新父级的fields
     dataSetFieldsChange(val) {
       console.log(val, 'dataSetFieldsChange')
+    },
+    //
+    async handleChangeDataSource(val) {
+      try {
+        this.currentDataSourceId = val
+        const data = await getDataTable(val)
+        this.dataTableList = data.list
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
