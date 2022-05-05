@@ -1,87 +1,161 @@
 <template>
-  <div class="data-set-wrap">
-    <!-- header -->
-
-    <div class="data-set-wrap-title">
-      <span>数据集</span>
-    </div>
-
-    <div class="data-set-wrap-content">
-      <!-- header -->
-      <div class="data-set-header">
-        <div class="data-set-header-l">
-          <el-button class="data-set-header-btn" style="background: #fa8334; color: #fff" @click="createFolder"><i class="el-icon-plus" />新建文件夹</el-button>
-          <el-button class="data-set-header-btn" style="color: rgba(0, 0, 0, 0.65)" @click="createDataSet">新建数据集</el-button>
+  <page-view>
+    <div class="data-set-wrap">
+      <div class="data-set-wrap-content">
+        <!-- header -->
+        <div class="data-set-header">
+          <div class="data-set-header-l">
+            <el-button
+              class="data-set-header-btn"
+              style="background: #fa8334; color: #fff"
+              @click="createFolder"
+            ><i class="el-icon-plus" />新建文件夹</el-button>
+            <el-button
+              class="data-set-header-btn"
+              style="color: rgba(0, 0, 0, 0.65)"
+              @click="createDataSet"
+            >新建数据集</el-button>
+          </div>
+          <div class="data-set-header-r">
+            <el-input
+              v-model="serachName"
+              placeholder="请输入文件/数据集名称"
+              style="margin-right: 12px"
+            />
+            <el-button
+              class="data-set-header-btn"
+              style="background: #fa8334; color: #fff"
+              @click="query"
+            >查询</el-button>
+            <el-button
+              class="data-set-header-btn"
+              style="color: rgba(0, 0, 0, 0.65)"
+              @click="reset"
+            >重置</el-button>
+          </div>
         </div>
-        <div class="data-set-header-r">
-          <el-input v-model="serachName" placeholder="请输入文件/数据集名称" style="margin-right: 12px" />
-          <el-button class="data-set-header-btn" style="background: #fa8334; color: #fff" @click="query">查询</el-button>
-          <el-button class="data-set-header-btn" style="color: rgba(0, 0, 0, 0.65)" @click="reset">重置</el-button>
-        </div>
-      </div>
 
-      <div v-show="multipleSelection && multipleSelection.length > 0" class="data-set-multiple">
-        <span>已选{{ multipleSelection.length }}项</span>
-        <span style="cursor: pointer;" @click="moveTo">移动到</span>
-        <span @click="clearSelection">取消选择</span>
-      </div>
-
-      <!-- main -->
-      <div v-if="isAllDataShow" class="data-set-main">
-        <el-table
-          ref="multipleTable"
-          lazy
-          :data="tableData"
-          tooltip-effect="dark"
-          style="width: 100%"
-          row-key="_id"
-          :load="loadDataSet"
-          :tree-props="{children: 'children', hasChildren: 'isFolder'}"
-          @selection-change="handleSelectionChange"
-          @expand-change="handleExpandChange"
-          @cell-click="handleCellClick"
+        <div
+          v-show="multipleSelection && multipleSelection.length > 0"
+          class="data-set-multiple"
         >
-          <el-table-column type="selection" width="55" />
-          <el-table-column prop="name" label="名称" width="200">
-            <template slot-scope="scope">
-              <svg-icon v-if="!scope.row.isFolder" icon-class="sql" style="margin-right: 8px" />
-              <svg-icon v-else icon-class="floder" style="margin-right: 8px" />
-              <span>{{ scope.row.name ? scope.row.name : scope.row.displayName }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="creatorId" label="创建者" width="120" />
-          <el-table-column prop="lastUpdatedTime" label="修改时间" width="150">
-            <template slot-scope="scope">
-              {{ scope.row.lastUpdatedTime | dateFilter }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="dataSourceName" label="数据源" width="120" />
-          <el-table-column label="操作" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <div v-if="!scope.row.isFolder" class="data-set-main-table-options" :class="{'no-allowed': batchSelection}">
-                <span @click="edit(scope.row)">编辑</span>
-                <el-divider direction="vertical" />
-                <span @click="createDashboard(scope.row)">新建仪表盘</span>
-                <el-divider direction="vertical" />
-                <span @click="showAttribute(scope.row)">属性</span>
-                <el-divider direction="vertical" />
-                <el-tooltip placement="bottom" effect="light" :disabled="moreToolTipDisabled">
-                  <ul slot="content" class="data-set-menu">
-                    <li @click="moveTo(scope.row)">移动到</li>
-                    <li @click="deleteDataSet(scope.row)">删除</li>
-                  </ul>
-                  <span @click="showMore">更多</span>
-                </el-tooltip>
-              </div>
-              <div v-else class="data-set-main-table-options" :class="{'no-allowed': batchSelection}">
-                <span @click="rename(scope.row)">重命名</span>
-                <el-divider direction="vertical" />
-                <span @click="deleteFloder(scope.row)">删除</span>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-        <!-- <el-pagination
+          <span>已选{{ multipleSelection.length }}项</span>
+          <span
+            style="cursor: pointer;"
+            @click="moveTo"
+          >移动到</span>
+          <span @click="clearSelection">取消选择</span>
+        </div>
+
+        <!-- main -->
+        <div
+          v-if="isAllDataShow"
+          class="data-set-main"
+        >
+          <el-table
+            ref="multipleTable"
+            lazy
+            :data="tableData"
+            tooltip-effect="dark"
+            style="width: 100%"
+            row-key="_id"
+            :load="loadDataSet"
+            :tree-props="{children: 'children', hasChildren: 'isFolder'}"
+            @selection-change="handleSelectionChange"
+            @expand-change="handleExpandChange"
+            @cell-click="handleCellClick"
+          >
+            <el-table-column
+              type="selection"
+              width="55"
+            />
+            <el-table-column
+              prop="name"
+              label="名称"
+              min-width="200"
+            >
+              <template slot-scope="scope">
+                <svg-icon
+                  :icon-class="scope.row.isFolder? 'floder': 'sql'"
+                  style="margin-right: 8px"
+                />
+                <el-popover
+                  v-if="!scope.row.isFolder"
+                  placement="top-start"
+                  title="点击编辑数据集"
+                  style="color: rgba(0, 0, 0, 0.3);line-height: 20px;"
+                  trigger="hover"
+                >
+                  <span slot="reference">{{ scope.row.name || scope.row.displayName }}</span>
+                </el-popover>
+                <span v-else>{{ scope.row.name || scope.row.displayName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="creatorName"
+              label="创建者"
+              min-width="120"
+            />
+            <el-table-column
+              prop="lastUpdatedTime"
+              label="修改时间"
+              min-width="150"
+              show-overflow-tooltip
+            >
+              <template slot-scope="scope">
+                {{ scope.row.lastUpdatedTime | dateFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="dataSourceName"
+              label="数据源"
+              min-width="120"
+              show-overflow-tooltip
+            />
+            <el-table-column
+              label="操作"
+              show-overflow-tooltip
+            >
+              <template slot-scope="scope">
+                <div
+                  v-if="!scope.row.isFolder"
+                  class="data-set-main-table-options"
+                  :class="{'no-allowed': batchSelection}"
+                >
+                  <span @click="edit(scope.row)">编辑</span>
+                  <el-divider direction="vertical" />
+                  <span @click="createDashboard(scope.row)">新建仪表盘</span>
+                  <el-divider direction="vertical" />
+                  <span @click="showAttribute(scope.row)">属性</span>
+                  <el-divider direction="vertical" />
+                  <el-tooltip
+                    placement="bottom"
+                    effect="light"
+                    :disabled="moreToolTipDisabled"
+                  >
+                    <ul
+                      slot="content"
+                      class="data-set-menu"
+                    >
+                      <li @click="moveTo(scope.row)">移动到</li>
+                      <li @click="deleteDataSet(scope.row)">删除</li>
+                    </ul>
+                    <span @click="showMore">更多</span>
+                  </el-tooltip>
+                </div>
+                <div
+                  v-else
+                  class="data-set-main-table-options"
+                  :class="{'no-allowed': batchSelection}"
+                >
+                  <span @click="rename(scope.row)">重命名</span>
+                  <el-divider direction="vertical" />
+                  <span @click="deleteFloder(scope.row)">删除</span>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+          <!-- <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="pagination.currentPage"
@@ -91,50 +165,92 @@
           style="text-align: right; margin-top: 16px"
           :total="pagination.total">
         </el-pagination> -->
-      </div>
+        </div>
 
-      <div v-else class="data-set-main">
-        <el-table
-          ref="multipleTable"
-          v-loading="dataSetLoading"
-          :data="dataSetData"
-          tooltip-effect="dark"
-          style="width: 100%"
-          row-key="_id"
-          @selection-change="handleSelectionChange"
+        <div
+          v-else
+          class="data-set-main"
         >
-          <el-table-column type="selection" width="55" />
-          <el-table-column prop="name" label="名称" width="200">
-            <template slot-scope="scope">
-              <svg-icon icon-class="sql" style="margin-right: 8px" />
-              <span>{{ scope.row.displayName }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="root" label="文件路径" width="150" />
-          <el-table-column prop="creatorId" label="创建者" width="120" />
-          <el-table-column prop="lastUpdatedTime" label="修改时间" width="150" />
-          <el-table-column prop="dataSource" label="数据源" width="120" />
-          <el-table-column label="操作" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <div class="data-set-main-table-options" :class="{'no-allowed': batchSelection}">
-                <span @click="edit(scope.row)">编辑</span>
-                <el-divider direction="vertical" />
-                <span @click="createDashboard(scope.row)">新建仪表盘</span>
-                <el-divider direction="vertical" />
-                <span @click="showAttribute(scope.row)">属性</span>
-                <el-divider direction="vertical" />
-                <el-tooltip placement="bottom" effect="light" :disabled="moreToolTipDisabled">
-                  <ul slot="content" class="data-set-menu">
-                    <li @click="moveTo(scope.row)">移动到</li>
-                    <li @click="deleteDataSet(scope.row)">删除</li>
-                  </ul>
-                  <span @click="showMore">更多</span>
-                </el-tooltip>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-        <!-- <el-pagination
+          <el-table
+            ref="multipleTable"
+            v-loading="dataSetLoading"
+            :data="dataSetData"
+            tooltip-effect="dark"
+            style="width: 100%"
+            row-key="_id"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column
+              type="selection"
+              width="55"
+            />
+            <el-table-column
+              prop="name"
+              label="名称"
+              width="200"
+            >
+              <template slot-scope="scope">
+                <svg-icon
+                  icon-class="sql"
+                  style="margin-right: 8px"
+                />
+                <span>{{ scope.row.displayName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="root"
+              label="文件路径"
+              width="150"
+            />
+            <el-table-column
+              prop="creatorId"
+              label="创建者"
+              width="120"
+            />
+            <el-table-column
+              prop="lastUpdatedTime"
+              label="修改时间"
+              width="150"
+            />
+            <el-table-column
+              prop="dataSource"
+              label="数据源"
+              width="120"
+            />
+            <el-table-column
+              label="操作"
+              show-overflow-tooltip
+            >
+              <template slot-scope="scope">
+                <div
+                  class="data-set-main-table-options"
+                  :class="{'no-allowed': batchSelection}"
+                >
+                  <span @click="edit(scope.row)">编辑</span>
+                  <el-divider direction="vertical" />
+                  <span @click="createDashboard(scope.row)">新建仪表盘</span>
+                  <el-divider direction="vertical" />
+                  <span @click="showAttribute(scope.row)">属性</span>
+                  <el-divider direction="vertical" />
+                  <el-tooltip
+                    placement="bottom"
+                    effect="light"
+                    :disabled="moreToolTipDisabled"
+                  >
+                    <ul
+                      slot="content"
+                      class="data-set-menu"
+                    >
+                      <li @click="moveTo(scope.row)">移动到</li>
+                      <li @click="deleteDataSet(scope.row)">删除</li>
+                    </ul>
+                    <span @click="showMore">更多</span>
+                  </el-tooltip>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+          <!-- <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="dataSetPagination.currentPage"
@@ -144,135 +260,221 @@
           style="text-align: right; margin-top: 16px"
           :total="dataSetPagination.total">
         </el-pagination> -->
-      </div>
-
-      <!-- 各种 弹窗 & 抽屉 -->
-      <el-dialog
-        title="新建文件夹"
-        :visible.sync="createFloderVisible"
-        width="30%"
-      >
-        <div class="create-floder">
-          <div style="line-height: 32px; width: 70px"><span>文件名称</span></div>
-          <el-input v-model="newFloderName" placeholder="请输入文件名称" style="margin-left: 12px;height: 32px" />
         </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="createFloderVisible = false; newFloderName = ''">取 消</el-button>
-          <el-button style="background-color: #FA8334;color: #fff;" @click="hanleCreateFloder">确 定</el-button>
-        </span>
-      </el-dialog>
 
-      <el-dialog
-        title="文件夹重命名"
-        :visible.sync="renameFolderVisible"
-        width="480px"
-      >
-        <div class="data-set-didlog-main">
-          <span>文件夹名称</span>
-          <el-input v-model="editFloderName" placeholder="请输入文件夹名称" class="data-set-didlog-main-input" />
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="renameFolderVisible = false">取 消</el-button>
-          <el-button style="background-color: #FA8334;color: #fff;" @click="hanleRenameFloder">确 定</el-button>
-        </span>
-      </el-dialog>
-
-      <el-dialog
-        title="编辑数据集"
-        :visible.sync="editDataSetVisible"
-        width="480px"
-      >
-        <div class="data-set-didlog-main">
-          <span>数据集名称</span>
-          <el-input v-model="updateDataSetName" placeholder="请输入文件夹名称" class="data-set-didlog-main-input" />
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="editDataSetVisible = false">取 消</el-button>
-          <el-button style="background-color: #FA8334;color: #fff;" @click="hanleEditFile">确 定</el-button>
-        </span>
-      </el-dialog>
-
-      <el-dialog
-        title="删除提示"
-        :visible.sync="deleteFolderVisible"
-        width="480px"
-      >
-        <div class="data-set-didlog-del">
-          <svg-icon icon-class="warning" style="margin-right: 16px" />
-          <span>确定删除文件夹吗？</span>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="deleteFolderVisible = false">取 消</el-button>
-          <el-button style="background-color: #FA8334;color: #fff;" @click="hanleDeleteFolder">确 定</el-button>
-        </span>
-      </el-dialog>
-
-      <el-dialog
-        title="删除提示"
-        :visible.sync="deleteDataSetVisible"
-        width="480px"
-      >
-        <div class="data-set-didlog-del">
-          <svg-icon icon-class="warning" style="margin-right: 16px" />
-          <span>确定删除数据集吗？</span>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="deleteDataSetVisible = false">取 消</el-button>
-          <el-button style="background-color: #FA8334;color: #fff;" @click="hanleDeleteDataSet">确 定</el-button>
-        </span>
-      </el-dialog>
-
-      <el-dialog
-        title="属性"
-        :visible.sync="dataSetAttributeVisible"
-        width="480px"
-      >
-        <div class="data-set-didlog-main">
-          <el-form :model="dataSetAttr" style="padding: 0px">
-            <el-form-item label="名称" label-width="80px">
-              <el-input v-model="dataSetAttr.name" autocomplete="off" style="width: 360px" />
-            </el-form-item>
-            <el-form-item label="描述" label-width="80px">
-              <el-input v-model="dataSetAttr.desc" type="textarea" style="width: 360px" />
-            </el-form-item>
-          </el-form>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dataSetAttributeVisible = false">取 消</el-button>
-          <el-button style="background-color: #FA8334;color: #fff;" @click="hanleDataSetAttribute">确 定</el-button>
-        </span>
-      </el-dialog>
-
-      <el-drawer
-        title="资源移动到"
-        :visible.sync="moveToVisible"
-      >
-        <div class="move-to-drawer">
-          <div class="move-to-drawer-main">
+        <!-- 各种 弹窗 & 抽屉 -->
+        <el-dialog
+          title="新建文件夹"
+          :visible.sync="createFloderVisible"
+          width="30%"
+        >
+          <div class="create-floder">
+            <div style="line-height: 32px; width: 70px"><span>文件名称</span></div>
             <el-input
-              v-model="searchFloder"
-              placeholder="请输入"
-              prefix-icon="el-icon-search"
-              @change="searchFloderList"
+              v-model="newFloderName"
+              placeholder="请输入文件名称"
+              style="margin-left: 12px;height: 32px"
             />
-            <div v-loading="!floderList" class="move-to-drawer-main-content">
-              <span class="move-to-drawer-main-content-root">根目录</span>
-              <ul>
-                <li v-for="(item, i) in floderList" :key="i" :class="{'select-actived': selectFloderId == item._id }" @click="selectFloder(item)">
-                  <svg-icon icon-class="floder" style="margin-right: 8px" />
-                  {{ item.name }}
-                </li>
-              </ul>
+          </div>
+          <span
+            slot="footer"
+            class="dialog-footer"
+          >
+            <el-button @click="createFloderVisible = false; newFloderName = ''">取 消</el-button>
+            <el-button
+              style="background-color: #FA8334;color: #fff;"
+              @click="hanleCreateFloder"
+            >确 定</el-button>
+          </span>
+        </el-dialog>
+
+        <el-dialog
+          title="文件夹重命名"
+          :visible.sync="renameFolderVisible"
+          width="480px"
+        >
+          <div class="data-set-didlog-main">
+            <span>文件夹名称</span>
+            <el-input
+              v-model="editFloderName"
+              placeholder="请输入文件夹名称"
+              class="data-set-didlog-main-input"
+            />
+          </div>
+          <span
+            slot="footer"
+            class="dialog-footer"
+          >
+            <el-button @click="renameFolderVisible = false">取 消</el-button>
+            <el-button
+              style="background-color: #FA8334;color: #fff;"
+              @click="hanleRenameFloder"
+            >确 定</el-button>
+          </span>
+        </el-dialog>
+
+        <el-dialog
+          title="编辑数据集"
+          :visible.sync="editDataSetVisible"
+          width="480px"
+        >
+          <div class="data-set-didlog-main">
+            <span>数据集名称</span>
+            <el-input
+              v-model="updateDataSetName"
+              placeholder="请输入文件夹名称"
+              class="data-set-didlog-main-input"
+            />
+          </div>
+          <span
+            slot="footer"
+            class="dialog-footer"
+          >
+            <el-button @click="editDataSetVisible = false">取 消</el-button>
+            <el-button
+              style="background-color: #FA8334;color: #fff;"
+              @click="hanleEditFile"
+            >确 定</el-button>
+          </span>
+        </el-dialog>
+
+        <el-dialog
+          title="删除提示"
+          :visible.sync="deleteFolderVisible"
+          width="480px"
+        >
+          <div class="data-set-didlog-del">
+            <svg-icon
+              icon-class="warning"
+              style="margin-right: 16px"
+            />
+            <span>确定删除文件夹吗？</span>
+          </div>
+          <span
+            slot="footer"
+            class="dialog-footer"
+          >
+            <el-button @click="deleteFolderVisible = false">取 消</el-button>
+            <el-button
+              style="background-color: #FA8334;color: #fff;"
+              @click="hanleDeleteFolder"
+            >确 定</el-button>
+          </span>
+        </el-dialog>
+
+        <el-dialog
+          title="删除提示"
+          :visible.sync="deleteDataSetVisible"
+          width="480px"
+        >
+          <div class="data-set-didlog-del">
+            <svg-icon
+              icon-class="warning"
+              style="margin-right: 16px"
+            />
+            <span>确定删除数据集吗？</span>
+          </div>
+          <span
+            slot="footer"
+            class="dialog-footer"
+          >
+            <el-button @click="deleteDataSetVisible = false">取 消</el-button>
+            <el-button
+              style="background-color: #FA8334;color: #fff;"
+              @click="hanleDeleteDataSet"
+            >确 定</el-button>
+          </span>
+        </el-dialog>
+
+        <el-dialog
+          title="属性"
+          :visible.sync="dataSetAttributeVisible"
+          width="480px"
+        >
+          <div class="data-set-didlog-main">
+            <el-form
+              :model="dataSetAttr"
+              style="padding: 0px"
+            >
+              <el-form-item
+                label="名称"
+                label-width="80px"
+              >
+                <el-input
+                  v-model="dataSetAttr.name"
+                  autocomplete="off"
+                  style="width: 360px"
+                />
+              </el-form-item>
+              <el-form-item
+                label="描述"
+                label-width="80px"
+              >
+                <el-input
+                  v-model="dataSetAttr.desc"
+                  type="textarea"
+                  style="width: 360px"
+                />
+              </el-form-item>
+            </el-form>
+          </div>
+          <span
+            slot="footer"
+            class="dialog-footer"
+          >
+            <el-button @click="dataSetAttributeVisible = false">取 消</el-button>
+            <el-button
+              style="background-color: #FA8334;color: #fff;"
+              @click="hanleDataSetAttribute"
+            >确 定</el-button>
+          </span>
+        </el-dialog>
+
+        <el-drawer
+          title="资源移动到"
+          :visible.sync="moveToVisible"
+        >
+          <div class="move-to-drawer">
+            <div class="move-to-drawer-main">
+              <el-input
+                v-model="searchFloder"
+                placeholder="请输入"
+                prefix-icon="el-icon-search"
+                @change="searchFloderList"
+              />
+              <div
+                v-loading="!floderList"
+                class="move-to-drawer-main-content"
+              >
+                <span class="move-to-drawer-main-content-root">根目录</span>
+                <ul>
+                  <li
+                    v-for="(item, i) in floderList"
+                    :key="i"
+                    :class="{'select-actived': selectFloderId == item._id }"
+                    @click="selectFloder(item)"
+                  >
+                    <svg-icon
+                      icon-class="floder"
+                      style="margin-right: 8px"
+                    />
+                    {{ item.name }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="move-to-drawer-footer">
+              <el-button @click="moveToVisible = false; selectFloderId = '' ">取 消</el-button>
+              <el-button
+                style="background-color: #FA8334;color: #fff;"
+                @click="handleMoveTo"
+              >确 定</el-button>
             </div>
           </div>
-          <div class="move-to-drawer-footer">
-            <el-button @click="moveToVisible = false; selectFloderId = '' ">取 消</el-button>
-            <el-button style="background-color: #FA8334;color: #fff;" @click="handleMoveTo">确 定</el-button>
-          </div>
-        </div>
-      </el-drawer>
+        </el-drawer>
+      </div>
     </div>
-  </div>
+  </page-view>
 </template>
 
 <script>
@@ -483,7 +685,7 @@ export default {
   },
   methods: {
     init () {
-      // this.getTableData()
+      this.getTableData()
       this.currentFloder = null
       this.cureentDataSet = null
       this.searchFloder = ''
@@ -545,7 +747,7 @@ export default {
         createdTime: currentTime
       }
       this.$router.push({
-        path: '/dataSet/edit',
+        path: '/dataManage/dataSet/edit',
         query
       })
     },
@@ -774,7 +976,7 @@ export default {
       if (column.label !== '名称' || row.isFolder) return false
       const query = row
       this.$router.push({
-        path: '/dataSet/edit',
+        path: '/dataManage/dataSet/edit',
         query
       })
     },
@@ -789,7 +991,7 @@ export default {
       }
     },
     // 搜索数据集
-    async searchFloderList() {
+    async searchFloderList () {
       const searchkey = this.searchFloder
       try {
         const data = await getFolderLists({ searchkey })
@@ -807,15 +1009,6 @@ export default {
 .data-set-wrap {
   height: 100%;
   width: 100%;
-
-  &-title {
-    height: 20px;
-    font-family: PingFangSC-Medium;
-    font-size: 12px;
-    color: rgba(0, 0, 0, 0.9);
-    line-height: 20px;
-    font-weight: 500;
-  }
 
   &-content {
     background: #fff;
@@ -903,7 +1096,7 @@ export default {
 
   &-del {
     font-size: 14px;
-    color: rgba(0,0,0,0.65);
+    color: rgba(0, 0, 0, 0.65);
     font-weight: 400;
   }
 }
@@ -912,14 +1105,14 @@ export default {
   list-style: none;
   margin: 8px 8px;
   font-size: 12px;
-  color: rgba(0,0,0,0.65);
+  color: rgba(0, 0, 0, 0.65);
   font-weight: 400;
   cursor: pointer;
 }
 
 .dialog-footer {
   height: 50px;
-  background: #F5F5F5;
+  background: #f5f5f5;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -935,7 +1128,7 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  border-top: 1px #F1F1F1 solid;
+  border-top: 1px #f1f1f1 solid;
   height: calc(100vh - 75px);
   &-main {
     flex: 1;
@@ -947,7 +1140,7 @@ export default {
         line-height: 30px;
         margin-top: 6px;
         font-size: 12px;
-        color: rgba(0,0,0,0.65);
+        color: rgba(0, 0, 0, 0.65);
       }
       ul > li {
         list-style: none;
@@ -955,27 +1148,27 @@ export default {
         line-height: 30px;
         margin-bottom: 8px;
         font-size: 12px;
-        color: rgba(0,0,0,0.65);
+        color: rgba(0, 0, 0, 0.65);
         padding-left: 20px;
         cursor: pointer;
       }
       .select-actived {
-        background: #F79B53;
+        background: #f79b53;
       }
     }
   }
   &-footer {
-      height: 50px;
-      background: #F5F5F5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0;
-      ::v-deep .el-button {
-        line-height: 8px;
-        height: 32px;
-        border-radius: 2px;
-      }
+    height: 50px;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    ::v-deep .el-button {
+      line-height: 8px;
+      height: 32px;
+      border-radius: 2px;
+    }
   }
 }
 ::v-deep .el-dialog__footer {

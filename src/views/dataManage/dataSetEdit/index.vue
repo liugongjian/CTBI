@@ -3,28 +3,53 @@
     <!-- header -->
     <div class="data-set-edit-wrap-header">
       <div class="data-set-edit-wrap-header-l">
-        <i class="el-icon-arrow-left" style="margin-right: 8px; cursor: pointer" @click="noSaveLeaveDialogVisible = true" />
+        <i
+          class="el-icon-arrow-left"
+          style="margin-right: 8px; cursor: pointer"
+          @click="noSaveLeaveDialogVisible = true"
+        />
         <span>{{ dataSourceName ? dataSourceName : '未命名' }}</span>
       </div>
       <div class="data-set-edit-wrap-header-r">
-        <div class="data-set-edit-wrap-header-r-btn" @click="saveDataSetDialogVisible = true">保存</div>
+        <div
+          class="data-set-edit-wrap-header-r-btn"
+          @click="saveDataSetDialogVisible = true"
+        >保存</div>
       </div>
     </div>
 
     <!-- edit toptool -->
-    <div v-show="isEdit" class="data-set-edit-wrap-toptool">
+    <div
+      v-show="isEdit"
+      class="data-set-edit-wrap-toptool"
+    >
       <div class="data-set-edit-wrap-toptool-l">
         <div>
-          <svg-icon icon-class="sql" style="margin-right: 8px" />
+          <svg-icon
+            icon-class="sql"
+            style="margin-right: 8px"
+          />
         </div>
-        <el-input v-model="dataSetDisplayName" placeholder="未命名SQL" />
+        <el-input
+          v-model="dataSetDisplayName"
+          placeholder="未命名SQL"
+        />
       </div>
       <div class="data-set-edit-wrap-toptool-r">
         <el-button @click="formatSqlData">格式化</el-button>
         <el-button @click="settingParam">参数配置</el-button>
-        <el-button type="primary" @click="runSql">运行</el-button>
-        <el-button type="primary" @click="confirmEdit">确认编辑</el-button>
-        <div style="margin-left: 8px" @click="leaveDialogVisible=true"><i class="el-icon-close" /></div>
+        <el-button
+          type="primary"
+          @click="runSql"
+        >运行</el-button>
+        <el-button
+          type="primary"
+          @click="confirmEdit"
+        >确认编辑</el-button>
+        <div
+          style="margin-left: 8px"
+          @click="leaveDialogVisible=true"
+        ><i class="el-icon-close" /></div>
       </div>
     </div>
 
@@ -32,22 +57,46 @@
     <div class="data-set-edit-wrap-main">
 
       <!-- side -->
-      <div class="data-set-edit-wrap-main-side" :class="{ 'data-set-edit-wrap-main-side-shrinked': isShrink }">
-        <div class="data-set-edit-wrap-main-side-btn" @click="isShrink = !isShrink">
-          <i v-if="isShrink" class="el-icon-arrow-right" style="color: #B2B2B2" />
-          <i v-else class="el-icon-arrow-left" style="color: #B2B2B2" />
+      <div
+        class="data-set-edit-wrap-main-side"
+        :class="{ 'data-set-edit-wrap-main-side-shrinked': isShrink }"
+      >
+        <div
+          class="data-set-edit-wrap-main-side-btn"
+          @click="isShrink = !isShrink"
+        >
+          <i
+            v-if="isShrink"
+            class="el-icon-arrow-right"
+            style="color: #B2B2B2"
+          />
+          <i
+            v-else
+            class="el-icon-arrow-left"
+            style="color: #B2B2B2"
+          />
         </div>
 
         <!-- top -->
         <div class="side-top">
-          <div v-if="!isEdit" class="side-top-main">
+          <div
+            v-if="!isEdit"
+            class="side-top-main"
+          >
             <div><span>当前数据源</span></div>
             <div><span>{{ dataSourceName }}</span></div>
           </div>
-          <div v-else class="side-top-main">
+          <div
+            v-else
+            class="side-top-main"
+          >
             <div><span>选择数据源</span></div>
             <div>
-              <el-select v-model="currentDataSourceId" placeholder="请选择"  @change="handleChangeDataSource">
+              <el-select
+                v-model="currentDataSourceId"
+                placeholder="请选择"
+                @change="handleChangeDataSource"
+              >
                 <el-option
                   v-for="item in dataSourceOptions"
                   :key="item.value"
@@ -62,26 +111,61 @@
         <!-- bottom -->
         <div class="side-bottom">
           <el-tabs v-model="activedTag">
-            <el-tab-pane label="数据表" name="first">
-              <div v-for="(table, i) in dataTableList" :key="i" class="side-bottom-main">
-                <div style="display: flex;justify-content: space-between;align-items: center;" class="side-bottom-main-list">
+            <el-tab-pane
+              label="数据表"
+              name="first"
+            >
+              <div
+                v-for="(table, i) in dataTableList"
+                :key="i"
+                class="side-bottom-main"
+              >
+                <div
+                  style="display: flex;justify-content: space-between;align-items: center;"
+                  class="side-bottom-main-list"
+                >
                   <div>
-                    <svg-icon icon-class="table" style="margin-right: 8px" />
+                    <svg-icon
+                      icon-class="table"
+                      style="margin-right: 8px"
+                    />
                     <span>{{ table.name }}</span>
                   </div>
                   <div>
-                    <el-tooltip content="复制" placement="top" effect="light">
-                      <i class="el-icon-document" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;" @click="handleCopy(table, $event)" />
+                    <el-tooltip
+                      content="复制"
+                      placement="top"
+                      effect="light"
+                    >
+                      <i
+                        class="el-icon-document"
+                        style="color: #B2B2B2;margin-right: 8px;cursor: pointer;"
+                        @click="handleCopy(table, $event)"
+                      />
                     </el-tooltip>
                     <el-popover
                       placement="right"
                       width="200"
-                      trigger="click">
+                      trigger="click"
+                    >
                       <el-table :data="currentTableInfo.columns">
-                        <el-table-column width="80" property="columnName" label="字段名"></el-table-column>
-                        <el-table-column width="120" property="columnType" label="字段类型"></el-table-column>
+                        <el-table-column
+                          width="80"
+                          property="columnName"
+                          label="字段名"
+                        />
+                        <el-table-column
+                          width="120"
+                          property="columnType"
+                          label="字段类型"
+                        />
                       </el-table>
-                      <i class="el-icon-info" slot="reference" @click="handleTableInfo(table.name)" style="color: #B2B2B2;margin-right: 8px;cursor: pointer;"/>
+                      <i
+                        slot="reference"
+                        class="el-icon-info"
+                        style="color: #B2B2B2;margin-right: 8px;cursor: pointer;"
+                        @click="handleTableInfo(table.name)"
+                      />
                     </el-popover>
                   </div>
                 </div>
@@ -94,7 +178,10 @@
       <!-- content -->
       <div class="data-set-edit-wrap-main-content">
         <!-- top -->
-        <div class="sql-edit" @dblclick="isEdit = true">
+        <div
+          class="sql-edit"
+          @dblclick="isEdit = true"
+        >
           <span v-if="!isEdit">{{ sqlStatement }}</span>
           <EditSql
             v-else
@@ -106,7 +193,14 @@
 
         <!-- bottom -->
         <div class="result-preview">
-          <ResultPreview :run-result-data="runResultData" :is-edit="isEdit" :fields="currentFields" :sql-id="currentSqlId" :sql-params="currentSqlData" @dataSetFieldsChange="dataSetFieldsChange" />
+          <ResultPreview
+            :run-result-data="runResultData"
+            :is-edit="isEdit"
+            :fields="currentFields"
+            :sql-id="currentSqlId"
+            :sql-params="currentSqlData"
+            @dataSetFieldsChange="dataSetFieldsChange"
+          />
         </div>
       </div>
     </div>
@@ -138,7 +232,10 @@
               min-width="120"
             >
               <template slot-scope="scope">
-                <el-select v-model="scope.row.dataType" placeholder="请选择">
+                <el-select
+                  v-model="scope.row.dataType"
+                  placeholder="请选择"
+                >
                   <el-option
                     v-for="item in variableTypeOptions"
                     :key="item.value"
@@ -154,7 +251,10 @@
             >
               <template slot-scope="scope">
                 <div style="display: flex">
-                  <el-select v-model="scope.row.useInGlobal" placeholder="请选择">
+                  <el-select
+                    v-model="scope.row.useInGlobal"
+                    placeholder="请选择"
+                  >
                     <el-option
                       v-for="item in queryDefaultOptions"
                       :key="item.value"
@@ -162,7 +262,10 @@
                       :value="item.value"
                     />
                   </el-select>
-                  <el-input v-model="scope.row.defaultValue" placeholder="请输入内容" />
+                  <el-input
+                    v-model="scope.row.defaultValue"
+                    placeholder="请输入内容"
+                  />
                 </div>
               </template>
             </el-table-column>
@@ -171,14 +274,21 @@
               min-width="80"
             >
               <template slot-scope="scope">
-                <svg-icon icon-class="delete" @click="deleteSqlVariable(scope.row)" />
+                <svg-icon
+                  icon-class="delete"
+                  @click="deleteSqlVariable(scope.row)"
+                />
               </template>
             </el-table-column>
           </el-table>
         </div>
         <div class="set-param-drawer-footer">
-          <el-button @click="settingParamVisiable = false; sqlVariables = []; sqlVariablesTableData = [] ">取 消</el-button>
-          <el-button style="background-color: #FA8334;color: #fff;" @click="settingParamVisiable = false; sqlVariables = sqlVariablesTableData.slice(); sqlVariablesTableData = [] ">确 定</el-button>
+          <el-button @click="settingParamVisiable = false; sqlVariables = []; sqlVariablesTableData = [] ">取 消
+          </el-button>
+          <el-button
+            style="background-color: #FA8334;color: #fff;"
+            @click="settingParamVisiable = false; sqlVariables = sqlVariablesTableData.slice(); sqlVariablesTableData = [] "
+          >确 定</el-button>
         </div>
       </div>
     </el-drawer>
@@ -190,12 +300,21 @@
       width="480px"
     >
       <div>
-        <svg-icon icon-class="tip" style="margin-right: 8px" />
+        <svg-icon
+          icon-class="tip"
+          style="margin-right: 8px"
+        />
         <span>您还未对此次代码的编辑进行确认，若此时返回，本次编辑内 容将不被保存，请问您是否确认返回？</span>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="leaveDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleLeave">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="handleLeave"
+        >确 定</el-button>
       </span>
     </el-dialog>
 
@@ -206,12 +325,21 @@
       width="480px"
     >
       <div>
-        <svg-icon icon-class="tip" style="margin-right: 8px" />
+        <svg-icon
+          icon-class="tip"
+          style="margin-right: 8px"
+        />
         <span>您还未对此次代码的编辑进行确认，若此时返回，本次编辑内 容将不被保存，请问您是否确认返回？</span>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="noSaveLeaveDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleNoSaveLeave">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="handleNoSaveLeave"
+        >确 定</el-button>
       </span>
     </el-dialog>
 
@@ -223,9 +351,18 @@
     >
       <div class="on-save-content">
         <div style="display: flex; align-items: flex-start;">
-          <div class="on-save-content-label" style="margin-top: 9px"><span>数据集</span></div>
-          <div class="on-save-content-main" style="width: 320px">
-            <el-input v-model="dataSetDisplayName" placeholder="请输入数据集名称" />
+          <div
+            class="on-save-content-label"
+            style="margin-top: 9px"
+          ><span>数据集</span></div>
+          <div
+            class="on-save-content-main"
+            style="width: 320px"
+          >
+            <el-input
+              v-model="dataSetDisplayName"
+              placeholder="请输入数据集名称"
+            />
             <div style="margin-top:8px;font-size: 12px;color: rgba(0, 0, 0, 0.45);">
               <span>名称只能由中英文、数字及下划线(_)、斜线(/)、反斜线(\)、竖线(I)、 小括号(())、中括号([])组成，不超过50个字符。</span>
             </div>
@@ -234,7 +371,11 @@
         <div style="display: flex; align-items: center; margin-top: 24px">
           <div class="on-save-content-label"><span>位置</span></div>
           <div class="on-save-content-main">
-            <el-select v-model="currentFloderId" placeholder="请选择" style="width: 320px">
+            <el-select
+              v-model="currentFloderId"
+              placeholder="请选择"
+              style="width: 320px"
+            >
               <el-option
                 v-for="item in floderList"
                 :key="item._id"
@@ -245,9 +386,15 @@
           </div>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="saveDataSetDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleSave">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="handleSave"
+        >确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -263,37 +410,6 @@ export default {
   components: {
     EditSql,
     ResultPreview
-  },
-  mounted () {
-    this.getDataSourceList()
-    this.getFolderList()
-    const data = this.$route.query
-    console.log(data, 'data')
-    // 如果都为空则表示新建的数据集，直接进入编辑状态
-    if (!data._id) {
-      this.isEdit = true
-    }
-    this.currentDataSet = data
-    if (data.sqlId) {
-      this.currentSqlId = data.sqlId
-      this.getSqlData(data.sqlId)
-    }
-    this.creatorName = data.creatorName
-    this.currentDataSourceId = data.dataSourceId || ''
-    this.current_id = data._id || ''
-    this.currentFields = data.fields || []
-    this.dataSetDisplayName = this.currentDataSet.displayName || ''
-    if (this.currentDataSourceId) {
-      this.handleTableInfo(this.currentDataSourceId)
-    }
-  },
-  computed: {
-    dataSourceName: function() {
-      return this.currentDataSet.dataSourceName || ''
-    },
-    sqlStatement: function() {
-      return this.currentSqlData.sql || ''
-    }
   },
   data () {
     return {
@@ -352,6 +468,37 @@ export default {
       saveDataSetDialogVisible: false,
       dataSetDisplayName: '',
       currentTableInfo: {}
+    }
+  },
+  computed: {
+    dataSourceName: function () {
+      return this.currentDataSet.dataSourceName || ''
+    },
+    sqlStatement: function () {
+      return this.currentSqlData.sql || ''
+    }
+  },
+  mounted () {
+    this.getDataSourceList()
+    this.getFolderList()
+    const data = this.$route.query
+    console.log(data, 'data')
+    // 如果都为空则表示新建的数据集，直接进入编辑状态
+    if (!data._id) {
+      this.isEdit = true
+    }
+    this.currentDataSet = data
+    if (data.sqlId) {
+      this.currentSqlId = data.sqlId
+      this.getSqlData(data.sqlId)
+    }
+    this.creatorName = data.creatorName
+    this.currentDataSourceId = data.dataSourceId || ''
+    this.current_id = data._id || ''
+    this.currentFields = data.fields || []
+    this.dataSetDisplayName = this.currentDataSet.displayName || ''
+    if (this.currentDataSourceId) {
+      this.handleTableInfo(this.currentDataSourceId)
     }
   },
   methods: {
@@ -459,7 +606,7 @@ export default {
       const str = val.name
       Clipboard(str, event)
     },
-    async handleTableInfo(tableName) {
+    async handleTableInfo (tableName) {
       const id = this.currentDataSourceId
       console.log(id)
       try {
@@ -477,12 +624,10 @@ export default {
     // 未保存 离开
     handleNoSaveLeave () {
       this.noSaveLeaveDialogVisible = false
-      this.$router.push({
-        path: '/dataSet'
-      })
+      this.$router.go(-1)
     },
     // 保存数据
-    async handleSave() {
+    async handleSave () {
       try {
         const body = {}
         // sql = currentSqlData fields folderId displayName
@@ -507,12 +652,12 @@ export default {
       }
     },
     // 离开 编辑状态 但不保存数据
-    handleLeave() {
+    handleLeave () {
       this.isEdit = false
       this.leaveDialogVisible = false
     },
     // 根据sqlId 获取sql相关的所有数据
-    async getSqlData(sqlId) {
+    async getSqlData (sqlId) {
       try {
         const data = await getSqlAllData(sqlId)
         console.log('currentSqlData', data)
@@ -522,15 +667,15 @@ export default {
         console.log(error)
       }
     },
-    handleCloseSettingParam(done) {
+    handleCloseSettingParam (done) {
       this.$confirm('确认关闭？选择离开本次编辑将不会保存')
         .then(_ => {
           done()
         })
-        .catch(_ => {})
+        .catch(_ => { })
     },
     // 获取 folderList
-    async getFolderList() {
+    async getFolderList () {
       try {
         const data = await getFolderLists()
         this.floderList = data.result
@@ -539,11 +684,11 @@ export default {
       }
     },
     // 子级更改更新父级的fields
-    dataSetFieldsChange(val) {
+    dataSetFieldsChange (val) {
       console.log(val, 'dataSetFieldsChange')
     },
     //
-    async handleChangeDataSource(val) {
+    async handleChangeDataSource (val) {
       try {
         this.currentDataSourceId = val
         const data = await getDataTable(val)
@@ -572,7 +717,7 @@ export default {
       &-btn {
         width: 60px;
         height: 32px;
-        background: #FA8334;
+        background: #fa8334;
         border-radius: 2px;
         cursor: pointer;
         color: rgba(255, 255, 255, 0.9);
@@ -603,7 +748,7 @@ export default {
       &-btn {
         width: 15px;
         height: 74px;
-        background: #FFFFFF;
+        background: #ffffff;
         position: absolute;
         box-shadow: 0px 2px 8px 0px rgba(200, 201, 204, 0.5);
         left: 251px;
@@ -620,7 +765,7 @@ export default {
   }
   &-toptool {
     height: 64px;
-    background: #F8F8F8;
+    background: #f8f8f8;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -651,7 +796,7 @@ export default {
   &-main {
     padding: 0 20px;
     &-list:hover {
-      background: #FEF5EE;
+      background: #fef5ee;
       margin: 0 -20px;
       padding: 0 20px;
       margin-bottom: 8px;
@@ -665,7 +810,7 @@ export default {
   &-main > div {
     margin-bottom: 8px;
     font-size: 12px;
-    color: rgba(0,0,0,0.65);
+    color: rgba(0, 0, 0, 0.65);
   }
 }
 
@@ -683,14 +828,14 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  border-top: 1px #F1F1F1 solid;
+  border-top: 1px #f1f1f1 solid;
   height: calc(100vh - 75px);
   &-main {
     flex: 1;
   }
   &-footer {
     height: 50px;
-    background: #F5F5F5;
+    background: #f5f5f5;
     display: flex;
     justify-content: center;
     align-items: center;

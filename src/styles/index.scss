@@ -9,11 +9,13 @@ body {
   height: 100%;
   margin: 0px;
   padding: 0px;
+  font-size: 12px;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
-    Microsoft YaHei, Arial, sans-serif;
+  font-family: PingFangSC-Regular, PingFang SC;
+  // font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
+  //   Microsoft YaHei, Arial, sans-serif;
 }
 
 html {
@@ -25,34 +27,47 @@ html {
   height: 100%;
 }
 
-a{
+a {
   text-decoration: none;
   background-color: transparent;
   outline: none;
   cursor: pointer;
 }
 
-.flex-align-center{
-  display:flex;
-  align-items:center;
+.flex-align-center {
+  display: flex;
+  align-items: center;
 }
 
 .editor-object-container {
-  margin: 10px 0px;  
+  margin: 10px 0px;
+
   .editor-item-container {
     padding-left: 22px;
-    .editor-item-title{
+
+    .editor-item-title {
       margin: 4px 8px;
       margin-left: 0;
       line-height: 20px;
       display: inline-block;
     }
   }
-  .box-disabled{
+
+  .box-disabled {
     cursor: not-allowed;
     opacity: .3;
-    &>*{
+
+    &>* {
       pointer-events: none;
+    }
+  }
+}
+
+// element原生样式调整
+.el-table {
+  &.el-table--enable-row-hover {
+    .el-table__body tr:hover>td.el-table__cell {
+      background-color: #FEF5EE;
     }
   }
 }
