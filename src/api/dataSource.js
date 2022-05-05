@@ -6,3 +6,7 @@ export function getDataSourceList () {
 export function getDataFileList () {
   return http.get('/dataFiles')
 }
+
+export function postDataSourceList (form) {
+  return http.post('/dataSources', form)
+}
