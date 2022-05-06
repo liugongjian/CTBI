@@ -4,7 +4,10 @@
       name="fade-transform"
       mode="out-in"
     >
-      <router-view :key="key" />
+      <router-view
+        id="main-page"
+        :key="key"
+      />
     </transition>
   </section>
 </template>

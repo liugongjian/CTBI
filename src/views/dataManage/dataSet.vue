@@ -58,7 +58,6 @@
             :load="loadDataSet"
             :tree-props="{children: 'children', hasChildren: 'isFolder'}"
             @select="handleSelectionChange"
-            @expand-change="handleExpandChange"
           >
             <el-table-column
               type="selection"
@@ -424,48 +423,6 @@
           </span>
         </el-dialog>
 
-        <el-drawer
-          title="资源移动到"
-          :visible.sync="moveToVisible"
-        >
-          <div class="move-to-drawer">
-            <div class="move-to-drawer-main">
-              <el-input
-                v-model="searchFloder"
-                placeholder="请输入"
-                prefix-icon="el-icon-search"
-                @change="searchFloderList"
-              />
-              <div
-                v-loading="!floderList"
-                class="move-to-drawer-main-content"
-              >
-                <span class="move-to-drawer-main-content-root">根目录</span>
-                <ul>
-                  <li
-                    v-for="(item, i) in floderList"
-                    :key="i"
-                    :class="{'select-actived': selectFloderId == item._id }"
-                    @click="selectFloder(item)"
-                  >
-                    <svg-icon
-                      icon-class="floder"
-                      style="margin-right: 8px"
-                    />
-                    {{ item.name }}
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="move-to-drawer-footer">
-              <el-button @click="moveToVisible = false; selectFloderId = '' ">取 消</el-button>
-              <el-button
-                type="primary"
-                @click="handleMoveTo"
-              >确 定</el-button>
-            </div>
-          </div>
-        </el-drawer>
       </div>
     </div>
   </page-view>
@@ -473,7 +430,7 @@
 
 <script>
 // import qs from 'qs'
-import { createFloders, updateFolderName, delFolders, updateDataSet, delDataSet, moveDataSet2Folder, getFolderLists, getDataSetsFolders } from '@/api/dataSet'
+import { createFloders, updateFolderName, delFolders, updateDataSet, delDataSet, getDataSetsFolders } from '@/api/dataSet'
 import { getDateTime } from '@/utils/optionUtils'
 export default {
   name: 'DataSet',
@@ -497,13 +454,8 @@ export default {
       },
       editFloderName: '',
       renameFolderVisible: false,
-      // 移动中的文件夹
-      floderList: [],
       currentFloder: null,
       cureentDataSet: null,
-      moveToVisible: false,
-      searchFloder: '',
-      selectFloderId: '',
       pagination: {
         currentPage: 1,
         pageSize: 10,
@@ -530,16 +482,16 @@ export default {
   },
   methods: {
     init () {
+      // element lazy数据会被缓存，需要清理
+      this.$set(this.$refs.multipleTable.store.states, 'lazyTreeNodeMap', {})
       // 先清空数据，否则对拥有子层级的列表无法刷新data
-      this.tableData = []
-      this.getTableData()
       this.currentFloder = null
       this.cureentDataSet = null
-      this.searchFloder = ''
-      this.selectFloderId = ''
-      this.serachName = ''
       this.multipleSelection = []
+      this.serachName = ''
+      this.tableData = []
       this.isAllDataShow = true
+      this.getTableData()
     },
     // 获取 tableData
     async getTableData () {
@@ -737,73 +689,25 @@ export default {
       }
     },
     async moveTo (val) {
-      if (this.multipleSelection.some(item => item.isFolder) || val?.isFolder) {
-        return this.$message({
-          message: '移动操作暂且只支持数据集不支持文件夹',
-          type: 'warning'
-        })
-      }
-      if (val) {
-        this.multipleSelection.push(val)
-      }
-      this.moveToVisible = true
-      try {
-        const data = await getFolderLists()
-        console.log(data)
-        this.floderList = data.result
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    async handleMoveTo () {
       const ids = []
-      const folderId = this.selectFloderId
-      this.multipleSelection.forEach(item => {
-        if (typeof item.isFolder !== 'undefined' && !item.isFolder) {
-          ids.push(item._id)
-        }
-      })
-      if (!ids.length) return false
-      try {
-        const data = await moveDataSet2Folder({
-          ids,
-          folderId
+      if (val) {
+        ids.push(val._id)
+      } else {
+        this.multipleSelection.forEach(item => {
+          if (typeof item.isFolder !== 'undefined' && !item.isFolder) {
+            ids.push(item._id)
+          }
         })
-        this.$message.success(data)
-        this.multipleSelection = null
-        this.selectFloderId = ''
-        this.$refs.multipleTable.clearSelection()
-        this.moveToVisible = false
-        this.init()
-      } catch (error) {
-        console.log(error)
       }
-    },
-    selectFloder (item) {
-      this.selectFloderId = item._id
+      this.$dialog.show('MoveDatasetDrawer', { ids }, () => {
+        this.init()
+      })
     },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
     },
     handleCurrentChange (val) {
       console.log(`当前页: ${val}`)
-    },
-    async handleExpandChange (row, expandedRows) {
-      if (!expandedRows || !row.isFolder) return false
-      const tmp = this.tableData.slice()
-      const folderId = row._id
-      try {
-        const data = await getDataSetsFolders({ folderId })
-        tmp.forEach(item => {
-          if (item._id === folderId) {
-            item.children = data
-            return true
-          }
-        })
-        this.tableData = tmp
-      } catch (error) {
-        console.log(error)
-      }
     },
     handleUpdateDataSetName () {
       this.editDataSetVisible = false
@@ -821,17 +725,6 @@ export default {
         const data = await getDataSetsFolders({ folderId })
         console.log(data)
         resolve(data)
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    // 搜索数据集
-    async searchFloderList () {
-      const searchkey = this.searchFloder
-      try {
-        const data = await getFolderLists({ searchkey })
-        console.log(data)
-        this.floderList = data.result
       } catch (error) {
         console.log(error)
       }
@@ -939,53 +832,6 @@ export default {
   }
 }
 
-.move-to-drawer {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  border-top: 1px #f1f1f1 solid;
-  height: calc(100vh - 75px);
-  &-main {
-    flex: 1;
-    padding: 24px;
-    &-content {
-      &-root {
-        display: inline-block;
-        height: 30px;
-        line-height: 30px;
-        margin-top: 6px;
-        font-size: 12px;
-        color: rgba(0, 0, 0, 0.65);
-      }
-      ul > li {
-        list-style: none;
-        height: 30px;
-        line-height: 30px;
-        margin-bottom: 8px;
-        font-size: 12px;
-        color: rgba(0, 0, 0, 0.65);
-        padding-left: 20px;
-        cursor: pointer;
-      }
-      .select-actived {
-        background: #f79b53;
-      }
-    }
-  }
-  &-footer {
-    height: 50px;
-    background: #f5f5f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    ::v-deep .el-button {
-      line-height: 8px;
-      height: 32px;
-      border-radius: 2px;
-    }
-  }
-}
 ::v-deep .el-dialog__footer {
   padding: 0px;
 }

@@ -184,6 +184,7 @@
         <!-- bottom -->
         <div class="result-preview">
           <ResultPreview
+            ref="ResultPreview"
             :run-result-data="runResultData"
             :is-edit="isEdit"
             :fields="currentFields"
@@ -525,9 +526,11 @@ export default {
     // 运行
     async runSql () {
       // dataSourceId & sql语句  必须
-      const body = {}
-      body.sql = this.currentSqlStatement
-      body.dataSourceId = this.currentDataSourceId
+      const body = {
+        sql: this.currentSqlStatement,
+        dataSourceId: this.currentDataSourceId,
+        _id: this.currentSqlId ?? ''
+      }
       if (this.sqlVariables && this.sqlVariables.length > 0) {
         body.sqlVariables = this.sqlVariables
       }
@@ -537,6 +540,8 @@ export default {
         if (this.currentSqlId !== data._id) {
           this.currentSqlId = data._id
         }
+        // 触发历史记录的查询事件
+        this.$refs.ResultPreview.getHistory()
       } catch (error) {
         console.log(error)
       }

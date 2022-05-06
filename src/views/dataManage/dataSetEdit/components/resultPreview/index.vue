@@ -462,17 +462,19 @@ export default {
     this.batchConfigTableData = this.getBatchConfigTableData(fields.slice())
   },
   methods: {
-    init () { },
     // 切换tags触发的事件
-    async handleClickTagsFirst (tab) {
+    handleClickTagsFirst (tab) {
       if (tab.name === 'historyLog') {
-        if (this.currentSqlId) {
-          try {
-            const data = await getSqlRunningLogs(this.currentSqlId)
-            this.historyLogTableData = data.slice()
-          } catch (error) {
-            console.log(error)
-          }
+        this.getHistory()
+      }
+    },
+    async getHistory () {
+      if (this.currentSqlId) {
+        try {
+          const data = await getSqlRunningLogs(this.currentSqlId)
+          this.historyLogTableData = data.slice()
+        } catch (error) {
+          console.log(error)
         }
       }
     },
