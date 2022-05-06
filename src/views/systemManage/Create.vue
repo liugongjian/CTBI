@@ -80,9 +80,11 @@
 </template>
 
 <script>
+import { encryptAes } from '@/utils/encrypt'
 import { validEmail, validPhone } from '@/utils/validate'
 import { exists, createUser } from '@/api/userManage'
 import { deepClone } from '@/utils/optionUtils'
+import _ from 'lodash'
 import { validPassword, validContinuousChar, validKeyboardContinuousChar } from '@/utils/validate'
 import Success from './Success'
 
@@ -164,8 +166,10 @@ export default {
         if (valid) {
           try {
             this.loading = true
+            const encryptedPswd = encryptAes(this.form.password)
             const params = {
-              ...this.form,
+              ..._.omit(this.form, ['password']),
+              password: encryptedPswd,
               from: 'platform'
             }
             const data = await createUser(params)
@@ -224,8 +228,7 @@ export default {
       const params = rule.field === 'userName' ? { userName: value } : rule.field === 'phone' ? { phone: value } : { email: value }
       const label = rule.field === 'userName' ? '账号名' : rule.field === 'phone' ? '手机号' : '邮箱'
       const isExist = await exists({ ...params, from: 'platform' })
-      console.log(isExist, rule)
-      if (isExist.data) {
+      if (isExist) {
         callback(new Error(`${label}已存在`))
       }
       callback()

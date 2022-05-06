@@ -79,7 +79,7 @@
               创建者
             </span>
           </template>
-          {{ form.creator }}
+          {{ form.creatorId.userName }}
         </el-form-item>
         <el-form-item prop="createdTime">
           <template #label>
@@ -179,7 +179,7 @@ export default {
         email: '',
         form: '',
         status: '',
-        creator: '',
+        creatorId: {},
         role: '',
         lastLoginTime: '',
         createdTime: '',

@@ -40,7 +40,6 @@ module.exports = {
     proxy: {
       // 配置跨域
       '/api': {
-        target: 'http://b524k10059.qicp.vip',
         target: 'http://139.196.10.0:888/ctbibackend/',
         changeOrigin: true,
         pathRewrite: {
