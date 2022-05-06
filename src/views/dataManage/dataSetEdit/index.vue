@@ -27,7 +27,7 @@
         <div>
           <svg-icon
             icon-class="sql"
-            style="margin-right: 8px"
+            style="margin-right: 8px;width:20px;height:20px;"
           />
         </div>
         <el-input
@@ -115,59 +115,48 @@
               label="数据表"
               name="first"
             >
-              <div
-                v-for="(table, i) in dataTableList"
-                :key="i"
-                class="side-bottom-main"
-              >
+              <div class="side-bottom-main">
                 <div
+                  v-for="(table, i) in dataTableList"
+                  :key="i"
                   style="display: flex;justify-content: space-between;align-items: center;"
                   class="side-bottom-main-list"
                 >
-                  <div>
+                  <svg-icon
+                    icon-class="table"
+                    style="margin-right: 8px; height: 32px; width: 20px;"
+                  />
+                  <b-tooltip
+                    :content="table.name"
+                    style="cursor: pointer;"
+                  />
+                  <el-tooltip
+                    content="复制"
+                    placement="top"
+                    effect="light"
+                  >
                     <svg-icon
-                      icon-class="table"
-                      style="margin-right: 8px"
+                      icon-class="copy"
+                      style="cursor: pointer;"
+                      @click="handleCopy(table, $event)"
                     />
-                    <span>{{ table.name }}</span>
-                  </div>
-                  <div>
-                    <el-tooltip
-                      content="复制"
-                      placement="top"
-                      effect="light"
-                    >
-                      <i
-                        class="el-icon-document"
-                        style="color: #B2B2B2;margin-right: 8px;cursor: pointer;"
-                        @click="handleCopy(table, $event)"
-                      />
-                    </el-tooltip>
-                    <el-popover
-                      placement="right"
-                      width="200"
-                      trigger="click"
-                    >
-                      <el-table :data="currentTableInfo.columns">
-                        <el-table-column
-                          width="80"
-                          property="columnName"
-                          label="字段名"
-                        />
-                        <el-table-column
-                          width="120"
-                          property="columnType"
-                          label="字段类型"
-                        />
-                      </el-table>
-                      <i
-                        slot="reference"
-                        class="el-icon-info"
-                        style="color: #B2B2B2;margin-right: 8px;cursor: pointer;"
-                        @click="handleTableInfo(table.name)"
-                      />
-                    </el-popover>
-                  </div>
+                  </el-tooltip>
+                  <el-popover
+                    placement="right"
+                    width="360"
+                    trigger="click"
+                  >
+                    <ColumnsList
+                      :columns="currentTableInfo.columns"
+                      :title="`table.name(${currentTableInfo.columns? currentTableInfo.columns.length : 0})`"
+                    />
+                    <svg-icon
+                      slot="reference"
+                      icon-class="point"
+                      style="cursor: pointer;"
+                      @click="handleTableInfo(table.name)"
+                    />
+                  </el-popover>
                 </div>
               </div>
             </el-tab-pane>
@@ -186,8 +175,9 @@
           <EditSql
             v-else
             ref="sqlEdit"
-            :sql-statement="sqlStatement"
-            @sqlStatementChange="sqlStatementChange"
+            :tables="editTables"
+            :value="currentSqlStatement"
+            @changeTextarea="sqlStatementChange($event)"
           />
         </div>
 
@@ -401,15 +391,18 @@
 </template>
 
 <script>
-import EditSql from './components/editSql/index.vue'
+import { format } from 'sql-formatter'
+import EditSql from '@/components/SqlEditor/index.vue'
 import { runtimeForSql, getDataSourceData, confirmEditSql, createDataSets, getSqlAllData, getSqlVariables, getFolderLists, getDataTable, getTableInfo } from '@/api/dataSet'
 import ResultPreview from './components/resultPreview/index.vue'
 import Clipboard from '@/utils/clipboard.js'
+import ColumnsList from '@/views/dataManage/dataSetEdit/components/ColumnsList.vue'
 export default {
   name: 'DataSetEdit',
   components: {
     EditSql,
-    ResultPreview
+    ResultPreview,
+    ColumnsList
   },
   data () {
     return {
@@ -417,13 +410,12 @@ export default {
       isShrink: false,
       dataSourceOptions: [],
       activedTag: 'first',
-      dataTableList: [
-        { name: 'cmswing_action' },
-        { name: 'cmswing_action' },
-        { name: 'cmswing_action' },
-        { name: 'cmswing_action' },
-        { name: 'cmswing_action' }
-      ],
+      // 数据表loading控制单元
+      tableLoading: false,
+      // 数据表
+      dataTableList: [],
+      // 传输给sql编辑器的表格提示词
+      editTables: {},
       runResultData: {},
       settingParamVisiable: false,
       variableTypeOptions: [
@@ -482,7 +474,6 @@ export default {
     this.getDataSourceList()
     this.getFolderList()
     const data = this.$route.query
-    console.log(data, 'data')
     // 如果都为空则表示新建的数据集，直接进入编辑状态
     if (!data._id) {
       this.isEdit = true
@@ -508,7 +499,8 @@ export default {
     },
     // 格式化 sql 编辑器
     formatSqlData () {
-      this.$refs.sqlEdit.formaterSql()
+      const dom = this.$refs.sqlEdit
+      dom.editor.setValue(format(this.currentSqlStatement))
     },
     // 参数设置
     async settingParam () {
@@ -559,7 +551,7 @@ export default {
         if (this.sqlVariables && this.sqlVariables.length > 0) {
           body.sqlVariables = this.sqlVariables
         }
-        const data = confirmEditSql(body)
+        const data = await confirmEditSql(body)
         this.currentFields = data.fields
         this.currentSqlData = data.sql
         this.currentSqlId = data.sql._id
@@ -595,7 +587,6 @@ export default {
           o.value = i._id
           options.push(o)
         })
-        console.log('options', options)
         this.dataSourceOptions = options.slice()
       } catch (error) {
         console.log(error)
@@ -608,7 +599,7 @@ export default {
     },
     async handleTableInfo (tableName) {
       const id = this.currentDataSourceId
-      console.log(id)
+      this.currentTableInfo = {}
       try {
         const data = await getTableInfo(id, tableName)
         this.currentTableInfo = data
@@ -618,7 +609,6 @@ export default {
     },
     // 获取改变的sql语句
     sqlStatementChange (sql) {
-      console.log('获取改变的sql语句', sql)
       this.currentSqlStatement = sql
     },
     // 未保存 离开
@@ -636,17 +626,15 @@ export default {
         body.sql = this.currentSqlData
         body.displayName = this.dataSetDisplayName
         console.log(body, 'body')
-        const data = await createDataSets(body)
-        if (data.code === '创建成功') {
-          this.$message({
-            message: '保存成功',
-            type: 'success'
-          })
-          this.saveDataSetDialogVisible = false
-          this.$router.push({
-            path: '/dataSet'
-          })
-        }
+        await createDataSets(body)
+        this.$message({
+          message: '保存成功',
+          type: 'success'
+        })
+        this.saveDataSetDialogVisible = false
+        this.$router.push({
+          path: '/dataManage/dataSet'
+        })
       } catch (error) {
         console.log(error)
       }
@@ -689,13 +677,22 @@ export default {
     },
     //
     async handleChangeDataSource (val) {
+      this.tableLoading = true
       try {
         this.currentDataSourceId = val
         const data = await getDataTable(val)
         this.dataTableList = data.list
+        // 给sql编辑器传参
+        const temp = {}
+        data.list.forEach(item => {
+          // 目前只返回表名称，未返回字段数据
+          temp[item.name] = []
+        })
+        this.editTables = temp
       } catch (error) {
         console.log(error)
       }
+      this.tableLoading = false
     }
   }
 }
@@ -785,7 +782,6 @@ export default {
 }
 
 .side-top {
-  height: 100px;
   padding: 20px 12px;
   &-main > div:nth-child(1) {
     margin-bottom: 8px;
@@ -795,11 +791,17 @@ export default {
 .side-bottom {
   &-main {
     padding: 0 20px;
-    &-list:hover {
-      background: #fef5ee;
-      margin: 0 -20px;
-      padding: 0 20px;
-      margin-bottom: 8px;
+    &-list {
+      display: flex;
+      height: 32px;
+      line-height: 32px;
+
+      &:hover {
+        background: #fef5ee;
+        margin: 0 -20px;
+        padding: 0 20px;
+        margin-bottom: 8px;
+      }
     }
   }
 
@@ -847,7 +849,9 @@ export default {
     }
   }
 }
-
+::v-deep .el-tooltip__popper.is-light {
+  border: 0px;
+}
 .on-save-content {
   &-label {
     width: 80px;

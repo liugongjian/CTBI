@@ -6,12 +6,6 @@ const apps = [
     meta: { title: '首页', icon: 'dashboard', affix: true }
   },
   {
-    path: '/editor',
-    name: 'Editor',
-    component: () => import('@/components/Editor/index.vue'),
-    meta: { title: 'SQl', icon: 'dashboard', affix: true }
-  },
-  {
     path: '/dashboard/',
     name: 'dashboard',
     component: () => import('@/views/dashboard/index.vue'),

@@ -63,6 +63,25 @@ a {
   }
 }
 
+// 滚动条样式优化
+::-webkit-scrollbar-track {
+  background: #fff;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  border-radius: 8px;
+  background: #DDDDDD;
+  transition: color .2s ease;
+}
+
 // element原生样式调整
 .el-table {
   &.el-table--enable-row-hover {

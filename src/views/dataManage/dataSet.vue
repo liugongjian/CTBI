@@ -6,15 +6,11 @@
         <div class="data-set-header">
           <div class="data-set-header-l">
             <el-button
-              class="data-set-header-btn"
-              style="background: #fa8334; color: #fff"
+              type="primary"
+              icon="el-icon-plus"
               @click="createFolder"
-            ><i class="el-icon-plus" />新建文件夹</el-button>
-            <el-button
-              class="data-set-header-btn"
-              style="color: rgba(0, 0, 0, 0.65)"
-              @click="createDataSet"
-            >新建数据集</el-button>
+            >新建文件夹</el-button>
+            <el-button @click="createDataSet">新建数据集</el-button>
           </div>
           <div class="data-set-header-r">
             <el-input
@@ -23,15 +19,10 @@
               style="margin-right: 12px"
             />
             <el-button
-              class="data-set-header-btn"
-              style="background: #fa8334; color: #fff"
+              type="primary"
               @click="query"
             >查询</el-button>
-            <el-button
-              class="data-set-header-btn"
-              style="color: rgba(0, 0, 0, 0.65)"
-              @click="reset"
-            >重置</el-button>
+            <el-button @click="reset">重置</el-button>
           </div>
         </div>
 
@@ -40,11 +31,15 @@
           class="data-set-multiple"
         >
           <span>已选{{ multipleSelection.length }}项</span>
-          <span
-            style="cursor: pointer;"
-            @click="moveTo"
-          >移动到</span>
-          <span @click="clearSelection">取消选择</span>
+          <el-button
+            type="text"
+            @click="moveTo()"
+          >移动到</el-button>
+          <el-button
+            type="text"
+            @click="clearSelection()"
+          >取消选择
+          </el-button>
         </div>
 
         <!-- main -->
@@ -54,6 +49,7 @@
         >
           <el-table
             ref="multipleTable"
+            v-loading="dataSetLoading"
             lazy
             :data="tableData"
             tooltip-effect="dark"
@@ -61,9 +57,8 @@
             row-key="_id"
             :load="loadDataSet"
             :tree-props="{children: 'children', hasChildren: 'isFolder'}"
-            @selection-change="handleSelectionChange"
+            @select="handleSelectionChange"
             @expand-change="handleExpandChange"
-            @cell-click="handleCellClick"
           >
             <el-table-column
               type="selection"
@@ -86,7 +81,11 @@
                   style="color: rgba(0, 0, 0, 0.3);line-height: 20px;"
                   trigger="hover"
                 >
-                  <span slot="reference">{{ scope.row.name || scope.row.displayName }}</span>
+                  <el-button
+                    slot="reference"
+                    type="text"
+                    @click="handleCellClick(scope.row)"
+                  >{{ scope.row.name || scope.row.displayName }}</el-button>
                 </el-popover>
                 <span v-else>{{ scope.row.name || scope.row.displayName }}</span>
               </template>
@@ -128,20 +127,13 @@
                   <el-divider direction="vertical" />
                   <span @click="showAttribute(scope.row)">属性</span>
                   <el-divider direction="vertical" />
-                  <el-tooltip
-                    placement="bottom"
-                    effect="light"
-                    :disabled="moreToolTipDisabled"
-                  >
-                    <ul
-                      slot="content"
-                      class="data-set-menu"
-                    >
-                      <li @click="moveTo(scope.row)">移动到</li>
-                      <li @click="deleteDataSet(scope.row)">删除</li>
-                    </ul>
-                    <span @click="showMore">更多</span>
-                  </el-tooltip>
+                  <el-dropdown trigger="click">
+                    <el-button type="text">更多</el-button>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item @click.native="moveTo(scope.row)">移动到</el-dropdown-item>
+                      <el-dropdown-item @click.native="deleteDataSet(scope.row)">删除</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
                 </div>
                 <div
                   v-else
@@ -187,35 +179,44 @@
             <el-table-column
               prop="name"
               label="名称"
-              width="200"
+              min-width="200"
             >
               <template slot-scope="scope">
                 <svg-icon
                   icon-class="sql"
                   style="margin-right: 8px"
                 />
-                <span>{{ scope.row.displayName }}</span>
+                <el-button
+                  slot="reference"
+                  type="text"
+                  @click="handleCellClick(scope.row)"
+                >{{ scope.row.name || scope.row.displayName }}</el-button>
               </template>
             </el-table-column>
             <el-table-column
               prop="root"
               label="文件路径"
-              width="150"
+              min-width="100"
             />
             <el-table-column
-              prop="creatorId"
+              prop="creatorName"
               label="创建者"
-              width="120"
+              min-width="120"
             />
             <el-table-column
               prop="lastUpdatedTime"
               label="修改时间"
-              width="150"
-            />
+              min-width="150"
+              show-overflow-tooltip
+            >
+              <template slot-scope="scope">
+                {{ scope.row.lastUpdatedTime | dateFilter }}
+              </template>
+            </el-table-column>
             <el-table-column
-              prop="dataSource"
+              prop="dataSourceName"
               label="数据源"
-              width="120"
+              min-width="120"
             />
             <el-table-column
               label="操作"
@@ -232,20 +233,13 @@
                   <el-divider direction="vertical" />
                   <span @click="showAttribute(scope.row)">属性</span>
                   <el-divider direction="vertical" />
-                  <el-tooltip
-                    placement="bottom"
-                    effect="light"
-                    :disabled="moreToolTipDisabled"
-                  >
-                    <ul
-                      slot="content"
-                      class="data-set-menu"
-                    >
-                      <li @click="moveTo(scope.row)">移动到</li>
-                      <li @click="deleteDataSet(scope.row)">删除</li>
-                    </ul>
-                    <span @click="showMore">更多</span>
-                  </el-tooltip>
+                  <el-dropdown trigger="click">
+                    <el-button type="text">更多</el-button>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item @click.native="moveTo(scope.row)">移动到</el-dropdown-item>
+                      <el-dropdown-item @click.native="deleteDataSet(scope.row)">删除</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
                 </div>
               </template>
             </el-table-column>
@@ -356,7 +350,7 @@
           >
             <el-button @click="deleteFolderVisible = false">取 消</el-button>
             <el-button
-              style="background-color: #FA8334;color: #fff;"
+              type="primary"
               @click="hanleDeleteFolder"
             >确 定</el-button>
           </span>
@@ -380,7 +374,7 @@
           >
             <el-button @click="deleteDataSetVisible = false">取 消</el-button>
             <el-button
-              style="background-color: #FA8334;color: #fff;"
+              type="primary"
               @click="hanleDeleteDataSet"
             >确 定</el-button>
           </span>
@@ -424,7 +418,7 @@
           >
             <el-button @click="dataSetAttributeVisible = false">取 消</el-button>
             <el-button
-              style="background-color: #FA8334;color: #fff;"
+              type="primary"
               @click="hanleDataSetAttribute"
             >确 定</el-button>
           </span>
@@ -466,7 +460,7 @@
             <div class="move-to-drawer-footer">
               <el-button @click="moveToVisible = false; selectFloderId = '' ">取 消</el-button>
               <el-button
-                style="background-color: #FA8334;color: #fff;"
+                type="primary"
                 @click="handleMoveTo"
               >确 定</el-button>
             </div>
@@ -487,121 +481,8 @@ export default {
     return {
       serachName: '',
       updateDataSetName: '',
-      tableData: [
-        {
-          _id: 'XKxw5woOOWWHp',
-          name: 'xxx-floder',
-          creatorId: 'xxx',
-          lastUpdatedTime: '2022-4-18 14:42:30',
-          dataSourceName: '',
-          isFolder: true,
-          children: [
-            {
-              _id: 'wy1Vf5wAvVXrT2',
-              name: 'qqq-data-set',
-              creatorId: 'qqq',
-              lastUpdatedTime: '2022-4-18 14:42:30',
-              dataSourceName: 'qqq',
-              isFolder: false
-            },
-            {
-              _id: 'wy1Vf5wAvVXrT3',
-              name: 'www-data-set',
-              creatorId: 'www',
-              lastUpdatedTime: '2022-4-18 14:42:30',
-              dataSourceName: 'www',
-              isFolder: false
-            }
-          ]
-        },
-        {
-          _id: 'wy1Vf5wAvVXrT',
-          name: 'ooo-data-set',
-          creatorId: 'ooo',
-          lastUpdatedTime: '2022-4-18 14:42:30',
-          dataSourceName: 'aaa',
-          isFolder: false
-        },
-        {
-          _id: 'BnJLUVUO2PV0p',
-          status: 1,
-          version: '1.0',
-          displayName: 'huym-0422',
-          comment: '这是备注',
-          sqlId: 'FwWlNdQ4N7JBs',
-          fields: [
-            {
-              attributes: [{
-                isHidden: true,
-                dataType: 'number'
-              }],
-              status: 1,
-              type: 'Measure',
-              column: 'id',
-              displayColumn: 'id',
-              comment: 'id',
-              _id: 'd2ZIiiSrmOKTr'
-            },
-            {
-              attributes: [{
-                isHidden: true,
-                dataType: 'number'
-              }],
-              status: 1,
-              type: 'Measure',
-              column: 'id',
-              displayColumn: 'id_cp',
-              comment: 'id',
-              _id: 'ofno3idEh98HM'
-            },
-            {
-              attributes: [{
-                isHidden: true,
-                dataType: 'number'
-              }],
-              status: -1,
-              type: 'Dimension',
-              column: 'name',
-              displayColumn: 'name',
-              comment: 'name',
-              _id: '9DoQFxAnPWX4p'
-            },
-            {
-              attributes: [{
-                isHidden: true,
-                dataType: 'number'
-              }],
-              status: 1,
-              type: 'Dimension',
-              column: 'telephone',
-              displayColumn: 'telephone',
-              comment: 'telephone',
-              _id: '9sRMN8KfO74dQ'
-            },
-            {
-              attributes: [{
-                isHidden: true,
-                dataType: 'number'
-              }],
-              status: 1,
-              type: 'Dimension',
-              column: 'address',
-              displayColumn: 'address',
-              comment: 'address',
-              _id: 'Ewp5qgoOFYprq'
-            }
-          ],
-          creatorId: 'huym',
-          dataSourceId: 'bUGgsUrXIe7I0',
-          createdTime: '2022-04-22T06:38:11.769Z',
-          lastUpdatedTime: '2022-04-22T09:02:22.514Z',
-          folderId: null,
-          isFolder: false,
-          dataSourceName: 'huym-test',
-          creatorName: 'huyimiao'
-        }
-      ],
-      loading: false,
+      // 数据集表格数据
+      tableData: [],
       dataSetLoading: true,
       multipleSelection: [],
       createFloderVisible: false,
@@ -616,26 +497,8 @@ export default {
       },
       editFloderName: '',
       renameFolderVisible: false,
-      floderList: [
-        {
-          _id: 'XKxw5woOOWWHp',
-          name: 'xxx-floder',
-          creatorId: 'xxx',
-          lastUpdatedTime: '2022-4-18 14:42:30',
-          dataSource: '',
-          type: 'floder',
-          children: []
-        },
-        {
-          _id: 'XKxw5woOOWWHpx',
-          name: 'ooo-floder',
-          creatorId: 'ooo',
-          lastUpdatedTime: '2022-4-18 14:42:30',
-          dataSource: '',
-          type: 'floder',
-          children: []
-        }
-      ],
+      // 移动中的文件夹
+      floderList: [],
       currentFloder: null,
       cureentDataSet: null,
       moveToVisible: false,
@@ -646,26 +509,8 @@ export default {
         pageSize: 10,
         total: 55
       },
-      dataSetData: [
-        {
-          _id: 'wy1Vf5wAvVXrTz',
-          name: 'zzz-data-set',
-          creatorId: 'xxx',
-          lastUpdatedTime: '2022-4-18 14:42:30',
-          dataSource: 'aaa',
-          root: 'aaa/xxx',
-          type: 'dataSet'
-        },
-        {
-          _id: 'wy1Vf5wAvVXrTx',
-          name: 'xxx-data-set',
-          creatorId: 'ooo',
-          lastUpdatedTime: '2022-4-18 14:42:30',
-          dataSource: 'aaa',
-          root: 'aaa/xxx',
-          type: 'dataSet'
-        }
-      ],
+      // 数据集数据
+      dataSetData: [],
       moreToolTipDisabled: true,
       isAllDataShow: true,
       dataSetPagination: {
@@ -685,6 +530,8 @@ export default {
   },
   methods: {
     init () {
+      // 先清空数据，否则对拥有子层级的列表无法刷新data
+      this.tableData = []
       this.getTableData()
       this.currentFloder = null
       this.cureentDataSet = null
@@ -696,19 +543,34 @@ export default {
     },
     // 获取 tableData
     async getTableData () {
+      this.dataSetLoading = true
       try {
         const data = await getDataSetsFolders()
-        // data.forEach(item => {
-        //   if (item.isFolder) {
-        //     item.children = []
-        //   }
-        // })
         this.tableData = data
-        console.log(this.tableData)
-        this.loading = false
       } catch (error) {
         console.log(error)
       }
+      this.dataSetLoading = false
+    },
+    // 查询
+    async query () {
+      if (!this.serachName) {
+        this.isAllDataShow = true
+        return this.$message({
+          message: '请输入正确的数据集名称',
+          type: 'warning'
+        })
+      }
+      this.isAllDataShow = false
+      const searchkey = this.serachName
+      this.dataSetLoading = true
+      try {
+        const data = await getDataSetsFolders({ searchkey })
+        this.dataSetData = data.filter(item => !item.isFolder)
+      } catch (error) {
+        console.log(error)
+      }
+      this.dataSetLoading = false
     },
     // 新建文件夹
     createFolder () {
@@ -750,25 +612,6 @@ export default {
         path: '/dataManage/dataSet/edit',
         query
       })
-    },
-    // 查询
-    async query () {
-      if (!this.serachName) {
-        this.isAllDataShow = true
-        return this.$message({
-          message: '请输入正确的数据集名称',
-          type: 'warning'
-        })
-      }
-      this.isAllDataShow = false
-      const searchkey = this.serachName
-      try {
-        const data = await getDataSetsFolders({ searchkey })
-        this.dataSetData = data.filter(item => !item.isFolder)
-        this.dataSetLoading = false
-      } catch (error) {
-        console.log(error)
-      }
     },
     // 重置
     reset () {
@@ -850,10 +693,9 @@ export default {
       }
       try {
         const data = await updateFolderName(id, body)
-        console.log(data)
+        this.$message.success(data)
         this.editFloderName = ''
         this.currentFloder = null
-        this.loading = true
         this.init()
       } catch (error) {
         console.log(error)
@@ -869,10 +711,9 @@ export default {
       const id = this.currentFloder._id
       try {
         const data = await delFolders(id)
-        console.log(data)
+        this.$message.success(data)
         this.deleteFolderVisible = false
         this.currentFloder = null
-        this.loading = true
         this.init()
       } catch (error) {
         console.log(error)
@@ -887,18 +728,16 @@ export default {
       const id = this.cureentDataSet._id
       try {
         const data = await delDataSet(id)
-        console.log(data)
+        this.$message.success(data)
         this.deleteDataSetVisible = false
         this.cureentDataSet = null
-        this.loading = true
-        this.dataSetLoading = true
         this.init()
       } catch (error) {
         console.log(error)
       }
     },
     async moveTo (val) {
-      if (this.multipleSelection.some(item => item.isFolder)) {
+      if (this.multipleSelection.some(item => item.isFolder) || val?.isFolder) {
         return this.$message({
           message: '移动操作暂且只支持数据集不支持文件夹',
           type: 'warning'
@@ -920,25 +759,22 @@ export default {
       const ids = []
       const folderId = this.selectFloderId
       this.multipleSelection.forEach(item => {
-        if (!item.isFolder) {
+        if (typeof item.isFolder !== 'undefined' && !item.isFolder) {
           ids.push(item._id)
         }
       })
       if (!ids.length) return false
       try {
-        const code = await moveDataSet2Folder({
+        const data = await moveDataSet2Folder({
           ids,
           folderId
         })
-        if (code === 200) {
-          this.multipleSelection = null
-          this.selectFloderId = ''
-          this.$refs.multipleTable.clearSelection()
-          this.moveToVisible = false
-          this.$router.go(0)
-        } else {
-          return false
-        }
+        this.$message.success(data)
+        this.multipleSelection = null
+        this.selectFloderId = ''
+        this.$refs.multipleTable.clearSelection()
+        this.moveToVisible = false
+        this.init()
       } catch (error) {
         console.log(error)
       }
@@ -972,8 +808,7 @@ export default {
     handleUpdateDataSetName () {
       this.editDataSetVisible = false
     },
-    handleCellClick (row, column) {
-      if (column.label !== '名称' || row.isFolder) return false
+    handleCellClick (row) {
       const query = row
       this.$router.push({
         path: '/dataManage/dataSet/edit',
@@ -1030,17 +865,6 @@ export default {
 
   &-r {
     display: flex;
-
-    ::v-deep .el-input__inner {
-      height: 32px;
-    }
-  }
-
-  &-btn {
-    height: 32px;
-    font-size: 12px;
-    padding: 0 20px;
-    line-height: 32px;
   }
 }
 
@@ -1099,15 +923,6 @@ export default {
     color: rgba(0, 0, 0, 0.65);
     font-weight: 400;
   }
-}
-
-.data-set-menu > li {
-  list-style: none;
-  margin: 8px 8px;
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.65);
-  font-weight: 400;
-  cursor: pointer;
 }
 
 .dialog-footer {

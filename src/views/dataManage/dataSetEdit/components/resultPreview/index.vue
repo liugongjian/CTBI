@@ -1,9 +1,19 @@
 <template>
   <div class="result-preview-wrap">
     <!-- 存在两种 一种为编辑状态下（运行结果+历史记录） 二为展示状态下（数据预览+批量配置） -->
-    <div v-if="isEdit" class="result-preview-wrap-main">
-      <el-tabs v-model="activeFirstTagName" type="card" @tab-click="handleClickTagsFirst">
-        <el-tab-pane label="运行结果" name="runResult">
+    <div
+      v-if="isEdit"
+      class="result-preview-wrap-main"
+    >
+      <el-tabs
+        v-model="activeFirstTagName"
+        type="card"
+        @tab-click="handleClickTagsFirst"
+      >
+        <el-tab-pane
+          label="运行结果"
+          name="runResult"
+        >
           <!-- 成功为table -->
           <template v-if="resultData.type =='success'">
             <el-table
@@ -13,44 +23,57 @@
               <el-table-column
                 label="序号"
                 type="index"
-                width="50"
+                min-width="50"
               />
               <el-table-column
                 v-for="(k,i) in resultData.columns"
                 :key="i"
                 :prop="k"
                 :label="k"
-                width="180"
               />
             </el-table>
           </template>
           <!-- 失败 -->
-          <template v-else></template>
+          <template v-else>
+            <div style="text-align: center;">
+              <svg-icon
+                style="width: 137px; height: 200px;"
+                icon-class="sql-result-bg"
+              />
+              <div>
+                <span class="result-bg-tip">编辑完代码后，点击上方运行按钮即可查看运行结果</span>
+              </div>
+            </div>
+          </template>
         </el-tab-pane>
-        <el-tab-pane label="历史记录" name="historyLog">
+        <el-tab-pane
+          label="历史记录"
+          name="historyLog"
+        >
           <el-table
+            v-if="historyLogTableData && historyLogTableData.length > 0"
             :data="historyLogTableData"
             style="width: 100%"
           >
             <el-table-column
               prop="createdTime"
               label="开始时间"
-              width="180"
+              min-width="180"
             />
             <el-table-column
               prop="sqlText"
               label="SQL语句"
-              width="180"
+              min-width="300"
             />
             <el-table-column
               prop="costTime"
               label="耗时（ms）"
-              width="180"
+              min-width="80"
             />
             <el-table-column
               prop="result"
               label="运行结果"
-              width="180"
+              min-width="80"
             >
               <template slot-scope="scope">
                 <div v-if="scope.row.result == 'success'">
@@ -63,17 +86,34 @@
             </el-table-column>
             <el-table-column
               label="操作"
-              width="100"
+              min-width="100"
             >
               <template slot-scope="scope">
-                <span @click="copyHistoryLog(scope.row, $event)">复制</span>
+                <el-button
+                  type="text"
+                  @click="copyHistoryLog(scope.row, $event)"
+                >复制</el-button>
               </template>
             </el-table-column>
           </el-table>
+          <template v-else>
+            <div style="text-align: center;">
+              <svg-icon
+                style="width: 137px; height: 200px;"
+                icon-class="sql-result-bg"
+              />
+              <div>
+                <span class="result-bg-tip">未查询到历史记录</span>
+              </div>
+            </div>
+          </template>
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div v-else class="result-preview-wrap-main">
+    <div
+      v-else
+      class="result-preview-wrap-main"
+    >
       <div class="result-preview-wrap-main-c">
         <div class="result-preview-wrap-main-c-top">
           <el-input
@@ -82,14 +122,31 @@
             prefix-icon="el-icon-search"
             style="margin-right: 24px"
           />
-          <el-button type="primary" icon="el-icon-refresh" @click="refreshPreview">刷新预览</el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-refresh"
+            @click="refreshPreview"
+          >刷新预览</el-button>
         </div>
-        <el-tabs v-model="activeSecondTagName" @tab-click="handleClickTagsSecond">
-          <el-tab-pane label="数据预览" name="dataPreview">
-            <div class="data-preview" style="width: 65vw">
+        <el-tabs
+          v-model="activeSecondTagName"
+          @tab-click="handleClickTagsSecond"
+        >
+          <el-tab-pane
+            label="数据预览"
+            name="dataPreview"
+          >
+            <div
+              class="data-preview"
+              style="width: 65vw"
+            >
               <!-- left -->
               <div class="data-preview-left">
-                <el-tree :data="dimensionMeasure" :props="defaultProps" @node-click="handleNodeClick" />
+                <el-tree
+                  :data="dimensionMeasure"
+                  :props="defaultProps"
+                  @node-click="handleNodeClick"
+                />
               </div>
 
               <!-- right -->
@@ -120,7 +177,10 @@
               </div>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="批量配置" name="batchConfiguration">
+          <el-tab-pane
+            label="批量配置"
+            name="batchConfiguration"
+          >
             <div style="width: 65vw">
               <el-table
                 :data="batchConfigTableData"
@@ -157,7 +217,10 @@
                   <template slot-scope="scope">
                     <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
                     <div v-else>
-                      <el-select v-model="scope.row.attributes[0].dataType" placeholder="请选择">
+                      <el-select
+                        v-model="scope.row.attributes[0].dataType"
+                        placeholder="请选择"
+                      >
                         <el-option
                           v-for="item in batchConfigurationDataTypeOptions"
                           :key="item.value"
@@ -180,7 +243,10 @@
                   <template slot-scope="scope">
                     <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
                     <div v-else>
-                      <el-select v-model="scope.row.attributes[0].format" placeholder="请选择">
+                      <el-select
+                        v-model="scope.row.attributes[0].format"
+                        placeholder="请选择"
+                      >
                         <el-option
                           v-for="item in formatMap[scope.row.attributes[0].dataType]"
                           :key="item.value"
@@ -198,19 +264,29 @@
                   <template slot-scope="scope">
                     <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
                     <div v-else>
-                      <el-input v-model="scope.row.comment" placeholder="请输入内容" />
+                      <el-input
+                        v-model="scope.row.comment"
+                        placeholder="请输入内容"
+                      />
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" min-width="200">
+                <el-table-column
+                  label="操作"
+                  min-width="200"
+                >
                   <template slot-scope="scope">
                     <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-                    <div v-else class="result-preview-batch-configuration-table-options">
+                    <div
+                      v-else
+                      class="result-preview-batch-configuration-table-options"
+                    >
                       <span @click="copyBatchConfiguration(scope.row)">复制</span>
                       <el-divider direction="vertical" />
                       <span @click="deleteBatchConfiguration(scope.row)">删除</span>
                       <el-divider direction="vertical" />
-                      <span @click="hideBatchConfiguration(scope.row)">{{ scope.row.attributes[0].isHidden ? '取消隐藏' : '隐藏' }}</span>
+                      <span
+                        @click="hideBatchConfiguration(scope.row)">{{ scope.row.attributes[0].isHidden ? '取消隐藏' : '隐藏' }}</span>
                     </div>
                   </template>
                 </el-table-column>
@@ -260,41 +336,6 @@ export default {
       default: () => {
         return {}
       }
-    }
-  },
-  mounted () {
-    this.dataSetInfo = this.$route.query
-    console.log(this.dataSetInfo, 'this.dataSetInfo')
-    const fields = this.fields.slice()
-    this.dataSetFields = fields.slice()
-    this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(fields.slice())))
-    this.dimensionMeasureTableColumns = fields.slice().filter(i => !i.attributes[0].isHidden)
-    this.batchConfigTableData = this.getBatchConfigTableData(fields.slice())
-  },
-  computed: {},
-  watch: {
-    fields: function(newVal, oldVal) {
-      this.dataSetFields = newVal.slice()
-      this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
-      this.dimensionMeasureTableColumns = newVal.slice().filter(i => !i.attributes[0].isHidden)
-      this.batchConfigTableData = this.getBatchConfigTableData(newVal.slice())
-    },
-    runResultData: function(newVal, oldVal) {
-      if (this.currentSqlId !== newVal._id) {
-        this.currentSqlId = newVal._id
-      }
-      const data = this.formatRunResultData(newVal)
-      console.log(data)
-      this.resultData = JSON.parse(JSON.stringify(data))
-    },
-    dataSetFields: {
-      handler(newVal, oldVal) {
-        // 这里 dataSetFields 等同于 父级的 fields 字段，子级有变化通知父级更改（合并的策略由父级处理）
-        this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
-        this.dimensionMeasureTableColumns = newVal.slice().filter(i => !i.attributes[0].isHidden)
-        this.$emit('dataSetFieldsChange', newVal)
-      },
-      deep: true
     }
   },
   data () {
@@ -385,18 +426,53 @@ export default {
       currentSqlId: this.sqlId
     }
   },
+  computed: {},
+  watch: {
+    fields: function (newVal, oldVal) {
+      this.dataSetFields = newVal.slice()
+      this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
+      this.dimensionMeasureTableColumns = newVal.slice().filter(i => !i.attributes[0].isHidden)
+      this.batchConfigTableData = this.getBatchConfigTableData(newVal.slice())
+    },
+    runResultData: function (newVal, oldVal) {
+      if (this.currentSqlId !== newVal._id) {
+        this.currentSqlId = newVal._id
+      }
+      const data = this.formatRunResultData(newVal)
+      console.log(data)
+      this.resultData = JSON.parse(JSON.stringify(data))
+    },
+    dataSetFields: {
+      handler (newVal, oldVal) {
+        // 这里 dataSetFields 等同于 父级的 fields 字段，子级有变化通知父级更改（合并的策略由父级处理）
+        this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
+        this.dimensionMeasureTableColumns = newVal.slice().filter(i => !i.attributes[0].isHidden)
+        this.$emit('dataSetFieldsChange', newVal)
+      },
+      deep: true
+    }
+  },
+  mounted () {
+    this.dataSetInfo = this.$route.query
+    console.log(this.dataSetInfo, 'this.dataSetInfo')
+    const fields = this.fields.slice()
+    this.dataSetFields = fields.slice()
+    this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(fields.slice())))
+    this.dimensionMeasureTableColumns = fields.slice().filter(i => !i.attributes[0].isHidden)
+    this.batchConfigTableData = this.getBatchConfigTableData(fields.slice())
+  },
   methods: {
-    init () {},
+    init () { },
     // 切换tags触发的事件
     async handleClickTagsFirst (tab) {
       if (tab.name === 'historyLog') {
-        const sqlId = this.currentSqlId
-        try {
-          const data = await getSqlRunningLogs(sqlId)
-          console.log(data)
-          this.historyLogTableData = data.slice()
-        } catch (error) {
-          console.log(error)
+        if (this.currentSqlId) {
+          try {
+            const data = await getSqlRunningLogs(this.currentSqlId)
+            this.historyLogTableData = data.slice()
+          } catch (error) {
+            console.log(error)
+          }
         }
       }
     },
@@ -484,7 +560,7 @@ export default {
       return res
     },
     // 隐藏 & 取消隐藏
-    hideBatchConfiguration(val) {
+    hideBatchConfiguration (val) {
       const tmp = this.dataSetFields.slice()
       tmp.forEach(i => {
         if (i._id === val._id) {
@@ -584,7 +660,7 @@ export default {
       width: 200px;
       box-sizing: border-box;
       border-right: 1px solid rgba(0, 0, 0, 0.06);
-      border-left: 1px solid rgba(0, 0, 0, 0.06)
+      border-left: 1px solid rgba(0, 0, 0, 0.06);
     }
     &-right {
       flex: 1;
@@ -607,5 +683,10 @@ export default {
 }
 ::v-deep .el-table td.el-table__cell div {
   display: flex;
+}
+.result-bg-tip {
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.45);
+  line-height: 20px;
 }
 </style>

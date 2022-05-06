@@ -2,7 +2,7 @@
 const path = require('path')
 const defaultSettings = require('./src/config/settings.js')
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
@@ -40,7 +40,7 @@ module.exports = {
     proxy: {
       // 配置跨域
       '/api': {
-        // target: 'http://5r062036w4.qicp.vip:31735',
+        // 测试环境地址
         target: 'http://139.196.10.0:888/ctbibackend/',
         changeOrigin: true,
         pathRewrite: {
@@ -61,7 +61,7 @@ module.exports = {
     }
   },
 
-  chainWebpack(config) {
+  chainWebpack (config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload
     config.plugin('preload').tap(() => [
       {
