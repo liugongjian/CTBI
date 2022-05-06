@@ -54,7 +54,7 @@ const actions = {
       getInfo(state.token).then(data => {
         const { result, info } = data
         if (!data || !result) {
-          return reject('Verification failed, please Login again.')
+          return reject('认证失败, 请重新登录.')
         }
 
         const { userName } = info

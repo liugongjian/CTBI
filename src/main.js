@@ -7,7 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 //global icon
 import '@/icons'
 // 路由守卫
-// import '@/config/permission'
+import '@/config/permission'
 // global css
 import '@/styles/index.scss'
 // 引入全局过滤器
