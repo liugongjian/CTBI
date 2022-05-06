@@ -143,13 +143,15 @@ export default {
         oldPassword: oldPassword,
         newPassword: newPassword
       }
-      const res = await activate(data)
-      if (res.code === 200) {
+      try {
+        await activate(data)
         this.$message({
           message: '提交成功!',
           iconClass: 'activate'
         })
         this.$router.push({ path: '/login' })
+      } catch (error) {
+        console.log(error)
       }
     }
 
