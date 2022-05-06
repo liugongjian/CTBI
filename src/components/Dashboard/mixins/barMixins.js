@@ -46,6 +46,19 @@ export default {
           this.getOption()
         }
       }
+    },
+    'storeOption.theme.ComponentOption.PercentStack': {
+      handler(val) {
+        this.storeOption.theme.ComponentOption.ChartLabel.type = this.type
+        if (val.isStack && !val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'StackedBarChart'
+        }
+        if (val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'PercentStackedBarChart'
+        }
+      },
+      deep: true
+
     }
   },
   mounted () {
@@ -297,7 +310,8 @@ export default {
         })
         if (option) {
           const { labelColor, showLabel, showMax } = option
-          item.label.show = showLabel
+          const ChartLabel = this.storeOption.theme.ComponentOption.ChartLabel
+          item.label.show = ChartLabel.type === 'StackedBarChart' ? this.checkList.includes('度量') && ChartLabel.check && showLabel : ChartLabel.check && showLabel
           item.label.color = labelColor
           if (showMax) {
             item.markPoint = {

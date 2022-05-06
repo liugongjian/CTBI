@@ -1,7 +1,7 @@
 <template>
   <div style="width: 100%; height: 100%">
     <div v-if="dataValue" class="kbs-wrap">
-      <subregion :data="dataValue" :option="getOption" />
+      <subregion :data="dataValue" :option="getOption" :series="getKanBanSeries" />
     </div>
     <div v-else>数据为空</div>
   </div>
@@ -58,8 +58,10 @@ export default {
   },
   computed: {
     getOption() {
-      console.log(this.storeOption)
       return this.storeOption.theme?.StyleConfig?.IndexQuickly || {}
+    },
+    getKanBanSeries() {
+      return this.storeOption.theme?.SeriesSetting?.kanBanSeries || {}
     }
   },
   watch: {
@@ -80,6 +82,8 @@ export default {
           this.getColor(this.dataValue)
           // 拿到名字 并设置svg
           this.getNameSvg(this.dataValue)
+          // 拿到系列和值
+          this.getDataSeries(this.dataValue)
         }
       }
     }

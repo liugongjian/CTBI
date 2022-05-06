@@ -3,11 +3,11 @@
     <!-- header -->
     <div class="data-set-edit-wrap-header">
       <div class="data-set-edit-wrap-header-l">
-        <i class="el-icon-arrow-left" style="margin-right: 8px" @click="toDataSetPage" />
+        <i class="el-icon-arrow-left" style="margin-right: 8px; cursor: pointer" @click="noSaveLeaveDialogVisible = true" />
         <span>{{ dataSourceName ? dataSourceName : '未命名' }}</span>
       </div>
       <div class="data-set-edit-wrap-header-r">
-        <div class="data-set-edit-wrap-header-r-btn" @click="onSave">保存</div>
+        <div class="data-set-edit-wrap-header-r-btn" @click="saveDataSetDialogVisible = true">保存</div>
       </div>
     </div>
 
@@ -17,14 +17,14 @@
         <div>
           <svg-icon icon-class="sql" style="margin-right: 8px" />
         </div>
-        <el-input v-model="sqlName" placeholder="未命名SQL" />
+        <el-input v-model="dataSetDisplayName" placeholder="未命名SQL" />
       </div>
       <div class="data-set-edit-wrap-toptool-r">
         <el-button @click="formatSqlData">格式化</el-button>
         <el-button @click="settingParam">参数配置</el-button>
         <el-button type="primary" @click="runSql">运行</el-button>
         <el-button type="primary" @click="confirmEdit">确认编辑</el-button>
-        <div style="margin-left: 8px" @click="isEdit=false"><i class="el-icon-close" /></div>
+        <div style="margin-left: 8px" @click="leaveDialogVisible=true"><i class="el-icon-close" /></div>
       </div>
     </div>
 
@@ -97,7 +97,7 @@
 
         <!-- bottom -->
         <div class="result-preview">
-          <ResultPreview :run-result-data="runResultData" :is-edit="isEdit" />
+          <ResultPreview :run-result-data="runResultData" :is-edit="isEdit" :fields="currentFields" :sql-id="currentSqlId" :sql-params="currentSqlData" @dataSetFieldsChange="dataSetFieldsChange" />
         </div>
       </div>
     </div>
@@ -105,6 +105,7 @@
     <!-- 各种弹窗 & 抽屉 -->
     <el-drawer
       title="参数配置"
+      :before-close="handleCloseSettingParam"
       :visible.sync="settingParamVisiable"
     >
       <div class="set-param-drawer">
@@ -172,12 +173,80 @@
         </div>
       </div>
     </el-drawer>
+
+    <!-- 未确认编辑 离开的弹窗 -->
+    <el-dialog
+      title="提示"
+      :visible.sync="leaveDialogVisible"
+      width="480px"
+    >
+      <div>
+        <svg-icon icon-class="tip" style="margin-right: 8px" />
+        <span>您还未对此次代码的编辑进行确认，若此时返回，本次编辑内 容将不被保存，请问您是否确认返回？</span>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="leaveDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleLeave">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 未保存 离开的弹窗 -->
+    <el-dialog
+      title="提示"
+      :visible.sync="noSaveLeaveDialogVisible"
+      width="480px"
+    >
+      <div>
+        <svg-icon icon-class="tip" style="margin-right: 8px" />
+        <span>您还未对此次代码的编辑进行确认，若此时返回，本次编辑内 容将不被保存，请问您是否确认返回？</span>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="noSaveLeaveDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleNoSaveLeave">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 保存 -->
+    <el-dialog
+      title="保存数据集"
+      :visible.sync="saveDataSetDialogVisible"
+      width="480px"
+    >
+      <div class="on-save-content">
+        <div style="display: flex; align-items: flex-start;">
+          <div class="on-save-content-label" style="margin-top: 9px"><span>数据集</span></div>
+          <div class="on-save-content-main" style="width: 320px">
+            <el-input v-model="dataSetDisplayName" placeholder="请输入数据集名称" />
+            <div style="margin-top:8px;font-size: 12px;color: rgba(0, 0, 0, 0.45);">
+              <span>名称只能由中英文、数字及下划线(_)、斜线(/)、反斜线(\)、竖线(I)、 小括号(())、中括号([])组成，不超过50个字符。</span>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 24px">
+          <div class="on-save-content-label"><span>位置</span></div>
+          <div class="on-save-content-main">
+            <el-select v-model="currentFloderId" placeholder="请选择" style="width: 320px">
+              <el-option
+                v-for="item in floderList"
+                :key="item._id"
+                :label="item.name"
+                :value="item._id"
+              />
+            </el-select>
+          </div>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="saveDataSetDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleSave">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import EditSql from './components/editSql/index.vue'
-import { runtimeForSql, getDataSourceData, createUpdateSql, createDataSets } from '@/api/dataSet'
+import { runtimeForSql, getDataSourceData, confirmEditSql, createDataSets, getSqlAllData, getSqlVariables, getFolderLists } from '@/api/dataSet'
 import ResultPreview from './components/resultPreview/index.vue'
 import Clipboard from '@/utils/clipboard.js'
 export default {
@@ -192,7 +261,6 @@ export default {
       isShrink: false,
       dataSourceOptions: [],
       activedTag: 'first',
-      sqlName: '',
       dataSourceList: [
         { displayName: 'cmswing_action' },
         { displayName: 'cmswing_action' },
@@ -200,10 +268,7 @@ export default {
         { displayName: 'cmswing_action' },
         { displayName: 'cmswing_action' }
       ],
-      runResultData: {
-        tableData: [],
-        columns: []
-      },
+      runResultData: {},
       settingParamVisiable: false,
       variableTypeOptions: [
         {
@@ -229,27 +294,56 @@ export default {
           label: '全局生效'
         }
       ],
+      currentDataSet: {},
+      currentSqlData: {},
       sqlVariablesTableData: [],
       sqlVariables: [],
-      dataSourceName: '',
       creatorName: '',
       currentSqlStatement: '',
-      sqlStatement: 'select * from users where telephone = ${telephone}',
       currentDataSourceId: '',
-      current_id: ''
+      current_id: '',
+      leaveDialogVisible: false,
+      currentFields: [],
+      currentSql: {},
+      noSaveLeaveDialogVisible: false,
+      currentSqlId: '',
+      floderList: [],
+      currentFloderId: '',
+      saveDataSetDialogVisible: false,
+      dataSetDisplayName: ''
+    }
+  },
+  computed: {
+    dataSourceName: function() {
+      return this.currentDataSet.dataSourceName || ''
+    },
+    sqlStatement: function() {
+      return this.currentSqlData.sql || ''
     }
   },
   mounted () {
+    this.getFolderList()
     const data = this.$route.query
     console.log(data, 'data')
-    this.dataSourceName = data.dataSourceName || ''
+    // 如果都为空则表示新建的数据集，直接进入编辑状态
+    if (!data._id) {
+      this.isEdit = true
+    }
+    this.currentDataSet = data
+    if (data.sqlId) {
+      this.currentSqlId = data.sqlId
+      this.getSqlData(data.sqlId)
+    }
     this.creatorName = data.creatorName
     this.currentDataSourceId = data.dataSourceId || ''
     this.current_id = data._id || ''
+    this.currentFields = data.fields || []
+    this.dataSetDisplayName = this.currentDataSet.displayName || ''
   },
   methods: {
     init () {
       this.getDataSourceList()
+      this.getFolderList()
     },
     // 格式化 sql 编辑器
     formatSqlData () {
@@ -258,20 +352,18 @@ export default {
     // 参数设置
     async settingParam () {
       this.settingParamVisiable = true
-      // const body = {}
-      // const keys = ['type', 'name', 'dataType', 'useInGlobal', 'defaultValue']
+      const sql = this.currentSqlStatement || this.currentSqlData.sql
+      if (!sql) {
+        this.$message({
+          message: '参数设置暂不支持空SQL语句',
+          type: 'warning'
+        })
+      }
+      const body = {
+        sql
+      }
       try {
-        // const data = await getSqlVariables(body)
-        const data = [
-          {
-            type: 'placeholder',
-            name: 'tel'
-          },
-          {
-            type: 'param',
-            name: 'n'
-          }
-        ]
+        const { data } = await getSqlVariables(body)
         this.sqlVariablesTableData = data.slice()
       } catch (error) {
         console.log(error)
@@ -283,17 +375,14 @@ export default {
       const body = {}
       body.sql = this.currentSqlStatement
       body.dataSourceId = this.currentDataSourceId
-      body.sqlVariables = this.sqlVariables
-      this.current_id && (body._id = this.current_id)
       if (this.sqlVariables && this.sqlVariables.length > 0) {
         body.sqlVariables = this.sqlVariables
       }
-      console.log('run sql body', body)
       try {
-        const data = await runtimeForSql(body)
+        const { data } = await runtimeForSql(body)
         this.runResultData = data
-        if (this.current_id !== data._id) {
-          this.current_id = data._id
+        if (this.currentSqlId !== data._id) {
+          this.currentSqlId = data._id
         }
       } catch (error) {
         console.log(error)
@@ -305,21 +394,35 @@ export default {
         const body = {}
         body.sql = this.currentSqlStatement
         body.dataSourceId = this.currentDataSourceId
-        body.sqlVariables = this.sqlVariables
-        this.current_id && (body._id = this.current_id)
+        this.currentSqlId && (body._id = this.currentSqlId)
         if (this.sqlVariables && this.sqlVariables.length > 0) {
           body.sqlVariables = this.sqlVariables
         }
-        const data = createUpdateSql(body)
-        if (this.current_id !== data._id) {
-          this.current_id = data._id
-        }
+        const { data } = confirmEditSql(body)
+        this.currentFields = data.fields
+        this.currentSqlData = data.sql
+        this.currentSqlId = data.sql._id
+        this.$message({
+          message: '恭喜你，确认编辑成功',
+          type: 'success'
+        })
       } catch (error) {
         console.log(error)
       }
     },
     // 删除
-    deleteSqlVariable () {},
+    deleteSqlVariable (val) {
+      if (!val) return false
+      let _idx = 0
+      const tmp = this.sqlVariablesTableData.slice()
+      tmp.forEach((item, idx) => {
+        if (val.type === item.type && val.name === item.name) {
+          _idx = idx
+        }
+      })
+      tmp.splice(_idx, 1)
+      this.sqlVariablesTableData = tmp.slice()
+    },
     // 获取数据源列表
     async getDataSourceList () {
       try {
@@ -347,21 +450,64 @@ export default {
       console.log('获取改变的sql语句', sql)
       this.currentSqlStatement = sql
     },
-    toDataSetPage () {
+    // 未保存 离开
+    handleNoSaveLeave () {
+      this.noSaveLeaveDialogVisible = false
       this.$router.push({
         path: '/dataSet'
       })
     },
     // 保存数据
-    async onSave () {
+    async handleSave() {
       try {
         const body = {}
-
-        const data = await createDataSets(body)
+        // sql = currentSqlData fields folderId displayName
+        body.fields = this.currentFields
+        body.folderId = this.currentFloderId
+        body.sql = this.currentSqlData
+        body.displayName = this.dataSetDisplayName
+        console.log(body, 'body')
+        const { data } = await createDataSets(body)
         console.log(data)
       } catch (error) {
         console.log(error)
       }
+    },
+    // 离开 编辑状态 但不保存数据
+    handleLeave() {
+      this.isEdit = false
+      this.leaveDialogVisible = false
+    },
+    // 根据sqlId 获取sql相关的所有数据
+    async getSqlData(sqlId) {
+      try {
+        const { data } = await getSqlAllData(sqlId)
+        console.log('currentSqlData', data)
+        this.currentSqlData = data
+        this.currentSqlStatement = data.sql
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    handleCloseSettingParam(done) {
+      this.$confirm('确认关闭？选择离开本次编辑将不会保存')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => {})
+    },
+    // 获取 folderList
+    async getFolderList() {
+      try {
+        const { data } = await getFolderLists()
+        this.floderList = data.result
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // 子级更改更新父级的fields
+    dataSetFieldsChange(val) {
+      console.log(val, 'dataSetFieldsChange')
     }
   }
 }
@@ -511,6 +657,12 @@ export default {
       height: 32px;
       border-radius: 2px;
     }
+  }
+}
+
+.on-save-content {
+  &-label {
+    width: 80px;
   }
 }
 </style>

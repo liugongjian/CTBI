@@ -27,6 +27,13 @@ export default {
         svg.push({ name: item.name, svg: data[index] || 'eyes' })
       })
       this.storeOption.theme.StyleConfig.IndexQuickly.setSvg = svg
+    },
+    getDataSeries(val) {
+      const data = []
+      val[0].data.forEach(item => {
+        data.push({ title: item.title, prefix: '', suffix: '' })
+      })
+      this.storeOption.theme.SeriesSetting.kanBanSeries.dataSeries = data
     }
 
   }

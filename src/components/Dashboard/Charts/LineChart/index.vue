@@ -28,7 +28,8 @@ export default {
       storeOption: {},
       chartOption: {},
       dataValue: null,
-      series: []
+      series: [],
+      type: 'LineChart'// 图表类型 1.线图；2.面积图; 3.堆叠面积图；4.百分比堆叠图
     }
   },
   watch: {

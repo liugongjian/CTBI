@@ -48,13 +48,15 @@ export default {
     'DisplayConfig': {
       'TableTheme': {
         'colorType': 'themeColor',
-        'show': false
+        'show': false,
+        'active': 'stripe' // stripe 斑马 border 线框 simple 简版 verySimple 极简
       },
       'ListHeader': {
         'head': false
       },
-      'Sequence': {
-        'show': false
+      'Sequence': { // 是否显示序号
+        'show': false,
+        'name': '序号'
       },
       'MergeForm': {
         'show': false

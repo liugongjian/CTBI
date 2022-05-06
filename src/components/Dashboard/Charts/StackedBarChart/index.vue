@@ -31,9 +31,6 @@ export default {
       const componentOption = this.storeOption.theme.ComponentOption
       this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery)
       this.getStackSeries(componentOption)
-      if (componentOption.PercentStack.isPercent) {
-        this.getPercentStackSeries(componentOption)
-      }
       // 如果选择百分比，转为百分比堆积柱状图
       if (componentOption.PercentStack.isPercent) {
         this.getPercentStackSeries(componentOption)
@@ -48,10 +45,19 @@ export default {
       })
       // 设置图例与图表距离
       this.setGrid(componentOption.Legend)
+
+      // 获取指标筛选中的图例数据
+      const legendData = []
+      this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
+        legendData.push({ name: item.value })
+      })
       this.chartOption = {
         'grid': this.grid,
         'color': colorOption,
-        'legend': componentOption.Legend,
+        'legend': {
+          ...componentOption.Legend,
+          data: legendData
+        },
         'xAxis': this.xAxis,
         'tooltip': this.tooltip,
         'yAxis': this.yAxis,

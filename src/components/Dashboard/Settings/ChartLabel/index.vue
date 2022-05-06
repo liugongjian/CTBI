@@ -18,7 +18,10 @@
         />
       </el-checkbox-group>
     </div>
-    <div v-if="option.type==='FunnelChart'" class="editor-object-container">
+    <div
+      v-if="option.type==='FunnelChart'"
+      class="editor-object-container"
+    >
       <div>转换率计算方式</div>
       <el-radio
         v-model="option.funnelTransform"
@@ -113,7 +116,36 @@ export default {
           }
         ],
         'LineChart': [],
-        'AreaChart': []
+        'AreaChart': [],
+        'StackedAreaChart': [
+          {
+            label: '度量'
+          }, {
+            label: '总计'
+          }
+        ],
+        'PercentStackedAreaChart': [
+          {
+            label: '度量'
+          }, {
+            label: '百分比'
+          }
+        ],
+        'HorizontalBarChart': [],
+        'StackedHorizontalBarChart': [
+          {
+            label: '度量'
+          }, {
+            label: '总计'
+          }
+        ],
+        'PSHorizontalBarChart': [
+          {
+            label: '度量'
+          }, {
+            label: '百分比'
+          }
+        ]
       },
       precisionOptions: [
         {

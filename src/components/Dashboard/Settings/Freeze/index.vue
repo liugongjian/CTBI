@@ -37,7 +37,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .arrange {
   display: flex;
 }
@@ -45,6 +45,6 @@ export default {
   flex: 1
 }
 ::v-deep .el-input-number {
-  width:80px
+  width:120px
 }
 </style>

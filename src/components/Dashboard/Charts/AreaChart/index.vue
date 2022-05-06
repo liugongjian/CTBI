@@ -27,7 +27,8 @@ export default {
       storeOption: {},
       chartOption: {},
       dataValue: null,
-      series: []
+      series: [],
+      type: 'AreaChart'// 图表类型 1.线图；2.面积图; 3.堆叠面积图；4.百分比堆叠图
     }
   },
   watch: {
@@ -54,6 +55,18 @@ export default {
           this.getOption()
         }
       }
+    },
+    'storeOption.theme.ComponentOption.PercentStack': {
+      handler(val) {
+        this.storeOption.theme.ComponentOption.ChartLabel.type = this.type
+        if (val.isStack && !val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'StackedAreaChart'
+        }
+        if (val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'PercentStackedAreaChart'
+        }
+      },
+      deep: true
     }
   },
   mounted () {
@@ -83,10 +96,19 @@ export default {
       })
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
+      // 获取指标筛选中的图例数据
+      const legendData = []
+      this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
+        legendData.push({ name: item.value })
+      })
+
       this.chartOption = {
         grid: this.grid,
         color: colorOption,
-        legend: ComponentOption.Legend,
+        legend: {
+          ...ComponentOption.Legend,
+          data: legendData
+        },
         xAxis: this.xAxis,
         tooltip: {
           trigger: 'axis',
