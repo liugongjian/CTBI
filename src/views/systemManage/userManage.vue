@@ -20,7 +20,7 @@
         </el-input>
       </template>
       <template #lastLoginTime="{scope}">
-        <span>{{ scope.row.lastLoginTime | dateFilter }}</span>
+        <span>{{ scope.row.lastLoginTime | parseTime }}</span>
       </template>
       <template #status="{scope}">
         <div class="status">
@@ -221,7 +221,6 @@ export default {
       try {
         this.tableLoading = true
         const params = {
-          // userName: 'admin',
           page: this.pageNum,
           limit: this.pageSize,
           sortBy: this.sortBy,
@@ -229,10 +228,13 @@ export default {
           isPaging: 1
         }
         const data = await getList(params)
-        this.tableData = data.data.list
-        this.pageNum = data.data.page
-        this.total = data.data.total
-        this.pageSize = data.data.limit
+        this.tableData = data.list
+        this.tableData.forEach((item) => {
+          item.creator = item.creatorId?.userName
+        })
+        this.pageNum = data.page
+        this.total = data.total
+        this.pageSize = data.limit
         this.tableDataCache = this.tableData
         this.tableLoading = false
       } catch (error) {
@@ -336,7 +338,6 @@ export default {
       this.createVisible = true
     },
     handleSortChange ({ prop, order }) {
-      console.log(prop, order)
       this.sortBy = prop
       if (order) {
         this.sortOrder = order === 'ascending' ? 'asc' : 'desc'

@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { encryptAes } from '@/utils/encrypt'
 import { resetUser } from '@/api/userManage'
 import { validPassword, validContinuousChar, validKeyboardContinuousChar } from '@/utils/validate'
 import Success from './Success'
@@ -96,8 +97,9 @@ export default {
         if (valid) {
           try {
             this.loading = true
+            const encryptedPswd = encryptAes(this.form.password)
             const params = {
-              password: this.form.password
+              password: encryptedPswd
             }
             const data = await resetUser(this.resetData._id, params)
             if (data) {

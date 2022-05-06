@@ -1,71 +1,21 @@
 <template>
   <div id="screentable" v-loading="loading" class="common-table">
-    <div v-if="isShowToolbar" class="toolbar">
-      <slot name="toolbar-left-option"><div class="toolbar-title">{{ tableTitle }}</div></slot>
-      <div class="toolbar-option">
-        <div class="slot-option">
-          <slot name="toolbar-option" />
-        </div>
-        <div v-if="isShowDefaultOption" class="default-option">
-          <el-divider direction="vertical" />
-          <template v-if="isShowRefresh">
-            <el-tooltip effect="dark" content="刷新" placement="top">
-              <div class="default-option-item">
-                <div class="item">
-                  <svg-icon icon-class="reload" @click="refresh" />
-                </div>
-              </div>
-            </el-tooltip>
-          </template>
-          <template v-if="isShowColumnSetting">
-            <el-tooltip effect="dark" content="列设置" placement="top">
-              <div class="default-option-item">
-                <ColumnSetting v-if="tableColumns" class="item" :table-columns="cloneTableColumns" @reset="reset" />
-              </div>
-            </el-tooltip>
-          </template>
-        </div>
-      </div>
-    </div>
-    <div
-      v-if="selectedTotal !== 0 && isShowSelectionInfo"
-      :class="isShowToolbar ? 'table-alert' : 'table-alert  table-alert-top'"
-    >
-      <div class="alert-info">
-        <div style="marginRight: 10px">
-          <i class="el-icon-info them-color" />
-        </div>
-        <div class="alert-info-content">
-          <div class="alert-info-message">
-            <span class="alert-info-message-item">
-              已选择<span style="margin: 0 5px;color: #468FAF;">{{ selectedTotal }}</span>项
-            </span>
-            <slot name="alert-message" :scope="multipleSelection" />
-          </div>
-          <div class="alert-info-option">
-            <el-button v-if="isShowFilter" type="text" size="medium" @click="filterSelected">
-              {{ showSelect ? '查看全部': '查看已选' }}
-            </el-button>
-            <slot name="alert-option" :scope="multipleSelection" />
-            <el-button type="text" @click="toggleSelection('clear')">清空</el-button>
-          </div>
-        </div>
-      </div>
-    </div>
+
     <el-table
       ref="table"
       class="table"
+      :stripe="stripe"
+      :border="border"
+      :show-header="!header"
       :data="tableData"
       v-bind="$attrs"
-      @selection-change="handleSelectionChange"
-      @row-click="rowClick"
       v-on="$listeners"
     >
       <el-table-column
-        v-if="isShowSelection"
-        type="selection"
-        fixed="left"
-        :selectable="selectable"
+        v-if="sequence"
+        type="index"
+        :index="indexMethod"
+        :label="sequenceName"
       />
       <template v-for="(item, index) in cloneTableColumns">
         <el-table-column
@@ -109,16 +59,13 @@
 </template>
 
 <script>
-// import Screenfull from '@/components/Screenfull/index.vue'
 import Pagination from '@/components/Pagination/index.vue'
-import ColumnSetting from './components/ColumnSetting'
+// import ColumnSetting from './components/ColumnSetting'
 
 export default {
   name: 'CommonTable',
   components: {
-    // Screenfull,
-    Pagination,
-    ColumnSetting
+    Pagination
   },
   props: {
     tableColumns: {
@@ -129,79 +76,49 @@ export default {
       required: true,
       type: Array
     },
-    isShowToolbar: {
-      type: Boolean,
-      default: true
-    },
-    // eslint-disable-next-line vue/require-prop-types
-    tableTitle: {
-      default: ''
-    },
-    isShowRefresh: {
-      type: Boolean,
-      default: true
-    },
-    isShowFullscreen: {
-      type: Boolean,
-      default: false
-    },
-    isShowColumnSetting: {
-      type: Boolean,
-      default: false
-    },
-    isShowSelection: {
-      type: Boolean,
-      default: false
-    },
     isShowPagination: {
       type: Boolean,
       default: true
-    },
-    isShowSelectionInfo: {
-      type: Boolean,
-      default: true
-    },
-    isShowFilter: {
-      type: Boolean,
-      default: false
     },
     loading: {
       type: Boolean,
       default: false
     },
-    defaultSelection: {
-      type: Array,
-      default: () => []
-    },
-    selectable: {
-      type: Function,
-      default: () => true
-    },
-    isShowDefaultOption: {
+    stripe: {
       type: Boolean,
       default: true
+    },
+    border: {
+      type: Boolean,
+      default: false
+    },
+    header: {
+      type: Boolean,
+      default: false
+    },
+    sequence: {
+      type: Boolean,
+      default: false
+    },
+    pageNum: {
+      type: Number,
+      required: true
+    },
+    pageSize: {
+      type: Number,
+      required: true
+    },
+    sequenceName: {
+      type: String,
+      default: '序号'
     }
   },
   data () {
     return {
-      cloneTableColumns: [],
-      multipleSelection: [],
-      selectedTotal: 0,
-      showSelect: false
+      cloneTableColumns: []
     }
   },
   watch: {
-    defaultSelection: {
-      handler (val) {
-        this.toggleSelection()
-        this.$nextTick(() => {
-          if (val?.length) {
-            this.toggleSelection(val)
-          }
-        })
-      },
-      immediate: false
-    },
     tableColumns: {
       handler () {
         this.reset()
@@ -213,7 +130,6 @@ export default {
     this.reset()
   },
   mounted () {
-    this.toggleSelection(this.defaultSelection)
   },
   methods: {
     reset () {
@@ -224,55 +140,13 @@ export default {
         return item
       })
     },
-    refresh () {
-      this.$emit('refresh')
-    },
     handlePageChange (page) {
       this.$emit('refresh', page)
     },
-    // 查看已选/全部
-    filterSelected () {
-      this.showSelect = !this.showSelect
-      const selectRows = this.multipleSelection
-      this.$emit('filterSelected', selectRows, this.showSelect)
-      if (selectRows?.length > 0) {
-        this.$nextTick(() => {
-          this.tableData.forEach((item) => {
-            selectRows.forEach((row) => {
-              if (row.host === item.host) {
-                this.$refs.table.toggleRowSelection(item, true)
-              }
-            })
-          })
-        })
-      }
-    },
-    toggleSelection (rows) {
-      if (rows && rows !== 'clear') {
-        rows.forEach((row) => {
-          this.$refs.table.toggleRowSelection(row)
-        })
-      } else {
-        let selection = []
-        if (rows === 'clear') {
-          selection = this.multipleSelection.filter((row) => !this.selectable(row))
-          this.showSelect = false
-          this.$emit('filterSelected', selection, false)
-        }
-        this.$refs.table.clearSelection()
-        selection.forEach((item) => {
-          this.$refs.table.toggleRowSelection(item, true)
-        })
-      }
-    },
-    handleSelectionChange (val) {
-      this.multipleSelection = val
-      this.selectedTotal = this.multipleSelection.length
-    },
-    rowClick (row) {
-      if (this.isShowSelection && this.selectable(row)) {
-        this.$refs.table.toggleRowSelection(row)
-      }
+    indexMethod(index) {
+      const page = this.pageNum // 当前页码
+      const pagesize = this.pageSize // 每页条数
+      return index + 1 + (page - 1) * pagesize
     }
   }
 }
