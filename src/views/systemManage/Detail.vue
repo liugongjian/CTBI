@@ -79,7 +79,7 @@
               创建者
             </span>
           </template>
-          {{ form.creatorId.userName }}
+          {{ form.creator }}
         </el-form-item>
         <el-form-item prop="createdTime">
           <template #label>
@@ -87,7 +87,7 @@
               创建时间
             </span>
           </template>
-          {{ form.createdTime | dateFilter }}
+          {{ form.createdTime | parseTime }}
         </el-form-item>
         <el-form-item prop="lastUpdatedTime">
           <template #label>
@@ -95,7 +95,7 @@
               上次更新时间
             </span>
           </template>
-          {{ form.lastUpdatedTime | dateFilter }}
+          {{ form.lastUpdatedTime | parseTime }}
         </el-form-item>
         <el-form-item prop="lastLoginTime">
           <template #label>
@@ -103,7 +103,7 @@
               最后登录时间
             </span>
           </template>
-          {{ form.lastLoginTime | dateFilter }}
+          {{ form.lastLoginTime | parseTime }}
         </el-form-item>
       </el-form>
       <div class="footer">
@@ -233,7 +233,7 @@ export default {
       const params = rule.field === 'userName' ? { userName: value } : rule.field === 'phone' ? { phone: value } : { email: value }
       const label = rule.field === 'userName' ? '账号名' : rule.field === 'phone' ? '手机号' : '邮箱'
       const isExist = await exists({ ...params, from: 'platform' })
-      if (isExist.data) {
+      if (isExist) {
         callback(new Error(`${label}已存在`))
       }
       callback()

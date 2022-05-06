@@ -94,7 +94,7 @@ export const http = {
       })
         .then((res) => {
           // axios返回的是一个promise对象
-          resolve(res.data || res) // resolve在promise执行器内部
+          resolve(res.data ?? res) // resolve在promise执行器内部
         })
         .catch((err) => {
           reject(err)
@@ -110,7 +110,7 @@ export const http = {
         data
       })
         .then((res) => {
-          resolve(res.data || res)
+          resolve(res.data ?? res)
         })
         .catch((err) => {
           reject(err)
@@ -119,7 +119,6 @@ export const http = {
   },
   // put请求
   put(url, data) {
-    console.log('url----', url, data)
     return new Promise((resolve, reject) => {
       service({
         method: 'put',
@@ -127,7 +126,7 @@ export const http = {
         data
       })
         .then((res) => {
-          resolve(res.data || res)
+          resolve(res.data ?? res)
         })
         .catch((err) => {
           reject(err)
@@ -143,7 +142,7 @@ export const http = {
         data
       })
         .then((res) => {
-          resolve(res.data || res)
+          resolve(res.data ?? res)
         })
         .catch((err) => {
           reject(err)
@@ -215,7 +214,7 @@ export const http = {
         data
       })
         .then((res) => {
-          resolve(res.data || res)
+          resolve(res.data ?? res)
         })
         .catch((err) => {
           reject(err)
