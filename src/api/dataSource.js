@@ -12,7 +12,7 @@ export function postDataSourceList (form) {
 }
 
 export function getSourceFile(id) {
-  console.log('url-------', '/dataSources/' + id + '/tables')
+  id = 'GKZIs8GEYhkV1'
   return http.get(`/dataSources/${id}/tables`)
 }
 

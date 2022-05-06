@@ -110,9 +110,28 @@
               <el-button plain class="create-data">SQL创建数据集</el-button>
             </span>
           </div>
-          <el-table>
-            <div>hah</div>
+          <el-table :default-sort="{prop: 'name', order: 'descending'}" :data="(sourceFile.list).slice((currentPage-1)*pageSize,currentPage*pageSize)">
+            <el-table-column sortable label="名称" prop="name" />
+            <el-table-column label="备注" prop="name" />
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <div class="operate">
+                  <span @click="createData(scope.row)">创建数据集</span>
+                  <el-divider direction="vertical" />
+                  <span @click="detail(scope.row)">详情</span>
+                </div>
+              </template>
+            </el-table-column>
           </el-table>
+          <el-pagination
+            :current-page.sync="currentPage"
+            :page-sizes="[10, 20]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="sourceFile.total"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
         </div>
       </div>
     </div>
@@ -126,11 +145,14 @@ export default {
   name: 'DataSource',
   data() {
     return {
+      currentPage: 1,
+      pageSize: 20,
       dialog: false,
       fileType: '',
       search: '',
       searchFile: '',
       dataSourceList: {},
+      sourceFile: { list: [] },
       form: {
         type: '',
         displayName: '',
@@ -154,17 +176,27 @@ export default {
     this.init()
   },
   methods: {
+    createData(val) {
+      console.log(val)
+    },
+    detail(val) {
+      console.log(val)
+    },
+    handleSizeChange(val) {
+      this.pageSize = val
+    },
+    handleCurrentChange(val) {
+      console.log(`current page: ${val}`)
+    },
     async init() {
       try {
         const res = await getDataSourceList()
         this.dataSourceList = res
         if ((res.list).length !== 0) {
           const result = res.list
-          console.log('result--', result)
           const ids = result[0]._id
-          console.log(this.dataSourceList)
-          console.log(ids)
           const file = await getSourceFile(ids)
+          this.sourceFile = file
           console.log('file---', file)
         }
       } catch (error) {
@@ -202,7 +234,6 @@ export default {
     async submit(form) {
       this.dialog = false
       form.password = encryptAes(form.password)
-      console.log('jiama', form.password)
       try {
         await postDataSourceList(form)
         this.init()
@@ -215,6 +246,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.operate {
+  color: #FA8334;
+  span {
+    cursor: pointer;
+  }
+}
 .table-row {
   display: flex;
   height: 68px;
@@ -246,6 +283,12 @@ export default {
   display: flex;
   justify-content: space-between;
   line-height: 68px;
+  font-family: PingFangSC-Medium;
+  font-size: 12px;
+  color: rgba(0,0,0,0.90);
+  text-align: left;
+  line-height: 42px;
+  font-weight: 500;
 }
 .research-file {
   display: flex;
@@ -253,7 +296,7 @@ export default {
   line-height: 68px;
 }
 .head-title {
-  padding: 16px;
+  margin: 1.7%;
 }
 .create-data {
   margin: 0 16px 0 12px;
@@ -287,12 +330,12 @@ export default {
     position: relative;
     background: #fff;
     margin-top: 16px;
-    height: calc(100vh - 50px);
+    height: calc(100% - 50px);
     font-size: 12px;
   }
 
   &__table {
-    display: flex
+    display: flex;
   }
 
   &__list {
@@ -304,6 +347,7 @@ export default {
   border-left: 1px solid #EBEEF5;
 }
 .head-select {
+  margin: 1.7%;
   font-size: 12px;
 }
 .el-button {
