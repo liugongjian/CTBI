@@ -20,7 +20,7 @@
         </el-input>
       </template>
       <template #lastLoginTime="{scope}">
-        <span>{{ scope.row.lastLoginTime | dateFilter }}</span>
+        <span>{{ scope.row.lastLoginTime | parseTime }}</span>
       </template>
       <template #status="{scope}">
         <div class="status">
@@ -338,7 +338,6 @@ export default {
       this.createVisible = true
     },
     handleSortChange ({ prop, order }) {
-      console.log(prop, order)
       this.sortBy = prop
       if (order) {
         this.sortOrder = order === 'ascending' ? 'asc' : 'desc'
