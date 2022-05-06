@@ -30,17 +30,17 @@ export default {
     }
   },
   mounted () {
-    // const dataValue = [
-    //   ['product', '2015', '2016', '2017'],
-    //   ['Matcha Latte', 43.3, 85.8, 93.7],
-    //   ['Matcha Latte11', 13.3, 85.8, 93.7],
-    //   ['Milk Tea1', 13.1, 73.4, 55.1],
-    //   ['Milk Tea2', 3.1, 73.4, 55.1],
-    //   ['Milk Tea6', 83.1, 73.4, 55.1],
-    //   ['Cheese Cocoa', 86.4, 65.2, 82.5],
-    //   ['Walnut Brownie', 72.4, 53.9, 39.1],
-    //   ['Tea', 22.1, 73.4, 55.1]
-    // ]
+    const dataValue = [
+      ['product', '2015', '2016', '2017'],
+      ['Matcha Latte', 43.3, 85.8, 93.7],
+      ['Matcha Latte11', 13.3, 85.8, 93.7],
+      ['Milk Tea1', 13.1, 73.4, 55.1],
+      ['Milk Tea2', 3.1, 73.4, 55.1],
+      ['Milk Tea6', 83.1, 73.4, 55.1],
+      ['Cheese Cocoa', 86.4, 65.2, 82.5],
+      ['Walnut Brownie', 72.4, 53.9, 39.1],
+      ['Tea', 22.1, 73.4, 55.1]
+    ]
     // 主轴-0标记 副轴-1标记 组合图专用数据
     // const dataValue = [
     //   ['date', '价格-0', '数量-0', '温度-1'],
@@ -82,33 +82,33 @@ export default {
     //   { name: 'NCAA baseball tournament', value: 273 }, { name: 'Point Break', value: 265 }
     // ]
     // 看板
-    const dataValue = [
-      {
-        'name': '东北',
-        data: [
-          { title: '单价', value: '4.45万' },
-          { title: '利润金额', value: '4.45万' }
-        ]
-      }, {
-        'name': '华东',
-        data: [
-          { title: '单价', value: '4.45万' },
-          { title: '利润金额', value: '4.45万' }
-        ]
-      }, {
-        'name': '华北',
-        data: [
-          { title: '单价', value: '4.45万' },
-          { title: '利润金额', value: '4.45万' }
-        ]
-      }, {
-        'name': '华南',
-        data: [
-          { title: '单价', value: '4.45万' },
-          { title: '利润金额', value: '4.45万' }
-        ]
-      }
-    ]
+    // const dataValue = [
+    //   {
+    //     'name': '东北',
+    //     data: [
+    //       { title: '单价', value: '4.45万' },
+    //       { title: '利润金额', value: '4.45万' }
+    //     ]
+    //   }, {
+    //     'name': '华东',
+    //     data: [
+    //       { title: '单价', value: '4.45万' },
+    //       { title: '利润金额', value: '4.45万' }
+    //     ]
+    //   }, {
+    //     'name': '华北',
+    //     data: [
+    //       { title: '单价', value: '4.45万' },
+    //       { title: '利润金额', value: '4.45万' }
+    //     ]
+    //   }, {
+    //     'name': '华南',
+    //     data: [
+    //       { title: '单价', value: '4.45万' },
+    //       { title: '利润金额', value: '4.45万' }
+    //     ]
+    //   }
+    // ]
     // const dataValue = [
     //   { name: '一月份订单', value: '200', target: '300' },
     //   { name: '二月份订单', value: '100', target: '200' },
