@@ -61,17 +61,41 @@
       </el-dialog>
       <div class="data-source__table">
         <div class="data-source__list">
-          <div class="table-title">
-            <span>我的数据源</span>
-            <el-input
-              v-model="search"
-              placeholder="共文件"
-              prefix-icon="el-icon-search"
-              class="input"
-            />
-          </div>
-          <el-table>
-            <div>hah</div>
+          <el-table :data="dataSourceList.list" class="tableBox">
+            <el-table-column
+              label="我的数据源">
+              <template slot="header">
+                <div class="table-title">
+                  <span>我的数据源</span>
+                  <el-input
+                    v-model="search"
+                    :placeholder="`共个文件`"
+                    prefix-icon="el-icon-search"
+                    class="input"
+                  />
+                </div>
+              </template>
+              <template slot-scope="scope">
+                <div class="table-row">
+                  <div class="table-row__image">
+                    <svg-icon :icon-class="scope.row.type"/>
+                  </div>
+                  <div class="table-row__text">
+                    <div v-if="scope.row.type=='mongodb'">MongoDB数据库</div>
+                    <div v-if="scope.row.type=='mysql'">MySQL数据库</div>
+                    <div>所有者：开发者中心</div>
+                  </div>
+                  <div class="table-row__tools">
+                    <span>
+                      <svg-icon icon-class="pencil" />
+                    </span>
+                    <span @click="deleteSource(scope.row._id)">
+                      <svg-icon icon-class="delete" />
+                    </span>
+                  </div>
+                </div>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
         <div class="data-file__list">
@@ -96,7 +120,8 @@
 </template>
 
 <script>
-import { getDataSourceList, getDataFileList, postDataSourceList } from '@/api/dataSource'
+import { encryptAes } from '@/utils/encrypt'
+import { getDataSourceList, postDataSourceList, getSourceFile, deleteSources } from '@/api/dataSource'
 export default {
   name: 'DataSource',
   data() {
@@ -105,6 +130,7 @@ export default {
       fileType: '',
       search: '',
       searchFile: '',
+      dataSourceList: {},
       form: {
         type: '',
         displayName: '',
@@ -125,15 +151,39 @@ export default {
     }
   },
   mounted() {
-    this.getDataSourceL()
-    this.getDataFileL()
+    this.init()
   },
   methods: {
-    async getDataSourceL() {
-      await getDataSourceList()
+    async init() {
+      try {
+        const res = await getDataSourceList()
+        this.dataSourceList = res
+        if ((res.list).length !== 0) {
+          const result = res.list
+          console.log('result--', result)
+          const ids = result[0]._id
+          console.log(this.dataSourceList)
+          console.log(ids)
+          const file = await getSourceFile(ids)
+          console.log('file---', file)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+      this.form = {
+        type: '',
+        displayName: '',
+        host: '',
+        port: '',
+        db: '',
+        username: '',
+        password: ''
+      }
     },
-    async getDataFileL() {
-      await getDataFileList()
+    async deleteSource(id) {
+      console.log(id)
+      await deleteSources(id)
+      this.init()
     },
     handleCommand(command) {
       this.dialog = true
@@ -151,13 +201,41 @@ export default {
     },
     async submit(form) {
       this.dialog = false
-      await postDataSourceList(form)
+      form.password = encryptAes(form.password)
+      console.log('jiama', form.password)
+      try {
+        await postDataSourceList(form)
+        this.init()
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.table-row {
+  display: flex;
+  height: 68px;
+  line-height: 34px;
+  &__image {
+    flex: 1;
+    font-size: 32px;
+    line-height: 68px;
+  }
+  &__text {
+    flex: 1
+  }
+  &__tools {
+    flex: 2;
+    text-align: right;
+    line-height: 68px;
+    span {
+      margin-right: 20px;
+    }
+  }
+}
 .input {
   width: 249px;
 }
@@ -167,9 +245,7 @@ export default {
 .table-title {
   display: flex;
   justify-content: space-between;
-  padding: 0 16px;
   line-height: 68px;
-  border: 1px solid #EBEEF5;
 }
 .research-file {
   display: flex;
@@ -181,6 +257,12 @@ export default {
 }
 .create-data {
   margin: 0 16px 0 12px;
+}
+::v-deep .el-table td {
+  height: 68px
+}
+::v-deep .el-table th {
+  height: 68px
 }
 .data-source {
   height: 100%;
@@ -197,7 +279,8 @@ export default {
 
   &__header {
     display: flex;
-    justify-content: space-between
+    justify-content: space-between;
+    border-bottom: 1px solid #EBEEF5;
   }
 
   &__content {
@@ -218,7 +301,7 @@ export default {
 }
 .data-file__list {
   flex: 2;
-  border: 1px solid #EBEEF5;
+  border-left: 1px solid #EBEEF5;
 }
 .head-select {
   font-size: 12px;

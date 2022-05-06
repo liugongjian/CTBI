@@ -10,3 +10,12 @@ export function getDataFileList () {
 export function postDataSourceList (form) {
   return http.post('/dataSources', form)
 }
+
+export function getSourceFile(id) {
+  console.log('url-------', '/dataSources/' + id + '/tables')
+  return http.get(`/dataSources/${id}/tables`)
+}
+
+export function deleteSources(id) {
+  return http.delete(`/dataSources/${id}`)
+}
