@@ -20,7 +20,14 @@
           </el-dropdown>
         </div>
       </div>
+      <el-dialog title="连接异常" :visible.sync="notConnect">
+        <p>连接数据库失败</p>
+        <span slot="footer">
+          <el-button type="primary" @click="notConnect = false">确定</el-button>
+        </span>
+      </el-dialog>
       <el-dialog
+        v-loading="isloading"
         :title="fileType"
         :visible.sync="dialog"
         width="560px">
@@ -72,7 +79,7 @@
             <el-table-column
               label="我的数据源"
             >
-              <template slot="header">
+              <template #header>
                 <div class="table-title">
                   <span>我的数据源</span>
                   <el-input
@@ -120,7 +127,7 @@
           </div>
           <el-table :default-sort="{prop: 'name', order: 'descending'}" :data="(sourceFile.list).slice((currentPage-1)*pageSize,currentPage*pageSize)">
             <el-table-column sortable label="名称" prop="name" />
-            <el-table-column label="备注" prop="name" />
+            <el-table-column label="备注" prop="comment" />
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <div class="operate">
@@ -147,11 +154,13 @@
 
 <script>
 import { encryptAes } from '@/utils/encrypt'
-import { getDataSourceList, postDataSourceList, getSourceFile, deleteSources, connectTest, editSources } from '@/api/dataSource'
+import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataSourceList, editSources } from '@/api/dataSource'
 export default {
   name: 'DataSource',
   data() {
     return {
+      isloading: false,
+      notConnect: false,
       notEdit: true,
       editform: {},
       currentRow: 0,
@@ -186,30 +195,31 @@ export default {
     this.init()
   },
   methods: {
-    async connect (form) {
-      try {
-        const checkform = {
-          type: form.type,
-          host: form.host,
-          port: form.port,
-          db: form.db,
-          username: form.username,
-          password: encryptAes(form.password)
-        }
-        await connectTest(checkform)
-      } catch (error) {
-        console.log(error)
-      }
-    },
+    // async connect (form) {
+    //   try {
+    //     const checkform = {
+    //       type: form.type,
+    //       host: form.host,
+    //       port: form.port,
+    //       db: form.db,
+    //       username: form.username,
+    //       password: encryptAes(form.password)
+    //     }
+    //     await connectTest(checkform)
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // },
     async editSource(row) {
       try {
-        console.log('row-----', row)
+        console.log('row', row)
         this.form.type = row.type
         this.form.displayName = row.displayName
         this.form.host = row.host
         this.form.port = row.port
         this.form.db = row.db
         this.form.username = row.username
+        // this.form.password = ''
         this.currentId = row._id
         this.dialog = true
         this.notEdit = false
@@ -266,7 +276,17 @@ export default {
       }
     },
     handleCommand(command) {
+      this.form = {
+        type: '',
+        displayName: '',
+        host: '',
+        port: '3306',
+        db: '',
+        username: '',
+        password: ''
+      }
       this.dialog = true
+      this.notEdit = true
       if (command === 'mysql') {
         this.fileType = '添加mySql数据源'
         this.form.type = 'mysql'
@@ -279,23 +299,46 @@ export default {
         this.fileType = '添加本地数据源'
       }
     },
-    async submit(form) {
-      this.connect(form)
-      this.dialog = false
-      const encryptform = form
-      encryptform.password = encryptAes(form.password)
-      console.log('this.notEdit', this.notEdit)
+    async connect(form) {
+      this.isloading = true
+      const testForm = {
+        username: form.username,
+        db: form.db,
+        host: form.host,
+        password: encryptAes(form.password),
+        port: form.port,
+        type: form.type
+      }
+      console.log('form', form)
       try {
-        if (this.notEdit) {
-          await postDataSourceList(encryptform)
-          this.init()
-        } else {
-          console.log('-------')
-          await editSources(this.currentId, this.form)
-          await getDataSourceList()
+        const result = await connectTest(testForm)
+        console.log(form)
+        if (!result) {
+          this.notConnect = true
         }
+        this.isloading = false
+        return result
       } catch (error) {
+        this.isloading = false
         console.log(error)
+      }
+    },
+    async submit(form) {
+      const result = await this.connect(form)
+      console.log('result--', result)
+      if (result === true) {
+        this.dialog = false
+        form.password = encryptAes(form.password)
+        try {
+          if (this.notEdit) {
+            await postDataSourceList(form)
+          } else {
+            await editSources(this.currentId, this.form)
+          }
+          this.init()
+        } catch (error) {
+          console.log(error)
+        }
       }
     }
   }
