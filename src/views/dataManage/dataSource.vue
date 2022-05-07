@@ -77,7 +77,7 @@
                   <span>我的数据源</span>
                   <el-input
                     v-model="search"
-                    :placeholder="`共个文件`"
+                    :placeholder="`共${dataSourceList.total}个文件`"
                     prefix-icon="el-icon-search"
                     class="input"
                   />
@@ -147,11 +147,13 @@
 
 <script>
 import { encryptAes } from '@/utils/encrypt'
-import { getDataSourceList, postDataSourceList, getSourceFile, deleteSources, connectTest } from '@/api/dataSource'
+import { getDataSourceList, postDataSourceList, getSourceFile, deleteSources, connectTest, editSources } from '@/api/dataSource'
 export default {
   name: 'DataSource',
   data() {
     return {
+      notEdit: true,
+      editform: {},
       currentRow: 0,
       currentPage: 1,
       pageSize: 20,
@@ -201,16 +203,16 @@ export default {
     },
     async editSource(row) {
       try {
-        this.form = {
-          type: row.type,
-          displayName: row.displayName,
-          host: row.host,
-          port: row.port,
-          db: row.db,
-          username: row.username,
-          password: ''
-        }
+        console.log('row-----', row)
+        this.form.type = row.type
+        this.form.displayName = row.displayName
+        this.form.host = row.host
+        this.form.port = row.port
+        this.form.db = row.db
+        this.form.username = row.username
+        this.currentId = row._id
         this.dialog = true
+        this.notEdit = false
       } catch (error) {
         console.log(error)
       }
@@ -248,6 +250,7 @@ export default {
         }
         const res = await getDataSourceList()
         this.dataSourceList = res
+        console.log('this.dataSourceList', this.dataSourceList)
         this.$refs.singleTable.setCurrentRow(this.dataSourceList.list[0])
       } catch (error) {
         console.log(error)
@@ -281,12 +284,15 @@ export default {
       this.dialog = false
       const encryptform = form
       encryptform.password = encryptAes(form.password)
+      console.log('this.notEdit', this.notEdit)
       try {
         if (this.notEdit) {
           await postDataSourceList(encryptform)
           this.init()
         } else {
-          // await editSources(id, form)
+          console.log('-------')
+          await editSources(this.currentId, this.form)
+          await getDataSourceList()
         }
       } catch (error) {
         console.log(error)
