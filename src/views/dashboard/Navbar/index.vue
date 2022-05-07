@@ -18,7 +18,9 @@ export default {
     // 保存画布
     saveCanvas () {
       const layout = JSON.stringify(this.$store.state.app.layout)
+      const dataOption = JSON.stringify(this.$store.state.app.dataOption)
       localStorage.setItem('layout', layout)
+      localStorage.setItem('dataOption', dataOption)
       this.$notify.success({
         title: '成功',
         message: '保存成功'
@@ -28,8 +30,10 @@ export default {
     // 清空画布
     clearCanvas () {
       this.$store.state.app.layout = []
+      this.$store.state.app.dataValue = []
       this.$store.state.app.currentLayoutId = ''
       localStorage.removeItem('layout')
+      localStorage.removeItem('dataValue')
     }
   }
 }

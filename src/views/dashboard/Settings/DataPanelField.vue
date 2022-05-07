@@ -1,32 +1,81 @@
 <template>
   <div class="tab-pane-content">
-    <el-input
-      v-model="val"
-      type="textarea"
-      autosize
-      placeholder="请输入内容"
-    />
-    <el-button
-      type="primary"
-      @click="reflashStore"
-    >更新</el-button>
+    <div class="data-panel-field-wrapper">
+      <div class="areas-wrapper">
+        <div
+          v-for="(item,name,index) in option.dataSource"
+          :key="index"
+          class="field-area-wrapper"
+          @dragover="hanldDragOver"
+          @drop.stop="handleTargetDrop($event,name,item,item.name)"
+        >
+          <div class="field-area-header">
+            <div class="area-name">{{ item.name }}</div>
+          </div>
+          <div>
+            <div class="field-area-body">
+              <div v-show="item.value && item.value.length>0">
+                <div
+                  v-for="(el,i) in item.value"
+                  :key="i"
+                  class="field-box-wrapper"
+                >
+                  <div
+                    :class="name==='dimension'?'dimension-field-box':'measure-field-box'"
+                    class="base-field-box"
+                  >
+                    <span class="field-caption">{{ el.label }}</span>
+                    <div class="right-hover-icons">
+                      <span
+                        style="cursor:pointer;marign-left:3px;"
+                        @click="hanldDelete(item,el)"
+                      >
+                        <i class="el-icon-delete" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                v-show="!item.value||item.value.length===0"
+                class="blank-area-tip"
+                title="拖动数据字段到此处"
+              >拖动数据字段到此处</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <el-input
+        v-model="val"
+        type="textarea"
+        autosize
+        placeholder="请输入内容"
+      />
+      <el-button
+        type="primary"
+        @click="reflashStore"
+      >更新</el-button>
+    </div>
   </div>
 </template>
 
 <script>
-import { getLayoutById } from '@/utils/optionUtils'
+import store from '@/store'
 export default {
   name: 'DataPanelField',
   props: {
     identify: {
       type: String,
       default: ''
+    },
+    option: {
+      type: Object,
+      default: () => { }
     }
   },
   data () {
     return {
-      val: '',
-      typeOption: ['BarChart', 'StackedBarChart', 'PercentStackedBarChart']
+      val: ''
     }
   },
   mounted () {
@@ -112,9 +161,57 @@ export default {
     this.val = JSON.stringify(dataValue)
   },
   methods: {
+    // 当拖拽在当前元素上时
+    hanldDragOver (e) {
+      e.preventDefault()
+      e.dataTransfer.dropEffect = 'copy'
+    },
+    // 拖拽结束
+    handleTargetDrop (e, name, item, itemName) {
+      const data = JSON.parse(e.dataTransfer.getData('data'))
+      // 判断拖拽元素是否在对应元素上
+      if (data.type === name) {
+        // 判断是否已经存在
+        const dataIndex = item.value.findIndex(el => {
+          return el.id === data.id
+        })
+        if (dataIndex !== -1) {
+          this.$message({
+            message: `已存在该对象 ${data.label}`,
+            type: 'warning'
+          })
+        } else {
+          item.value.push(data)
+        }
+      } else {
+        const dataName = data.type === 'measure' ? '度量' : '维度'
+        this.$message({
+          message: `不支持添加${dataName}到[${itemName}]上`,
+          type: 'warning'
+        })
+      }
+    },
+    // 删除字段
+    hanldDelete (item, el) {
+      const dataIndex = item.value.findIndex(ele => {
+        return ele.id === el.id
+      })
+      item.value.splice(dataIndex, 1)
+    },
+    // 更新
     reflashStore () {
-      const layout = getLayoutById(this.identify)
-      layout.option.dataSource = JSON.parse(this.val)
+      const data = store.state.app.dataOption.find(item => {
+        return item.i === this.identify
+      })
+      // 判断是否已经存在
+      if (data) {
+        data.dataValue = JSON.parse(this.val)// 更新数据
+      } else {
+        store.state.app.dataOption.push({
+          dataValue: JSON.parse(this.val),
+          i: this.identify
+        })
+      }
     }
   }
 }

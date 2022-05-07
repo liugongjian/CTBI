@@ -112,6 +112,23 @@ export const getLayoutOptionById = function (identify) {
 }
 
 /**
+ * 通过id获取vuex中的dataValue数据
+ * @param {string} identify
+ * @returns {Object}
+ */
+export const getDataValueById = function (identify) {
+  const dataOption = store.state.app.dataOption
+  const obj = dataOption.find((item) => {
+    return item.i === identify
+  })
+  if (obj && JSON.stringify(obj) !== '{}') {
+    return obj.dataValue
+  }
+  console.warn(`获取 ${identify} 组件数据信息为空`)
+  return {}
+}
+
+/**
  * 获取当前时间 格式为 yyyy - mm - dd hh : mm : ss
  */
 export const getDateTime = () => {
