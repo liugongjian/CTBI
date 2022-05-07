@@ -12,7 +12,7 @@ export const initDialogs = (Vue) => {
   let instance
   Vue.prototype.$dialog = {
     show: function (dialog, data = {}, callback = undefined) {
-      data = Object.assign({ dialogVisible: true, callback: callback }, data)
+      const d = Object.assign({ dialogVisible: true, callback: callback }, JSON.parse(JSON.stringify(data)))
       let Contructor
       if (typeof dialog === 'string') {
         // 组件实例
@@ -27,10 +27,11 @@ export const initDialogs = (Vue) => {
         Contructor = Vue.extend(dialog)
       }
       instance = new Contructor({
-        data: data
+        data: d
       }).$mount() // 渲染组件
       // 注意，需要将组价挂载到body上，因为在切换组件时，提示框还有延迟，不会立刻消失
-      document.body.appendChild(instance.$el)
+      console.log(document.querySelector('#main-page'))
+      document.body.querySelector('#main-page').appendChild(instance.$el)
     },
     close: function () {
       if (instance) {
