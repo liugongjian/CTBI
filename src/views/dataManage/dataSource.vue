@@ -20,27 +20,29 @@
           </el-dropdown>
         </div>
       </div>
-      <el-dialog title="连接异常" :visible.sync="notConnect">
+      <!-- <el-dialog title="连接异常" :visible.sync="notConnect">
         <p>连接数据库失败</p>
         <span slot="footer">
           <el-button type="primary" @click="notConnect = false">确定</el-button>
         </span>
-      </el-dialog>
+      </el-dialog> -->
       <el-dialog
-        v-loading="isloading"
         :title="fileType"
-        :visible.sync="dialog"
-        width="560px">
+        :visible.sync="dialogVisible"
+        width="560px"
+      >
         <el-form ref="form" :rules="rules" :model="form" label-width="120px">
           <el-form-item label="显示名称" prop="displayName">
             <el-input
               v-model="form.displayName"
-              placeholder="请输入数据源配置列表显示名称" />
+              placeholder="请输入数据源配置列表显示名称"
+            />
           </el-form-item>
           <el-form-item label="数据库地址" prop="host">
             <el-input
               v-model="form.host"
-              placeholder="请输入IP地址" />
+              placeholder="请输入IP地址"
+            />
           </el-form-item>
           <el-form-item label="端口" prop="port">
             <el-input v-model="form.port" />
@@ -48,22 +50,27 @@
           <el-form-item label="数据库" prop="db">
             <el-input
               v-model="form.db"
-              placeholder="数据库名称" />
+              placeholder="数据库名称"
+            />
           </el-form-item>
           <el-form-item label="用户名" prop="username">
             <el-input
               v-model="form.username"
-              placeholder="请输入用户名" />
+              placeholder="请输入用户名"
+            />
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input
               v-model="form.password"
-              placeholder="请输入密码" />
+              type="password"
+              placeholder="请输入密码"
+              show-password
+            />
           </el-form-item>
         </el-form>
         <span slot="footer">
           <el-button type="primary" @click="submit(form)">确定</el-button>
-          <el-button type="primary" @click="connect(form)">连接测试</el-button>
+          <el-button v-loading="isloading" type="primary" @click="connect(form)">连接测试</el-button>
           <el-button type="primary" @click="dialog = false">关闭</el-button>
         </span>
       </el-dialog>
@@ -93,11 +100,12 @@
               <template slot-scope="scope">
                 <div class="table-row">
                   <div class="table-row__image">
-                    <svg-icon :icon-class="scope.row.type"/>
+                    <svg-icon :icon-class="scope.row.type" />
                   </div>
                   <div class="table-row__text">
-                    <div v-if="scope.row.type=='mongodb'">MongoDB数据库</div>
-                    <div v-if="scope.row.type=='mysql'">MySQL数据库</div>
+                    <!-- <div v-if="scope.row.type=='mongodb'">MongoDB数据库</div>
+                    <div v-if="scope.row.type=='mysql'">MySQL数据库</div> -->
+                    <div>{{ scope.row.displayName }}</div>
                     <div>所有者：开发者中心</div>
                   </div>
                   <div class="table-row__tools">
@@ -155,6 +163,7 @@
 <script>
 import { encryptAes } from '@/utils/encrypt'
 import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataSourceList, editSources } from '@/api/dataSource'
+
 export default {
   name: 'DataSource',
   data() {
@@ -166,7 +175,7 @@ export default {
       currentRow: 0,
       currentPage: 1,
       pageSize: 20,
-      dialog: false,
+      dialogVisible: false,
       fileType: '',
       search: '',
       searchFile: '',
@@ -219,9 +228,9 @@ export default {
         this.form.port = row.port
         this.form.db = row.db
         this.form.username = row.username
-        // this.form.password = ''
+        this.form.password = ''
         this.currentId = row._id
-        this.dialog = true
+        this.dialogVisible = true
         this.notEdit = false
       } catch (error) {
         console.log(error)
@@ -285,7 +294,7 @@ export default {
         username: '',
         password: ''
       }
-      this.dialog = true
+      this.dialogVisible = true
       this.notEdit = true
       if (command === 'mysql') {
         this.fileType = '添加mySql数据源'
@@ -314,7 +323,10 @@ export default {
         const result = await connectTest(testForm)
         console.log(form)
         if (!result) {
-          this.notConnect = true
+          // this.notConnect = true
+          this.$message.error('连接数据库失败！')
+        } else {
+          this.$message.success('连接数据库成功！')
         }
         this.isloading = false
         return result
@@ -324,21 +336,24 @@ export default {
       }
     },
     async submit(form) {
-      const result = await this.connect(form)
-      console.log('result--', result)
-      if (result === true) {
-        this.dialog = false
+      const valid = await this.$refs.form.validate()
+      if (!valid) {
+        return
+      }
+      try {
         form.password = encryptAes(form.password)
-        try {
+        const result = await connectTest(form)
+        if (result === true) {
+          this.dialogVisible = false
           if (this.notEdit) {
             await postDataSourceList(form)
           } else {
             await editSources(this.currentId, this.form)
           }
           this.init()
-        } catch (error) {
-          console.log(error)
         }
+      } catch (error) {
+        console.log(error)
       }
     }
   }
@@ -370,6 +385,7 @@ export default {
     line-height: 68px;
     span {
       margin-right: 20px;
+      cursor:pointer;
     }
   }
 }
