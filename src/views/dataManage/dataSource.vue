@@ -125,27 +125,28 @@
               <el-button plain class="create-data">SQL创建数据集</el-button>
             </span>
           </div>
-          <el-table :default-sort="{prop: 'name', order: 'descending'}" :data="(sourceFile.list).slice((currentPage-1)*pageSize,currentPage*pageSize)">
-            <el-table-column sortable label="名称" prop="name" />
-            <el-table-column label="备注" prop="comment" />
-            <el-table-column label="操作">
-              <template slot-scope="scope">
-                <div class="operate">
-                  <span @click="createData(scope.row)">创建数据集</span>
-                  <el-divider direction="vertical" />
-                  <span @click="detail(scope.row)">详情</span>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-pagination
-            :current-page.sync="currentPage"
-            :page-sizes="[10, 20]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="sourceFile.total"
-            @size-change="handleSizeChange"
-          />
+          <common-table
+            :table-columns="tableColums"
+            :table-data="sourceFile"
+            :page-num.sync="page"
+            :page-size.sync="limit"
+            :total="total"
+            :is-show-default-option="true"
+          >
+            <template #name="{scope}">
+              {{ scope.row.name }}
+            </template>
+            <template #comment="{scope}">
+              {{ scope.row.name }}
+            </template>
+            <template #operation="{scope}">
+              <div class="operate">
+                <span @click="createData(scope.row)">创建数据集</span>
+                <el-divider direction="vertical" />
+                <span @click="detail(scope.row)">详情</span>
+              </div>
+            </template>
+          </common-table>
         </div>
       </div>
     </div>
@@ -155,10 +156,20 @@
 <script>
 import { encryptAes } from '@/utils/encrypt'
 import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataSourceList, editSources } from '@/api/dataSource'
+import CommonTable from '@/components/CommonTable/index.vue'
 export default {
   name: 'DataSource',
+  components: {
+    CommonTable
+  },
   data() {
     return {
+      isPaging: 1,
+      page: 1,
+      limit: 20,
+      sortBy: '',
+      sortOrder: '',
+      searchkey: '',
       isloading: false,
       notConnect: false,
       notEdit: true,
@@ -171,7 +182,8 @@ export default {
       search: '',
       searchFile: '',
       dataSourceList: {},
-      sourceFile: { list: [] },
+      sourceFile: [],
+      total: 0,
       form: {
         type: '',
         displayName: '',
@@ -188,28 +200,32 @@ export default {
         db: [{ required: true, message: '请输入数据库名称', trigger: 'blur' }],
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
-      }
+      },
+      tableColums: [
+        {
+          prop: 'name',
+          label: '名称',
+          fixed: false,
+          sortable: true
+        },
+        {
+          prop: 'comment',
+          label: '备注',
+          fixed: false
+        },
+        {
+          prop: 'operation',
+          label: '操作',
+          slot: 'operation',
+          fixed: 'right'
+        }
+      ]
     }
   },
   mounted() {
     this.init()
   },
   methods: {
-    // async connect (form) {
-    //   try {
-    //     const checkform = {
-    //       type: form.type,
-    //       host: form.host,
-    //       port: form.port,
-    //       db: form.db,
-    //       username: form.username,
-    //       password: encryptAes(form.password)
-    //     }
-    //     await connectTest(checkform)
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    // },
     async editSource(row) {
       try {
         console.log('row', row)
@@ -219,7 +235,7 @@ export default {
         this.form.port = row.port
         this.form.db = row.db
         this.form.username = row.username
-        // this.form.password = ''
+        this.form.password = ''
         this.currentId = row._id
         this.dialog = true
         this.notEdit = false
@@ -231,11 +247,23 @@ export default {
       try {
         this.currentRow = val
         const ids = val._id
-        const file = await getSourceFile(ids)
-        this.sourceFile = file
+        const params = {
+          isPaging: this.isPaging,
+          page: this.page,
+          limit: this.limit,
+          sortBy: this.sortBy,
+          sortOrder: this.sortOrder,
+          searchkey: this.searchkey
+        }
+        const file = await getSourceFile(ids, params)
+        console.log('file-----------', file)
+        this.sourceFile = file.list
+        this.total = file.total
+        this.page = file.page
+        this.limit = file.limit
       } catch (error) {
         console.log(error)
-        this.sourceFile = { list: [] }
+        this.sourceFile = []
       }
     },
     createData(val) {
