@@ -53,17 +53,25 @@
               v-model="form.password"
               placeholder="请输入密码" />
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submit(form)">确定</el-button>
-            <el-button type="primary" @click="dialog = false">关闭</el-button>
-          </el-form-item>
         </el-form>
+        <span slot="footer">
+          <el-button type="primary" @click="submit(form)">确定</el-button>
+          <el-button type="primary" @click="connect(form)">连接测试</el-button>
+          <el-button type="primary" @click="dialog = false">关闭</el-button>
+        </span>
       </el-dialog>
       <div class="data-source__table">
         <div class="data-source__list">
-          <el-table :data="dataSourceList.list" class="tableBox">
+          <el-table
+            ref="singleTable"
+            :data="dataSourceList.list"
+            class="tableBox"
+            highlight-current-row
+            @current-change="handleCurrentChange"
+          >
             <el-table-column
-              label="我的数据源">
+              label="我的数据源"
+            >
               <template slot="header">
                 <div class="table-title">
                   <span>我的数据源</span>
@@ -86,7 +94,7 @@
                     <div>所有者：开发者中心</div>
                   </div>
                   <div class="table-row__tools">
-                    <span>
+                    <span @click.prevent="editSource(scope.row)">
                       <svg-icon icon-class="pencil" />
                     </span>
                     <span @click="deleteSource(scope.row._id)">
@@ -130,7 +138,6 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total="sourceFile.total"
             @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
           />
         </div>
       </div>
@@ -140,11 +147,12 @@
 
 <script>
 import { encryptAes } from '@/utils/encrypt'
-import { getDataSourceList, postDataSourceList, getSourceFile, deleteSources } from '@/api/dataSource'
+import { getDataSourceList, postDataSourceList, getSourceFile, deleteSources, connectTest } from '@/api/dataSource'
 export default {
   name: 'DataSource',
   data() {
     return {
+      currentRow: 0,
       currentPage: 1,
       pageSize: 20,
       dialog: false,
@@ -176,6 +184,48 @@ export default {
     this.init()
   },
   methods: {
+    async connect (form) {
+      try {
+        const checkform = {
+          type: form.type,
+          host: form.host,
+          port: form.port,
+          db: form.db,
+          username: form.username,
+          password: encryptAes(form.password)
+        }
+        await connectTest(checkform)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async editSource(row) {
+      try {
+        this.form = {
+          type: row.type,
+          displayName: row.displayName,
+          host: row.host,
+          port: row.port,
+          db: row.db,
+          username: row.username,
+          password: ''
+        }
+        this.dialog = true
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async handleCurrentChange(val) {
+      try {
+        this.currentRow = val
+        const ids = val._id
+        const file = await getSourceFile(ids)
+        this.sourceFile = file
+      } catch (error) {
+        console.log(error)
+        this.sourceFile = { list: [] }
+      }
+    },
     createData(val) {
       console.log(val)
     },
@@ -185,37 +235,32 @@ export default {
     handleSizeChange(val) {
       this.pageSize = val
     },
-    handleCurrentChange(val) {
-      console.log(`current page: ${val}`)
-    },
     async init() {
       try {
+        this.form = {
+          type: '',
+          displayName: '',
+          host: '',
+          port: '3306',
+          db: '',
+          username: '',
+          password: ''
+        }
         const res = await getDataSourceList()
         this.dataSourceList = res
-        if ((res.list).length !== 0) {
-          const result = res.list
-          const ids = result[0]._id
-          const file = await getSourceFile(ids)
-          this.sourceFile = file
-          console.log('file---', file)
-        }
+        this.$refs.singleTable.setCurrentRow(this.dataSourceList.list[0])
       } catch (error) {
         console.log(error)
       }
-      this.form = {
-        type: '',
-        displayName: '',
-        host: '',
-        port: '',
-        db: '',
-        username: '',
-        password: ''
-      }
     },
     async deleteSource(id) {
-      console.log(id)
-      await deleteSources(id)
-      this.init()
+      try {
+        console.log(id)
+        await deleteSources(id)
+        this.init()
+      } catch (error) {
+        console.log(error)
+      }
     },
     handleCommand(command) {
       this.dialog = true
@@ -232,11 +277,17 @@ export default {
       }
     },
     async submit(form) {
+      this.connect(form)
       this.dialog = false
-      form.password = encryptAes(form.password)
+      const encryptform = form
+      encryptform.password = encryptAes(form.password)
       try {
-        await postDataSourceList(form)
-        this.init()
+        if (this.notEdit) {
+          await postDataSourceList(encryptform)
+          this.init()
+        } else {
+          // await editSources(id, form)
+        }
       } catch (error) {
         console.log(error)
       }

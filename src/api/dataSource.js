@@ -12,10 +12,18 @@ export function postDataSourceList (form) {
 }
 
 export function getSourceFile(id) {
-  id = 'GKZIs8GEYhkV1'
+  // id = 'GKZIs8GEYhkV1'
   return http.get(`/dataSources/${id}/tables`)
 }
 
 export function deleteSources(id) {
   return http.delete(`/dataSources/${id}`)
+}
+
+export function editSources(id) {
+  return http.put(`/dataSources/${id}`)
+}
+
+export function connectTest(body) {
+  return http.post(`/dataSources/link`, body)
 }
