@@ -22,7 +22,10 @@
               label="字段"
               name="1"
             >
-              <data-panel-field :identify="currentLayoutId" />
+              <data-panel-field
+                :identify="currentLayoutId"
+                :option="option"
+              />
             </el-tab-pane>
             <el-tab-pane
               label="样式"
@@ -82,7 +85,10 @@
             @click="showData=true"
           ><span>数据</span></div>
         </div>
-        <data-panel v-show="showData" style="height:calc(100vh - 190px)" />
+        <data-panel
+          v-show="showData"
+          style="height:calc(100vh - 190px)"
+        />
       </div>
     </div>
 

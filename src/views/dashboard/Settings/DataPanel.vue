@@ -3,7 +3,7 @@
     <el-input
       v-model="filterText"
       prefix-icon="el-icon-search"
-      placeholder="输入关键字进行过滤"
+      placeholder="输入关键字搜索"
     />
     <div class="tree-wrapper">
       <div class="data-panel-dimension-tree">
@@ -20,6 +20,7 @@
           :allow-drag="allowDrag"
           :filter-node-method="filterNode"
           draggable
+          @node-drag-start="handleDragStart"
         />
       </div>
       <div class="data-panel-measure-tree">
@@ -34,7 +35,9 @@
           default-expand-all
           :filter-node-method="filterNode"
           :allow-drop="allowDrop"
+          :allow-drag="allowDrag"
           draggable
+          @node-drag-start="handleDragStart"
         />
       </div>
 
@@ -51,72 +54,65 @@ export default {
   data () {
     return {
       filterText: '',
-      dimension: [{
+      dimension: [{ // 维度
         id: 1,
-        label: '一级 1',
-        level: 1,
-        children: [{
-          id: 4,
-          level: 2,
-          label: '二级 1-1'
-        }]
+        type: 'dimension',
+        label: '一级 1'
       }, {
-        id: 2,
-        level: 1,
         label: '一级 2',
         children: [{
-          level: 2,
-          id: 5,
+          id: 2,
+          type: 'dimension',
           label: '二级 2-1'
         }, {
-          level: 2,
-          id: 6,
+          id: 3,
+          type: 'dimension',
           label: '二级 2-2'
         }]
       }, {
-        level: 1,
-        id: 3,
         label: '一级 3',
         children: [{
-          level: 2,
-          id: 7,
+          id: 4,
+          type: 'dimension',
           label: '二级 3-1'
         }, {
-          level: 2,
-          id: 8,
+          id: 5,
+          type: 'dimension',
           label: '二级 3-2'
         }]
       }
-      ], // 维度
-      measure: [{
-        id: 1,
+      ],
+      measure: [{ // 度量
         label: '一级 1',
         children: [{
-          id: 4,
+          id: 6,
+          type: 'measure',
           label: '二级 1-1'
         }]
       }, {
-        id: 2,
         label: '一级 2',
         children: [{
-          id: 5,
+          id: 7,
+          type: 'measure',
           label: '二级 2-1'
         }, {
-          id: 6,
+          id: 8,
+          type: 'measure',
           label: '二级 2-2'
         }]
       }, {
-        id: 3,
         label: '一级 3',
         children: [{
-          id: 7,
+          id: 9,
+          type: 'measure',
           label: '二级 3-1'
         }, {
-          id: 8,
+          id: 10,
+          type: 'measure',
           label: '二级 3-2'
         }]
       }
-      ], // 度量
+      ],
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -146,6 +142,11 @@ export default {
         return false
       }
       return true
+    },
+    handleDragStart (node, ev) {
+      const dt = ev.dataTransfer
+      ev.dataTransfer.effectAllowed = 'copy'
+      dt.setData('data', JSON.stringify(node.data))
     }
   }
 }
