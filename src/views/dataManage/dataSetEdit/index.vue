@@ -36,10 +36,19 @@
         />
       </div>
       <div class="data-set-edit-wrap-toptool-r">
-        <el-button @click="formatSqlData">格式化</el-button>
-        <el-button @click="settingParam">参数配置</el-button>
+        <el-button
+          icon="el-icon-disk"
+          plain
+          @click="formatSqlData"
+        >格式化</el-button>
+        <el-button
+          plain
+          icon="el-icon-volume"
+          @click="settingParam"
+        >参数配置</el-button>
         <el-button
           type="primary"
+          icon="el-icon-video-play"
           @click="runSql"
         >运行</el-button>
         <el-button
@@ -543,14 +552,14 @@ export default {
       }
       try {
         const data = await runtimeForSql(body)
-        this.runResultData = data
+        this.runResultData = Object.assign({ success: true }, data)
         if (this.currentSqlId !== data._id) {
           this.currentSqlId = data._id
         }
         // 触发历史记录的查询事件
         this.$refs.ResultPreview.getHistory()
       } catch (error) {
-        console.log(error)
+        this.runResultData = Object.assign({ success: false }, error)
       }
     },
     // 确认编辑
@@ -877,5 +886,39 @@ export default {
   padding: 17px 20px 0px 20px;
   display: flex;
   justify-content: space-between;
+}
+.create-folder {
+  display: flex;
+  ::v-deep .el-input__inner {
+    height: 32px;
+  }
+}
+.dialog-footer {
+  height: 50px;
+  background: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+// 自定义按钮图标
+::v-deep .el-icon-volume {
+  background: url('../../../assets/Image/datasource/volume.png') center
+    no-repeat;
+  background-size: cover;
+
+  &:before {
+    content: '替';
+    visibility: hidden;
+  }
+}
+::v-deep .el-icon-disk {
+  background: url('../../../assets/Image/datasource/disk.png') center no-repeat;
+  background-size: cover;
+
+  &:before {
+    content: '替';
+    visibility: hidden;
+  }
 }
 </style>
