@@ -1,7 +1,7 @@
 /**
 {
   "author": "ZhengJiale",
-  "time": "2022/04/",30
+  "time": "2022/04/30",
   "description": "条形图组件"
 }
  * */
@@ -168,6 +168,15 @@ export default {
     }
   },
   'advance': {}, // 高级
-  'dataSource': {}// 数据集
+  'dataSource': {
+    'dimension': { // 维度
+      'name': '类别轴/维度',
+      'value': []
+    },
+    'measure': { // 度量
+      'name': '值轴/度量',
+      'value': []
+    }
+  }// 数据集
 }
 

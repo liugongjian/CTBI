@@ -44,16 +44,20 @@ export default {
     Widget, Settings, Tools, Navbar
   },
   mounted () {
-    // 获取本地layout，进行画布初始化
+    // 获取本地数据，进行画布初始化
     if (localStorage.getItem('layout')) {
       const layout = JSON.parse(localStorage.getItem('layout'))
       this.$store.state.app.layout = layout
+    }
+    if (localStorage.getItem('dataOption')) {
+      const dataOption = JSON.parse(localStorage.getItem('dataOption'))
+      this.$store.state.app.dataOption = dataOption
     }
   },
   methods: {
     dragover (event) {
       event.preventDefault()
-      event.dataTransfer.dropEffect = 'move'
+      event.dataTransfer.dropEffect = 'copy'
     },
     getGridLayout (callback) {
       callback(this.$refs.gridLayout.$children[0])

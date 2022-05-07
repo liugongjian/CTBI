@@ -1,10 +1,68 @@
 <template>
-  <div />
+  <div style="width:100%;height:100%;">
+    <v-chart
+      v-if="dataValue"
+      :option="chartOption"
+      :update-options="{notMerge:true}"
+      autoresize
+    />
+    <div v-else>数据为空</div>
+  </div>
 </template>
 
 <script>
+import horizontalBarMixins from '@/components/Dashboard/mixins/horizontalBarMixins'
 export default {
-  name: 'PSHorizontalBarChart'
+  name: 'PSHorizontalBarChart',
+  mixins: [horizontalBarMixins],
+  props: {
+    identify: {
+      type: String,
+      default: ''
+    }
+  },
+  data () {
+    return {
+      type: 'PSHorizontalBarChart'// 图表类型 1.条形图;2.堆积条形图;3.百分比堆叠条形图
+    }
+  },
+  methods: {
+    getOption () {
+      const componentOption = this.storeOption.theme.ComponentOption
+      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery)
+      this.getPercentStackSeries(componentOption)
+      // 系列配置
+      this.setSeriesItem()
+      // 获取颜色设置
+      const colorOption = []
+      componentOption.Color.color.forEach(item => {
+        colorOption.push(item.color)
+      })
+
+      // 设置图例与图表距离
+      this.setGrid(componentOption.Legend)
+      this.chartOption = {
+        'grid': this.grid,
+        'color': colorOption,
+        'legend': componentOption.Legend,
+        'xAxis': this.xAxis,
+        'tooltip': this.tooltip,
+        'yAxis': this.yAxis,
+        'dataset': {
+          'source': this.dataValue
+        },
+        'dataZoom': {
+          'type': 'slider',
+          'show': this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom !== 'hide',
+          'realtime': true,
+          'start': 0,
+          'end': 100,
+          'yAxisIndex': [0, 1]
+        },
+        'series': this.series
+      }
+    }
+  }
 }
 </script>
 

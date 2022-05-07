@@ -70,6 +70,9 @@ export default {
         'type': 'StackedHorizontalBarChart', // 图表类型
         'labelShow': 1 // 数据标签展示方式 1 智能显示；2 全量显示
       },
+      'ChartAlign': { // 图表对齐方式
+        'align': 'left'// 1.left 左对齐;2.right 右对齐
+      },
       'Legend': { // 图例
         'show': true,
         'top': 'auto',
@@ -107,7 +110,7 @@ export default {
     },
     'Axis': { // 坐标轴配置
       'XAxis': {
-        'cname': 'X轴',
+        'cname': 'y轴',
         'title': '',
         'unit': '',
         'show': true,
@@ -123,7 +126,7 @@ export default {
         'splitType': 'solid'
       },
       'YAxis': {
-        'cname': '左Y轴',
+        'cname': '下x轴',
         'title': '',
         'unit': '',
         'show': true,
@@ -162,6 +165,15 @@ export default {
     }
   },
   'advance': {}, // 高级
-  'dataSource': {}// 数据集
+  'dataSource': {
+    'dimension': { // 维度
+      'name': '类别轴/维度',
+      'value': []
+    },
+    'measure': { // 度量
+      'name': '值轴/度量',
+      'value': []
+    }
+  }// 数据集
 }
 
