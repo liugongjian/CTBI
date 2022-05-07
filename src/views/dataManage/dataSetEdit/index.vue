@@ -146,10 +146,17 @@
                     width="360"
                     trigger="click"
                   >
-                    <ColumnsList
-                      :columns="currentTableInfo.columns"
-                      :title="`table.name(${currentTableInfo.columns? currentTableInfo.columns.length : 0})`"
-                    />
+                    <div class="prop-title">
+                      <div>
+                        {{ table.name }}({{ currentTableInfo.columns? currentTableInfo.columns.length : 0 }})
+                      </div>
+                      <!-- 关闭不知道咋弄，先放着 -->
+                      <!-- <div class="title-right-content">
+                        <svg-icon icon-class="close" />
+                      </div> -->
+                    </div>
+                    <el-divider />
+                    <ColumnsList :columns="currentTableInfo.columns" />
                     <svg-icon
                       slot="reference"
                       icon-class="point"
@@ -861,5 +868,14 @@ export default {
   &-label {
     width: 80px;
   }
+}
+.prop-title {
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.9);
+  line-height: 22px;
+  font-size: 16px;
+  padding: 17px 20px 0px 20px;
+  display: flex;
+  justify-content: space-between;
 }
 </style>

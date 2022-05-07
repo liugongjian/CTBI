@@ -1,9 +1,5 @@
 <template>
   <div class="column-wrapper">
-    <div class="title">
-      {{ title }}
-    </div>
-    <el-divider />
     <div class="content">
       <div
         v-for="(item, index) in columns"
@@ -54,14 +50,6 @@ export default {
 .column-wrapper {
   max-height: 300px;
   overflow: hidden;
-
-  .title {
-    font-weight: 500;
-    color: rgba(0, 0, 0, 0.9);
-    line-height: 22px;
-    font-size: 16px;
-    padding: 17px 20px 0px 20px;
-  }
 
   .content {
     max-height: 250px;

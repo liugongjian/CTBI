@@ -73,19 +73,19 @@
                   :icon-class="scope.row.isFolder? 'floder': 'sql'"
                   style="margin-right: 8px"
                 />
-                <el-popover
+                <el-tooltip
                   v-if="!scope.row.isFolder"
-                  placement="top-start"
-                  title="点击编辑数据集"
-                  style="color: rgba(0, 0, 0, 0.3);line-height: 20px;"
-                  trigger="hover"
+                  placement="top"
+                  effect="light"
                 >
+                  <template slot="content">
+                    <span class="tooltip-light-content">点击编辑数据集</span>
+                  </template>
                   <el-button
-                    slot="reference"
                     type="text"
                     @click="handleCellClick(scope.row)"
                   >{{ scope.row.name || scope.row.displayName }}</el-button>
-                </el-popover>
+                </el-tooltip>
                 <span v-else>{{ scope.row.name || scope.row.displayName }}</span>
               </template>
             </el-table-column>
@@ -257,31 +257,6 @@
 
         <!-- 各种 弹窗 & 抽屉 -->
         <el-dialog
-          title="新建文件夹"
-          :visible.sync="createFloderVisible"
-          width="30%"
-        >
-          <div class="create-floder">
-            <div style="line-height: 32px; width: 70px"><span>文件名称</span></div>
-            <el-input
-              v-model="newFloderName"
-              placeholder="请输入文件名称"
-              style="margin-left: 12px;height: 32px"
-            />
-          </div>
-          <span
-            slot="footer"
-            class="dialog-footer"
-          >
-            <el-button @click="createFloderVisible = false; newFloderName = ''">取 消</el-button>
-            <el-button
-              style="background-color: #FA8334;color: #fff;"
-              @click="hanleCreateFloder"
-            >确 定</el-button>
-          </span>
-        </el-dialog>
-
-        <el-dialog
           title="文件夹重命名"
           :visible.sync="renameFolderVisible"
           width="480px"
@@ -430,7 +405,7 @@
 
 <script>
 // import qs from 'qs'
-import { createFloders, updateFolderName, delFolders, updateDataSet, delDataSet, getDataSetsFolders } from '@/api/dataSet'
+import { updateFolderName, delFolders, updateDataSet, delDataSet, getDataSetsFolders } from '@/api/dataSet'
 import { getDateTime } from '@/utils/optionUtils'
 export default {
   name: 'DataSet',
@@ -442,8 +417,6 @@ export default {
       tableData: [],
       dataSetLoading: true,
       multipleSelection: [],
-      createFloderVisible: false,
-      newFloderName: '',
       editDataSetVisible: false,
       deleteFolderVisible: false,
       deleteDataSetVisible: false,
@@ -526,23 +499,11 @@ export default {
     },
     // 新建文件夹
     createFolder () {
-      this.createFloderVisible = true
-    },
-    async hanleCreateFloder () {
-      const body = {
-        type: 'dataSet',
-        name: this.newFloderName
-      }
-      try {
-        const data = await createFloders(body)
-        console.log('createFloders data', data)
-        this.createFloderVisible = false
-        this.newFloderName = ''
+      this.$dialog('CreateDatesetFolderDialog', {}, () => {
         this.init()
-      } catch (error) {
-        console.log(error)
-      }
+      })
     },
+
     // 新建数据集
     createDataSet () {
       const currentTime = getDateTime()
@@ -818,28 +779,7 @@ export default {
   }
 }
 
-.dialog-footer {
-  height: 50px;
-  background: #f5f5f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  ::v-deep .el-button {
-    line-height: 8px;
-    height: 32px;
-    border-radius: 2px;
-  }
-}
-
 ::v-deep .el-dialog__footer {
   padding: 0px;
-}
-
-.create-floder {
-  display: flex;
-  ::v-deep .el-input__inner {
-    height: 32px;
-  }
 }
 </style>
