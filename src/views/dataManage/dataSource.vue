@@ -378,6 +378,8 @@ export default {
             await editSources(this.currentId, this.form)
           }
           this.init()
+        } else {
+          this.$message.error('连接数据库失败！')
         }
       } catch (error) {
         console.log(error)
