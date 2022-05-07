@@ -155,17 +155,18 @@ export default {
   display: flex;
   .box {
     position: relative;
+    min-width: 160px;
     border-bottom: 1px solid #e5e5e5;
   }
   .item {
     padding: 5px;
     padding-bottom: 5px;
     margin: 5px;
-    width: 80%;
+    width: 150px;
     &:before {
       content: '';
       position: absolute;
-      left: -5px;
+      left: -1px;
       bottom: 5px;
       display: inline-block;
       height: 90%;

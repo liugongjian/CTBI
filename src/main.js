@@ -7,11 +7,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 //global icon
 import '@/icons'
 // 路由守卫
-// import '@/config/permission'
+import '@/config/permission'
 // global css
 import '@/styles/index.scss'
 // 引入全局过滤器
-import filters from '@/filters/index'
+import initFilters from '@/filters/index'
+initFilters(Vue)
 // 引入弹窗指令化
 import initDialogs from '@/config/dialog'
 initDialogs(Vue)
@@ -29,7 +30,7 @@ import '@/components/autoRegister'
 import directive from '@/utils/directive'
 directive(Vue)
 
-Vue.use(ElementUI)
+Vue.use(ElementUI, { size: 'small' })
 Vue.prototype.$echarts = echarts
 Vue.prototype.$bus = new Vue()
 new Vue({
@@ -37,7 +38,3 @@ new Vue({
   store,
   render: (h) => h(App)
 }).$mount('#app')
-
-Object.keys(filters).forEach((key) => {
-  Vue.filter(key, filters[key])
-})

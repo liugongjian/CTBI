@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading" class="common-table" id="screentable">
+  <div id="screentable" v-loading="loading" class="common-table">
     <div v-if="isShowToolbar" class="toolbar">
       <slot name="toolbar-left-option"><div class="toolbar-title">{{ tableTitle }}</div></slot>
       <div class="toolbar-option">

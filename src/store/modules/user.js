@@ -7,16 +7,7 @@ const getDefaultState = () => {
     name: '',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     userData: {},
-    routes: [
-      {
-        'path': '/index',
-        'component': 'permission/index',
-        'name': 'PagePermission',
-        'meta': {
-          'title': 'Page'
-        }
-      }
-    ]
+    routes: []
   }
 }
 
@@ -54,7 +45,7 @@ const actions = {
       getInfo(state.token).then(data => {
         const { result, info } = data
         if (!data || !result) {
-          return reject('Verification failed, please Login again.')
+          return reject('认证失败, 请重新登录.')
         }
 
         const { userName } = info
