@@ -5,313 +5,322 @@
       v-if="isEdit"
       class="result-preview-wrap-main"
     >
-      <el-tabs
-        v-model="activeFirstTagName"
-        type="card"
-        @tab-click="handleClickTagsFirst"
-      >
-        <el-tab-pane
-          label="运行结果"
-          name="runResult"
-        >
-          <!-- 成功为table -->
-          <template v-if="resultData.type !='fail'">
-            <template v-if="!resultData.data || resultData.data.length === 0">
-              <div style="text-align: center;margin-top: 38px;">
-                <svg-icon
-                  style="width: 371px; height: 200px;"
-                  icon-class="sql-result-bg"
-                />
-                <div>
-                  <span class="result-bg-tip">编辑完代码后，点击上方运行按钮即可查看运</span>
-                </div>
-              </div>
-            </template>
-            <el-table
-              v-else
-              :data="resultData.data"
-              style="width: 100%"
-            >
-              <el-table-column
-                label="序号"
-                type="index"
-                min-width="50"
+      <div class="m-tab">
+        <div
+          :class="[{'active': activeFirstTagName === 1}, 'tab-block']"
+          @click="activeFirstTagName = 1"
+        >运行结果</div>
+        <div
+          :class="[{'active': activeFirstTagName === 2}, 'tab-block']"
+          @click="activeFirstTagName = 2"
+        >历史记录</div>
+      </div>
+      <div v-show="activeFirstTagName === 1">
+        <!-- 成功为table -->
+        <template v-if="resultData.type !='fail'">
+          <!-- 未查询出数据时展示效果 -->
+          <template v-if="!resultData.data || resultData.data.length === 0">
+            <div style="text-align: center;margin-top: 38px;">
+              <svg-icon
+                style="width: 371px; height: 200px;"
+                icon-class="sql-result-bg"
               />
-              <el-table-column
-                v-for="(k,i) in resultData.columns"
-                :key="i"
-                :prop="k"
-                :label="k"
-              />
-            </el-table>
-          </template>
-          <!-- 失败 -->
-          <template v-else>
-            <div>
-              <div class="error-msg-block">
-                <div>报错详情</div>
-                <div>{{ resultData.msg }}</div>
-              </div>
-              <div style="text-align: center;margin-top: 38px;">
-                <svg-icon
-                  style="width: 371px; height: 200px;"
-                  icon-class="sql-result-err-bg"
-                />
-                <div>
-                  <span class="result-bg-tip">运行失败，SQL存在错误，请先修改代码</span>
-                </div>
+              <div>
+                <span class="result-bg-tip">编辑完代码后，点击上方运行按钮即可查看运</span>
               </div>
             </div>
           </template>
-        </el-tab-pane>
-        <el-tab-pane
-          label="历史记录"
-          name="historyLog"
-        >
+          <!-- 查询出数据时展示效果 -->
           <el-table
-            v-if="historyLogTableData && historyLogTableData.length > 0"
-            :data="historyLogTableData"
+            v-else
+            border
+            header-row-class-name="m-table-header"
+            row-class-name="m-table-row"
+            :data="resultData.data"
             style="width: 100%"
           >
             <el-table-column
-              prop="createdTime"
-              label="开始时间"
-              min-width="180"
+              label="序号"
+              type="index"
+              fixed
+              min-width="50"
             />
             <el-table-column
-              prop="sqlText"
-              label="SQL语句"
-              min-width="300"
+              v-for="(k,i) in resultData.columns"
+              :key="i"
+              min-width="50"
+              show-overflow-tooltip
+              :prop="k"
+              :label="k"
             />
-            <el-table-column
-              prop="costTime"
-              label="耗时（ms）"
-              min-width="80"
-            />
-            <el-table-column
-              prop="result"
-              label="运行结果"
-              min-width="80"
-            >
-              <template slot-scope="scope">
-                <div v-if="scope.row.result == 'success'">
-                  <span>成功</span>
-                </div>
-                <div v-else>
-                  <span>失败</span>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="操作"
-              min-width="100"
-            >
-              <template slot-scope="scope">
-                <el-button
-                  type="text"
-                  @click="copyHistoryLog(scope.row, $event)"
-                >复制</el-button>
-              </template>
-            </el-table-column>
           </el-table>
-          <template v-else>
-            <div style="text-align: center;">
+        </template>
+        <!-- 失败 -->
+        <template v-else>
+          <div>
+            <div class="error-msg-block">
+              <div>报错详情</div>
+              <div>{{ resultData.msg }}</div>
+            </div>
+            <div style="text-align: center;margin-top: 38px;">
               <svg-icon
-                style="width: 137px; height: 200px;"
+                style="width: 371px; height: 200px;"
                 icon-class="sql-result-err-bg"
               />
               <div>
-                <span class="result-bg-tip">未查询到历史记录</span>
+                <span class="result-bg-tip">运行失败，SQL存在错误，请先修改代码</span>
               </div>
             </div>
-          </template>
-        </el-tab-pane>
-      </el-tabs>
+          </div>
+        </template>
+      </div>
+      <div v-show="activeFirstTagName === 2">
+        <el-table
+          v-if="historyLogTableData && historyLogTableData.length > 0"
+          :data="historyLogTableData"
+          style="width: 100%"
+        >
+          <el-table-column
+            prop="createdTime"
+            label="开始时间"
+            min-width="180"
+          />
+          <el-table-column
+            prop="sqlText"
+            label="SQL语句"
+            min-width="300"
+          />
+          <el-table-column
+            prop="costTime"
+            label="耗时（ms）"
+            min-width="80"
+          />
+          <el-table-column
+            prop="result"
+            label="运行结果"
+            min-width="80"
+          >
+            <template slot-scope="scope">
+              <div v-if="scope.row.result == 'success'">
+                <span>成功</span>
+              </div>
+              <div v-else>
+                <span>失败</span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            min-width="100"
+          >
+            <template slot-scope="scope">
+              <el-button
+                type="text"
+                @click="copyHistoryLog(scope.row, $event)"
+              >复制</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <template v-else>
+          <div style="text-align: center;margin-top: 38px;">
+            <svg-icon
+              style="width: 371px; height: 200px;"
+              icon-class="sql-result-bg"
+            />
+            <div>
+              <span class="result-bg-tip">未查询到历史记录</span>
+            </div>
+          </div>
+        </template>
+      </div>
     </div>
     <div
       v-else
       class="result-preview-wrap-main"
     >
       <div class="result-preview-wrap-main-c">
-        <div class="result-preview-wrap-main-c-top">
-          <el-input
-            v-model="inputFieldName"
-            placeholder="请输入字段名称"
-            prefix-icon="el-icon-search"
-            style="margin-right: 24px"
-          />
-          <el-button
-            type="primary"
-            icon="el-icon-refresh"
-            @click="refreshPreview"
-          >刷新预览</el-button>
-        </div>
-        <el-tabs
-          v-model="activeSecondTagName"
-          @tab-click="handleClickTagsSecond"
+        <div
+          class="m-tab"
+          style="justify-content: space-between;"
         >
-          <el-tab-pane
-            label="数据预览"
-            name="dataPreview"
-          >
+          <div class="d-f">
             <div
-              class="data-preview"
-              style="width: 65vw"
-            >
-              <!-- left -->
-              <div class="data-preview-left">
-                <el-tree
-                  :data="dimensionMeasure"
-                  :props="defaultProps"
-                  @node-click="handleNodeClick"
-                />
-              </div>
+              :class="[{'active': activeSecondTagName === 1}, 'tab-block']"
+              @click="activeSecondTagName = 1"
+            >数据预览</div>
+            <div
+              :class="[{'active': activeSecondTagName === 2}, 'tab-block']"
+              @click="activeSecondTagName = 2"
+            >批量配置</div>
+          </div>
+          <div class="d-f">
+            <el-input
+              v-model="inputFieldName"
+              placeholder="请输入字段名称"
+              prefix-icon="el-icon-search"
+              style="margin-right: 24px"
+            />
+            <el-button
+              type="primary"
+              icon="el-icon-refresh"
+              style="height: 32px;"
+              @click="refreshPreview"
+            >刷新预览</el-button>
+          </div>
+        </div>
+        <div
+          v-show="activeSecondTagName === 1"
+          class="data-preview"
+          style="width: 65vw"
+        >
+          <!-- left -->
+          <div class="data-preview-left">
+            <el-tree
+              :data="dimensionMeasure"
+              :props="defaultProps"
+              @node-click="handleNodeClick"
+            />
+          </div>
 
-              <!-- right -->
-              <div class="data-preview-right">
-                <el-table
-                  :data="dimensionMeasureTableData"
-                  style="width: 100%"
-                >
-                  <el-table-column label="维度">
-                    <el-table-column
-                      v-for="(v,i) in dimensionMeasureTableColumns.filter(i => i.type === 'Dimension')"
-                      :key="i"
-                      :prop="v.column"
-                      :label="v.displayColumn"
-                      min-width="120"
-                    />
-                  </el-table-column>
-                  <el-table-column label="度量">
-                    <el-table-column
-                      v-for="(v,i) in dimensionMeasureTableColumns.filter(i => i.type === 'Measure')"
-                      :key="i"
-                      :prop="v.column"
-                      :label="v.displayColumn"
-                      min-width="120"
-                    />
-                  </el-table-column>
-                </el-table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane
-            label="批量配置"
-            name="batchConfiguration"
-          >
-            <div style="width: 65vw">
-              <el-table
-                :data="batchConfigTableData"
-                style="width: 100%;"
-                row-key="displayColumn"
-                tooltip-effect="dark"
-                default-expand-all
-                class="batch-config-table-data"
-                :tree-props="{children: 'children'}"
-              >
+          <!-- right -->
+          <div class="data-preview-right">
+            <el-table
+              :data="dimensionMeasureTableData"
+              style="width: 100%"
+            >
+              <el-table-column label="维度">
                 <el-table-column
-                  label="名称字段"
-                  prop="displayColumn"
-                  width="360"
-                >
-                  <template slot-scope="scope">
-                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'">
-                      <span>{{ scope.row.displayColumn }}</span>
-                    </div>
-                    <div v-else>
-                      <el-input v-model="scope.row.displayColumn" />
-                    </div>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  prop="column"
-                  label="物理字段名"
-                  width="180"
+                  v-for="(v,i) in dimensionMeasureTableColumns.filter(i => i.type === 'Dimension')"
+                  :key="i"
+                  :prop="v.column"
+                  :label="v.displayColumn"
                 />
+              </el-table-column>
+              <el-table-column label="度量">
                 <el-table-column
-                  label="字段类型"
-                  width="180"
-                >
-                  <template slot-scope="scope">
-                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-                    <div v-else>
-                      <el-select
-                        v-model="scope.row.attributes[0].dataType"
-                        placeholder="请选择"
-                      >
-                        <el-option
-                          v-for="item in batchConfigurationDataTypeOptions"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-                        />
-                      </el-select>
-                    </div>
-                  </template>
-                </el-table-column>
-                <!-- <el-table-column
+                  v-for="(v,i) in dimensionMeasureTableColumns.filter(i => i.type === 'Measure')"
+                  :key="i"
+                  :prop="v.column"
+                  :label="v.displayColumn"
+                />
+              </el-table-column>
+            </el-table>
+          </div>
+        </div>
+        <div
+          v-show="activeSecondTagName === 2"
+          style="width: 65vw"
+        >
+          <el-table
+            :data="batchConfigTableData"
+            style="width: 100%;"
+            row-key="displayColumn"
+            default-expand-all
+            header-row-class-name="m-table-header"
+            class="batch-config-table-data"
+            :tree-props="{children: 'children'}"
+          >
+            <el-table-column
+              label="名称字段"
+              prop="displayColumn"
+              width="360"
+            >
+              <template slot-scope="scope">
+                <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'">
+                  <span>{{ scope.row.displayColumn }}</span>
+                </div>
+                <div v-else>
+                  <el-input v-model="scope.row.displayColumn" />
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="column"
+              label="物理字段名"
+              width="180"
+            />
+            <el-table-column
+              label="字段类型"
+              width="180"
+            >
+              <template slot-scope="scope">
+                <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
+                <div v-else>
+                  <el-select
+                    v-model="scope.row.attributes[0].dataType"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in batchConfigurationDataTypeOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </div>
+              </template>
+            </el-table-column>
+            <!-- <el-table-column
                   prop="address"
                   label="默认聚合"
                   width="180">
                 </el-table-column> -->
-                <el-table-column
-                  label="数值展示格式"
-                  width="180"
+            <el-table-column
+              label="数值展示格式"
+              width="180"
+            >
+              <template slot-scope="scope">
+                <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
+                <div v-else>
+                  <el-select
+                    v-model="scope.row.attributes[0].format"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in formatMap[scope.row.attributes[0].dataType]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="字段描述"
+              width="180"
+            >
+              <template slot-scope="scope">
+                <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
+                <div v-else>
+                  <el-input
+                    v-model="scope.row.comment"
+                    placeholder="请输入内容"
+                  />
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="操作"
+              min-width="200"
+            >
+              <template slot-scope="scope">
+                <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
+                <div
+                  v-else
+                  class="result-preview-batch-configuration-table-options"
                 >
-                  <template slot-scope="scope">
-                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-                    <div v-else>
-                      <el-select
-                        v-model="scope.row.attributes[0].format"
-                        placeholder="请选择"
-                      >
-                        <el-option
-                          v-for="item in formatMap[scope.row.attributes[0].dataType]"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-                        />
-                      </el-select>
-                    </div>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="字段描述"
-                  width="180"
-                >
-                  <template slot-scope="scope">
-                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-                    <div v-else>
-                      <el-input
-                        v-model="scope.row.comment"
-                        placeholder="请输入内容"
-                      />
-                    </div>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="操作"
-                  min-width="200"
-                >
-                  <template slot-scope="scope">
-                    <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-                    <div
-                      v-else
-                      class="result-preview-batch-configuration-table-options"
-                    >
-                      <span @click="copyBatchConfiguration(scope.row)">复制</span>
-                      <el-divider direction="vertical" />
-                      <span @click="deleteBatchConfiguration(scope.row)">删除</span>
-                      <el-divider direction="vertical" />
-                      <span
-                        @click="hideBatchConfiguration(scope.row)">{{ scope.row.attributes[0].isHidden ? '取消隐藏' : '隐藏' }}</span>
-                    </div>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-          </el-tab-pane>
-        </el-tabs>
+                  <span @click="copyBatchConfiguration(scope.row)">复制</span>
+                  <el-divider direction="vertical" />
+                  <span @click="deleteBatchConfiguration(scope.row)">删除</span>
+                  <el-divider direction="vertical" />
+                  <span
+                    @click="hideBatchConfiguration(scope.row)">{{ scope.row.attributes[0].isHidden ? '取消隐藏' : '隐藏' }}</span>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
       </div>
     </div>
   </div>
@@ -359,8 +368,8 @@ export default {
   data () {
     return {
       dataSetInfo: null,
-      activeFirstTagName: 'runResult',
-      activeSecondTagName: 'dataPreview',
+      activeFirstTagName: 1,
+      activeSecondTagName: 1,
       historyLogTableData: [],
       inputFieldName: '',
       dimensionMeasure: [{
@@ -531,7 +540,7 @@ export default {
     },
     // 刷新预览
     async refreshPreview () {
-      this.activeSecondTagName = 'dataPreview'
+      this.activeSecondTagName = 1
       const sql = {}
       sql._id = this.sqlParams._id
       sql.dataSourceId = this.sqlParams.dataSourceId
@@ -662,14 +671,34 @@ export default {
 .result-preview-wrap-main {
   &-c {
     position: relative;
-    &-top {
-      display: flex;
-      height: 40px;
-      width: 368px;
-      position: absolute;
-      right: 10px;
-      top: -10px;
-      z-index: 99;
+  }
+
+  .m-tab {
+    border-bottom: 1px solid #dddddd;
+    display: flex;
+    margin-bottom: 16px;
+
+    .tab-block {
+      line-height: 20px;
+      background-color: #f4f5f6;
+      padding: 10px 22px;
+      border: 1px solid #ddd;
+      position: relative;
+      top: 1px;
+      border-bottom-width: 1px;
+      color: rgba(0, 0, 0, 0.65);
+      border-radius: 2px 2px 0px 0px;
+      cursor: pointer;
+
+      &:first-of-type {
+        border-right-width: 0px;
+      }
+
+      &.active {
+        background-color: #fff;
+        border-bottom-color: #fff;
+        color: #fa8334;
+      }
     }
   }
 
@@ -696,14 +725,6 @@ export default {
 .result-preview-batch-configuration-table-options > span {
   cursor: pointer;
 }
-.batch-config-table-data {
-  ::v-deep .el-table td.el-table__cell div {
-    display: flex;
-  }
-}
-::v-deep .el-table td.el-table__cell div {
-  display: flex;
-}
 .result-bg-tip {
   font-weight: 400;
   color: rgba(0, 0, 0, 0.45);
@@ -716,5 +737,22 @@ export default {
   min-height: 60px;
   line-height: 20px;
   padding: 10px 16px 24px 16px;
+}
+
+// 为了实现UI设计同时支持表头resize，这里设置边框为0，但是要在table加上边框属性
+::v-deep .m-table-header > th {
+  background-color: #fafafa !important;
+  color: rgba(0, 0, 0, 0.9);
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+}
+::v-deep .m-table-row > td {
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+}
+::v-deep .el-table--border {
+  border-width: 0px;
 }
 </style>

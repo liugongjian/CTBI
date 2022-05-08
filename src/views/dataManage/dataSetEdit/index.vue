@@ -201,6 +201,8 @@
         <div class="result-preview">
           <ResultPreview
             ref="ResultPreview"
+            v-loading="resultPreviewLoading"
+            element-loading-text="拼命加载中"
             :run-result-data="runResultData"
             :is-edit="isEdit"
             :fields="currentFields"
@@ -476,7 +478,8 @@ export default {
       currentFloderId: '',
       saveDataSetDialogVisible: false,
       dataSetDisplayName: '',
-      currentTableInfo: {}
+      currentTableInfo: {},
+      resultPreviewLoading: false
     }
   },
   computed: {
@@ -551,6 +554,7 @@ export default {
         body.sqlVariables = this.sqlVariables
       }
       try {
+        this.resultPreviewLoading = true
         const data = await runtimeForSql(body)
         this.runResultData = Object.assign({ success: true }, data)
         if (this.currentSqlId !== data._id) {
@@ -561,6 +565,7 @@ export default {
       } catch (error) {
         this.runResultData = Object.assign({ success: false }, error)
       }
+      this.resultPreviewLoading = false
     },
     // 确认编辑
     async confirmEdit () {
