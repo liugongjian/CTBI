@@ -120,6 +120,7 @@
               placeholder="请输入文件名称"
               prefix-icon="el-icon-search"
               class="input-file"
+              @keyup.enter.native="searchFiles"
             />
             <span>
               <el-button plain class="create-data">SQL创建数据集</el-button>
@@ -131,7 +132,8 @@
             :page-num.sync="page"
             :page-size.sync="limit"
             :total="total"
-            :is-show-default-option="true"
+            :is-show-toolbar="false"
+            @refresh="refresh"
           >
             <template #name="{scope}">
               {{ scope.row.name }}
@@ -164,6 +166,7 @@ export default {
   },
   data() {
     return {
+      ids: '',
       isPaging: 1,
       page: 1,
       limit: 20,
@@ -175,8 +178,6 @@ export default {
       notEdit: true,
       editform: {},
       currentRow: 0,
-      currentPage: 1,
-      pageSize: 20,
       dialog: false,
       fileType: '',
       search: '',
@@ -228,7 +229,6 @@ export default {
   methods: {
     async editSource(row) {
       try {
-        console.log('row', row)
         this.form.type = row.type
         this.form.displayName = row.displayName
         this.form.host = row.host
@@ -243,10 +243,8 @@ export default {
         console.log(error)
       }
     },
-    async handleCurrentChange(val) {
+    async getSourceFile(ids) {
       try {
-        this.currentRow = val
-        const ids = val._id
         const params = {
           isPaging: this.isPaging,
           page: this.page,
@@ -256,14 +254,28 @@ export default {
           searchkey: this.searchkey
         }
         const file = await getSourceFile(ids, params)
-        console.log('file-----------', file)
         this.sourceFile = file.list
         this.total = file.total
         this.page = file.page
         this.limit = file.limit
       } catch (error) {
         console.log(error)
-        this.sourceFile = []
+      }
+    },
+    searchFiles() {
+      this.searchkey = this.searchFile
+      this.refresh()
+    },
+    refresh() {
+      this.handleCurrentChange(this.currentRow)
+    },
+    async handleCurrentChange(val) {
+      try {
+        this.currentRow = val
+        const ids = val._id
+        await this.getSourceFile(ids)
+      } catch (error) {
+        console.log(error)
       }
     },
     createData(val) {
@@ -271,9 +283,6 @@ export default {
     },
     detail(val) {
       console.log(val)
-    },
-    handleSizeChange(val) {
-      this.pageSize = val
     },
     async init() {
       try {
@@ -288,7 +297,6 @@ export default {
         }
         const res = await getDataSourceList()
         this.dataSourceList = res
-        console.log('this.dataSourceList', this.dataSourceList)
         this.$refs.singleTable.setCurrentRow(this.dataSourceList.list[0])
       } catch (error) {
         console.log(error)
@@ -337,10 +345,8 @@ export default {
         port: form.port,
         type: form.type
       }
-      console.log('form', form)
       try {
         const result = await connectTest(testForm)
-        console.log(form)
         if (!result) {
           this.notConnect = true
         }
@@ -353,7 +359,6 @@ export default {
     },
     async submit(form) {
       const result = await this.connect(form)
-      console.log('result--', result)
       if (result === true) {
         this.dialog = false
         form.password = encryptAes(form.password)
