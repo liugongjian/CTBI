@@ -36,10 +36,19 @@
         />
       </div>
       <div class="data-set-edit-wrap-toptool-r">
-        <el-button @click="formatSqlData">格式化</el-button>
-        <el-button @click="settingParam">参数配置</el-button>
+        <el-button
+          icon="el-icon-disk"
+          plain
+          @click="formatSqlData"
+        >格式化</el-button>
+        <el-button
+          plain
+          icon="el-icon-volume"
+          @click="settingParam"
+        >参数配置</el-button>
         <el-button
           type="primary"
+          icon="el-icon-video-play"
           @click="runSql"
         >运行</el-button>
         <el-button
@@ -146,10 +155,17 @@
                     width="360"
                     trigger="click"
                   >
-                    <ColumnsList
-                      :columns="currentTableInfo.columns"
-                      :title="`table.name(${currentTableInfo.columns? currentTableInfo.columns.length : 0})`"
-                    />
+                    <div class="prop-title">
+                      <div>
+                        {{ table.name }}({{ currentTableInfo.columns? currentTableInfo.columns.length : 0 }})
+                      </div>
+                      <!-- 关闭不知道咋弄，先放着 -->
+                      <!-- <div class="title-right-content">
+                        <svg-icon icon-class="close" />
+                      </div> -->
+                    </div>
+                    <el-divider />
+                    <ColumnsList :columns="currentTableInfo.columns" />
                     <svg-icon
                       slot="reference"
                       icon-class="point"
@@ -184,6 +200,7 @@
         <!-- bottom -->
         <div class="result-preview">
           <ResultPreview
+            ref="ResultPreview"
             :run-result-data="runResultData"
             :is-edit="isEdit"
             :fields="currentFields"
@@ -525,20 +542,24 @@ export default {
     // 运行
     async runSql () {
       // dataSourceId & sql语句  必须
-      const body = {}
-      body.sql = this.currentSqlStatement
-      body.dataSourceId = this.currentDataSourceId
+      const body = {
+        sql: this.currentSqlStatement,
+        dataSourceId: this.currentDataSourceId,
+        _id: this.currentSqlId ?? ''
+      }
       if (this.sqlVariables && this.sqlVariables.length > 0) {
         body.sqlVariables = this.sqlVariables
       }
       try {
         const data = await runtimeForSql(body)
-        this.runResultData = data
+        this.runResultData = Object.assign({ success: true }, data)
         if (this.currentSqlId !== data._id) {
           this.currentSqlId = data._id
         }
+        // 触发历史记录的查询事件
+        this.$refs.ResultPreview.getHistory()
       } catch (error) {
-        console.log(error)
+        this.runResultData = Object.assign({ success: false }, error)
       }
     },
     // 确认编辑
@@ -855,6 +876,49 @@ export default {
 .on-save-content {
   &-label {
     width: 80px;
+  }
+}
+.prop-title {
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.9);
+  line-height: 22px;
+  font-size: 16px;
+  padding: 17px 20px 0px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.create-folder {
+  display: flex;
+  ::v-deep .el-input__inner {
+    height: 32px;
+  }
+}
+.dialog-footer {
+  height: 50px;
+  background: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+// 自定义按钮图标
+::v-deep .el-icon-volume {
+  background: url('../../../assets/Image/datasource/volume.png') center
+    no-repeat;
+  background-size: cover;
+
+  &:before {
+    content: '替';
+    visibility: hidden;
+  }
+}
+::v-deep .el-icon-disk {
+  background: url('../../../assets/Image/datasource/disk.png') center no-repeat;
+  background-size: cover;
+
+  &:before {
+    content: '替';
+    visibility: hidden;
   }
 }
 </style>

@@ -1,9 +1,10 @@
 // 条形图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
-import { getLayoutOptionById } from '@/utils/optionUtils'
+import { getLayoutOptionById, getDataValueById } from '@/utils/optionUtils'
 import { deepClone } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
+import store from '@/store'
 export default {
   mixins: [baseMixins, YAxis],
   data () {
@@ -12,6 +13,7 @@ export default {
       chartOption: {},
       dataValue: null,
       series: [],
+      dataOption: [],
       xAxis: {},
       yAxis: { type: 'category' },
       grid: {}
@@ -26,17 +28,20 @@ export default {
     storeOption: {
       handler (val) {
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = deepClone(val.dataSource)// 深拷贝，避免修改数据
+        if (this.dataValue) {
+          this.dataValue = deepClone(getDataValueById(this.identify))
           this.getOption()
         }
       },
       deep: true
     },
-    'storeOption.dataSource': {
+    dataOption: {
       handler (val) {
-        if (JSON.stringify(val) !== '{}') {
-          this.dataValue = deepClone(val)
+        const isData = val.findIndex(item => {
+          return item.i === this.identify
+        })
+        if (isData !== -1) {
+          this.dataValue = deepClone(getDataValueById(this.identify))
           // 拿到数据中的系列名字
           this.getSeriesOptions(this.dataValue)
           // 拿到数据的系列名字 并设置颜色
@@ -45,7 +50,8 @@ export default {
           this.getIndicatorOptions(this.dataValue)
           this.getOption()
         }
-      }
+      },
+      deep: true
     },
     'storeOption.theme.ComponentOption.PercentStack': {
       handler(val) {
@@ -63,6 +69,7 @@ export default {
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
+    this.dataOption = store.state.app.dataOption
   },
   methods: {
 
@@ -243,7 +250,7 @@ export default {
         type: 'bar',
         label: {
           show: componentOption.ChartLabel.check && this.checkList.includes('总计'), // 标签显示
-          position: 'top',
+          position: 'right',
           formatter: function (params) {
             let dataTotal = 0
             for (let i = 1; i < params.value.length; i++) {
@@ -275,6 +282,7 @@ export default {
       if (!componentOption.TwisYAxis.check) {
         this.xAxis[0].axisLabel.formatter = '{value}%'
       }
+      const data = getDataValueById(this.identify)
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'bar',
@@ -283,7 +291,7 @@ export default {
             show: componentOption.ChartLabel.check, // 标签显示
             formatter: function (params) {
               const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
-              const isMeasure = that.checkList.includes('度量') ? `${that.storeOption.dataSource[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+              const isMeasure = that.checkList.includes('度量') ? `${data[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
               return isPercent + '\n' + isMeasure
             }
           },
@@ -311,8 +319,7 @@ export default {
         if (option) {
           const { labelColor, showLabel, showMax } = option
           const ChartLabel = this.storeOption.theme.ComponentOption.ChartLabel
-          item.label.show = ChartLabel.type === 'StackedHorizontalBarChart' ? this.checkList.includes('度量') && ChartLabel.check && showLabel : ChartLabel.check && showLabel
-          console.log(ChartLabel.type)
+          item.label.show = ChartLabel.type === 'StackedHorizontalBarChart' ? (this.checkList.includes('度量') && ChartLabel.check) || showLabel : ChartLabel.check || showLabel
           item.label.color = labelColor
           if (showMax) {
             item.markPoint = {

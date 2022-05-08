@@ -174,7 +174,7 @@ export default {
         if (option) {
           const { labelColor, showLabel, showMax, showMark, markType, lineType } = option
           const ChartLabel = this.storeOption.theme.ComponentOption.ChartLabel
-          item.label.show = item.label.show = ChartLabel.type === 'StackedBarChart' ? this.checkList.includes('度量') && ChartLabel.check && showLabel : ChartLabel.check && showLabel
+          item.label.show = item.label.show = ChartLabel.type === 'StackedBarChart' ? (this.checkList.includes('度量') && ChartLabel.check) || showLabel : ChartLabel.check || showLabel
           item.label.color = labelColor
           item.lineStyle = {
             type: lineType
