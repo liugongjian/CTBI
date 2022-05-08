@@ -20,27 +20,23 @@
           </el-dropdown>
         </div>
       </div>
-      <el-dialog title="连接异常" :visible.sync="notConnect">
-        <p>连接数据库失败</p>
-        <span slot="footer">
-          <el-button type="primary" @click="notConnect = false">确定</el-button>
-        </span>
-      </el-dialog>
       <el-dialog
-        v-loading="isloading"
         :title="fileType"
-        :visible.sync="dialog"
-        width="560px">
+        :visible.sync="dialogVisible"
+        width="560px"
+      >
         <el-form ref="form" :rules="rules" :model="form" label-width="120px">
           <el-form-item label="显示名称" prop="displayName">
             <el-input
               v-model="form.displayName"
-              placeholder="请输入数据源配置列表显示名称" />
+              placeholder="请输入数据源配置列表显示名称"
+            />
           </el-form-item>
           <el-form-item label="数据库地址" prop="host">
             <el-input
               v-model="form.host"
-              placeholder="请输入IP地址" />
+              placeholder="请输入IP地址"
+            />
           </el-form-item>
           <el-form-item label="端口" prop="port">
             <el-input v-model="form.port" />
@@ -48,23 +44,28 @@
           <el-form-item label="数据库" prop="db">
             <el-input
               v-model="form.db"
-              placeholder="数据库名称" />
+              placeholder="数据库名称"
+            />
           </el-form-item>
           <el-form-item label="用户名" prop="username">
             <el-input
               v-model="form.username"
-              placeholder="请输入用户名" />
+              placeholder="请输入用户名"
+            />
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input
               v-model="form.password"
-              placeholder="请输入密码" />
+              type="password"
+              placeholder="请输入密码"
+              show-password
+            />
           </el-form-item>
         </el-form>
         <span slot="footer">
           <el-button type="primary" @click="submit(form)">确定</el-button>
-          <el-button type="primary" @click="connect(form)">连接测试</el-button>
-          <el-button type="primary" @click="dialog = false">关闭</el-button>
+          <el-button v-loading="isloading" type="primary" @click="connect(form)">连接测试</el-button>
+          <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
         </span>
       </el-dialog>
       <div class="data-source__table">
@@ -87,17 +88,17 @@
                     :placeholder="`共${dataSourceList.total}个文件`"
                     prefix-icon="el-icon-search"
                     class="input"
+                    @keyup.enter.native="searchSource"
                   />
                 </div>
               </template>
               <template slot-scope="scope">
                 <div class="table-row">
                   <div class="table-row__image">
-                    <svg-icon :icon-class="scope.row.type"/>
+                    <svg-icon :icon-class="scope.row.type" />
                   </div>
                   <div class="table-row__text">
-                    <div v-if="scope.row.type=='mongodb'">MongoDB数据库</div>
-                    <div v-if="scope.row.type=='mysql'">MySQL数据库</div>
+                    <div>{{ scope.row.displayName }}</div>
                     <div>所有者：开发者中心</div>
                   </div>
                   <div class="table-row__tools">
@@ -149,6 +150,34 @@
               </div>
             </template>
           </common-table>
+          <el-dialog
+            title="表详情"
+            :visible.sync="detailVisible"
+            width="560px"
+          >
+            <p>表名称：{{ tableName }}</p>
+            <p>表描述：{{ comment }}</p>
+            <el-table
+              :data="detailColumns"
+              height="250"
+              style="width: 100%"
+            >
+              <el-table-column
+                prop="columnName"
+                label="字段名称"
+                width="180" />
+              <el-table-column
+                prop="columnType"
+                label="字段类型"
+                width="180" />
+              <el-table-column
+                prop="columnComment"
+                label="字段描述" />
+            </el-table>
+            <span slot="footer">
+              <el-button type="primary" @click="detailVisible = false">关闭</el-button>
+            </span>
+          </el-dialog>
         </div>
       </div>
     </div>
@@ -157,7 +186,7 @@
 
 <script>
 import { encryptAes } from '@/utils/encrypt'
-import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataSourceList, editSources } from '@/api/dataSource'
+import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataSourceList, editSources, detailSource } from '@/api/dataSource'
 import CommonTable from '@/components/CommonTable/index.vue'
 export default {
   name: 'DataSource',
@@ -166,7 +195,19 @@ export default {
   },
   data() {
     return {
+      detailTable: {
+        tableName: '',
+        comment: '',
+        columns: [
+          {}
+        ]
+      },
+      tableName: '',
+      comment: '',
+      detailColumns: [],
+      detailInfo: {},
       ids: '',
+      detailVisible: false,
       isPaging: 1,
       page: 1,
       limit: 20,
@@ -174,11 +215,10 @@ export default {
       sortOrder: '',
       searchkey: '',
       isloading: false,
-      notConnect: false,
       notEdit: true,
       editform: {},
       currentRow: 0,
-      dialog: false,
+      dialogVisible: false,
       fileType: '',
       search: '',
       searchFile: '',
@@ -227,6 +267,22 @@ export default {
     this.init()
   },
   methods: {
+    async detailSources() {
+      try {
+        this.tableName = this.detailInfo.name
+        const params = {
+          id: this.currentRow._id,
+          tableName: this.detailInfo.name
+        }
+        this.detailTable = await detailSource(params)
+        this.detailColumns = this.detailTable.columns
+        this.tableName = this.detailTable.tableName
+        this.comment = this.detailTable.comment
+        this.detailColumns.forEach(function (value) { value.columnType = value.columnType.toUpperCase() })
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async editSource(row) {
       try {
         this.form.type = row.type
@@ -237,7 +293,7 @@ export default {
         this.form.username = row.username
         this.form.password = ''
         this.currentId = row._id
-        this.dialog = true
+        this.dialogVisible = true
         this.notEdit = false
       } catch (error) {
         console.log(error)
@@ -262,6 +318,9 @@ export default {
         console.log(error)
       }
     },
+    searchSource() {
+      this.init()
+    },
     searchFiles() {
       this.searchkey = this.searchFile
       this.refresh()
@@ -282,7 +341,9 @@ export default {
       console.log(val)
     },
     detail(val) {
-      console.log(val)
+      this.detailVisible = true
+      this.detailInfo = val
+      this.detailSources()
     },
     async init() {
       try {
@@ -290,12 +351,12 @@ export default {
           type: '',
           displayName: '',
           host: '',
-          port: '3306',
+          port: '',
           db: '',
           username: '',
           password: ''
         }
-        const res = await getDataSourceList()
+        const res = await getDataSourceList({ searchkey: this.search })
         this.dataSourceList = res
         this.$refs.singleTable.setCurrentRow(this.dataSourceList.list[0])
       } catch (error) {
@@ -316,12 +377,12 @@ export default {
         type: '',
         displayName: '',
         host: '',
-        port: '3306',
+        port: '',
         db: '',
         username: '',
         password: ''
       }
-      this.dialog = true
+      this.dialogVisible = true
       this.notEdit = true
       if (command === 'mysql') {
         this.fileType = '添加mySql数据源'
@@ -348,7 +409,9 @@ export default {
       try {
         const result = await connectTest(testForm)
         if (!result) {
-          this.notConnect = true
+          this.$message.error('连接数据库失败！')
+        } else {
+          this.$message.success('连接数据库成功！')
         }
         this.isloading = false
         return result
@@ -358,20 +421,26 @@ export default {
       }
     },
     async submit(form) {
-      const result = await this.connect(form)
-      if (result === true) {
-        this.dialog = false
+      const valid = await this.$refs.form.validate()
+      if (!valid) {
+        return
+      }
+      try {
         form.password = encryptAes(form.password)
-        try {
+        const result = await connectTest(form)
+        if (result === true) {
+          this.dialogVisible = false
           if (this.notEdit) {
             await postDataSourceList(form)
           } else {
             await editSources(this.currentId, this.form)
           }
           this.init()
-        } catch (error) {
-          console.log(error)
+        } else {
+          this.$message.error('连接数据库失败！')
         }
+      } catch (error) {
+        console.log(error)
       }
     }
   }
@@ -403,6 +472,7 @@ export default {
     line-height: 68px;
     span {
       margin-right: 20px;
+      cursor:pointer;
     }
   }
 }

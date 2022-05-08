@@ -1,6 +1,6 @@
 import { http } from '@/config/request'
-export function getDataSourceList () {
-  return http.get('/dataSources')
+export function getDataSourceList (params) {
+  return http.get('/dataSources', params)
 }
 
 export function postDataSourceList (form) {
@@ -22,4 +22,8 @@ export function editSources(id, body) {
 
 export function connectTest(body) {
   return http.post(`/dataSources/link`, body)
+}
+
+export function detailSource(params) {
+  return http.get(`/dataSources/${params.id}/table/info`, params)
 }
