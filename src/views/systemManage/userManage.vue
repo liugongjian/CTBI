@@ -198,7 +198,7 @@ export default {
   },
   computed: {
     columns () {
-      if (this.form.role === 'superUser') {
+      if (this.$store.state.user.userData.role === 'superUser') {
         return this.adminColumns
       }
       return this.simpleUserColumns

@@ -15,8 +15,20 @@
           name="runResult"
         >
           <!-- 成功为table -->
-          <template v-if="resultData.type =='success'">
+          <template v-if="resultData.type !='fail'">
+            <template v-if="!resultData.data || resultData.data.length === 0">
+              <div style="text-align: center;margin-top: 38px;">
+                <svg-icon
+                  style="width: 371px; height: 200px;"
+                  icon-class="sql-result-bg"
+                />
+                <div>
+                  <span class="result-bg-tip">编辑完代码后，点击上方运行按钮即可查看运</span>
+                </div>
+              </div>
+            </template>
             <el-table
+              v-else
               :data="resultData.data"
               style="width: 100%"
             >
@@ -35,13 +47,19 @@
           </template>
           <!-- 失败 -->
           <template v-else>
-            <div style="text-align: center;">
-              <svg-icon
-                style="width: 137px; height: 200px;"
-                icon-class="sql-result-bg"
-              />
-              <div>
-                <span class="result-bg-tip">编辑完代码后，点击上方运行按钮即可查看运行结果</span>
+            <div>
+              <div class="error-msg-block">
+                <div>报错详情</div>
+                <div>{{ resultData.msg }}</div>
+              </div>
+              <div style="text-align: center;margin-top: 38px;">
+                <svg-icon
+                  style="width: 371px; height: 200px;"
+                  icon-class="sql-result-err-bg"
+                />
+                <div>
+                  <span class="result-bg-tip">运行失败，SQL存在错误，请先修改代码</span>
+                </div>
               </div>
             </div>
           </template>
@@ -100,7 +118,7 @@
             <div style="text-align: center;">
               <svg-icon
                 style="width: 137px; height: 200px;"
-                icon-class="sql-result-bg"
+                icon-class="sql-result-err-bg"
               />
               <div>
                 <span class="result-bg-tip">未查询到历史记录</span>
@@ -439,7 +457,6 @@ export default {
         this.currentSqlId = newVal._id
       }
       const data = this.formatRunResultData(newVal)
-      console.log(data)
       this.resultData = JSON.parse(JSON.stringify(data))
     },
     dataSetFields: {
@@ -454,7 +471,6 @@ export default {
   },
   mounted () {
     this.dataSetInfo = this.$route.query
-    console.log(this.dataSetInfo, 'this.dataSetInfo')
     const fields = this.fields.slice()
     this.dataSetFields = fields.slice()
     this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(fields.slice())))
@@ -618,6 +634,7 @@ export default {
     // 格式化 运行结果
     formatRunResultData (val) {
       // success == true 为成功的结果
+      console.log(val)
       if (val.success) {
         const _res = {
           columns: [],
@@ -631,7 +648,8 @@ export default {
         return _res
       } else {
         const _res = {
-          type: 'fail'
+          type: 'fail',
+          msg: val.msg
         }
         return _res
       }
@@ -690,5 +708,13 @@ export default {
   font-weight: 400;
   color: rgba(0, 0, 0, 0.45);
   line-height: 20px;
+}
+
+.error-msg-block {
+  border: 1px solid #ffa4a3;
+  background-color: #ffecec;
+  min-height: 60px;
+  line-height: 20px;
+  padding: 10px 16px 24px 16px;
 }
 </style>

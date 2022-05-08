@@ -97,6 +97,13 @@ a {
   line-height: 20px;
 }
 
+// element朴素按钮样式调整
+.el-button.el-button--default.is-plain {
+  background: #FFFFFF;
+  border-color: #FA8334;
+  color: #FA8334;
+}
+
 // element原生样式调整
 .el-table {
   &.el-table--enable-row-hover {

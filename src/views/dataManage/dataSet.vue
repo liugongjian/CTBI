@@ -462,8 +462,8 @@ export default {
       this.cureentDataSet = null
       this.multipleSelection = []
       this.serachName = ''
-      this.tableData = []
       this.isAllDataShow = true
+      this.tableData = []
       this.getTableData()
     },
     // 获取 tableData
@@ -481,12 +481,9 @@ export default {
     async query () {
       if (!this.serachName) {
         this.isAllDataShow = true
-        return this.$message({
-          message: '请输入正确的数据集名称',
-          type: 'warning'
-        })
+      } else {
+        this.isAllDataShow = false
       }
-      this.isAllDataShow = false
       const searchkey = this.serachName
       this.dataSetLoading = true
       try {
@@ -499,7 +496,7 @@ export default {
     },
     // 新建文件夹
     createFolder () {
-      this.$dialog('CreateDatesetFolderDialog', {}, () => {
+      this.$dialog.show('CreateDatesetFolderDialog', {}, () => {
         this.init()
       })
     },
@@ -779,7 +776,28 @@ export default {
   }
 }
 
+.dialog-footer {
+  height: 50px;
+  background: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  ::v-deep .el-button {
+    line-height: 8px;
+    height: 32px;
+    border-radius: 2px;
+  }
+}
+
 ::v-deep .el-dialog__footer {
   padding: 0px;
+}
+
+.create-floder {
+  display: flex;
+  ::v-deep .el-input__inner {
+    height: 32px;
+  }
 }
 </style>
