@@ -88,6 +88,7 @@
         <data-panel
           v-show="showData"
           style="height:calc(100vh - 190px)"
+          :option="option.dataSource"
         />
       </div>
     </div>
