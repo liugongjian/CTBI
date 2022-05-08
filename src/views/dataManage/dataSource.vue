@@ -124,7 +124,7 @@
               @keyup.enter.native="searchFiles"
             />
             <span>
-              <el-button plain class="create-data">SQL创建数据集</el-button>
+              <el-button plain class="create-data" @click="toCreateDataSet">SQL创建数据集</el-button>
             </span>
           </div>
           <common-table
@@ -144,7 +144,7 @@
             </template>
             <template #operation="{scope}">
               <div class="operate">
-                <span @click="createData(scope.row)">创建数据集</span>
+                <span @click="() => toCreateDataSet(currentRow)">创建数据集</span>
                 <el-divider direction="vertical" />
                 <span @click="detail(scope.row)">详情</span>
               </div>
@@ -165,14 +165,17 @@
               <el-table-column
                 prop="columnName"
                 label="字段名称"
-                width="180" />
+                width="180"
+              />
               <el-table-column
                 prop="columnType"
                 label="字段类型"
-                width="180" />
+                width="180"
+              />
               <el-table-column
                 prop="columnComment"
-                label="字段描述" />
+                label="字段描述"
+              />
             </el-table>
             <span slot="footer">
               <el-button type="primary" @click="detailVisible = false">关闭</el-button>
@@ -188,6 +191,7 @@
 import { encryptAes } from '@/utils/encrypt'
 import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataSourceList, editSources, detailSource } from '@/api/dataSource'
 import CommonTable from '@/components/CommonTable/index.vue'
+import { getDateTime } from '@/utils/optionUtils'
 export default {
   name: 'DataSource',
   components: {
@@ -267,6 +271,27 @@ export default {
     this.init()
   },
   methods: {
+    toCreateDataSet(dataSource) {
+      const currentTime = getDateTime()
+      const query = {
+        _id: '',
+        displayName: '',
+        comment: '',
+        sqlId: '',
+        fields: [],
+        folderId: null,
+        isFolder: false,
+        creatorId: '',
+        dataSourceId: dataSource && dataSource._id || '',
+        dataSourceName: dataSource && dataSource.displayName || '',
+        creatorName: '',
+        createdTime: currentTime
+      }
+      this.$router.push({
+        path: '/dataManage/dataSet/edit',
+        query
+      })
+    },
     async detailSources() {
       try {
         this.tableName = this.detailInfo.name
@@ -336,9 +361,6 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    },
-    createData(val) {
-      console.log(val)
     },
     detail(val) {
       this.detailVisible = true
