@@ -11,7 +11,8 @@
 
 <script>
 import 'echarts-wordcloud'
-import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
+import { getLayoutOptionById, getDataValueById, deepClone } from '@/utils/optionUtils'
+import store from '@/store'
 export default {
   name: 'WordCloudChart',
   props: {
@@ -26,15 +27,28 @@ export default {
       chartOption: {},
       dataValue: null,
       minValue: 12,
-      maxValue: 60
+      maxValue: 60,
+      dataOption: []
     }
   },
   watch: {
     storeOption: {
       handler (val) {
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = deepClone(val.dataSource)
+        if (this.dataValue) {
+          this.dataValue = deepClone(getDataValueById(this.identify))
+          this.getOption()
+        }
+      },
+      deep: true
+    },
+    dataOption: {
+      handler (val) {
+        const isData = val.findIndex(item => {
+          return item.i === this.identify
+        })
+        if (isData !== -1) {
+          this.dataValue = deepClone(getDataValueById(this.identify))
           this.getOption()
         }
       },
@@ -43,6 +57,7 @@ export default {
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
+    this.dataOption = store.state.app.dataOption
   },
   methods: {
     getOption () {

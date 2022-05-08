@@ -1,12 +1,49 @@
 // 饼图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
+import { getLayoutOptionById, getDataValueById, deepClone } from '@/utils/optionUtils'
+import store from '@/store'
 export default {
   mixins: [baseMixins],
   data: function () {
     return {
-      grid: {}
+      grid: {},
+      dataOption: []
     }
+  },
+  watch: {
+    storeOption: {
+      handler (val) {
+        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
+        if (this.dataValue) {
+          this.dataValue = deepClone(getDataValueById(this.identify))
+          this.getOption()
+        }
+      },
+      deep: true
+    },
+    dataOption: {
+      handler (val) {
+        const isData = val.findIndex(item => {
+          return item.i === this.identify
+        })
+        if (isData !== -1) {
+          this.dataValue = deepClone(getDataValueById(this.identify))
+          // 拿到数据中的系列名字
+          this.getSeriesOptions(this.dataValue)
+          // 拿到数据的系列名字 并设置颜色
+          this.getColor(this.dataValue)
+          // 拿到数据中的指标
+          this.getIndicatorOptions(this.dataValue)
+          this.getOption()
+        }
+      },
+      deep: true
+    }
+  },
+  mounted () {
+    this.storeOption = getLayoutOptionById(this.identify)
+    this.dataOption = store.state.app.dataOption
   },
   methods: {
     // 拿到数据中的系列名字

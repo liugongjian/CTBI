@@ -133,16 +133,16 @@ export default {
     //   }]
     // }
     // 柱图、折线图
-    const dataValue = [
-      ['date', '价格', '数量', '温度'],
-      ['Mon', 820, 410, 36],
-      ['Tue', 932, 320, 36.3],
-      ['Wed', 901, 300, 36.6],
-      ['Thu', 934, 380, undefined],
-      ['Fri', 1290, 430, 39.6],
-      ['Sat', 1330, 480, 37.6],
-      ['Sun', 1320, 460, 38]
-    ]
+    // const dataValue = [
+    //   ['date', '价格', '数量', '温度'],
+    //   ['Mon', 820, 410, 36],
+    //   ['Tue', 932, 320, 36.3],
+    //   ['Wed', 901, 300, 36.6],
+    //   ['Thu', 934, 380, undefined],
+    //   ['Fri', 1290, 430, 39.6],
+    //   ['Sat', 1330, 480, 37.6],
+    //   ['Sun', 1320, 460, 38]
+    // ]
     // 雷达图
     // const dataValue = [
     //   ['实际支出', [5000, 14000, 28000, 26000, 42000, 21000]],
@@ -150,18 +150,18 @@ export default {
     // ]
     // 进度条
     // 词云数据
-    // const dataValue = [
-    //   { name: 'Sam S Club', value: 10000 }, { name: 'Macys', value: 6181 },
-    //   { name: 'Amy Schumer', value: 4386 }, { name: 'Jurassic World', value: 4055 },
-    //   { name: 'Charter Communications', value: 2467 }, { name: 'Chick Fil A', value: 2244 },
-    //   { name: 'Planet Fitness', value: 1898 }, { name: 'Pitch Perfect', value: 1484 },
-    //   { name: 'Express', value: 1112 }, { name: 'Home', value: 965 },
-    //   { name: 'Johnny Depp', value: 847 }, { name: 'Lena Dunham', value: 582 },
-    //   { name: 'Lewis Hamilton', value: 555 }, { name: 'KXAN', value: 550 },
-    //   { name: 'Mary Ellen Mark', value: 462 }, { name: 'Farrah Abraham', value: 366 },
-    //   { name: 'Rita Ora', value: 360 }, { name: 'Serena Williams', value: 282 },
-    //   { name: 'NCAA baseball tournament', value: 273 }, { name: 'Point Break', value: 265 }
-    // ]
+    const dataValue = [
+      { name: 'Sam S Club', value: 10000 }, { name: 'Macys', value: 6181 },
+      { name: 'Amy Schumer', value: 4386 }, { name: 'Jurassic World', value: 4055 },
+      { name: 'Charter Communications', value: 2467 }, { name: 'Chick Fil A', value: 2244 },
+      { name: 'Planet Fitness', value: 1898 }, { name: 'Pitch Perfect', value: 1484 },
+      { name: 'Express', value: 1112 }, { name: 'Home', value: 965 },
+      { name: 'Johnny Depp', value: 847 }, { name: 'Lena Dunham', value: 582 },
+      { name: 'Lewis Hamilton', value: 555 }, { name: 'KXAN', value: 550 },
+      { name: 'Mary Ellen Mark', value: 462 }, { name: 'Farrah Abraham', value: 366 },
+      { name: 'Rita Ora', value: 360 }, { name: 'Serena Williams', value: 282 },
+      { name: 'NCAA baseball tournament', value: 273 }, { name: 'Point Break', value: 265 }
+    ]
     // 看板
     // const dataValue = [
     //   {
