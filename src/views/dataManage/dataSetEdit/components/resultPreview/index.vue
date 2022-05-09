@@ -212,20 +212,22 @@
                           style="margin-right: 5px;"
                         />复制
                       </el-dropdown-item>
-                      <!-- <el-dropdown-item @click.native="data.attributes[0].isHidden = !data.attributes[0].isHidden">
-                        <span v-if="!data.attributes[0].isHidden">
-                          <svg-icon
-                            icon-class="m-eye-close"
-                            style="margin-right: 5px;"
-                          />隐藏
-                        </span>
-                        <span v-else>
-                          <svg-icon
-                            icon-class="eye-open"
-                            style="margin-right: 5px;"
-                          />显示
-                        </span>
-                      </el-dropdown-item> -->
+                      <template v-if="data.attributes">
+                        <el-dropdown-item @click.native="data.attributes[0].isHidden = !data.attributes[0].isHidden">
+                          <span v-if="!data.attributes[0].isHidden">
+                            <svg-icon
+                              icon-class="m-eye-close"
+                              style="margin-right: 5px;"
+                            />隐藏
+                          </span>
+                          <span v-else>
+                            <svg-icon
+                              icon-class="eye-open"
+                              style="margin-right: 5px;"
+                            />显示
+                          </span>
+                        </el-dropdown-item>
+                      </template>
                       <el-dropdown-item
                         icon="el-icon-delete"
                         @click.native="() => {deleteDimensionMeasure(data, node.parent.data._id)}"
