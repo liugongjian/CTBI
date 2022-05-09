@@ -102,36 +102,36 @@ export default {
     //   ['Sun', 1320, 460, 38]
     // ]
     // 明细表
-    const dataValue = {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }],
-      total: 4,
-      columns: [{
-        prop: 'date',
-        label: '日期'
-      }, {
-        prop: 'name',
-        label: '姓名'
-      }, {
-        prop: 'address',
-        label: '地址'
-      }]
-    }
+    // const dataValue = {
+    //   tableData: [{
+    //     date: '2016-05-02',
+    //     name: '王小虎',
+    //     address: '上海市普陀区金沙江路 1518 弄'
+    //   }, {
+    //     date: '2016-05-04',
+    //     name: '王小虎',
+    //     address: '上海市普陀区金沙江路 1517 弄'
+    //   }, {
+    //     date: '2016-05-01',
+    //     name: '王小虎',
+    //     address: '上海市普陀区金沙江路 1519 弄'
+    //   }, {
+    //     date: '2016-05-03',
+    //     name: '王小虎',
+    //     address: '上海市普陀区金沙江路 1516 弄'
+    //   }],
+    //   total: 4,
+    //   columns: [{
+    //     prop: 'date',
+    //     label: '日期'
+    //   }, {
+    //     prop: 'name',
+    //     label: '姓名'
+    //   }, {
+    //     prop: 'address',
+    //     label: '地址'
+    //   }]
+    // }
     // 柱图、折线图
     // const dataValue = [
     //   ['date', '价格', '数量', '温度'],
@@ -150,18 +150,18 @@ export default {
     // ]
     // 进度条
     // 词云数据
-    // const dataValue = [
-    //   { name: 'Sam S Club', value: 10000 }, { name: 'Macys', value: 6181 },
-    //   { name: 'Amy Schumer', value: 4386 }, { name: 'Jurassic World', value: 4055 },
-    //   { name: 'Charter Communications', value: 2467 }, { name: 'Chick Fil A', value: 2244 },
-    //   { name: 'Planet Fitness', value: 1898 }, { name: 'Pitch Perfect', value: 1484 },
-    //   { name: 'Express', value: 1112 }, { name: 'Home', value: 965 },
-    //   { name: 'Johnny Depp', value: 847 }, { name: 'Lena Dunham', value: 582 },
-    //   { name: 'Lewis Hamilton', value: 555 }, { name: 'KXAN', value: 550 },
-    //   { name: 'Mary Ellen Mark', value: 462 }, { name: 'Farrah Abraham', value: 366 },
-    //   { name: 'Rita Ora', value: 360 }, { name: 'Serena Williams', value: 282 },
-    //   { name: 'NCAA baseball tournament', value: 273 }, { name: 'Point Break', value: 265 }
-    // ]
+    const dataValue = [
+      { name: 'Sam S Club', value: 10000 }, { name: 'Macys', value: 6181 },
+      { name: 'Amy Schumer', value: 4386 }, { name: 'Jurassic World', value: 4055 },
+      { name: 'Charter Communications', value: 2467 }, { name: 'Chick Fil A', value: 2244 },
+      { name: 'Planet Fitness', value: 1898 }, { name: 'Pitch Perfect', value: 1484 },
+      { name: 'Express', value: 1112 }, { name: 'Home', value: 965 },
+      { name: 'Johnny Depp', value: 847 }, { name: 'Lena Dunham', value: 582 },
+      { name: 'Lewis Hamilton', value: 555 }, { name: 'KXAN', value: 550 },
+      { name: 'Mary Ellen Mark', value: 462 }, { name: 'Farrah Abraham', value: 366 },
+      { name: 'Rita Ora', value: 360 }, { name: 'Serena Williams', value: 282 },
+      { name: 'NCAA baseball tournament', value: 273 }, { name: 'Point Break', value: 265 }
+    ]
     // 看板
     // const dataValue = [
     //   {

@@ -1,0 +1,17 @@
+.el-dialog {
+    & > .el-dialog__footer{
+    height: 50px;
+    background: #F5F5F5;
+    text-align: center;
+    }
+    & > .el-dialog__header{
+        padding-bottom: 15px;
+        border-bottom: 1px solid #F1F1F1;
+        .el-dialog__title{
+            font-family: PingFangSC-Medium;
+            font-size: 16px;
+            color: rgba(0,0,0,0.90);
+            font-weight: 500;
+        }
+    }
+}

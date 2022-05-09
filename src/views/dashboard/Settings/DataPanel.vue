@@ -21,7 +21,16 @@
           :filter-node-method="filterNode"
           draggable
           @node-drag-start="handleDragStart"
-        />
+        >
+          <span
+            slot-scope="{ node, data }"
+            class="custom-tree-node"
+            style="width:100%;"
+            @dblclick="addItem(data)"
+          >
+            <span>{{ node.label }}</span>
+          </span>
+        </el-tree>
       </div>
       <div class="data-panel-measure-tree">
         <div class="data-panel-tree-title">
@@ -38,7 +47,16 @@
           :allow-drag="allowDrag"
           draggable
           @node-drag-start="handleDragStart"
-        />
+        >
+          <span
+            slot-scope="{ node, data }"
+            class="custom-tree-node"
+            style="width:100%;"
+            @dblclick="addItem(data)"
+          >
+            <span>{{ node.label }}</span>
+          </span>
+        </el-tree>
       </div>
 
     </div>
@@ -50,6 +68,10 @@
 export default {
   name: 'DataPanel',
   props: {
+    option: {
+      type: Object,
+      default: () => { }
+    }
   },
   data () {
     return {
@@ -147,6 +169,37 @@ export default {
       const dt = ev.dataTransfer
       ev.dataTransfer.effectAllowed = 'copy'
       dt.setData('data', JSON.stringify(node.data))
+    },
+    // 添加字段
+    addItem (data) {
+      const that = this
+      const addData = function () { // 添加字段
+        // 判断是否已经存在
+        const dataIndex = that.option[data.type].value.findIndex(el => {
+          return el.id === data.id
+        })
+        if (dataIndex !== -1) {
+          that.$message({
+            message: `已存在该对象 ${data.label}`,
+            type: 'warning'
+          })
+        } else {
+          that.option[data.type].value.push(data)
+        }
+      }
+
+      if (this.option.dimension) {
+        addData()
+      } else { // 当维度不存在时
+        if (data.type === 'dimension') {
+          this.$message({
+            message: `不支持添加维度到[${this.option.measure.name}]上`,
+            type: 'warning'
+          })
+        } else {
+          addData()
+        }
+      }
     }
   }
 }

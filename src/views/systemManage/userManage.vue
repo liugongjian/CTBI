@@ -198,7 +198,7 @@ export default {
   },
   computed: {
     columns () {
-      if (this.form.role === 'superUser') {
+      if (this.$store.state.user.userData.role === 'superUser') {
         return this.adminColumns
       }
       return this.simpleUserColumns
@@ -356,7 +356,6 @@ export default {
 <style lang="scss" scoped>
 .user-list {
   font-size: 12px;
-  padding: 20px;
   .username-link {
     max-width: 100%;
     overflow: hidden;
