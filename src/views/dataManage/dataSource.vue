@@ -159,7 +159,7 @@
             :visible.sync="detailVisible"
           >
             <p class="part"><span class="table-title-name">表名称：</span>{{ tableName }}</p>
-            <p class="part"><span class="table-title-name">表描述：</span>{{ detailComment }}</p>
+            <p class="part"><span class="table-title-name">表备注：</span>{{ detailComment }}</p>
             <common-table
               :table-columns="comments"
               :table-data="detailColumns"
