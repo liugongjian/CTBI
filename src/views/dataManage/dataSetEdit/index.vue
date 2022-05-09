@@ -111,9 +111,9 @@
               >
                 <el-option
                   v-for="item in dataSourceOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  :key="item._id"
+                  :label="item.displayName"
+                  :value="item._id"
                 />
               </el-select>
             </div>
@@ -121,17 +121,18 @@
         </div>
 
         <!-- bottom -->
-        <div class="side-bottom">
+        <div
+          v-loading="dataTableLoading"
+          class="side-bottom"
+          element-loading-text="数据加载中"
+        >
           <el-tabs v-model="activedTag">
             <el-tab-pane
               label="数据表"
               name="first"
             >
-              <div
-                v-loading="dataTableLoading"
-                element-loading-text="拼命加载中"
-                class="side-bottom-main"
-              >
+              <el-empty v-if="dataTableList && dataTableList.length === 0" />
+              <div class="side-bottom-main">
                 <div
                   v-for="(table, i) in dataTableList"
                   :key="i"
@@ -216,7 +217,7 @@
           <ResultPreview
             ref="ResultPreview"
             v-loading="resultPreviewLoading"
-            element-loading-text="拼命加载中"
+            element-loading-text="数据加载中"
             :run-result-data="runResultData"
             :is-edit="isEdit"
             :fields="currentFields"
@@ -401,7 +402,10 @@
 <script>
 import { format } from 'sql-formatter'
 import EditSql from '@/components/SqlEditor/index.vue'
-import { runtimeForSql, getDataSourceData, confirmEditSql, createDataSets, getSqlAllData, getSqlVariables, getFolderLists, getDataTable, getTableInfo } from '@/api/dataSet'
+import {
+  runtimeForSql, getDataSourceData, confirmEditSql, createDataSets, updateDataSet, getSqlAllData,
+  getSqlVariables, getFolderLists, getDataTable, dataFiles, getTableInfo, getFileTableInfo
+} from '@/api/dataSet'
 import ResultPreview from './components/resultPreview/index.vue'
 import Clipboard from '@/utils/clipboard.js'
 import ColumnsList from '@/views/dataManage/dataSetEdit/components/ColumnsList.vue'
@@ -424,6 +428,8 @@ export default {
       dataTableList: [],
       // 传输给sql编辑器的表格提示词
       editTables: {},
+      // 选择数据源后，展示于编辑中的字段
+      dataSourceName: '',
       runResultData: {},
       settingParamVisiable: false,
       variableTypeOptions: [
@@ -457,6 +463,7 @@ export default {
       creatorName: '',
       currentSqlStatement: '',
       currentDataSourceId: '',
+      currentDataSourceType: '',
       current_id: '',
       currentFields: [],
       currentSql: {},
@@ -473,9 +480,6 @@ export default {
     }
   },
   computed: {
-    dataSourceName: function () {
-      return this.currentDataSet.dataSourceName || ''
-    },
     sqlStatement: function () {
       return this.currentSqlData.sql || ''
     }
@@ -494,6 +498,8 @@ export default {
     }
     this.creatorName = data.creatorName
     this.currentDataSourceId = data.dataSourceId || ''
+    this.dataSourceName = data.dataSourceName
+    this.currentDataSourceType = data.dataSourceType || ''
     this.current_id = data._id || ''
     this.currentFields = data.fields || []
   },
@@ -502,7 +508,7 @@ export default {
     this.getFolderList()
     this.dataSetDisplayName = this.currentDataSet.displayName || ''
     if (this.currentDataSourceId) {
-      this.handleChangeDataSource(this.currentDataSourceId)
+      this.handleChangeDataSource(this.currentDataSourceId, this.currentDataSourceType)
     }
   },
   methods: {
@@ -541,6 +547,7 @@ export default {
       const body = {
         sql: this.currentSqlStatement,
         dataSourceId: this.currentDataSourceId,
+        type: this.currentDataSourceType,
         _id: this.currentSqlId ?? ''
       }
       if (this.sqlVariables && this.sqlVariables.length > 0) {
@@ -580,6 +587,7 @@ export default {
           message: '恭喜你，确认编辑成功',
           type: 'success'
         })
+        this.isEdit = false
       } catch (error) {
         console.log(error)
       }
@@ -601,14 +609,7 @@ export default {
     async getDataSourceList () {
       try {
         const { list } = await getDataSourceData()
-        const options = []
-        list.forEach(i => {
-          const o = {}
-          o.label = i.displayName
-          o.value = i._id
-          options.push(o)
-        })
-        this.dataSourceOptions = options.slice()
+        this.dataSourceOptions = list
       } catch (error) {
         console.log(error)
       }
@@ -628,8 +629,13 @@ export default {
       this.currentTableInfo = {}
       try {
         this.tableInfoLoading = true
-        const data = await getTableInfo(id, tableName)
-        this.currentTableInfo = data
+        let result = null
+        if (this.currentDataSourceType === 'file') {
+          result = await getFileTableInfo(tableName)
+        } else {
+          result = await getTableInfo(id, tableName)
+        }
+        this.currentTableInfo = result
       } catch (error) {
         console.log(error)
       }
@@ -654,7 +660,11 @@ export default {
         body.sql = this.currentSqlData
         body.displayName = this.dataSetDisplayName
         console.log(body, 'body')
-        await createDataSets(body)
+        if (this.current_id) {
+          await updateDataSet(this.current_id, body)
+        } else {
+          await createDataSets(body)
+        }
         this.$message({
           message: '保存成功',
           type: 'success'
@@ -703,15 +713,30 @@ export default {
     dataSetFieldsChange (val) {
     },
     // 获取数据源中的表
-    async handleChangeDataSource (val) {
-      this.tableLoading = true
+    async handleChangeDataSource (val, type) {
+      this.dataTableLoading = true
       try {
         this.currentDataSourceId = val
-        const data = await getDataTable(val)
-        this.dataTableList = data.list
+        if (type !== '') {
+          const currentDataSource = this.dataSourceOptions.find(item => item._id === val)
+          // type, file||""
+          this.currentDataSourceType = currentDataSource.type || ''
+          this.dataSourceName = currentDataSource.displayName
+        }
+
+        if (this.currentDataSourceType === 'file') {
+          const params = {
+            searchkey: this.currentDataSourceId
+          }
+          const result = await dataFiles(params)
+          this.dataTableList = result.list
+        } else {
+          const result = await getDataTable(val)
+          this.dataTableList = result.list
+        }
         // 给sql编辑器传参
         const temp = {}
-        data.list.forEach(item => {
+        this.dataTableList.forEach(item => {
           // 目前只返回表名称，未返回字段数据
           temp[item.name] = []
         })
@@ -719,7 +744,7 @@ export default {
       } catch (error) {
         console.log(error)
       }
-      this.tableLoading = false
+      this.dataTableLoading = false
     }
   }
 }
@@ -758,7 +783,7 @@ export default {
   }
   &-main {
     display: flex;
-    min-height: calc(100vh - 100px);
+    min-height: calc(100vh - 165px);
     box-sizing: border-box;
     background: #fff;
     &-side {
@@ -898,14 +923,6 @@ export default {
   ::v-deep .el-input__inner {
     height: 32px;
   }
-}
-.dialog-footer {
-  height: 50px;
-  background: #f5f5f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
 }
 // 自定义按钮图标
 ::v-deep .el-icon-volume {

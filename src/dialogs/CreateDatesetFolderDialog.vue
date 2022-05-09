@@ -65,12 +65,4 @@ export default {
     height: 32px;
   }
 }
-.dialog-footer {
-  height: 50px;
-  background: #f5f5f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-}
 </style>
