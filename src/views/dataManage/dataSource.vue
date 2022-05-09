@@ -511,19 +511,29 @@ export default {
       }
     },
     async submit(form) {
+      console.log('form', form)
       const valid = await this.$refs.form.validate()
       if (!valid) {
         return
       }
       try {
-        form.password = encryptAes(form.password)
-        const result = await connectTest(form)
+        const testForm = {
+          displayName: form.displayName,
+          username: form.username,
+          db: form.db,
+          host: form.host,
+          password: encryptAes(form.password),
+          port: form.port,
+          type: form.type
+        }
+        const result = await this.connect(form)
         if (result === true) {
+          console.log('test---', testForm)
           this.dialogVisible = false
           if (this.notEdit) {
-            await postDataSourceList(form)
+            await postDataSourceList(testForm)
           } else {
-            await editSources(this.currentId, this.form)
+            await editSources(this.currentId, testForm)
           }
           this.init()
         } else {
@@ -564,10 +574,11 @@ export default {
     font-size: 32px;
   }
   &__text {
-    flex: 1
+    flex: 2;
+    text-align: left;
   }
   &__tools {
-    flex: 2;
+    flex: 1;
     text-align: right;
     span {
       margin-right: 20px;
