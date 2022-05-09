@@ -135,13 +135,16 @@
             :page-size.sync="limit"
             :total="total"
             :is-show-toolbar="false"
+            @sort-change="handleSortChange"
             @refresh="refresh"
           >
             <template #name="{scope}">
               {{ scope.row.name }}
             </template>
             <template #comment="{scope}">
-              {{ scope.row.name }}
+              <el-tooltip class="item" effect="dark" :content="scope.row.comment" placement="top">
+                <span class="description">{{ scope.row.comment }} </span>
+              </el-tooltip>
             </template>
             <template #operation="{scope}">
               <div class="operate">
@@ -154,32 +157,21 @@
           <el-dialog
             title="表详情"
             :visible.sync="detailVisible"
-            width="560px"
           >
-            <p>表名称：{{ tableName }}</p>
-            <p>表描述：{{ comment }}</p>
-            <el-table
-              :data="detailColumns"
-              height="250"
-              style="width: 100%"
+            <p class="part"><span class="table-title-name">表名称：</span>{{ tableName }}</p>
+            <p class="part"><span class="table-title-name">表描述：</span>{{ comment }}</p>
+            <common-table
+              :table-columns="columnComments"
+              :table-data="detailColumns"
+              :is-show-toolbar="false"
+              :is-show-pagination="false"
             >
-              <el-table-column
-                prop="columnName"
-                label="字段名称"
-                width="180"
-              />
-              <el-table-column
-                prop="columnType"
-                label="字段类型"
-                width="180"
-              />
-              <el-table-column
-                prop="columnComment"
-                label="字段描述"
-              />
-            </el-table>
+              <template #columnName />
+              <template #columnType />
+              <template #columnComment />
+            </common-table>
             <span slot="footer">
-              <el-button type="primary" @click="detailVisible = false">关闭</el-button>
+              <el-button @click="detailVisible = false">关闭</el-button>
             </span>
           </el-dialog>
         </div>
@@ -218,7 +210,7 @@ export default {
       isPaging: 1,
       page: 1,
       limit: 20,
-      sortBy: '',
+      sortBy: 'name',
       sortOrder: '',
       searchkey: '',
       isloading: false,
@@ -254,6 +246,23 @@ export default {
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       },
+      columnComments: [
+        {
+          prop: 'columnName',
+          label: '字段名称',
+          fixed: false
+        },
+        {
+          prop: 'columnType',
+          label: '字段类型',
+          fixed: false
+        },
+        {
+          prop: 'columnComment',
+          label: '字段描述',
+          fixed: false
+        }
+      ],
       tableColums: [
         {
           prop: 'name',
@@ -264,7 +273,9 @@ export default {
         {
           prop: 'comment',
           label: '备注',
-          fixed: false
+          slot: 'comment',
+          fixed: false,
+          ellipsis: true
         },
         {
           prop: 'operation',
@@ -416,24 +427,24 @@ export default {
       }
     },
     async deleteSource(id) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        console.log(id)
-        deleteSources(id)
-        this.init()
+      try {
+        await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        await deleteSources(id)
+        await this.init()
         this.$message({
           type: 'success',
           message: '删除成功!'
         })
-      }).catch(() => {
+      } catch (err) {
         this.$message({
           type: 'info',
           message: '已取消删除'
         })
-      })
+      }
     },
     handleCommand(command) {
       this.status = '添加'
@@ -465,6 +476,15 @@ export default {
           }
         })
       }
+    },
+    handleSortChange({ prop, order }) {
+      this.sortBy = prop
+      if (order) {
+        this.sortOrder = order === 'ascending' ? 'asc' : 'desc'
+      } else {
+        this.sortOrder = 'desc'
+      }
+      console.log('hhhh')
     },
     async connect(form) {
       this.isloading = true
@@ -518,6 +538,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.part {
+  margin-bottom: 1em;
+}
+.table-title-name {
+  width: 48px;
+  height: 20px;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: rgba(0,0,0,0.90);
+  line-height: 20px;
+  font-weight: 400;
+}
 .operate {
   color: #FA8334;
   span {
@@ -569,16 +601,18 @@ export default {
   line-height: 68px;
 }
 .head-title {
-  margin: 1.7%;
+  margin:24px;
 }
 .create-data {
-  margin: 0 16px 0 12px;
+  margin: 0 0 0 12px;
 }
 ::v-deep .el-table td {
-  height: 42px
+  height: 42px;
+  padding-left: 16px
 }
 ::v-deep .el-table th {
-  height: 42px
+  height: 42px;
+  padding-left: 16px
 }
 .data-source {
   height: 100%;
@@ -620,15 +654,19 @@ export default {
 }
 .data-file__list {
   flex: 2;
+  padding: 24px;
   border-left: 1px solid #EBEEF5;
   height: calc(100vh - 168px);
   overflow: auto
 }
 .head-select {
-  margin: 1.7%;
+  margin: 24px;
   font-size: 12px;
 }
 .el-button {
   font-size: 12px;
+}
+.description {
+  cursor: pointer;
 }
 </style>

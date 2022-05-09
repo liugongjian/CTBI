@@ -67,25 +67,6 @@ export default {
     color: #F0914B;
     font: 44px "PingFang SC"
   }
-  .button {
-    background: #F0914B;
-    width: 100%;
-    height: 50px;
-    color: #FFF;
-    font-size: 18px;
-    border:#f0914b;
-    border-radius: 10px;
-  }
-  .button:hover {
-    background: #f0914b;
-    color: #fff;
-    border:#f0914b
-  }
-  .button:focus {
-    background: #f0914b;
-    color: #fff;
-    border:#f0914b
-  }
   .form {
     width: 330px;
   }
@@ -114,10 +95,6 @@ export default {
     font-size: 18px;
     color: #696969;
     }
-  .button-style {
-    position: relative;
-    margin-top: 58px;
-  }
   .shadow {
     z-index: -1;
     position: absolute;
