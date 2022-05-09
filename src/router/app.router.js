@@ -12,12 +12,6 @@ const apps = [
     meta: { title: '仪表盘', icon: 'dashboard', affix: true }
   },
   {
-    path: '/dashboardList/',
-    name: 'dashboardList',
-    component: () => import('@/views/dashboardList/index.vue'),
-    meta: { title: '仪表盘demo', icon: 'dashboard', affix: true }
-  },
-  {
     path: '/dataManage',
     name: 'dataManage',
     redirect: '/dataManage/dataSource',
