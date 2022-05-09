@@ -159,16 +159,16 @@
             :visible.sync="detailVisible"
           >
             <p class="part"><span class="table-title-name">表名称：</span>{{ tableName }}</p>
-            <p class="part"><span class="table-title-name">表描述：</span>{{ comment }}</p>
+            <p class="part"><span class="table-title-name">表描述：</span>{{ detailComment }}</p>
             <common-table
-              :table-columns="columnComments"
+              :table-columns="comments"
               :table-data="detailColumns"
               :is-show-toolbar="false"
               :is-show-pagination="false"
             >
               <template #columnName />
               <template #columnType />
-              <template #columnComment />
+              <template #comment />
             </common-table>
             <span slot="footer">
               <el-button @click="detailVisible = false">关闭</el-button>
@@ -202,7 +202,7 @@ export default {
         ]
       },
       tableName: '',
-      comment: '',
+      detailComment: '',
       detailColumns: [],
       detailInfo: {},
       ids: '',
@@ -211,7 +211,7 @@ export default {
       page: 1,
       limit: 20,
       sortBy: 'name',
-      sortOrder: '',
+      sortOrder: 'asc',
       searchkey: '',
       isloading: false,
       notEdit: true,
@@ -246,7 +246,7 @@ export default {
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       },
-      columnComments: [
+      comments: [
         {
           prop: 'columnName',
           label: '字段名称',
@@ -258,7 +258,7 @@ export default {
           fixed: false
         },
         {
-          prop: 'columnComment',
+          prop: 'comment',
           label: '字段描述',
           fixed: false
         }
@@ -326,7 +326,7 @@ export default {
         this.detailTable = await detailSource(params)
         this.detailColumns = this.detailTable.columns
         this.tableName = this.detailTable.tableName
-        this.comment = this.detailTable.comment
+        this.detailComment = this.detailTable.comment
         this.detailColumns.forEach(function (value) { value.columnType = value.columnType.toUpperCase() })
       } catch (error) {
         console.log(error)
@@ -484,7 +484,7 @@ export default {
       } else {
         this.sortOrder = 'desc'
       }
-      console.log('hhhh')
+      this.getSourceFile(this.currentRow._id)
     },
     async connect(form) {
       this.isloading = true
@@ -547,7 +547,6 @@ export default {
   font-family: PingFangSC-Regular;
   font-size: 12px;
   color: rgba(0,0,0,0.90);
-  line-height: 20px;
   font-weight: 400;
 }
 .operate {
@@ -558,12 +557,11 @@ export default {
 }
 .table-row {
   display: flex;
+  align-items: center;
   height: 50px;
-  line-height: 25px;
   &__image {
     flex: 1;
     font-size: 32px;
-    line-height: 50px;
   }
   &__text {
     flex: 1
@@ -571,7 +569,6 @@ export default {
   &__tools {
     flex: 2;
     text-align: right;
-    line-height: 68px;
     span {
       margin-right: 20px;
       cursor:pointer;
@@ -586,9 +583,9 @@ export default {
 }
 .table-title {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   height: 50px;
-  line-height: 50px;
   font-family: PingFangSC-Medium;
   font-size: 12px;
   color: rgba(0,0,0,0.90);
@@ -623,7 +620,6 @@ export default {
     font-family: PingFangSC-Medium;
     font-size: 12px;
     color: rgba(0, 0, 0, 0.9);
-    line-height: 20px;
     font-weight: 500;
   }
 
