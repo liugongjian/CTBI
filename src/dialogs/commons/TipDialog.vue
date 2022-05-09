@@ -11,10 +11,7 @@
       />
       <span>{{ content }}</span>
     </div>
-    <span
-      slot="footer"
-      class="dialog-footer"
-    >
+    <span slot="footer">
       <el-button @click="closeSilence">取 消</el-button>
       <el-button
         type="primary"
