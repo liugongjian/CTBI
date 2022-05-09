@@ -69,10 +69,10 @@
             <el-input v-model="form.email" size="small" placeholder="请输入邮箱" />
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button size="small" @click="handleClose">取 消</el-button>
-          <el-button type="primary" size="small" @click="handleCreate">确 定</el-button>
-        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" @click="handleClose">取 消</el-button>
+        <el-button type="primary" size="small" @click="handleCreate">确 定</el-button>
       </div>
     </el-dialog>
     <Success :success-visible.sync="successVisible" :success-data="successData" @refresh="refresh" />
@@ -199,10 +199,9 @@ export default {
       callback()
     },
     createNewPassword () {
-      console.log(this.form)
       const newPasswordArray = []
-      // 密码8-20位
-      const passwordLength = Math.floor(Math.random() * 13) + 8
+      // 密码12-26位
+      const passwordLength = Math.floor(Math.random() * 15) + 12
       const str = '0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM@$!%*#_~?&^'
       for (let index = 0; index < passwordLength; index++) {
         const tag = Math.floor(Math.random() * str.length)
@@ -219,7 +218,6 @@ export default {
           return
         }
         this.form.password = newPassword
-        console.log(this.form, newPassword)
         return
       }
       this.createNewPassword()
@@ -288,8 +286,6 @@ export default {
 .dialog-footer {
   display: flex;
   justify-content: center;
-  padding: 10px 20px 0;
   margin: 0 -20px -10px;
-  border-top: 1px solid #f1f1f1;
 }
 </style>
