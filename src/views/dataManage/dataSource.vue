@@ -352,6 +352,7 @@ export default {
         this.limit = file.limit
       } catch (error) {
         console.log(error)
+        this.sourceFile = []
       }
     },
     searchSource() {
