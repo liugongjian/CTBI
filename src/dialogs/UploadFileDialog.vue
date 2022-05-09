@@ -194,7 +194,6 @@ export default {
     display: flex;
     justify-content: center;
     margin: 0 -20px -10px;
-    border-top: 1px solid #f1f1f1;
   }
 }
 </style>
