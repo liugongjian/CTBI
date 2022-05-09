@@ -98,8 +98,8 @@
                     <svg-icon :icon-class="scope.row.type" />
                   </div>
                   <div class="table-row__text">
-                    <div>{{ scope.row.displayName }}</div>
-                    <div>所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}</div>
+                    <div class="table-row__text-part1">{{ scope.row.displayName }}</div>
+                    <div class="table-row__text-part1">所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}</div>
                   </div>
                   <div class="table-row__tools">
                     <span v-if="scope.row.type!=='file'" @click.prevent="editSource(scope.row)">
@@ -337,7 +337,6 @@ export default {
         this.notEdit = false
         this.status = '编辑'
         this.form.type = row.type
-        console.log('form.type', this.form.type)
         this.form.displayName = row.displayName
         this.form.host = row.host
         this.form.port = row.port
@@ -511,7 +510,6 @@ export default {
       }
     },
     async submit(form) {
-      console.log('form', form)
       const valid = await this.$refs.form.validate()
       if (!valid) {
         return
@@ -528,7 +526,6 @@ export default {
         }
         const result = await this.connect(form)
         if (result === true) {
-          console.log('test---', testForm)
           this.dialogVisible = false
           if (this.notEdit) {
             await postDataSourceList(testForm)
@@ -536,8 +533,6 @@ export default {
             await editSources(this.currentId, testForm)
           }
           this.init()
-        } else {
-          this.$message.error('连接数据库失败！')
         }
       } catch (error) {
         console.log(error)
@@ -584,6 +579,12 @@ export default {
       margin-right: 20px;
       cursor:pointer;
     }
+  }
+  &__text-part1 {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 .input {
