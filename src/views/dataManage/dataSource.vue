@@ -23,47 +23,84 @@
       <el-dialog
         :title="fileType"
         :visible.sync="dialog"
-        width="560px">
-        <el-form ref="form" :rules="rules" :model="form" label-width="120px">
-          <el-form-item label="显示名称" prop="displayName">
+        width="560px"
+      >
+        <el-form
+          ref="form"
+          :rules="rules"
+          :model="form"
+          label-width="120px"
+        >
+          <el-form-item
+            label="显示名称"
+            prop="displayName"
+          >
             <el-input
               v-model="form.displayName"
-              placeholder="请输入数据源配置列表显示名称" />
+              placeholder="请输入数据源配置列表显示名称"
+            />
           </el-form-item>
-          <el-form-item label="数据库地址" prop="host">
+          <el-form-item
+            label="数据库地址"
+            prop="host"
+          >
             <el-input
               v-model="form.host"
-              placeholder="请输入IP地址" />
+              placeholder="请输入IP地址"
+            />
           </el-form-item>
-          <el-form-item label="端口" prop="port">
+          <el-form-item
+            label="端口"
+            prop="port"
+          >
             <el-input v-model="form.port" />
           </el-form-item>
-          <el-form-item label="数据库" prop="db">
+          <el-form-item
+            label="数据库"
+            prop="db"
+          >
             <el-input
               v-model="form.db"
-              placeholder="数据库名称" />
+              placeholder="数据库名称"
+            />
           </el-form-item>
-          <el-form-item label="用户名" prop="username">
+          <el-form-item
+            label="用户名"
+            prop="username"
+          >
             <el-input
               v-model="form.username"
-              placeholder="请输入用户名" />
+              placeholder="请输入用户名"
+            />
           </el-form-item>
-          <el-form-item label="密码" prop="password">
+          <el-form-item
+            label="密码"
+            prop="password"
+          >
             <el-input
               v-model="form.password"
-              placeholder="请输入密码" />
+              placeholder="请输入密码"
+            />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submit(form)">确定</el-button>
-            <el-button type="primary" @click="dialog = false">关闭</el-button>
+            <el-button
+              type="primary"
+              @click="submit(form)"
+            >确定</el-button>
+            <el-button
+              type="primary"
+              @click="dialog = false"
+            >关闭</el-button>
           </el-form-item>
         </el-form>
       </el-dialog>
       <div class="data-source__table">
         <div class="data-source__list">
-          <el-table :data="dataSourceList.list" class="tableBox">
-            <el-table-column
-              label="我的数据源">
+          <el-table
+            :data="dataSourceList.list"
+            class="tableBox"
+          >
+            <el-table-column label="我的数据源">
               <template slot="header">
                 <div class="table-title">
                   <span>我的数据源</span>
@@ -78,7 +115,7 @@
               <template slot-scope="scope">
                 <div class="table-row">
                   <div class="table-row__image">
-                    <svg-icon :icon-class="scope.row.type"/>
+                    <svg-icon :icon-class="scope.row.type" />
                   </div>
                   <div class="table-row__text">
                     <div v-if="scope.row.type=='mongodb'">MongoDB数据库</div>
@@ -107,12 +144,25 @@
               class="input-file"
             />
             <span>
-              <el-button plain class="create-data">SQL创建数据集</el-button>
+              <el-button
+                plain
+                class="create-data"
+              >SQL创建数据集</el-button>
             </span>
           </div>
-          <el-table :default-sort="{prop: 'name', order: 'descending'}" :data="(sourceFile.list).slice((currentPage-1)*pageSize,currentPage*pageSize)">
-            <el-table-column sortable label="名称" prop="name" />
-            <el-table-column label="备注" prop="name" />
+          <el-table
+            :default-sort="{prop: 'name', order: 'descending'}"
+            :data="(sourceFile.list).slice((currentPage-1)*pageSize,currentPage*pageSize)"
+          >
+            <el-table-column
+              sortable
+              label="名称"
+              prop="name"
+            />
+            <el-table-column
+              label="备注"
+              prop="name"
+            />
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <div class="operate">
@@ -143,7 +193,7 @@ import { encryptAes } from '@/utils/encrypt'
 import { getDataSourceList, postDataSourceList, getSourceFile, deleteSources } from '@/api/dataSource'
 export default {
   name: 'DataSource',
-  data() {
+  data () {
     return {
       currentPage: 1,
       pageSize: 20,
@@ -172,23 +222,23 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.init()
   },
   methods: {
-    createData(val) {
+    createData (val) {
       console.log(val)
     },
-    detail(val) {
+    detail (val) {
       console.log(val)
     },
-    handleSizeChange(val) {
+    handleSizeChange (val) {
       this.pageSize = val
     },
-    handleCurrentChange(val) {
+    handleCurrentChange (val) {
       console.log(`current page: ${val}`)
     },
-    async init() {
+    async init () {
       try {
         const res = await getDataSourceList()
         this.dataSourceList = res
@@ -212,12 +262,12 @@ export default {
         password: ''
       }
     },
-    async deleteSource(id) {
+    async deleteSource (id) {
       console.log(id)
       await deleteSources(id)
       this.init()
     },
-    handleCommand(command) {
+    handleCommand (command) {
       this.dialog = true
       if (command === 'mysql') {
         this.fileType = '添加mySql数据源'
@@ -231,7 +281,7 @@ export default {
         this.fileType = '添加本地数据源'
       }
     },
-    async submit(form) {
+    async submit (form) {
       this.dialog = false
       form.password = encryptAes(form.password)
       try {
@@ -247,7 +297,7 @@ export default {
 
 <style lang="scss" scoped>
 .operate {
-  color: #FA8334;
+  color: #fa8334;
   span {
     cursor: pointer;
   }
@@ -262,7 +312,7 @@ export default {
     line-height: 68px;
   }
   &__text {
-    flex: 1
+    flex: 1;
   }
   &__tools {
     flex: 2;
@@ -285,7 +335,7 @@ export default {
   line-height: 68px;
   font-family: PingFangSC-Medium;
   font-size: 12px;
-  color: rgba(0,0,0,0.90);
+  color: rgba(0, 0, 0, 0.9);
   text-align: left;
   line-height: 42px;
   font-weight: 500;
@@ -302,10 +352,10 @@ export default {
   margin: 0 16px 0 12px;
 }
 ::v-deep .el-table td {
-  height: 68px
+  height: 68px;
 }
 ::v-deep .el-table th {
-  height: 68px
+  height: 68px;
 }
 .data-source {
   height: 100%;
@@ -323,7 +373,7 @@ export default {
   &__header {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #EBEEF5;
+    border-bottom: 1px solid #ebeef5;
   }
 
   &__content {
@@ -339,12 +389,12 @@ export default {
   }
 
   &__list {
-    flex: 1
+    flex: 1;
   }
 }
 .data-file__list {
   flex: 2;
-  border-left: 1px solid #EBEEF5;
+  border-left: 1px solid #ebeef5;
 }
 .head-select {
   margin: 1.7%;

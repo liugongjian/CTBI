@@ -9,11 +9,15 @@
         <div
           :class="[{'active': activeFirstTagName === 1}, 'tab-block']"
           @click="activeFirstTagName = 1"
-        >运行结果</div>
+        >
+          运行结果
+        </div>
         <div
           :class="[{'active': activeFirstTagName === 2}, 'tab-block']"
           @click="activeFirstTagName = 2"
-        >历史记录</div>
+        >
+          历史记录
+        </div>
       </div>
       <div v-show="activeFirstTagName === 1">
         <!-- 成功为table -->
@@ -78,6 +82,7 @@
         <el-table
           v-if="historyLogTableData && historyLogTableData.length > 0"
           :data="historyLogTableData"
+          header-row-class-name="m-table-header"
           style="width: 100%"
         >
           <el-table-column
@@ -171,15 +176,65 @@
         <div
           v-show="activeSecondTagName === 1"
           class="data-preview"
-          style="width: 65vw"
         >
           <!-- left -->
           <div class="data-preview-left">
             <el-tree
               :data="dimensionMeasure"
               :props="defaultProps"
-              @node-click="handleNodeClick"
-            />
+              default-expand-all
+            >
+              <div
+                slot-scope="{ node, data }"
+                class="custom-tree-node d-f f-b-c w-100p"
+              >
+                <div
+                  :class="{'hide-tree-node': (data.attributes && (data.attributes[0] && data.attributes[0].isHidden))}"
+                >
+                  <b-tooltip :content="data.displayColumn" />
+                </div>
+                <div
+                  v-if="node.isLeaf"
+                  class="p-r-10"
+                >
+                  <el-dropdown trigger="click">
+                    <el-button type="text">
+                      <svg-icon icon-class="gear" />
+                    </el-button>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item
+                        icon="el-icon-edit-outline"
+                        @click.native="editDimensionMeasure(data)"
+                      >编辑</el-dropdown-item>
+                      <el-dropdown-item @click.native="() => {copyDimensionMeasure(data, node.parent.data._id)}">
+                        <svg-icon
+                          icon-class="file-copy"
+                          style="margin-right: 5px;"
+                        />复制
+                      </el-dropdown-item>
+                      <!-- <el-dropdown-item @click.native="data.attributes[0].isHidden = !data.attributes[0].isHidden">
+                        <span v-if="!data.attributes[0].isHidden">
+                          <svg-icon
+                            icon-class="m-eye-close"
+                            style="margin-right: 5px;"
+                          />隐藏
+                        </span>
+                        <span v-else>
+                          <svg-icon
+                            icon-class="eye-open"
+                            style="margin-right: 5px;"
+                          />显示
+                        </span>
+                      </el-dropdown-item> -->
+                      <el-dropdown-item
+                        icon="el-icon-delete"
+                        @click.native="() => {deleteDimensionMeasure(data, node.parent.data._id)}"
+                      >删除</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </div>
+              </div>
+            </el-tree>
           </div>
 
           <!-- right -->
@@ -187,23 +242,95 @@
             <el-table
               :data="dimensionMeasureTableData"
               style="width: 100%"
+              stripe
             >
-              <el-table-column label="维度">
-                <el-table-column
-                  v-for="(v,i) in dimensionMeasureTableColumns.filter(i => i.type === 'Dimension')"
-                  :key="i"
-                  :prop="v.column"
-                  :label="v.displayColumn"
-                />
+              <el-table-column
+                v-for="(parent, i) in dimensionMeasure"
+                :key="`column-p-${parent._id}`"
+                :label="parent.label"
+                :class-name="`m-column-${i}`"
+              >
+                <template #header="{ column }">
+                  <div>{{ column.label }}</div>
+                </template>
+                <span
+                  v-for="(v, index) in parent.children"
+                  :key="`column-child-${index}`"
+                >
+                  <el-table-column
+                    v-if="!v.attributes[0].isHidden"
+                    :prop="v.column"
+                    width="130"
+                    class-name="column-child"
+                    :label="v.displayColumn"
+                    show-overflow-tooltip
+                  >
+                    <template #header="{ column }">
+                      <b-tooltip :content="column.label" />
+                      <div class="d-f f-b-c">
+                        <div>{{ v.attributes[0].dataType }}</div>
+                        <div>
+                          <el-dropdown trigger="click">
+                            <el-button type="text">
+                              <svg-icon icon-class="gear" />
+                            </el-button>
+                            <el-dropdown-menu slot="dropdown">
+                              <el-dropdown-item
+                                icon="el-icon-edit-outline"
+                                @click.native="editDimensionMeasure(v)"
+                              >编辑</el-dropdown-item>
+                              <el-dropdown-item @click.native="copyDimensionMeasure(v, parent.children)">
+                                <svg-icon
+                                  icon-class="file-copy"
+                                  style="margin-right: 5px;"
+                                />复制
+                              </el-dropdown-item>
+                              <el-dropdown-item @click.native="v.attributes[0].isHidden = !v.attributes[0].isHidden">
+                                <span v-if="!v.attributes[0].isHidden">
+                                  <svg-icon
+                                    icon-class="m-eye-close"
+                                    style="margin-right: 5px;"
+                                  />隐藏
+                                </span>
+                                <span v-else>
+                                  <svg-icon
+                                    icon-class="eye-open"
+                                    style="margin-right: 5px;"
+                                  />显示
+                                </span>
+                              </el-dropdown-item>
+                              <el-dropdown-item
+                                icon="el-icon-delete"
+                                @click.native="deleteDimensionMeasure(v, parent._id)"
+                              >删除</el-dropdown-item>
+                            </el-dropdown-menu>
+                          </el-dropdown>
+                        </div>
+                      </div>
+                    </template>
+                  </el-table-column>
+                </span>
               </el-table-column>
-              <el-table-column label="度量">
-                <el-table-column
-                  v-for="(v,i) in dimensionMeasureTableColumns.filter(i => i.type === 'Measure')"
-                  :key="i"
-                  :prop="v.column"
-                  :label="v.displayColumn"
-                />
-              </el-table-column>
+
+              <template slot="empty">
+                <div style="text-align: center;margin-top: 38px;">
+                  <svg-icon
+                    style="width: 371px; height: 200px;"
+                    icon-class="refresh-preview"
+                  />
+                  <div>
+                    <div class="result-bg-tip">
+                      你可以点击右侧的
+                      <span style="font-weight: 400;color: #595959; font-size:14px;">
+                        <i class="el-icon-refresh" /> 刷新预览
+                      </span>
+                    </div>
+                    <div class="result-bg-tip">
+                      来预览并配置数据
+                    </div>
+                  </div>
+                </div>
+              </template>
             </el-table>
           </div>
         </div>
@@ -260,11 +387,6 @@
                 </div>
               </template>
             </el-table-column>
-            <!-- <el-table-column
-                  prop="address"
-                  label="默认聚合"
-                  width="180">
-                </el-table-column> -->
             <el-table-column
               label="数值展示格式"
               width="180"
@@ -314,8 +436,9 @@
                   <el-divider direction="vertical" />
                   <span @click="deleteBatchConfiguration(scope.row)">删除</span>
                   <el-divider direction="vertical" />
-                  <span
-                    @click="hideBatchConfiguration(scope.row)">{{ scope.row.attributes[0].isHidden ? '取消隐藏' : '隐藏' }}</span>
+                  <span @click="hideBatchConfiguration(scope.row)">
+                    {{ scope.row.attributes[0].isHidden ? '取消隐藏' : '隐藏' }}
+                  </span>
                 </div>
               </template>
             </el-table-column>
@@ -328,6 +451,7 @@
 
 <script>
 import Clipboard from '@/utils/clipboard.js'
+import { deepClone } from '@/utils/optionUtils'
 import { getSqlRunningLogs, getPreviewData } from '@/api/dataSet'
 export default {
   name: 'ResultPreview',
@@ -374,19 +498,18 @@ export default {
       inputFieldName: '',
       dimensionMeasure: [{
         _id: 1,
-        label: '维度',
+        displayColumn: '维度',
         children: []
       }, {
         _id: 2,
-        label: '度量',
+        displayColumn: '度量',
         children: []
       }],
       defaultProps: {
         children: 'children',
-        label: 'label'
+        label: 'displayColumn'
       },
       dimensionMeasureTableData: [],
-      dimensionMeasureTableColumns: [],
       batchConfigTableData: [
         {
           _id: '',
@@ -458,7 +581,6 @@ export default {
     fields: function (newVal, oldVal) {
       this.dataSetFields = newVal.slice()
       this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
-      this.dimensionMeasureTableColumns = newVal.slice().filter(i => !i.attributes[0].isHidden)
       this.batchConfigTableData = this.getBatchConfigTableData(newVal.slice())
     },
     runResultData: function (newVal, oldVal) {
@@ -472,7 +594,6 @@ export default {
       handler (newVal, oldVal) {
         // 这里 dataSetFields 等同于 父级的 fields 字段，子级有变化通知父级更改（合并的策略由父级处理）
         this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
-        this.dimensionMeasureTableColumns = newVal.slice().filter(i => !i.attributes[0].isHidden)
         this.$emit('dataSetFieldsChange', newVal)
       },
       deep: true
@@ -483,7 +604,6 @@ export default {
     const fields = this.fields.slice()
     this.dataSetFields = fields.slice()
     this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(fields.slice())))
-    this.dimensionMeasureTableColumns = fields.slice().filter(i => !i.attributes[0].isHidden)
     this.batchConfigTableData = this.getBatchConfigTableData(fields.slice())
   },
   methods: {
@@ -511,32 +631,56 @@ export default {
       const str = val.sqlText
       Clipboard(str, event)
     },
-    // 点击节点
-    handleNodeClick (data) {
-      console.log(data)
-    },
     // 获取tree data
     getDimensionMeasureData (fields) {
       if (!fields) return []
       const res = [{
         _id: 1,
-        label: '维度',
+        displayColumn: '维度',
         children: []
       }, {
         _id: 2,
-        label: '度量',
+        displayColumn: '度量',
         children: []
       }]
       fields.forEach(item => {
-        if (!item.attributes[0].isHidden) {
-          if (item.type === 'Dimension') {
-            res[0].children.push({ label: item.displayColumn })
-          } else {
-            res[1].children.push({ label: item.displayColumn })
-          }
+        if (item.type === 'Dimension') {
+          res[0].children.push({ ...item })
+        } else {
+          res[1].children.push({ ...item })
         }
       })
       return res
+    },
+    // 删除数据预览中的字段
+    deleteDimensionMeasure (item, id) {
+      this.$dialog.show('TipDialog', {}, () => {
+        this.dimensionMeasure.forEach(di => {
+          if (di._id === id) {
+            const index = di.children.findIndex(a => a._id === item._id)
+            di.children.splice(index, 1)
+          }
+        })
+      })
+    },
+    // 复制数据预览中的字段
+    copyDimensionMeasure (item, id) {
+      this.dimensionMeasure.forEach(di => {
+        if (di._id === id) {
+          const index = di.children.findIndex(a => a._id === item._id)
+          const copyItem = Object.assign(deepClone(item), { _id: '', displayColumn: item.displayColumn + '-副本' })
+          di.children.splice(index + 1, 0, copyItem)
+        }
+      })
+    },
+    // 编辑数据预览中的字段
+    editDimensionMeasure (item) {
+      this.$dialog.show('EditDimensionMeasureDialog', { form: item }, (data) => {
+        if (!data.displayColumn) {
+          data.displayColumn = data.column
+        }
+        Object.assign(item, data)
+      })
     },
     // 刷新预览
     async refreshPreview () {
@@ -555,7 +699,6 @@ export default {
       try {
         const data = await getPreviewData(body)
         this.dimensionMeasureTableData = data.data.slice()
-        this.dimensionMeasureTableColumns = data.fields.slice().filter(i => !i.attributes[0].isHidden)
       } catch (error) {
         console.log(error)
       }
@@ -643,7 +786,6 @@ export default {
     // 格式化 运行结果
     formatRunResultData (val) {
       // success == true 为成功的结果
-      console.log(val)
       if (val.success) {
         const _res = {
           columns: [],
@@ -710,6 +852,12 @@ export default {
       box-sizing: border-box;
       border-right: 1px solid rgba(0, 0, 0, 0.06);
       border-left: 1px solid rgba(0, 0, 0, 0.06);
+
+      .custom-tree-node {
+        .hide-tree-node {
+          color: #ccc;
+        }
+      }
     }
     &-right {
       flex: 1;
@@ -754,5 +902,25 @@ export default {
 }
 ::v-deep .el-table--border {
   border-width: 0px;
+}
+// 维度样式
+::v-deep .m-column-0 {
+  background-color: #919ff8 !important;
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+}
+// 度量样式
+::v-deep .m-column-1 {
+  background-color: #63cd9f !important;
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+}
+::v-deep .column-child {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  background-color: #fff !important;
 }
 </style>

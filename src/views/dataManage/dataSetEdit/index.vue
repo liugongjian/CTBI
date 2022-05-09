@@ -57,7 +57,8 @@
         >确认编辑</el-button>
         <div
           style="margin-left: 8px"
-          @click="leaveDialogVisible=true"
+          class="h-c-p"
+          @click="checkLeaveEdit"
         ><i class="el-icon-close" /></div>
       </div>
     </div>
@@ -93,7 +94,9 @@
             class="side-top-main"
           >
             <div><span>当前数据源</span></div>
-            <div><span>{{ dataSourceName }}</span></div>
+            <div>
+              <span style="font-size: 12px;font-weight: 500;color: rgba(0, 0, 0, 0.9);">{{ dataSourceName }}</span>
+            </div>
           </div>
           <div
             v-else
@@ -124,7 +127,11 @@
               label="数据表"
               name="first"
             >
-              <div class="side-bottom-main">
+              <div
+                v-loading="dataTableLoading"
+                element-loading-text="拼命加载中"
+                class="side-bottom-main"
+              >
                 <div
                   v-for="(table, i) in dataTableList"
                   :key="i"
@@ -145,9 +152,10 @@
                     effect="light"
                   >
                     <svg-icon
+                      :id="`copy-icon-${i}`"
                       icon-class="copy"
                       style="cursor: pointer;"
-                      @click="handleCopy(table, $event)"
+                      @click="handleCopy(table.name, $event)"
                     />
                   </el-tooltip>
                   <el-popover
@@ -165,11 +173,17 @@
                       </div> -->
                     </div>
                     <el-divider />
-                    <ColumnsList :columns="currentTableInfo.columns" />
+                    <div
+                      v-loading="tableInfoLoading"
+                      element-loading-text="加载字段中"
+                      style="min-height: 150px;"
+                    >
+                      <ColumnsList :columns="currentTableInfo.columns" />
+                    </div>
                     <svg-icon
                       slot="reference"
                       icon-class="point"
-                      style="cursor: pointer;"
+                      class="h-c-p"
                       @click="handleTableInfo(table.name)"
                     />
                   </el-popover>
@@ -301,31 +315,6 @@
         </div>
       </div>
     </el-drawer>
-
-    <!-- 未确认编辑 离开的弹窗 -->
-    <el-dialog
-      title="提示"
-      :visible.sync="leaveDialogVisible"
-      width="480px"
-    >
-      <div>
-        <svg-icon
-          icon-class="tip"
-          style="margin-right: 8px"
-        />
-        <span>您还未对此次代码的编辑进行确认，若此时返回，本次编辑内 容将不被保存，请问您是否确认返回？</span>
-      </div>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button @click="leaveDialogVisible = false">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="handleLeave"
-        >确 定</el-button>
-      </span>
-    </el-dialog>
 
     <!-- 未保存 离开的弹窗 -->
     <el-dialog
@@ -469,7 +458,6 @@ export default {
       currentSqlStatement: '',
       currentDataSourceId: '',
       current_id: '',
-      leaveDialogVisible: false,
       currentFields: [],
       currentSql: {},
       noSaveLeaveDialogVisible: false,
@@ -479,7 +467,9 @@ export default {
       saveDataSetDialogVisible: false,
       dataSetDisplayName: '',
       currentTableInfo: {},
-      resultPreviewLoading: false
+      resultPreviewLoading: false,
+      tableInfoLoading: false,
+      dataTableLoading: false
     }
   },
   computed: {
@@ -490,11 +480,10 @@ export default {
       return this.currentSqlData.sql || ''
     }
   },
-  mounted () {
-    this.getDataSourceList()
-    this.getFolderList()
+  created () {
     const data = this.$route.query
     // 如果都为空则表示新建的数据集，直接进入编辑状态
+    // 需要在实例都挂载前完成数据的映射
     if (!data._id) {
       this.isEdit = true
     }
@@ -507,9 +496,13 @@ export default {
     this.currentDataSourceId = data.dataSourceId || ''
     this.current_id = data._id || ''
     this.currentFields = data.fields || []
+  },
+  mounted () {
+    this.getDataSourceList()
+    this.getFolderList()
     this.dataSetDisplayName = this.currentDataSet.displayName || ''
     if (this.currentDataSourceId) {
-      this.handleTableInfo(this.currentDataSourceId)
+      this.handleChangeDataSource(this.currentDataSourceId)
     }
   },
   methods: {
@@ -560,8 +553,10 @@ export default {
         if (this.currentSqlId !== data._id) {
           this.currentSqlId = data._id
         }
-        // 触发历史记录的查询事件
-        this.$refs.ResultPreview.getHistory()
+        this.$nextTick(() => {
+          // 触发历史记录的查询事件
+          this.$refs.ResultPreview.getHistory()
+        })
       } catch (error) {
         this.runResultData = Object.assign({ success: false }, error)
       }
@@ -620,18 +615,25 @@ export default {
     },
     // 复制数据源列表
     handleCopy (val, event) {
-      const str = val.name
-      Clipboard(str, event)
+      Clipboard(val, event, () => {
+        this.$message({
+          message: '该表名已复制到剪切板',
+          type: 'success',
+          duration: 1500
+        })
+      })
     },
     async handleTableInfo (tableName) {
       const id = this.currentDataSourceId
       this.currentTableInfo = {}
       try {
+        this.tableInfoLoading = true
         const data = await getTableInfo(id, tableName)
         this.currentTableInfo = data
       } catch (error) {
         console.log(error)
       }
+      this.tableInfoLoading = false
     },
     // 获取改变的sql语句
     sqlStatementChange (sql) {
@@ -666,15 +668,15 @@ export default {
       }
     },
     // 离开 编辑状态 但不保存数据
-    handleLeave () {
-      this.isEdit = false
-      this.leaveDialogVisible = false
+    checkLeaveEdit () {
+      this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内 容将不被保存，请问您是否确认返回？' }, () => {
+        this.isEdit = false
+      })
     },
     // 根据sqlId 获取sql相关的所有数据
     async getSqlData (sqlId) {
       try {
         const data = await getSqlAllData(sqlId)
-        console.log('currentSqlData', data)
         this.currentSqlData = data
         this.currentSqlStatement = data.sql
       } catch (error) {
@@ -699,9 +701,8 @@ export default {
     },
     // 子级更改更新父级的fields
     dataSetFieldsChange (val) {
-      console.log(val, 'dataSetFieldsChange')
     },
-    //
+    // 获取数据源中的表
     async handleChangeDataSource (val) {
       this.tableLoading = true
       try {
@@ -887,7 +888,7 @@ export default {
   font-weight: 500;
   color: rgba(0, 0, 0, 0.9);
   line-height: 22px;
-  font-size: 16px;
+  font-size: 14px;
   padding: 17px 20px 0px 20px;
   display: flex;
   justify-content: space-between;
