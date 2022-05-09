@@ -356,7 +356,6 @@ export default {
 <style lang="scss" scoped>
 .user-list {
   font-size: 12px;
-  padding: 20px;
   .username-link {
     max-width: 100%;
     overflow: hidden;
