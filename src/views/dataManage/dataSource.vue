@@ -21,7 +21,7 @@
         </div>
       </div>
       <el-dialog
-        :title="fileType"
+        :title="status+fileType[form.type]"
         :visible.sync="dialogVisible"
         width="560px"
       >
@@ -63,9 +63,9 @@
           </el-form-item>
         </el-form>
         <span slot="footer">
+          <el-button @click="close">关闭</el-button>
+          <el-button v-loading="isloading" @click="connect(form)">连接测试</el-button>
           <el-button type="primary" @click="submit(form)">确定</el-button>
-          <el-button v-loading="isloading" type="primary" @click="connect(form)">连接测试</el-button>
-          <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
         </span>
       </el-dialog>
       <div class="data-source__table">
@@ -99,13 +99,13 @@
                   </div>
                   <div class="table-row__text">
                     <div>{{ scope.row.displayName }}</div>
-                    <div>所有者：开发者中心</div>
+                    <div>所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}</div>
                   </div>
                   <div class="table-row__tools">
-                    <span @click.prevent="editSource(scope.row)">
+                    <span v-if="scope.row.type!=='file'" @click.prevent="editSource(scope.row)">
                       <svg-icon icon-class="pencil" />
                     </span>
-                    <span @click="deleteSource(scope.row._id)">
+                    <span v-if="scope.row.type!=='file'" @click="deleteSource(scope.row._id)">
                       <svg-icon icon-class="delete" />
                     </span>
                   </div>
@@ -219,7 +219,12 @@ export default {
       editform: {},
       currentRow: 0,
       dialogVisible: false,
-      fileType: '',
+      fileType: {
+        'mysql': 'mySql数据源',
+        'mongodb': 'MongoDB数据源',
+        'file': '本地数据源'
+      },
+      status: '',
       search: '',
       searchFile: '',
       dataSourceList: {},
@@ -267,6 +272,10 @@ export default {
     this.init()
   },
   methods: {
+    close() {
+      this.$refs['form'].clearValidate()
+      this.dialogVisible = false
+    },
     async detailSources() {
       try {
         this.tableName = this.detailInfo.name
@@ -285,7 +294,10 @@ export default {
     },
     async editSource(row) {
       try {
+        this.notEdit = false
+        this.status = '编辑'
         this.form.type = row.type
+        console.log('form.type', this.form.type)
         this.form.displayName = row.displayName
         this.form.host = row.host
         this.form.port = row.port
@@ -294,7 +306,6 @@ export default {
         this.form.password = ''
         this.currentId = row._id
         this.dialogVisible = true
-        this.notEdit = false
       } catch (error) {
         console.log(error)
       }
@@ -364,15 +375,28 @@ export default {
       }
     },
     async deleteSource(id) {
-      try {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
         console.log(id)
-        await deleteSources(id)
+        deleteSources(id)
         this.init()
-      } catch (error) {
-        console.log(error)
-      }
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
     handleCommand(command) {
+      this.status = '添加'
+      this.notEdit = true
       this.form = {
         type: '',
         displayName: '',
@@ -383,17 +407,14 @@ export default {
         password: ''
       }
       this.dialogVisible = true
-      this.notEdit = true
       if (command === 'mysql') {
-        this.fileType = '添加mySql数据源'
         this.form.type = 'mysql'
       }
       if (command === 'mongoDB') {
-        this.fileType = '添加MongoDB数据源'
         this.form.type = 'mongodb'
       }
       if (command === 'localFile') {
-        this.fileType = '添加本地数据源'
+        this.form.type = 'file'
       }
     },
     async connect(form) {
@@ -456,12 +477,12 @@ export default {
 }
 .table-row {
   display: flex;
-  height: 68px;
-  line-height: 34px;
+  height: 50px;
+  line-height: 25px;
   &__image {
     flex: 1;
     font-size: 32px;
-    line-height: 68px;
+    line-height: 50px;
   }
   &__text {
     flex: 1
@@ -485,12 +506,12 @@ export default {
 .table-title {
   display: flex;
   justify-content: space-between;
-  line-height: 68px;
+  height: 50px;
+  line-height: 50px;
   font-family: PingFangSC-Medium;
   font-size: 12px;
   color: rgba(0,0,0,0.90);
   text-align: left;
-  line-height: 42px;
   font-weight: 500;
 }
 .research-file {
@@ -505,10 +526,10 @@ export default {
   margin: 0 16px 0 12px;
 }
 ::v-deep .el-table td {
-  height: 68px
+  height: 42px
 }
 ::v-deep .el-table th {
-  height: 68px
+  height: 42px
 }
 .data-source {
   height: 100%;
@@ -526,6 +547,7 @@ export default {
   &__header {
     display: flex;
     justify-content: space-between;
+    height: 68px;
     border-bottom: 1px solid #EBEEF5;
   }
 
@@ -533,7 +555,7 @@ export default {
     position: relative;
     background: #fff;
     margin-top: 16px;
-    height: calc(100% - 50px);
+    height: calc(100vh - 50px);
     font-size: 12px;
   }
 
@@ -542,12 +564,16 @@ export default {
   }
 
   &__list {
-    flex: 1
+    flex: 1;
+    height: calc(100vh - 168px);
+    overflow: auto
   }
 }
 .data-file__list {
   flex: 2;
   border-left: 1px solid #EBEEF5;
+  height: calc(100vh - 168px);
+  overflow: auto
 }
 .head-select {
   margin: 1.7%;
