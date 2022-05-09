@@ -12,7 +12,10 @@
     @pagination="getDataFiles"
   >
     <template #toolbar-option>
-      <el-input v-model="searchKey" class="search-input" prefix-icon="el-icon-search" size="small" placeholder="请输入文件名称" @keyup.enter.native="handleSearch" />
+      <div class="search-bar">
+        <el-input v-model="searchKey" class="search-input" prefix-icon="el-icon-search" size="small" placeholder="请输入文件名称" @keyup.enter.native="handleSearch" />
+        <el-button size="small" class="btn" @click="createDataSet">SQL创建数据集</el-button>
+      </div>
     </template>
     <template #size="{scope}">
       <span>{{ scope.row.size | bytesFilter }}</span>
@@ -125,24 +128,24 @@ export default {
           }
         })
     },
-    createDataSet({ _id, displayName }) {
+    createDataSet(dataSource) {
       const currentTime = getDateTime()
       const query = {
-        _id,
-        displayName,
+        _id: '',
+        displayName: '',
         comment: '',
         sqlId: '',
         fields: [],
         folderId: null,
         isFolder: false,
         creatorId: '',
-        dataSourceId: '',
-        dataSourceName: '',
+        dataSourceId: dataSource?._id ?? '',
+        dataSourceName: dataSource?.displayName ?? '',
         creatorName: '',
         createdTime: currentTime
       }
       this.$router.push({
-        path: '/dataSet/edit',
+        path: '/dataManage/dataSet/edit',
         query
       })
     },
@@ -164,5 +167,13 @@ export default {
 <style lang="scss" scoped>
 .data-files {
   margin-right: 24px;
+  .search-bar {
+    display: flex;
+    justify-content: flex-end;
+    .btn {
+      margin-left: 12px;
+      color: #FA8334;
+    }
+  }
 }
 </style>
