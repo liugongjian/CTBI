@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="新建文件夹"
+    :title=" !data ? '新建文件夹' : '编辑文件夹'"
     :visible.sync="visible"
     width="30%"
   >
@@ -19,19 +19,21 @@
       <el-button @click="close">取 消</el-button>
       <el-button
         type="primary"
-        @click="handlerCreateFolder"
+        @click="submit"
       >确 定</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
-import { createFolder } from '@/api/dashboard'
+import { createFolder, updateFolderOrDashboardProperties } from '@/api/dashboard'
 
 export default {
   name: 'FolderEdit',
   props: {
     visible: Boolean,
+    // eslint-disable-next-line vue/require-default-prop
+    data: Object,
     // eslint-disable-next-line vue/require-default-prop
     handleAction: Function
   },
@@ -41,23 +43,46 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    data: {
+      handler (newVal) {
+        console.log(newVal)
+        this.newFolderName = !newVal ? '' : newVal.name
+      }
+    }
+  },
   created () { },
-  mounted () { },
+  mounted () {
+    console.log(this.data)
+  },
   methods: {
-    async handlerCreateFolder () {
-      const body = {
-        name: this.newFolderName
+    async submit () {
+      const name = this.newFolderName
+      if (!name) {
+        this.$message.warning('文件夹名称必填')
+        return
+      }
+      const isEdit = this.data && this.data._id
+      const body = isEdit ? {
+        id: this.data._id,
+        name,
+        type: 'directory'
+      } : {
+        name
       }
       try {
-        await createFolder(body)
+        if (isEdit) {
+          await updateFolderOrDashboardProperties(body)
+        } else {
+          await createFolder(body)
+        }
         this.close()
       } catch (error) {
         console.log(error)
       }
     },
     close() {
-      console.log(123)
+      this.newFolderName = ''
       this.$emit('handleAction', 'cancel')
     }
   }

@@ -101,12 +101,13 @@
                   <el-divider v-if="scope.row.directory" direction="vertical" />
                   <span v-if="scope.row.directory" @click="deleteData(scope.row)">删除</span>
                   <el-divider v-if="!scope.row.directory" direction="vertical" />
-                  <span v-if="!scope.row.directory" @click="showAttribute(scope.row)">属性</span>
+                  <span v-if="!scope.row.directory" @click="editDashboardAttribute(scope.row)">属性</span>
                   <el-divider v-if="!scope.row.directory" direction="vertical" />
                   <el-dropdown v-if="!scope.row.directory" class="data-more">
                     <span>更多</span>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item
+                        v-if="scope.row.publishStatus === 1"
                         @click.native="shareDashboard(scope.row)"
                       >公开</el-dropdown-item>
                       <el-dropdown-item
@@ -138,27 +139,6 @@
         </div>
 
         <!-- 各种 弹窗 & 抽屉 -->
-        <el-dialog
-          title="文件夹重命名"
-          :visible.sync="renameFolderVisible"
-          width="480px"
-        >
-          <div class="data-set-didlog-main">
-            <span>文件夹名称</span>
-            <el-input
-              v-model="editFloderName"
-              placeholder="请输入文件夹名称"
-              class="data-set-didlog-main-input"
-            />
-          </div>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="renameFolderVisible = false">取 消</el-button>
-            <el-button
-              style="background-color: #fa8334; color: #fff"
-              @click="hanleRenameFloder"
-            >确 定</el-button>
-          </span>
-        </el-dialog>
 
         <el-dialog
           title="编辑数据集"
@@ -238,21 +218,31 @@
 
         <el-dialog
           title="属性"
-          :visible.sync="dataSetAttributeVisible"
+          :visible.sync="dashboardAttributeVisible"
           width="480px"
         >
           <div class="data-set-didlog-main">
-            <el-form :model="dataSetAttr" style="padding: 0px">
+            <el-form :model="dashboardAttr" style="padding: 0px">
               <el-form-item label="名称" label-width="80px">
                 <el-input
-                  v-model="dataSetAttr.name"
+                  v-model="dashboardAttr.name"
                   autocomplete="off"
                   style="width: 360px"
                 />
               </el-form-item>
+              <el-form-item label="所有者" label-width="80px">
+                <el-select v-model="dashboardAttr.ownerId" placeholder="请选择">
+                  <el-option
+                    v-for="item in users"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
               <el-form-item label="描述" label-width="80px">
                 <el-input
-                  v-model="dataSetAttr.desc"
+                  v-model="dashboardAttr.description"
                   type="textarea"
                   style="width: 360px"
                 />
@@ -261,17 +251,39 @@
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button
-              @click="dataSetAttributeVisible = false"
+              @click="dashboardAttributeVisible = false"
             >取 消</el-button>
             <el-button
               type="primary"
-              @click="hanleDataSetAttribute"
+              @click="hanledashboardAttribute"
             >确 定</el-button>
           </span>
+        </el-dialog>
+
+        <el-dialog
+          title="公开链接分享"
+          :visible.sync="shareDashboardVisible"
+          width="480px"
+        >
+          <div v-if="!currentShareInfo">
+            <el-button
+              type="primary"
+              @click="executeShare"
+            >公开分享</el-button>
+          </div>
+          <div v-else>
+            <div>
+              <span>所有用户可以通过一下链接查看报表备份</span>
+              <el-button
+                @click="dashboardAttributeVisible = false"
+              >不再公开</el-button>
+            </div>
+          </div>
         </el-dialog>
       </div>
       <FolderEdit
         :visible="folderDialogVisible"
+        :data="editFolder"
         @handleAction="handleFolderEdit"
       />
     </div>
@@ -280,7 +292,7 @@
 
 <script>
 // import qs from 'qs'
-import { batchDeleteResources, batchCancelPublishDashboards } from '@/api/dashboard'
+import { batchDeleteResources, batchCancelPublishDashboards, updateFolderOrDashboardProperties, shareDashboard } from '@/api/dashboard'
 import {
   updateFolderName,
   delFolders,
@@ -289,6 +301,7 @@ import {
 } from '@/api/dataSet'
 // import { getDateTime } from '@/utils/optionUtils'
 import FolderEdit from './FolderEdit'
+import moment from 'moment'
 export default {
   name: 'DataSet',
   components: {
@@ -305,13 +318,13 @@ export default {
       editDataSetVisible: false,
       deleteFolderVisible: false,
       deleteDataVisible: false,
-      dataSetAttributeVisible: false,
-      dataSetAttr: {
+      dashboardAttributeVisible: false,
+      dashboardAttr: {
         name: '',
-        desc: ''
+        ownerId: '',
+        description: ''
       },
       editFloderName: '',
-      renameFolderVisible: false,
       currentFloder: null,
       cureentData: null,
       pagination: {
@@ -331,7 +344,10 @@ export default {
       // 仪表板相关
       folderDialogVisible: false,
       cancelPublishVisible: false,
-      shareDashboardVisible: false
+      shareDashboardVisible: false,
+      editFolder: null,
+      users: [],
+      currentShareInfo: null
     }
   },
   computed: {
@@ -461,8 +477,10 @@ export default {
     edit(val) {
       if (this.batchSelection) return false
       this.cureentData = val
-      this.editDataSetVisible = true
-      this.updateDataSetName = val.displayName
+      if (val.directory) {
+        this.folderDialogVisible = true
+        this.editFolder = val
+      }
     },
     async hanleEditFile() {
       console.log(this.cureentData)
@@ -483,23 +501,26 @@ export default {
     createDashboard1() {
       if (this.batchSelection) return false
     },
-    showAttribute(val) {
+    editDashboardAttribute(val) {
       if (this.batchSelection) return false
       this.cureentData = val
-      this.dataSetAttributeVisible = true
-      this.dataSetAttr.name = val.displayName
-      this.dataSetAttr.desc = val.comment
+      this.dashboardAttributeVisible = true
+      this.dashboardAttr.name = val.name
+      this.dashboardAttr.ownerId = val.owner
+      this.dashboardAttr.description = val.description
     },
-    async hanleDataSetAttribute() {
+    async hanledashboardAttribute() {
       const id = this.cureentData._id
       const params = {
-        displayName: this.dataSetAttr.name,
-        comment: this.dataSetAttr.desc
+        id,
+        type: 'dashboard',
+        ownerName: this.cureentData.name,
+        ...this.dashboardAttr
       }
       try {
-        const data = await updateDataSet(id, params)
+        const data = await updateFolderOrDashboardProperties(params)
         console.log(data)
-        this.dataSetAttributeVisible = false
+        this.dashboardAttributeVisible = false
         this.cureentData = null
         this.init()
       } catch (error) {
@@ -509,12 +530,6 @@ export default {
     showMore() {
       if (this.batchSelection) return false
       this.moreToolTipDisabled = false
-    },
-    rename(val) {
-      if (this.batchSelection) return false
-      this.currentFloder = val
-      this.renameFolderVisible = true
-      this.editFloderName = val.name
     },
     async hanleRenameFloder() {
       const id = this.currentFloder._id
@@ -614,6 +629,7 @@ export default {
       }
     },
     handleFolderEdit(action) {
+      this.editFolder = null
       if (action === 'cancel') {
         this.folderDialogVisible = false
       }
@@ -621,8 +637,39 @@ export default {
         this.folderDialogVisible = false
       }
     },
-    shareDashboard(data) {
-      console.log(data)
+    async shareDashboard(data) {
+      this.cureentData = data
+      // this.currentShareInfo = {
+      //   'shareUrl': 'http://0.0.0.0/dashboard/publish/hLhqzBlr2xxBA7R',
+      //   'shareEndTime': '2022-06-21',
+      //   'isPublic': true
+      // }
+      this.shareDashboardVisible = true
+      // try {
+      //   const info = await getShareInfo(data._id)
+      //   this.cureentData = data
+      //   this.currentShareInfo = info
+      //   this.shareDashboardVisible = true
+      // } catch (error) {
+      //   console.log(error)
+      // }
+    },
+    async executeShare () {
+      try {
+        const shareEndTime = moment().add(2, 'days').format('YYYY-MM-DD')
+        const params = {
+          _id: this.cureentData._id,
+          shareEndTime
+        }
+        this.currentShareInfo = {
+          shareUrl: 'http://0.0.0.0/dashboard/publish/hLhqzBlr2xxBA7R',
+          shareEndTime
+        }
+        const info = await shareDashboard(params)
+        this.currentShareInfo = info
+      } catch (error) {
+        console.log(error)
+      }
     },
     cancelPublish(data) {
       console.log(data)
