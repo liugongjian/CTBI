@@ -270,7 +270,6 @@
           </div>
           <span
             slot="footer"
-            class="dialog-footer"
           >
             <el-button @click="renameFolderVisible = false">取 消</el-button>
             <el-button
@@ -295,7 +294,6 @@
           </div>
           <span
             slot="footer"
-            class="dialog-footer"
           >
             <el-button @click="editDataSetVisible = false">取 消</el-button>
             <el-button
@@ -319,7 +317,6 @@
           </div>
           <span
             slot="footer"
-            class="dialog-footer"
           >
             <el-button @click="deleteFolderVisible = false">取 消</el-button>
             <el-button
@@ -343,7 +340,6 @@
           </div>
           <span
             slot="footer"
-            class="dialog-footer"
           >
             <el-button @click="deleteDataSetVisible = false">取 消</el-button>
             <el-button
@@ -387,7 +383,6 @@
           </div>
           <span
             slot="footer"
-            class="dialog-footer"
           >
             <el-button @click="dataSetAttributeVisible = false">取 消</el-button>
             <el-button

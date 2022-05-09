@@ -37,7 +37,6 @@
     </el-form>
     <div
       slot="footer"
-      class="dialog-footer"
     >
       <el-button @click="closeSilence">取 消</el-button>
       <el-button

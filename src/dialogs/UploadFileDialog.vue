@@ -4,7 +4,7 @@
     title="上传文件"
     :visible.sync="dialogVisible"
   >
-    <div slot="footer" class="dialog-footer">
+    <div slot="footer">
       <el-button size="small" @click="dialogVisible = false">取 消</el-button>
       <el-button type="primary" :loading="loading" size="small" @click="handleConfirm">确 定</el-button>
     </div>

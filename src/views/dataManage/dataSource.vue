@@ -135,9 +135,9 @@
             :page-size.sync="limit"
             :total="total"
             :is-show-toolbar="false"
-            @sort-change="handleSortChange"
             @refresh="refresh"
           >
+            <!-- @sort-change="handleSortChange" -->
             <template #name="{scope}">
               {{ scope.row.name }}
             </template>
@@ -210,8 +210,8 @@ export default {
       isPaging: 1,
       page: 1,
       limit: 20,
-      sortBy: 'name',
-      sortOrder: 'asc',
+      // sortBy: 'name',
+      // sortOrder: 'asc',
       searchkey: '',
       isloading: false,
       notEdit: true,
@@ -221,7 +221,8 @@ export default {
       fileType: {
         'mysql': 'mySql数据源',
         'mongodb': 'MongoDB数据源',
-        'file': '本地数据源'
+        'file': '本地数据源',
+        '': '?'
       },
       status: '',
       search: '',
@@ -260,15 +261,16 @@ export default {
         {
           prop: 'comment',
           label: '字段描述',
-          fixed: false
+          fixed: false,
+          ellipsis: true
         }
       ],
       tableColums: [
         {
           prop: 'name',
           label: '名称',
-          fixed: false,
-          sortable: true
+          fixed: false
+          // sortable: true
         },
         {
           prop: 'comment',
@@ -355,8 +357,8 @@ export default {
           isPaging: this.isPaging,
           page: this.page,
           limit: this.limit,
-          sortBy: this.sortBy,
-          sortOrder: this.sortOrder,
+          // sortBy: this.sortBy,
+          // sortOrder: this.sortOrder,
           searchkey: this.searchkey
         }
         const file = await getSourceFile(ids, params)
@@ -446,6 +448,7 @@ export default {
       }
     },
     handleCommand(command) {
+      console.log('.............')
       this.status = '添加'
       this.notEdit = true
       this.form = {
@@ -458,17 +461,19 @@ export default {
         password: ''
       }
       if (command === 'mysql') {
-        this.form.type = 'mysql'
+        // this.form.type = 'mysql'
+        this.$set(this.form, 'type', 'mysql')
         this.dialogVisible = true
         this.notEdit = true
       }
       if (command === 'mongoDB') {
-        this.form.type = 'mongodb'
+        // this.form.type = 'mongodb'
+        this.$set(this.form, 'type', 'mongodb')
         this.dialogVisible = true
         this.notEdit = true
       }
       if (command === 'localFile') {
-        this.fileType = '添加本地数据源'
+        // this.fileType = '添加本地数据源'
         this.$dialog.show('UploadFileDialog', {}, () => {
           if (this.isShowDataFiles) {
             this.$refs.dataFiles.getDataFiles()
@@ -476,15 +481,15 @@ export default {
         })
       }
     },
-    handleSortChange({ prop, order }) {
-      this.sortBy = prop
-      if (order) {
-        this.sortOrder = order === 'ascending' ? 'asc' : 'desc'
-      } else {
-        this.sortOrder = 'desc'
-      }
-      this.getSourceFile(this.currentRow._id)
-    },
+    // handleSortChange({ prop, order }) {
+    //   this.sortBy = prop
+    //   if (order) {
+    //     this.sortOrder = order === 'ascending' ? 'asc' : 'desc'
+    //   } else {
+    //     this.sortOrder = 'desc'
+    //   }
+    //   this.getSourceFile(this.currentRow._id)
+    // },
     async connect(form) {
       this.isloading = true
       const testForm = {

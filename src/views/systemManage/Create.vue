@@ -70,7 +70,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer">
         <el-button size="small" @click="handleClose">取 消</el-button>
         <el-button type="primary" size="small" @click="handleCreate">确 定</el-button>
       </div>

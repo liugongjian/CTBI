@@ -331,7 +331,6 @@
       </div>
       <span
         slot="footer"
-        class="dialog-footer"
       >
         <el-button @click="noSaveLeaveDialogVisible = false">取 消</el-button>
         <el-button
@@ -386,7 +385,6 @@
       </div>
       <span
         slot="footer"
-        class="dialog-footer"
       >
         <el-button @click="saveDataSetDialogVisible = false">取 消</el-button>
         <el-button

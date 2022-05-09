@@ -7,7 +7,6 @@
     <span>这是一段信息</span>
     <span
       slot="footer"
-      class="dialog-footer"
     >
       <el-button @click="closeSilence()">取 消</el-button>
       <el-button

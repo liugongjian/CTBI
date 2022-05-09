@@ -35,7 +35,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer">
         <el-button @click="handleClose">取 消</el-button>
         <el-button type="primary" @click="updatePassword">确 定</el-button>
       </div>
