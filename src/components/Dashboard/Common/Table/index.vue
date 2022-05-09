@@ -9,6 +9,7 @@
       :show-header="!header"
       :data="tableData"
       v-bind="$attrs"
+      :row-style="rowStyle"
       v-on="$listeners"
     >
       <el-table-column
@@ -111,6 +112,10 @@ export default {
     sequenceName: {
       type: String,
       default: '序号'
+    },
+    rowStyle: {
+      type: Object,
+      default: null
     }
   },
   data () {
@@ -309,5 +314,10 @@ export default {
   .them-color{
     // color: $mainColor;
   }
+}
+.el-table{
+    ::v-deep table{
+        border-collapse: collapse;
+    }
 }
 </style>

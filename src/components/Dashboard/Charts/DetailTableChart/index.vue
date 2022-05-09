@@ -15,6 +15,7 @@
         :header="header"
         :sequence="sequence"
         :sequence-name="sequenceName"
+        :row-style="rowStyle"
         @refresh="refresh"
       />
     </div>
@@ -26,6 +27,7 @@
 import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import tableMixins from '@/components/Dashboard/mixins/tableMixins'
 import TableChart from '../../Common/Table'
+
 export default {
   name: 'DetailTableChart',
   components: { TableChart },
@@ -39,6 +41,7 @@ export default {
   data () {
     return {
       dataValue: null,
+      columns: [],
       isShowPagination: true,
       pageNum: 1,
       pageSize: 20,
@@ -48,15 +51,19 @@ export default {
       border: false, // 线框
       header: false, // 不显示列头
       sequence: false, // 是否展示序号
-      sequenceName: '序号'
+      sequenceName: '序号',
+      rowStyle: {}
     }
   },
   watch: {
     storeOption: {
       handler (val) {
+        const colorType = val.theme.DisplayConfig.TableTheme.colorType
+        const color = colorType === 'gray' ? colorType : (colorType === 'themeColor' ? 'blue' : 'red') // TODO:red是自定义，要再做
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         this.stripe = val.theme.DisplayConfig.TableTheme.active === 'stripe'
         this.border = val.theme.DisplayConfig.TableTheme.active === 'border'
+        this.rowStyle = val.theme.DisplayConfig.TableTheme.active === 'simple' ? { 'border-bottom': `3px ${color} solid` } : {}
         this.header = val.theme.DisplayConfig.ListHeader.head
         this.sequence = val.theme.DisplayConfig.Sequence.show
         this.sequenceName = val.theme.DisplayConfig.Sequence.name
@@ -74,6 +81,9 @@ export default {
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
+    const tableData = [{ 'name': 'Sam S Club', 'value': 10000 }, { 'name': 'a Club', 'value': 12122 }]
+    this.dataValue = { tableData, total: tableData.length }
+    this.columns = [{ prop: 'name', label: '姓名' }, { prop: 'value', label: '价格' }]
   },
   methods: {
     refresh() {
