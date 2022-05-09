@@ -11,9 +11,10 @@
 </template>
 
 <script>
-import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
+import { getLayoutOptionById, getDataValueById, deepClone } from '@/utils/optionUtils'
 import combineMixins from '@/components/Dashboard/mixins/combineMixins'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
+import store from '@/store'
 export default {
   name: 'CombineChart',
   mixins: [combineMixins, YAxis],
@@ -27,6 +28,7 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
+      dataOption: [],
       dataValue: null
     }
   },
@@ -34,28 +36,33 @@ export default {
     storeOption: {
       handler (val) {
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = deepClone(val.dataSource)// 深拷贝，避免修改数据
+        if (this.dataValue) {
+          this.dataValue = deepClone(getDataValueById(this.identify))
           this.getOption()
         }
       },
       deep: true
     },
-    'storeOption.dataSource': {
+    dataOption: {
       handler (val) {
-        if (JSON.stringify(val) !== '{}') {
-          this.dataValue = deepClone(val)
+        const isData = val.findIndex(item => {
+          return item.i === this.identify
+        })
+        if (isData !== -1) {
+          this.dataValue = deepClone(getDataValueById(this.identify))
           // 拿到数据中的系列名字
           this.getSeriesOptions(this.dataValue)
           // 拿到数据的系列名字 并设置颜色
           this.getColor(this.dataValue)
           this.getOption()
         }
-      }
+      },
+      deep: true
     }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
+    this.dataOption = store.state.app.dataOption
   },
   methods: {
     getOption () {

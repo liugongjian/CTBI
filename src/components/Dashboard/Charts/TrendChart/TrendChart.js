@@ -84,11 +84,18 @@ export default {
         'dataLabel': 'capacity' // capacity  full
       }
     },
-    'FunctionalOption': { // 功能配置
-      'progressConfig': {
-        'cfgTarget': [], // 目标值
-        'cfgTargetOption': [], // 目标值数据集
-        'proportion': { type: 1, decimal: 0 }
+    'StyleConfig': { // 样式配置
+      'trendStyleConfig': {
+        'line': 4,
+        'style': false,
+        'fontSizeStyle': [
+          { 'name': '名称', 'color': '#000024', 'fontSize': 12 },
+          { 'name': '数值', 'color': '#000024', 'fontSize': 12 }
+        ],
+        'position': 'center', // center left 位置
+        'align': 'center', // center left 对齐方式
+        'icon': false,
+        'dataIcon': []
       }
     }
   },
