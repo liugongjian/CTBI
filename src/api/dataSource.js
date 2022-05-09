@@ -3,6 +3,22 @@ export function getDataSourceList (params) {
   return http.get('/dataSources', params)
 }
 
+export function uploadDataFile (param) {
+  return http.post('/dataFiles', param)
+}
+
+export function isDataFileExists (param) {
+  return http.get('dataFiles/exists', param)
+}
+
+export function getDataFiles (param) {
+  return http.get('/dataFiles', param)
+}
+
+export function deleteDataFile (id) {
+  return http.delete(`/dataFiles/${id}`)
+}
+
 export function postDataSourceList (form) {
   return http.post('/dataSources', form)
 }

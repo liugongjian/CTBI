@@ -114,7 +114,8 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="data-file__list">
+        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-file__list" />
+        <div v-else class="data-file__list">
           <div class="research-file">
             <el-input
               v-model="searchFile"
@@ -192,10 +193,12 @@ import { encryptAes } from '@/utils/encrypt'
 import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataSourceList, editSources, detailSource } from '@/api/dataSource'
 import CommonTable from '@/components/CommonTable/index.vue'
 import { getDateTime } from '@/utils/optionUtils'
+import dataFiles from './dataFiles.vue'
 export default {
   name: 'DataSource',
   components: {
-    CommonTable
+    CommonTable,
+    dataFiles
   },
   data() {
     return {
@@ -269,7 +272,8 @@ export default {
           slot: 'operation',
           fixed: 'right'
         }
-      ]
+      ],
+      isShowDataFiles: false
     }
   },
   mounted() {
@@ -368,8 +372,16 @@ export default {
     async handleCurrentChange(val) {
       try {
         this.currentRow = val
-        const ids = val._id
-        await this.getSourceFile(ids)
+        if (val.type === 'file') {
+          this.isShowDataFiles = true
+          this.$nextTick(() => {
+            this.$refs.dataFiles.getDataFiles()
+          })
+        } else {
+          this.isShowDataFiles = false
+          const ids = val._id
+          await this.getSourceFile(ids)
+        }
       } catch (error) {
         console.log(error)
       }
@@ -392,7 +404,13 @@ export default {
         }
         const res = await getDataSourceList({ searchkey: this.search })
         this.dataSourceList = res
-        this.$refs.singleTable.setCurrentRow(this.dataSourceList.list[0])
+        const [firstRow] = res.list
+        if (firstRow.type === 'file') {
+          this.isShowDataFiles = true
+        } else {
+          this.isShowDataFiles = false
+        }
+        this.$refs.singleTable.setCurrentRow(firstRow)
       } catch (error) {
         console.log(error)
       }
@@ -429,15 +447,23 @@ export default {
         username: '',
         password: ''
       }
-      this.dialogVisible = true
       if (command === 'mysql') {
         this.form.type = 'mysql'
+        this.dialogVisible = true
+        this.notEdit = true
       }
       if (command === 'mongoDB') {
         this.form.type = 'mongodb'
+        this.dialogVisible = true
+        this.notEdit = true
       }
       if (command === 'localFile') {
-        this.form.type = 'file'
+        this.fileType = '添加本地数据源'
+        this.$dialog.show('UploadFileDialog', {}, () => {
+          if (this.isShowDataFiles) {
+            this.$refs.dataFiles.getDataFiles()
+          }
+        })
       }
     },
     async connect(form) {

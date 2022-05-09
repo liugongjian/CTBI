@@ -1,7 +1,5 @@
 <template>
   <div style="width:100%;height:100%;">
-    <div>1212</div>
-
     <v-chart
       v-if="dataValue"
       :option="chartOption"

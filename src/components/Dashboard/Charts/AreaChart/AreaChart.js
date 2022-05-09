@@ -60,7 +60,7 @@ export default {
       'ChartLabel': { // 标签样式
         'type': 'AreaChart', // 饼图标签样式
         'check': false, // 选中显示标签
-        'checkList': [],
+        'checkList': ['度量'],
         'precisionShow': false, // 是否显示百分比设置组件
         'precision': 2, // 百分比保留位数 0位 1位 2位
         'labelShow': 1 // 0不显示 1 智能显示 2 全部显示

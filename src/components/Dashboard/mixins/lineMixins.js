@@ -1,19 +1,61 @@
 // 折线图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
+import { getLayoutOptionById, getDataValueById, deepClone } from '@/utils/optionUtils'
+import store from '@/store'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 export default {
   mixins: [baseMixins, YAxis],
   data: function () {
     return {
+      storeOption: {},
+      chartOption: {},
+      dataValue: null,
+      dataOption: [],
       series: [],
-      yAxis: {}
+      xAxis: { type: 'category' },
+      yAxis: {},
+      grid: {}
     }
   },
   computed: {
     checkList () {
       return this.storeOption.theme.ComponentOption.ChartLabel.checkList
     }
+  },
+  watch: {
+    storeOption: {
+      handler (val) {
+        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
+        if (this.dataValue) {
+          this.dataValue = deepClone(getDataValueById(this.identify))
+          this.getOption()
+        }
+      },
+      deep: true
+    },
+    dataOption: {
+      handler (val) {
+        const isData = val.findIndex(item => {
+          return item.i === this.identify
+        })
+        if (isData !== -1) {
+          this.dataValue = deepClone(getDataValueById(this.identify))
+          // 拿到数据中的系列名字
+          this.getSeriesOptions(this.dataValue)
+          // 拿到数据的系列名字 并设置颜色
+          this.getColor(this.dataValue)
+          // 拿到数据中的指标
+          this.getIndicatorOptions(this.dataValue)
+          this.getOption()
+        }
+      },
+      deep: true
+    }
+  },
+  mounted () {
+    this.storeOption = getLayoutOptionById(this.identify)
+    this.dataOption = store.state.app.dataOption
   },
   methods: {
     // 拿到数据中的系列名字
@@ -298,6 +340,7 @@ export default {
       if (!ComponentOption.TwisYAxis.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
+      const data = getDataValueById(this.identify)
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'line',
@@ -306,7 +349,7 @@ export default {
             show: ComponentOption.ChartLabel.check, // 标签显示
             formatter: function (params) {
               const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
-              const isMeasure = that.checkList.includes('度量') ? `${that.storeOption.dataSource[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+              const isMeasure = that.checkList.includes('度量') ? `${data[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
               return isPercent + '\n' + isMeasure
             }
           },
