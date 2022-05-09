@@ -178,6 +178,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.button-style {
+    position: relative;
+    margin-top: 58px;
+  }
+  .button {
+    background: #F0914B;
+    width: 100%;
+    height: 50px;
+    color: #FFF;
+    font-size: 18px;
+    border:#f0914b;
+    border-radius: 10px;
+  }
+  .button:hover {
+    background: #f0914b;
+    color: #fff;
+    border:#f0914b
+  }
+  .button:focus {
+    background: #f0914b;
+    color: #fff;
+    border:#f0914b
+  }
 .verifyImg {
   position: absolute;
   display: inline-block;

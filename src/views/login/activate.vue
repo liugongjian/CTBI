@@ -60,7 +60,6 @@
     <div class="button-style">
       <el-button
         class="button"
-        :plain="true"
         @click="setUp"
       >
         确认
@@ -164,24 +163,14 @@ export default {
     position: relative;
     margin-top: 58px;
   }
-  .button {
-    background: #F0914B;
+.button {
+    background: #f0914b;
+    color: #fff;
     width: 100%;
     height: 50px;
-    color: #FFF;
     font-size: 18px;
     border:#f0914b;
     border-radius: 10px;
-  }
-  .button:hover {
-    background: #f0914b;
-    color: #fff;
-    border:#f0914b
-  }
-  .button:focus {
-    background: #f0914b;
-    color: #fff;
-    border:#f0914b
   }
 ::v-deep .back {
   display: inline-block;
