@@ -69,7 +69,7 @@
     </div>
     <span class="warn">
       <svg-icon icon-class="warn" />
-      <span class="warn-text">您尚未激活，请修改出场密码。</span>
+      <span class="warn-text">您尚未激活，请修改出厂密码。</span>
     </span>
   </div>
 </template>
