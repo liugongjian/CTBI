@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="13px" viewBox="0 0 15 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>upload</title>
+    <defs>
+        <path d="M1.66666667,6.11764706 L1.666,11.47 L13.333,11.47 L13.3333333,6.11764706 L15,6.11764706 L14.999,11.47 L15,11.4705882 L15,12 L14.999,12.016 L15,12.2352941 L14.972131,12.2354193 C14.8662738,12.674105 14.4711953,13 14,13 L1,13 C0.528804678,13 0.133726216,12.674105 0.0278689984,12.2354193 L0,12.2352941 L0,6.11764706 L1.66666667,6.11764706 Z M7.5,0 L10.8333333,3.82352941 L8.333,3.823 L8.33333333,9.17647059 L6.66666667,9.17647059 L6.666,3.823 L4.16666667,3.82352941 L7.5,0 Z" id="path-1"></path>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="上传文件" transform="translate(-177.000000, -131.000000)">
+            <g id="文件上传-无数量限制备份-2" transform="translate(138.000000, 124.000000)">
+                <g id="文件上传/添加文件" transform="translate(39.000000, 6.000000)">
+                    <g id="upload" transform="translate(0.000000, 1.000000)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use id="01_PC/01_Basic/55_upload" fill="#FA8334" xlink:href="#path-1"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -22,18 +22,21 @@
       </div>
       <el-dialog
         :title="fileType"
-        :visible.sync="dialog"
-        width="560px">
+        :visible.sync="dialogVisible"
+        width="560px"
+      >
         <el-form ref="form" :rules="rules" :model="form" label-width="120px">
           <el-form-item label="显示名称" prop="displayName">
             <el-input
               v-model="form.displayName"
-              placeholder="请输入数据源配置列表显示名称" />
+              placeholder="请输入数据源配置列表显示名称"
+            />
           </el-form-item>
           <el-form-item label="数据库地址" prop="host">
             <el-input
               v-model="form.host"
-              placeholder="请输入IP地址" />
+              placeholder="请输入IP地址"
+            />
           </el-form-item>
           <el-form-item label="端口" prop="port">
             <el-input v-model="form.port" />
@@ -41,52 +44,65 @@
           <el-form-item label="数据库" prop="db">
             <el-input
               v-model="form.db"
-              placeholder="数据库名称" />
+              placeholder="数据库名称"
+            />
           </el-form-item>
           <el-form-item label="用户名" prop="username">
             <el-input
               v-model="form.username"
-              placeholder="请输入用户名" />
+              placeholder="请输入用户名"
+            />
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input
               v-model="form.password"
-              placeholder="请输入密码" />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submit(form)">确定</el-button>
-            <el-button type="primary" @click="dialog = false">关闭</el-button>
+              type="password"
+              placeholder="请输入密码"
+              show-password
+            />
           </el-form-item>
         </el-form>
+        <span slot="footer">
+          <el-button type="primary" @click="submit(form)">确定</el-button>
+          <el-button v-loading="isloading" type="primary" @click="connect(form)">连接测试</el-button>
+          <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
+        </span>
       </el-dialog>
       <div class="data-source__table">
         <div class="data-source__list">
-          <el-table :data="dataSourceList.list" class="tableBox">
+          <el-table
+            ref="singleTable"
+            :data="dataSourceList.list"
+            class="tableBox"
+            highlight-current-row
+            @current-change="handleCurrentChange"
+          >
             <el-table-column
-              label="我的数据源">
-              <template slot="header">
+              label="我的数据源"
+            >
+              <template #header>
                 <div class="table-title">
                   <span>我的数据源</span>
                   <el-input
                     v-model="search"
-                    :placeholder="`共个文件`"
+                    :placeholder="`共${dataSourceList.total}个文件`"
                     prefix-icon="el-icon-search"
                     class="input"
+                    @keyup.enter.native="searchSource"
                   />
                 </div>
               </template>
               <template slot-scope="scope">
                 <div class="table-row">
                   <div class="table-row__image">
-                    <svg-icon :icon-class="scope.row.type"/>
+                    <svg-icon :icon-class="scope.row.type" />
                   </div>
                   <div class="table-row__text">
-                    <div v-if="scope.row.type=='mongodb'">MongoDB数据库</div>
-                    <div v-if="scope.row.type=='mysql'">MySQL数据库</div>
+                    <div>{{ scope.row.displayName }}</div>
                     <div>所有者：开发者中心</div>
                   </div>
                   <div class="table-row__tools">
-                    <span>
+                    <span @click.prevent="editSource(scope.row)">
                       <svg-icon icon-class="pencil" />
                     </span>
                     <span @click="deleteSource(scope.row._id)">
@@ -98,40 +114,74 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="data-file__list">
+        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-file__list" />
+        <div v-else class="data-file__list">
           <div class="research-file">
             <el-input
               v-model="searchFile"
               placeholder="请输入文件名称"
               prefix-icon="el-icon-search"
               class="input-file"
+              @keyup.enter.native="searchFiles"
             />
             <span>
-              <el-button plain class="create-data">SQL创建数据集</el-button>
+              <el-button plain class="create-data" @click="toCreateDataSet">SQL创建数据集</el-button>
             </span>
           </div>
-          <el-table :default-sort="{prop: 'name', order: 'descending'}" :data="(sourceFile.list).slice((currentPage-1)*pageSize,currentPage*pageSize)">
-            <el-table-column sortable label="名称" prop="name" />
-            <el-table-column label="备注" prop="name" />
-            <el-table-column label="操作">
-              <template slot-scope="scope">
-                <div class="operate">
-                  <span @click="createData(scope.row)">创建数据集</span>
-                  <el-divider direction="vertical" />
-                  <span @click="detail(scope.row)">详情</span>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-pagination
-            :current-page.sync="currentPage"
-            :page-sizes="[10, 20]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="sourceFile.total"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-          />
+          <common-table
+            :table-columns="tableColums"
+            :table-data="sourceFile"
+            :page-num.sync="page"
+            :page-size.sync="limit"
+            :total="total"
+            :is-show-toolbar="false"
+            @refresh="refresh"
+          >
+            <template #name="{scope}">
+              {{ scope.row.name }}
+            </template>
+            <template #comment="{scope}">
+              {{ scope.row.name }}
+            </template>
+            <template #operation="{scope}">
+              <div class="operate">
+                <span @click="() => toCreateDataSet(currentRow)">创建数据集</span>
+                <el-divider direction="vertical" />
+                <span @click="detail(scope.row)">详情</span>
+              </div>
+            </template>
+          </common-table>
+          <el-dialog
+            title="表详情"
+            :visible.sync="detailVisible"
+            width="560px"
+          >
+            <p>表名称：{{ tableName }}</p>
+            <p>表描述：{{ comment }}</p>
+            <el-table
+              :data="detailColumns"
+              height="250"
+              style="width: 100%"
+            >
+              <el-table-column
+                prop="columnName"
+                label="字段名称"
+                width="180"
+              />
+              <el-table-column
+                prop="columnType"
+                label="字段类型"
+                width="180"
+              />
+              <el-table-column
+                prop="columnComment"
+                label="字段描述"
+              />
+            </el-table>
+            <span slot="footer">
+              <el-button type="primary" @click="detailVisible = false">关闭</el-button>
+            </span>
+          </el-dialog>
         </div>
       </div>
     </div>
@@ -140,19 +190,48 @@
 
 <script>
 import { encryptAes } from '@/utils/encrypt'
-import { getDataSourceList, postDataSourceList, getSourceFile, deleteSources } from '@/api/dataSource'
+import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataSourceList, editSources, detailSource } from '@/api/dataSource'
+import CommonTable from '@/components/CommonTable/index.vue'
+import { getDateTime } from '@/utils/optionUtils'
+import dataFiles from './dataFiles.vue'
 export default {
   name: 'DataSource',
+  components: {
+    CommonTable,
+    dataFiles
+  },
   data() {
     return {
-      currentPage: 1,
-      pageSize: 20,
-      dialog: false,
+      detailTable: {
+        tableName: '',
+        comment: '',
+        columns: [
+          {}
+        ]
+      },
+      tableName: '',
+      comment: '',
+      detailColumns: [],
+      detailInfo: {},
+      ids: '',
+      detailVisible: false,
+      isPaging: 1,
+      page: 1,
+      limit: 20,
+      sortBy: '',
+      sortOrder: '',
+      searchkey: '',
+      isloading: false,
+      notEdit: true,
+      editform: {},
+      currentRow: 0,
+      dialogVisible: false,
       fileType: '',
       search: '',
       searchFile: '',
       dataSourceList: {},
-      sourceFile: { list: [] },
+      sourceFile: [],
+      total: 0,
       form: {
         type: '',
         displayName: '',
@@ -169,39 +248,170 @@ export default {
         db: [{ required: true, message: '请输入数据库名称', trigger: 'blur' }],
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
-      }
+      },
+      tableColums: [
+        {
+          prop: 'name',
+          label: '名称',
+          fixed: false,
+          sortable: true
+        },
+        {
+          prop: 'comment',
+          label: '备注',
+          fixed: false
+        },
+        {
+          prop: 'operation',
+          label: '操作',
+          slot: 'operation',
+          fixed: 'right'
+        }
+      ],
+      isShowDataFiles: false
     }
   },
   mounted() {
     this.init()
   },
   methods: {
-    createData(val) {
-      console.log(val)
+    toCreateDataSet(dataSource) {
+      const currentTime = getDateTime()
+      const query = {
+        _id: '',
+        displayName: '',
+        comment: '',
+        sqlId: '',
+        fields: [],
+        folderId: null,
+        isFolder: false,
+        creatorId: '',
+        dataSourceId: dataSource && dataSource._id || '',
+        dataSourceName: dataSource && dataSource.displayName || '',
+        creatorName: '',
+        createdTime: currentTime
+      }
+      this.$router.push({
+        path: '/dataManage/dataSet/edit',
+        query
+      })
     },
-    detail(val) {
-      console.log(val)
-    },
-    handleSizeChange(val) {
-      this.pageSize = val
-    },
-    handleCurrentChange(val) {
-      console.log(`current page: ${val}`)
-    },
-    async init() {
+    async detailSources() {
       try {
-        const res = await getDataSourceList()
-        this.dataSourceList = res
-        if ((res.list).length !== 0) {
-          const result = res.list
-          const ids = result[0]._id
-          const file = await getSourceFile(ids)
-          this.sourceFile = file
-          console.log('file---', file)
+        this.tableName = this.detailInfo.name
+        const params = {
+          id: this.currentRow._id,
+          tableName: this.detailInfo.name
+        }
+        this.detailTable = await detailSource(params)
+        this.detailColumns = this.detailTable.columns
+        this.tableName = this.detailTable.tableName
+        this.comment = this.detailTable.comment
+        this.detailColumns.forEach(function (value) { value.columnType = value.columnType.toUpperCase() })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async editSource(row) {
+      try {
+        this.form.type = row.type
+        this.form.displayName = row.displayName
+        this.form.host = row.host
+        this.form.port = row.port
+        this.form.db = row.db
+        this.form.username = row.username
+        this.form.password = ''
+        this.currentId = row._id
+        this.dialogVisible = true
+        this.notEdit = false
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async getSourceFile(ids) {
+      try {
+        const params = {
+          isPaging: this.isPaging,
+          page: this.page,
+          limit: this.limit,
+          sortBy: this.sortBy,
+          sortOrder: this.sortOrder,
+          searchkey: this.searchkey
+        }
+        const file = await getSourceFile(ids, params)
+        this.sourceFile = file.list
+        this.total = file.total
+        this.page = file.page
+        this.limit = file.limit
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    searchSource() {
+      this.init()
+    },
+    searchFiles() {
+      this.searchkey = this.searchFile
+      this.refresh()
+    },
+    refresh() {
+      this.handleCurrentChange(this.currentRow)
+    },
+    async handleCurrentChange(val) {
+      try {
+        this.currentRow = val
+        if (val.type === 'file') {
+          this.isShowDataFiles = true
+          this.$nextTick(() => {
+            this.$refs.dataFiles.getDataFiles()
+          })
+        } else {
+          const ids = val._id
+          this.getSourceFile(ids)
         }
       } catch (error) {
         console.log(error)
       }
+    },
+    detail(val) {
+      this.detailVisible = true
+      this.detailInfo = val
+      this.detailSources()
+    },
+    async init() {
+      try {
+        this.form = {
+          type: '',
+          displayName: '',
+          host: '',
+          port: '',
+          db: '',
+          username: '',
+          password: ''
+        }
+        const res = await getDataSourceList({ searchkey: this.search })
+        this.dataSourceList = res
+        const [firstRow] = res.list
+        if (firstRow.type === 'file') {
+          this.isShowDataFiles = true
+        } else {
+          this.isShowDataFiles = false
+        }
+        this.$refs.singleTable.setCurrentRow(firstRow)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async deleteSource(id) {
+      try {
+        console.log(id)
+        await deleteSources(id)
+        this.init()
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    handleCommand(command) {
       this.form = {
         type: '',
         displayName: '',
@@ -211,32 +421,70 @@ export default {
         username: '',
         password: ''
       }
-    },
-    async deleteSource(id) {
-      console.log(id)
-      await deleteSources(id)
-      this.init()
-    },
-    handleCommand(command) {
-      this.dialog = true
       if (command === 'mysql') {
         this.fileType = '添加mySql数据源'
         this.form.type = 'mysql'
+        this.dialogVisible = true
+        this.notEdit = true
       }
       if (command === 'mongoDB') {
         this.fileType = '添加MongoDB数据源'
         this.form.type = 'mongodb'
+        this.dialogVisible = true
+        this.notEdit = true
       }
       if (command === 'localFile') {
         this.fileType = '添加本地数据源'
+        this.$dialog.show('UploadFileDialog', {}, () => {
+          if (this.isShowDataFiles) {
+            this.$refs.dataFiles.getDataFiles()
+          }
+        })
+      }
+    },
+    async connect(form) {
+      this.isloading = true
+      const testForm = {
+        username: form.username,
+        db: form.db,
+        host: form.host,
+        password: encryptAes(form.password),
+        port: form.port,
+        type: form.type
+      }
+      try {
+        const result = await connectTest(testForm)
+        if (!result) {
+          this.$message.error('连接数据库失败！')
+        } else {
+          this.$message.success('连接数据库成功！')
+        }
+        this.isloading = false
+        return result
+      } catch (error) {
+        this.isloading = false
+        console.log(error)
       }
     },
     async submit(form) {
-      this.dialog = false
-      form.password = encryptAes(form.password)
+      const valid = await this.$refs.form.validate()
+      if (!valid) {
+        return
+      }
       try {
-        await postDataSourceList(form)
-        this.init()
+        form.password = encryptAes(form.password)
+        const result = await connectTest(form)
+        if (result === true) {
+          this.dialogVisible = false
+          if (this.notEdit) {
+            await postDataSourceList(form)
+          } else {
+            await editSources(this.currentId, this.form)
+          }
+          this.init()
+        } else {
+          this.$message.error('连接数据库失败！')
+        }
       } catch (error) {
         console.log(error)
       }
@@ -270,6 +518,7 @@ export default {
     line-height: 68px;
     span {
       margin-right: 20px;
+      cursor:pointer;
     }
   }
 }
