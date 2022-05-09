@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import lineMixins from '@/components/Dashboard/mixins/lineMixins'
 export default {
   name: 'StackedAreaChart',
@@ -24,38 +23,10 @@ export default {
   },
   data () {
     return {
-      storeOption: {},
-      chartOption: {},
-      dataValue: null,
-      series: [],
       type: 'StackedAreaChart'
     }
   },
   watch: {
-    storeOption: {
-      handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = deepClone(val.dataSource)
-          this.getOption()
-        }
-      },
-      deep: true
-    },
-    'storeOption.dataSource': {
-      handler (val) {
-        if (JSON.stringify(val) !== '{}') {
-          this.dataValue = deepClone(val)
-          // 拿到数据中的系列名字
-          this.getSeriesOptions(this.dataValue)
-          // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
-          // 拿到数据中的指标
-          this.getIndicatorOptions(this.dataValue)
-          this.getOption()
-        }
-      }
-    },
     'storeOption.theme.ComponentOption.PercentStack': {
       handler(val) {
         this.storeOption.theme.ComponentOption.ChartLabel.type = this.type
@@ -68,9 +39,6 @@ export default {
       },
       deep: true
     }
-  },
-  mounted () {
-    this.storeOption = getLayoutOptionById(this.identify)
   },
   methods: {
     getOption () {
