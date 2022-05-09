@@ -98,8 +98,8 @@
                     <svg-icon :icon-class="scope.row.type" />
                   </div>
                   <div class="table-row__text">
-                    <div class="table-row__text-part1">{{ scope.row.displayName }}</div>
-                    <div class="table-row__text-part1">所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}</div>
+                    <div class="table-row__text-part1" :title="scope.row.displayName">{{ scope.row.displayName }}</div>
+                    <div class="table-row__text-part1" :title="scope.row.creator && scope.row.creator.userName || '-'">所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}</div>
                   </div>
                   <div class="table-row__tools">
                     <span v-if="scope.row.type!=='file'" @click.prevent="editSource(scope.row)">
@@ -564,24 +564,29 @@ export default {
   display: flex;
   align-items: center;
   height: 50px;
+  margin-right:10px;
   &__image {
-    flex: 1;
+    width:32px;
+    margin-right: 15px;
     font-size: 32px;
   }
   &__text {
-    flex: 2;
+    flex: 1;
     text-align: left;
+    overflow:hidden;
   }
   &__tools {
-    flex: 1;
+    width:65px;
     text-align: right;
-    span {
-      margin-right: 20px;
+    span{
       cursor:pointer;
+      &:not(:last-of-type) {
+        margin-right: 20px;
+      }
     }
   }
   &__text-part1 {
-    max-width: 200px;
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -657,7 +662,8 @@ export default {
   &__list {
     flex: 1;
     height: calc(100vh - 168px);
-    overflow: auto
+    min-width:270px;
+    overflow: auto;
   }
 }
 .data-file__list {
@@ -665,7 +671,7 @@ export default {
   padding: 24px;
   border-left: 1px solid #EBEEF5;
   height: calc(100vh - 168px);
-  overflow: auto
+  overflow: auto;
 }
 .head-select {
   margin: 24px;
