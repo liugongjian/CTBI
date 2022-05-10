@@ -24,8 +24,9 @@
         :title="status+fileType[form.type]"
         :visible.sync="dialogVisible"
         width="560px"
+        class="dialog-new"
       >
-        <el-form ref="form" :rules="rules" :model="form" label-width="120px">
+        <el-form ref="form" :rules="rules" :model="form" label-width="90px">
           <el-form-item label="显示名称" prop="displayName">
             <el-input
               v-model="form.displayName"
@@ -44,7 +45,7 @@
           <el-form-item label="数据库" prop="db">
             <el-input
               v-model="form.db"
-              placeholder="数据库名称"
+              placeholder="请输入数据库名称"
             />
           </el-form-item>
           <el-form-item label="用户名" prop="username">
@@ -99,7 +100,7 @@
                   </div>
                   <div class="table-row__text">
                     <div class="table-row__text-part1" :title="scope.row.displayName">{{ scope.row.displayName }}</div>
-                    <div class="table-row__text-part1" :title="scope.row.creator && scope.row.creator.userName || '-'">所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}</div>
+                    <div class="table-row__text-part2" :title="scope.row.creator && scope.row.creator.userName || '-'">所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}</div>
                   </div>
                   <div class="table-row__tools">
                     <span v-if="scope.row.type!=='file'" @click.prevent="editSource(scope.row)">
@@ -125,7 +126,7 @@
               @keyup.enter.native="searchFiles"
             />
             <span>
-              <el-button plain class="create-data" @click="toCreateDataSet">SQL创建数据集</el-button>
+              <el-button class="create-data" @click="toCreateDataSet">SQL创建数据集</el-button>
             </span>
           </div>
           <common-table
@@ -157,14 +158,17 @@
           <el-dialog
             title="表详情"
             :visible.sync="detailVisible"
+            width="1000px"
+            height="481px"
           >
-            <p class="part"><span class="table-title-name">表名称：</span>{{ tableName }}</p>
-            <p class="part"><span class="table-title-name">表备注：</span>{{ detailComment }}</p>
+            <p class="part"><span class="table-title-name">表名称：</span><span class="table-content">{{ tableName }}</span></p>
+            <p class="part"><span class="table-title-name">表备注：</span><span class="table-content">{{ detailComment }}</span></p>
             <common-table
               :table-columns="comments"
               :table-data="detailColumns"
               :is-show-toolbar="false"
               :is-show-pagination="false"
+              class="table-detail"
             >
               <template #columnName />
               <template #columnType />
@@ -448,7 +452,6 @@ export default {
       }
     },
     handleCommand(command) {
-      console.log('.............')
       this.status = '添加'
       this.notEdit = true
       this.form = {
@@ -463,12 +466,14 @@ export default {
       if (command === 'mysql') {
         // this.form.type = 'mysql'
         this.$set(this.form, 'type', 'mysql')
+        this.$set(this.form, 'port', '3306')
         this.dialogVisible = true
         this.notEdit = true
       }
       if (command === 'mongoDB') {
         // this.form.type = 'mongodb'
         this.$set(this.form, 'type', 'mongodb')
+        this.$set(this.form, 'port', '8922')
         this.dialogVisible = true
         this.notEdit = true
       }
@@ -515,11 +520,11 @@ export default {
       }
     },
     async submit(form) {
-      const valid = await this.$refs.form.validate()
-      if (!valid) {
-        return
-      }
       try {
+        const valid = await this.$refs.form.validate()
+        if (!valid) {
+          return
+        }
         const testForm = {
           displayName: form.displayName,
           username: form.username,
@@ -548,6 +553,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .common-table .table.el-table th .cell {
+  font-family: PingFangSC-Medium;
+  font-size: 12px;
+  color: rgba(0,0,0,0.90);
+  text-align: left;
+  line-height: 42px;
+  font-weight: 500;
+}
+::v-deep .common-table .table.el-table td .cell {
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.65);
+  text-align: left;
+  line-height: 42px;
+  font-weight: 400;
+}
+.table-detail {
+  width: 950px;
+  height: 300px;
+  overflow: auto;
+}
 .new-button {
   width: 124px;
   height: 32px;
@@ -572,6 +598,13 @@ export default {
   color: rgba(0,0,0,0.90);
   font-weight: 400;
 }
+.table-content {
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: rgba(0,0,0,0.65);
+  line-height: 20px;
+  font-weight: 400;
+}
 .operate {
   color: #FA8334;
   span {
@@ -591,7 +624,7 @@ export default {
   &__text {
     flex: 1;
     text-align: left;
-    overflow:hidden;
+    overflow: hidden;
   }
   &__tools {
     width:65px;
@@ -608,6 +641,20 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-family: PingFangSC-Medium;
+    font-size: 12px;
+    color: rgba(0,0,0,0.90);
+    font-weight: 500;
+  }
+   &__text-part2 {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: rgba(0,0,0,0.65);
+    font-weight: 400;
   }
 }
 .input {
@@ -638,6 +685,7 @@ export default {
   line-height: 68px;
 }
 .create-data {
+  color: #FA8334;
   margin: 0 0 0 12px;
 }
 ::v-deep .el-table td {
@@ -647,6 +695,40 @@ export default {
 ::v-deep .el-table th {
   height: 42px;
   padding-left: 14px
+}
+::v-deep .el-dialog__title {
+  width: 155px;
+  height: 22px;
+  font-family: PingFangSC-Medium;
+  font-size: 16px;
+  color: rgba(0,0,0,0.90);
+  font-weight: 500;
+}
+
+::v-deep label.el-form-item__label {
+  height: 32px;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: rgba(0,0,0,0.90);
+  line-height: 32px;
+  font-weight: 400;
+}
+::v-deep .dialog-new .el-dialog__body {
+  padding: 24px 24px 0 24px
+}
+::v-deep .dialog-new .el-input__inner {
+  width: 423px;
+  height: 32px;
+  background: #FFFFFF;
+  border: 1px solid rgba(221,221,221,1);
+  border-radius: 2px;
+}
+::v-deep .dialog-new .el-input__inner::-webkit-input-placeholder {
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: rgba(0,0,0,0.30);
+  line-height: 32px;
+  font-weight: 400;
 }
 .data-source {
   height: 100%;
@@ -686,7 +768,7 @@ export default {
   }
 }
 .data-files__list {
-  flex: 1;
+  flex: 2;
   height: calc(100vh - 250px);
   overflow: auto;
 
