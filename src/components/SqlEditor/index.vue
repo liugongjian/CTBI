@@ -1,11 +1,8 @@
 <template>
-  <div>
-    <textarea
-      ref="mycode"
-      v-model="value"
-      class="codesql"
-    />
-  </div>
+  <textarea
+    ref="mycode"
+    v-model="value"
+  />
 </template>
 <script>
 import 'codemirror/theme/ambiance.css'
@@ -114,13 +111,15 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .CodeMirror {
-  color: black;
-  /* direction: ltr; */
-  line-height: 22px;
+  border: 1px solid #eee;
+  height: auto;
 }
-.CodeMirror-hints {
-  z-index: 999 !important;
+
+::v-deep .CodeMirror-scroll {
+  height: auto;
+  overflow-y: hidden;
+  overflow-x: auto;
 }
 </style>

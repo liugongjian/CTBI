@@ -223,6 +223,12 @@ export default {
       const folderId = tree._id
       try {
         const data = await getDataSetsFolders({ folderId })
+        // 数据塞入展示数组中，全选使用
+        this.dataList.forEach(item => {
+          if (item._id === tree._id) {
+            item.children = data
+          }
+        })
         resolve(data)
       } catch (error) {
         console.log(error)
@@ -287,7 +293,6 @@ export default {
     split (data, flag) {
       data.forEach((row) => {
         this.$refs.multipleTable.toggleRowSelection(row, flag)
-        console.log(this.$refs.multipleTable, this.$refs.multipleTable.store.states)
         if (row.children !== undefined) {
           this.split(row.children)
         }
