@@ -656,7 +656,7 @@ export default {
     position: relative;
     background: #fff;
     margin-top: 16px;
-    height: calc(100vh - 50px);
+    height: calc(100vh - 125px);
     font-size: 12px;
   }
 
@@ -666,7 +666,7 @@ export default {
 
   &__list {
     flex: 1;
-    height: calc(100vh - 168px);
+    height: calc(100vh - 250px);
     min-width:270px;
     overflow: auto;
   }
@@ -675,7 +675,7 @@ export default {
   flex: 2;
   padding: 24px;
   border-left: 1px solid #EBEEF5;
-  height: calc(100vh - 168px);
+  height: calc(100vh - 250px);
   overflow: auto;
 }
 .head-select {
