@@ -72,7 +72,7 @@
         <div class="data-source__list">
           <el-table
             ref="singleTable"
-            :data="dataSourceList.list"
+            :data="filterdDatasources"
             class="tableBox"
             highlight-current-row
             @current-change="handleCurrentChange"
@@ -289,6 +289,14 @@ export default {
       isShowDataFiles: false
     }
   },
+  computed: {
+    filterdDatasources() {
+      return this.dataSourceList?.list?.filter(item => {
+        console.log(item.displayName, this.search)
+        return this.search ? item.displayName.indexOf(this.search) >= 0 : true
+      }) || []
+    }
+  },
   mounted() {
     this.init()
   },
@@ -318,6 +326,7 @@ export default {
         query
       })
     },
+
     async detailSources() {
       try {
         this.tableName = this.detailInfo.name
