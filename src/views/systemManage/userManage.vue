@@ -78,18 +78,13 @@ export default {
       },
       {
         prop: 'email',
+        width: 250,
         label: '邮箱',
         fixed: false
       },
       {
-        prop: 'creator',
-        label: '创建者',
-        fixed: false,
-        ellipsis: true
-      },
-      {
         prop: 'lastLoginTime',
-        width: 200,
+        width: 150,
         label: '最后登录时间',
         fixed: false,
         slot: 'lastLoginTime',
@@ -97,6 +92,7 @@ export default {
       },
       {
         prop: 'status',
+        width: 100,
         label: '账号状态',
         fixed: false,
         slot: 'status'
@@ -245,7 +241,7 @@ export default {
       }
     },
     logoutDisabled (row) {
-      return row.status === -1
+      return row.status === -1 || row.userName === this.$store.state.user.userData.userName
     },
     resetDisabled (row) {
       return row.from === 'ctyun'
