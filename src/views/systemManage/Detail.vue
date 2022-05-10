@@ -274,6 +274,7 @@ export default {
   }
   ::v-deep .el-form-item__content {
     font-size: 12px;
+    height: 40px;
   }
   ::v-deep :focus {
     outline: 0;
@@ -282,6 +283,7 @@ export default {
     border-bottom: 1px solid var(--gray-04,#d9d9d9);
     margin-bottom: 10px;
     padding: 10px 20px;
+    height: 30px;
   }
   ::v-deep .el-drawer__body {
     overflow: hidden;
@@ -310,7 +312,7 @@ export default {
   }
   .footer {
     display: flex;
-    border-top: 1px solid #d9d9d9;
+    background: #F5F5F5;
     line-height: 50px;
     height: 50px;
     padding: 0 30px;

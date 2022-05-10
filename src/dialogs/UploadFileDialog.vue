@@ -4,7 +4,7 @@
     title="上传文件"
     :visible.sync="dialogVisible"
   >
-    <div slot="footer" class="dialog-footer">
+    <div slot="footer">
       <el-button size="small" @click="dialogVisible = false">取 消</el-button>
       <el-button type="primary" :loading="loading" size="small" @click="handleConfirm">确 定</el-button>
     </div>
@@ -21,9 +21,10 @@
           :on-remove="handleRemove"
           :on-change="handleUploadChange"
           :before-upload="beforeUpload"
+          :file-list="fileList"
         >
           <el-button class="upload-btn"><svg-icon icon-class="upload" style="margin-right: 9px;" />{{ form.file ? '重新上传' : '添加文件' }}</el-button>
-          <div slot="tip" class="el-upload__tip">文件只支持csv、xlsx、xls格式</div>
+          <div slot="tip" class="el-upload__tip">文件只支持csv、xlsx、xls格式且行数不能大于10000，列数不能大于50</div>
         </el-upload>
       </el-form-item>
       <el-form-item prop="displayName" label="自定义文件名称">
@@ -40,6 +41,7 @@
 <script>
 import dialogMixin from '@/dialogs/dialogMixin'
 import { uploadDataFile, isDataFileExists } from '@/api/dataSource'
+import XLSX from 'xlsx'
 
 export default {
   name: 'UploadFileDialog',
@@ -47,6 +49,7 @@ export default {
   data() {
     return {
       loading: false,
+      fileList: [],
       form: {
         displayName: null,
         file: null
@@ -78,19 +81,55 @@ export default {
         callback()
       }
     },
-    beforeUpload(file) {
+    async beforeUpload(file) {
       if (file.raw.type !== 'text/csv' && file.raw.type !== 'application/vnd.ms-excel' && file.raw.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
         this.$message.warning('文件只支持csv、xlsx、xls格式！请重新上传')
         return false
       }
-      return true
+      return await this.readExcel(file.raw)
     },
-    handleUploadChange(file, fileList) {
-      if (!this.beforeUpload(file)) {
+    readExcel(file) {
+      return new Promise((resolve) => {
+        const fileReader = new FileReader()
+        try {
+          fileReader.readAsBinaryString(file)
+        } catch (error) {
+          console.log(error)
+        }
+        fileReader.onload = (event) => {
+          try {
+            const data = event.target.result
+            const workbook = XLSX.read(data, { type: 'binary', codepage: 936 })
+            const fileExcelData = this.excelToJson(workbook)
+            const [header] = fileExcelData
+            if (fileExcelData.length > 10000) {
+              resolve(false)
+              this.$message.warning('文件行数大于10000!请重新上传')
+            } else if (header.length > 50) {
+              resolve(false)
+              this.$message.warning('文件列数大于50!请重新上传')
+            } else {
+              resolve(true)
+            }
+          } catch (error) {
+            console.log(error)
+          }
+        }
+      })
+    },
+    excelToJson(workbook) {
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]]
+      const data = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: 'NULL' })
+      return data
+    },
+    async handleUploadChange(file, fileList) {
+      if (!await this.beforeUpload(file)) {
+        this.fileList = []
         return
       }
       const { status, name } = file
       if (status === 'fail') {
+        this.fileList = []
         this.handleUploadErr(name, file)
         return
       }
@@ -100,7 +139,7 @@ export default {
       this.form.file = file.raw
     },
     handleUploadErr() {
-      this.$message.warning('头像上传失败!请重新上传')
+      this.$message.warning('文件上传失败!请重新上传')
     },
     handleRemove() {
       this.form.file = null
@@ -194,7 +233,6 @@ export default {
     display: flex;
     justify-content: center;
     margin: 0 -20px -10px;
-    border-top: 1px solid #f1f1f1;
   }
 }
 </style>

@@ -21,7 +21,7 @@
         </div>
       </div>
       <el-dialog
-        :title="fileType"
+        :title="status+fileType[form.type]"
         :visible.sync="dialogVisible"
         width="560px"
       >
@@ -63,9 +63,9 @@
           </el-form-item>
         </el-form>
         <span slot="footer">
+          <el-button @click="close">关闭</el-button>
+          <el-button v-loading="isloading" @click="connect(form)">连接测试</el-button>
           <el-button type="primary" @click="submit(form)">确定</el-button>
-          <el-button v-loading="isloading" type="primary" @click="connect(form)">连接测试</el-button>
-          <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
         </span>
       </el-dialog>
       <div class="data-source__table">
@@ -98,14 +98,14 @@
                     <svg-icon :icon-class="scope.row.type" />
                   </div>
                   <div class="table-row__text">
-                    <div>{{ scope.row.displayName }}</div>
-                    <div>所有者：开发者中心</div>
+                    <div class="table-row__text-part1" :title="scope.row.displayName">{{ scope.row.displayName }}</div>
+                    <div class="table-row__text-part1" :title="scope.row.creator && scope.row.creator.userName || '-'">所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}</div>
                   </div>
                   <div class="table-row__tools">
-                    <span @click.prevent="editSource(scope.row)">
+                    <span v-if="scope.row.type!=='file'" @click.prevent="editSource(scope.row)">
                       <svg-icon icon-class="pencil" />
                     </span>
-                    <span @click="deleteSource(scope.row._id)">
+                    <span v-if="scope.row.type!=='file'" @click="deleteSource(scope.row._id)">
                       <svg-icon icon-class="delete" />
                     </span>
                   </div>
@@ -137,11 +137,14 @@
             :is-show-toolbar="false"
             @refresh="refresh"
           >
+            <!-- @sort-change="handleSortChange" -->
             <template #name="{scope}">
               {{ scope.row.name }}
             </template>
             <template #comment="{scope}">
-              {{ scope.row.name }}
+              <el-tooltip class="item" effect="dark" :content="scope.row.comment" placement="top">
+                <span class="description">{{ scope.row.comment }} </span>
+              </el-tooltip>
             </template>
             <template #operation="{scope}">
               <div class="operate">
@@ -154,32 +157,21 @@
           <el-dialog
             title="表详情"
             :visible.sync="detailVisible"
-            width="560px"
           >
-            <p>表名称：{{ tableName }}</p>
-            <p>表描述：{{ comment }}</p>
-            <el-table
-              :data="detailColumns"
-              height="250"
-              style="width: 100%"
+            <p class="part"><span class="table-title-name">表名称：</span>{{ tableName }}</p>
+            <p class="part"><span class="table-title-name">表备注：</span>{{ detailComment }}</p>
+            <common-table
+              :table-columns="comments"
+              :table-data="detailColumns"
+              :is-show-toolbar="false"
+              :is-show-pagination="false"
             >
-              <el-table-column
-                prop="columnName"
-                label="字段名称"
-                width="180"
-              />
-              <el-table-column
-                prop="columnType"
-                label="字段类型"
-                width="180"
-              />
-              <el-table-column
-                prop="columnComment"
-                label="字段描述"
-              />
-            </el-table>
+              <template #columnName />
+              <template #columnType />
+              <template #comment />
+            </common-table>
             <span slot="footer">
-              <el-button type="primary" @click="detailVisible = false">关闭</el-button>
+              <el-button @click="detailVisible = false">关闭</el-button>
             </span>
           </el-dialog>
         </div>
@@ -210,7 +202,7 @@ export default {
         ]
       },
       tableName: '',
-      comment: '',
+      detailComment: '',
       detailColumns: [],
       detailInfo: {},
       ids: '',
@@ -218,15 +210,21 @@ export default {
       isPaging: 1,
       page: 1,
       limit: 20,
-      sortBy: '',
-      sortOrder: '',
+      // sortBy: 'name',
+      // sortOrder: 'asc',
       searchkey: '',
       isloading: false,
       notEdit: true,
       editform: {},
       currentRow: 0,
       dialogVisible: false,
-      fileType: '',
+      fileType: {
+        'mysql': 'mySql数据源',
+        'mongodb': 'MongoDB数据源',
+        'file': '本地数据源',
+        '': '?'
+      },
+      status: '',
       search: '',
       searchFile: '',
       dataSourceList: {},
@@ -249,17 +247,37 @@ export default {
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       },
+      comments: [
+        {
+          prop: 'columnName',
+          label: '字段名称',
+          fixed: false
+        },
+        {
+          prop: 'columnType',
+          label: '字段类型',
+          fixed: false
+        },
+        {
+          prop: 'comment',
+          label: '字段描述',
+          fixed: false,
+          ellipsis: true
+        }
+      ],
       tableColums: [
         {
           prop: 'name',
           label: '名称',
-          fixed: false,
-          sortable: true
+          fixed: false
+          // sortable: true
         },
         {
           prop: 'comment',
           label: '备注',
-          fixed: false
+          slot: 'comment',
+          fixed: false,
+          ellipsis: true
         },
         {
           prop: 'operation',
@@ -275,6 +293,10 @@ export default {
     this.init()
   },
   methods: {
+    close() {
+      this.$refs['form'].clearValidate()
+      this.dialogVisible = false
+    },
     toCreateDataSet(dataSource) {
       const currentTime = getDateTime()
       const query = {
@@ -306,7 +328,7 @@ export default {
         this.detailTable = await detailSource(params)
         this.detailColumns = this.detailTable.columns
         this.tableName = this.detailTable.tableName
-        this.comment = this.detailTable.comment
+        this.detailComment = this.detailTable.comment
         this.detailColumns.forEach(function (value) { value.columnType = value.columnType.toUpperCase() })
       } catch (error) {
         console.log(error)
@@ -314,6 +336,8 @@ export default {
     },
     async editSource(row) {
       try {
+        this.notEdit = false
+        this.status = '编辑'
         this.form.type = row.type
         this.form.displayName = row.displayName
         this.form.host = row.host
@@ -323,7 +347,6 @@ export default {
         this.form.password = ''
         this.currentId = row._id
         this.dialogVisible = true
-        this.notEdit = false
       } catch (error) {
         console.log(error)
       }
@@ -334,8 +357,8 @@ export default {
           isPaging: this.isPaging,
           page: this.page,
           limit: this.limit,
-          sortBy: this.sortBy,
-          sortOrder: this.sortOrder,
+          // sortBy: this.sortBy,
+          // sortOrder: this.sortOrder,
           searchkey: this.searchkey
         }
         const file = await getSourceFile(ids, params)
@@ -345,6 +368,7 @@ export default {
         this.limit = file.limit
       } catch (error) {
         console.log(error)
+        this.sourceFile = []
       }
     },
     searchSource() {
@@ -366,8 +390,9 @@ export default {
             this.$refs.dataFiles.getDataFiles()
           })
         } else {
+          this.isShowDataFiles = false
           const ids = val._id
-          this.getSourceFile(ids)
+          await this.getSourceFile(ids)
         }
       } catch (error) {
         console.log(error)
@@ -404,14 +429,28 @@ export default {
     },
     async deleteSource(id) {
       try {
-        console.log(id)
+        await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
         await deleteSources(id)
-        this.init()
-      } catch (error) {
-        console.log(error)
+        await this.init()
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      } catch (err) {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       }
     },
     handleCommand(command) {
+      console.log('.............')
+      this.status = '添加'
+      this.notEdit = true
       this.form = {
         type: '',
         displayName: '',
@@ -422,19 +461,19 @@ export default {
         password: ''
       }
       if (command === 'mysql') {
-        this.fileType = '添加mySql数据源'
-        this.form.type = 'mysql'
+        // this.form.type = 'mysql'
+        this.$set(this.form, 'type', 'mysql')
         this.dialogVisible = true
         this.notEdit = true
       }
       if (command === 'mongoDB') {
-        this.fileType = '添加MongoDB数据源'
-        this.form.type = 'mongodb'
+        // this.form.type = 'mongodb'
+        this.$set(this.form, 'type', 'mongodb')
         this.dialogVisible = true
         this.notEdit = true
       }
       if (command === 'localFile') {
-        this.fileType = '添加本地数据源'
+        // this.fileType = '添加本地数据源'
         this.$dialog.show('UploadFileDialog', {}, () => {
           if (this.isShowDataFiles) {
             this.$refs.dataFiles.getDataFiles()
@@ -442,6 +481,15 @@ export default {
         })
       }
     },
+    // handleSortChange({ prop, order }) {
+    //   this.sortBy = prop
+    //   if (order) {
+    //     this.sortOrder = order === 'ascending' ? 'asc' : 'desc'
+    //   } else {
+    //     this.sortOrder = 'desc'
+    //   }
+    //   this.getSourceFile(this.currentRow._id)
+    // },
     async connect(form) {
       this.isloading = true
       const testForm = {
@@ -472,18 +520,24 @@ export default {
         return
       }
       try {
-        form.password = encryptAes(form.password)
-        const result = await connectTest(form)
+        const testForm = {
+          displayName: form.displayName,
+          username: form.username,
+          db: form.db,
+          host: form.host,
+          password: encryptAes(form.password),
+          port: form.port,
+          type: form.type
+        }
+        const result = await this.connect(form)
         if (result === true) {
           this.dialogVisible = false
           if (this.notEdit) {
-            await postDataSourceList(form)
+            await postDataSourceList(testForm)
           } else {
-            await editSources(this.currentId, this.form)
+            await editSources(this.currentId, testForm)
           }
           this.init()
-        } else {
-          this.$message.error('连接数据库失败！')
         }
       } catch (error) {
         console.log(error)
@@ -494,6 +548,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.part {
+  margin-bottom: 1em;
+}
+.table-title-name {
+  width: 48px;
+  height: 20px;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: rgba(0,0,0,0.90);
+  font-weight: 400;
+}
 .operate {
   color: #FA8334;
   span {
@@ -502,24 +567,34 @@ export default {
 }
 .table-row {
   display: flex;
-  height: 68px;
-  line-height: 34px;
+  align-items: center;
+  height: 50px;
+  margin-right:10px;
   &__image {
-    flex: 1;
+    width:32px;
+    margin-right: 15px;
     font-size: 32px;
-    line-height: 68px;
   }
   &__text {
-    flex: 1
+    flex: 1;
+    text-align: left;
+    overflow:hidden;
   }
   &__tools {
-    flex: 2;
+    width:65px;
     text-align: right;
-    line-height: 68px;
-    span {
-      margin-right: 20px;
+    span{
       cursor:pointer;
+      &:not(:last-of-type) {
+        margin-right: 20px;
+      }
     }
+  }
+  &__text-part1 {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 .input {
@@ -530,13 +605,13 @@ export default {
 }
 .table-title {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  line-height: 68px;
+  height: 50px;
   font-family: PingFangSC-Medium;
   font-size: 12px;
   color: rgba(0,0,0,0.90);
   text-align: left;
-  line-height: 42px;
   font-weight: 500;
 }
 .research-file {
@@ -545,16 +620,18 @@ export default {
   line-height: 68px;
 }
 .head-title {
-  margin: 1.7%;
+  margin:24px;
 }
 .create-data {
-  margin: 0 16px 0 12px;
+  margin: 0 0 0 12px;
 }
 ::v-deep .el-table td {
-  height: 68px
+  height: 42px;
+  padding-left: 16px
 }
 ::v-deep .el-table th {
-  height: 68px
+  height: 42px;
+  padding-left: 16px
 }
 .data-source {
   height: 100%;
@@ -565,13 +642,13 @@ export default {
     font-family: PingFangSC-Medium;
     font-size: 12px;
     color: rgba(0, 0, 0, 0.9);
-    line-height: 20px;
     font-weight: 500;
   }
 
   &__header {
     display: flex;
     justify-content: space-between;
+    height: 68px;
     border-bottom: 1px solid #EBEEF5;
   }
 
@@ -579,7 +656,7 @@ export default {
     position: relative;
     background: #fff;
     margin-top: 16px;
-    height: calc(100% - 50px);
+    height: calc(100vh - 50px);
     font-size: 12px;
   }
 
@@ -588,18 +665,27 @@ export default {
   }
 
   &__list {
-    flex: 1
+    flex: 1;
+    height: calc(100vh - 168px);
+    min-width:270px;
+    overflow: auto;
   }
 }
 .data-file__list {
   flex: 2;
+  padding: 24px;
   border-left: 1px solid #EBEEF5;
+  height: calc(100vh - 168px);
+  overflow: auto;
 }
 .head-select {
-  margin: 1.7%;
+  margin: 24px;
   font-size: 12px;
 }
 .el-button {
   font-size: 12px;
+}
+.description {
+  cursor: pointer;
 }
 </style>

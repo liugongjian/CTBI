@@ -30,7 +30,6 @@ export const initDialogs = (Vue) => {
         data: d
       }).$mount() // 渲染组件
       // 注意，需要将组价挂载到body上，因为在切换组件时，提示框还有延迟，不会立刻消失
-      console.log(document.querySelector('#main-page'))
       document.body.querySelector('#main-page').appendChild(instance.$el)
     },
     close: function () {

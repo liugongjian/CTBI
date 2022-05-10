@@ -34,10 +34,10 @@
             </div>
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="handleClose">取 消</el-button>
-          <el-button type="primary" @click="updatePassword">确 定</el-button>
-        </div>
+      </div>
+      <div slot="footer">
+        <el-button @click="handleClose">取 消</el-button>
+        <el-button type="primary" @click="updatePassword">确 定</el-button>
       </div>
     </el-dialog>
     <Success :success-visible.sync="successVisible" :success-data="successData" @refresh="refresh" />
@@ -106,7 +106,6 @@ export default {
               this.successVisible = true
               this.visible = false
               this.successData = { userName: this.resetData.userName, password: this.form.password }
-              console.log(this.successData)
             }
           } catch (error) {
             console.log(error)
@@ -118,8 +117,8 @@ export default {
     },
     createNewPassword () {
       const newPasswordArray = []
-      // 密码8-20位
-      const passwordLength = Math.floor(Math.random() * 13) + 8
+      // 密码12-26位
+      const passwordLength = Math.floor(Math.random() * 15) + 12
       const str = '0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM@$!%*#_~?&^'
       for (let index = 0; index < passwordLength; index++) {
         const tag = Math.floor(Math.random() * str.length)
@@ -183,10 +182,8 @@ export default {
 }
 .dialog-footer {
   display: flex;
-  justify-content: flex-end;
-  padding: 10px 20px 0;
+  justify-content: center;
   margin: 0 -20px -10px;
-  border-top: 1px solid #f1f1f1;
 }
 .info {
   font-size: 12px;

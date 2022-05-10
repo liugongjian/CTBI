@@ -60,7 +60,6 @@
     <div class="button-style">
       <el-button
         class="button"
-        :plain="true"
         @click="setUp"
       >
         确认
@@ -160,6 +159,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.button-style {
+    position: relative;
+    margin-top: 58px;
+  }
+.button {
+    background: #f0914b;
+    color: #fff;
+    width: 100%;
+    height: 50px;
+    font-size: 18px;
+    border:#f0914b;
+    border-radius: 10px;
+  }
 ::v-deep .back {
   display: inline-block;
   font-size: 62px;

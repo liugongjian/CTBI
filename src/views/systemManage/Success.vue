@@ -19,10 +19,10 @@
           {{ '********' }}
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button size="small" @click="handleClose">关 闭</el-button>
-        <el-button type="primary" size="small" @click="(e) => handleClipboard(e)">一键复制</el-button>
-      </div>
+    </div>
+    <div slot="footer">
+      <el-button size="small" @click="handleClose">关 闭</el-button>
+      <el-button type="primary" size="small" @click="(e) => handleClipboard(e)">一键复制</el-button>
     </div>
   </el-dialog>
 </template>
@@ -94,6 +94,9 @@ export default {
 ::v-deep .el-dialog__title {
   font-size: 16px;
 }
+::v-deep .el-dialog__body {
+  padding-bottom: 10px;
+}
 ::v-deep .el-input__inner {
   font-size: 12px;
 }
@@ -103,8 +106,6 @@ export default {
 .dialog-footer {
   display: flex;
   justify-content: center;
-  padding: 10px 20px 0;
   margin: 0 -20px -10px;
-  border-top: 1px solid #f1f1f1;
 }
 </style>
