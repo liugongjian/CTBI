@@ -341,9 +341,9 @@
           style="width: 65vw"
         >
           <el-table
-            :data="batchConfigTableData"
+            :data="fomatBatchConfigTableData"
             style="width: 100%;"
-            row-key="displayColumn"
+            row-key="idx"
             default-expand-all
             header-row-class-name="m-table-header"
             class="batch-config-table-data"
@@ -355,11 +355,20 @@
               width="360"
             >
               <template slot-scope="scope">
+                <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
+                <div v-else>
+                  <el-input
+                    v-model="scope.row.comment"
+                    placeholder="请输入内容"
+                  />
+                </div>
+              </template>
+              <template slot-scope="scope">
                 <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'">
                   <span>{{ scope.row.displayColumn }}</span>
                 </div>
                 <div v-else>
-                  <el-input v-model="scope.row.displayColumn" />
+                  <el-input v-model="scope.row.displayColumn" placeholder="请输入内容" />
                 </div>
               </template>
             </el-table-column>
@@ -514,12 +523,12 @@ export default {
       dimensionMeasureTableData: [],
       batchConfigTableData: [
         {
-          _id: '',
+          idx: '1',
           displayColumn: '维度',
           children: []
         },
         {
-          _id: '',
+          idx: '2',
           displayColumn: '度量',
           children: []
         }
@@ -578,7 +587,21 @@ export default {
       currentSqlId: this.sqlId
     }
   },
-  computed: {},
+  computed: {
+    fomatBatchConfigTableData() {
+      const tmp = this.batchConfigTableData.slice()
+      tmp.forEach((o, i) => {
+        const _children = o.children.slice()
+        const prev = i + ''
+        console.log('prev', prev)
+        _children.forEach((item, idx) => {
+          item.idx = prev + idx
+        })
+        o.children = _children
+      })
+      return tmp
+    }
+  },
   watch: {
     fields: function (newVal, oldVal) {
       this.dataSetFields = newVal.slice()
@@ -924,5 +947,9 @@ export default {
   font-weight: 400;
   line-height: 20px;
   background-color: #fff !important;
+}
+// 批量配置样式调整
+::v-deep .el-table td.el-table__cell div {
+  display: flex;
 }
 </style>
