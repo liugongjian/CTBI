@@ -2,7 +2,7 @@
   <div class="result-preview-wrap">
     <!-- 存在两种 一种为编辑状态下（运行结果+历史记录） 二为展示状态下（数据预览+批量配置） -->
     <div
-      v-if="isEdit"
+      v-show="isEdit"
       class="result-preview-wrap-main"
     >
       <div class="m-tab">
@@ -140,7 +140,7 @@
       </div>
     </div>
     <div
-      v-else
+      v-show="!isEdit"
       class="result-preview-wrap-main"
     >
       <div class="result-preview-wrap-main-c">
@@ -578,12 +578,12 @@ export default {
       currentSqlId: this.sqlId
     }
   },
-  computed: {},
   watch: {
     fields: function (newVal, oldVal) {
       this.dataSetFields = newVal.slice()
-      this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
-      this.batchConfigTableData = this.getBatchConfigTableData(newVal.slice())
+      // 做强关联，联动数据
+      this.dimensionMeasure = this.getDimensionMeasureData(this.dataSetFields)
+      this.batchConfigTableData = this.getBatchConfigTableData(this.dataSetFields)
     },
     runResultData: function (newVal, oldVal) {
       if (this.currentSqlId !== newVal._id) {
@@ -595,7 +595,6 @@ export default {
     dataSetFields: {
       handler (newVal, oldVal) {
         // 这里 dataSetFields 等同于 父级的 fields 字段，子级有变化通知父级更改（合并的策略由父级处理）
-        this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(newVal.slice())))
         this.$emit('dataSetFieldsChange', newVal)
       },
       deep: true
@@ -607,14 +606,9 @@ export default {
     this.dataSetFields = fields.slice()
     this.dimensionMeasure = JSON.parse(JSON.stringify(this.getDimensionMeasureData(fields.slice())))
     this.batchConfigTableData = this.getBatchConfigTableData(fields.slice())
+    this.getHistory()
   },
   methods: {
-    // 切换tags触发的事件
-    handleClickTagsFirst (tab) {
-      if (tab.name === 'historyLog') {
-        this.getHistory()
-      }
-    },
     async getHistory () {
       if (this.currentSqlId) {
         try {
@@ -688,6 +682,7 @@ export default {
     async refreshPreview () {
       this.activeSecondTagName = 1
       const sql = {}
+      console.log(this.sqlParams)
       sql._id = this.sqlParams._id
       sql.dataSourceId = this.sqlParams.dataSourceId
       sql.sql = this.sqlParams.sql
@@ -718,8 +713,7 @@ export default {
         }
       ]
       if (!fields) return res
-      const tmp = fields.slice()
-      tmp.forEach(i => {
+      fields.forEach(i => {
         if (i.type === 'Measure') {
           if (!i.attributes) {
             i.attributes = [{}]
@@ -733,23 +727,19 @@ export default {
     },
     // 隐藏 & 取消隐藏
     hideBatchConfiguration (val) {
-      const tmp = this.dataSetFields.slice()
-      tmp.forEach(i => {
+      this.dataSetFields.forEach(i => {
         if (i._id === val._id) {
           i.attributes.forEach((item, idx) => {
             if (!idx) {
               item.isHidden = !item.isHidden
             }
           })
-          console.log(i.attributes)
         }
       })
-      this.dataSetFields = tmp.slice()
-      this.batchConfigTableData = this.getBatchConfigTableData(tmp.slice()).slice()
     },
     // 删除
     deleteBatchConfiguration (val) {
-      const tmp = this.dataSetFields.slice()
+      const tmp = this.dataSetFields
       let _idx = 0
       tmp.forEach((i, idx) => {
         if (i._id === val._id) {
@@ -757,12 +747,10 @@ export default {
         }
       })
       tmp.splice(_idx, 1)
-      this.dataSetFields = tmp.slice()
-      this.batchConfigTableData = this.getBatchConfigTableData(tmp.slice()).slice()
     },
     // 复制
     copyBatchConfiguration (val) {
-      const tmp = this.dataSetFields.slice()
+      const tmp = this.dataSetFields
       const displayColumnList = []
       let copy = {}
       // let idx = 0
@@ -782,8 +770,6 @@ export default {
       }
       copy.displayColumn = _displayColumn
       tmp.push(copy)
-      this.dataSetFields = tmp.slice()
-      this.batchConfigTableData = this.getBatchConfigTableData(tmp.slice()).slice()
     },
     // 格式化 运行结果
     formatRunResultData (val) {

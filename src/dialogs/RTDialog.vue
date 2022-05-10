@@ -27,7 +27,7 @@
 
 <script>
 import E from 'wangeditor'
-import dialogMixin from '@/dialogs/dialogMixin'
+import dialogMixin from '@/mixins/dialogMixin'
 export default {
   name: 'RTDialog',
   mixins: [dialogMixin],

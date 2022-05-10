@@ -10,6 +10,7 @@
       :style="{width: width + 'px'}"
       @mouseenter="visibilityChange($event)"
     >{{ content }}</span>
+    <slot class="ellipsis-text" />
   </el-tooltip>
 </template>
 

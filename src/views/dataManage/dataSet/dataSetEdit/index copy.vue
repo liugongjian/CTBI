@@ -8,7 +8,7 @@
           style="margin-right: 8px; cursor: pointer"
           @click="noSaveLeaveDialogVisible = true"
         />
-        <span>{{ dataSourceName ? dataSourceName : '未命名' }}</span>
+        <span>{{ dataSetDisplayName ? dataSetDisplayName : '未命名' }}</span>
       </div>
       <div class="data-set-edit-wrap-header-r">
         <div
@@ -58,7 +58,7 @@
         <div
           style="margin-left: 8px"
           class="h-c-p"
-          @click="checkLeaveEdit"
+          @click="isEdit = false"
         ><i class="el-icon-close" /></div>
       </div>
     </div>
@@ -93,7 +93,7 @@
             v-if="!isEdit"
             class="side-top-main"
           >
-            <div><span>当前数据源</span></div>
+            <div><span style="color: rgba(0, 0, 0, 0.45);">当前数据源</span></div>
             <div>
               <span style="font-size: 12px;font-weight: 500;color: rgba(0, 0, 0, 0.9);">{{ dataSourceName }}</span>
             </div>
@@ -677,12 +677,6 @@ export default {
         console.log(error)
       }
     },
-    // 离开 编辑状态 但不保存数据
-    checkLeaveEdit () {
-      this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内 容将不被保存，请问您是否确认返回？' }, () => {
-        this.isEdit = false
-      })
-    },
     // 根据sqlId 获取sql相关的所有数据
     async getSqlData (sqlId) {
       try {
@@ -711,6 +705,7 @@ export default {
     },
     // 子级更改更新父级的fields
     dataSetFieldsChange (val) {
+      console.log('dataSetFieldsChange', val)
     },
     // 获取数据源中的表
     async handleChangeDataSource (val, type) {
@@ -757,7 +752,7 @@ export default {
     height: 50px;
     border-bottom: 1px solid #ccc;
     box-sizing: border-box;
-    background: rgba(0, 0, 0, 0.9);
+    background: #2d303b;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -870,12 +865,13 @@ export default {
 
 .sql-edit {
   min-height: 300px;
+  padding: 16px;
   box-sizing: border-box;
   border-bottom: 1px solid #ccc;
 }
 
 .result-preview {
-  padding: 16px;
+  padding: 20px;
 }
 
 .set-param-drawer {
