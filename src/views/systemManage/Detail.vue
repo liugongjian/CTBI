@@ -6,6 +6,7 @@
       :modal="false"
       :wrapper-closable="false"
       @open="handleOpen"
+      @close="handleClose"
     >
       <span slot="title" class="title">
         账号详情
@@ -157,7 +158,8 @@ export default {
     this.rules = {
       realName: [
         { message: '请输入真实姓名', trigger: 'blur' },
-        { pattern: /^[\u4E00-\u9FA5A-Za-z]+$/, message: '真实姓名只允许输入中文和英文', trigger: 'blur' }
+        { pattern: /^[\u4E00-\u9FA5A-Za-z]+$/, message: '真实姓名只允许输入中文和英文', trigger: 'blur' },
+        { max: 100, message: '最多只能输入100字符', trigger: 'blur' }
       ],
       phone: [
         { message: '请输入手机号', trigger: 'blur' },
@@ -177,7 +179,7 @@ export default {
         realName: '',
         phone: '',
         email: '',
-        form: '',
+        from: '',
         status: '',
         creatorId: {},
         role: '',
@@ -232,7 +234,7 @@ export default {
     async validateExists (rule, value, callback) {
       const params = rule.field === 'userName' ? { userName: value } : rule.field === 'phone' ? { phone: value } : { email: value }
       const label = rule.field === 'userName' ? '账号名' : rule.field === 'phone' ? '手机号' : '邮箱'
-      const isExist = await exists({ ...params, from: 'platform' })
+      const isExist = await exists({ ...params, from: 'platform', userId: this.form._id })
       if (isExist) {
         callback(new Error(`${label}已存在`))
       }
@@ -251,6 +253,7 @@ export default {
       callback()
     },
     handleClose () {
+      this.$refs.form.clearValidate()
       this.$emit('update:detailVisible', false)
     }
   }
@@ -271,6 +274,7 @@ export default {
   }
   ::v-deep .el-form-item__error {
     padding-top: 0;
+    margin-top: -4px;
   }
   ::v-deep .el-form-item__content {
     font-size: 12px;

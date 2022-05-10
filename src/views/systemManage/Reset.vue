@@ -23,7 +23,7 @@
                 />
                 <div slot="content">
                   <div>1. 密码为数字、大写字母、小写字母、特殊符号（@$!%*#_~?&）的组合</div>
-                  <div>2. 长度限制为8-20位</div>
+                  <div>2. 长度限制为12-26位</div>
                   <div>3. 不能包含账号信息、字典序及键盘序</div>
                 </div>
               </el-tooltip>
@@ -142,7 +142,7 @@ export default {
     },
     validatePassword (rule, value, callback) {
       if (!validPassword(value)) {
-        callback(new Error('密码应包括数字、小写字母、大写字母和特殊符号四种类型字符(长度为8-26位)'))
+        callback(new Error('密码应包括数字、小写字母、大写字母和特殊符号四种类型字符(长度为12-26位)'))
         return
       }
       if (validContinuousChar(value)) {
