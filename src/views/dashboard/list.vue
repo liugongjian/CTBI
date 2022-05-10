@@ -153,31 +153,13 @@
               class="data-set-didlog-main-input"
             />
           </div>
-          <span slot="footer" class="dialog-footer">
+          <div slot="footer" class="dialog-footer">
             <el-button @click="editDataSetVisible = false">取 消</el-button>
             <el-button
               style="background-color: #fa8334; color: #fff"
               @click="hanleEditFile"
             >确 定</el-button>
-          </span>
-        </el-dialog>
-
-        <el-dialog
-          title="删除提示"
-          :visible.sync="deleteFolderVisible"
-          width="480px"
-        >
-          <div class="data-set-didlog-del">
-            <svg-icon icon-class="warning" style="margin-right: 16px" />
-            <span>确定删除文件夹吗？</span>
           </div>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="deleteFolderVisible = false">取 消</el-button>
-            <el-button
-              type="primary"
-              @click="hanleDeleteFolder"
-            >确 定</el-button>
-          </span>
         </el-dialog>
 
         <el-dialog
@@ -189,13 +171,13 @@
             <svg-icon icon-class="warning" style="margin-right: 16px" />
             <span>确定删除该{{ cureentData && cureentData.directory ? '文件夹' : '仪表板' }}吗？</span>
           </div>
-          <span slot="footer" class="dialog-footer">
+          <div slot="footer" class="dialog-footer">
             <el-button @click="deleteDataVisible = false">取 消</el-button>
             <el-button
               type="primary"
               @click="hanledeleteData"
             >确 定</el-button>
-          </span>
+          </div>
         </el-dialog>
 
         <el-dialog
@@ -207,13 +189,13 @@
             <svg-icon icon-class="warning" style="margin-right: 16px" />
             <span>下线后该报表不可被查看</span>
           </div>
-          <span slot="footer" class="dialog-footer">
+          <div slot="footer" class="dialog-footer">
             <el-button @click="cancelPublishVisible = false">取 消</el-button>
             <el-button
               type="primary"
               @click="handleCancelPublish"
             >确 定</el-button>
-          </span>
+          </div>
         </el-dialog>
 
         <el-dialog
@@ -231,7 +213,7 @@
                 />
               </el-form-item>
               <el-form-item label="所有者" label-width="80px">
-                <el-select v-model="dashboardAttr.ownerId" placeholder="请选择">
+                <el-select v-model="dashboardAttr.ownerId" placeholder="请选择" style="width: 360px">
                   <el-option
                     v-for="item in users"
                     :key="item.value"
@@ -249,7 +231,7 @@
               </el-form-item>
             </el-form>
           </div>
-          <span slot="footer" class="dialog-footer">
+          <div slot="footer" class="dialog-footer">
             <el-button
               @click="dashboardAttributeVisible = false"
             >取 消</el-button>
@@ -257,7 +239,7 @@
               type="primary"
               @click="hanledashboardAttribute"
             >确 定</el-button>
-          </span>
+          </div>
         </el-dialog>
 
         <el-dialog
@@ -278,6 +260,20 @@
                 @click="dashboardAttributeVisible = false"
               >不再公开</el-button>
             </div>
+            <div>
+              <el-input v-model="currentShareInfo.shareUrl" readonly>
+                <el-button slot="append" type="primary">复制</el-button>
+              </el-input>
+            </div>
+            <el-form :model="currentShareInfo" style="padding: 0px">
+              <el-form-item label="截止日期" label-width="80px">
+                <el-date-picker
+                  v-model="currentShareInfo.shareEndTime"
+                  type="date"
+                  placeholder="选择日期"
+                />
+              </el-form-item>
+            </el-form>
           </div>
         </el-dialog>
       </div>
@@ -295,7 +291,6 @@
 import { batchDeleteResources, batchCancelPublishDashboards, updateFolderOrDashboardProperties, shareDashboard } from '@/api/dashboard'
 import {
   updateFolderName,
-  delFolders,
   updateDataSet,
   getDataSetsFolders
 } from '@/api/dataSet'
@@ -316,7 +311,6 @@ export default {
       dataLoading: true,
       multipleSelection: [],
       editDataSetVisible: false,
-      deleteFolderVisible: false,
       deleteDataVisible: false,
       dashboardAttributeVisible: false,
       dashboardAttr: {
@@ -547,23 +541,6 @@ export default {
       }
       this.renameFolderVisible = false
     },
-    deleteFloder(val) {
-      if (this.batchSelection) return false
-      this.currentFloder = val
-      this.deleteFolderVisible = true
-    },
-    async hanleDeleteFolder() {
-      const id = this.currentFloder._id
-      try {
-        const data = await delFolders(id)
-        this.$message.success(data)
-        this.deleteFolderVisible = false
-        this.currentFloder = null
-        this.init()
-      } catch (error) {
-        console.log(error)
-      }
-    },
     deleteData(val) {
       if (this.batchSelection) return false
       this.cureentData = val
@@ -793,5 +770,9 @@ export default {
     cursor: pointer;
   }
 
+}
+.dialog-footer{
+  padding-bottom: 10px;
+  margin-right: 20px;
 }
 </style>
