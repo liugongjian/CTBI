@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-object-container">
+  <div v-if="option.visible" class="editor-object-container">
     <el-checkbox v-model="option.show">自定义表格主题</el-checkbox>
     <div :class="{'box-disabled':!option.show}">
       <div class="table-theme">
@@ -22,8 +22,8 @@
           <div>极简</div>
         </div>
       </div>
-      <div v-if="option.active!=='verySimple'"><span>主色系</span></div>
-      <el-radio-group v-if="option.active!=='verySimple'" v-model="option.colorType">
+      <div v-if="option.active==='simple'"><span>主色系</span></div>
+      <el-radio-group v-if="option.active==='simple'" v-model="option.colorType">
         <el-radio label="themeColor">主题色</el-radio>
         <el-radio label="gray">灰色</el-radio>
         <el-radio label="custom">自定义</el-radio>
@@ -33,12 +33,34 @@
 </template>
 
 <script>
+import store from '@/store'
+
 export default {
   name: 'TableTheme',
   props: {
     option: {
       type: Object,
       default: () => {}
+    }
+  },
+  watch: {
+    'option.colorType': {
+      handler(val) {
+        store.state.app.layout.forEach(item => {
+          if (item.i === store.state.app.currentLayoutId) {
+            item.option.theme.DisplayConfig.Color.show = val === 'custom'
+          }
+        })
+      }
+    },
+    'option.active': {
+      handler(val) {
+        store.state.app.layout.forEach(item => {
+          if (item.i === store.state.app.currentLayoutId) {
+            item.option.theme.DisplayConfig.Color.show = val === 'verySimple'
+          }
+        })
+      }
     }
   },
   methods: {

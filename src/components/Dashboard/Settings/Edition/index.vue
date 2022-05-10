@@ -21,14 +21,15 @@
         <p>以上差异，导致切换后需要重新配置相关内容，建议切换前手动另存为副本</p>
       </span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">确定</el-button>
-        <el-button type="primary" @click="dialogVisible = false">取消</el-button>
+        <el-button @click="visibleOp(true)">确定</el-button>
+        <el-button type="primary" @click="visibleOp()">取消</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import store from '@/store'
 export default {
   name: 'Edition',
   props: {
@@ -42,7 +43,23 @@ export default {
       dialogVisible: false
     }
   },
+  watch: {
+    'option.edition': {
+      handler(val) {
+        val === 'oldEdition' && this.visibleOp()
+      }
+    }
+  },
   methods: {
+    visibleOp(val = false) {
+      this.dialogVisible = false
+      store.state.app.layout.forEach(item => {
+        if (item.i === store.state.app.currentLayoutId) {
+          item.option.theme.DisplayConfig.Color.show = val
+          item.option.theme.DisplayConfig.TableTheme.visible = val
+        }
+      })
+    }
   }
 }
 </script>

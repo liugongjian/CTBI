@@ -58,11 +58,11 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        const colorType = val.theme.DisplayConfig.TableTheme.colorType
-        const color = colorType === 'gray' ? colorType : (colorType === 'themeColor' ? 'blue' : 'red') // TODO:red是自定义，要再做
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         this.stripe = val.theme.DisplayConfig.TableTheme.active === 'stripe'
         this.border = val.theme.DisplayConfig.TableTheme.active === 'border'
+        const colorType = val.theme.DisplayConfig.TableTheme.colorType
+        const color = colorType === 'gray' ? colorType : (colorType === 'themeColor' ? 'blue' : val.theme.DisplayConfig.Color.color[0].color)
         this.rowStyle = val.theme.DisplayConfig.TableTheme.active === 'simple' ? { 'border-bottom': `3px ${color} solid` } : {}
         this.header = val.theme.DisplayConfig.ListHeader.head
         this.sequence = val.theme.DisplayConfig.Sequence.show
