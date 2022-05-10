@@ -1,72 +1,94 @@
 <template>
-  <div class="data-panel-tree">
-    <el-input
-      v-model="filterText"
-      prefix-icon="el-icon-search"
-      placeholder="输入关键字搜索"
-    />
-    <div class="tree-wrapper">
-      <div class="data-panel-dimension-tree">
-        <div class="data-panel-tree-title">
-          <div>维度<i class="el-icon-warning-outline m-l-10" /></div>
+  <div>
+    <div class="cube-switch">
+      <div class="j-select-cube">
+        <div class="guid-tip-container">
+          <data-set-select />
         </div>
-        <el-tree
-          ref="tree"
-          class="filter-tree"
-          :data="dimension"
-          :props="defaultProps"
-          default-expand-all
-          :allow-drop="allowDrop"
-          :allow-drag="allowDrag"
-          :filter-node-method="filterNode"
-          draggable
-          @node-drag-start="handleDragStart"
+        <div
+          v-if="dataSetData && dataSetData.length>0"
+          title="编辑数据集"
+          class="edit-cube"
         >
-          <span
-            slot-scope="{ node, data }"
-            class="custom-tree-node"
-            style="width:100%;"
-            @dblclick="addItem(data)"
-          >
-            <span>{{ node.label }}</span>
-          </span>
-        </el-tree>
+          <i class="el-icon-edit-outline" />
+        </div>
       </div>
-      <div class="data-panel-measure-tree">
-        <div class="data-panel-tree-title">
-          <div>度量<i class="el-icon-warning-outline m-l-10" /></div>
-        </div>
-        <el-tree
-          ref="tree"
-          class="filter-tree"
-          :data="measure"
-          :props="defaultProps"
-          default-expand-all
-          :filter-node-method="filterNode"
-          :allow-drop="allowDrop"
-          :allow-drag="allowDrag"
-          draggable
-          @node-drag-start="handleDragStart"
-        >
-          <span
-            slot-scope="{ node, data }"
-            class="custom-tree-node"
-            style="width:100%;"
-            @dblclick="addItem(data)"
+    </div>
+    <div
+      v-if="dataSetData && dataSetData.length>0"
+      class="data-panel-tree"
+    >
+      <el-input
+        v-model="filterText"
+        prefix-icon="el-icon-search"
+        placeholder="输入关键字搜索"
+      />
+      <div class="tree-wrapper">
+        <div class="data-panel-dimension-tree">
+          <div class="data-panel-tree-title">
+            <div>维度<i class="el-icon-warning-outline m-l-10" /></div>
+          </div>
+          <el-tree
+            ref="tree"
+            class="filter-tree"
+            :data="dimension"
+            :props="defaultProps"
+            default-expand-all
+            :allow-drop="allowDrop"
+            :allow-drag="allowDrag"
+            :filter-node-method="filterNode"
+            draggable
+            @node-drag-start="handleDragStart"
           >
-            <span>{{ node.label }}</span>
-          </span>
-        </el-tree>
+            <span
+              slot-scope="{ node, data }"
+              class="custom-tree-node"
+              style="width:100%;"
+              @dblclick="addItem(data)"
+            >
+              <span>{{ node.label }}</span>
+            </span>
+          </el-tree>
+        </div>
+        <div class="data-panel-measure-tree">
+          <div class="data-panel-tree-title">
+            <div>度量<i class="el-icon-warning-outline m-l-10" /></div>
+          </div>
+          <el-tree
+            ref="tree"
+            class="filter-tree"
+            :data="measure"
+            :props="defaultProps"
+            default-expand-all
+            :filter-node-method="filterNode"
+            :allow-drop="allowDrop"
+            :allow-drag="allowDrag"
+            draggable
+            @node-drag-start="handleDragStart"
+          >
+            <span
+              slot-scope="{ node, data }"
+              class="custom-tree-node"
+              style="width:100%;"
+              @dblclick="addItem(data)"
+            >
+              <span>{{ node.label }}</span>
+            </span>
+          </el-tree>
+        </div>
+
       </div>
 
     </div>
-
   </div>
+
 </template>
 
 <script>
+import DataSetSelect from './components/DataSetSelect.vue'
 export default {
   name: 'DataPanel',
+  components: { DataSetSelect },
   props: {
     option: {
       type: Object,
@@ -138,7 +160,9 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'label'
-      }
+      },
+      dataSetData: [], // 数据集
+      value: ''
     }
   },
   watch: {
