@@ -8,8 +8,8 @@
         <div class="head-title">数据源</div>
         <div class="head-select">
           <el-dropdown @command="handleCommand">
-            <el-button type="primary">
-              +新建数据源
+            <el-button type="primary" icon="el-icon-plus" class="new-button">
+              <span class="newFile">新建数据源</span>
               <i class="el-icon-arrow-down el-icon--right" />
             </el-button>
             <el-dropdown-menu slot="dropdown">
@@ -114,7 +114,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-file__list" />
+        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-files__list" />
         <div v-else class="data-file__list">
           <div class="research-file">
             <el-input
@@ -548,6 +548,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.new-button {
+  width: 124px;
+  height: 32px;
+  background: #FA8334;
+  border-radius: 2px;
+}
+.newFile {
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #FFFFFF;
+  text-align: left;
+  font-weight: 400;
+}
 .part {
   margin-bottom: 1em;
 }
@@ -569,7 +582,7 @@ export default {
   display: flex;
   align-items: center;
   height: 50px;
-  margin-right:10px;
+  margin-right: 10px;
   &__image {
     width:32px;
     margin-right: 15px;
@@ -620,18 +633,20 @@ export default {
   line-height: 68px;
 }
 .head-title {
-  margin:24px;
+  position: absolute;
+  left: 24px;
+  line-height: 68px;
 }
 .create-data {
   margin: 0 0 0 12px;
 }
 ::v-deep .el-table td {
   height: 42px;
-  padding-left: 16px
+  padding-left: 14px
 }
 ::v-deep .el-table th {
   height: 42px;
-  padding-left: 16px
+  padding-left: 14px
 }
 .data-source {
   height: 100%;
@@ -646,8 +661,7 @@ export default {
   }
 
   &__header {
-    display: flex;
-    justify-content: space-between;
+    position: relative;
     height: 68px;
     border-bottom: 1px solid #EBEEF5;
   }
@@ -671,16 +685,27 @@ export default {
     overflow: auto;
   }
 }
+.data-files__list {
+  flex: 1;
+  height: calc(100vh - 250px);
+  overflow: auto;
+
+}
 .data-file__list {
   flex: 2;
-  padding: 24px;
+  padding: 0 24px 10px 10px;
   border-left: 1px solid #EBEEF5;
   height: calc(100vh - 250px);
   overflow: auto;
 }
+.data_file {
+  padding: 0
+}
 .head-select {
-  margin: 24px;
+  position: absolute;
+  right: 24px;
   font-size: 12px;
+  line-height: 68px;
 }
 .el-button {
   font-size: 12px;
