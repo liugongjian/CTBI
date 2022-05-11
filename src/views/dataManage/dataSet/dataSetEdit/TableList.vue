@@ -1,5 +1,5 @@
 <template>
-  <div class="list-wrapper">
+  <div :class="[{'full-height': !toggleContent}, 'list-wrapper']">
     <div
       v-for="(table, i) in tableList"
       :key="i"
@@ -59,7 +59,6 @@
 </template>
 
 <script>
-import { getTableInfo, getFileTableInfo } from '@/api/dataSet'
 import ColumnsList from '@/views/dataManage/dataSet/dataSetEdit/ColumnsList'
 import Clipboard from '@/utils/clipboard.js'
 
@@ -71,13 +70,9 @@ export default {
       type: Array,
       default: () => []
     },
-    type: {
-      type: String,
-      default: ''
-    },
-    dataSourceId: {
-      type: String,
-      default: ''
+    toggleContent: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -86,29 +81,7 @@ export default {
       currentTableInfo: {}
     }
   },
-  computed: {},
-  watch: {},
-  created () { },
-  mounted () {
-  },
   methods: {
-    async handleTableInfo (tableName) {
-      const id = this.dataSourceId
-      this.currentTableInfo = {}
-      try {
-        this.tableInfoLoading = true
-        let result = null
-        if (this.type === 'file') {
-          result = await getFileTableInfo(tableName)
-        } else {
-          result = await getTableInfo(id, tableName)
-        }
-        this.currentTableInfo = result
-      } catch (error) {
-        console.log(error)
-      }
-      this.tableInfoLoading = false
-    },
     // 复制数据源列表
     handleCopy (val, event) {
       Clipboard(val, event, () => {
@@ -126,8 +99,13 @@ export default {
 .list-wrapper {
   padding: 20px 12px;
   position: relative;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   height: calc(100vh - 365px);
+
+  &.full-height {
+    height: calc(100vh - 270px);
+  }
 
   .main-list {
     .table-btn {
