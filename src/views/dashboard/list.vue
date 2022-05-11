@@ -50,7 +50,7 @@
             <el-table-column prop="name" label="名称" min-width="200">
               <template slot-scope="scope">
                 <svg-icon
-                  :icon-class="scope.row.directory ? 'floder' : 'sql'"
+                  :icon-class="scope.row.directory ? 'floder' : 'board'"
                   style="margin-right: 8px"
                 />
                 <el-tooltip
@@ -216,9 +216,9 @@
                 <el-select v-model="dashboardAttr.ownerId" placeholder="请选择" style="width: 360px">
                   <el-option
                     v-for="item in users"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
                   />
                 </el-select>
               </el-form-item>
@@ -250,30 +250,34 @@
           <div v-if="!currentShareInfo">
             <el-button
               type="primary"
-              @click="executeShare"
+              @click="() => executeShare()"
             >公开分享</el-button>
           </div>
-          <div v-else>
+          <div v-else class="shareWrap">
             <div>
-              <span>所有用户可以通过一下链接查看报表备份</span>
+              <span class="shareTip">所有用户可以通过一下链接查看报表备份</span>
               <el-button
-                @click="dashboardAttributeVisible = false"
+                @click="cancelShareDashboard"
               >不再公开</el-button>
             </div>
-            <div>
+            <div class="shareCopy">
               <el-input v-model="currentShareInfo.shareUrl" readonly>
-                <el-button slot="append" type="primary">复制</el-button>
+                <el-button slot="append" @click="copyShareUrl">复制</el-button>
               </el-input>
             </div>
-            <el-form :model="currentShareInfo" style="padding: 0px">
-              <el-form-item label="截止日期" label-width="80px">
-                <el-date-picker
-                  v-model="currentShareInfo.shareEndTime"
-                  type="date"
-                  placeholder="选择日期"
-                />
-              </el-form-item>
-            </el-form>
+            <div class="shareDate">
+              <el-form :model="currentShareInfo" style="padding: 0px">
+                <el-form-item label="截止日期">
+                  <el-date-picker
+                    v-model="currentShareInfo.shareEndTime"
+                    type="date"
+                    placeholder="选择日期"
+                    :clearable="false"
+                    @change="shareDateChange"
+                  />
+                </el-form-item>
+              </el-form>
+            </div>
           </div>
         </el-dialog>
       </div>
@@ -282,25 +286,33 @@
         :data="editFolder"
         @handleAction="handleFolderEdit"
       />
+      <FolderTree
+        :visible="treeVisible"
+        :data="moveDashboardIds"
+        @handleAction="handleMoveDashboard"
+      />
     </div>
   </page-view>
 </template>
 
 <script>
 // import qs from 'qs'
-import { batchDeleteResources, batchCancelPublishDashboards, updateFolderOrDashboardProperties, shareDashboard } from '@/api/dashboard'
+import { batchDeleteResources, batchCancelPublishDashboards, updateFolderOrDashboardProperties, shareDashboard, cancelShareDashboard } from '@/api/dashboard'
 import {
   updateFolderName,
   updateDataSet,
   getDataSetsFolders
 } from '@/api/dataSet'
+import { getList } from '@/api/userManage'
 // import { getDateTime } from '@/utils/optionUtils'
 import FolderEdit from './FolderEdit'
+import FolderTree from './FolderTree'
 import moment from 'moment'
 export default {
   name: 'DataSet',
   components: {
-    FolderEdit
+    FolderEdit,
+    FolderTree
   },
   data() {
     return {
@@ -341,7 +353,9 @@ export default {
       shareDashboardVisible: false,
       editFolder: null,
       users: [],
-      currentShareInfo: null
+      currentShareInfo: null,
+      treeVisible: false,
+      moveDashboardIds: []
     }
   },
   computed: {
@@ -495,8 +509,10 @@ export default {
     createDashboard1() {
       if (this.batchSelection) return false
     },
-    editDashboardAttribute(val) {
+    async editDashboardAttribute(val) {
       if (this.batchSelection) return false
+      const users = await getList()
+      this.users = users.list.map(item => { return { id: item._id, name: item.userName } })
       this.cureentData = val
       this.dashboardAttributeVisible = true
       this.dashboardAttr.name = val.name
@@ -575,9 +591,11 @@ export default {
           }
         })
       }
-      this.$dialog.show('MoveDatasetDrawer', { ids }, () => {
-        this.init()
-      })
+      this.treeVisible = true
+      this.moveDashboardIds = ids
+      // this.$dialog.show('MoveDatasetDrawer', { ids }, () => {
+      //   this.init()
+      // })
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
@@ -631,15 +649,15 @@ export default {
       //   console.log(error)
       // }
     },
-    async executeShare () {
+    async executeShare (endDate) {
       try {
-        const shareEndTime = moment().add(2, 'days').format('YYYY-MM-DD')
+        const shareEndTime = endDate || moment().add(2, 'days').format('YYYY-MM-DD')
         const params = {
           _id: this.cureentData._id,
           shareEndTime
         }
         this.currentShareInfo = {
-          shareUrl: 'http://0.0.0.0/dashboard/publish/hLhqzBlr2xxBA7R',
+          shareUrl: 'http://0.0.0.0/dashboard/publish/hLhqzBlr2xxBA7R' + endDate,
           shareEndTime
         }
         const info = await shareDashboard(params)
@@ -667,6 +685,29 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    copyShareUrl() {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(this.currentShareInfo.shareUrl)
+      }
+    },
+    shareDateChange(e) {
+      console.log(e)
+      console.log(moment(e).format('YYYY-MM-DD'))
+      this.executeShare(moment(e).format('YYYY-MM-DD'))
+    },
+    async cancelShareDashboard() {
+      try {
+        await cancelShareDashboard(this.cureentData._id)
+        this.cureentData = null
+        this.currentShareInfo = null
+        this.shareDashboardVisible = false
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    handleMoveDashboard (action) {
+      console.log(action)
     }
   }
 }
@@ -774,5 +815,18 @@ export default {
 .dialog-footer{
   padding-bottom: 10px;
   margin-right: 20px;
+}
+.shareWrap{
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.9);
+  line-height: 20px;
+  .shareCopy{
+    margin-top: 24px;
+  }
+  .shareDate{
+    margin-top: 24px;
+  }
 }
 </style>
