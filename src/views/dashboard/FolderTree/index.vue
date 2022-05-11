@@ -77,7 +77,6 @@ export default {
     },
     async getFolders() {
       try {
-        console.log(this.props)
         const data = await getFolderTree()
         this.folderList = data.result
         this.originList = data.result
@@ -100,14 +99,15 @@ export default {
           folderId: this.selectFolderId
         })
         this.$message.success(data)
-        this.close()
+        this.selectFolderId = null
+        this.searchKey = null
+        this.$emit('handleAction', 'success')
       } catch (error) {
         console.log(error)
       }
       this.loading = false
     },
     close () {
-      console.log(this.ids)
       this.selectFolderId = null
       this.searchKey = null
       this.$emit('handleAction', 'cancel')

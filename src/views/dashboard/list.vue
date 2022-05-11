@@ -247,7 +247,7 @@
           :visible.sync="shareDashboardVisible"
           width="480px"
         >
-          <div v-if="!currentShareInfo">
+          <div v-if="!currentShareInfo || !currentShareInfo.shareUrl">
             <el-button
               type="primary"
               @click="() => executeShare()"
@@ -298,7 +298,16 @@
 
 <script>
 // import qs from 'qs'
-import { getDashboardList, batchDeleteResources, batchCancelPublishDashboards, updateFolderOrDashboardProperties, shareDashboard, cancelShareDashboard } from '@/api/dashboard'
+import {
+  getDashboardList,
+  batchDeleteResources,
+  batchCancelPublishDashboards,
+  updateFolderOrDashboardProperties,
+  getShareInfo,
+  shareDashboard,
+  cancelShareDashboard,
+  saveDashboard
+} from '@/api/dashboard'
 import {
   updateFolderName,
   updateDataSet,
@@ -463,10 +472,20 @@ export default {
     },
 
     // 新建数据集
-    createDashboard() {
-      this.$router.push({
-        path: '/dashboard'
-      })
+    async createDashboard() {
+      const setting = {
+        name: 'setting'
+      }
+      const params = {
+        name: '看板' + Math.round(Math.random() * 10),
+        setting: JSON.stringify(setting),
+        isPublish: true
+      }
+      const reselt = await saveDashboard(params)
+      console.log(reselt)
+      // this.$router.push({
+      //   path: '/dashboard'
+      // })
     },
     // 重置
     reset() {
@@ -518,7 +537,7 @@ export default {
       this.dashboardAttributeVisible = true
       this.dashboardAttr.name = val.name
       this.dashboardAttr.ownerId = val.owner
-      this.dashboardAttr.description = val.description
+      this.dashboardAttr.description = val.desc
     },
     async hanledashboardAttribute() {
       const id = this.cureentData._id
@@ -627,29 +646,29 @@ export default {
     },
     handleFolderEdit(action) {
       this.editFolder = null
-      if (action === 'cancel') {
-        this.folderDialogVisible = false
-      }
-      if (action === 'createSuccess') {
-        this.folderDialogVisible = false
+      this.folderDialogVisible = false
+      if (action !== 'cancel') {
+        this.$message.success(action)
+        this.cureentData = null
+        this.init()
       }
     },
     async shareDashboard(data) {
-      this.cureentData = data
+      // this.cureentData = data
       // this.currentShareInfo = {
       //   'shareUrl': 'http://0.0.0.0/dashboard/publish/hLhqzBlr2xxBA7R',
       //   'shareEndTime': '2022-06-21',
       //   'isPublic': true
       // }
-      this.shareDashboardVisible = true
-      // try {
-      //   const info = await getShareInfo(data._id)
-      //   this.cureentData = data
-      //   this.currentShareInfo = info
-      //   this.shareDashboardVisible = true
-      // } catch (error) {
-      //   console.log(error)
-      // }
+      // this.shareDashboardVisible = true
+      try {
+        const info = await getShareInfo(data._id)
+        this.cureentData = data
+        this.currentShareInfo = info
+        this.shareDashboardVisible = true
+      } catch (error) {
+        console.log(error)
+      }
     },
     async executeShare (endDate) {
       try {
@@ -658,12 +677,28 @@ export default {
           _id: this.cureentData._id,
           shareEndTime
         }
-        this.currentShareInfo = {
-          shareUrl: 'http://0.0.0.0/dashboard/publish/hLhqzBlr2xxBA7R' + endDate,
-          shareEndTime
-        }
         const info = await shareDashboard(params)
-        this.currentShareInfo = info
+        this.currentShareInfo = { ...info, shareEndTime }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    copyShareUrl() {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(this.currentShareInfo.shareUrl)
+        this.$message.success('复制成功')
+      }
+    },
+    shareDateChange(e) {
+      this.executeShare(moment(e).format('YYYY-MM-DD'))
+    },
+    async cancelShareDashboard() {
+      try {
+        const result = await cancelShareDashboard(this.cureentData._id)
+        this.$message.success(result)
+        this.cureentData = null
+        this.currentShareInfo = null
+        this.shareDashboardVisible = false
       } catch (error) {
         console.log(error)
       }
@@ -688,30 +723,11 @@ export default {
         console.log(error)
       }
     },
-    copyShareUrl() {
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(this.currentShareInfo.shareUrl)
-      }
-    },
-    shareDateChange(e) {
-      console.log(e)
-      console.log(moment(e).format('YYYY-MM-DD'))
-      this.executeShare(moment(e).format('YYYY-MM-DD'))
-    },
-    async cancelShareDashboard() {
-      try {
-        await cancelShareDashboard(this.cureentData._id)
-        this.cureentData = null
-        this.currentShareInfo = null
-        this.shareDashboardVisible = false
-      } catch (error) {
-        console.log(error)
-      }
-    },
     handleMoveDashboard (action) {
-      console.log(action)
-      if (action === 'cancel') {
-        this.treeVisible = false
+      this.treeVisible = false
+      if (action !== 'cancel') {
+        this.cureentData = null
+        this.init()
       }
     }
   }

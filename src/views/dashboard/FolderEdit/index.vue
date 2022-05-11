@@ -76,7 +76,8 @@ export default {
         } else {
           await createFolder(body)
         }
-        this.close()
+        this.newFolderName = ''
+        this.$emit('handleAction', isEdit ? '重命名成功' : '创建成功')
       } catch (error) {
         console.log(error)
       }
