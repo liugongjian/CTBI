@@ -106,7 +106,7 @@
                     <span v-if="scope.row.type!=='file'" @click.prevent="editSource(scope.row)">
                       <svg-icon icon-class="pencil" />
                     </span>
-                    <span v-if="scope.row.type!=='file'" @click="deleteSource(scope.row._id)">
+                    <span v-if="scope.row.type!=='file'" @click="deleteSource(scope.row)">
                       <svg-icon icon-class="delete" />
                     </span>
                   </div>
@@ -234,6 +234,7 @@ export default {
       dataSourceList: {},
       sourceFile: [],
       total: 0,
+      disname: '',
       form: {
         type: '',
         displayName: '',
@@ -431,9 +432,12 @@ export default {
         console.log(error)
       }
     },
-    async deleteSource(id) {
+    async deleteSource(column) {
       try {
-        await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        const id = column._id
+        this.disname = column.displayName
+        console.log(disname)
+        await this.$confirm(`确定删除${{ disname }}数据源?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -445,10 +449,7 @@ export default {
           message: '删除成功!'
         })
       } catch (err) {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
+        console.log(err)
       }
     },
     handleCommand(command) {
