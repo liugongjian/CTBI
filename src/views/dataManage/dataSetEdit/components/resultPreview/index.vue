@@ -249,7 +249,7 @@
               <el-table-column
                 v-for="(parent, i) in dimensionMeasure"
                 :key="`column-p-${parent._id}`"
-                :label="parent.label"
+                :label="parent.displayColumn"
                 :class-name="`m-column-${i}`"
               >
                 <template #header="{ column }">
@@ -281,7 +281,7 @@
                                 icon="el-icon-edit-outline"
                                 @click.native="editDimensionMeasure(v)"
                               >编辑</el-dropdown-item>
-                              <el-dropdown-item @click.native="copyDimensionMeasure(v, parent.children)">
+                              <el-dropdown-item @click.native="copyDimensionMeasure(v, parent._id)">
                                 <svg-icon
                                   icon-class="file-copy"
                                   style="margin-right: 5px;"
@@ -670,7 +670,7 @@ export default {
       this.dimensionMeasure.forEach(di => {
         if (di._id === id) {
           const index = di.children.findIndex(a => a._id === item._id)
-          const copyItem = Object.assign(deepClone(item), { _id: '', displayColumn: item.displayColumn + '-副本' })
+          const copyItem = Object.assign(deepClone(item), { _id: '', displayColumn: item.displayColumn + '_副本' })
           di.children.splice(index + 1, 0, copyItem)
         }
       })
