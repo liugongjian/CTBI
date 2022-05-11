@@ -73,6 +73,7 @@
         <div class="data-source__list">
           <el-table
             ref="singleTable"
+            v-loading="loading"
             :data="filterdDatasources"
             class="tableBox"
             highlight-current-row
@@ -218,6 +219,7 @@ export default {
       // sortOrder: 'asc',
       searchkey: '',
       isloading: false,
+      loading: false,
       notEdit: true,
       editform: {},
       currentRow: 0,
@@ -234,7 +236,6 @@ export default {
       dataSourceList: {},
       sourceFile: [],
       total: 0,
-      disname: '',
       form: {
         type: '',
         displayName: '',
@@ -397,6 +398,7 @@ export default {
     },
     async handleCurrentChange(val) {
       try {
+        this.loading = true
         this.currentRow = val
         if (val.type === 'file') {
           this.isShowDataFiles = true
@@ -408,7 +410,9 @@ export default {
           const ids = val._id
           await this.getSourceFile(ids)
         }
+        this.loading = false
       } catch (error) {
+        this.loading = false
         console.log(error)
       }
     },
@@ -444,9 +448,8 @@ export default {
     async deleteSource(column) {
       try {
         const id = column._id
-        this.disname = column.displayName
-        console.log(disname)
-        await this.$confirm(`确定删除${{ disname }}数据源?`, '提示', {
+        const name = column.displayName
+        await this.$confirm('确定删除' + name + '数据源?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -481,14 +484,12 @@ export default {
         this.notEdit = true
       }
       if (command === 'mongoDB') {
-        // this.form.type = 'mongodb'
         this.$set(this.form, 'type', 'mongodb')
         this.$set(this.form, 'port', '8922')
         this.dialogVisible = true
         this.notEdit = true
       }
       if (command === 'localFile') {
-        // this.fileType = '添加本地数据源'
         this.$dialog.show('UploadFileDialog', {}, () => {
           if (this.isShowDataFiles) {
             this.$refs.dataFiles.getDataFiles()
@@ -506,16 +507,20 @@ export default {
     //   this.getSourceFile(this.currentRow._id)
     // },
     async connect(form) {
-      this.isloading = true
-      const testForm = {
-        username: form.username,
-        db: form.db,
-        host: form.host,
-        password: encryptAes(form.password),
-        port: form.port,
-        type: form.type
-      }
       try {
+        const valid = await this.$refs.form.validate()
+        if (!valid) {
+          return
+        }
+        this.isloading = true
+        const testForm = {
+          username: form.username,
+          db: form.db,
+          host: form.host,
+          password: encryptAes(form.password),
+          port: form.port,
+          type: form.type
+        }
         const result = await connectTest(testForm)
         if (!result) {
           this.$message.error('连接数据库失败！')
@@ -531,10 +536,6 @@ export default {
     },
     async submit(form) {
       try {
-        const valid = await this.$refs.form.validate()
-        if (!valid) {
-          return
-        }
         const testForm = {
           displayName: form.displayName,
           username: form.username,
@@ -804,5 +805,10 @@ export default {
 }
 .description {
   cursor: pointer;
+}
+</style>
+<style lang="scss">
+.el-message-box__message p {
+  word-wrap: break-word;
 }
 </style>
