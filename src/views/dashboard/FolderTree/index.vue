@@ -2,6 +2,7 @@
   <el-drawer
     title="资源移动到"
     :visible.sync="visible"
+    :before-close="close"
   >
     <div class="move-to-drawer">
       <div class="move-to-drawer-main">
@@ -9,19 +10,18 @@
           v-model="searchKey"
           placeholder="请输入"
           prefix-icon="el-icon-search"
-          @change="searchfolderList"
+          @input="searchfolder"
         />
         <div
-          v-loading="loading"
           class="move-to-drawer-main-content"
         >
           <span class="move-to-drawer-main-content-root">根目录</span>
           <ul>
             <li
-              v-for="(item, i) in folderList"
-              :key="i"
-              :class="{'select-actived': selectFloderId == item._id }"
-              @click="selectFloder(item)"
+              v-for="item in folderList"
+              :key="item.id"
+              :class="{'select-actived': selectFolderId == item.id }"
+              @click="selectFolder(item)"
             >
               <svg-icon
                 icon-class="floder"
@@ -34,8 +34,7 @@
       </div>
       <div class="move-to-drawer-footer">
         <el-button
-          :loading="loading"
-          @click="closeSilence"
+          @click="close"
         >取 消</el-button>
         <el-button
           :loading="loading"
@@ -48,13 +47,13 @@
 </template>
 
 <script>
-import { getFolderLists } from '@/api/dataSet'
 import { getFolderTree, moveDashboardToFolder } from '@/api/dashboard'
+import _ from 'lodash'
 export default {
   props: {
     visible: Boolean,
     // eslint-disable-next-line vue/require-default-prop
-    data: Object,
+    ids: Array,
     // eslint-disable-next-line vue/require-default-prop
     handleAction: Function
   },
@@ -64,42 +63,41 @@ export default {
       // 目录搜索值
       searchKey: '',
       // 当前选中目录id
-      selectFloderId: '',
-      // 将被移动的数据集数组
-      ids: []
+      selectFolderId: '',
+      originList: [],
+      loading: false
     }
   },
   mounted () {
     this.getFolders()
   },
   methods: {
-    selectFloder (item) {
-      this.selectFloderId = item._id
+    selectFolder (item) {
+      this.selectFolderId = item.id
     },
     async getFolders() {
       try {
+        console.log(this.props)
         const data = await getFolderTree()
         this.folderList = data.result
+        this.originList = data.result
       } catch (error) {
         console.log(error)
       }
     },
-    // 搜索数据集
-    async searchfolderList () {
+    // 搜索
+    searchfolder: _.debounce(function() {
       const searchkey = this.searchKey
-      try {
-        const data = await getFolderLists({ searchkey })
-        this.folderList = data.result
-      } catch (error) {
-        console.log(error)
-      }
-    },
+      this.folderList = this.originList.filter(item => {
+        return item.name.includes(searchkey)
+      })
+    }, 500),
     async handleMoveTo () {
       this.loading = true
       try {
         const data = await moveDashboardToFolder({
           dashboardIds: this.ids,
-          folderId: this.selectFloderId
+          folderId: this.selectFolderId
         })
         this.$message.success(data)
         this.close()
@@ -107,6 +105,12 @@ export default {
         console.log(error)
       }
       this.loading = false
+    },
+    close () {
+      console.log(this.ids)
+      this.selectFolderId = null
+      this.searchKey = null
+      this.$emit('handleAction', 'cancel')
     }
 
   }

@@ -287,8 +287,9 @@
         @handleAction="handleFolderEdit"
       />
       <FolderTree
+        ref="treeFolder"
         :visible="treeVisible"
-        :data="moveDashboardIds"
+        :ids="moveDashboardIds"
         @handleAction="handleMoveDashboard"
       />
     </div>
@@ -297,7 +298,7 @@
 
 <script>
 // import qs from 'qs'
-import { batchDeleteResources, batchCancelPublishDashboards, updateFolderOrDashboardProperties, shareDashboard, cancelShareDashboard } from '@/api/dashboard'
+import { getDashboardList, batchDeleteResources, batchCancelPublishDashboards, updateFolderOrDashboardProperties, shareDashboard, cancelShareDashboard } from '@/api/dashboard'
 import {
   updateFolderName,
   updateDataSet,
@@ -383,54 +384,54 @@ export default {
     async getTableData() {
       this.dataLoading = true
       try {
-        // const data = await getDashboardList()
-        const temp = {
-          'code': 200,
-          'data': {
-            'result': [
-              {
-                '_id': 'Tl596HpUtrITQ',
-                'status': 1,
-                'publishStatus': 2,
-                'childNode': [
-                  {
-                    '_id': 'I7U01G5miLrr0',
-                    'status': 1,
-                    'publishStatus': -1,
-                    'name': '测试子文件',
-                    'isRoot': false,
-                    'directory': false,
-                    'createdTime': '2022-04-22T11:45:53.726Z',
-                    'lastUpdatedTime': '2022-04-22T11:45:53.726Z',
-                    'owner': 'CN8SeyWsSqqM0',
-                    'ownerName': 'wlm'
-                  }
-                ],
-                'name': '测试文件夹',
-                'isRoot': true,
-                'directory': true,
-                'createdTime': '2022-04-22T11:45:08.342Z',
-                'lastUpdatedTime': '2022-04-22T11:45:08.342Z',
-                'owner': 'CN8SeyWsSqqM0',
-                'ownerName': 'wlm2'
-              },
-              {
-                '_id': '4KRtCYKCMDGG7',
-                'status': 1,
-                'publishStatus': 1,
-                'childNode': [],
-                'name': '测试',
-                'createdTime': '2022-04-19T09:35:42.321Z',
-                'lastUpdatedTime': '2022-04-22T11:27:22.126Z',
-                'isRoot': true,
-                'directory': false,
-                'owner': 'CN8SeyWsSqqM0',
-                'ownerName': 'wlm'
-              }
-            ]
-          }
-        }
-        this.tableData = temp.data.result
+        const data = await getDashboardList('useOne=123')
+        // const temp = {
+        //   'code': 200,
+        //   'data': {
+        //     'result': [
+        //       {
+        //         '_id': 'Tl596HpUtrITQ',
+        //         'status': 1,
+        //         'publishStatus': 2,
+        //         'childNode': [
+        //           {
+        //             '_id': 'I7U01G5miLrr0',
+        //             'status': 1,
+        //             'publishStatus': -1,
+        //             'name': '测试子文件',
+        //             'isRoot': false,
+        //             'directory': false,
+        //             'createdTime': '2022-04-22T11:45:53.726Z',
+        //             'lastUpdatedTime': '2022-04-22T11:45:53.726Z',
+        //             'owner': 'CN8SeyWsSqqM0',
+        //             'ownerName': 'wlm'
+        //           }
+        //         ],
+        //         'name': '测试文件夹',
+        //         'isRoot': true,
+        //         'directory': true,
+        //         'createdTime': '2022-04-22T11:45:08.342Z',
+        //         'lastUpdatedTime': '2022-04-22T11:45:08.342Z',
+        //         'owner': 'CN8SeyWsSqqM0',
+        //         'ownerName': 'wlm2'
+        //       },
+        //       {
+        //         '_id': '4KRtCYKCMDGG7',
+        //         'status': 1,
+        //         'publishStatus': 1,
+        //         'childNode': [],
+        //         'name': '测试',
+        //         'createdTime': '2022-04-19T09:35:42.321Z',
+        //         'lastUpdatedTime': '2022-04-22T11:27:22.126Z',
+        //         'isRoot': true,
+        //         'directory': false,
+        //         'owner': 'CN8SeyWsSqqM0',
+        //         'ownerName': 'wlm'
+        //       }
+        //     ]
+        //   }
+        // }
+        this.tableData = data.result
       } catch (error) {
         console.log(error)
       }
@@ -441,7 +442,7 @@ export default {
       if (!this.serachName) {
         this.isAllDataShow = true
         return this.$message({
-          message: '请输入正确的数据集名称',
+          message: '请输入正确的资源名称',
           type: 'warning'
         })
       }
@@ -580,7 +581,7 @@ export default {
         console.log(error)
       }
     },
-    async moveTo(val) {
+    moveTo(val) {
       const ids = []
       if (val) {
         ids.push(val._id)
@@ -593,6 +594,7 @@ export default {
       }
       this.treeVisible = true
       this.moveDashboardIds = ids
+      this.$refs.treeFolder.getFolders()
       // this.$dialog.show('MoveDatasetDrawer', { ids }, () => {
       //   this.init()
       // })
@@ -708,6 +710,9 @@ export default {
     },
     handleMoveDashboard (action) {
       console.log(action)
+      if (action === 'cancel') {
+        this.treeVisible = false
+      }
     }
   }
 }
