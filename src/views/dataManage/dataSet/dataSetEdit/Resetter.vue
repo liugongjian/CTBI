@@ -20,7 +20,8 @@
             v-model="inputFieldName"
             placeholder="请输入字段名称"
             prefix-icon="el-icon-search"
-            style="margin-right: 24px"
+            style="margin-right: 24px;height: 32px;"
+            @change="filterColumns"
           />
           <el-button
             type="primary"
@@ -207,7 +208,7 @@
         <el-table
           :data="dimensionMeasure"
           :height="tableHeight"
-          :row-key="getRowKey"
+          row-key="index"
           default-expand-all
           header-row-class-name="m-table-header"
           :tree-props="{children: 'children', hasChildren: 'isFolder'}"
@@ -225,7 +226,7 @@
                 v-else
                 style="display: inline-block;width: calc(100% - 60px);"
               >
-                <el-input v-model="fields[getFieldsIndex(scope.row)].displayColumn" />
+                <el-input v-model="scope.row.displayColumn" />
               </span>
             </template>
           </el-table-column>
@@ -242,7 +243,7 @@
               <span v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
               <span v-else>
                 <el-select
-                  v-model="fields[getFieldsIndex(scope.row)].attributes[0].dataType"
+                  v-model="scope.row.attributes[0].dataType"
                   placeholder="请选择"
                 >
                   <el-option
@@ -411,8 +412,13 @@ export default {
     }
   },
   methods: {
-    getFieldsIndex (row) {
-      return this.fields.findIndex(field => field.$treeNodeId === row.$treeNodeId)
+    filterColumns () {
+      if (this.inputFieldName) {
+        const filter = this.fields.filter(field => field.displayColumn.indexOf(this.inputFieldName) > -1)
+        this.dimensionMeasure = this.getDimensionMeasureData(filter)
+      } else {
+        this.dimensionMeasure = this.getDimensionMeasureData(this.fields)
+      }
     },
     getRowKey (row) {
       return row._id + row.displayColumn + row.$treeNodeId
@@ -452,11 +458,11 @@ export default {
         displayColumn: '度量',
         children: []
       }]
-      fields.forEach(item => {
+      fields.forEach((item, index) => {
         if (item.type === 'Dimension') {
-          res[0].children.push(item)
+          res[0].children.push({ index, ...item })
         } else {
-          res[1].children.push(item)
+          res[1].children.push({ index, ...item })
         }
       })
       return res
