@@ -131,6 +131,7 @@
             </span>
           </div>
           <common-table
+            v-loading="tableListLoading"
             :table-columns="tableColums"
             :table-data="sourceFile"
             :page-num.sync="page"
@@ -199,6 +200,7 @@ export default {
   },
   data() {
     return {
+      tableListLoading: false,
       detailTable: {
         tableName: '',
         comment: '',
@@ -368,6 +370,7 @@ export default {
     },
     async getSourceFile(ids) {
       try {
+        this.tableListLoading = true
         const params = {
           isPaging: this.isPaging,
           page: this.page,
@@ -381,9 +384,11 @@ export default {
         this.total = file.total
         this.page = file.page
         this.limit = file.limit
+        this.tableListLoading = false
       } catch (error) {
         console.log(error)
         this.sourceFile = []
+        this.tableListLoading = false
       }
     },
     searchSource() {
@@ -485,7 +490,7 @@ export default {
       }
       if (command === 'mongoDB') {
         this.$set(this.form, 'type', 'mongodb')
-        this.$set(this.form, 'port', '8922')
+        this.$set(this.form, 'port', '27017')
         this.dialogVisible = true
         this.notEdit = true
       }
