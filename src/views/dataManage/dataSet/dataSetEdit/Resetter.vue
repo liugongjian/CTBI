@@ -35,9 +35,12 @@
         class="data-preview d-f"
       >
         <!-- left -->
-        <div class="data-preview-left">
+        <div
+          class="data-preview-left"
+          :style="{ height: tableHeight + 'px' }"
+        >
           <el-tree
-            style="width: 200px;"
+            style="width: 200px"
             :data="dimensionMeasure"
             :props="defaultProps"
             default-expand-all
@@ -63,14 +66,14 @@
                       icon="el-icon-edit-outline"
                       @click.native="editDimensionMeasure(data)"
                     >编辑</el-dropdown-item>
-                    <el-dropdown-item @click.native="() => {copyDimensionMeasure(data, node.parent.data._id)}">
+                    <el-dropdown-item @click.native="() => {copyDimensionMeasure(data)}">
                       <svg-icon
                         icon-class="file-copy"
                         style="margin-right: 5px;"
                       />复制
                     </el-dropdown-item>
                     <template v-if="data.attributes">
-                      <el-dropdown-item @click.native="data.attributes[0].isHidden = !data.attributes[0].isHidden">
+                      <el-dropdown-item @click.native="hideDimensionMeasure(data)">
                         <span v-if="!data.attributes[0].isHidden">
                           <svg-icon
                             icon-class="m-eye-close"
@@ -87,7 +90,7 @@
                     </template>
                     <el-dropdown-item
                       icon="el-icon-delete"
-                      @click.native="() => {deleteDimensionMeasure(data, node.parent.data._id)}"
+                      @click.native="() => {deleteDimensionMeasure(data)}"
                     >删除</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -100,12 +103,13 @@
         <div class="data-preview-right">
           <el-table
             :data="dimensionMeasureTableData"
+            :height="tableHeight"
             style="width: 100%"
             stripe
           >
             <el-table-column
               v-for="(parent, i) in dimensionMeasure"
-              :key="`column-p-${parent._id}`"
+              :key="`column-p-${parent.label}-${i}`"
               :label="parent.displayColumn"
               :class-name="`m-column-${i}`"
             >
@@ -114,12 +118,12 @@
               </template>
               <span
                 v-for="(v, index) in parent.children"
-                :key="`column-child-${index}`"
+                :key="`column-child-${v.displayColumn}-${index}`"
               >
                 <el-table-column
                   v-if="!v.attributes[0].isHidden"
                   :prop="v.column"
-                  width="130"
+                  width="120"
                   class-name="column-child"
                   :label="v.displayColumn"
                   show-overflow-tooltip
@@ -138,13 +142,13 @@
                               icon="el-icon-edit-outline"
                               @click.native="editDimensionMeasure(v)"
                             >编辑</el-dropdown-item>
-                            <el-dropdown-item @click.native="copyDimensionMeasure(v, parent._id)">
+                            <el-dropdown-item @click.native="copyDimensionMeasure(v)">
                               <svg-icon
                                 icon-class="file-copy"
                                 style="margin-right: 5px;"
                               />复制
                             </el-dropdown-item>
-                            <el-dropdown-item @click.native="v.attributes[0].isHidden = !v.attributes[0].isHidden">
+                            <el-dropdown-item @click.native="hideDimensionMeasure(v)">
                               <span v-if="!v.attributes[0].isHidden">
                                 <svg-icon
                                   icon-class="m-eye-close"
@@ -160,7 +164,7 @@
                             </el-dropdown-item>
                             <el-dropdown-item
                               icon="el-icon-delete"
-                              @click.native="deleteDimensionMeasure(v, parent._id)"
+                              @click.native="deleteDimensionMeasure(v)"
                             >删除</el-dropdown-item>
                           </el-dropdown-menu>
                         </el-dropdown>
@@ -177,14 +181,17 @@
                   style="width: 371px; height: 200px;"
                   icon-class="refresh-preview"
                 />
-                <div>
-                  <div class="result-bg-tip">
+                <div
+                  class="result-bg-tip"
+                  style="line-height: 20px;"
+                >
+                  <div>
                     你可以点击右侧的
                     <span style="font-weight: 400;color: #595959; font-size:14px;">
                       <i class="el-icon-refresh" /> 刷新预览
                     </span>
                   </div>
-                  <div class="result-bg-tip">
+                  <div>
                     来预览并配置数据
                   </div>
                 </div>
@@ -193,18 +200,17 @@
           </el-table>
         </div>
       </div>
-      <!-- <div
+      <div
         v-show="activeTagName === 2"
         style="width: 65vw"
       >
         <el-table
-          :data="batchConfigTableData"
-          style="width: 100%;"
-          row-key="displayColumn"
+          :data="dimensionMeasure"
+          :height="tableHeight"
+          :row-key="getRowKey"
           default-expand-all
           header-row-class-name="m-table-header"
-          class="batch-config-table-data"
-          :tree-props="{children: 'children'}"
+          :tree-props="{children: 'children', hasChildren: 'isFolder'}"
         >
           <el-table-column
             label="名称字段"
@@ -212,12 +218,15 @@
             width="360"
           >
             <template slot-scope="scope">
-              <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'">
-                <span>{{ scope.row.displayColumn }}</span>
-              </div>
-              <div v-else>
-                <el-input v-model="scope.row.displayColumn" />
-              </div>
+              <span v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'">
+                {{ scope.row.displayColumn }}
+              </span>
+              <span
+                v-else
+                style="display: inline-block;width: calc(100% - 60px);"
+              >
+                <el-input v-model="fields[getFieldsIndex(scope.row)].displayColumn" />
+              </span>
             </template>
           </el-table-column>
           <el-table-column
@@ -230,20 +239,20 @@
             width="180"
           >
             <template slot-scope="scope">
-              <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-              <div v-else>
+              <span v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
+              <span v-else>
                 <el-select
-                  v-model="scope.row.attributes[0].dataType"
+                  v-model="fields[getFieldsIndex(scope.row)].attributes[0].dataType"
                   placeholder="请选择"
                 >
                   <el-option
-                    v-for="item in batchConfigurationDataTypeOptions"
+                    v-for="item in dataTypeOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   />
                 </el-select>
-              </div>
+              </span>
             </template>
           </el-table-column>
           <el-table-column
@@ -291,51 +300,146 @@
                 v-else
                 class="result-preview-batch-configuration-table-options"
               >
-                <span @click="copyBatchConfiguration(scope.row)">复制</span>
+                <el-button
+                  type="text"
+                  @click="copyDimensionMeasure(scope.row)"
+                >复制</el-button>
                 <el-divider direction="vertical" />
-                <span @click="deleteBatchConfiguration(scope.row)">删除</span>
+                <el-button
+                  type="text"
+                  @click="deleteDimensionMeasure(scope.row)"
+                >删除</el-button>
                 <el-divider direction="vertical" />
-                <span @click="hideBatchConfiguration(scope.row)">
+                <el-button
+                  type="text"
+                  @click="hideDimensionMeasure(scope.row)"
+                >
                   {{ scope.row.attributes[0].isHidden ? '取消隐藏' : '隐藏' }}
-                </span>
+                </el-button>
               </div>
             </template>
           </el-table-column>
         </el-table>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { deepClone } from '@/utils/optionUtils'
+import { getPreviewData } from '@/api/dataSet'
+
 export default {
   props: {
     fields: {
       type: Array,
       default: () => []
+    },
+    sql: {
+      type: Object,
+      default: () => { }
     }
   },
   data () {
     return {
       activeTagName: 1,
+      inputFieldName: '',
       defaultProps: {
         children: 'children',
         label: 'displayColumn'
       },
-      dimensionMeasureTableData: []
+      dimensionMeasure: [],
+      dimensionMeasureTableData: [],
+      dataTypeOptions: [
+        {
+          value: 'number',
+          label: '数字'
+        },
+        {
+          value: 'text',
+          label: '文本'
+        },
+        {
+          value: 'time',
+          label: '时间'
+        }
+      ],
+      formatMap: {
+        text: [],
+        number: [
+          {
+            label: '整数',
+            value: '#,##0'
+          },
+          {
+            label: '保留1位小数',
+            value: '#,##0.0'
+          },
+          {
+            label: '保留2位小数',
+            value: '#,##0.00'
+          },
+          {
+            label: '百分比',
+            value: '#,##0%'
+          },
+          {
+            label: '百分比1位小数',
+            value: '#,##0.0%'
+          },
+          {
+            label: '百分比2位小数',
+            value: '#,##0.00%'
+          }
+        ],
+        time: [
+          {
+            label: '年-月-日 时-分秒',
+            value: 'YYYY-MM-DD HH:mm:ss'
+          }
+        ]
+      },
+      tableHeight: 320
     }
   },
-  computed: {
-    dimensionMeasure: {
-      get () {
-        return this.getDimensionMeasureData(this.fields)
+  watch: {
+    fields: {
+      handler (n, o) {
+        this.dimensionMeasure = this.getDimensionMeasureData(n)
       },
-      set (newVal) {
-        this.dimensionMeasure = newVal
-      }
+      deep: true
     }
   },
   methods: {
+    getFieldsIndex (row) {
+      return this.fields.findIndex(field => field.$treeNodeId === row.$treeNodeId)
+    },
+    getRowKey (row) {
+      return row._id + row.displayColumn + row.$treeNodeId
+    },
+    setTableHeight (h) {
+      if (h === '0px') return
+      try {
+        const height = Number.parseInt(h.replace('px'))
+        this.tableHeight = height - 80
+      } catch (err) {
+        console.error('传入高度需为带px结尾的字符串')
+      }
+    },
+    // 刷新预览
+    async refreshPreview () {
+      const body = {
+        sql: this.sql,
+        sqlVarData: this.sql.sqlVarData,
+        fields: this.fields
+      }
+      try {
+        const data = await getPreviewData(body)
+        this.dimensionMeasureTableData = data.data.slice()
+      } catch (error) {
+        console.log(error)
+      }
+    },
     // 获取tree data
     getDimensionMeasureData (fields) {
       if (!fields) return []
@@ -356,6 +460,33 @@ export default {
         }
       })
       return res
+    },
+    // 编辑数据预览中的字段
+    editDimensionMeasure (item) {
+      this.$dialog.show('EditDimensionMeasureDialog', { form: item }, (data) => {
+        if (!data.displayColumn) {
+          data.displayColumn = data.column
+        }
+        Object.assign(item, data)
+      })
+    },
+    // 复制数据预览中的字段
+    copyDimensionMeasure (item) {
+      const copyItem = Object.assign(deepClone(item), { _id: '', displayColumn: item.displayColumn + '_副本' })
+      this.$set(this.fields, this.fields.length, copyItem)
+      this.dimensionMeasure = this.getDimensionMeasureData(this.fields)
+    },
+    // 删除数据预览中的字段
+    deleteDimensionMeasure (item) {
+      this.$dialog.show('TipDialog', {}, () => {
+        const index = this.fields.findIndex(field => field._id === item._id)
+        this.fields.splice(index, 1)
+      })
+      this.dimensionMeasure = this.getDimensionMeasureData(this.fields)
+    },
+    // 隐藏
+    hideDimensionMeasure (item) {
+      item.attributes[0].isHidden = !item.attributes[0].isHidden
     }
   }
 }
@@ -408,8 +539,15 @@ export default {
     .data-preview {
       .data-preview-left {
         width: 200px;
+        flex: 0 0 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
 
         .custom-tree-node {
+          .hide-tree-node {
+            color: #ccc;
+          }
+
           &:hover > .gear-btn {
             display: block;
           }
@@ -417,6 +555,10 @@ export default {
             display: none;
           }
         }
+      }
+
+      .data-preview-right {
+        overflow: auto;
       }
     }
   }
@@ -434,6 +576,10 @@ export default {
   font-size: 12px;
   font-weight: 500;
   color: #fff;
+}
+::v-deep .m-table-header > th {
+  background-color: #fafafa !important;
+  color: rgba(0, 0, 0, 0.9);
 }
 ::v-deep .column-child {
   font-size: 12px;

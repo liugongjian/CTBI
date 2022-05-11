@@ -34,11 +34,12 @@
           <!-- 查询出数据时展示效果 -->
           <el-table
             v-else
-            border
+            ref="refsTable"
+            fit
+            :height="tableHeight"
             header-row-class-name="m-table-header"
             row-class-name="m-table-row"
             :data="resultData.data"
-            style="width: 100%"
           >
             <el-table-column
               label="序号"
@@ -49,7 +50,7 @@
             <el-table-column
               v-for="k in resultData.columns"
               :key="`table-column-${k.name}`"
-              min-width="50"
+              min-width="100"
               show-overflow-tooltip
               :prop="k.name"
               :label="k.name"
@@ -78,6 +79,7 @@
       <div v-show="activeTagName === 2">
         <el-table
           v-if="historyLogTableData && historyLogTableData.length > 0"
+          :height="tableHeight"
           :data="historyLogTableData"
           header-row-class-name="m-table-header"
           style="width: 100%"
@@ -140,6 +142,8 @@
 </template>
 
 <script>
+import Clipboard from '@/utils/clipboard.js'
+
 export default {
   props: {
     resultData: {
@@ -153,16 +157,30 @@ export default {
   },
   data () {
     return {
-      activeTagName: 1
+      activeTagName: 1,
+      tableHeight: 320
+    }
+  },
+  methods: {
+    setTableHeight (h) {
+      if (h === '0px') return
+      try {
+        const height = Number.parseInt(h.replace('px'))
+        this.tableHeight = height - 90
+      } catch (err) {
+        console.error('传入高度需为带px结尾的字符串')
+      }
+    },
+    // 复制
+    copyHistoryLog (val, event) {
+      const str = val.sqlText
+      Clipboard(str, event)
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 .main-bar {
-  width: calc(100vw - 458px);
-  height: calc(100vh - 166px);
-  display: inline-block;
   position: relative;
 
   .main-edit {
@@ -219,18 +237,9 @@ export default {
   padding: 10px 16px 24px 16px;
 }
 
-// 为了实现UI设计同时支持表头resize，这里设置边框为0，但是要在table加上边框属性
 ::v-deep .m-table-header > th {
   background-color: #fafafa !important;
   color: rgba(0, 0, 0, 0.9);
-  border-top-width: 0px;
-  border-left-width: 0px;
-  border-right-width: 0px;
-}
-::v-deep .m-table-row > td {
-  border-top-width: 0px;
-  border-left-width: 0px;
-  border-right-width: 0px;
 }
 ::v-deep .el-table--border {
   border-width: 0px;

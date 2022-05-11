@@ -131,6 +131,7 @@
             <!-- 运行记录 -->
             <runner
               v-show="toggleContent"
+              ref="runner"
               v-loading="resultPreviewLoading"
               :result-data="resultData"
               :history-log-table-data="historyLogTableData"
@@ -138,7 +139,9 @@
             <!-- 数据预览 -->
             <resetter
               v-show="!toggleContent"
+              ref="resetter"
               :fields="dataInfo.fields"
+              :sql="dataInfo.sql"
             />
           </div>
         </div>
@@ -187,19 +190,12 @@ export default {
       dataTableLoading: false,
       // 收缩
       isShrink: false,
-      draggableContainerHeight: { height: '50%' },
+      draggableContainerHeight: { height: '400px' },
       // 运行结果集
       resultData: { success: true },
       resultPreviewLoading: false,
       // 历史记录集
       historyLogTableData: []
-    }
-  },
-  watch: {
-    dataInfo: {
-      handler (n, o) {
-        console.log('dataInfo改变', n)
-      }
     }
   },
   created () {
@@ -371,11 +367,14 @@ export default {
     },
     resizeContainer () {
       this.isShrink = !this.isShrink
-      this.draggableContainerHeight.height = this.isShrink ? '0px' : 'calc(100% - 50px)'
+      const height = window.innerHeight - 200
+      this.draggableContainerHeight.height = this.isShrink ? '0px' : height + 'px'
+      this.$refs.runner.setTableHeight(this.draggableContainerHeight.height)
+      this.$refs.resetter.setTableHeight(this.draggableContainerHeight.height)
     },
     drag (e) {
       const clientHeight = document.body.clientHeight
-      if (e.clientY > (clientHeight) || e.clientY < 250) {
+      if (e.clientY > (clientHeight) || e.clientY < 200) {
         return
       }
       // 设定箭头方向
@@ -384,11 +383,13 @@ export default {
     },
     dragend (e) {
       const clientHeight = document.body.clientHeight
-      if (e.clientY > (clientHeight) || e.clientY < 250) {
+      if (e.clientY > (clientHeight) || e.clientY < 200) {
         return
       }
       this.isShrink = (e.clientY > (clientHeight / 2))
       this.draggableContainerHeight.height = (clientHeight - e.clientY) + 'px'
+      this.$refs.runner.setTableHeight(this.draggableContainerHeight.height)
+      this.$refs.resetter.setTableHeight(this.draggableContainerHeight.height)
     }
   }
 }
@@ -478,7 +479,6 @@ export default {
 
   .draggable-container {
     width: 100%;
-    height: 50%;
     position: absolute;
     bottom: 0px;
     left: 0;
