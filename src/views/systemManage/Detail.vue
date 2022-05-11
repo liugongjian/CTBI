@@ -216,20 +216,28 @@ export default {
       return this.statusMap.get(status)
     },
     async handleEdit () {
-      const params = {
-        realName: this.form.realName,
-        phone: this.form.phone,
-        email: this.form.email
-      }
-      const data = await editUser(this.form._id, params)
-      if (data) {
-        this.$message({
-          type: 'success',
-          message: '信息更新成功！'
-        })
-        this.$emit('refresh')
-        this.visible = false
-      }
+      this.$refs.form.validate(async (valid) => {
+        if (valid) {
+          try {
+            const params = {
+              realName: this.form.realName,
+              phone: this.form.phone,
+              email: this.form.email
+            }
+            const data = await editUser(this.form._id, params)
+            if (data) {
+              this.$message({
+                type: 'success',
+                message: '信息更新成功！'
+              })
+              this.$emit('refresh')
+              this.visible = false
+            }
+          } catch (error) {
+            console.log(error)
+          }
+        }
+      })
     },
     async validateExists (rule, value, callback) {
       const params = rule.field === 'userName' ? { userName: value } : rule.field === 'phone' ? { phone: value } : { email: value }
