@@ -168,7 +168,7 @@ export default {
 .data-files {
   margin-right: 24px;
   ::v-deep .toolbar {
-    padding: 15px 0 20px;
+    padding: 15px 0 19px;
   }
   .search-bar {
     display: flex;
