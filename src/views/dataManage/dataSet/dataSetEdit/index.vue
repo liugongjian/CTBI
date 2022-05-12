@@ -92,6 +92,7 @@
             <table-list
               v-loading="dataTableLoading"
               :table-list="dataTableList"
+              :data-source-id="dataInfo.dataSourceId"
               :toggle-content="toggleContent"
             />
           </div>
@@ -348,7 +349,6 @@ export default {
         this.dataInfo.dataSourceId = val
         this.dataInfo.sql.dataSourceId = val
         this.dataInfo.dataSourceName = currentDataSource?.displayName
-        console.log(this.dataInfo.dataSourceName, currentDataSource)
         this.dataInfo.dataSourceType = type
 
         if (type === 'file') {
