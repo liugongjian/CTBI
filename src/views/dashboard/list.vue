@@ -42,7 +42,7 @@
             tooltip-effect="dark"
             style="width: 100%"
             row-key="_id"
-            :load="loadDataSet"
+            :load="loadDashboard"
             :tree-props="{ children: 'children', hasChildren: 'directory' }"
             @select="handleSelectionChange"
           >
@@ -126,40 +126,9 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-pagination
-            :current-page.sync="pagination.currentPage"
-            :page-sizes="[10, 20]"
-            :page-size="pagination.pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="pagination.total"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-          />
         </div>
 
         <!-- 各种 弹窗 & 抽屉 -->
-
-        <el-dialog
-          title="编辑数据集"
-          :visible.sync="editDataSetVisible"
-          width="480px"
-        >
-          <div class="data-set-didlog-main">
-            <span>数据集名称</span>
-            <el-input
-              v-model="updateDataSetName"
-              placeholder="请输入文件夹名称"
-              class="data-set-didlog-main-input"
-            />
-          </div>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="editDataSetVisible = false">取 消</el-button>
-            <el-button
-              style="background-color: #fa8334; color: #fff"
-              @click="hanleEditFile"
-            >确 定</el-button>
-          </div>
-        </el-dialog>
 
         <el-dialog
           title="删除提示"
@@ -246,8 +215,14 @@
           :visible.sync="shareDashboardVisible"
           width="480px"
         >
-          <div v-if="!currentShareInfo || !currentShareInfo.shareUrl">
+          <div v-if="!currentShareInfo || !currentShareInfo.shareUrl" class="shareEmpty">
+            <img
+              style="width: 371px; height: 200px"
+              :src="require('../../assets/Image/dashboard/shareEmpty.png')"
+            >
+            <p>开启后，所有获得分享链接的人都可以查看内容</p>
             <el-button
+              style="margin-top: 14px;"
               type="primary"
               @click="() => executeShare()"
             >公开分享</el-button>
@@ -307,11 +282,6 @@ import {
   cancelShareDashboard,
   saveDashboard
 } from '@/api/dashboard'
-import {
-  updateFolderName,
-  updateDataSet,
-  getDataSetsFolders
-} from '@/api/dataSet'
 import { getList } from '@/api/userManage'
 // import { getDateTime } from '@/utils/optionUtils'
 import FolderEdit from './FolderEdit'
@@ -326,8 +296,7 @@ export default {
   data() {
     return {
       serachName: '',
-      updateDataSetName: '',
-      // 数据集表格数据
+      // 表格数据
       tableData: [],
       dataLoading: true,
       multipleSelection: [],
@@ -342,11 +311,6 @@ export default {
       editFloderName: '',
       currentFloder: null,
       cureentData: null,
-      pagination: {
-        currentPage: 1,
-        pageSize: 10,
-        total: 55
-      },
       // 仪表板相关
       folderDialogVisible: false,
       cancelPublishVisible: false,
@@ -380,10 +344,10 @@ export default {
       this.getTableData()
     },
     // 获取 tableData
-    async getTableData() {
+    async getTableData(searchkey = '') {
       this.dataLoading = true
       try {
-        const data = await getDashboardList('useOne=123')
+        const data = await getDashboardList('isPaging=0' + searchkey)
         // const temp = {
         //   'code': 200,
         //   'data': {
@@ -438,23 +402,8 @@ export default {
     },
     // 查询
     async query() {
-      if (!this.serachName) {
-        this.isAllDataShow = true
-        return this.$message({
-          message: '请输入正确的资源名称',
-          type: 'warning'
-        })
-      }
-      this.isAllDataShow = false
-      const searchkey = this.serachName
-      this.dataLoading = true
-      try {
-        const data = await getDataSetsFolders({ searchkey })
-        this.dataSetData = data.filter((item) => !item.isFolder)
-      } catch (error) {
-        console.log(error)
-      }
-      this.dataLoading = false
+      const searchkey = this.serachName ? `&searchkey=${this.serachName}` : ''
+      this.getTableData(searchkey)
     },
     // 新建文件夹
     createFolder() {
@@ -500,24 +449,11 @@ export default {
         this.editFolder = val
       }
     },
-    async hanleEditFile() {
-      console.log(this.cureentData)
-      const id = this.cureentData._id
-      const params = {
-        displayName: this.updateDataSetName
-      }
-      try {
-        const data = await updateDataSet(id, params)
-        console.log(data)
-        this.editDataSetVisible = false
-        this.currentFloder = null
-        this.init()
-      } catch (error) {
-        console.log(error)
-      }
-    },
     createDashboard1() {
       if (this.batchSelection) return false
+    },
+    loadDashboard(tree, treeNode, resolve) {
+      resolve(tree.childNode)
     },
     async editDashboardAttribute(val) {
       if (this.batchSelection) return false
@@ -551,22 +487,6 @@ export default {
       if (this.batchSelection) return false
       this.moreToolTipDisabled = false
     },
-    async hanleRenameFloder() {
-      const id = this.currentFloder._id
-      const body = {
-        name: this.editFloderName
-      }
-      try {
-        const data = await updateFolderName(id, body)
-        this.$message.success(data)
-        this.editFloderName = ''
-        this.currentFloder = null
-        this.init()
-      } catch (error) {
-        console.log(error)
-      }
-      this.renameFolderVisible = false
-    },
     deleteData(val) {
       if (this.batchSelection) return false
       this.cureentData = val
@@ -595,6 +515,10 @@ export default {
       if (val) {
         ids.push(val._id)
       } else {
+        if (this.multipleSelection.some(item => item.directory)) {
+          this.$message.warning('文件夹不能移动')
+          return
+        }
         this.multipleSelection.forEach((item) => {
           if (!item.directory) {
             ids.push(item._id)
@@ -611,32 +535,6 @@ export default {
       // this.$dialog.show('MoveDatasetDrawer', { ids }, () => {
       //   this.init()
       // })
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
-    },
-    handleUpdateDataSetName() {
-      this.editDataSetVisible = false
-    },
-    handleCellClick(row) {
-      const query = row
-      this.$router.push({
-        path: '/dataManage/dataSet/edit',
-        query
-      })
-    },
-    async loadDataSet(tree, treeNode, resolve) {
-      const folderId = tree._id
-      try {
-        const data = await getDataSetsFolders({ folderId })
-        console.log(data)
-        resolve(data)
-      } catch (error) {
-        console.log(error)
-      }
     },
     handleFolderEdit(action) {
       this.editFolder = null
@@ -843,5 +741,15 @@ export default {
   .shareDate{
     margin-top: 24px;
   }
+}
+.shareEmpty{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.45);
 }
 </style>
