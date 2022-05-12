@@ -64,7 +64,7 @@
 
 <script>
 import dialogMixin from '@/mixins/dialogMixin'
-import regex from '@/constants/regex'
+import regex from '@/constants/Regex'
 import { createDataSets, updateDataSet, getFolderLists } from '@/api/dataSet'
 
 export default {

@@ -104,7 +104,7 @@ export default {
   height: calc(100vh - 365px);
 
   &.full-height {
-    height: calc(100vh - 270px);
+    height: calc(100vh - 285px);
   }
 
   .main-list {
