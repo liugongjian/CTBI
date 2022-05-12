@@ -178,6 +178,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.login-item_title {
+  font-family: PingFangSC-Medium;
+  font-size: 42px;
+  color: #F0914B;
+  letter-spacing: 1.91px;
+  font-weight: 500;
+}
+.login-item_title-bi {
+  font-family: PingFangSC-Medium;
+  font-size: 44px;
+  color: #F0914B;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
 .title-size {
   width: 57px;
   height: 25px;
