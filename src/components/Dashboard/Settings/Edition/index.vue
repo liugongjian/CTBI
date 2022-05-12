@@ -57,6 +57,7 @@ export default {
         if (item.i === store.state.app.currentLayoutId) {
           item.option.theme.DisplayConfig.Color.show = val
           item.option.theme.DisplayConfig.TableTheme.visible = val
+          item.option.theme.DisplayConfig.TableThemeSimple.visible = !val
         }
       })
     }
