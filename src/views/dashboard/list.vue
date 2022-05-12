@@ -126,16 +126,15 @@
               </template>
             </el-table-column>
           </el-table>
-          <!-- <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="pagination.currentPage"
-          :page-sizes="[10, 20, 30, 40, 50]"
-          :page-size="pagination.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          style="text-align: right; margin-top: 16px"
-          :total="pagination.total">
-        </el-pagination> -->
+          <el-pagination
+            :current-page.sync="pagination.currentPage"
+            :page-sizes="[10, 20]"
+            :page-size="pagination.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pagination.total"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
         </div>
 
         <!-- 各种 弹窗 & 抽屉 -->
@@ -344,15 +343,6 @@ export default {
       currentFloder: null,
       cureentData: null,
       pagination: {
-        currentPage: 1,
-        pageSize: 10,
-        total: 55
-      },
-      // 数据集数据
-      dataSetData: [],
-      moreToolTipDisabled: true,
-      isAllDataShow: true,
-      dataSetPagination: {
         currentPage: 1,
         pageSize: 10,
         total: 55
@@ -606,10 +596,14 @@ export default {
         ids.push(val._id)
       } else {
         this.multipleSelection.forEach((item) => {
-          if (typeof item.isFolder !== 'undefined' && !item.isFolder) {
+          if (!item.directory) {
             ids.push(item._id)
           }
         })
+      }
+      if (ids.length === 0) {
+        this.$message.warning('请选择仪表板')
+        return
       }
       this.treeVisible = true
       this.moveDashboardIds = ids
