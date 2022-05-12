@@ -65,7 +65,7 @@
         </el-form>
         <span slot="footer">
           <el-button @click="close">关闭</el-button>
-          <el-button v-loading="isloading" @click="connect(form)">连接测试</el-button>
+          <el-button v-loading="connectLoading" @click="connect(form)">连接测试</el-button>
           <el-button type="primary" @click="submit(form)">确定</el-button>
         </span>
       </el-dialog>
@@ -73,6 +73,7 @@
         <div class="data-source__list">
           <el-table
             ref="singleTable"
+            v-loading="dataSourceLoading"
             :data="filterdDatasources"
             class="tableBox"
             highlight-current-row
@@ -219,8 +220,7 @@ export default {
       // sortBy: 'name',
       // sortOrder: 'asc',
       searchkey: '',
-      isloading: false,
-      loading: false,
+      connectLoading: false,
       notEdit: true,
       editform: {},
       currentRow: 0,
@@ -414,9 +414,7 @@ export default {
           const ids = val._id
           await this.getSourceFile(ids)
         }
-        this.loading = false
       } catch (error) {
-        this.loading = false
         console.log(error)
       }
     },
@@ -424,6 +422,12 @@ export default {
       this.detailVisible = true
       this.detailInfo = val
       this.detailSources()
+    },
+    async getDatasource() {
+      this.dataSourceLoading = true
+      const res = await getDataSourceList({ searchkey: this.search })
+      this.dataSourceList = res
+      this.dataSourceLoading = false
     },
     async init() {
       try {
@@ -436,9 +440,8 @@ export default {
           username: '',
           password: ''
         }
-        const res = await getDataSourceList({ searchkey: this.search })
-        this.dataSourceList = res
-        const [firstRow] = res.list
+        await this.getDatasource()
+        const [firstRow] = this.dataSourceList.list
         if (firstRow.type === 'file') {
           this.isShowDataFiles = true
         } else {
@@ -516,7 +519,7 @@ export default {
         if (!valid) {
           return
         }
-        this.isloading = true
+        this.connectLoading = true
         const testForm = {
           username: form.username,
           db: form.db,
@@ -531,10 +534,10 @@ export default {
         } else {
           this.$message.success('连接数据库成功！')
         }
-        this.isloading = false
+        this.connectLoading = false
         return result
       } catch (error) {
-        this.isloading = false
+        this.connectLoading = false
         console.log(error)
       }
     },
@@ -554,23 +557,13 @@ export default {
           this.dialogVisible = false
           if (this.notEdit) {
             await postDataSourceList(testForm)
+            await this.getDatasource()
           } else {
             await editSources(this.currentId, testForm)
+            await this.getDatasource()
+            const currentRow = this.filterdDatasources.find(item => item._id === this.currentId)
+            this.$refs.singleTable.setCurrentRow(currentRow)
           }
-          const res = await getDataSourceList({ searchkey: this.search })
-          this.dataSourceList = res
-          const results = {
-            displayName: form.displayName,
-            type: form.type,
-            _id: this.currentId
-          }
-          if (results.type === 'file') {
-            this.isShowDataFiles = true
-          } else {
-            this.isShowDataFiles = false
-          }
-          this.$refs.singleTable.setCurrentRow(results)
-          console.log('----------------editcurrentRow', results)
         }
       } catch (error) {
         console.log(error)
