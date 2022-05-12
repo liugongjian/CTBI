@@ -50,8 +50,7 @@
               slot-scope="{ node, data }"
               class="custom-tree-node d-f f-b-c w-100p"
             >
-              <div
-                :class="{'hide-tree-node': (data.attributes && (data.attributes[0] && data.attributes[0].isHidden))}">
+              <div :class="getDisplayColumnClass">
                 <b-tooltip :content="data.displayColumn" />
               </div>
               <div
@@ -491,6 +490,9 @@ export default {
     // 隐藏
     hideDimensionMeasure (item) {
       item.attributes[0].isHidden = !item.attributes[0].isHidden
+    },
+    getDisplayColumnClass (data) {
+      return { 'hide-tree-node': (data.attributes && (data.attributes[0] && data.attributes[0].isHidden)) }
     }
   }
 }

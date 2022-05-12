@@ -245,7 +245,7 @@ export default {
     formatSqlData () {
       this.dataInfo.sql.sql = this.currentSqlStatement
       const formatSql = format(this.currentSqlStatement)
-      this.$refs.sqlEdit.editor.setValue(formatSql)
+      this.$refs.sqlEdit?.editor.setValue(formatSql)
     },
     // 参数设置
     showParamsSetDrawer () {
@@ -279,10 +279,7 @@ export default {
         if (this.dataInfo.sql._id !== data._id) {
           this.dataInfo.sql._id = data._id
         }
-        this.$nextTick(() => {
-          // 触发历史记录的查询事件
-          this.getHistory()
-        })
+        this.getHistory()
       } catch (error) {
         this.resultData = Object.assign({ success: false }, error)
       }
@@ -290,9 +287,9 @@ export default {
     },
     // 获取历史记录
     async getHistory () {
-      if (this.currentSqlId) {
+      if (this.dataInfo.sql._id) {
         try {
-          const data = await getSqlRunningLogs(this.currentSqlId)
+          const data = await getSqlRunningLogs(this.dataInfo.sql._id)
           this.historyLogTableData = data.slice()
         } catch (error) {
           console.log(error)
@@ -315,7 +312,7 @@ export default {
           message: '恭喜你，确认编辑成功',
           type: 'success'
         })
-        this.isEdit = false
+        this.toggleContent = false
       } catch (error) {
         console.log(error)
       }
@@ -349,6 +346,7 @@ export default {
         const currentDataSource = this.dataSourceOptions.find(item => item._id === val)
         const type = currentDataSource?.type || ''
         this.dataInfo.dataSourceId = val
+        this.dataInfo.sql.dataSourceId = val
         this.dataInfo.dataSourceName = currentDataSource?.displayName
         console.log(this.dataInfo.dataSourceName, currentDataSource)
         this.dataInfo.dataSourceType = type

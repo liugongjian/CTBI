@@ -56,6 +56,7 @@
         :load="loadDataSet"
         :tree-props="{children: 'children', hasChildren: 'isFolder'}"
         @select-all="selectAll"
+        @select="select"
       >
         <el-table-column
           type="selection"
@@ -196,8 +197,10 @@ export default {
     },
     // 表格查询
     async queryImpl () {
+      // 清空已选
+      this.selectedRows = []
+      this.checkedKeys = false
       let params = Object.assign({}, this.queryForm)
-
       // 带参数查询，需要展示文件路径
       if (this.queryForm.searchkey.length > 0) {
         this.showFolderColumn = true
@@ -272,6 +275,7 @@ export default {
           }
         })
       }
+      console.log(this.selectedRows, val)
       this.$dialog.show('MoveDatasetDrawer', { ids }, () => {
         this.query()
       })
@@ -284,17 +288,41 @@ export default {
     },
     // 多选全选
     selectAll () {
-      this.checkedKeys = !this.checkedKeys
-      this.split(this.dataList, this.checkedKeys)
+      // flag = true 有选中项，flag=false 为无选中项
+      if (!this.checkedKeys) {
+        this.split(this.dataList, !this.checkedKeys)
+        if (this.selectedRows.length > 0) {
+          this.checkedKeys = true
+        }
+      } else {
+        this.$refs.multipleTable.clearSelection()
+        this.selectedRows = []
+        this.checkedKeys = false
+      }
+    },
+    select (selection, row) {
+      if (row.isFolder) {
+        this.$refs.multipleTable.toggleRowSelection(row, false)
+      } else {
+        this.checkedKeys = true
+        this.selectedRows = selection
+      }
     },
     /**
      * 处理数据
      */
     split (data, flag) {
       data.forEach((row) => {
-        this.$refs.multipleTable.toggleRowSelection(row, flag)
+        // 如果为目录，则不做选中
+        let isSelect = flag
+        if (row.isFolder) {
+          isSelect = false
+        } else {
+          this.selectedRows.push(row)
+        }
+        this.$refs.multipleTable.toggleRowSelection(row, isSelect)
         if (row.children !== undefined) {
-          this.split(row.children)
+          this.split(row.children, flag)
         }
       })
     }
