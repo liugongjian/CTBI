@@ -27,7 +27,7 @@ const apps = [
       {
         path: 'dataSet',
         name: 'dataSet',
-        component: () => import('@/views/dataManage/dataSet.vue'),
+        component: () => import('@/views/dataManage/dataSet/index.vue'),
         meta: { title: '数据集', icon: 'dashboard', affix: true }
       },
       {
@@ -35,7 +35,7 @@ const apps = [
         name: 'dataSetEdit',
         hidden: true,
         meta: { activeMenu: '/dataManage/dataSet' },
-        component: () => import('@/views/dataManage/dataSetEdit/index.vue')
+        component: () => import('@/views/dataManage/dataSet/dataSetEdit/index.vue')
       }
     ]
   },

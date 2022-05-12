@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import dialogMixin from '@/dialogs/dialogMixin'
+import dialogMixin from '@/mixins/dialogMixin'
 export default {
   name: 'TipDialog',
   mixins: [dialogMixin],

@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import dialogMinix from '@/dialogs/dialogMixin'
+import dialogMinix from '@/mixins/dialogMixin'
 import { getFolderLists, moveDataSet2Folder } from '@/api/dataSet'
 export default {
   name: 'MoveDatasetDrawer',
