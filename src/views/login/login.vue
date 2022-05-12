@@ -178,6 +178,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.title-size {
+  width: 57px;
+  height: 25px;
+  font-family: PingFangSC-Medium;
+  font-size: 18px;
+  color: #696969;
+  letter-spacing: 1px;
+  font-weight: 500;
+  margin-right: 1em;
+}
 .button-style {
     position: relative;
     margin-top: 58px;

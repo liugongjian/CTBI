@@ -38,7 +38,7 @@ export function isEmptyStr (str) {
  * @returns {Boolean}
  */
 export function validPassword (str) { // @$!%*#_~?&^
-  const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!^&@#$%*_?])[A-Za-z\d~!^&@#$%*_?]{8,20}$/
+  const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!^&@#$%*_?])[A-Za-z\d~!^&@#$%*_?]{12,26}$/
   return reg.test(str)
 }
 

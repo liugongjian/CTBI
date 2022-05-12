@@ -72,9 +72,13 @@ export default {
   }
     .el-input {
       display: inline-block;
-      width:273px;
+      width: 75%;
+    }
+    .el-form-item__error {
+      padding-left: 6em;
     }
     .el-input__inner {
+      padding: 0px;
       border-top-width: 0px;
       border-left-width: 0px;
       border-right-width: 0px;
@@ -86,7 +90,12 @@ export default {
       border-color: #f0914b
     }
     .el-input__inner::-webkit-input-placeholder {
+      width: 84px;
+      height: 20px;
+      font-family: PingFangSC-Medium;
       font-size: 14px;
+      color: #D8D8D8;
+      font-weight: 500;
     }
   .title-size {
     width: 57px;

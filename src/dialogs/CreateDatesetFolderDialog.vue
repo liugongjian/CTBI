@@ -15,8 +15,12 @@
     <span
       slot="footer"
     >
-      <el-button @click="closeSilence">取 消</el-button>
       <el-button
+        :loading="loading"
+        @click="closeSilence"
+      >取 消</el-button>
+      <el-button
+        :loading="loading"
         type="primary"
         @click="handlerCreateFolder"
       >确 定</el-button>
@@ -25,7 +29,7 @@
 </template>
 
 <script>
-import dialogMixin from '@/dialogs/dialogMixin'
+import dialogMixin from '@/mixins/dialogMixin'
 import { createFolders } from '@/api/dataSet'
 
 export default {
