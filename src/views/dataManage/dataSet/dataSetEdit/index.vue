@@ -5,13 +5,14 @@
       <div>
         <i
           class="el-icon-arrow-left h-c-p m-r-8"
-          @click="$router.go(-1)"
+          @click="checkExit"
         />
         <span>{{ dataInfo.displayName || '未命名' }}</span>
       </div>
       <div class="edit-wrap-header-r">
         <el-button
           type="primary"
+          :disabled="toggleContent"
           @click="showSaveDialog"
         >保存</el-button>
       </div>
@@ -57,7 +58,7 @@
           >确认编辑</el-button>
           <el-button
             type="text"
-            @click="checkExit"
+            @click="toggleContent = !toggleContent"
           ><i class="el-icon-close" /></el-button>
         </div>
       </div>
@@ -319,13 +320,9 @@ export default {
       }
     },
     checkExit () {
-      if (this.dataInfo.sql._id && this.dataInfo.sql.sql) {
-        this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内容将不被保存，请问您是否确认返回？' }, () => {
-          this.toggleContent = !this.toggleContent
-        })
-      } else {
-        this.toggleContent = !this.toggleContent
-      }
+      this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内容将不被保存，请问您是否确认返回？' }, () => {
+        this.$router.go(-1)
+      })
     },
     handlerToggleContent () {
       this.toggleContent = !this.toggleContent
@@ -401,7 +398,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .edit-wrap {
-  margin: -20px;
   &-header {
     height: 50px;
     border-bottom: 1px solid #ccc;
@@ -422,7 +418,7 @@ export default {
   width: 250px;
 
   &.full-height {
-    height: calc(100vh - 100px);
+    height: calc(100vh - 60px);
   }
 
   .side-top {
@@ -477,7 +473,7 @@ export default {
   .main-edit {
     height: calc(100vh - 166px);
     &.full-height {
-      height: calc(100vh - 101px);
+      height: calc(100vh - 50px);
     }
   }
 
