@@ -343,7 +343,6 @@ export default {
     async handleChangeDataSource (val) {
       this.dataTableLoading = true
       try {
-        console.log()
         const currentDataSource = this.dataSourceOptions.find(item => item._id === val)
         const type = currentDataSource?.type || ''
         this.dataInfo.dataSourceId = val
@@ -352,8 +351,7 @@ export default {
         this.dataInfo.dataSourceType = type
 
         if (type === 'file') {
-          const params = { searchkey: currentDataSource.displayName }
-          const result = await dataFiles(params)
+          const result = await dataFiles()
           this.dataTableList = result.list
         } else {
           const result = await getDataTable(val)
