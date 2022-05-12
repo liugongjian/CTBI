@@ -44,7 +44,7 @@
           <el-button
             plain
             icon="el-icon-volume"
-            @click="settingParam"
+            @click="showParamsSetDrawer"
           >参数配置</el-button>
           <el-button
             type="primary"
@@ -65,7 +65,7 @@
       <div class="d-f">
         <div :class="[{'full-height': !toggleContent}, 'side-bar']">
           <div class="side-top">
-            <div v-if="toggleContent">
+            <div v-show="toggleContent">
               <div class="side-top-label"><span>选择数据源</span></div>
               <el-select
                 v-model="dataInfo.dataSourceId"
@@ -80,7 +80,7 @@
                 />
               </el-select>
             </div>
-            <div v-else>
+            <div v-show="!toggleContent">
               <div class="side-top-label"><span>当前数据源</span></div>
               <div><span class="side-top-text">{{ dataInfo.dataSourceName }}</span></div>
             </div>
@@ -101,11 +101,26 @@
           <!-- SQL编辑器 -->
           <div :class="[{'full-height': !toggleContent}, 'main-edit']">
             <EditSql
+              v-if="toggleContent"
               ref="sqlEdit"
               :tables="hintOptions"
+              edit-height="calc(100vh - 110px)"
               :value="currentSqlStatement"
               @changeTextarea="sqlStatementChange($event)"
             />
+            <div
+              v-else
+              class="p-16-16"
+            >
+              <span>{{ currentSqlStatement }}</span>
+              <div class="edit-sql-btn">
+                <el-button
+                  type="text"
+                  icon="el-icon-edit-outline"
+                  @click="handlerToggleContent"
+                >编辑</el-button>
+              </div>
+            </div>
           </div>
 
           <!-- 执行结果 & 数据预览 -->
@@ -157,7 +172,8 @@ import Runner from '@/views/dataManage/dataSet/dataSetEdit/Runner'
 import Resetter from '@/views/dataManage/dataSet/dataSetEdit/Resetter'
 import TableList from '@/views/dataManage/dataSet/dataSetEdit/TableList'
 import EditSql from '@/components/SqlEditor/index.vue'
-import { getDataSetsInfo, runtimeForSql, getSqlVariables, getSqlRunningLogs, confirmEditSql, getDataSourceData, dataFiles, getDataTable } from '@/api/dataSet'
+import { getDataSetsInfo, runtimeForSql, getSqlRunningLogs, confirmEditSql, getDataSourceData, dataFiles, getDataTable } from '@/api/dataSet'
+import { deepClone } from '@/utils/optionUtils'
 
 export default {
   components: { Runner, Resetter, TableList, EditSql },
@@ -199,9 +215,11 @@ export default {
     }
   },
   created () {
+    this.getDataSourceList()
     const data = this.$route.query
     if (data._id) {
       this.getDetail()
+      this.toggleContent = false
     }
   },
   methods: {
@@ -214,7 +232,7 @@ export default {
       this.formatSqlData()
 
       this.historyLogTableData = this.dataInfo.sql.history
-      this.getDataSourceList()
+      await this.getDataSourceList()
       this.handleChangeDataSource(this.dataInfo.dataSourceId)
     },
     // 打开保存窗口
@@ -230,24 +248,11 @@ export default {
       this.$refs.sqlEdit.editor.setValue(formatSql)
     },
     // 参数设置
-    async settingParam () {
-      this.settingParamVisiable = true
-      const sql = this.dataInfo.sql.sql || this.currentSqlData.sql
-      if (!sql) {
-        this.$message({
-          message: '参数设置暂不支持空SQL语句',
-          type: 'warning'
-        })
-      }
-      const body = {
-        sql
-      }
-      try {
-        const data = await getSqlVariables(body)
-        this.sqlVariablesTableData = data.slice()
-      } catch (error) {
-        console.log(error)
-      }
+    showParamsSetDrawer () {
+      const sqlVariablesTableData = deepClone(this.dataInfo.sql.sqlVariables)
+      this.$dialog.show('DatasetParamsDrawer', { sql: this.dataInfo.sql.sql, sqlVariablesTableData }, (variable) => {
+        this.dataInfo.sql.sqlVariables = variable
+      })
     },
     // 获取改变的sql语句
     sqlStatementChange (sql) {
@@ -261,7 +266,8 @@ export default {
         sql: this.currentSqlStatement,
         dataSourceId: this.dataInfo.dataSourceId,
         type: this.dataInfo.dataSourceType,
-        _id: this.dataInfo.sql._id
+        _id: this.dataInfo.sql._id,
+        sqlVariables: this.dataInfo.sql.sqlVariables
       }
       if (this.sqlVariables && this.sqlVariables.length > 0) {
         body.sqlVariables = this.sqlVariables
@@ -299,11 +305,9 @@ export default {
         const body = {
           _id: this.dataInfo.sql._id,
           sql: this.dataInfo.sql.sql,
-          dataSourceId: this.dataInfo.dataSourceId
+          dataSourceId: this.dataInfo.dataSourceId,
+          sqlVariables: this.dataInfo.sql.sqlVariables
         }
-        // if (this.sqlVariables && this.sqlVariables.length > 0) {
-        //   body.sqlVariables = this.sqlVariables
-        // }
         const data = await confirmEditSql(body)
         Object.assign(this.dataInfo.sql, data.sql)
         this.dataInfo.fields = data.fields
@@ -325,6 +329,9 @@ export default {
         this.toggleContent = !this.toggleContent
       }
     },
+    handlerToggleContent () {
+      this.toggleContent = !this.toggleContent
+    },
     // 获取数据源列表
     async getDataSourceList () {
       try {
@@ -338,10 +345,12 @@ export default {
     async handleChangeDataSource (val) {
       this.dataTableLoading = true
       try {
+        console.log()
         const currentDataSource = this.dataSourceOptions.find(item => item._id === val)
         const type = currentDataSource?.type || ''
         this.dataInfo.dataSourceId = val
         this.dataInfo.dataSourceName = currentDataSource?.displayName
+        console.log(this.dataInfo.dataSourceName, currentDataSource)
         this.dataInfo.dataSourceType = type
 
         if (type === 'file') {
@@ -412,7 +421,6 @@ export default {
 
 .side-bar {
   display: inline-block;
-  float: left;
   background-color: #fff;
   height: calc(100vh - 167px);
   width: 250px;
@@ -512,6 +520,17 @@ export default {
       }
     }
   }
+}
+.edit-sql-btn {
+  position: absolute;
+  right: 0px;
+  width: 64px;
+  height: 32px;
+  background: #ffffff;
+  box-shadow: 0px 12px 48px 16px rgb(0 0 0 / 3%),
+    0px 9px 28px 0px rgb(0 0 0 / 5%), 4px 6px 16px -8px #f1ae82;
+  border-radius: 16px 0px 0px 16px;
+  text-align: center;
 }
 
 // 自定义按钮图标

@@ -201,22 +201,20 @@
           </el-table>
         </div>
       </div>
-      <div
-        v-show="activeTagName === 2"
-        style="width: 65vw"
-      >
+      <div v-show="activeTagName === 2">
         <el-table
           :data="dimensionMeasure"
           :height="tableHeight"
           row-key="index"
           default-expand-all
+          style="width: 100%"
           header-row-class-name="m-table-header"
           :tree-props="{children: 'children', hasChildren: 'isFolder'}"
         >
           <el-table-column
             label="名称字段"
             prop="displayColumn"
-            width="360"
+            min-width="360"
           >
             <template slot-scope="scope">
               <span v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'">
@@ -233,11 +231,11 @@
           <el-table-column
             prop="column"
             label="物理字段名"
-            width="180"
+            min-width="180"
           />
           <el-table-column
             label="字段类型"
-            width="180"
+            min-width="180"
           >
             <template slot-scope="scope">
               <span v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
@@ -258,7 +256,7 @@
           </el-table-column>
           <el-table-column
             label="数值展示格式"
-            width="180"
+            min-width="180"
           >
             <template slot-scope="scope">
               <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
@@ -279,7 +277,7 @@
           </el-table-column>
           <el-table-column
             label="字段描述"
-            width="180"
+            min-width="180"
           >
             <template slot-scope="scope">
               <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
@@ -592,13 +590,5 @@ export default {
   font-weight: 400;
   line-height: 20px;
   background-color: #fff !important;
-
-  // &:hover > .gear-btn {
-  //   display: block;
-  // }
-
-  // .gear-btn {
-  //   display: none;
-  // }
 }
 </style>
