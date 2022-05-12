@@ -4,37 +4,16 @@
     title="上传文件"
     :visible.sync="dialogVisible"
   >
-    <div
-      slot="footer"
-      class="dialog-footer"
-    >
-      <el-button
-        size="small"
-        @click="dialogVisible = false"
-      >取 消</el-button>
-      <el-button
-        type="primary"
-        :loading="loading"
-        size="small"
-        @click="handleConfirm"
-      >确 定</el-button>
+    <div slot="footer">
+      <el-button size="small" @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" :loading="loading" size="small" @click="handleConfirm">确 定</el-button>
     </div>
     <div class="title">
       <div class="block" />
       <span class="text">基础配置</span>
     </div>
-    <el-form
-      ref="form"
-      :rules="rules"
-      size="small"
-      class="form"
-      :model="form"
-      label-width="110px"
-    >
-      <el-form-item
-        prop="file"
-        label="请选择文件"
-      >
+    <el-form ref="form" :rules="rules" size="small" class="form" :model="form" label-width="110px">
+      <el-form-item prop="file" label="请选择文件">
         <el-upload
           :auto-upload="false"
           action=""
@@ -44,22 +23,11 @@
           :before-upload="beforeUpload"
           :file-list="fileList"
         >
-          <el-button class="upload-btn">
-            <svg-icon
-              icon-class="upload"
-              style="margin-right: 9px;"
-            />{{ form.file ? '重新上传' : '添加文件' }}
-          </el-button>
-          <div
-            slot="tip"
-            class="el-upload__tip"
-          >文件只支持csv、xlsx、xls格式且行数不能大于10000，列数不能大于50</div>
+          <el-button class="upload-btn"><svg-icon icon-class="upload" style="margin-right: 9px;" />{{ form.file ? '重新上传' : '添加文件' }}</el-button>
+          <div slot="tip" class="el-upload__tip">文件只支持csv、xlsx、xls格式且行数不能大于10000，列数不能大于50</div>
         </el-upload>
       </el-form-item>
-      <el-form-item
-        prop="displayName"
-        label="自定义文件名称"
-      >
+      <el-form-item prop="displayName" label="自定义文件名称">
         <el-input v-model="form.displayName" />
       </el-form-item>
       <el-form-item label="">
@@ -71,14 +39,14 @@
 </template>
 
 <script>
-import dialogMixin from '@/mixins/dialogMixin'
+import dialogMixin from '@/dialogs/dialogMixin'
 import { uploadDataFile, isDataFileExists } from '@/api/dataSource'
 import XLSX from 'xlsx'
 
 export default {
   name: 'UploadFileDialog',
   mixins: [dialogMixin],
-  data () {
+  data() {
     return {
       loading: false,
       fileList: [],
@@ -100,7 +68,7 @@ export default {
     }
   },
   methods: {
-    async validateDisplayName (rule, value, callback) {
+    async validateDisplayName(rule, value, callback) {
       try {
         const isExist = await isDataFileExists({ displayName: value })
         if (isExist) {
@@ -113,14 +81,14 @@ export default {
         callback()
       }
     },
-    async beforeUpload (file) {
+    async beforeUpload(file) {
       if (file.raw.type !== 'text/csv' && file.raw.type !== 'application/vnd.ms-excel' && file.raw.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
         this.$message.warning('文件只支持csv、xlsx、xls格式！请重新上传')
         return false
       }
       return await this.readExcel(file.raw)
     },
-    readExcel (file) {
+    readExcel(file) {
       return new Promise((resolve) => {
         const fileReader = new FileReader()
         try {
@@ -149,12 +117,12 @@ export default {
         }
       })
     },
-    excelToJson (workbook) {
+    excelToJson(workbook) {
       const worksheet = workbook.Sheets[workbook.SheetNames[0]]
       const data = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: 'NULL' })
       return data
     },
-    async handleUploadChange (file, fileList) {
+    async handleUploadChange(file, fileList) {
       if (!await this.beforeUpload(file)) {
         this.fileList = []
         return
@@ -170,13 +138,13 @@ export default {
       }
       this.form.file = file.raw
     },
-    handleUploadErr () {
+    handleUploadErr() {
       this.$message.warning('文件上传失败!请重新上传')
     },
-    handleRemove () {
+    handleRemove() {
       this.form.file = null
     },
-    handleConfirm () {
+    handleConfirm() {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
           const data = new FormData()

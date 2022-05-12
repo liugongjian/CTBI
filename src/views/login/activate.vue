@@ -12,7 +12,7 @@
       <div class="login-font">
         <span class="login-item_title">激活</span>
       </div>
-      <el-form-item prop="userName">
+      <el-form-item prop="oldPassword">
         <span class="title-size">旧密码</span>
         <el-input
           ref="oldPassword"
@@ -60,7 +60,6 @@
     <div class="button-style">
       <el-button
         class="button"
-        :plain="true"
         @click="setUp"
       >
         确认
@@ -160,6 +159,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.button-style {
+    position: relative;
+    margin-top: 58px;
+  }
+.button {
+    background: #f0914b;
+    color: #fff;
+    width: 100%;
+    height: 50px;
+    font-size: 18px;
+    border:#f0914b;
+    border-radius: 10px;
+  }
 ::v-deep .back {
   display: inline-block;
   font-size: 62px;
@@ -173,6 +185,16 @@ export default {
 }
 </style>
 <style>
+.title-size {
+  width: 57px;
+  height: 25px;
+  font-family: PingFangSC-Medium;
+  font-size: 18px;
+  color: #696969;
+  letter-spacing: 1px;
+  font-weight: 500;
+  margin-right: 1em;
+}
 .el-message {
   background-color:#FFF;
   border-color:#E6E6E6;

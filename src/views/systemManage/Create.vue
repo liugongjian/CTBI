@@ -34,7 +34,7 @@
                 />
                 <div slot="content">
                   <div>1. 密码为数字、大写字母、小写字母、特殊符号（@$!%*#_~?&）的组合</div>
-                  <div>2. 长度限制为8-20位</div>
+                  <div>2. 长度限制为12-26位</div>
                   <div>3. 不能包含账号信息、字典序及键盘序</div>
                 </div>
               </el-tooltip>
@@ -70,7 +70,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer">
         <el-button size="small" @click="handleClose">取 消</el-button>
         <el-button type="primary" size="small" @click="handleCreate">确 定</el-button>
       </div>
@@ -104,6 +104,7 @@ export default {
         { required: true, message: '请输入账号名', trigger: 'blur' },
         { pattern: /^[\w]*$/, message: '账号名仅支持英文、数字', trigger: 'blur' },
         { pattern: /^[^0-9].*$/, message: '账号名不能以数字开头', trigger: 'blur' },
+        { max: 50, message: '最多只能输入50字符', trigger: 'blur' },
         { validator: this.validateExists, trigger: 'blur' }
       ],
       password: [
@@ -113,7 +114,8 @@ export default {
       ],
       realName: [
         { required: true, message: '请输入真实姓名', trigger: 'blur' },
-        { pattern: /^[\u4E00-\u9FA5A-Za-z]+$/, message: '真实姓名只允许输入中文和英文', trigger: 'blur' }
+        { pattern: /^[\u4E00-\u9FA5A-Za-z]+$/, message: '真实姓名只允许输入中文和英文', trigger: 'blur' },
+        { max: 100, message: '最多只能输入100字符', trigger: 'blur' }
       ],
       phone: [
         { required: true, message: '请输入手机号', trigger: 'blur' },
@@ -236,7 +238,7 @@ export default {
     },
     validatePassword (rule, value, callback) {
       if (!validPassword(value)) {
-        callback(new Error('密码应包括数字、小写字母、大写字母和特殊符号四种类型字符(长度为8-26位)'))
+        callback(new Error('密码应包括数字、小写字母、大写字母和特殊符号四种类型字符(长度为12-26位)'))
         return
       }
       if (validContinuousChar(value)) {

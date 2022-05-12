@@ -8,8 +8,8 @@
         <div class="head-title">数据源</div>
         <div class="head-select">
           <el-dropdown @command="handleCommand">
-            <el-button type="primary">
-              +新建数据源
+            <el-button type="primary" icon="el-icon-plus" class="new-button">
+              <span class="newFile">新建数据源</span>
               <i class="el-icon-arrow-down el-icon--right" />
             </el-button>
             <el-dropdown-menu slot="dropdown">
@@ -24,8 +24,9 @@
         :title="status+fileType[form.type]"
         :visible.sync="dialogVisible"
         width="560px"
+        class="dialog-new"
       >
-        <el-form ref="form" :rules="rules" :model="form" label-width="120px">
+        <el-form ref="form" :rules="rules" :model="form" label-width="90px">
           <el-form-item label="显示名称" prop="displayName">
             <el-input
               v-model="form.displayName"
@@ -44,7 +45,7 @@
           <el-form-item label="数据库" prop="db">
             <el-input
               v-model="form.db"
-              placeholder="数据库名称"
+              placeholder="请输入数据库名称"
             />
           </el-form-item>
           <el-form-item label="用户名" prop="username">
@@ -72,7 +73,8 @@
         <div class="data-source__list">
           <el-table
             ref="singleTable"
-            :data="dataSourceList.list"
+            v-loading="loading"
+            :data="filterdDatasources"
             class="tableBox"
             highlight-current-row
             @current-change="handleCurrentChange"
@@ -98,14 +100,14 @@
                     <svg-icon :icon-class="scope.row.type" />
                   </div>
                   <div class="table-row__text">
-                    <div>{{ scope.row.displayName }}</div>
-                    <div>所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}</div>
+                    <div class="table-row__text-part1" :title="scope.row.displayName">{{ scope.row.displayName }}</div>
+                    <div class="table-row__text-part2" :title="scope.row.creator && scope.row.creator.userName || '-'">所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}</div>
                   </div>
                   <div class="table-row__tools">
                     <span v-if="scope.row.type!=='file'" @click.prevent="editSource(scope.row)">
                       <svg-icon icon-class="pencil" />
                     </span>
-                    <span v-if="scope.row.type!=='file'" @click="deleteSource(scope.row._id)">
+                    <span v-if="scope.row.type!=='file'" @click="deleteSource(scope.row)">
                       <svg-icon icon-class="delete" />
                     </span>
                   </div>
@@ -114,7 +116,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-file__list" />
+        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-files__list" />
         <div v-else class="data-file__list">
           <div class="research-file">
             <el-input
@@ -125,10 +127,11 @@
               @keyup.enter.native="searchFiles"
             />
             <span>
-              <el-button plain class="create-data" @click="toCreateDataSet">SQL创建数据集</el-button>
+              <el-button class="create-data" @click="toCreateDataSet">SQL创建数据集</el-button>
             </span>
           </div>
           <common-table
+            v-loading="tableListLoading"
             :table-columns="tableColums"
             :table-data="sourceFile"
             :page-num.sync="page"
@@ -137,11 +140,14 @@
             :is-show-toolbar="false"
             @refresh="refresh"
           >
+            <!-- @sort-change="handleSortChange" -->
             <template #name="{scope}">
               {{ scope.row.name }}
             </template>
             <template #comment="{scope}">
-              {{ scope.row.name }}
+              <el-tooltip class="item" effect="dark" :content="scope.row.comment" placement="top">
+                <span class="description">{{ scope.row.comment }} </span>
+              </el-tooltip>
             </template>
             <template #operation="{scope}">
               <div class="operate">
@@ -154,32 +160,24 @@
           <el-dialog
             title="表详情"
             :visible.sync="detailVisible"
-            width="560px"
+            width="1000px"
+            height="481px"
           >
-            <p>表名称：{{ tableName }}</p>
-            <p>表描述：{{ comment }}</p>
-            <el-table
-              :data="detailColumns"
-              height="250"
-              style="width: 100%"
+            <p class="part"><span class="table-title-name">表名称：</span><span class="table-content">{{ tableName }}</span></p>
+            <p class="part"><span class="table-title-name">表备注：</span><span class="table-content">{{ detailComment }}</span></p>
+            <common-table
+              :table-columns="comments"
+              :table-data="detailColumns"
+              :is-show-toolbar="false"
+              :is-show-pagination="false"
+              class="table-detail"
             >
-              <el-table-column
-                prop="columnName"
-                label="字段名称"
-                width="180"
-              />
-              <el-table-column
-                prop="columnType"
-                label="字段类型"
-                width="180"
-              />
-              <el-table-column
-                prop="columnComment"
-                label="字段描述"
-              />
-            </el-table>
+              <template #columnName />
+              <template #columnType />
+              <template #comment />
+            </common-table>
             <span slot="footer">
-              <el-button type="primary" @click="detailVisible = false">关闭</el-button>
+              <el-button @click="detailVisible = false">关闭</el-button>
             </span>
           </el-dialog>
         </div>
@@ -202,6 +200,7 @@ export default {
   },
   data() {
     return {
+      tableListLoading: false,
       detailTable: {
         tableName: '',
         comment: '',
@@ -210,7 +209,7 @@ export default {
         ]
       },
       tableName: '',
-      comment: '',
+      detailComment: '',
       detailColumns: [],
       detailInfo: {},
       ids: '',
@@ -218,10 +217,11 @@ export default {
       isPaging: 1,
       page: 1,
       limit: 20,
-      sortBy: '',
-      sortOrder: '',
+      // sortBy: 'name',
+      // sortOrder: 'asc',
       searchkey: '',
       isloading: false,
+      loading: false,
       notEdit: true,
       editform: {},
       currentRow: 0,
@@ -229,7 +229,8 @@ export default {
       fileType: {
         'mysql': 'mySql数据源',
         'mongodb': 'MongoDB数据源',
-        'file': '本地数据源'
+        'file': '本地数据源',
+        '': '?'
       },
       status: '',
       search: '',
@@ -254,17 +255,37 @@ export default {
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       },
+      comments: [
+        {
+          prop: 'columnName',
+          label: '字段名称',
+          fixed: false
+        },
+        {
+          prop: 'columnType',
+          label: '字段类型',
+          fixed: false
+        },
+        {
+          prop: 'comment',
+          label: '字段描述',
+          fixed: false,
+          ellipsis: true
+        }
+      ],
       tableColums: [
         {
           prop: 'name',
           label: '名称',
-          fixed: false,
-          sortable: true
+          fixed: false
+          // sortable: true
         },
         {
           prop: 'comment',
           label: '备注',
-          fixed: false
+          slot: 'comment',
+          fixed: false,
+          ellipsis: true
         },
         {
           prop: 'operation',
@@ -274,6 +295,14 @@ export default {
         }
       ],
       isShowDataFiles: false
+    }
+  },
+  computed: {
+    filterdDatasources() {
+      return this.dataSourceList?.list?.filter(item => {
+        console.log(item.displayName, this.search)
+        return this.search ? item.displayName.indexOf(this.search) >= 0 : true
+      }) || []
     }
   },
   mounted() {
@@ -305,6 +334,7 @@ export default {
         query
       })
     },
+
     async detailSources() {
       try {
         this.tableName = this.detailInfo.name
@@ -315,7 +345,7 @@ export default {
         this.detailTable = await detailSource(params)
         this.detailColumns = this.detailTable.columns
         this.tableName = this.detailTable.tableName
-        this.comment = this.detailTable.comment
+        this.detailComment = this.detailTable.comment
         this.detailColumns.forEach(function (value) { value.columnType = value.columnType.toUpperCase() })
       } catch (error) {
         console.log(error)
@@ -326,7 +356,6 @@ export default {
         this.notEdit = false
         this.status = '编辑'
         this.form.type = row.type
-        console.log('form.type', this.form.type)
         this.form.displayName = row.displayName
         this.form.host = row.host
         this.form.port = row.port
@@ -341,12 +370,13 @@ export default {
     },
     async getSourceFile(ids) {
       try {
+        this.tableListLoading = true
         const params = {
           isPaging: this.isPaging,
           page: this.page,
           limit: this.limit,
-          sortBy: this.sortBy,
-          sortOrder: this.sortOrder,
+          // sortBy: this.sortBy,
+          // sortOrder: this.sortOrder,
           searchkey: this.searchkey
         }
         const file = await getSourceFile(ids, params)
@@ -354,8 +384,11 @@ export default {
         this.total = file.total
         this.page = file.page
         this.limit = file.limit
+        this.tableListLoading = false
       } catch (error) {
         console.log(error)
+        this.sourceFile = []
+        this.tableListLoading = false
       }
     },
     searchSource() {
@@ -370,6 +403,7 @@ export default {
     },
     async handleCurrentChange(val) {
       try {
+        this.loading = true
         this.currentRow = val
         if (val.type === 'file') {
           this.isShowDataFiles = true
@@ -381,7 +415,9 @@ export default {
           const ids = val._id
           await this.getSourceFile(ids)
         }
+        this.loading = false
       } catch (error) {
+        this.loading = false
         console.log(error)
       }
     },
@@ -414,25 +450,24 @@ export default {
         console.log(error)
       }
     },
-    async deleteSource(id) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        console.log(id)
-        deleteSources(id)
-        this.init()
+    async deleteSource(column) {
+      try {
+        const id = column._id
+        const name = column.displayName
+        await this.$confirm('确定删除' + name + '数据源?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        await deleteSources(id)
+        await this.init()
         this.$message({
           type: 'success',
           message: '删除成功!'
         })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
-      })
+      } catch (err) {
+        console.log(err)
+      }
     },
     handleCommand(command) {
       this.status = '添加'
@@ -447,17 +482,19 @@ export default {
         password: ''
       }
       if (command === 'mysql') {
-        this.form.type = 'mysql'
+        // this.form.type = 'mysql'
+        this.$set(this.form, 'type', 'mysql')
+        this.$set(this.form, 'port', '3306')
         this.dialogVisible = true
         this.notEdit = true
       }
       if (command === 'mongoDB') {
-        this.form.type = 'mongodb'
+        this.$set(this.form, 'type', 'mongodb')
+        this.$set(this.form, 'port', '27017')
         this.dialogVisible = true
         this.notEdit = true
       }
       if (command === 'localFile') {
-        this.fileType = '添加本地数据源'
         this.$dialog.show('UploadFileDialog', {}, () => {
           if (this.isShowDataFiles) {
             this.$refs.dataFiles.getDataFiles()
@@ -465,17 +502,30 @@ export default {
         })
       }
     },
+    // handleSortChange({ prop, order }) {
+    //   this.sortBy = prop
+    //   if (order) {
+    //     this.sortOrder = order === 'ascending' ? 'asc' : 'desc'
+    //   } else {
+    //     this.sortOrder = 'desc'
+    //   }
+    //   this.getSourceFile(this.currentRow._id)
+    // },
     async connect(form) {
-      this.isloading = true
-      const testForm = {
-        username: form.username,
-        db: form.db,
-        host: form.host,
-        password: encryptAes(form.password),
-        port: form.port,
-        type: form.type
-      }
       try {
+        const valid = await this.$refs.form.validate()
+        if (!valid) {
+          return
+        }
+        this.isloading = true
+        const testForm = {
+          username: form.username,
+          db: form.db,
+          host: form.host,
+          password: encryptAes(form.password),
+          port: form.port,
+          type: form.type
+        }
         const result = await connectTest(testForm)
         if (!result) {
           this.$message.error('连接数据库失败！')
@@ -490,23 +540,25 @@ export default {
       }
     },
     async submit(form) {
-      const valid = await this.$refs.form.validate()
-      if (!valid) {
-        return
-      }
       try {
-        form.password = encryptAes(form.password)
-        const result = await connectTest(form)
+        const testForm = {
+          displayName: form.displayName,
+          username: form.username,
+          db: form.db,
+          host: form.host,
+          password: encryptAes(form.password),
+          port: form.port,
+          type: form.type
+        }
+        const result = await this.connect(form)
         if (result === true) {
           this.dialogVisible = false
           if (this.notEdit) {
-            await postDataSourceList(form)
+            await postDataSourceList(testForm)
           } else {
-            await editSources(this.currentId, this.form)
+            await editSources(this.currentId, testForm)
           }
           this.init()
-        } else {
-          this.$message.error('连接数据库失败！')
         }
       } catch (error) {
         console.log(error)
@@ -517,6 +569,58 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .common-table .table.el-table th .cell {
+  font-family: PingFangSC-Medium;
+  font-size: 12px;
+  color: rgba(0,0,0,0.90);
+  text-align: left;
+  line-height: 42px;
+  font-weight: 500;
+}
+::v-deep .common-table .table.el-table td .cell {
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.65);
+  text-align: left;
+  line-height: 42px;
+  font-weight: 400;
+}
+.table-detail {
+  width: 950px;
+  height: 300px;
+  overflow: auto;
+}
+.new-button {
+  width: 124px;
+  height: 32px;
+  background: #FA8334;
+  border-radius: 2px;
+}
+.newFile {
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #FFFFFF;
+  text-align: left;
+  font-weight: 400;
+}
+.part {
+  margin-bottom: 1em;
+}
+.table-title-name {
+  width: 48px;
+  height: 20px;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: rgba(0,0,0,0.90);
+  font-weight: 400;
+}
+.table-content {
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: rgba(0,0,0,0.65);
+  line-height: 20px;
+  font-weight: 400;
+}
 .operate {
   color: #FA8334;
   span {
@@ -525,24 +629,48 @@ export default {
 }
 .table-row {
   display: flex;
+  align-items: center;
   height: 50px;
-  line-height: 25px;
+  margin-right: 10px;
   &__image {
-    flex: 1;
+    width:32px;
+    margin-right: 15px;
     font-size: 32px;
-    line-height: 50px;
   }
   &__text {
-    flex: 1
+    flex: 1;
+    text-align: left;
+    overflow: hidden;
   }
   &__tools {
-    flex: 2;
+    width:65px;
     text-align: right;
-    line-height: 68px;
-    span {
-      margin-right: 20px;
+    span{
       cursor:pointer;
+      &:not(:last-of-type) {
+        margin-right: 20px;
+      }
     }
+  }
+  &__text-part1 {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: PingFangSC-Medium;
+    font-size: 12px;
+    color: rgba(0,0,0,0.90);
+    font-weight: 500;
+  }
+   &__text-part2 {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: rgba(0,0,0,0.65);
+    font-weight: 400;
   }
 }
 .input {
@@ -553,9 +681,9 @@ export default {
 }
 .table-title {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   height: 50px;
-  line-height: 50px;
   font-family: PingFangSC-Medium;
   font-size: 12px;
   color: rgba(0,0,0,0.90);
@@ -568,16 +696,55 @@ export default {
   line-height: 68px;
 }
 .head-title {
-  margin: 1.7%;
+  position: absolute;
+  left: 24px;
+  line-height: 68px;
 }
 .create-data {
-  margin: 0 16px 0 12px;
+  color: #FA8334;
+  margin: 0 0 0 12px;
 }
 ::v-deep .el-table td {
-  height: 42px
+  height: 42px;
+  padding-left: 14px
 }
 ::v-deep .el-table th {
-  height: 42px
+  height: 42px;
+  padding-left: 14px
+}
+::v-deep .el-dialog__title {
+  width: 155px;
+  height: 22px;
+  font-family: PingFangSC-Medium;
+  font-size: 16px;
+  color: rgba(0,0,0,0.90);
+  font-weight: 500;
+}
+
+::v-deep label.el-form-item__label {
+  height: 32px;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: rgba(0,0,0,0.90);
+  line-height: 32px;
+  font-weight: 400;
+}
+::v-deep .dialog-new .el-dialog__body {
+  padding: 24px 24px 0 24px
+}
+::v-deep .dialog-new .el-input__inner {
+  width: 423px;
+  height: 32px;
+  background: #FFFFFF;
+  border: 1px solid rgba(221,221,221,1);
+  border-radius: 2px;
+}
+::v-deep .dialog-new .el-input__inner::-webkit-input-placeholder {
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: rgba(0,0,0,0.30);
+  line-height: 32px;
+  font-weight: 400;
 }
 .data-source {
   height: 100%;
@@ -588,13 +755,11 @@ export default {
     font-family: PingFangSC-Medium;
     font-size: 12px;
     color: rgba(0, 0, 0, 0.9);
-    line-height: 20px;
     font-weight: 500;
   }
 
   &__header {
-    display: flex;
-    justify-content: space-between;
+    position: relative;
     height: 68px;
     border-bottom: 1px solid #EBEEF5;
   }
@@ -603,7 +768,7 @@ export default {
     position: relative;
     background: #fff;
     margin-top: 16px;
-    height: calc(100vh - 50px);
+    height: calc(100vh - 125px);
     font-size: 12px;
   }
 
@@ -613,21 +778,42 @@ export default {
 
   &__list {
     flex: 1;
-    height: calc(100vh - 168px);
-    overflow: auto
+    height: calc(100vh - 250px);
+    min-width:270px;
+    overflow: auto;
   }
+}
+.data-files__list {
+  flex: 2;
+  height: calc(100vh - 250px);
+  overflow: auto;
+
 }
 .data-file__list {
   flex: 2;
+  padding: 0 24px 10px 10px;
   border-left: 1px solid #EBEEF5;
-  height: calc(100vh - 168px);
-  overflow: auto
+  height: calc(100vh - 250px);
+  overflow: auto;
+}
+.data_file {
+  padding: 0
 }
 .head-select {
-  margin: 1.7%;
+  position: absolute;
+  right: 24px;
   font-size: 12px;
+  line-height: 68px;
 }
 .el-button {
   font-size: 12px;
+}
+.description {
+  cursor: pointer;
+}
+</style>
+<style lang="scss">
+.el-message-box__message p {
+  word-wrap: break-word;
 }
 </style>

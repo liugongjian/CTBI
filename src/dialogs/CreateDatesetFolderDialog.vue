@@ -14,7 +14,6 @@
     </div>
     <span
       slot="footer"
-      class="dialog-footer"
     >
       <el-button
         :loading="loading"
