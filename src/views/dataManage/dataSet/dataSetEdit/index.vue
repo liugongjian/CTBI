@@ -245,7 +245,7 @@ export default {
     // 格式化 sql 编辑器
     formatSqlData () {
       this.dataInfo.sql.sql = this.currentSqlStatement
-      const formatSql = format(this.currentSqlStatement)
+      const formatSql = format(this.currentSqlStatement).replaceAll('$ ', '$').replaceAll('{ ', '{').replaceAll(' }', '}')
       this.$refs.sqlEdit?.editor.setValue(formatSql)
     },
     // 参数设置
