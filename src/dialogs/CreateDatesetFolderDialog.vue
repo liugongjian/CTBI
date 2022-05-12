@@ -14,7 +14,6 @@
     </div>
     <span
       slot="footer"
-      class="dialog-footer"
     >
       <el-button @click="closeSilence">取 消</el-button>
       <el-button
@@ -64,13 +63,5 @@ export default {
   ::v-deep .el-input__inner {
     height: 32px;
   }
-}
-.dialog-footer {
-  height: 50px;
-  background: #f5f5f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
 }
 </style>

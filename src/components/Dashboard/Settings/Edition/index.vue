@@ -20,7 +20,7 @@
         <p>5、其他样式上的调整差异</p>
         <p>以上差异，导致切换后需要重新配置相关内容，建议切换前手动另存为副本</p>
       </span>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer">
         <el-button @click="dialogVisible = false">确定</el-button>
         <el-button type="primary" @click="dialogVisible = false">取消</el-button>
       </span>

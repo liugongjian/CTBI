@@ -71,9 +71,11 @@ export default {
       }
 
       .column-name {
+        font-size: 12px;
       }
 
       .column-des {
+        font-size: 12px;
         color: rgba(0, 0, 0, 0.3);
       }
     }

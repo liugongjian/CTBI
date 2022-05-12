@@ -57,7 +57,8 @@
         >确认编辑</el-button>
         <div
           style="margin-left: 8px"
-          @click="leaveDialogVisible=true"
+          class="h-c-p"
+          @click="checkLeaveEdit"
         ><i class="el-icon-close" /></div>
       </div>
     </div>
@@ -93,7 +94,9 @@
             class="side-top-main"
           >
             <div><span>当前数据源</span></div>
-            <div><span>{{ dataSourceName }}</span></div>
+            <div>
+              <span style="font-size: 12px;font-weight: 500;color: rgba(0, 0, 0, 0.9);">{{ dataSourceName }}</span>
+            </div>
           </div>
           <div
             v-else
@@ -108,9 +111,9 @@
               >
                 <el-option
                   v-for="item in dataSourceOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  :key="item._id"
+                  :label="item.displayName"
+                  :value="item._id"
                 />
               </el-select>
             </div>
@@ -118,12 +121,17 @@
         </div>
 
         <!-- bottom -->
-        <div class="side-bottom">
+        <div
+          v-loading="dataTableLoading"
+          class="side-bottom"
+          element-loading-text="数据加载中"
+        >
           <el-tabs v-model="activedTag">
             <el-tab-pane
               label="数据表"
               name="first"
             >
+              <el-empty v-if="dataTableList && dataTableList.length === 0" />
               <div class="side-bottom-main">
                 <div
                   v-for="(table, i) in dataTableList"
@@ -145,9 +153,10 @@
                     effect="light"
                   >
                     <svg-icon
+                      :id="`copy-icon-${i}`"
                       icon-class="copy"
                       style="cursor: pointer;"
-                      @click="handleCopy(table, $event)"
+                      @click="handleCopy(table.name, $event)"
                     />
                   </el-tooltip>
                   <el-popover
@@ -165,11 +174,17 @@
                       </div> -->
                     </div>
                     <el-divider />
-                    <ColumnsList :columns="currentTableInfo.columns" />
+                    <div
+                      v-loading="tableInfoLoading"
+                      element-loading-text="加载字段中"
+                      style="min-height: 150px;"
+                    >
+                      <ColumnsList :columns="currentTableInfo.columns" />
+                    </div>
                     <svg-icon
                       slot="reference"
                       icon-class="point"
-                      style="cursor: pointer;"
+                      class="h-c-p"
                       @click="handleTableInfo(table.name)"
                     />
                   </el-popover>
@@ -201,6 +216,8 @@
         <div class="result-preview">
           <ResultPreview
             ref="ResultPreview"
+            v-loading="resultPreviewLoading"
+            element-loading-text="数据加载中"
             :run-result-data="runResultData"
             :is-edit="isEdit"
             :fields="currentFields"
@@ -300,31 +317,6 @@
       </div>
     </el-drawer>
 
-    <!-- 未确认编辑 离开的弹窗 -->
-    <el-dialog
-      title="提示"
-      :visible.sync="leaveDialogVisible"
-      width="480px"
-    >
-      <div>
-        <svg-icon
-          icon-class="tip"
-          style="margin-right: 8px"
-        />
-        <span>您还未对此次代码的编辑进行确认，若此时返回，本次编辑内 容将不被保存，请问您是否确认返回？</span>
-      </div>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button @click="leaveDialogVisible = false">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="handleLeave"
-        >确 定</el-button>
-      </span>
-    </el-dialog>
-
     <!-- 未保存 离开的弹窗 -->
     <el-dialog
       title="提示"
@@ -340,7 +332,6 @@
       </div>
       <span
         slot="footer"
-        class="dialog-footer"
       >
         <el-button @click="noSaveLeaveDialogVisible = false">取 消</el-button>
         <el-button
@@ -395,7 +386,6 @@
       </div>
       <span
         slot="footer"
-        class="dialog-footer"
       >
         <el-button @click="saveDataSetDialogVisible = false">取 消</el-button>
         <el-button
@@ -410,7 +400,10 @@
 <script>
 import { format } from 'sql-formatter'
 import EditSql from '@/components/SqlEditor/index.vue'
-import { runtimeForSql, getDataSourceData, confirmEditSql, createDataSets, getSqlAllData, getSqlVariables, getFolderLists, getDataTable, getTableInfo } from '@/api/dataSet'
+import {
+  runtimeForSql, getDataSourceData, confirmEditSql, createDataSets, updateDataSet, getSqlAllData,
+  getSqlVariables, getFolderLists, getDataTable, dataFiles, getTableInfo, getFileTableInfo
+} from '@/api/dataSet'
 import ResultPreview from './components/resultPreview/index.vue'
 import Clipboard from '@/utils/clipboard.js'
 import ColumnsList from '@/views/dataManage/dataSetEdit/components/ColumnsList.vue'
@@ -433,6 +426,8 @@ export default {
       dataTableList: [],
       // 传输给sql编辑器的表格提示词
       editTables: {},
+      // 选择数据源后，展示于编辑中的字段
+      dataSourceName: '',
       runResultData: {},
       settingParamVisiable: false,
       variableTypeOptions: [
@@ -466,8 +461,8 @@ export default {
       creatorName: '',
       currentSqlStatement: '',
       currentDataSourceId: '',
+      currentDataSourceType: '',
       current_id: '',
-      leaveDialogVisible: false,
       currentFields: [],
       currentSql: {},
       noSaveLeaveDialogVisible: false,
@@ -476,22 +471,21 @@ export default {
       currentFloderId: '',
       saveDataSetDialogVisible: false,
       dataSetDisplayName: '',
-      currentTableInfo: {}
+      currentTableInfo: {},
+      resultPreviewLoading: false,
+      tableInfoLoading: false,
+      dataTableLoading: false
     }
   },
   computed: {
-    dataSourceName: function () {
-      return this.currentDataSet.dataSourceName || ''
-    },
     sqlStatement: function () {
       return this.currentSqlData.sql || ''
     }
   },
-  mounted () {
-    this.getDataSourceList()
-    this.getFolderList()
+  created () {
     const data = this.$route.query
     // 如果都为空则表示新建的数据集，直接进入编辑状态
+    // 需要在实例都挂载前完成数据的映射
     if (!data._id) {
       this.isEdit = true
     }
@@ -502,11 +496,17 @@ export default {
     }
     this.creatorName = data.creatorName
     this.currentDataSourceId = data.dataSourceId || ''
+    this.dataSourceName = data.dataSourceName
+    this.currentDataSourceType = data.dataSourceType || ''
     this.current_id = data._id || ''
     this.currentFields = data.fields || []
+  },
+  mounted () {
+    this.getDataSourceList()
+    this.getFolderList()
     this.dataSetDisplayName = this.currentDataSet.displayName || ''
     if (this.currentDataSourceId) {
-      this.handleTableInfo(this.currentDataSourceId)
+      this.handleChangeDataSource(this.currentDataSourceId, this.currentDataSourceType)
     }
   },
   methods: {
@@ -545,22 +545,27 @@ export default {
       const body = {
         sql: this.currentSqlStatement,
         dataSourceId: this.currentDataSourceId,
+        type: this.currentDataSourceType,
         _id: this.currentSqlId ?? ''
       }
       if (this.sqlVariables && this.sqlVariables.length > 0) {
         body.sqlVariables = this.sqlVariables
       }
       try {
+        this.resultPreviewLoading = true
         const data = await runtimeForSql(body)
         this.runResultData = Object.assign({ success: true }, data)
         if (this.currentSqlId !== data._id) {
           this.currentSqlId = data._id
         }
-        // 触发历史记录的查询事件
-        this.$refs.ResultPreview.getHistory()
+        this.$nextTick(() => {
+          // 触发历史记录的查询事件
+          this.$refs.ResultPreview.getHistory()
+        })
       } catch (error) {
         this.runResultData = Object.assign({ success: false }, error)
       }
+      this.resultPreviewLoading = false
     },
     // 确认编辑
     async confirmEdit () {
@@ -580,6 +585,7 @@ export default {
           message: '恭喜你，确认编辑成功',
           type: 'success'
         })
+        this.isEdit = false
       } catch (error) {
         console.log(error)
       }
@@ -601,32 +607,37 @@ export default {
     async getDataSourceList () {
       try {
         const { list } = await getDataSourceData()
-        const options = []
-        list.forEach(i => {
-          const o = {}
-          o.label = i.displayName
-          o.value = i._id
-          options.push(o)
-        })
-        this.dataSourceOptions = options.slice()
+        this.dataSourceOptions = list
       } catch (error) {
         console.log(error)
       }
     },
     // 复制数据源列表
     handleCopy (val, event) {
-      const str = val.name
-      Clipboard(str, event)
+      Clipboard(val, event, () => {
+        this.$message({
+          message: '该表名已复制到剪切板',
+          type: 'success',
+          duration: 1500
+        })
+      })
     },
     async handleTableInfo (tableName) {
       const id = this.currentDataSourceId
       this.currentTableInfo = {}
       try {
-        const data = await getTableInfo(id, tableName)
-        this.currentTableInfo = data
+        this.tableInfoLoading = true
+        let result = null
+        if (this.currentDataSourceType === 'file') {
+          result = await getFileTableInfo(tableName)
+        } else {
+          result = await getTableInfo(id, tableName)
+        }
+        this.currentTableInfo = result
       } catch (error) {
         console.log(error)
       }
+      this.tableInfoLoading = false
     },
     // 获取改变的sql语句
     sqlStatementChange (sql) {
@@ -647,7 +658,11 @@ export default {
         body.sql = this.currentSqlData
         body.displayName = this.dataSetDisplayName
         console.log(body, 'body')
-        await createDataSets(body)
+        if (this.current_id) {
+          await updateDataSet(this.current_id, body)
+        } else {
+          await createDataSets(body)
+        }
         this.$message({
           message: '保存成功',
           type: 'success'
@@ -661,15 +676,15 @@ export default {
       }
     },
     // 离开 编辑状态 但不保存数据
-    handleLeave () {
-      this.isEdit = false
-      this.leaveDialogVisible = false
+    checkLeaveEdit () {
+      this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内 容将不被保存，请问您是否确认返回？' }, () => {
+        this.isEdit = false
+      })
     },
     // 根据sqlId 获取sql相关的所有数据
     async getSqlData (sqlId) {
       try {
         const data = await getSqlAllData(sqlId)
-        console.log('currentSqlData', data)
         this.currentSqlData = data
         this.currentSqlStatement = data.sql
       } catch (error) {
@@ -694,18 +709,32 @@ export default {
     },
     // 子级更改更新父级的fields
     dataSetFieldsChange (val) {
-      console.log(val, 'dataSetFieldsChange')
     },
-    //
-    async handleChangeDataSource (val) {
-      this.tableLoading = true
+    // 获取数据源中的表
+    async handleChangeDataSource (val, type) {
+      this.dataTableLoading = true
       try {
         this.currentDataSourceId = val
-        const data = await getDataTable(val)
-        this.dataTableList = data.list
+        if (type !== '') {
+          const currentDataSource = this.dataSourceOptions.find(item => item._id === val)
+          // type, file||""
+          this.currentDataSourceType = currentDataSource.type || ''
+          this.dataSourceName = currentDataSource.displayName
+        }
+
+        if (this.currentDataSourceType === 'file') {
+          const params = {
+            searchkey: this.currentDataSourceId
+          }
+          const result = await dataFiles(params)
+          this.dataTableList = result.list
+        } else {
+          const result = await getDataTable(val)
+          this.dataTableList = result.list
+        }
         // 给sql编辑器传参
         const temp = {}
-        data.list.forEach(item => {
+        this.dataTableList.forEach(item => {
           // 目前只返回表名称，未返回字段数据
           temp[item.name] = []
         })
@@ -713,7 +742,7 @@ export default {
       } catch (error) {
         console.log(error)
       }
-      this.tableLoading = false
+      this.dataTableLoading = false
     }
   }
 }
@@ -752,7 +781,7 @@ export default {
   }
   &-main {
     display: flex;
-    min-height: calc(100vh - 100px);
+    min-height: calc(100vh - 165px);
     box-sizing: border-box;
     background: #fff;
     &-side {
@@ -882,7 +911,7 @@ export default {
   font-weight: 500;
   color: rgba(0, 0, 0, 0.9);
   line-height: 22px;
-  font-size: 16px;
+  font-size: 14px;
   padding: 17px 20px 0px 20px;
   display: flex;
   justify-content: space-between;
@@ -892,14 +921,6 @@ export default {
   ::v-deep .el-input__inner {
     height: 32px;
   }
-}
-.dialog-footer {
-  height: 50px;
-  background: #f5f5f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
 }
 // 自定义按钮图标
 ::v-deep .el-icon-volume {

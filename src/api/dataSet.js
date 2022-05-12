@@ -17,7 +17,7 @@ export function getDataSetsFolders (data = {}) {
 
 // 重命名文件夹 更新
 export function updateFolderName (id, body) {
-  return http.putDataSet(`/folders/${id}`, body)
+  return http.put(`/folders/${id}`, body)
 }
 
 // 删除文件夹
@@ -37,7 +37,7 @@ export function getFolderLists (
 
 // 更新数据集
 export function updateDataSet (id, params) {
-  return http.putDataSet(`/dataSets/${id}`, params)
+  return http.put(`/dataSets/${id}`, params)
 }
 
 // 删除数据集
@@ -47,7 +47,7 @@ export function delDataSet (id) {
 
 // 移动数据集到文件夹
 export function moveDataSet2Folder (body) {
-  return http.putDataSet(`/dataSets/move`, body)
+  return http.put(`/dataSets/move`, body)
 }
 
 // 运行sql
@@ -100,7 +100,15 @@ export function getDataTable (id) {
   return http.get(`/dataSources/${id}/tables`)
 }
 
+// 获取指定数据源的 数据表
+export function dataFiles (params) {
+  return http.get(`/dataFiles`, params)
+}
+
 // 查表详情
 export function getTableInfo (id, tableName) {
   return http.get(`/dataSources/${id}/table/info`, { tableName })
+}
+export function getFileTableInfo (tableName) {
+  return http.get(`/dataFiles/table/info`, { tableName })
 }

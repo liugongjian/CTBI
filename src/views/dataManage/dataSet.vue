@@ -17,6 +17,7 @@
               v-model="serachName"
               placeholder="请输入文件/数据集名称"
               style="margin-right: 12px"
+              @keyup.enter.native="query"
             />
             <el-button
               type="primary"
@@ -44,7 +45,7 @@
 
         <!-- main -->
         <div
-          v-if="isAllDataShow"
+          v-show="isAllDataShow"
           class="data-set-main"
         >
           <el-table
@@ -66,7 +67,6 @@
             <el-table-column
               prop="name"
               label="名称"
-              min-width="200"
             >
               <template slot-scope="scope">
                 <svg-icon
@@ -92,26 +92,24 @@
             <el-table-column
               prop="creatorName"
               label="创建者"
-              min-width="120"
             />
             <el-table-column
               prop="lastUpdatedTime"
               label="修改时间"
-              min-width="150"
               show-overflow-tooltip
             >
               <template slot-scope="scope">
-                {{ scope.row.lastUpdatedTime | dateFilter }}
+                {{ scope.row.lastUpdatedTime | parseTime }}
               </template>
             </el-table-column>
             <el-table-column
               prop="dataSourceName"
               label="数据源"
-              min-width="120"
               show-overflow-tooltip
             />
             <el-table-column
               label="操作"
+              min-width="100"
               show-overflow-tooltip
             >
               <template slot-scope="scope">
@@ -159,11 +157,11 @@
         </div>
 
         <div
-          v-else
+          v-show="!isAllDataShow"
           class="data-set-main"
         >
           <el-table
-            ref="multipleTable"
+            ref="subTable"
             v-loading="dataSetLoading"
             :data="dataSetData"
             tooltip-effect="dark"
@@ -178,7 +176,6 @@
             <el-table-column
               prop="name"
               label="名称"
-              min-width="200"
             >
               <template slot-scope="scope">
                 <svg-icon
@@ -193,32 +190,34 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="root"
+              prop="folderName"
               label="文件路径"
               min-width="100"
-            />
+            >
+              <template slot-scope="scope">
+                <span style="color: #4393F4;">根目录/{{ scope.row.folderName }}</span>
+              </template>
+            </el-table-column>
             <el-table-column
               prop="creatorName"
               label="创建者"
-              min-width="120"
             />
             <el-table-column
               prop="lastUpdatedTime"
               label="修改时间"
-              min-width="150"
               show-overflow-tooltip
             >
               <template slot-scope="scope">
-                {{ scope.row.lastUpdatedTime | dateFilter }}
+                {{ scope.row.lastUpdatedTime | parseTime }}
               </template>
             </el-table-column>
             <el-table-column
               prop="dataSourceName"
               label="数据源"
-              min-width="120"
             />
             <el-table-column
               label="操作"
+              min-width="100"
               show-overflow-tooltip
             >
               <template slot-scope="scope">
@@ -271,7 +270,6 @@
           </div>
           <span
             slot="footer"
-            class="dialog-footer"
           >
             <el-button @click="renameFolderVisible = false">取 消</el-button>
             <el-button
@@ -296,7 +294,6 @@
           </div>
           <span
             slot="footer"
-            class="dialog-footer"
           >
             <el-button @click="editDataSetVisible = false">取 消</el-button>
             <el-button
@@ -320,7 +317,6 @@
           </div>
           <span
             slot="footer"
-            class="dialog-footer"
           >
             <el-button @click="deleteFolderVisible = false">取 消</el-button>
             <el-button
@@ -344,7 +340,6 @@
           </div>
           <span
             slot="footer"
-            class="dialog-footer"
           >
             <el-button @click="deleteDataSetVisible = false">取 消</el-button>
             <el-button
@@ -388,7 +383,6 @@
           </div>
           <span
             slot="footer"
-            class="dialog-footer"
           >
             <el-button @click="dataSetAttributeVisible = false">取 消</el-button>
             <el-button
@@ -535,6 +529,7 @@ export default {
     // 取消选择
     clearSelection () {
       this.$refs.multipleTable.clearSelection()
+      this.$refs.subTable.clearSelection()
       this.multipleSelection = []
     },
     // table options
@@ -699,8 +694,7 @@ export default {
   &-content {
     background: #fff;
     padding: 16px;
-    margin-top: 16px;
-    height: calc(100vh - 50px);
+    height: calc(100vh - 155px);
   }
 }
 
