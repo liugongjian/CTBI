@@ -92,6 +92,7 @@
             <table-list
               v-loading="dataTableLoading"
               :table-list="dataTableList"
+              :data-source-id="dataInfo.dataSourceId"
               :toggle-content="toggleContent"
             />
           </div>
@@ -244,7 +245,7 @@ export default {
     // 格式化 sql 编辑器
     formatSqlData () {
       this.dataInfo.sql.sql = this.currentSqlStatement
-      const formatSql = format(this.currentSqlStatement)
+      const formatSql = format(this.currentSqlStatement).replaceAll('$ ', '$').replaceAll('{ ', '{').replaceAll(' }', '}')
       this.$refs.sqlEdit?.editor.setValue(formatSql)
     },
     // 参数设置
@@ -342,18 +343,15 @@ export default {
     async handleChangeDataSource (val) {
       this.dataTableLoading = true
       try {
-        console.log()
         const currentDataSource = this.dataSourceOptions.find(item => item._id === val)
         const type = currentDataSource?.type || ''
         this.dataInfo.dataSourceId = val
         this.dataInfo.sql.dataSourceId = val
         this.dataInfo.dataSourceName = currentDataSource?.displayName
-        console.log(this.dataInfo.dataSourceName, currentDataSource)
         this.dataInfo.dataSourceType = type
 
         if (type === 'file') {
-          const params = { searchkey: currentDataSource.displayName }
-          const result = await dataFiles(params)
+          const result = await dataFiles()
           this.dataTableList = result.list
         } else {
           const result = await getDataTable(val)
