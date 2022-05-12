@@ -3,10 +3,10 @@
     <div class="cube-switch">
       <div class="j-select-cube">
         <div class="guid-tip-container">
-          <data-set-select />
+          <data-set-select @reflashValue="reflashValue" />
         </div>
         <div
-          v-if="dataSetData && dataSetData.length>0"
+          v-if="Dimension.length>0||Measure.length>0"
           title="编辑数据集"
           class="edit-cube"
         >
@@ -15,7 +15,8 @@
       </div>
     </div>
     <div
-      v-if="dataSetData && dataSetData.length>0"
+      v-if="Dimension.length>0||Measure.length>0"
+      v-loading="dataSetLoading"
       class="data-panel-tree"
     >
       <el-input
@@ -31,7 +32,7 @@
           <el-tree
             ref="tree"
             class="filter-tree"
-            :data="dimension"
+            :data="Dimension"
             :props="defaultProps"
             default-expand-all
             :allow-drop="allowDrop"
@@ -57,7 +58,7 @@
           <el-tree
             ref="tree"
             class="filter-tree"
-            :data="measure"
+            :data="Measure"
             :props="defaultProps"
             default-expand-all
             :filter-node-method="filterNode"
@@ -86,6 +87,7 @@
 
 <script>
 import DataSetSelect from './components/DataSetSelect.vue'
+import { getDataSetData } from '@/api/dataSet'
 export default {
   name: 'DataPanel',
   components: { DataSetSelect },
@@ -98,71 +100,14 @@ export default {
   data () {
     return {
       filterText: '',
-      dimension: [{ // 维度
-        id: 1,
-        type: 'dimension',
-        label: '一级 1'
-      }, {
-        label: '一级 2',
-        children: [{
-          id: 2,
-          type: 'dimension',
-          label: '二级 2-1'
-        }, {
-          id: 3,
-          type: 'dimension',
-          label: '二级 2-2'
-        }]
-      }, {
-        label: '一级 3',
-        children: [{
-          id: 4,
-          type: 'dimension',
-          label: '二级 3-1'
-        }, {
-          id: 5,
-          type: 'dimension',
-          label: '二级 3-2'
-        }]
-      }
-      ],
-      measure: [{ // 度量
-        label: '一级 1',
-        children: [{
-          id: 6,
-          type: 'measure',
-          label: '二级 1-1'
-        }]
-      }, {
-        label: '一级 2',
-        children: [{
-          id: 7,
-          type: 'measure',
-          label: '二级 2-1'
-        }, {
-          id: 8,
-          type: 'measure',
-          label: '二级 2-2'
-        }]
-      }, {
-        label: '一级 3',
-        children: [{
-          id: 9,
-          type: 'measure',
-          label: '二级 3-1'
-        }, {
-          id: 10,
-          type: 'measure',
-          label: '二级 3-2'
-        }]
-      }
-      ],
+      Dimension: [], // 度量
+      Measure: [], // 度量
       defaultProps: {
         children: 'children',
-        label: 'label'
+        label: 'displayColumn'
       },
-      dataSetData: [], // 数据集
-      value: ''
+      value: '', // 树形过滤关键字
+      dataSetLoading: false
     }
   },
   watch: {
@@ -170,10 +115,30 @@ export default {
       this.$refs.tree.filter(val)
     }
   },
-  mounted () {
-
-  },
   methods: {
+    // 更新数据
+    async reflashValue (id) {
+      this.dataSetLoading = true
+      try {
+        const res = await getDataSetData(id)
+        if (res) {
+          const dataList = res.fields
+          this.Dimension = []
+          this.Measure = []
+          dataList.forEach(item => {
+            if (item.type === 'Dimension') {
+              this.Dimension.push(item)
+            } else {
+              this.Measure.push(item)
+            }
+          })
+          this.dataSetLoading = false
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // 过滤树形数据
     filterNode (value, data) {
       if (!value) return true
       return data.label.indexOf(value) !== -1
@@ -200,11 +165,11 @@ export default {
       const addData = function () { // 添加字段
         // 判断是否已经存在
         const dataIndex = that.option[data.type].value.findIndex(el => {
-          return el.id === data.id
+          return el._id === data._id
         })
         if (dataIndex !== -1) {
           that.$message({
-            message: `已存在该对象 ${data.label}`,
+            message: `已存在该对象 ${data.displayColumn}`,
             type: 'warning'
           })
         } else {
@@ -212,12 +177,12 @@ export default {
         }
       }
 
-      if (this.option.dimension) {
+      if (this.option.Dimension) {
         addData()
       } else { // 当维度不存在时
-        if (data.type === 'dimension') {
+        if (data.type === 'Dimension') {
           this.$message({
-            message: `不支持添加维度到[${this.option.measure.name}]上`,
+            message: `不支持添加维度到[${this.option.Measure.name}]上`,
             type: 'warning'
           })
         } else {

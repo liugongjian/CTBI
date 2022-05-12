@@ -21,10 +21,10 @@
                   class="field-box-wrapper"
                 >
                   <div
-                    :class="name==='dimension'?'dimension-field-box':'measure-field-box'"
+                    :class="name==='Dimension'?'dimension-field-box':'measure-field-box'"
                     class="base-field-box"
                   >
-                    <span class="field-caption">{{ el.label }}</span>
+                    <span class="field-caption">{{ el.displayColumn }}</span>
                     <div class="right-hover-icons">
                       <span
                         style="cursor:pointer;marign-left:3px;"
@@ -51,10 +51,13 @@
         autosize
         placeholder="请输入内容"
       />
-      <el-button
-        type="primary"
-        @click="reflashStore"
-      >更新</el-button>
+      <div class="update-wrapper">
+        <el-button
+          type="primary"
+          @click="reflashStore"
+        >更新</el-button>
+      </div>
+
     </div>
   </div>
 </template>
@@ -205,18 +208,18 @@ export default {
       if (data.type === name) {
         // 判断是否已经存在
         const dataIndex = item.value.findIndex(el => {
-          return el.id === data.id
+          return el._id === data._id
         })
         if (dataIndex !== -1) {
           this.$message({
-            message: `已存在该对象 ${data.label}`,
+            message: `已存在该对象 ${data.displayColumn}`,
             type: 'warning'
           })
         } else {
           item.value.push(data)
         }
       } else {
-        const dataName = data.type === 'measure' ? '度量' : '维度'
+        const dataName = data.type === 'Measure' ? '度量' : '维度'
         this.$message({
           message: `不支持添加${dataName}到[${itemName}]上`,
           type: 'warning'
@@ -226,7 +229,7 @@ export default {
     // 删除字段
     hanldDelete (item, el) {
       const dataIndex = item.value.findIndex(ele => {
-        return ele.id === el.id
+        return ele._id === el._id
       })
       item.value.splice(dataIndex, 1)
     },

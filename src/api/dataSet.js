@@ -112,3 +112,8 @@ export function getTableInfo (id, tableName) {
 export function getFileTableInfo (tableName) {
   return http.get(`/dataFiles/table/info`, { tableName })
 }
+
+// 查询数据集详情
+export function getDataSetData (id) {
+  return http.get(`/dataSets/${id}`)
+}
