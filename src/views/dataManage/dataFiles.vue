@@ -167,6 +167,9 @@ export default {
 <style lang="scss" scoped>
 .data-files {
   margin-right: 24px;
+  ::v-deep .toolbar {
+    padding: 15px 0 19px;
+  }
   .search-bar {
     display: flex;
     justify-content: flex-end;

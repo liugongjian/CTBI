@@ -1,5 +1,5 @@
 {
-  "name": "front-common-framework",
+  "name": "CTBI",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -34,7 +34,7 @@
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0",
     "wangeditor": "^4.6.3",
-    "xlsx": "0.14.1"
+    "xlsx": "^0.14.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
