@@ -73,7 +73,6 @@
         <div class="data-source__list">
           <el-table
             ref="singleTable"
-            v-loading="loading"
             :data="filterdDatasources"
             class="tableBox"
             highlight-current-row
@@ -104,7 +103,7 @@
                     <div class="table-row__text-part2" :title="scope.row.creator && scope.row.creator.userName || '-'">所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}</div>
                   </div>
                   <div class="table-row__tools">
-                    <span v-if="scope.row.type!=='file'" @click.prevent="editSource(scope.row)">
+                    <span v-if="scope.row.type!=='file'" @click.stop="editSource(scope.row)">
                       <svg-icon icon-class="pencil" />
                     </span>
                     <span v-if="scope.row.type!=='file'" @click="deleteSource(scope.row)">
@@ -227,7 +226,7 @@ export default {
       currentRow: 0,
       dialogVisible: false,
       fileType: {
-        'mysql': 'mySql数据源',
+        'mysql': 'MySQL数据源',
         'mongodb': 'MongoDB数据源',
         'file': '本地数据源',
         '': '?'
@@ -291,6 +290,7 @@ export default {
           prop: 'operation',
           label: '操作',
           slot: 'operation',
+          width: 220,
           fixed: 'right'
         }
       ],
@@ -300,7 +300,6 @@ export default {
   computed: {
     filterdDatasources() {
       return this.dataSourceList?.list?.filter(item => {
-        console.log(item.displayName, this.search)
         return this.search ? item.displayName.indexOf(this.search) >= 0 : true
       }) || []
     }
@@ -402,8 +401,8 @@ export default {
       this.handleCurrentChange(this.currentRow)
     },
     async handleCurrentChange(val) {
+      console.log('editval------------', val)
       try {
-        this.loading = true
         this.currentRow = val
         if (val.type === 'file') {
           this.isShowDataFiles = true
@@ -558,7 +557,20 @@ export default {
           } else {
             await editSources(this.currentId, testForm)
           }
-          this.init()
+          const res = await getDataSourceList({ searchkey: this.search })
+          this.dataSourceList = res
+          const results = {
+            displayName: form.displayName,
+            type: form.type,
+            _id: this.currentId
+          }
+          if (results.type === 'file') {
+            this.isShowDataFiles = true
+          } else {
+            this.isShowDataFiles = false
+          }
+          this.$refs.singleTable.setCurrentRow(results)
+          console.log('----------------editcurrentRow', results)
         }
       } catch (error) {
         console.log(error)
