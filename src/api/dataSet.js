@@ -15,6 +15,11 @@ export function getDataSetsFolders (data = {}) {
   return http.get('/dataSets', data)
 }
 
+// 根据ID查询数据集详情
+export function getDataSetsInfo (id) {
+  return http.get(`/dataSets/${id}`)
+}
+
 // 重命名文件夹 更新
 export function updateFolderName (id, body) {
   return http.put(`/folders/${id}`, body)

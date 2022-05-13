@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import dialogMixin from '@/dialogs/dialogMixin'
+import dialogMixin from '@/mixins/dialogMixin'
 export default {
   name: 'EditDimensionMeasureDialog',
   mixins: [dialogMixin],
