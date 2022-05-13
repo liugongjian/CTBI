@@ -192,6 +192,7 @@ import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataS
 import CommonTable from '@/components/CommonTable/index.vue'
 import { getDateTime } from '@/utils/optionUtils'
 import dataFiles from './dataFiles.vue'
+
 export default {
   name: 'DataSource',
   components: {
@@ -200,6 +201,7 @@ export default {
   },
   data() {
     return {
+      LOCAL_FILE_ID: 'BIDATASOURCE0',
       tableListLoading: false,
       detailTable: {
         tableName: '',
@@ -498,9 +500,13 @@ export default {
       }
       if (command === 'localFile') {
         this.$dialog.show('UploadFileDialog', {}, () => {
-          if (this.isShowDataFiles) {
+          console.log('???', this.LOCAL_FILE_ID)
+          const currentRow = this.filterdDatasources.find(item => item._id === this.LOCAL_FILE_ID)
+          this.$refs.singleTable.setCurrentRow(currentRow)
+          this.isShowDataFiles = true
+          this.$nextTick(() => {
             this.$refs.dataFiles.getDataFiles()
-          }
+          })
         })
       }
     },

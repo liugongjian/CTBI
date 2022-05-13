@@ -47,7 +47,7 @@ export default {
       sortBy: 'desc',
       columns: Object.freeze([
         {
-          prop: 'displayName',
+          prop: 'name',
           label: '名称',
           sortable: true
         },
