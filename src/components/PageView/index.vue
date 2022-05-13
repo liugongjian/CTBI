@@ -10,7 +10,7 @@
         <slot name="rightContent" />
       </div>
     </div>
-    <div class="main-page">
+    <div class="page-content">
       <slot />
     </div>
   </div>
@@ -32,6 +32,11 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 17px;
+}
+.page-content {
+  background-color: #fff;
+  min-height: calc(100vh - 155px);
+  padding: 16px;
 }
 .light-bg {
   background-color: #f1f5f8;

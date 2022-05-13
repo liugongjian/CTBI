@@ -1,9 +1,8 @@
 <template>
-  <div>
+  <div :style="{height: editHeight}">
     <textarea
       ref="mycode"
       v-model="value"
-      class="codesql"
     />
   </div>
 </template>
@@ -20,6 +19,10 @@ require('codemirror/addon/hint/sql-hint')
 export default {
   name: 'SqlEditor',
   props: {
+    editHeight: {
+      type: String,
+      default: '300px'
+    },
     // 接收父组件传值
     value: {
       type: String,
@@ -114,13 +117,15 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .CodeMirror {
-  color: black;
-  /* direction: ltr; */
-  line-height: 22px;
+  border: 1px solid #eee;
+  height: auto;
 }
-.CodeMirror-hints {
-  z-index: 999 !important;
+
+::v-deep .CodeMirror-scroll {
+  height: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
 }
 </style>

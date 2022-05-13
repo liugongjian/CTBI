@@ -65,7 +65,7 @@
         </el-form>
         <span slot="footer">
           <el-button @click="close">关闭</el-button>
-          <el-button v-loading="isloading" @click="connect(form)">连接测试</el-button>
+          <el-button v-loading="connectLoading" @click="connect(form)">连接测试</el-button>
           <el-button type="primary" @click="submit(form)">确定</el-button>
         </span>
       </el-dialog>
@@ -73,7 +73,7 @@
         <div class="data-source__list">
           <el-table
             ref="singleTable"
-            v-loading="loading"
+            v-loading="dataSourceLoading"
             :data="filterdDatasources"
             class="tableBox"
             highlight-current-row
@@ -104,7 +104,7 @@
                     <div class="table-row__text-part2" :title="scope.row.creator && scope.row.creator.userName || '-'">所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}</div>
                   </div>
                   <div class="table-row__tools">
-                    <span v-if="scope.row.type!=='file'" @click.prevent="editSource(scope.row)">
+                    <span v-if="scope.row.type!=='file'" @click.stop="editSource(scope.row)">
                       <svg-icon icon-class="pencil" />
                     </span>
                     <span v-if="scope.row.type!=='file'" @click="deleteSource(scope.row)">
@@ -220,14 +220,13 @@ export default {
       // sortBy: 'name',
       // sortOrder: 'asc',
       searchkey: '',
-      isloading: false,
-      loading: false,
+      connectLoading: false,
       notEdit: true,
       editform: {},
       currentRow: 0,
       dialogVisible: false,
       fileType: {
-        'mysql': 'mySql数据源',
+        'mysql': 'MySQL数据源',
         'mongodb': 'MongoDB数据源',
         'file': '本地数据源',
         '': '?'
@@ -291,6 +290,7 @@ export default {
           prop: 'operation',
           label: '操作',
           slot: 'operation',
+          width: 220,
           fixed: 'right'
         }
       ],
@@ -300,7 +300,6 @@ export default {
   computed: {
     filterdDatasources() {
       return this.dataSourceList?.list?.filter(item => {
-        console.log(item.displayName, this.search)
         return this.search ? item.displayName.indexOf(this.search) >= 0 : true
       }) || []
     }
@@ -402,8 +401,8 @@ export default {
       this.handleCurrentChange(this.currentRow)
     },
     async handleCurrentChange(val) {
+      console.log('editval------------', val)
       try {
-        this.loading = true
         this.currentRow = val
         if (val.type === 'file') {
           this.isShowDataFiles = true
@@ -415,9 +414,7 @@ export default {
           const ids = val._id
           await this.getSourceFile(ids)
         }
-        this.loading = false
       } catch (error) {
-        this.loading = false
         console.log(error)
       }
     },
@@ -425,6 +422,12 @@ export default {
       this.detailVisible = true
       this.detailInfo = val
       this.detailSources()
+    },
+    async getDatasource() {
+      this.dataSourceLoading = true
+      const res = await getDataSourceList({ searchkey: this.search })
+      this.dataSourceList = res
+      this.dataSourceLoading = false
     },
     async init() {
       try {
@@ -437,9 +440,8 @@ export default {
           username: '',
           password: ''
         }
-        const res = await getDataSourceList({ searchkey: this.search })
-        this.dataSourceList = res
-        const [firstRow] = res.list
+        await this.getDatasource()
+        const [firstRow] = this.dataSourceList.list
         if (firstRow.type === 'file') {
           this.isShowDataFiles = true
         } else {
@@ -517,7 +519,7 @@ export default {
         if (!valid) {
           return
         }
-        this.isloading = true
+        this.connectLoading = true
         const testForm = {
           username: form.username,
           db: form.db,
@@ -532,10 +534,10 @@ export default {
         } else {
           this.$message.success('连接数据库成功！')
         }
-        this.isloading = false
+        this.connectLoading = false
         return result
       } catch (error) {
-        this.isloading = false
+        this.connectLoading = false
         console.log(error)
       }
     },
@@ -555,10 +557,13 @@ export default {
           this.dialogVisible = false
           if (this.notEdit) {
             await postDataSourceList(testForm)
+            await this.getDatasource()
           } else {
             await editSources(this.currentId, testForm)
+            await this.getDatasource()
+            const currentRow = this.filterdDatasources.find(item => item._id === this.currentId)
+            this.$refs.singleTable.setCurrentRow(currentRow)
           }
-          this.init()
         }
       } catch (error) {
         console.log(error)
