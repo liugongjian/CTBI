@@ -65,7 +65,7 @@
 <script>
 import dialogMixin from '@/mixins/dialogMixin'
 import regex from '@/constants/regex'
-import { createDataSets, updateDataSet, getFolderLists } from '@/api/dataSet'
+import { createDataSets, getFolderLists } from '@/api/dataSet'
 
 export default {
   name: 'SaveDataSetDialog',
@@ -103,18 +103,13 @@ export default {
       try {
         this.loading = true
         const body = {
-          _id: this.dataInfo._id,
           displayName: this.dataInfo.displayName,
           sql: this.dataInfo.sql,
           fields: this.dataInfo.fields,
           comment: this.dataInfo.comment,
           folderId: this.dataInfo.folderId
         }
-        if (body._id) {
-          await updateDataSet(body._id, body)
-        } else {
-          await createDataSets(body)
-        }
+        await createDataSets(body)
         this.$message({
           message: '保存成功',
           type: 'success'
@@ -127,7 +122,8 @@ export default {
     },
     async getFolder () {
       const { result } = await getFolderLists()
-      this.folderList = result
+      const folders = [{ _id: null, name: '根目录' }, ...result]
+      this.folderList = folders
     },
     // 名称规则校验
     validateName (rule, value, callback) {
