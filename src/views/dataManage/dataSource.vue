@@ -226,7 +226,7 @@ export default {
       dataSourceLoading: false,
       notEdit: true,
       editform: {},
-      currentRow: 0,
+      currentRow: '',
       dialogVisible: false,
       fileType: {
         'mysql': 'MySQL数据源',
@@ -405,6 +405,9 @@ export default {
     },
     async handleCurrentChange(val) {
       try {
+        if (val === null || val === '') {
+          return
+        }
         this.currentRow = val
         if (val.type === 'file') {
           this.isShowDataFiles = true
@@ -607,6 +610,9 @@ export default {
   height: 32px;
   background: #FA8334;
   border-radius: 2px;
+}
+::v-deep .el-dropdown {
+  height: 48px;
 }
 .newFile {
   font-family: PingFangSC-Regular;
