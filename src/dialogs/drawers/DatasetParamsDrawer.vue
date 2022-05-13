@@ -2,6 +2,8 @@
   <el-drawer
     title="参数配置"
     :before-close="handleCloseSettingParam"
+    :wrapper-closable="false"
+    :size="560"
     :visible.sync="dialogVisible"
   >
     <div class="set-param-drawer">
@@ -15,34 +17,45 @@
           <el-table-column
             prop="type"
             label="类型"
-            min-width="120"
+            width="120"
+            show-overflow-tooltip
           />
           <el-table-column
             prop="name"
             label="变量名"
-            min-width="120"
+            width="120"
+            show-overflow-tooltip
           />
           <el-table-column
             label="变量类型"
-            min-width="120"
+            width="120"
           >
             <template slot-scope="scope">
               <el-select
                 v-model="scope.row.dataType"
                 placeholder="请选择"
               >
+                <template v-if="scope.row.dataType" #prefix>
+                  <svg-icon :icon-class="`data-type-option-${scope.row.dataType}`" />
+                </template>
                 <el-option
                   v-for="item in variableTypeOptions"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
-                />
+                >
+                  <span
+                    class="data-type-option"
+                  ><svg-icon
+                    :icon-class="`data-type-option-${item.value}`"
+                  /><span class="label">{{ item.label }}</span></span>
+                </el-option>
               </el-select>
             </template>
           </el-table-column>
           <el-table-column
             label="查询默认值"
-            min-width="360"
+            width="360"
           >
             <template slot-scope="scope">
               <div style="display: flex">
@@ -59,6 +72,7 @@
                 </el-select>
                 <el-input
                   v-model="scope.row.defaultValue"
+                  style="margin-left: 8px"
                   placeholder="请输入内容"
                 />
               </div>
@@ -71,6 +85,7 @@
             <template slot-scope="scope">
               <svg-icon
                 icon-class="delete"
+                style="cursor:pointer"
                 @click="deleteSqlVariable(scope.row)"
               />
             </template>
@@ -195,16 +210,52 @@ export default {
 <style lang="scss" scoped>
 .set-param-drawer {
   .set-param-drawer-main {
-    padding: 24px;
-    height: calc(100vh - 200px);
+    padding: 15px 24px 24px;
+    height: calc(100vh - 164px);
   }
   .set-param-drawer-footer {
     position: absolute;
     bottom: 0;
-    padding: 20px 12px;
+    padding: 9px 12px;
     text-align: center;
     background: #f5f5f5;
     width: 100%;
+  }
+}
+
+.el-select .el-input__prefix {
+  left: 7px;
+  line-height: 32px;
+  font-size: 13px;
+  .svg-icon {
+    width: 20px;
+  }
+}
+.el-select-dropdown__item {
+  padding: 0 12px;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  .data-type-option {
+    .label {
+      margin-left: 3px;
+      color: rgba(0, 0, 0, 0.65);
+      line-height: 20px;
+    }
+    .svg-icon {
+      width: 18px;
+    }
+  }
+}
+.el-select-dropdown__item.hover {
+  background: #FEF5EE;
+}
+
+.el-select-dropdown__item.selected {
+  .data-type-option {
+    .label {
+      color: #FA8334;
+    }
   }
 }
 
@@ -220,6 +271,7 @@ export default {
   height: 30px;
   font-size: 16px;
   font-weight: 500;
+  font-family: PingFangSC-Medium, PingFang SC;
   color: rgba(0, 0, 0, 0.9);
 }
 </style>

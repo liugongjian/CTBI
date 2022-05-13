@@ -709,7 +709,7 @@ export default {
 .research-file {
   display: flex;
   justify-content: flex-end;
-  line-height: 68px;
+  line-height: 66px;
 }
 .head-title {
   position: absolute;
@@ -809,7 +809,7 @@ export default {
 }
 .data-file__list {
   flex: 2;
-  padding: 0 24px 10px 10px;
+  padding: 0 24px 10px 15px;
   border-left: 1px solid #EBEEF5;
   height: calc(100vh - 250px);
   overflow: auto;

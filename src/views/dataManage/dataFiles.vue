@@ -166,7 +166,7 @@ export default {
 
 <style lang="scss" scoped>
 .data-files {
-  margin-right: 24px;
+  padding: 0 24px 0 15px;
   ::v-deep .toolbar {
     padding: 15px 0 19px;
   }
