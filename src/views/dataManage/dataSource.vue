@@ -116,7 +116,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-files__list" />
+        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-files__lists" />
         <div v-else class="data-file__list">
           <div class="research-file">
             <el-input
@@ -790,8 +790,10 @@ export default {
     overflow: auto;
   }
 }
-.data-files__list {
+.data-files__lists {
   flex: 2;
+  padding-left: 10px;
+  border-left: 1px solid #EBEEF5;
   height: calc(100vh - 250px);
   overflow: auto;
 
