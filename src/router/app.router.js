@@ -15,7 +15,7 @@ const apps = [
     path: '/dashboardList/',
     name: 'dashboard',
     component: () => import('@/views/dashboard/list.vue'),
-    meta: { title: '仪表盘', icon: 'dashboard', affix: true }
+    meta: { title: '仪表盘列表', icon: 'dashboard', affix: true }
   },
   {
     path: '/dataManage',

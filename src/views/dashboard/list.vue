@@ -1,3 +1,4 @@
+/* eslint-disable vue/no-parsing-error */
 <template>
   <page-view>
     <div class="data-set-wrap">
@@ -61,7 +62,7 @@
                   <template slot="content">
                     <span class="tooltip-light-content">点击编辑仪表板</span>
                   </template>
-                  <el-button type="text" @click="handleCellClick(scope.row)">{{
+                  <el-button type="text" @click="edit(scope.row)">{{
                     scope.row.name || scope.row.displayName
                   }}</el-button>
                 </el-tooltip>
@@ -76,8 +77,12 @@
               min-width="120"
               show-overflow-tooltip
             >
-              <template v-if="!scope.row.directory" slot-scope="scope">
-                {{ scope.row.publishStatus === 1 ? "已发布" : scope.row.publishStatus === 2 ? "未发布" : "已下线" }}
+              <template slot-scope="scope">
+                <div v-if="!scope.row.directory" class="publish-status">
+                  <div class="status-tip" :class="`status-tip${scope.row.publishStatus}`" />
+                  <p>{{ scope.row.publishStatus === 1 ? "已发布" : scope.row.publishStatus === 2 ? "未发布" : "已下线" }}</p>
+                </div>
+                <div v-else>-</div>
               </template>
             </el-table-column>
             <el-table-column prop="ownerName" label="创建者" min-width="120" />
@@ -348,52 +353,6 @@ export default {
       this.dataLoading = true
       try {
         const data = await getDashboardList('isPaging=0' + searchkey)
-        // const temp = {
-        //   'code': 200,
-        //   'data': {
-        //     'result': [
-        //       {
-        //         '_id': 'Tl596HpUtrITQ',
-        //         'status': 1,
-        //         'publishStatus': 2,
-        //         'childNode': [
-        //           {
-        //             '_id': 'I7U01G5miLrr0',
-        //             'status': 1,
-        //             'publishStatus': -1,
-        //             'name': '测试子文件',
-        //             'isRoot': false,
-        //             'directory': false,
-        //             'createdTime': '2022-04-22T11:45:53.726Z',
-        //             'lastUpdatedTime': '2022-04-22T11:45:53.726Z',
-        //             'owner': 'CN8SeyWsSqqM0',
-        //             'ownerName': 'wlm'
-        //           }
-        //         ],
-        //         'name': '测试文件夹',
-        //         'isRoot': true,
-        //         'directory': true,
-        //         'createdTime': '2022-04-22T11:45:08.342Z',
-        //         'lastUpdatedTime': '2022-04-22T11:45:08.342Z',
-        //         'owner': 'CN8SeyWsSqqM0',
-        //         'ownerName': 'wlm2'
-        //       },
-        //       {
-        //         '_id': '4KRtCYKCMDGG7',
-        //         'status': 1,
-        //         'publishStatus': 1,
-        //         'childNode': [],
-        //         'name': '测试',
-        //         'createdTime': '2022-04-19T09:35:42.321Z',
-        //         'lastUpdatedTime': '2022-04-22T11:27:22.126Z',
-        //         'isRoot': true,
-        //         'directory': false,
-        //         'owner': 'CN8SeyWsSqqM0',
-        //         'ownerName': 'wlm'
-        //       }
-        //     ]
-        //   }
-        // }
         this.tableData = data.result
       } catch (error) {
         console.log(error)
@@ -416,12 +375,12 @@ export default {
         name: 'setting'
       }
       const params = {
-        name: '看板' + Math.round(Math.random() * 10),
+        name: '看板' + Math.round(Math.random() * 40),
         setting: JSON.stringify(setting),
-        isPublish: true
+        isPublish: Math.round(Math.random() * 40) % 2 === 0
       }
-      const reselt = await saveDashboard(params)
-      console.log(reselt)
+      await saveDashboard(params)
+      this.init()
       // this.$router.push({
       //   path: '/dashboard'
       // })
@@ -443,14 +402,18 @@ export default {
     // table options
     edit(val) {
       if (this.batchSelection) return false
-      this.cureentData = val
       if (val.directory) {
+        this.cureentData = val
         this.folderDialogVisible = true
         this.editFolder = val
+      } else {
+        this.$router.push({
+          path: '/dashboard',
+          query: {
+            id: val._id
+          }
+        })
       }
-    },
-    createDashboard1() {
-      if (this.batchSelection) return false
     },
     loadDashboard(tree, treeNode, resolve) {
       resolve(tree.childNode)
@@ -532,9 +495,6 @@ export default {
       this.treeVisible = true
       this.moveDashboardIds = ids
       this.$refs.treeFolder.getFolders()
-      // this.$dialog.show('MoveDatasetDrawer', { ids }, () => {
-      //   this.init()
-      // })
     },
     handleFolderEdit(action) {
       this.editFolder = null
@@ -546,13 +506,6 @@ export default {
       }
     },
     async shareDashboard(data) {
-      // this.cureentData = data
-      // this.currentShareInfo = {
-      //   'shareUrl': 'http://0.0.0.0/dashboard/publish/hLhqzBlr2xxBA7R',
-      //   'shareEndTime': '2022-06-21',
-      //   'isPublic': true
-      // }
-      // this.shareDashboardVisible = true
       try {
         const info = await getShareInfo(data._id)
         this.cureentData = data
@@ -751,5 +704,23 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: rgba(0, 0, 0, 0.45);
+}
+.publish-status {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  .status-tip{
+    width: 8px;
+    height: 8px;
+    background: #AEAEAE;
+    border-radius: 4px;
+    margin-right: 8px;
+    &1{
+        background: #52C41A;
+    }
+    &2{
+        background: #1890FF;
+    }
+  }
 }
 </style>
