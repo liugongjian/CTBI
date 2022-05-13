@@ -51,7 +51,7 @@
             <el-table-column prop="name" label="名称" min-width="200">
               <template slot-scope="scope">
                 <svg-icon
-                  :icon-class="scope.row.directory ? 'floder' : 'board'"
+                  :icon-class="scope.row.directory ? 'folder' : 'board'"
                   style="margin-right: 8px"
                 />
                 <el-tooltip
