@@ -500,7 +500,6 @@ export default {
       }
       if (command === 'localFile') {
         this.$dialog.show('UploadFileDialog', {}, () => {
-          console.log('???', this.LOCAL_FILE_ID)
           const currentRow = this.filterdDatasources.find(item => item._id === this.LOCAL_FILE_ID)
           this.$refs.singleTable.setCurrentRow(currentRow)
           this.isShowDataFiles = true
