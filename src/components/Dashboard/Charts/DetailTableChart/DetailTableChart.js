@@ -1,11 +1,3 @@
-/*
- * @Author: liugongjian liugongjianxin@163.com
- * @Date: 2022-05-06 15:44:58
- * @LastEditors: liugongjian liugongjianxin@163.com
- * @LastEditTime: 2022-05-12 15:23:44
- * @FilePath: \ctbi-web\src\components\Dashboard\Charts\DetailTableChart\DetailTableChart.js
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 // 折线图配置项信息
 
 import { colorTheme } from '@/constants/color.js'
@@ -57,18 +49,15 @@ export default {
     },
     'DisplayConfig': {
       'TableTheme': {
-        'visible': true,
         'colorType': 'themeColor',
         'show': false,
         'active': 'stripe' // stripe 斑马 border 线框 simple 简版 verySimple 极简
       },
       'TableThemeSimple': {
-        'visible': false,
         'show': true,
         'type': 'default'
       },
       'Color': { // 颜色设置
-        'show': false,
         'title': '配色设置',
         'color': colorTheme['defaultColor']
       },
@@ -98,6 +87,9 @@ export default {
       },
       'IndicatorGroup': {
         'show': false
+      },
+      'ColumnWidth': {
+        'type': 'selfadapting'
       }
     }
   },

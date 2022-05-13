@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-object-container">
+  <div v-if="visible" class="editor-object-container">
     <el-checkbox v-model="option.show">指标展示分组</el-checkbox>
     <div class="pag-select">
       <el-dropdown :disabled="!option.show">
@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import Edition from '@/components/Dashboard/mixins/EditionMixins'
 const testData = [{
   id: 1,
   label: '一级 1',
@@ -107,6 +108,7 @@ const testData = [{
 
 export default {
   name: 'IndicatorGroup',
+  mixins: [Edition],
   props: {
     option: {
       type: Object,

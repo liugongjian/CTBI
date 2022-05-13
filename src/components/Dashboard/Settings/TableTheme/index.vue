@@ -1,5 +1,5 @@
 <template>
-  <div v-if="option.visible" class="editor-object-container">
+  <div v-if="visible" class="editor-object-container">
     <el-checkbox v-model="option.show">自定义表格主题</el-checkbox>
     <div :class="{'box-disabled':!option.show}">
       <div class="table-theme">
@@ -34,9 +34,11 @@
 
 <script>
 import store from '@/store'
+import Edition from '@/components/Dashboard/mixins/EditionMixins'
 
 export default {
   name: 'TableTheme',
+  mixins: [Edition],
   props: {
     option: {
       type: Object,

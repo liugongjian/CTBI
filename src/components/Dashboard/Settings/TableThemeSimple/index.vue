@@ -1,5 +1,5 @@
 <template>
-  <div v-if="option.visible" class="editor-object-container">
+  <div v-if="!visible" class="editor-object-container">
     <el-checkbox v-model="option.show">自定义表格主题</el-checkbox>
     <el-radio-group v-model="option.type">
       <el-radio label="default">默认</el-radio>
@@ -10,8 +10,10 @@
 </template>
 
 <script>
+import Edition from '@/components/Dashboard/mixins/EditionMixins'
 export default {
   name: 'TableThemeSimple',
+  mixins: [Edition],
   props: {
     option: {
       type: Object,
