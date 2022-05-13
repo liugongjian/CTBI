@@ -221,6 +221,7 @@ export default {
       // sortOrder: 'asc',
       searchkey: '',
       connectLoading: false,
+      dataSourceLoading: false,
       notEdit: true,
       editform: {},
       currentRow: 0,
@@ -398,11 +399,9 @@ export default {
       this.refresh()
     },
     refresh() {
-      console.log('----------------------REfresh!!!!!!!!!!!')
       this.handleCurrentChange(this.currentRow)
     },
     async handleCurrentChange(val) {
-      console.log('editval------------', val)
       try {
         this.currentRow = val
         if (val.type === 'file') {
@@ -557,8 +556,10 @@ export default {
         if (result === true) {
           this.dialogVisible = false
           if (this.notEdit) {
-            await postDataSourceList(testForm)
+            const newForm = await postDataSourceList(testForm)
             await this.getDatasource()
+            const currentRow = this.filterdDatasources.find(item => item._id === newForm._id)
+            this.$refs.singleTable.setCurrentRow(currentRow)
           } else {
             await editSources(this.currentId, testForm)
             await this.getDatasource()
