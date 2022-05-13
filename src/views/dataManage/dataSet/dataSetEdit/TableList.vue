@@ -123,10 +123,10 @@ export default {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100vh - 365px);
+  height: calc(100vh - 315px);
 
   &.full-height {
-    height: calc(100vh - 285px);
+    height: calc(100vh - 235px);
   }
 
   .main-list {
