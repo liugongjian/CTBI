@@ -186,7 +186,7 @@
                 />
               </el-form-item>
               <el-form-item label="所有者" label-width="80px">
-                <el-select v-model="dashboardAttr.ownerId" placeholder="请选择" style="width: 360px">
+                <el-select v-model="dashboardAttr.ownerId" filterable placeholder="请选择" style="width: 360px">
                   <el-option
                     v-for="item in users"
                     :key="item.id"
@@ -292,7 +292,6 @@ import {
   saveDashboard
 } from '@/api/dashboard'
 import { getList } from '@/api/userManage'
-// import { getDateTime } from '@/utils/optionUtils'
 import FolderEdit from './FolderEdit'
 import FolderTree from './FolderTree'
 import moment from 'moment'
@@ -424,7 +423,7 @@ export default {
     },
     async editDashboardAttribute(val) {
       if (this.batchSelection) return false
-      const users = await getList()
+      const users = await getList({ limit: 9999 })
       this.users = users.list.map(item => { return { id: item._id, name: item.userName } })
       this.cureentData = val
       this.dashboardAttributeVisible = true
@@ -442,7 +441,7 @@ export default {
       }
       try {
         const data = await updateFolderOrDashboardProperties(params)
-        console.log(data)
+        this.$message.success(data)
         this.dashboardAttributeVisible = false
         this.cureentData = null
         this.init()
