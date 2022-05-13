@@ -11,7 +11,7 @@
       label-width="90px"
     >
       <el-form-item
-        label="活动名称"
+        label="名称"
         prop="displayName"
       >
         <div>
@@ -104,6 +104,7 @@ export default {
         this.loading = true
         const body = {
           _id: this.dataInfo._id,
+          displayName: this.dataInfo.displayName,
           sql: this.dataInfo.sql,
           fields: this.dataInfo.fields,
           comment: this.dataInfo.comment,

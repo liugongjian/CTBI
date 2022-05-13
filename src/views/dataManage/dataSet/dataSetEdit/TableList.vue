@@ -61,6 +61,7 @@
 <script>
 import ColumnsList from '@/views/dataManage/dataSet/dataSetEdit/ColumnsList'
 import Clipboard from '@/utils/clipboard.js'
+import { getFileTableInfo, getTableInfo } from '@/api/dataSet'
 
 export default {
   name: 'TableList',
@@ -73,6 +74,10 @@ export default {
     toggleContent: {
       type: Boolean,
       default: true
+    },
+    dataSourceId: {
+      type: String,
+      default: ''
     }
   },
   data () {
@@ -91,6 +96,23 @@ export default {
           duration: 1500
         })
       })
+    },
+    async handleTableInfo (tableName) {
+      const id = this.dataSourceId
+      this.currentTableInfo = {}
+      try {
+        this.tableInfoLoading = true
+        let result = null
+        if (this.type === 'file') {
+          result = await getFileTableInfo(tableName)
+        } else {
+          result = await getTableInfo(id, tableName)
+        }
+        this.currentTableInfo = result
+      } catch (error) {
+        console.log(error)
+      }
+      this.tableInfoLoading = false
     }
   }
 }
@@ -101,10 +123,10 @@ export default {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100vh - 365px);
+  height: calc(100vh - 315px);
 
   &.full-height {
-    height: calc(100vh - 285px);
+    height: calc(100vh - 235px);
   }
 
   .main-list {

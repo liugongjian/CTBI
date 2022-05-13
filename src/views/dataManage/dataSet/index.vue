@@ -5,7 +5,7 @@
         <el-button
           type="primary"
           icon="el-icon-plus"
-          @click="createFolder"
+          @click="createFolder()"
         >
           新建文件夹
         </el-button>
@@ -68,7 +68,7 @@
         >
           <template slot-scope="scope">
             <svg-icon
-              :icon-class="scope.row.isFolder? 'floder': 'sql'"
+              :icon-class="scope.row.isFolder? 'folder': 'sql'"
               style="margin-right: 8px"
             />
             <el-tooltip
@@ -156,7 +156,7 @@
             >
               <el-button
                 type="text"
-                @click="rename(scope.row)"
+                @click="createFolder(scope.row)"
               >重命名</el-button>
               <el-divider direction="vertical" />
               <el-button
@@ -246,8 +246,9 @@ export default {
       })
     },
     // 新建文件夹
-    createFolder () {
-      this.$dialog.show('CreateDatesetFolderDialog', {}, () => {
+    createFolder (data) {
+      const title = data ? '重命名文件夹' : '新建文件夹'
+      this.$dialog.show('SaveDatesetFolderDialog', { form: { ...data }, title }, () => {
         this.query()
       })
     },
@@ -275,7 +276,6 @@ export default {
           }
         })
       }
-      console.log(this.selectedRows, val)
       this.$dialog.show('MoveDatasetDrawer', { ids }, () => {
         this.query()
       })

@@ -499,7 +499,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main-bar {
-  width: calc(100vw - 458px);
+  width: 100%;
   height: calc(100vh - 166px);
   display: inline-block;
   position: relative;
