@@ -2,7 +2,7 @@
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
 import { getLayoutOptionById, getDataValueById } from '@/utils/optionUtils'
-import { deepClone } from '@/utils/optionUtils'
+import { deepClone, formatDataValue } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 import store from '@/store'
 export default {
@@ -29,7 +29,7 @@ export default {
       handler (val) {
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (this.dataValue) {
-          this.dataValue = deepClone(getDataValueById(this.identify))
+          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
           this.getOption()
         }
       },
@@ -41,7 +41,7 @@ export default {
           return item.i === this.identify
         })
         if (isData !== -1) {
-          this.dataValue = deepClone(getDataValueById(this.identify))
+          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
           // 拿到数据中的系列名字
           this.getSeriesOptions(this.dataValue)
           // 拿到数据的系列名字 并设置颜色

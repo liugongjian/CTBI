@@ -119,6 +119,16 @@ export function getFileTableInfo (tableName) {
 }
 
 // 查询数据集详情
-export function getDataSetData (id) {
+export function getDataSetsData (id) {
   return http.get(`/dataSets/${id}`)
+}
+
+// 查询数据集列表包括文件夹下的数据集
+export function getFullList () {
+  return http.get(`/dataSets/fullList`)
+}
+
+// 查询维度/度量数据
+export function getDataSetData (id, body) {
+  return http.post(`/dataSets/${id}/data`, body)
 }

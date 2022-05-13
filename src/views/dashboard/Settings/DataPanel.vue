@@ -6,16 +6,17 @@
           <data-set-select @reflashValue="reflashValue" />
         </div>
         <div
-          v-if="Dimension.length>0||Measure.length>0"
+          v-show="Dimension.length>0||Measure.length>0"
           title="编辑数据集"
           class="edit-cube"
+          @click="editDataSet"
         >
           <i class="el-icon-edit-outline" />
         </div>
       </div>
     </div>
     <div
-      v-if="Dimension.length>0||Measure.length>0"
+      v-show="Dimension.length>0||Measure.length>0"
       v-loading="dataSetLoading"
       class="data-panel-tree"
     >
@@ -99,6 +100,7 @@ export default {
   },
   data () {
     return {
+      dataSetID: '', // 数据集ID
       filterText: '',
       Dimension: [], // 度量
       Measure: [], // 度量
@@ -122,16 +124,22 @@ export default {
       try {
         const res = await getDataSetData(id)
         if (res) {
+          this.dataSetID = id
           const dataList = res.fields
           this.Dimension = []
           this.Measure = []
           dataList.forEach(item => {
+            item.dataSetID = id
             if (item.type === 'Dimension') {
               this.Dimension.push(item)
             } else {
               this.Measure.push(item)
             }
           })
+          const option = this.option
+          for (const i in option) {
+            option[i]['value'] = []
+          }
           this.dataSetLoading = false
         }
       } catch (error) {
@@ -189,6 +197,15 @@ export default {
           addData()
         }
       }
+    },
+
+    // 跳转到编辑数据集页面
+    editDataSet () {
+      const query = { _id: this.dataSetID }
+      this.$router.push({
+        path: '/dataManage/dataSet/edit',
+        query
+      })
     }
   }
 }

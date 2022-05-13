@@ -87,7 +87,7 @@
 
       <!-- 功能菜单模块 -->
       <div class="select-option-menu">
-        <button class="add-cube">新建数据集</button>
+        <button class="add-cube" @click="editDataSet">新建数据集</button>
         <el-upload
           class="upload-demo"
           action="#"
@@ -219,6 +219,12 @@ export default {
     filterNode (value, data) {
       if (!value) return true
       return data.name.indexOf(value) !== -1
+    },
+    // 跳转到编辑数据集页面
+    editDataSet () {
+      this.$router.push({
+        path: '/dataManage/dataSet/edit'
+      })
     }
   }
 }
@@ -335,7 +341,7 @@ $base-bgc: #2e74ff;
         text-overflow: ellipsis;
       }
       i {
-        color: #2e74ff;
+        color: $base-bgc;
       }
     }
     li:hover {
@@ -359,7 +365,7 @@ $base-bgc: #2e74ff;
     align-items: center;
     color: hsla(0, 0%, 100%, 0.65);
     .viw-btn {
-      color: #246dff;
+      color: $base-bgc;
       margin-right: 5px;
     }
   }
@@ -385,7 +391,7 @@ $base-bgc: #2e74ff;
   left: 0;
   width: 100%;
   .add-cube {
-    background-color: #2e74ff;
+    background-color: $base-bgc;
     margin-right: 8px;
     flex: 1;
   }
@@ -400,6 +406,9 @@ $base-bgc: #2e74ff;
 }
 ::v-deep .el-upload--text {
   width: 100%;
+}
+::v-deep .el-tree-node.is-current > .el-tree-node__content {
+  background-color: $base-bgc;
 }
 button {
   font-size: 12px;

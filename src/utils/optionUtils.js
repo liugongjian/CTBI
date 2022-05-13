@@ -146,3 +146,30 @@ export const getDateTime = () => {
   dateSeconds = dateSeconds < 10 ? '0' + dateSeconds : dateSeconds
   return dateYear + '-' + dateMonth + '-' + dateDate + ' ' + dateHours + ':' + dateMinutes + ':' + dateSeconds
 }
+
+/**
+ * 将维度和度量的数据进行转换为图表需要的数据
+ * @param {Array} data
+ * @returns {Array}
+ */
+export const formatDataValue = function(data) {
+  const dataValue = []
+  data.forEach(item => {
+    if (item.fields[0].type === 'Dimension') {
+      const dataOption = []
+      item.data.forEach(ele => {
+        dataOption.push(ele[item.fields[0].displayColumn])
+      })
+      dataOption.unshift(item.fields[0].displayColumn)
+      dataValue.unshift(dataOption)
+    } else {
+      const dataOption = []
+      item.data.forEach(ele => {
+        dataOption.push(ele[item.fields[0].displayColumn])
+      })
+      dataOption.unshift(item.fields[0].displayColumn)
+      dataValue.push(dataOption)
+    }
+  })
+  return dataValue
+}

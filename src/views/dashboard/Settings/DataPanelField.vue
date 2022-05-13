@@ -45,13 +45,17 @@
           </div>
         </div>
       </div>
-      <el-input
-        v-model="val"
-        type="textarea"
-        autosize
-        placeholder="请输入内容"
-      />
       <div class="update-wrapper">
+        <div class="result-display">
+          <span class="m-r-8">结果展示</span>
+          <div class="w-60">
+            <input
+              v-model="limit"
+              type="number"
+              class="limit-input"
+            >
+          </div>
+        </div>
         <el-button
           type="primary"
           @click="reflashStore"
@@ -64,6 +68,8 @@
 
 <script>
 import store from '@/store'
+import { getDataSetData } from '@/api/dataSet'
+import { deepClone } from '@/utils/optionUtils'
 export default {
   name: 'DataPanelField',
   props: {
@@ -78,21 +84,22 @@ export default {
   },
   data () {
     return {
-      val: ''
+      dataValue: [],
+      limit: 100 // 结果展示条数
     }
   },
   mounted () {
-    const dataValue = [
-      ['product', '2015', '2016', '2017'],
-      ['Matcha Latte', 43.3, 85.8, 93.7],
-      ['Matcha Latte11', 13.3, 85.8, 93.7],
-      ['Milk Tea1', 13.1, 73.4, 55.1],
-      ['Milk Tea2', 3.1, 73.4, 55.1],
-      ['Milk Tea6', 83.1, 73.4, 55.1],
-      ['Cheese Cocoa', 86.4, 65.2, 82.5],
-      ['Walnut Brownie', 72.4, 53.9, 39.1],
-      ['Tea', 22.1, 73.4, 55.1]
-    ]
+    // const dataValue = [
+    //   ['product', '2015', '2016', '2017'],
+    //   ['Matcha Latte', 43.3, 85.8, 93.7],
+    //   ['Matcha Latte11', 13.3, 85.8, 93.7],
+    //   ['Milk Tea1', 13.1, 73.4, 55.1],
+    //   ['Milk Tea2', 3.1, 73.4, 55.1],
+    //   ['Milk Tea6', 83.1, 73.4, 55.1],
+    //   ['Cheese Cocoa', 86.4, 65.2, 82.5],
+    //   ['Walnut Brownie', 72.4, 53.9, 39.1],
+    //   ['Tea', 22.1, 73.4, 55.1]
+    // ]
     // 主轴-0标记 副轴-1标记 组合图专用数据
     // const dataValue = [
     //   ['date', '价格-0', '数量-0', '温度-1'],
@@ -193,7 +200,6 @@ export default {
     //     ]
     //   }
     // ]
-    this.val = JSON.stringify(dataValue)
   },
   methods: {
     // 当拖拽在当前元素上时
@@ -234,18 +240,47 @@ export default {
       item.value.splice(dataIndex, 1)
     },
     // 更新
-    reflashStore () {
+    async reflashStore () {
+      const dataSource = this.option.dataSource
+      this.dataValue = []
+      for (const i in dataSource) {
+        if (dataSource[i].value.length === 0) {
+          this.$message({
+            message: `${dataSource[i].name}缺少必填字段`,
+            type: 'error'
+          })
+          return
+        }
+        for (let j = 0; j < dataSource[i].value.length; j++) {
+          await this.getData(dataSource[i]['value'][j])
+        }
+      }
       const data = store.state.app.dataOption.find(item => {
         return item.i === this.identify
       })
       // 判断是否已经存在
+      const val = deepClone(this.dataValue)
       if (data) {
-        data.dataValue = JSON.parse(this.val)// 更新数据
+        data.dataValue = val// 更新数据
       } else {
         store.state.app.dataOption.push({
-          dataValue: JSON.parse(this.val),
+          dataValue: val,
           i: this.identify
         })
+      }
+    },
+
+    // 获取详细数据
+    async getData (item) {
+      try {
+        const body = {
+          limit: this.limit,
+          selectFields: [{ displayColumn: item.displayColumn }]
+        }
+        const res = await getDataSetData(item.dataSetID, body)
+        this.dataValue.push(res)
+      } catch (error) {
+        console.log(error)
       }
     }
   }
