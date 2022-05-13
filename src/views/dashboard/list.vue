@@ -218,7 +218,7 @@
         <el-dialog
           title="公开链接分享"
           :visible.sync="shareDashboardVisible"
-          width="480px"
+          width="560px"
         >
           <div v-if="!currentShareInfo || !currentShareInfo.shareUrl" class="shareEmpty">
             <img
@@ -236,13 +236,17 @@
             <div>
               <span class="shareTip">所有用户可以通过一下链接查看报表备份</span>
               <el-button
+                style="color:#FA8334; border-color: #FA8334;font-size:12px; margin-left: 14px;height: 32px;"
                 @click="cancelShareDashboard"
               >不再公开</el-button>
             </div>
             <div class="shareCopy">
-              <el-input v-model="currentShareInfo.shareUrl" readonly>
-                <el-button slot="append" @click="copyShareUrl">复制</el-button>
-              </el-input>
+              <div class="shareCopyUrl">{{ currentShareInfo.shareUrl }}</div>
+              <el-button
+                type="primary"
+                style="font-size:12px; border-top-left-radius: 0px; border-bottom-left-radius: 0px;margin-left: -3px;z-index: 99;"
+                @click="copyShareUrl"
+              >复制</el-button>
             </div>
             <div class="shareDate">
               <el-form :model="currentShareInfo" style="padding: 0px">
@@ -679,7 +683,7 @@ export default {
 
 }
 .dialog-footer{
-  padding-bottom: 10px;
+  padding-top: 10px;
   margin-right: 20px;
 }
 .shareWrap{
@@ -690,6 +694,23 @@ export default {
   line-height: 20px;
   .shareCopy{
     margin-top: 24px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .shareCopyUrl{
+      width: 480px;
+      height: 32px;
+      padding: 0px 10px;
+      background: #F4F6F8;
+      box-sizing: border-box;
+      border: 1px solid rgba(223,225,229,1);
+      border-radius: 2.5px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: #666A77;
+      line-height: 30px;
+    }
   }
   .shareDate{
     margin-top: 24px;

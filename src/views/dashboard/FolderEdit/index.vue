@@ -5,10 +5,10 @@
     width="30%"
   >
     <div class="create-folder">
-      <div style="line-height: 32px; width: 70px"><span>文件名称</span></div>
+      <div style="line-height: 32px; width: 90px"><span>文件夹名称</span></div>
       <el-input
         v-model="newFolderName"
-        placeholder="请输入文件名称"
+        placeholder="请输入文件夹名称"
         style="margin-left: 12px;height: 32px"
       />
     </div>
