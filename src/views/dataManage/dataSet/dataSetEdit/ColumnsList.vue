@@ -12,13 +12,13 @@
         />
         <div class="column-name">
           <b-tooltip
-            width="170"
+            :width="'70px'"
             :content="item.columnName"
           />
         </div>
         <div class="column-des">
           <b-tooltip
-            width="70"
+            :width="'70px'"
             :content="item.comment"
           />
         </div>
