@@ -398,6 +398,7 @@ export default {
       this.refresh()
     },
     refresh() {
+      console.log('----------------------REfresh!!!!!!!!!!!')
       this.handleCurrentChange(this.currentRow)
     },
     async handleCurrentChange(val) {
