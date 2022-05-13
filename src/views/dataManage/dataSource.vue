@@ -201,7 +201,6 @@ export default {
   },
   data() {
     return {
-      LOCAL_FILE_ID: 'BIDATASOURCE0',
       tableListLoading: false,
       detailTable: {
         tableName: '',
@@ -231,8 +230,7 @@ export default {
       fileType: {
         'mysql': 'MySQL数据源',
         'mongodb': 'MongoDB数据源',
-        'file': '本地数据源',
-        '': '?'
+        'file': '本地数据源'
       },
       status: '',
       search: '',
@@ -405,7 +403,7 @@ export default {
     },
     async handleCurrentChange(val) {
       try {
-        if (val === null || val === '') {
+        if (!val) {
           return
         }
         this.currentRow = val
@@ -503,7 +501,7 @@ export default {
       }
       if (command === 'localFile') {
         this.$dialog.show('UploadFileDialog', {}, () => {
-          const currentRow = this.filterdDatasources.find(item => item._id === this.LOCAL_FILE_ID)
+          const currentRow = this.filterdDatasources.find(item => item.type === 'file')
           this.$refs.singleTable.setCurrentRow(currentRow)
           this.isShowDataFiles = true
           this.$nextTick(() => {
