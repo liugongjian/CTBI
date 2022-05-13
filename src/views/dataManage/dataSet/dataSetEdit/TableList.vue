@@ -2,7 +2,7 @@
   <div :class="[{'full-height': !toggleContent}, 'list-wrapper']">
     <div
       v-for="(table, i) in tableList"
-      :key="i"
+      :key="`table-list-${i}`"
       style="display: flex;justify-content: space-between;align-items: center;"
       class="main-list"
     >
@@ -76,6 +76,11 @@ export default {
       default: true
     },
     dataSourceId: {
+      type: String,
+      default: ''
+    },
+    // 数据源类型，只有本地文件有值 file
+    type: {
       type: String,
       default: ''
     }

@@ -12,8 +12,9 @@
       <div class="edit-wrap-header-r">
         <el-button
           type="primary"
+          :loading="saveBtnLoading"
           :disabled="toggleContent"
-          @click="showSaveDialog"
+          @click="showSaveDialog()"
         >保存</el-button>
       </div>
     </div>
@@ -93,6 +94,7 @@
             <table-list
               v-loading="dataTableLoading"
               :table-list="dataTableList"
+              :type="dataInfo.dataSourceType"
               :data-source-id="dataInfo.dataSourceId"
               :toggle-content="toggleContent"
             />
@@ -174,7 +176,7 @@ import Runner from '@/views/dataManage/dataSet/dataSetEdit/Runner'
 import Resetter from '@/views/dataManage/dataSet/dataSetEdit/Resetter'
 import TableList from '@/views/dataManage/dataSet/dataSetEdit/TableList'
 import EditSql from '@/components/SqlEditor/index.vue'
-import { getDataSetsInfo, runtimeForSql, getSqlRunningLogs, confirmEditSql, getDataSourceData, dataFiles, getDataTable } from '@/api/dataSet'
+import { getDataSetsInfo, runtimeForSql, getSqlRunningLogs, confirmEditSql, getDataSourceData, dataFiles, getDataTable, updateDataSet } from '@/api/dataSet'
 import { deepClone } from '@/utils/optionUtils'
 
 export default {
@@ -189,11 +191,14 @@ export default {
         dataSourceId: '',
         // 数据源名称
         dataSourceName: '',
+        // 目录地址
+        folderId: null,
         // 数据源类型
         dataSourceType: '',
         // 脚本集SQL信息
         sql: { _id: '', sql: '' }
       },
+      saveBtnLoading: false,
       // sql 编辑器提示语合集
       hintOptions: {},
       // sql脚本
@@ -239,9 +244,32 @@ export default {
     },
     // 打开保存窗口
     showSaveDialog () {
-      this.$dialog.show('SaveDataSetDialog', { dataInfo: this.dataInfo }, () => {
-        this.$router.go(-1)
-      })
+      // 更新数据集无需弹窗提示，直接保存
+      if (this.dataInfo._id) {
+        // 校验数据集名称是否符合
+        const body = {
+          _id: this.dataInfo._id,
+          displayName: this.dataInfo.displayName,
+          sql: this.dataInfo.sql,
+          fields: this.dataInfo.fields,
+          comment: this.dataInfo.comment,
+          folderId: this.dataInfo.folderId
+        }
+        this.saveBtnLoading = true
+        updateDataSet(body._id, body).then(res => {
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+          this.$router.go(-1)
+        }).finally(e => {
+          this.saveBtnLoading = false
+        })
+      } else {
+        this.$dialog.show('SaveDataSetDialog', { dataInfo: this.dataInfo }, () => {
+          this.$router.go(-1)
+        })
+      }
     },
     // 格式化 sql 编辑器
     formatSqlData () {
