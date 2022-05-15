@@ -110,7 +110,6 @@
                     />
                     <div class="d-f f-b-c">
                       <div>
-                        <!-- {{ v.attributes[0].dataType }} -->
                         <svg-icon
                           style="width: 20px;"
                           :icon-class="typeTransform(v.attributes)"
@@ -159,6 +158,7 @@
           :height="tableHeight"
           row-key="index"
           default-expand-all
+          :row-class-name="tableRowClassName"
           style="width: 100%"
           header-row-class-name="m-table-header"
           :tree-props="{children: 'children'}"
@@ -169,9 +169,13 @@
             min-width="360"
           >
             <template slot-scope="scope">
-              <span v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'">
+              <div
+                v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"
+                style="display: inline-block;"
+              >
+                <div class="left-divider" />
                 {{ scope.row.displayColumn }}
-              </span>
+              </div>
               <span
                 v-else
                 style="display: inline-block;width: calc(100% - 60px);"
@@ -339,6 +343,14 @@ export default {
     }
   },
   methods: {
+    tableRowClassName ({ row, rowIndex }) {
+      if (row._id === 1) {
+        return 'dimension-column-row'
+      } else if (row._id === 2) {
+        return 'measure-column-row'
+      }
+      return ''
+    },
     filterColumns () {
       if (this.inputFieldName) {
         const filter = this.fields.filter(field => field.displayColumn.indexOf(this.inputFieldName) > -1)
@@ -481,6 +493,25 @@ export default {
     }
   }
 }
+.left-divider {
+  position: absolute;
+  width: 4px;
+  background-color: #fa8334;
+  height: calc(100% + 2px);
+  left: 0px;
+  top: -1px;
+}
+
+::v-deep .dimension-column-row,
+.dimension-column-row:hover > td {
+  background: rgba(145, 159, 248, 0.11) !important;
+}
+
+::v-deep .measure-column-row,
+.measure-column-row:hover > td {
+  background: rgba(99, 205, 159, 0.11) !important;
+}
+
 // 维度样式
 ::v-deep .m-column-0 {
   background-color: #919ff8 !important;
