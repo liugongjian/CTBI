@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { transformDataTypeIcon } from '@/utils/optionUtils'
 export default {
   props: {
     title: {
@@ -41,7 +42,7 @@ export default {
   },
   methods: {
     typeTransform (type) {
-      return 'copy'
+      return transformDataTypeIcon(type)
     }
   }
 }
@@ -66,7 +67,7 @@ export default {
 
       .icon {
         width: 20px;
-        height: 20px;
+        height: 22px;
         margin-right: 6px;
       }
 

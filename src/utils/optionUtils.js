@@ -152,7 +152,7 @@ export const getDateTime = () => {
  * @param {Array} data
  * @returns {Array}
  */
-export const formatDataValue = function(data) {
+export const formatDataValue = function (data) {
   const dataValue = []
   data.forEach(item => {
     if (item.fields[0].type === 'Dimension') {
@@ -172,4 +172,23 @@ export const formatDataValue = function(data) {
     }
   })
   return dataValue
+}
+
+/**
+ * 将字段类型转换为图标
+ * @param {String} type
+ * @returns {String}
+ */
+export const transformDataTypeIcon = function (type) {
+  if (type.indexOf('text') > -1 ||
+    type.indexOf('char') > -1 ||
+    type.indexOf('varChar') > -1 ||
+    type.indexOf('varchar') > -1) {
+    return 'data-type-option-text'
+  } else if (type.indexOf('date') > -1 || type.indexOf('time') > -1) {
+    return 'data-type-option-date'
+  } else if (type.indexOf('int') > -1 || type.indexOf('number') > -1) {
+    return 'data-type-option-number'
+  }
+  return ''
 }

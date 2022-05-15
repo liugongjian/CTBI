@@ -145,7 +145,6 @@ export default {
     },
     // 获取切换文本
     getTransformText (type) {
-      console.log(type)
       if (type === 'Measure') {
         return '转换为' + constants.DatasetType.Dimension
       } else {

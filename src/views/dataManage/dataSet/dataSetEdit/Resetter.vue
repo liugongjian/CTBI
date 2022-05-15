@@ -50,8 +50,16 @@
               slot-scope="{ node, data }"
               class="custom-tree-node d-f f-b-c w-100p"
             >
-              <div :class="{ 'hide-tree-node': (data.attributes && data.attributes[0].isHidden) }">
-                <b-tooltip :content="data.displayColumn" />
+              <div :class="[{ 'hide-tree-node': (data.attributes && data.attributes[0].isHidden) }, 'd-f']">
+                <svg-icon
+                  v-if="data.attributes"
+                  style="width: 20px;height: 18px;margin-right: 6px;"
+                  :icon-class="typeTransform(data.attributes)"
+                />
+                <b-tooltip
+                  :content="data.displayColumn"
+                  width="100px"
+                />
               </div>
               <div
                 v-if="node.isLeaf"
@@ -90,7 +98,7 @@
                 <el-table-column
                   v-if="!v.attributes[0].isHidden"
                   :prop="v.column"
-                  width="120"
+                  width="95"
                   class-name="column-child"
                   :label="v.displayColumn"
                   show-overflow-tooltip
@@ -98,10 +106,16 @@
                   <template #header="{ column }">
                     <b-tooltip
                       :content="column.label"
-                      :width="'100px'"
+                      width="80px"
                     />
                     <div class="d-f f-b-c">
-                      <div>{{ v.attributes[0].dataType }}</div>
+                      <div>
+                        <!-- {{ v.attributes[0].dataType }} -->
+                        <svg-icon
+                          style="width: 20px;"
+                          :icon-class="typeTransform(v.attributes)"
+                        />
+                      </div>
                       <gear-btn
                         :active-tag-name="activeTagName"
                         :data="v"
@@ -147,7 +161,7 @@
           default-expand-all
           style="width: 100%"
           header-row-class-name="m-table-header"
-          :tree-props="{children: 'children', hasChildren: 'isFolder'}"
+          :tree-props="{children: 'children'}"
         >
           <el-table-column
             label="名称字段"
@@ -178,18 +192,11 @@
             <template slot-scope="scope">
               <span v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
               <span v-else>
-                <el-select
+                <b-select
                   v-model="scope.row.attributes[0].dataType"
-                  placeholder="请选择"
+                  :options="dataTypeOptions"
                   @change="scope.row.attributes[0].format = ''"
-                >
-                  <el-option
-                    v-for="item in dataTypeOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
+                />
               </span>
             </template>
           </el-table-column>
@@ -200,17 +207,10 @@
             <template slot-scope="scope">
               <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
               <div v-else-if="scope.row.type === 'Measure'">
-                <el-select
+                <b-select
                   v-model="scope.row.attributes[0].format"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in formatMap[scope.row.attributes[0].dataType]"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
+                  :options="formatMap[scope.row.attributes[0].dataType]"
+                />
               </div>
             </template>
           </el-table-column>
@@ -253,6 +253,7 @@
 
 <script>
 import { getPreviewData } from '@/api/dataSet'
+import { transformDataTypeIcon } from '@/utils/optionUtils'
 import GearBtn from '@/views/dataManage/dataSet/dataSetEdit/GearBtn'
 
 export default {
@@ -378,9 +379,11 @@ export default {
       const res = [{
         _id: 1,
         displayColumn: '维度',
+        index: 'dimension_p_1',
         children: []
       }, {
         _id: 2,
+        index: 'measure_p_1',
         displayColumn: '度量',
         children: []
       }]
@@ -394,6 +397,14 @@ export default {
       })
       this.dimensionMeasure = res
       return res
+    },
+    typeTransform (data) {
+      if (typeof data === 'string') {
+        return transformDataTypeIcon(data)
+      } else {
+        const type = data ? data[0].dataType : ''
+        return transformDataTypeIcon(type)
+      }
     }
   }
 }
