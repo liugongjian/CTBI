@@ -11,7 +11,7 @@
       label-width="90px"
     >
       <el-form-item
-        label="活动名称"
+        label="名称"
         prop="name"
       >
         <el-input
@@ -78,10 +78,7 @@ export default {
       })
     },
     async handlerCreate () {
-      const body = {
-        type: 'dataSet',
-        name: this.newFolderName
-      }
+      const body = Object.assign({ type: 'dataSet' }, this.form)
       try {
         const data = await createFolders(body)
         this.$message.success(data)

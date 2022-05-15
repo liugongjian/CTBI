@@ -116,7 +116,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-files__list" />
+        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-files__lists" />
         <div v-else class="data-file__list">
           <div class="research-file">
             <el-input
@@ -192,6 +192,7 @@ import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataS
 import CommonTable from '@/components/CommonTable/index.vue'
 import { getDateTime } from '@/utils/optionUtils'
 import dataFiles from './dataFiles.vue'
+
 export default {
   name: 'DataSource',
   components: {
@@ -221,15 +222,15 @@ export default {
       // sortOrder: 'asc',
       searchkey: '',
       connectLoading: false,
+      dataSourceLoading: false,
       notEdit: true,
       editform: {},
-      currentRow: 0,
+      currentRow: '',
       dialogVisible: false,
       fileType: {
         'mysql': 'MySQL数据源',
         'mongodb': 'MongoDB数据源',
-        'file': '本地数据源',
-        '': '?'
+        'file': '本地数据源'
       },
       status: '',
       search: '',
@@ -401,8 +402,10 @@ export default {
       this.handleCurrentChange(this.currentRow)
     },
     async handleCurrentChange(val) {
-      console.log('editval------------', val)
       try {
+        if (!val) {
+          return
+        }
         this.currentRow = val
         if (val.type === 'file') {
           this.isShowDataFiles = true
@@ -498,9 +501,12 @@ export default {
       }
       if (command === 'localFile') {
         this.$dialog.show('UploadFileDialog', {}, () => {
-          if (this.isShowDataFiles) {
+          const currentRow = this.filterdDatasources.find(item => item.type === 'file')
+          this.$refs.singleTable.setCurrentRow(currentRow)
+          this.isShowDataFiles = true
+          this.$nextTick(() => {
             this.$refs.dataFiles.getDataFiles()
-          }
+          })
         })
       }
     },
@@ -556,8 +562,10 @@ export default {
         if (result === true) {
           this.dialogVisible = false
           if (this.notEdit) {
-            await postDataSourceList(testForm)
+            const newForm = await postDataSourceList(testForm)
             await this.getDatasource()
+            const currentRow = this.filterdDatasources.find(item => item._id === newForm._id)
+            this.$refs.singleTable.setCurrentRow(currentRow)
           } else {
             await editSources(this.currentId, testForm)
             await this.getDatasource()
@@ -600,6 +608,9 @@ export default {
   height: 32px;
   background: #FA8334;
   border-radius: 2px;
+}
+::v-deep .el-dropdown {
+  height: 48px;
 }
 .newFile {
   font-family: PingFangSC-Regular;
@@ -698,7 +709,7 @@ export default {
 .research-file {
   display: flex;
   justify-content: flex-end;
-  line-height: 68px;
+  line-height: 66px;
 }
 .head-title {
   position: absolute;
@@ -788,15 +799,17 @@ export default {
     overflow: auto;
   }
 }
-.data-files__list {
+.data-files__lists {
   flex: 2;
+  padding-left: 10px;
+  border-left: 1px solid #EBEEF5;
   height: calc(100vh - 250px);
   overflow: auto;
 
 }
 .data-file__list {
   flex: 2;
-  padding: 0 24px 10px 10px;
+  padding: 0 24px 10px 15px;
   border-left: 1px solid #EBEEF5;
   height: calc(100vh - 250px);
   overflow: auto;
