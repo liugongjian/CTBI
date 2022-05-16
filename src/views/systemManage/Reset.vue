@@ -2,7 +2,7 @@
   <div>
     <el-dialog :append-to-body="true" title="重置密码" :visible.sync="visible" :close-on-click-modal="false" width="40%" @close="handleClose">
       <div v-loading="loading">
-        <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form ref="form" :model="form" :rules="rules" label-width="100px" @submit.native.prevent>
           <el-form-item>
             <template #label>
               <span>

@@ -5,17 +5,17 @@
         <el-button
           type="primary"
           icon="el-icon-plus"
-          @click="createFolder()"
+          @click="gotoDataSetEdit"
         >
-          新建文件夹
+          新建数据集
         </el-button>
-        <el-button @click="gotoDataSetEdit">新建数据集</el-button>
+        <el-button @click="createFolder()">新建文件夹</el-button>
       </div>
       <div class="d-f">
         <el-input
           v-model="queryForm.searchkey"
-          placeholder="请输入文件/数据集名称"
-          style="margin-right: 12px"
+          placeholder="请输入数据集名称"
+          style="margin-right: 12px; width: 268px;"
           @keyup.enter.native="query"
         />
         <el-button
@@ -32,14 +32,16 @@
         v-show="selectedRows && selectedRows.length > 0"
         class="multiple-select-tip"
       >
-        <span>已选{{ selectedRows.length }}项</span>
+        <span>已选 {{ selectedRows.length }} 项</span>
         <el-button
+          class="info"
           type="text"
           @click="moveTo()"
         >移动到</el-button>
         <el-button
+          class="info"
           type="text"
-          @click="clearSelection()"
+          @click="handleClearSelection()"
         >取消选择
         </el-button>
       </div>
@@ -55,12 +57,14 @@
         row-key="_id"
         :load="loadDataSet"
         :tree-props="{children: 'children', hasChildren: 'isFolder'}"
-        @select-all="selectAll"
-        @select="select"
+        :header-cell-class-name="cellClass"
+        :header-cell-style="{background: '#FAFAFA', color:'rgba(0,0,0,0.9)'}"
+        @selection-change="select"
       >
         <el-table-column
           type="selection"
           width="55"
+          :selectable="handleSelecTable"
         />
         <el-table-column
           prop="name"
@@ -130,11 +134,11 @@
                 type="text"
                 @click="gotoDataSetEdit(scope.row)"
               >编辑</el-button>
-              <el-divider direction="vertical" />
+              <!-- <el-divider direction="vertical" />
               <el-button
                 type="text"
                 @click="createDashboard(scope.row)"
-              >新建仪表盘</el-button>
+              >新建仪表盘</el-button> -->
               <el-divider direction="vertical" />
               <el-button
                 type="text"
@@ -157,11 +161,11 @@
               <el-button
                 type="text"
                 @click="createFolder(scope.row)"
-              >重命名</el-button>
+              >编辑</el-button>
               <el-divider direction="vertical" />
               <el-button
                 type="text"
-                @click="deleteFloder(scope.row)"
+                @click="deleteFolder(scope.row)"
               >删除</el-button>
             </div>
           </template>
@@ -173,7 +177,7 @@
 
 <script>
 import listPageMixin from '@/mixins/listPageMixin'
-import { getDataSetsFolders, delFolders } from '@/api/dataSet'
+import { getDataSetsFolders, delFolders, delDataSet } from '@/api/dataSet'
 export default {
   mixins: [listPageMixin],
   data () {
@@ -190,6 +194,11 @@ export default {
     this.query()
   },
   methods: {
+    cellClass(row) {
+      if (row.columnIndex === 0 && row.row[0].type === 'selection') {
+        return 'disable-header-selection'
+      }
+    },
     // 表格重置搜索条件查询
     reset () {
       this.queryForm.searchkey = ''
@@ -209,7 +218,6 @@ export default {
         // 接口要求不能传参
         params = {}
       }
-
       try {
         const data = await getDataSetsFolders(params)
         // element lazy数据会被缓存，需要清理
@@ -252,17 +260,87 @@ export default {
         this.query()
       })
     },
-    // 文件夹删除事件
-    deleteFloder (row) {
-      this.$dialog.show('TipDialog', { content: `确定删除文件夹${row.name}?` }, async () => {
+    // 删除数据集
+    deleteDataSet (row) {
+      const h = this.$createElement
+      this.$msgbox({
+        title: '删除提示',
+        message: h('p', null, [
+          h('svg-icon', ('svg-icon', {
+            attrs: { iconClass: 'warning', style: 'width:1.5em;height:1.5em;margin-right:10px;vertical-align: -0.35em;' }
+          })),
+          h('span', null, `确定删除数据集${row.displayName}?`)
+        ]),
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        closeOnClickModal: false
+      }).then(async () => {
         try {
-          const data = await delFolders(row.id)
-          this.$message.success(data)
-          this.query()
+          const data = await delDataSet(row._id)
+          if (data) {
+            this.$message({
+              message: '删除成功！',
+              type: 'success'
+            })
+            this.query()
+          }
         } catch (error) {
           console.log(error)
         }
       })
+    },
+    // 文件夹删除事件
+    async deleteFolder (row) {
+      const h = this.$createElement
+      let existDataset = false
+      if (row.children) {
+        existDataset = true
+      } else {
+        const childrenData = await getDataSetsFolders({ folderId: row._id })
+        existDataset = childrenData.length >= 1
+      }
+      if (existDataset) {
+        this.$msgbox({
+          title: '删除提示',
+          message: h('p', null, [
+            h('svg-icon', ('svg-icon', {
+              attrs: { iconClass: 'warning', style: 'width:1.5em;height:1.5em;margin-right:10px;vertical-align: -0.35em;' }
+            })),
+            h('span', null, '该文件夹下已存在数据集，请移除后再删除！')
+          ]),
+          showCancelButton: false,
+          confirmButtonText: '确定',
+          closeOnClickModal: false
+        })
+      } else {
+        this.$msgbox({
+          title: '删除提示',
+          message: h('p', null, [
+            h('svg-icon', ('svg-icon', {
+              attrs: { iconClass: 'warning', style: 'width:1.5em;height:1.5em;margin-right:10px;vertical-align: -0.35em;' }
+            })),
+            h('span', null, `确定删除文件夹${row.name}?`)
+          ]),
+          showCancelButton: true,
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          closeOnClickModal: false
+        }).then(async () => {
+          try {
+            const data = await delFolders(row._id)
+            if (data) {
+              this.$message({
+                message: '删除成功！',
+                type: 'success'
+              })
+              this.query()
+            }
+          } catch (error) {
+            console.log(error)
+          }
+        })
+      }
     },
     // 目录移动事件
     moveTo (val) {
@@ -286,61 +364,47 @@ export default {
         this.query()
       })
     },
-    // 多选全选
-    selectAll () {
-      // flag = true 有选中项，flag=false 为无选中项
-      if (!this.checkedKeys) {
-        this.split(this.dataList, !this.checkedKeys)
-        if (this.selectedRows.length > 0) {
-          this.checkedKeys = true
-        }
-      } else {
-        this.$refs.multipleTable.clearSelection()
-        this.selectedRows = []
-        this.checkedKeys = false
-      }
+    handleClearSelection() {
+      this.$refs.multipleTable.clearSelection()
+    },
+    handleSelecTable(row) {
+      return !row.isFolder
     },
     select (selection, row) {
-      if (row.isFolder) {
-        this.$refs.multipleTable.toggleRowSelection(row, false)
-      } else {
-        this.checkedKeys = true
-        this.selectedRows = selection
-      }
-    },
-    /**
-     * 处理数据
-     */
-    split (data, flag) {
-      data.forEach((row) => {
-        // 如果为目录，则不做选中
-        let isSelect = flag
-        if (row.isFolder) {
-          isSelect = false
-        } else {
-          this.selectedRows.push(row)
-        }
-        this.$refs.multipleTable.toggleRowSelection(row, isSelect)
-        if (row.children !== undefined) {
-          this.split(row.children, flag)
-        }
-      })
+      this.selectedRows = selection
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+::v-deep .disable-header-selection > .cell .el-checkbox__inner {
+  display: none;
+}
 .multiple-select-tip {
   height: 40px;
   line-height: 40px;
   padding: 0px 16px;
   background: #fef6e7;
   border: 1px solid #fcd68a;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
 
   span {
     color: #fa8334;
-    margin-right: 8px;
+    margin-right: 24px;
+  }
+  .info {
+    margin-right: 24px;
+    margin-left: 0;
+    color: #FA8334;
+    line-height: 20px;
+    font-weight: 400;
+  }
+}
+.data-set-main-table-options {
+  .el-button--text {
+    font-weight: 400;
   }
 }
 </style>

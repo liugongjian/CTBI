@@ -26,6 +26,8 @@ export const regex = {
   USER_NAME_REGEX: /^(?!\d+$)[\da-zA-Z\u4e00-\u9fa5-_]*$/,
   // 中英文、数字及下划线(_)、斜线(/)、反斜线(\)、竖线(|)、 小括号(())、中括号([])组成
   DATASET_NAME_REGEX: /^[A-Za-z0-9\u4e00-\u9fa5_[\]\|/()\\]+$/
+  // 中英文、数字及下划线(_)组成
+  FOLDER_REGEX: /^[\u4e00-\u9fa5A-Za-z0-9_]+$/
 }
 
 export default regex
