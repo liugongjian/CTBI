@@ -35,6 +35,11 @@ export default {
     /* 设定列表数据 */
     setResult (list, total) {
       this.dataList = list
+      this.dataList.forEach((item) => {
+        if (!item.dataSourceName) {
+          item.dataSourceName = '-'
+        }
+      })
       this.queryForm.total = total
       if (
         total > 0 &&
