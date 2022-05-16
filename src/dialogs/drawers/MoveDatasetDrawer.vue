@@ -95,9 +95,9 @@ export default {
     },
     // 搜索数据集
     async searchFolderList () {
-      const searchKey = this.searchKey
+      const searchkey = this.searchKey
       try {
-        const data = await getFolderLists({ searchKey })
+        const data = await getFolderLists({ searchkey })
         this.folderList = data.result
         this.treeData = [
           {
