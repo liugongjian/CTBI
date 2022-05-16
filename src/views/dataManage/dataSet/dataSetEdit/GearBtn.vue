@@ -20,7 +20,10 @@
                 style="margin-right: 5px;"
               />复制
             </el-dropdown-item>
-            <el-dropdown-item @click.native="hideDimensionMeasure(data)">
+            <el-dropdown-item
+              v-if="data.attributes"
+              @click.native="hideDimensionMeasure(data)"
+            >
               <span v-if="!data.attributes[0].isHidden">
                 <svg-icon
                   icon-class="m-eye-close"
@@ -31,7 +34,7 @@
                 <svg-icon
                   icon-class="eye-open"
                   style="margin-right: 5px;"
-                />显示
+                />取消隐藏
               </span>
             </el-dropdown-item>
             <el-dropdown-item
@@ -52,6 +55,7 @@
         @click="copyDimensionMeasure(data)"
       >复制</el-button>
       <el-divider direction="vertical" />
+      <!-- 转换为度量&维度 -->
       <el-button
         type="text"
         @click="transformType(data)"
@@ -63,6 +67,7 @@
       >删除</el-button>
       <el-divider direction="vertical" />
       <el-button
+        v-if="data.attributes"
         type="text"
         @click="hideDimensionMeasure(data)"
       >
@@ -94,7 +99,7 @@ export default {
   methods: {
     // 编辑数据预览中的字段
     editDimensionMeasure (item) {
-      this.$dialog.show('EditDimensionMeasureDialog', { form: item }, (data) => {
+      this.$dialog.show('EditDimensionMeasureDialog', { form: item, fields: this.fields }, (data) => {
         if (!data.displayColumn) {
           data.displayColumn = data.column
         }
@@ -132,7 +137,9 @@ export default {
     },
     // 隐藏
     hideDimensionMeasure (item) {
-      item.attributes[0].isHidden = !item.attributes[0].isHidden
+      if (item.attributes) {
+        item.attributes[0].isHidden = !item.attributes[0].isHidden
+      }
     },
     // 切换维度或者度量
     transformType (data) {

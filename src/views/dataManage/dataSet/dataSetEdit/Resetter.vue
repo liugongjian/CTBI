@@ -81,6 +81,7 @@
           <el-table
             :data="dimensionMeasureTableData"
             :height="tableHeight"
+            empty-text=" "
             style="width: 100%"
             stripe
           >
@@ -88,7 +89,7 @@
               v-for="(parent, i) in dimensionMeasure"
               :key="`column-p-${i}`"
               :label="parent.displayColumn"
-              :class-name="`m-column-${i}`"
+              :class-name="`m-column-${parent._id}`"
             >
               <el-table-column
                 v-for="(v, index) in parent.children"
@@ -96,7 +97,7 @@
                 class-name="display-none"
               >
                 <el-table-column
-                  v-if="!v.attributes[0].isHidden"
+                  v-if="(v.attributes && !v.attributes[0].isHidden)"
                   :prop="v.column"
                   width="95"
                   class-name="column-child"
@@ -126,30 +127,32 @@
                 </el-table-column>
               </el-table-column>
             </el-table-column>
-
-            <template slot="empty">
-              <div style="text-align: center;margin-top: 38px;">
-                <svg-icon
-                  style="width: 371px; height: 200px;"
-                  icon-class="refresh-preview"
-                />
-                <div
-                  class="result-bg-tip"
-                  style="line-height: 20px;"
-                >
-                  <div>
-                    你可以点击右侧的
-                    <span style="font-weight: 400;color: #595959; font-size:14px;">
-                      <i class="el-icon-refresh" /> 刷新预览
-                    </span>
-                  </div>
-                  <div>
-                    来预览并配置数据
-                  </div>
+          </el-table>
+          <div
+            v-if="dimensionMeasureTableData.length === 0"
+            style="position: absolute; top: 40%; left: 40%;"
+          >
+            <div style="text-align: center;margin-top: 38px; width: 100%;">
+              <svg-icon
+                style="width: 371px; height: 200px;"
+                icon-class="refresh-preview"
+              />
+              <div
+                class="result-bg-tip"
+                style="line-height: 20px;"
+              >
+                <div>
+                  你可以点击右侧的
+                  <span style="font-weight: 400;color: #595959; font-size:14px;">
+                    <i class="el-icon-refresh" /> 刷新预览
+                  </span>
+                </div>
+                <div>
+                  来预览并配置数据
                 </div>
               </div>
-            </template>
-          </el-table>
+            </div>
+          </div>
         </div>
       </div>
       <div v-show="activeTagName === 2">
@@ -170,7 +173,7 @@
           >
             <template slot-scope="scope">
               <div
-                v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'"
+                v-if="scope.row._id === 1 || scope.row._id === 2"
                 style="display: inline-block;"
               >
                 <div class="left-divider" />
@@ -180,7 +183,11 @@
                 v-else
                 style="display: inline-block;width: calc(100% - 60px);"
               >
-                <el-input v-model="scope.row.displayColumn" />
+                <re-input
+                  v-model="scope.row.displayColumn"
+                  :max-length="50"
+                  :blur-fun="(newVal, oldVal) => {return handlerBlur(newVal, oldVal, scope.row._id)}"
+                />
               </span>
             </template>
           </el-table-column>
@@ -194,8 +201,7 @@
             min-width="180"
           >
             <template slot-scope="scope">
-              <span v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-              <span v-else>
+              <span v-if="scope.row._id !== 1 && scope.row._id !== 2">
                 <b-select
                   v-model="scope.row.attributes[0].dataType"
                   :options="dataTypeOptions"
@@ -209,8 +215,7 @@
             min-width="180"
           >
             <template slot-scope="scope">
-              <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-              <div v-else-if="scope.row.type === 'Measure'">
+              <div v-if="scope.row._id !== 1 && scope.row._id !== 2 && scope.row.type === 'Measure'">
                 <b-select
                   v-model="scope.row.attributes[0].format"
                   :options="formatMap[scope.row.attributes[0].dataType]"
@@ -223,8 +228,7 @@
             min-width="180"
           >
             <template slot-scope="scope">
-              <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-              <div v-else>
+              <div v-if="scope.row._id !== 1 && scope.row._id !== 2">
                 <el-input
                   v-model="scope.row.comment"
                   placeholder="请输入内容"
@@ -234,12 +238,10 @@
           </el-table-column>
           <el-table-column
             label="操作"
-            fixed="right"
             min-width="200"
           >
             <template slot-scope="scope">
-              <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-              <div v-else>
+              <div v-if="scope.row._id !== 1 && scope.row._id !== 2">
                 <gear-btn
                   :active-tag-name="activeTagName"
                   :data="scope.row"
@@ -257,11 +259,13 @@
 
 <script>
 import { getPreviewData } from '@/api/dataSet'
+import regex from '@/constants/regex'
 import { transformDataTypeIcon } from '@/utils/optionUtils'
 import GearBtn from '@/views/dataManage/dataSet/dataSetEdit/GearBtn'
+import ReInput from '@/views/dataManage/dataSet/dataSetEdit/ReInput'
 
 export default {
-  components: { GearBtn },
+  components: { GearBtn, ReInput },
   props: {
     fields: {
       type: Array,
@@ -280,7 +284,17 @@ export default {
         children: 'children',
         label: 'displayColumn'
       },
-      dimensionMeasure: [],
+      dimensionMeasure: [{
+        _id: 1,
+        displayColumn: '维度',
+        index: 'dimension_p_1',
+        children: []
+      }, {
+        _id: 2,
+        index: 'measure_p_1',
+        displayColumn: '度量',
+        children: []
+      }],
       dimensionMeasureTableData: [],
       dataTypeOptions: [
         {
@@ -407,6 +421,12 @@ export default {
           res[1].children.push(item)
         }
       })
+      if (res[1].children.length === 0) {
+        res.splice(1, 1)
+      }
+      if (res[0].children.length === 0) {
+        res.splice(0, 1)
+      }
       this.dimensionMeasure = res
       return res
     },
@@ -416,6 +436,20 @@ export default {
       } else {
         const type = data ? data[0].dataType : ''
         return transformDataTypeIcon(type)
+      }
+    },
+    handlerBlur (newVal, oldVal, id) {
+      if (regex.DATASET_NAME_REGEX.test(newVal)) {
+        const temp = this.fields.find(item => (item.displayColumn === newVal && item._id !== id))
+        if (temp) {
+          this.$message.error('字段名称和其他对象存在重名，请检查！')
+          return false
+        } else {
+          return true
+        }
+      } else {
+        this.$message.error('字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成！')
+        return false
       }
     }
   }
@@ -470,6 +504,7 @@ export default {
       .data-preview-left {
         width: 200px;
         flex: 0 0 200px;
+        border-right: 1px solid #dddddd;
         overflow-y: auto;
         overflow-x: hidden;
 
@@ -489,6 +524,7 @@ export default {
 
       .data-preview-right {
         overflow: auto;
+        width: 100%;
       }
     }
   }
@@ -513,14 +549,14 @@ export default {
 }
 
 // 维度样式
-::v-deep .m-column-0 {
+::v-deep .m-column-1 {
   background-color: #919ff8 !important;
   font-size: 12px;
   font-weight: 500;
   color: #fff;
 }
 // 度量样式
-::v-deep .m-column-1 {
+::v-deep .m-column-2 {
   background-color: #63cd9f !important;
   font-size: 12px;
   font-weight: 500;
@@ -537,6 +573,11 @@ export default {
   background-color: #fff !important;
 }
 ::v-deep .display-none {
+  height: 0px;
   display: none !important;
+}
+::v-deep .el-table--group,
+.el-table--border {
+  border-width: 0px;
 }
 </style>

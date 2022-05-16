@@ -56,7 +56,7 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入数据集名称', trigger: 'change' },
-          { pattern: regex.STRING_REGEX2, message: '名称输入有误，请参考下方提示', trigger: 'change' }
+          { pattern: regex.DATASET_NAME_REGEX, message: '名称输入有误，请参考下方提示', trigger: 'change' }
         ]
       },
       title: '新建文件夹'

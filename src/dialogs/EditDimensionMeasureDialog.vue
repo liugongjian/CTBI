@@ -35,9 +35,7 @@
         />
       </el-form-item>
     </el-form>
-    <div
-      slot="footer"
-    >
+    <div slot="footer">
       <el-button @click="closeSilence">取 消</el-button>
       <el-button
         type="primary"
@@ -55,7 +53,13 @@ export default {
   data () {
     return {
       form: {},
-      formLabelWidth: '120px'
+      formLabelWidth: '120px',
+      fields: []
+    }
+  },
+  methods: {
+    checkDisplayColumn () {
+
     }
   }
 }

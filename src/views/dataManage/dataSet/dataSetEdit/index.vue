@@ -32,10 +32,25 @@
               style="margin-right: 8px;width:20px;height:32px;"
             />
           </div>
-          <el-input
-            v-model="dataInfo.displayName"
-            placeholder="未命名SQL"
-          />
+          <el-form
+            ref="displayForm"
+            :model="dataInfo"
+          >
+            <el-form-item
+              prop="displayName"
+              :rules="[
+                { pattern: regex.DATASET_NAME_REGEX, message: '字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成，不超过50个字符', trigger: 'change' }
+              ]"
+            >
+              <el-input
+                v-model="dataInfo.displayName"
+                style="width: 300px;"
+                max-length="50"
+                placeholder="未命名SQL"
+              />
+            </el-form-item>
+          </el-form>
+
         </div>
         <div>
           <el-button
@@ -59,7 +74,7 @@
           >确认编辑</el-button>
           <el-button
             type="text"
-            @click="toggleContent = !toggleContent"
+            @click="handlerToggleContent"
           ><i class="el-icon-close" /></el-button>
         </div>
       </div>
@@ -114,14 +129,15 @@
             />
             <div
               v-else
-              class="p-16-16"
+              class="p-16-16 h-100p"
+              @dblclick="toggleContent = !toggleContent"
             >
               <span>{{ currentSqlStatement }}</span>
               <div class="edit-sql-btn">
                 <el-button
                   type="text"
                   icon="el-icon-edit-outline"
-                  @click="handlerToggleContent"
+                  @click.stop="toggleContent = !toggleContent"
                 >编辑</el-button>
               </div>
             </div>
@@ -172,6 +188,7 @@
 
 <script>
 import { format } from 'sql-formatter'
+import regex from '@/constants/regex'
 import Runner from '@/views/dataManage/dataSet/dataSetEdit/Runner'
 import Resetter from '@/views/dataManage/dataSet/dataSetEdit/Resetter'
 import TableList from '@/views/dataManage/dataSet/dataSetEdit/TableList'
@@ -183,6 +200,7 @@ export default {
   components: { Runner, Resetter, TableList, EditSql },
   data () {
     return {
+      regex: regex,
       dataInfo: {
         _id: '',
         // 脚本集名称
@@ -221,8 +239,13 @@ export default {
       historyLogTableData: []
     }
   },
-  created () {
-    this.getDataSourceList()
+  async created () {
+    await this.getDataSourceList()
+    const queryDataSourceId = this.$route.query.dataSourceId
+    if (queryDataSourceId) {
+      this.dataInfo.dataSourceId = queryDataSourceId
+      this.handleChangeDataSource(queryDataSourceId)
+    }
     const data = this.$route.query
     if (data._id) {
       this.getDetail()
@@ -244,32 +267,38 @@ export default {
     },
     // 打开保存窗口
     showSaveDialog () {
-      // 更新数据集无需弹窗提示，直接保存
-      if (this.dataInfo._id) {
-        // 校验数据集名称是否符合
-        const body = {
-          _id: this.dataInfo._id,
-          displayName: this.dataInfo.displayName,
-          sql: this.dataInfo.sql,
-          fields: this.dataInfo.fields,
-          comment: this.dataInfo.comment,
-          folderId: this.dataInfo.folderId
+      this.$refs.displayForm.validate((valid) => {
+        if (valid) {
+          // 更新数据集无需弹窗提示，直接保存
+          if (this.dataInfo._id) {
+            // 校验数据集名称是否符合
+            const body = {
+              _id: this.dataInfo._id,
+              displayName: this.dataInfo.displayName,
+              sql: this.dataInfo.sql,
+              fields: this.dataInfo.fields,
+              comment: this.dataInfo.comment,
+              folderId: this.dataInfo.folderId
+            }
+            this.saveBtnLoading = true
+            updateDataSet(body._id, body).then(res => {
+              this.$message({
+                message: '保存成功',
+                type: 'success'
+              })
+              this.$router.go(-1)
+            }).finally(e => {
+              this.saveBtnLoading = false
+            })
+          } else {
+            this.$dialog.show('SaveDataSetDialog', { dataInfo: this.dataInfo }, () => {
+              this.$router.go(-1)
+            })
+          }
+        } else {
+          this.$message.error('字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成，不超过50个字符')
         }
-        this.saveBtnLoading = true
-        updateDataSet(body._id, body).then(res => {
-          this.$message({
-            message: '保存成功',
-            type: 'success'
-          })
-          this.$router.go(-1)
-        }).finally(e => {
-          this.saveBtnLoading = false
-        })
-      } else {
-        this.$dialog.show('SaveDataSetDialog', { dataInfo: this.dataInfo }, () => {
-          this.$router.go(-1)
-        })
-      }
+      })
     },
     // 格式化 sql 编辑器
     formatSqlData () {
@@ -353,7 +382,13 @@ export default {
       })
     },
     handlerToggleContent () {
-      this.toggleContent = !this.toggleContent
+      if (this.dataInfo.sql._id) {
+        this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内容将不被保存，请问您是否确认返回？' }, () => {
+          this.toggleContent = !this.toggleContent
+        })
+      } else {
+        this.toggleContent = !this.toggleContent
+      }
     },
     // 获取数据源列表
     async getDataSourceList () {
@@ -573,5 +608,8 @@ export default {
     content: '替';
     visibility: hidden;
   }
+}
+::v-deep .CodeMirror-scroll {
+  background-color: #f2f2f2;
 }
 </style>
