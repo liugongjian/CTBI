@@ -46,9 +46,10 @@
             :load="loadDashboard"
             :tree-props="{ children: 'children', hasChildren: 'directory' }"
             @select="handleSelectionChange"
+            @select-all="handleSelectAll"
           >
-            <el-table-column type="selection" width="55" />
-            <el-table-column prop="name" label="名称" min-width="200">
+            <el-table-column type="selection" width="55" :selectable="row => !row.directory" :render-header="renderSelectHeader" />
+            <el-table-column prop="name" label="名称" min-width="150">
               <template slot-scope="scope">
                 <svg-icon
                   :icon-class="scope.row.directory ? 'folder' : 'board'"
@@ -74,7 +75,7 @@
             <el-table-column
               prop="publishStatus"
               label="发布状态"
-              min-width="120"
+              min-width="80"
               show-overflow-tooltip
             >
               <template slot-scope="scope">
@@ -85,15 +86,25 @@
                 <div v-else>-</div>
               </template>
             </el-table-column>
-            <el-table-column prop="ownerName" label="创建者" min-width="120" />
+            <el-table-column
+              v-if="onSearched"
+              prop="path"
+              label="文件路径"
+              min-width="120"
+            >
+              <template slot-scope="scope">
+                <div style="color:#4393F4;">{{ scope.row.path }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="ownerName" label="创建者" min-width="60" />
             <el-table-column
               prop="lastUpdatedTime"
               label="修改时间"
-              min-width="150"
+              min-width="100"
               show-overflow-tooltip
             >
               <template slot-scope="scope">
-                {{ scope.row.lastUpdatedTime }}
+                {{ formatTime( scope.row ) }}
               </template>
             </el-table-column>
             <el-table-column label="操作">
@@ -107,6 +118,8 @@
                   <span v-if="scope.row.directory" @click="deleteData(scope.row)">删除</span>
                   <el-divider v-if="!scope.row.directory" direction="vertical" />
                   <span v-if="!scope.row.directory" @click="editDashboardAttribute(scope.row)">属性</span>
+                  <el-divider v-if="!scope.row.directory" direction="vertical" />
+                  <span v-if="!scope.row.directory" @click="edit(scope.row)">预览</span>
                   <el-divider v-if="!scope.row.directory" direction="vertical" />
                   <el-dropdown v-if="!scope.row.directory" class="data-more">
                     <span>更多</span>
@@ -142,7 +155,8 @@
         >
           <div class="data-set-didlog-del">
             <svg-icon icon-class="warning" style="margin-right: 16px" />
-            <span>确定删除该{{ cureentData && cureentData.directory ? '文件夹' : '仪表板' }}吗？</span>
+            <span v-if="cureentData && cureentData.directory && cureentData.childNode.length > 0">该文件夹下面有仪表板，请移除后再删除</span>
+            <span v-else>确定删除该{{ cureentData && cureentData.directory ? '文件夹' : '仪表板' }}吗？</span>
           </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="deleteDataVisible = false">取 消</el-button>
@@ -327,7 +341,8 @@ export default {
       users: [],
       currentShareInfo: null,
       treeVisible: false,
-      moveDashboardIds: []
+      moveDashboardIds: [],
+      onSearched: false
     }
   },
   computed: {
@@ -356,12 +371,23 @@ export default {
       this.dataLoading = true
       try {
         const data = await getDashboardList('isPaging=0' + searchkey)
-        this.tableData = data.result.map(item => {
-          return {
-            ...item,
-            lastUpdatedTime: item.lastUpdatedTime ? moment.utc(item.lastUpdatedTime).local().format('YYYY-MM-DD HH:mm:ss') : '-'
-          }
-        })
+        const result = data.result
+        if (searchkey) {
+          const temp = []
+          result.forEach(item => {
+            if (item.directory) {
+              item.childNode.forEach(child => {
+                temp.push({ ...child, path: `根目录/${item.name}` })
+              })
+            } else {
+              temp.push({ ...item, path: '根目录' })
+            }
+          })
+          this.tableData = temp
+        } else {
+          this.tableData = result
+        }
+        this.onSearched = !!searchkey
       } catch (error) {
         console.log(error)
       }
@@ -401,6 +427,10 @@ export default {
     handleSelectionChange(val) {
       console.log(val, '多选')
       this.multipleSelection = val
+    },
+    handleSelectAll(val) {
+      console.log(val, '多选')
+      // this.multipleSelection = val
     },
     // 取消选择
     clearSelection() {
@@ -464,10 +494,15 @@ export default {
       this.deleteDataVisible = true
     },
     async hanledeleteData() {
-      const id = this.cureentData._id
+      const { _id, directory, childNode } = this.cureentData
+      if (directory && childNode.length > 0) {
+        this.deleteDataVisible = false
+        this.cureentData = null
+        return
+      }
       const params = {
         resources: [{
-          id,
+          id: _id,
           directory: !!this.cureentData.directory
         }]
       }
@@ -537,7 +572,7 @@ export default {
       }
     },
     copyShareUrl() {
-      if (!navigator.clipboard) {
+      if (navigator.clipboard) {
         navigator.clipboard.writeText(this.currentShareInfo.shareUrl)
         this.$message.success('复制成功')
       } else {
@@ -593,6 +628,14 @@ export default {
         this.cureentData = null
         this.init()
       }
+    },
+    renderSelectHeader(h) {
+      return h('span', {}, [
+        h('el-checkbox', { props: { disabled: true } })
+      ])
+    },
+    formatTime(row) {
+      return row.lastUpdatedTime ? moment.utc(row.lastUpdatedTime).local().format('YYYY-MM-DD HH:mm:ss') : '-'
     }
   }
 }
