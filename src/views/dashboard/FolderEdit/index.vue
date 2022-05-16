@@ -3,6 +3,7 @@
     :title=" !data ? '新建文件夹' : '编辑文件夹'"
     :visible.sync="visible"
     width="30%"
+    @close="close"
   >
     <div class="create-folder">
       <div style="line-height: 32px; width: 90px"><span>文件夹名称</span></div>

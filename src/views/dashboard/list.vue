@@ -93,7 +93,7 @@
               show-overflow-tooltip
             >
               <template slot-scope="scope">
-                {{ scope.row.lastUpdatedTime | dateFilter }}
+                {{ scope.row.lastUpdatedTime }}
               </template>
             </el-table-column>
             <el-table-column label="操作">
@@ -356,7 +356,12 @@ export default {
       this.dataLoading = true
       try {
         const data = await getDashboardList('isPaging=0' + searchkey)
-        this.tableData = data.result
+        this.tableData = data.result.map(item => {
+          return {
+            ...item,
+            lastUpdatedTime: item.lastUpdatedTime ? moment.utc(item.lastUpdatedTime).local().format('YYYY-MM-DD HH:mm:ss') : '-'
+          }
+        })
       } catch (error) {
         console.log(error)
       }
@@ -532,9 +537,20 @@ export default {
       }
     },
     copyShareUrl() {
-      if (navigator.clipboard) {
+      if (!navigator.clipboard) {
         navigator.clipboard.writeText(this.currentShareInfo.shareUrl)
         this.$message.success('复制成功')
+      } else {
+        const textarea = document.createElement('textarea')
+        document.body.appendChild(textarea)
+        textarea.style.position = 'fixed'
+        textarea.style.clip = 'rect(0 0 0 0)'
+        textarea.style.top = '10px'
+        textarea.value = this.currentShareInfo.shareUrl
+        textarea.select()
+        document.execCommand('copy', true)
+        this.$message.success('复制成功')
+        document.body.removeChild(textarea)
       }
     },
     shareDateChange(e) {

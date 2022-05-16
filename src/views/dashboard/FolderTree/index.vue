@@ -24,7 +24,7 @@
               @click="selectFolder(item)"
             >
               <svg-icon
-                icon-class="floder"
+                icon-class="folder"
                 style="margin-right: 8px"
               />
               {{ item.name }}
