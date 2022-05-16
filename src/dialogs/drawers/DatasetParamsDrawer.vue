@@ -3,7 +3,7 @@
     title="参数配置"
     :before-close="handleCloseSettingParam"
     :wrapper-closable="false"
-    :size="560"
+    :size="630"
     :visible.sync="dialogVisible"
   >
     <div class="set-param-drawer">
@@ -17,13 +17,13 @@
           <el-table-column
             prop="type"
             label="类型"
-            width="120"
+            width="80"
             show-overflow-tooltip
           />
           <el-table-column
             prop="name"
             label="变量名"
-            width="120"
+            width="70"
             show-overflow-tooltip
           />
           <el-table-column
@@ -55,8 +55,13 @@
           </el-table-column>
           <el-table-column
             label="查询默认值"
-            width="360"
+            width="260"
           >
+            <template #header>
+              <span>查询默认值</span><el-tooltip class="item" effect="dark" content="默认值生效范围支持“仅编辑页”和“全局生效”两种模式：仅编辑页-只在数据集编辑页生效，全局生效-在仪表板等下游也生效" placement="top">
+                <svg-icon style="cursor:pointer" icon-class="data-type-info" />
+              </el-tooltip>
+            </template>
             <template slot-scope="scope">
               <div style="display: flex">
                 <el-select
@@ -72,15 +77,16 @@
                 </el-select>
                 <el-input
                   v-model="scope.row.defaultValue"
+                  class="default-value"
                   style="margin-left: 8px"
-                  placeholder="请输入内容"
+                  placeholder="请输入默认值"
                 />
               </div>
             </template>
           </el-table-column>
           <el-table-column
             label="操作"
-            min-width="80"
+            width="50"
           >
             <template slot-scope="scope">
               <svg-icon
@@ -223,14 +229,21 @@ export default {
   }
 }
 
-.el-select .el-input__prefix {
-  left: 7px;
-  line-height: 32px;
-  font-size: 13px;
-  .svg-icon {
-    width: 20px;
+::v-deep .el-select {
+  width: 106px;
+  .el-input__prefix {
+    left: 7px;
+    line-height: 32px;
+    font-size: 13px;
+    .svg-icon {
+      width: 20px;
+    }
   }
 }
+::v-deep .default-value.el-input {
+  width: 140px;
+}
+
 .el-select-dropdown__item {
   padding: 0 12px;
   font-size: 12px;
