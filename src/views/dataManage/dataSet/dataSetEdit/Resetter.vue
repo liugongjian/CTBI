@@ -69,7 +69,7 @@
                   :active-tag-name="activeTagName"
                   :data="data"
                   :fields="fields"
-                  @reset="getDimensionMeasureData(fields)"
+                  @reset="getDimensionMeasureData(fields);refreshPreview();"
                 />
               </div>
             </div>
@@ -98,7 +98,7 @@
               >
                 <el-table-column
                   v-if="(v.attributes && !v.attributes[0].isHidden)"
-                  :prop="v.column"
+                  :prop="v.displayColumn"
                   width="95"
                   class-name="column-child"
                   :label="v.displayColumn"
@@ -120,7 +120,7 @@
                         :active-tag-name="activeTagName"
                         :data="v"
                         :fields="fields"
-                        @reset="getDimensionMeasureData(fields)"
+                        @reset="getDimensionMeasureData(fields);refreshPreview();"
                       />
                     </div>
                   </template>
