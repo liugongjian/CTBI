@@ -560,7 +560,7 @@ export default {
     },
     async executeShare (endDate) {
       try {
-        const shareEndTime = endDate || moment().add(2, 'days').format('YYYY-MM-DD')
+        const shareEndTime = endDate || moment().add(1, 'days').format('YYYY-MM-DD')
         const params = {
           _id: this.cureentData._id,
           shareEndTime
