@@ -146,3 +146,49 @@ export const getDateTime = () => {
   dateSeconds = dateSeconds < 10 ? '0' + dateSeconds : dateSeconds
   return dateYear + '-' + dateMonth + '-' + dateDate + ' ' + dateHours + ':' + dateMinutes + ':' + dateSeconds
 }
+
+/**
+ * 将维度和度量的数据进行转换为图表需要的数据
+ * @param {Array} data
+ * @returns {Array}
+ */
+export const formatDataValue = function (data) {
+  const dataValue = []
+  data.forEach(item => {
+    if (item.fields[0].type === 'Dimension') {
+      const dataOption = []
+      item.data.forEach(ele => {
+        dataOption.push(ele[item.fields[0].displayColumn])
+      })
+      dataOption.unshift(item.fields[0].displayColumn)
+      dataValue.unshift(dataOption)
+    } else {
+      const dataOption = []
+      item.data.forEach(ele => {
+        dataOption.push(ele[item.fields[0].displayColumn])
+      })
+      dataOption.unshift(item.fields[0].displayColumn)
+      dataValue.push(dataOption)
+    }
+  })
+  return dataValue
+}
+
+/**
+ * 将字段类型转换为图标
+ * @param {String} type
+ * @returns {String}
+ */
+export const transformDataTypeIcon = function (type) {
+  if (type.indexOf('text') > -1 ||
+    type.indexOf('char') > -1 ||
+    type.indexOf('varChar') > -1 ||
+    type.indexOf('varchar') > -1) {
+    return 'data-type-option-text'
+  } else if (type.indexOf('date') > -1 || type.indexOf('time') > -1) {
+    return 'data-type-option-date'
+  } else if (type.indexOf('int') > -1 || type.indexOf('number') > -1) {
+    return 'data-type-option-number'
+  }
+  return ''
+}

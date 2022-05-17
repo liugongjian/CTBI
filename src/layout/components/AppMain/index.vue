@@ -4,7 +4,20 @@
       name="fade-transform"
       mode="out-in"
     >
+      <keep-alive>
+        <router-view
+          v-if="$route.meta.keepAlive"
+          id="main-page"
+          :key="key"
+        />
+      </keep-alive>
+    </transition>
+    <transition
+      name="fade-transform"
+      mode="out-in"
+    >
       <router-view
+        v-if="!$route.meta.keepAlive"
         id="main-page"
         :key="key"
       />

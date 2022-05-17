@@ -7,9 +7,10 @@
   >
     <span
       class="ellipsis-text"
-      :style="{width: width + 'px'}"
+      :style="{width: width}"
       @mouseenter="visibilityChange($event)"
-    >{{ content }}</span>
+      v-html="content"
+    />
   </el-tooltip>
 </template>
 
@@ -30,7 +31,7 @@ export default {
     },
     width: {
       type: String,
-      default: '130'
+      default: '130px'
     },
     effect: {
       type: String,
@@ -64,5 +65,6 @@ export default {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

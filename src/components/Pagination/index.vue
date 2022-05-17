@@ -91,14 +91,24 @@ export default {
 }
 </script>
 
+<style>
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: #FA8334;
+  border: 1px solid #FA8334;
+}
+.el-pagination.is-background .el-pager li:not(.disabled) {
+  background-color: #FFF;
+}
+.el-pagination .btn-next,
+.el-pagination .btn-prev {
+  background-color: #FFF !important;
+}
+</style>
 <style scoped>
 .pagination-container {
   background: #fff;
   padding: 15px 16px;
 }
-/* .el-pagination.is-background .el-pager li:not(.disabled).active {
-  background-color: #FA8334;
-} */
 .pagination-container.hidden {
   display: none;
 }

@@ -2,7 +2,7 @@
   <div>
     <el-dialog :append-to-body="true" title="重置密码" :visible.sync="visible" :close-on-click-modal="false" width="40%" @close="handleClose">
       <div v-loading="loading">
-        <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form ref="form" :model="form" :rules="rules" label-width="100px" @submit.native.prevent>
           <el-form-item>
             <template #label>
               <span>
@@ -23,7 +23,7 @@
                 />
                 <div slot="content">
                   <div>1. 密码为数字、大写字母、小写字母、特殊符号（@$!%*#_~?&）的组合</div>
-                  <div>2. 长度限制为8-20位</div>
+                  <div>2. 长度限制为12-26位</div>
                   <div>3. 不能包含账号信息、字典序及键盘序</div>
                 </div>
               </el-tooltip>
@@ -34,10 +34,10 @@
             </div>
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="handleClose">取 消</el-button>
-          <el-button type="primary" @click="updatePassword">确 定</el-button>
-        </div>
+      </div>
+      <div slot="footer">
+        <el-button @click="handleClose">取 消</el-button>
+        <el-button type="primary" @click="updatePassword">确 定</el-button>
       </div>
     </el-dialog>
     <Success :success-visible.sync="successVisible" :success-data="successData" @refresh="refresh" />
@@ -106,7 +106,6 @@ export default {
               this.successVisible = true
               this.visible = false
               this.successData = { userName: this.resetData.userName, password: this.form.password }
-              console.log(this.successData)
             }
           } catch (error) {
             console.log(error)
@@ -118,8 +117,8 @@ export default {
     },
     createNewPassword () {
       const newPasswordArray = []
-      // 密码8-20位
-      const passwordLength = Math.floor(Math.random() * 13) + 8
+      // 密码12-26位
+      const passwordLength = Math.floor(Math.random() * 15) + 12
       const str = '0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM@$!%*#_~?&^'
       for (let index = 0; index < passwordLength; index++) {
         const tag = Math.floor(Math.random() * str.length)
@@ -143,7 +142,7 @@ export default {
     },
     validatePassword (rule, value, callback) {
       if (!validPassword(value)) {
-        callback(new Error('密码应包括数字、小写字母、大写字母和特殊符号四种类型字符(长度为8-26位)'))
+        callback(new Error('密码应包括数字、小写字母、大写字母和特殊符号四种类型字符(长度为12-26位)'))
         return
       }
       if (validContinuousChar(value)) {
@@ -183,10 +182,8 @@ export default {
 }
 .dialog-footer {
   display: flex;
-  justify-content: flex-end;
-  padding: 10px 20px 0;
+  justify-content: center;
   margin: 0 -20px -10px;
-  border-top: 1px solid #f1f1f1;
 }
 .info {
   font-size: 12px;

@@ -14,7 +14,6 @@
 
     <span
       slot="footer"
-      class="dialog-footer"
     >
       <el-button @click="closeSilence()">取 消</el-button>
       <el-button
@@ -27,7 +26,7 @@
 
 <script>
 import E from 'wangeditor'
-import dialogMixin from '@/dialogs/dialogMixin'
+import dialogMixin from '@/mixins/dialogMixin'
 export default {
   name: 'RTDialog',
   mixins: [dialogMixin],

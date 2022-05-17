@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Clipboard from 'clipboard'
 
-function clipboardSuccess () {
+export function clipboardSuccess () {
   Vue.prototype.$message({
     message: '复制成功',
     type: 'success',
@@ -16,17 +16,32 @@ function clipboardError () {
   })
 }
 
-export default function handleClipboard (text, event) {
-  const clipboard = new Clipboard(event.target, {
+export default function handleClipboard (text, event, success, error) {
+  const clipboard = new Clipboard(event.target.id, {
     text: () => text
   })
-  clipboard.on('success', () => {
-    clipboardSuccess()
-    clipboard.destroy()
-  })
-  clipboard.on('error', () => {
-    clipboardError()
-    clipboard.destroy()
-  })
+  if (success && typeof success === 'function') {
+    clipboard.on('success', () => {
+      success()
+      clipboard.destroy()
+    })
+  } else {
+    clipboard.on('success', () => {
+      clipboardSuccess()
+      clipboard.destroy()
+    })
+  }
+  if (error && typeof error === 'function') {
+    clipboard.on('success', () => {
+      error()
+      clipboard.destroy()
+    })
+  } else {
+    clipboard.on('error', () => {
+      clipboardError()
+      clipboard.destroy()
+    })
+  }
+
   clipboard.onClick(event)
 }

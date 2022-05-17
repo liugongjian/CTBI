@@ -1,5 +1,5 @@
 <template>
-  <div class="light-bg">
+  <div>
     <div class="page-view-warpper">
       <div class="router-name">
         <slot name="leftContent">
@@ -10,7 +10,7 @@
         <slot name="rightContent" />
       </div>
     </div>
-    <div class="main-page">
+    <div class="page-content">
       <slot />
     </div>
   </div>
@@ -33,9 +33,10 @@ export default {
   align-items: center;
   margin-bottom: 17px;
 }
-.light-bg {
-  background-color: #f1f5f8;
-  // padding: 20px;
+.page-content {
+  background-color: #fff;
+  min-height: calc(100vh - 155px);
+  padding: 16px;
 }
 .router-name {
   font-size: 12px;
