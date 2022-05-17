@@ -47,6 +47,7 @@
               style="margin-right: 9px;"
             />{{ form.file ? '重新上传' : '添加文件' }}
           </el-button>
+          <ExportFileTemplate />
           <div
             slot="tip"
             class="el-upload__tip"
@@ -70,10 +71,14 @@
 <script>
 import dialogMixin from '@/mixins/dialogMixin'
 import { uploadDataFile, isDataFileExists } from '@/api/dataSource'
+import ExportFileTemplate from '../views/dataManage/ExportFileTemplate'
 import XLSX from 'xlsx'
 
 export default {
   name: 'UploadFileDialog',
+  components: {
+    ExportFileTemplate
+  },
   mixins: [dialogMixin],
   data () {
     return {
