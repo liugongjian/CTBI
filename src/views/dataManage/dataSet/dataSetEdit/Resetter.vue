@@ -8,7 +8,7 @@
         <div class="d-f">
           <div
             :class="[{'active': activeTagName === 1}, 'tab-block']"
-            @click="activeTagName = 1"
+            @click="activeTagName = 1;refreshPreview()"
           >数据预览</div>
           <div
             :class="[{'active': activeTagName === 2}, 'tab-block']"

@@ -4,14 +4,21 @@
     width="600px"
     :visible.sync="dialogVisible"
   >
-    <el-form :model="form">
+    <el-form
+      ref="form"
+      :model="form"
+    >
       <el-form-item
         label="字段名称"
         :label-width="formLabelWidth"
+        prop="displayColumn"
+        :rules="[
+          { pattern: regex.DATASET_NAME_REGEX, message: '字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成，不超过50个字符', trigger: 'change' }
+        ]"
       >
         <el-input
           v-model="form.displayColumn"
-          maxlength="100"
+          maxlength="50"
           autocomplete="off"
         />
       </el-form-item>
@@ -39,7 +46,7 @@
       <el-button @click="closeSilence">取 消</el-button>
       <el-button
         type="primary"
-        @click="close(form)"
+        @click="checkDisplayColumn"
       >确 定</el-button>
     </div>
   </el-dialog>
@@ -47,11 +54,14 @@
 
 <script>
 import dialogMixin from '@/mixins/dialogMixin'
+import regex from '@/constants/regex'
+
 export default {
   name: 'EditDimensionMeasureDialog',
   mixins: [dialogMixin],
   data () {
     return {
+      regex: regex,
       form: {},
       formLabelWidth: '120px',
       fields: []
@@ -59,7 +69,16 @@ export default {
   },
   methods: {
     checkDisplayColumn () {
-
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          const temp = this.fields.find(item => (item.displayColumn === this.form.displayColumn && item._id !== this.form._id))
+          if (temp) {
+            this.$message.error('字段名称和其他对象存在重名，请检查！')
+          } else {
+            this.close(this.form)
+          }
+        }
+      })
     }
   }
 }
