@@ -241,7 +241,7 @@ export default {
     },
     // 更新
     async reflashStore () {
-      const dataSource = this.option.dataSource
+      const dataSource = deepClone(this.option.dataSource)
       this.dataValue = []
       for (const i in dataSource) {
         if (dataSource[i].value.length === 0) {

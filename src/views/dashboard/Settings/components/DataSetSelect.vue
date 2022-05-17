@@ -35,10 +35,10 @@
             <li
               v-for="(item,index) in selectOption"
               :key="index"
-              @click="hanldClickOption(item.id)"
+              @click="hanldClickOption(item.id,item.name)"
             ><span class="cube-list-caption">{{ item.name }}</span>
               <i
-                v-if="item.name===value"
+                v-if="item.id===dataSet.id"
                 class="el-icon-check"
               />
             </li>
@@ -50,9 +50,15 @@
         <div class="tree-box-title">
           <div><i class="el-icon-box swrapper-icon" />全部</div>
           <div class="tree-box-title-r">
-            <span class="viw-btn">预览数据</span>
+            <span
+              class="viw-btn"
+              @click="showPreview"
+            >预览数据</span>
             <el-divider direction="vertical" />
-            <span class="el-icon-refresh-right" />
+            <span
+              class="el-icon-refresh-right"
+              @click="getTreeData"
+            />
           </div>
         </div>
         <div class="tree-box-input">
@@ -67,17 +73,22 @@
             <i
               slot="suffix"
               class="el-input__icon el-icon-close"
-              @click="filterValue=''"
+              @click="filterText=''"
             />
           </el-input>
         </div>
-        <div class="tree-box-option">
+        <div
+          v-loading="dataLoading"
+          class="tree-box-option"
+        >
           <el-tree
             ref="tree"
+            node-key="_id"
+            :data="treeData"
+            :current-node-key="dataSet.id"
+            highlight-current
             :props="defaultProps"
             :filter-node-method="filterNode"
-            :load="loadNode"
-            lazy
             @node-click="clickTreeNode"
           />
 
@@ -87,13 +98,10 @@
 
       <!-- 功能菜单模块 -->
       <div class="select-option-menu">
-        <button class="add-cube" @click="editDataSet">新建数据集</button>
-        <el-upload
-          class="upload-demo"
-          action="#"
-        >
-          <button class="upload-file">上传本地文件</button>
-        </el-upload>
+        <button
+          class="add-cube"
+          @click="addDataSet"
+        >新建数据集</button>
       </div>
       <!-- 功能菜单模块END -->
 
@@ -103,45 +111,64 @@
 </template>
 
 <script>
-import { getDataSetsFolders } from '@/api/dataSet'
+import { getFullList } from '@/api/dataSet'
+import store from '@/store'
 export default {
   name: 'DataSetSelect',
+  props: {
+    option: {
+      type: Object,
+      default: () => { }
+    },
+    dataSet: {
+      type: Object,
+      default: () => { }
+    }
+  },
   data () {
     return {
-      value: '',
+      treeData: [], // 树形数据
       showOption: false, // 是否展示选项
-      showOptionList: false, // 是否展示已使用选项
-      selectOption: [], // 已使用的选项
+      showOptionList: true, // 是否展示已使用选项
       filterText: '', // 树形过滤
+      dataLoading: false,
       defaultProps: {
         children: 'children',
         label: 'name',
-        isLeaf: 'leaf',
-        id: 'id'
-      }
+        id: '_id'
+      },
+      layout: [] // layout数据
     }
   },
   computed: {
+    // 选中数据集的名称
     selectValueName () {
       const option = this.selectOption.find(item => {
-        if (item.id === this.value) {
-          return item
-        }
+        return item.id === this.dataSet.id
       })
       return option?.name || '请选择数据集'
+    },
+    // 已使用选项
+    selectOption () {
+      const option = []
+      this.layout.forEach(item => {
+        if (item.option.dataSet.id) {
+          option.push(item.option.dataSet)
+        }
+      })
+      return option
     }
   },
   watch: {
     filterText (val) {
       this.$refs.tree.filter(val)
     },
-    value: {
+    dataSet: {
       handler (val) {
-        if (val) {
-          this.$emit('reflashValue', val)
-        }
+        this.$emit('reflashValue', val.id)
       },
-      immediate: true
+      immediate: true,
+      deep: true
     }
   },
   created () {
@@ -154,77 +181,75 @@ export default {
         }
       }
     })
+    this.getTreeData()
+    this.layout = store.state.app.layout
   },
   methods: {
-    // 加载树形数据
-    loadNode (node, resolve) {
-      const that = this
-      if (node.level === 0) {
-        that.loadTreeData(resolve)
-      }
-      if (node.level >= 1) {
-        that.loadChildData(node.data.id, resolve)
-      }
-    },
-    // 获取树形父节点数据
-    async loadTreeData (resolve) {
+    // 获取数据集树形数据
+    async getTreeData () {
       try {
-        const data = await getDataSetsFolders()
-        data.forEach(item => {
-          item.id = item._id
-          item.leaf = !item.isFolder
-          item.name = item.displayName || item.name
-        })
-        resolve(data)
+        this.dataLoading = true
+        const res = await getFullList()
+        this.treeData = res
+        this.dataLoading = false
       } catch (error) {
         console.log(error)
       }
     },
-    // 获取树形子节点数据
-    async loadChildData (folderId, resolve) {
-      try {
-        const data = await getDataSetsFolders({ folderId })
-        data.forEach(item => {
-          item.id = item._id
-          item.leaf = !item.isFolder
-          item.name = item.displayName
-        })
-        resolve(data)
-      } catch (error) {
-        console.log(error)
-      }
-    },
+
     // 点击已使用选项
-    hanldClickOption (id) {
-      this.value = id
+    hanldClickOption (id, name) {
+      this.dataSet.id = id
+      this.dataSet.name = name
       this.showOption = false
+      // 清空dataSource的数据
+      const option = this.option
+      for (const i in option) {
+        option[i]['value'] = []
+      }
     },
     // 点击树节点
     clickTreeNode (node) {
+      // 判断是否点击的不是文件夹
       if (!node.isFolder) {
-        const data = this.selectOption.find(item => {
-          if (item.id === node.id) {
-            return item
-          }
-        })
-        if (!data) {
-          this.selectOption.push(node)
-        }
-        this.value = node.id
+        this.dataSet.id = node._id
+        this.dataSet.name = node.name
         this.showOption = false
+        // 清空dataSource的数据
+        const option = this.option
+        for (const i in option) {
+          option[i]['value'] = []
+        }
       } else {
         return
       }
     },
+    // 过滤数据
     filterNode (value, data) {
       if (!value) return true
       return data.name.indexOf(value) !== -1
     },
-    // 跳转到编辑数据集页面
-    editDataSet () {
+    // 跳转到新建数据集页面
+    addDataSet () {
       this.$router.push({
         path: '/dataManage/dataSet/edit'
       })
+    },
+    // 预览数据
+    showPreview () {
+      this.showOption = false
+      this.$dialog.show('DataSetPreviewDialog', {
+        treeData: this.treeData,
+        selectOption: this.selectOption,
+        defaultProps: this.defaultProps,
+        dataSet: this.dataSet
+      }, this.callback)
+    },
+
+    // 预览数据弹窗返回值
+    callback (val) {
+      this.dataSet.id = val.id
+      this.dataSet.name = val.name
     }
   }
 }
@@ -395,19 +420,17 @@ $base-bgc: #2e74ff;
     margin-right: 8px;
     flex: 1;
   }
-  .upload-demo {
-    flex: 1;
-  }
-  .upload-file {
-    width: 100%;
-    background-color: transparent;
-    border: 1px solid hsla(0, 0%, 100%, 0.2);
-  }
 }
 ::v-deep .el-upload--text {
   width: 100%;
 }
 ::v-deep .el-tree-node.is-current > .el-tree-node__content {
+  background-color: $base-bgc;
+}
+::v-deep
+  .el-tree--highlight-current
+  .el-tree-node.is-current
+  > .el-tree-node__content {
   background-color: $base-bgc;
 }
 button {
