@@ -5,14 +5,11 @@
     width="30%"
     @close="close"
   >
-    <div class="create-folder">
-      <div style="line-height: 32px; width: 90px"><span>文件夹名称</span></div>
-      <el-input
-        v-model="newFolderName"
-        placeholder="请输入文件夹名称"
-        style="margin-left: 12px;height: 32px"
-      />
-    </div>
+    <el-form ref="ruleForm" :model="formData" :rules="rules" label-width="100px">
+      <el-form-item label="文件夹名称" prop="name">
+        <el-input v-model="formData.name" placeholder="请输入文件夹名称" />
+      </el-form-item>
+    </el-form>
     <span
       slot="footer"
       class="dialog-footer"
@@ -39,8 +36,28 @@ export default {
     handleAction: Function
   },
   data () {
+    const validateName = (rule, value, callback) => {
+      const name = value.trim()
+      if (name === '') {
+        callback(new Error('请输入文件夹名称'))
+      } else {
+        const reg = /^[\u4e00-\u9fa5\w]{1,50}$/
+        if (!reg.test(name)) {
+          callback(new Error('支持中文、英文、数字及下划线, 长度不超过50'))
+        } else {
+          callback()
+        }
+      }
+    }
     return {
-      newFolderName: ''
+      formData: {
+        name: ''
+      },
+      rules: {
+        name: [
+          { validator: validateName, trigger: 'blur' }
+        ]
+      }
     }
   },
   computed: {},
@@ -48,7 +65,11 @@ export default {
     data: {
       handler (newVal) {
         console.log(newVal)
-        this.newFolderName = !newVal ? '' : newVal.name
+        this.formData = !newVal ? {
+          name: ''
+        } : {
+          name: newVal.name
+        }
       }
     }
   },
@@ -57,12 +78,18 @@ export default {
     console.log(this.data)
   },
   methods: {
-    async submit () {
-      const name = this.newFolderName
-      if (!name) {
-        this.$message.warning('文件夹名称必填')
-        return
-      }
+    submit() {
+      this.$refs['ruleForm'].validate((valid) => {
+        if (valid) {
+          this.executeSubmit()
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    async executeSubmit () {
+      const name = this.formData.name.trim()
       const isEdit = this.data && this.data._id
       const body = isEdit ? {
         id: this.data._id,
@@ -77,16 +104,20 @@ export default {
         } else {
           await createFolder(body)
         }
-        this.newFolderName = ''
+        this.resetForm()
         this.$emit('handleAction', isEdit ? '重命名成功' : '创建成功')
       } catch (error) {
         console.log(error)
       }
     },
     close() {
-      this.newFolderName = ''
+      this.resetForm()
       this.$emit('handleAction', 'cancel')
+    },
+    resetForm() {
+      this.$refs['ruleForm'].resetFields()
     }
+
   }
 }
 </script>
