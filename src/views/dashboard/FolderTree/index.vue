@@ -15,7 +15,17 @@
         <div
           class="move-to-drawer-main-content"
         >
-          <span class="move-to-drawer-main-content-root">根目录</span>
+          <div
+            class="move-to-drawer-main-content-root"
+            :class="{'select-actived': selectFolderId === '-1' }"
+            @click="selectFolder({id: '-1'})"
+          >
+            <svg-icon
+              icon-class="folder"
+              style="margin-right: 8px"
+            />
+            根目录
+          </div>
           <ul>
             <li
               v-for="item in folderList"
@@ -24,7 +34,7 @@
               @click="selectFolder(item)"
             >
               <svg-icon
-                icon-class="floder"
+                icon-class="folder"
                 style="margin-right: 8px"
               />
               {{ item.name }}
@@ -87,11 +97,19 @@ export default {
     // 搜索
     searchfolder: _.debounce(function() {
       const searchkey = this.searchKey
-      this.folderList = this.originList.filter(item => {
+      const result = this.originList.filter(item => {
         return item.name.includes(searchkey)
       })
+      this.folderList = result
+      if (this.selectFolderId && this.selectFolderId !== '-1' && result.findIndex(item => item.id === this.selectFolderId)) {
+        this.selectFolderId = ''
+      }
     }, 500),
     async handleMoveTo () {
+      if (!this.selectFolderId) {
+        this.$message.warning('请选中文件夹')
+        return
+      }
       this.loading = true
       try {
         const data = await moveDashboardToFolder({
@@ -128,12 +146,15 @@ export default {
     padding: 24px;
     &-content {
       &-root {
-        display: inline-block;
+        display: flex;
         height: 30px;
-        line-height: 30px;
+        justify-content: flex-start;
+        align-items: center;
         margin-top: 6px;
         font-size: 12px;
         color: rgba(0, 0, 0, 0.65);
+        cursor: pointer;
+        padding-left: 10px;
       }
       ul > li {
         list-style: none;
@@ -142,7 +163,7 @@ export default {
         margin-bottom: 8px;
         font-size: 12px;
         color: rgba(0, 0, 0, 0.65);
-        padding-left: 20px;
+        padding-left: 25px;
         cursor: pointer;
       }
       .select-actived {
