@@ -2,16 +2,18 @@
   <el-dialog
     :title="title"
     :visible.sync="dialogVisible"
-    width="30%"
+    :close-on-click-modal="false"
+    width="50%"
   >
     <el-form
       ref="ruleForm"
       :rules="rules"
       :model="form"
       label-width="90px"
+      @submit.native.prevent
     >
       <el-form-item
-        label="活动名称"
+        label="名称"
         prop="name"
       >
         <el-input
@@ -22,7 +24,7 @@
         />
       </el-form-item>
       <div style="padding-left: 90px;margin-top:8px;font-size: 12px;color: rgba(0, 0, 0, 0.45);">
-        <span>名称只能由中英文、数字及下划线(_)、斜线(/)、反斜线(\)、竖线(|)、 小括号(())、中括号([])组成，不超过50个字符。</span>
+        <span>名称只能由中英文、数字及下划线(_)组成，不超过50个字符。</span>
       </div>
     </el-form>
 
@@ -56,7 +58,7 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入数据集名称', trigger: 'change' },
-          { pattern: regex.STRING_REGEX2, message: '名称输入有误，请参考下方提示', trigger: 'change' }
+          { pattern: regex.FOLDER_REGEX, message: '名称输入有误，请参考下方提示', trigger: 'change' }
         ]
       },
       title: '新建文件夹'
@@ -78,10 +80,7 @@ export default {
       })
     },
     async handlerCreate () {
-      const body = {
-        type: 'dataSet',
-        name: this.newFolderName
-      }
+      const body = Object.assign({ type: 'dataSet' }, this.form)
       try {
         const data = await createFolders(body)
         this.$message.success(data)
@@ -93,7 +92,7 @@ export default {
     async handlerUpdate () {
       const id = this.form._id
       const body = {
-        name: this.name
+        name: this.form.name
       }
       try {
         const data = await updateFolderName(id, body)

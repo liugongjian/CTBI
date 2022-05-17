@@ -124,5 +124,10 @@ a {
 
 .CodeMirror {
   height: 100% !important;
-  background-color: #F0F2F4 !important;
+  background-color: #F0F2F4;
+}
+
+.el-input__inner {
+  border-radius: 2px !important;
+  border: 1px solid #DDDDDD;
 }

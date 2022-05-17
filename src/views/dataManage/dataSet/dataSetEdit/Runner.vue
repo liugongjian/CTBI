@@ -106,9 +106,19 @@
           >
             <template slot-scope="scope">
               <div v-if="scope.row.result == 'success'">
+                <el-badge
+                  is-dot
+                  style="top: 4px;margin-right: 6px;"
+                  type="success"
+                />
                 <span>成功</span>
               </div>
               <div v-else>
+                <el-badge
+                  is-dot
+                  style="top: 4px;margin-right: 6px;"
+                  type="danger"
+                />
                 <span>失败</span>
               </div>
             </template>
@@ -120,6 +130,7 @@
             <template slot-scope="scope">
               <el-button
                 type="text"
+                fixed="right"
                 @click="copyHistoryLog(scope.row, $event)"
               >复制</el-button>
             </template>

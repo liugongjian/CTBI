@@ -20,3 +20,13 @@
         }
     }
 }
+.el-message-box__title {
+    font-family: PingFangSC-Medium;
+    font-size: 16px !important;
+}
+.el-table tbody tr:hover>td {
+    background-color: #FEF5EE !important;
+}
+.el-table__body .el-table__row.hover-row td {
+    background-color: #FEF5EE !important;
+}
