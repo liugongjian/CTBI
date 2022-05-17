@@ -223,6 +223,7 @@ export default {
         // element lazy数据会被缓存，需要清理
         if (this.dataList.length > 0) {
           this.$set(this.$refs.multipleTable.store.states, 'lazyTreeNodeMap', {})
+          this.$set(this.$refs.multipleTable.store.states, 'treeData', {})
         }
         this.setResult(data, data.length)
       } catch (error) {
