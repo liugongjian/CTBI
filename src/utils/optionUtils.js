@@ -154,6 +154,22 @@ export const getDateTime = () => {
  */
 export const formatDataValue = function (data) {
   const dataValue = []
+  const temp = []
+  data.forEach((item, index) => {
+    temp.push(item.fields[0].displayColumn)
+  })
+  dataValue.push(temp)
+  for (let j = 0; j < data[0].data.length; j++) {
+    const temp1 = []
+    for (let i = 0; i < data.length; i++) {
+      temp1.push(data[i].data[j][data[i].fields[0].displayColumn])
+    }
+    dataValue.push(temp1)
+  }
+  return dataValue
+}
+export const formatDataValue1 = function (data) {
+  const dataValue = []
   data.forEach(item => {
     if (item.fields[0].type === 'Dimension') {
       const dataOption = []
