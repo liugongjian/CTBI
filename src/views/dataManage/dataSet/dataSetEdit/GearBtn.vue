@@ -112,6 +112,7 @@ export default {
       this.fields.splice(index + 1, 0, copyItem)
       this.$emit('reset')
     },
+    // 递归名称复制
     copyName (name, arr, i = 0, reName = '') {
       reName = reName || name + '_${copyIndex}'
       const temp = arr.find(item => item.displayColumn === name)
@@ -144,6 +145,11 @@ export default {
       } else {
         data.type = 'Measure'
       }
+      // 将字段放到最后
+      const index = this.fields.findIndex(field => { return data.index === field.index })
+      this.fields.splice(index, 1)
+      this.fields.push(data)
+
       this.$emit('reset')
     },
     // 获取切换文本
