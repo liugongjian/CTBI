@@ -77,9 +77,11 @@
         </div>
 
         <!-- right -->
+        <!-- gutter-th 由于表头与表体不对齐，el-table会默认追加gutter，这边选择隐藏 -->
         <div class="data-preview-right">
           <el-table
             :data="dimensionMeasureTableData"
+            class="gutter-th"
             :height="tableHeight"
             empty-text=" "
             style="width: 100%"
@@ -238,7 +240,8 @@
           </el-table-column>
           <el-table-column
             label="操作"
-            min-width="200"
+            fixed="right"
+            min-width="120"
           >
             <template slot-scope="scope">
               <div v-if="scope.row._id !== 1 && scope.row._id !== 2">
@@ -529,6 +532,17 @@ export default {
     }
   }
 }
+
+// 由于表头与表体不对齐，el-table会默认追加gutter，这边选择隐藏
+::v-deep .gutter-th {
+  .is-group.has-gutter {
+    tr th.gutter {
+      display: none !important;
+      width: 0px !important;
+    }
+  }
+}
+
 .left-divider {
   position: absolute;
   width: 4px;
