@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="page-view-warpper">
-      <div class="router-name">
+    <div class="page-view-wrapper">
+      <!-- <div class="router-name">
         <slot name="leftContent">
           {{ routerName }}
         </slot>
-      </div>
+      </div> -->
       <div class="right-content">
         <slot name="rightContent" />
       </div>
@@ -27,15 +27,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.page-view-warpper {
+.page-view-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 17px;
 }
 .page-content {
   background-color: #fff;
-  min-height: calc(100vh - 155px);
+  min-height: calc(100vh - 120px);
   padding: 16px;
 }
 .router-name {

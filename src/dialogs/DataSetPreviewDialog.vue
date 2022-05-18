@@ -52,7 +52,7 @@
                 @click="hanldClickOption(item.id,item.name)"
               ><span class="cube-list-caption">{{ item.name }}</span>
                 <i
-                  v-if="item.id===dataSet.id"
+                  v-if="item.id===dataSetValue.id"
                   class="el-icon-check"
                 />
               </li>
@@ -153,6 +153,7 @@ export default {
   created () {
     // 初始化
     if (this.dataSet.id) {
+      this.dataSetValue = JSON.parse(JSON.stringify(this.dataSet))
       this.getTableData(this.dataSet.id)
       this.$nextTick(() => {
         this.defaultExpand = []
