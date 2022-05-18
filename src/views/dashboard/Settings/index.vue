@@ -89,6 +89,7 @@
           v-show="showData"
           style="height:calc(100vh - 190px)"
           :option="option.dataSource"
+          :data-set="option.dataSet"
         />
       </div>
     </div>

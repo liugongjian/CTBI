@@ -9,7 +9,7 @@ const apps = [
     path: '/dashboard/',
     name: 'dashboard',
     component: () => import('@/views/dashboard/index.vue'),
-    meta: { title: '仪表盘', icon: 'dashboard', affix: true }
+    meta: { title: '仪表盘', icon: 'dashboard', affix: true, keepAlive: true }
   },
   {
     path: '/dashboardList/',

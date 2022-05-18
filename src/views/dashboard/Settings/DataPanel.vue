@@ -3,7 +3,11 @@
     <div class="cube-switch">
       <div class="j-select-cube">
         <div class="guid-tip-container">
-          <data-set-select @reflashValue="reflashValue" />
+          <data-set-select
+            :data-set="dataSet"
+            :option="option"
+            @reflashValue="reflashValue"
+          />
         </div>
         <div
           v-show="Dimension.length>0||Measure.length>0"
@@ -15,72 +19,71 @@
         </div>
       </div>
     </div>
-    <div
-      v-show="Dimension.length>0||Measure.length>0"
-      v-loading="dataSetLoading"
-      class="data-panel-tree"
-    >
-      <el-input
-        v-model="filterText"
-        prefix-icon="el-icon-search"
-        placeholder="输入关键字搜索"
-      />
-      <div class="tree-wrapper">
-        <div class="data-panel-dimension-tree">
-          <div class="data-panel-tree-title">
-            <div>维度<i class="el-icon-warning-outline m-l-10" /></div>
-          </div>
-          <el-tree
-            ref="tree"
-            class="filter-tree"
-            :data="Dimension"
-            :props="defaultProps"
-            default-expand-all
-            :allow-drop="allowDrop"
-            :allow-drag="allowDrag"
-            :filter-node-method="filterNode"
-            draggable
-            @node-drag-start="handleDragStart"
-          >
-            <span
-              slot-scope="{ node, data }"
-              class="custom-tree-node"
-              style="width:100%;"
-              @dblclick="addItem(data)"
+    <div v-loading="dataSetLoading">
+      <div
+        v-show="Dimension.length>0||Measure.length>0"
+        class="data-panel-tree"
+      >
+        <el-input
+          v-model="filterText"
+          prefix-icon="el-icon-search"
+          placeholder="输入关键字搜索"
+        />
+        <div class="tree-wrapper">
+          <div class="data-panel-dimension-tree">
+            <div class="data-panel-tree-title">
+              <div>维度<i class="el-icon-warning-outline m-l-10" /></div>
+            </div>
+            <el-tree
+              ref="tree"
+              class="filter-tree"
+              :data="Dimension"
+              :props="defaultProps"
+              default-expand-all
+              :allow-drop="allowDrop"
+              :allow-drag="allowDrag"
+              :filter-node-method="filterNode"
+              draggable
+              @node-drag-start="handleDragStart"
             >
-              <span>{{ node.label }}</span>
-            </span>
-          </el-tree>
-        </div>
-        <div class="data-panel-measure-tree">
-          <div class="data-panel-tree-title">
-            <div>度量<i class="el-icon-warning-outline m-l-10" /></div>
+              <span
+                slot-scope="{ node, data }"
+                class="custom-tree-node"
+                style="width:100%;"
+                @dblclick="addItem(data)"
+              >
+                <span>{{ node.label }}</span>
+              </span>
+            </el-tree>
           </div>
-          <el-tree
-            ref="tree"
-            class="filter-tree"
-            :data="Measure"
-            :props="defaultProps"
-            default-expand-all
-            :filter-node-method="filterNode"
-            :allow-drop="allowDrop"
-            :allow-drag="allowDrag"
-            draggable
-            @node-drag-start="handleDragStart"
-          >
-            <span
-              slot-scope="{ node, data }"
-              class="custom-tree-node"
-              style="width:100%;"
-              @dblclick="addItem(data)"
+          <div class="data-panel-measure-tree">
+            <div class="data-panel-tree-title">
+              <div>度量<i class="el-icon-warning-outline m-l-10" /></div>
+            </div>
+            <el-tree
+              ref="tree"
+              class="filter-tree"
+              :data="Measure"
+              :props="defaultProps"
+              default-expand-all
+              :filter-node-method="filterNode"
+              :allow-drop="allowDrop"
+              :allow-drag="allowDrag"
+              draggable
+              @node-drag-start="handleDragStart"
             >
-              <span>{{ node.label }}</span>
-            </span>
-          </el-tree>
+              <span
+                slot-scope="{ node, data }"
+                class="custom-tree-node"
+                style="width:100%;"
+                @dblclick="addItem(data)"
+              >
+                <span>{{ node.label }}</span>
+              </span>
+            </el-tree>
+          </div>
         </div>
-
       </div>
-
     </div>
   </div>
 
@@ -96,11 +99,14 @@ export default {
     option: {
       type: Object,
       default: () => { }
+    },
+    dataSet: {
+      type: Object,
+      default: () => { }
     }
   },
   data () {
     return {
-      dataSetID: '', // 数据集ID
       filterText: '',
       Dimension: [], // 度量
       Measure: [], // 度量
@@ -120,30 +126,30 @@ export default {
   methods: {
     // 更新数据
     async reflashValue (id) {
-      this.dataSetLoading = true
-      try {
-        const res = await getDataSetData(id)
-        if (res) {
-          this.dataSetID = id
-          const dataList = res.fields
-          this.Dimension = []
-          this.Measure = []
-          dataList.forEach(item => {
-            item.dataSetID = id
-            if (item.type === 'Dimension') {
-              this.Dimension.push(item)
-            } else {
-              this.Measure.push(item)
-            }
-          })
-          const option = this.option
-          for (const i in option) {
-            option[i]['value'] = []
+      if (id) {
+        this.dataSetLoading = true
+        try {
+          const res = await getDataSetData(id)
+          if (res) {
+            const dataList = res.fields
+            this.Dimension = []
+            this.Measure = []
+            dataList.forEach(item => {
+              item.dataSetID = id
+              if (item.type === 'Dimension') {
+                this.Dimension.push(item)
+              } else {
+                this.Measure.push(item)
+              }
+            })
+            this.dataSetLoading = false
           }
-          this.dataSetLoading = false
+        } catch (error) {
+          console.log(error)
         }
-      } catch (error) {
-        console.log(error)
+      } else {
+        this.Dimension = []
+        this.Measure = []
       }
     },
     // 过滤树形数据
@@ -201,7 +207,7 @@ export default {
 
     // 跳转到编辑数据集页面
     editDataSet () {
-      const query = { _id: this.dataSetID }
+      const query = { _id: this.dataSet.id }
       this.$router.push({
         path: '/dataManage/dataSet/edit',
         query

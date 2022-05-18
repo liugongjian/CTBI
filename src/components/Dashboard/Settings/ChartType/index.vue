@@ -106,8 +106,10 @@ export default {
     changeHandler (type) {
       const storeOption = getLayoutById(store.state.app.currentLayoutId)
       const dataSource = JSON.parse(JSON.stringify(storeOption.option.dataSource))
+      const dataSet = JSON.parse(JSON.stringify(storeOption.option.dataSet))
       storeOption.option = JSON.parse(JSON.stringify(store.state.app.toolList[type]))
       storeOption.option.dataSource = dataSource
+      storeOption.option.dataSet = dataSet
       storeOption.is = type
     }
   }

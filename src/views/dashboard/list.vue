@@ -46,9 +46,10 @@
             :load="loadDashboard"
             :tree-props="{ children: 'children', hasChildren: 'directory' }"
             @select="handleSelectionChange"
+            @select-all="handleSelectAll"
           >
-            <el-table-column type="selection" width="55" />
-            <el-table-column prop="name" label="名称" min-width="200">
+            <el-table-column type="selection" width="55" :selectable="row => !row.directory" :render-header="renderSelectHeader" />
+            <el-table-column prop="name" label="名称" min-width="150">
               <template slot-scope="scope">
                 <svg-icon
                   :icon-class="scope.row.directory ? 'folder' : 'board'"
@@ -74,7 +75,7 @@
             <el-table-column
               prop="publishStatus"
               label="发布状态"
-              min-width="120"
+              min-width="80"
               show-overflow-tooltip
             >
               <template slot-scope="scope">
@@ -85,15 +86,25 @@
                 <div v-else>-</div>
               </template>
             </el-table-column>
-            <el-table-column prop="ownerName" label="创建者" min-width="120" />
+            <el-table-column
+              v-if="onSearched"
+              prop="path"
+              label="文件路径"
+              min-width="120"
+            >
+              <template slot-scope="scope">
+                <div style="color:#4393F4;">{{ scope.row.path }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="ownerName" label="创建者" min-width="60" />
             <el-table-column
               prop="lastUpdatedTime"
               label="修改时间"
-              min-width="150"
+              min-width="100"
               show-overflow-tooltip
             >
               <template slot-scope="scope">
-                {{ scope.row.lastUpdatedTime | dateFilter }}
+                {{ formatTime( scope.row ) }}
               </template>
             </el-table-column>
             <el-table-column label="操作">
@@ -107,6 +118,8 @@
                   <span v-if="scope.row.directory" @click="deleteData(scope.row)">删除</span>
                   <el-divider v-if="!scope.row.directory" direction="vertical" />
                   <span v-if="!scope.row.directory" @click="editDashboardAttribute(scope.row)">属性</span>
+                  <el-divider v-if="!scope.row.directory" direction="vertical" />
+                  <span v-if="!scope.row.directory" @click="edit(scope.row)">预览</span>
                   <el-divider v-if="!scope.row.directory" direction="vertical" />
                   <el-dropdown v-if="!scope.row.directory" class="data-more">
                     <span>更多</span>
@@ -142,7 +155,8 @@
         >
           <div class="data-set-didlog-del">
             <svg-icon icon-class="warning" style="margin-right: 16px" />
-            <span>确定删除该{{ cureentData && cureentData.directory ? '文件夹' : '仪表板' }}吗？</span>
+            <span v-if="cureentData && cureentData.directory && cureentData.childNode.length > 0">该文件夹下面有仪表板，请移除后再删除</span>
+            <span v-else>确定删除该{{ cureentData && cureentData.directory ? '文件夹' : '仪表板' }}吗？</span>
           </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="deleteDataVisible = false">取 消</el-button>
@@ -175,30 +189,22 @@
           title="属性"
           :visible.sync="dashboardAttributeVisible"
           width="480px"
+          @close="hiddenashboardAttribute"
         >
           <div class="data-set-didlog-main">
-            <el-form :model="dashboardAttr" style="padding: 0px">
-              <el-form-item label="名称" label-width="80px">
+            <el-form ref="attrForm" style="padding: 0px" :model="dashboardAttr" :rules="attrRules" label-width="40px">
+              <el-form-item label="名称" prop="name">
                 <el-input
                   v-model="dashboardAttr.name"
-                  autocomplete="off"
+                  placeholder="请输入仪表板名称"
                   style="width: 360px"
                 />
               </el-form-item>
-              <el-form-item label="所有者" label-width="80px">
-                <el-select v-model="dashboardAttr.ownerId" filterable placeholder="请选择" style="width: 360px">
-                  <el-option
-                    v-for="item in users"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="描述" label-width="80px">
+              <el-form-item label="描述" prop="description" style="margin-top: 30px">
                 <el-input
                   v-model="dashboardAttr.description"
                   type="textarea"
+                  placeholder="请输入描述，不超过200字"
                   style="width: 360px"
                 />
               </el-form-item>
@@ -206,11 +212,11 @@
           </div>
           <div slot="footer" class="dialog-footer">
             <el-button
-              @click="dashboardAttributeVisible = false"
+              @click="hiddenashboardAttribute"
             >取 消</el-button>
             <el-button
               type="primary"
-              @click="hanledashboardAttribute"
+              @click="handleDashboardAttribute"
             >确 定</el-button>
           </div>
         </el-dialog>
@@ -291,7 +297,6 @@ import {
   cancelShareDashboard,
   saveDashboard
 } from '@/api/dashboard'
-import { getList } from '@/api/userManage'
 import FolderEdit from './FolderEdit'
 import FolderTree from './FolderTree'
 import moment from 'moment'
@@ -302,6 +307,27 @@ export default {
     FolderTree
   },
   data() {
+    const validateName = (rule, value, callback) => {
+      const name = value.trim()
+      if (name === '') {
+        callback(new Error('请输入文件夹名称'))
+      } else {
+        const reg = /^[\u4e00-\u9fa5\w|\[\]\(\)\/\\]{1,50}$/
+        if (!reg.test(name)) {
+          callback(new Error('支持中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号, 长度不超过50'))
+        } else {
+          callback()
+        }
+      }
+    }
+    const validateDescription = (rule, value, callback) => {
+      const name = value && value.trim()
+      if (name && name.length > 200) {
+        callback(new Error('描述长度不超过200'))
+      } else {
+        callback()
+      }
+    }
     return {
       serachName: '',
       // 表格数据
@@ -313,8 +339,15 @@ export default {
       dashboardAttributeVisible: false,
       dashboardAttr: {
         name: '',
-        ownerId: '',
         description: ''
+      },
+      attrRules: {
+        name: [
+          { validator: validateName, trigger: 'blur' }
+        ],
+        description: [
+          { validator: validateDescription, trigger: 'blur' }
+        ]
       },
       editFloderName: '',
       currentFloder: null,
@@ -327,7 +360,8 @@ export default {
       users: [],
       currentShareInfo: null,
       treeVisible: false,
-      moveDashboardIds: []
+      moveDashboardIds: [],
+      onSearched: false
     }
   },
   computed: {
@@ -356,7 +390,23 @@ export default {
       this.dataLoading = true
       try {
         const data = await getDashboardList('isPaging=0' + searchkey)
-        this.tableData = data.result
+        const result = data.result
+        if (searchkey) {
+          const temp = []
+          result.forEach(item => {
+            if (item.directory) {
+              item.childNode.forEach(child => {
+                temp.push({ ...child, path: `根目录/${item.name}` })
+              })
+            } else {
+              temp.push({ ...item, path: '根目录' })
+            }
+          })
+          this.tableData = temp
+        } else {
+          this.tableData = result
+        }
+        this.onSearched = !!searchkey
       } catch (error) {
         console.log(error)
       }
@@ -397,6 +447,10 @@ export default {
       console.log(val, '多选')
       this.multipleSelection = val
     },
+    handleSelectAll(val) {
+      console.log(val, '多选')
+      // this.multipleSelection = val
+    },
     // 取消选择
     clearSelection() {
       this.$refs.multipleTable.clearSelection()
@@ -421,29 +475,46 @@ export default {
     loadDashboard(tree, treeNode, resolve) {
       resolve(tree.childNode)
     },
-    async editDashboardAttribute(val) {
+    editDashboardAttribute(val) {
       if (this.batchSelection) return false
-      const users = await getList({ limit: 9999 })
-      this.users = users.list.map(item => { return { id: item._id, name: item.userName } })
       this.cureentData = val
       this.dashboardAttributeVisible = true
       this.dashboardAttr.name = val.name
-      this.dashboardAttr.ownerId = val.owner
+      // this.dashboardAttr.ownerId = val.owner
       this.dashboardAttr.description = val.desc
     },
-    async hanledashboardAttribute() {
+    handleDashboardAttribute() {
+      this.$refs['attrForm'].validate((valid) => {
+        if (valid) {
+          this.executeUpDashboardAttribute()
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    resetForm() {
+      this.$refs['attrForm'].resetFields()
+    },
+    hiddenashboardAttribute() {
+      this.dashboardAttributeVisible = false
+      this.cureentData = null
+      this.resetForm()
+    },
+    async executeUpDashboardAttribute() {
       const id = this.cureentData._id
       const params = {
         id,
         type: 'dashboard',
-        ownerName: this.cureentData.name,
-        ...this.dashboardAttr
+        name: this.dashboardAttr.name.trim(),
+        description: this.dashboardAttr.description ? this.dashboardAttr.description.trim() : ''
       }
       try {
         const data = await updateFolderOrDashboardProperties(params)
         this.$message.success(data)
         this.dashboardAttributeVisible = false
         this.cureentData = null
+        this.resetForm()
         this.init()
       } catch (error) {
         console.log(error)
@@ -459,10 +530,15 @@ export default {
       this.deleteDataVisible = true
     },
     async hanledeleteData() {
-      const id = this.cureentData._id
+      const { _id, directory, childNode } = this.cureentData
+      if (directory && childNode.length > 0) {
+        this.deleteDataVisible = false
+        this.cureentData = null
+        return
+      }
       const params = {
         resources: [{
-          id,
+          id: _id,
           directory: !!this.cureentData.directory
         }]
       }
@@ -520,7 +596,7 @@ export default {
     },
     async executeShare (endDate) {
       try {
-        const shareEndTime = endDate || moment().add(2, 'days').format('YYYY-MM-DD')
+        const shareEndTime = endDate || moment().add(1, 'days').format('YYYY-MM-DD')
         const params = {
           _id: this.cureentData._id,
           shareEndTime
@@ -535,6 +611,17 @@ export default {
       if (navigator.clipboard) {
         navigator.clipboard.writeText(this.currentShareInfo.shareUrl)
         this.$message.success('复制成功')
+      } else {
+        const textarea = document.createElement('textarea')
+        document.body.appendChild(textarea)
+        textarea.style.position = 'fixed'
+        textarea.style.clip = 'rect(0 0 0 0)'
+        textarea.style.top = '10px'
+        textarea.value = this.currentShareInfo.shareUrl
+        textarea.select()
+        document.execCommand('copy', true)
+        this.$message.success('复制成功')
+        document.body.removeChild(textarea)
       }
     },
     shareDateChange(e) {
@@ -577,6 +664,14 @@ export default {
         this.cureentData = null
         this.init()
       }
+    },
+    renderSelectHeader(h) {
+      return h('span', {}, [
+        h('el-checkbox', { props: { disabled: true } })
+      ])
+    },
+    formatTime(row) {
+      return row.lastUpdatedTime ? moment.utc(row.lastUpdatedTime).local().format('YYYY-MM-DD HH:mm:ss') : '-'
     }
   }
 }
