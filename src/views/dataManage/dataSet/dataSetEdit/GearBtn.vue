@@ -55,12 +55,6 @@
         @click="copyDimensionMeasure(data)"
       >复制</el-button>
       <el-divider direction="vertical" />
-      <!-- 转换为度量&维度 -->
-      <el-button
-        type="text"
-        @click="transformType(data)"
-      >{{ getTransformText(data.type) }}</el-button>
-      <el-divider direction="vertical" />
       <el-button
         type="text"
         @click="deleteDimensionMeasure(data)"
