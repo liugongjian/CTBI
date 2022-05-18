@@ -161,7 +161,7 @@
         <el-table
           :data="dimensionMeasure"
           :height="tableHeight"
-          row-key="index"
+          row-key="$treeNodeId"
           default-expand-all
           :row-class-name="tableRowClassName"
           style="width: 100%"
@@ -188,7 +188,7 @@
                 <re-input
                   v-model="scope.row.displayColumn"
                   :max-length="50"
-                  :blur-fun="(newVal, oldVal) => {return handlerBlur(newVal, oldVal, scope.row._id)}"
+                  :blur-fun="(newVal, oldVal) => {return handlerBlur(newVal, oldVal, scope.row.index)}"
                 />
               </span>
             </template>
@@ -241,7 +241,7 @@
           <el-table-column
             label="操作"
             fixed="right"
-            min-width="120"
+            min-width="150"
           >
             <template slot-scope="scope">
               <div v-if="scope.row._id !== 1 && scope.row._id !== 2">
@@ -249,7 +249,7 @@
                   :active-tag-name="activeTagName"
                   :data="scope.row"
                   :fields="fields"
-                  @reset="getDimensionMeasureData(fields)"
+                  @reset="getDimensionMeasureData(fields);refreshPreview()"
                 />
               </div>
             </template>
@@ -441,9 +441,9 @@ export default {
         return transformDataTypeIcon(type)
       }
     },
-    handlerBlur (newVal, oldVal, id) {
+    handlerBlur (newVal, oldVal, index) {
       if (regex.DATASET_NAME_REGEX.test(newVal)) {
-        const temp = this.fields.find(item => (item.displayColumn === newVal && item._id !== id))
+        const temp = this.fields.find(item => { return (item.displayColumn === newVal && item.index !== index) })
         if (temp) {
           this.$message.error('字段名称和其他对象存在重名，请检查！')
           return false
@@ -552,12 +552,12 @@ export default {
   top: -1px;
 }
 
-::v-deep .dimension-column-row,
+::v-deep .dimension-column-row > td,
 .dimension-column-row:hover > td {
   background: rgba(145, 159, 248, 0.11) !important;
 }
 
-::v-deep .measure-column-row,
+::v-deep .measure-column-row > td,
 .measure-column-row:hover > td {
   background: rgba(99, 205, 159, 0.11) !important;
 }

@@ -71,7 +71,7 @@ export default {
     checkDisplayColumn () {
       this.$refs.form.validate(valid => {
         if (valid) {
-          const temp = this.fields.find(item => (item.displayColumn === this.form.displayColumn && item._id !== this.form._id))
+          const temp = this.fields.find(item => { return (item.displayColumn === this.form.displayColumn && item.index !== this.form.index) })
           if (temp) {
             this.$message.error('字段名称和其他对象存在重名，请检查！')
           } else {

@@ -29,6 +29,11 @@ export default {
       modelValue: ''
     }
   },
+  watch: {
+    value () {
+      this.modelValue = this.value
+    }
+  },
   created () {
     this.modelValue = this.value
   },

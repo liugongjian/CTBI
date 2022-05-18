@@ -23,7 +23,7 @@
     <div>
       <div
         v-show="toggleContent"
-        class="d-f p-16-16 f-b-s bg-c-f8f8f8"
+        class="d-f p-16-16 f-b-s bg-c-f8f8f8 h-40"
       >
         <div class="d-f">
           <div>
@@ -32,25 +32,34 @@
               style="margin-right: 8px;width:20px;height:32px;"
             />
           </div>
-          <el-form
-            ref="displayForm"
-            :model="dataInfo"
-          >
-            <el-form-item
-              prop="displayName"
-              :rules="[
-                { pattern: regex.DATASET_NAME_REGEX, message: '字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成，不超过50个字符', trigger: 'change' }
-              ]"
+          <div>
+            <el-input
+              v-model="dataInfo.displayName"
+              style="width: 300px;"
+              :class="{'error-input': isErrorName}"
+              max-length="50"
+              placeholder="未命名SQL"
+              @input="checkDisplayName"
+            />
+            <el-tooltip
+              class="m-l-8"
+              content="字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成，不超过50个字符"
+              placement="bottom-start"
+              effect="light"
             >
-              <el-input
-                v-model="dataInfo.displayName"
-                style="width: 300px;"
-                max-length="50"
-                placeholder="未命名SQL"
+              <i class="el-icon-warning-outline" />
+            </el-tooltip>
+            <div
+              :class="{'error-input-text': isErrorName}"
+              style="display: none;"
+            >
+              <b-tooltip
+                :content="errorInputText"
+                width="300px"
+                placement="bottom-start"
               />
-            </el-form-item>
-          </el-form>
-
+            </div>
+          </div>
         </div>
         <div>
           <el-button
@@ -201,6 +210,9 @@ export default {
   data () {
     return {
       regex: regex,
+      // 数据集名称是否错误
+      isErrorName: false,
+      errorInputText: '',
       dataInfo: {
         _id: '',
         // 脚本集名称
@@ -253,6 +265,16 @@ export default {
     }
   },
   methods: {
+    checkDisplayName () {
+      if (this.dataInfo.displayName === '') {
+        this.errorInputText = '数据集名称不能为空'
+      } else {
+        this.isErrorName = !regex.DATASET_NAME_REGEX.test(this.dataInfo.displayName)
+        if (this.isErrorName) {
+          this.errorInputText = '字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成，不超过50个字符'
+        }
+      }
+    },
     // 获取数据集详情
     async getDetail () {
       const result = await getDataSetsInfo(this.$route.query._id)
@@ -267,38 +289,36 @@ export default {
     },
     // 打开保存窗口
     showSaveDialog () {
-      this.$refs.displayForm.validate((valid) => {
-        if (valid) {
-          // 更新数据集无需弹窗提示，直接保存
-          if (this.dataInfo._id) {
-            // 校验数据集名称是否符合
-            const body = {
-              _id: this.dataInfo._id,
-              displayName: this.dataInfo.displayName,
-              sql: this.dataInfo.sql,
-              fields: this.dataInfo.fields,
-              comment: this.dataInfo.comment,
-              folderId: this.dataInfo.folderId
-            }
-            this.saveBtnLoading = true
-            updateDataSet(body._id, body).then(res => {
-              this.$message({
-                message: '保存成功',
-                type: 'success'
-              })
-              this.$router.go(-1)
-            }).finally(e => {
-              this.saveBtnLoading = false
-            })
-          } else {
-            this.$dialog.show('SaveDataSetDialog', { dataInfo: this.dataInfo }, () => {
-              this.$router.go(-1)
-            })
+      // 更新数据集无需弹窗提示，直接保存
+      if (this.dataInfo._id) {
+        if (regex.DATASET_NAME_REGEX.test(this.dataInfo.displayName)) {
+          // 校验数据集名称是否符合
+          const body = {
+            _id: this.dataInfo._id,
+            displayName: this.dataInfo.displayName,
+            sql: this.dataInfo.sql,
+            fields: this.dataInfo.fields,
+            comment: this.dataInfo.comment,
+            folderId: this.dataInfo.folderId
           }
+          this.saveBtnLoading = true
+          updateDataSet(body._id, body).then(res => {
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            })
+            this.$router.go(-1)
+          }).finally(e => {
+            this.saveBtnLoading = false
+          })
         } else {
           this.$message.error('字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成，不超过50个字符')
         }
-      })
+      } else {
+        this.$dialog.show('SaveDataSetDialog', { dataInfo: this.dataInfo }, () => {
+          this.$router.go(-1)
+        })
+      }
     },
     // 格式化 sql 编辑器
     formatSqlData () {
@@ -460,6 +480,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+::v-deep .error-input > .el-input__inner {
+  border: 1px solid #ff4949;
+}
+.error-input-text {
+  color: #ff4949;
+  display: block !important;
+}
 .edit-wrap {
   &-header {
     height: 50px;

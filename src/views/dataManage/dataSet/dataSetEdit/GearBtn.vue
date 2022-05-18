@@ -96,8 +96,10 @@ export default {
       this.$dialog.show('EditDimensionMeasureDialog', { form: item, fields: this.fields }, (data) => {
         if (!data.displayColumn) {
           data.displayColumn = data.column
+        } else {
+          Object.assign(item, data)
+          this.$emit('reset')
         }
-        Object.assign(item, data)
       })
     },
     // 复制数据预览中的字段

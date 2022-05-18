@@ -24,11 +24,6 @@ export default {
       test: 'number'
     }
   },
-  watch: {
-    test (n) {
-      console.log(n)
-    }
-  },
   computed: {
     ...mapGetters([
       'name'

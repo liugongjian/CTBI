@@ -1,7 +1,7 @@
 <template>
   <el-tooltip
     :content="content"
-    placement="top-start"
+    :placement="placement"
     :effect="effect"
     :disabled="!isShowTooltip"
   >
@@ -35,7 +35,11 @@ export default {
     },
     effect: {
       type: String,
-      default: 'dark'
+      default: 'light'
+    },
+    placement: {
+      type: String,
+      default: 'top-start'
     }
   },
   data () {
