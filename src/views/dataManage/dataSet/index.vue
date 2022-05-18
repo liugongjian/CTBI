@@ -295,7 +295,7 @@ export default {
     async deleteFolder (row) {
       const h = this.$createElement
       let existDataset = false
-      if (row.children) {
+      if (row.children?.length >= 1) {
         existDataset = true
       } else {
         const childrenData = await getDataSetsFolders({ folderId: row._id })
