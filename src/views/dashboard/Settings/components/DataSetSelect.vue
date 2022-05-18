@@ -89,6 +89,7 @@
             highlight-current
             :props="defaultProps"
             :filter-node-method="filterNode"
+            :default-expanded-keys="defaultExpand"
             @node-click="clickTreeNode"
           />
 
@@ -131,6 +132,7 @@ export default {
       showOption: false, // 是否展示选项
       showOptionList: true, // 是否展示已使用选项
       filterText: '', // 树形过滤
+      defaultExpand: [], // 树形默认展开节点
       dataLoading: false,
       defaultProps: {
         children: 'children',
@@ -250,6 +252,9 @@ export default {
     callback (val) {
       this.dataSet.id = val.id
       this.dataSet.name = val.name
+      this.defaultExpand = []
+      this.defaultExpand.push(val.id)
+      this.$refs.tree.setCurrentKey(val.id)
     }
   }
 }
