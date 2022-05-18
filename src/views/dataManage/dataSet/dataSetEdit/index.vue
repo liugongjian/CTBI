@@ -89,7 +89,7 @@
       </div>
 
       <div class="d-f">
-        <div :class="[{'full-height': !toggleContent}, 'side-bar']">
+        <div :class="[{'full-height': !toggleContent, 'hide': isShrinkLeft}, 'side-bar']">
           <div class="side-top">
             <div v-show="toggleContent">
               <div class="side-top-label"><span>选择数据源</span></div>
@@ -109,6 +109,13 @@
             <div v-show="!toggleContent">
               <div class="side-top-label"><span>当前数据源</span></div>
               <div><span class="side-top-text">{{ dataInfo.dataSourceName }}</span></div>
+            </div>
+            <!-- 收缩按钮 -->
+            <div
+              class="left-shrink-btn bg-c-fff"
+              @click="isShrinkLeft = !isShrinkLeft"
+            >
+              <i :class="{'el-icon-arrow-right': isShrinkLeft, 'el-icon-arrow-left': !isShrinkLeft}" />
             </div>
           </div>
           <div class="side-content">
@@ -243,6 +250,7 @@ export default {
       dataTableLoading: false,
       // 收缩
       isShrink: false,
+      isShrinkLeft: false,
       draggableContainerHeight: { height: '400px' },
       // 运行结果集
       resultData: { success: true },
@@ -501,11 +509,37 @@ export default {
   }
 }
 
+// @keyframes turn-out {
+//   from {
+//     width: 200px;
+//   }
+//   to {
+//     width: 0px;
+//   }
+// }
+// @keyframes turn-in {
+//   from {
+//     width: 0px;
+//   }
+//   to {
+//     width: 200px;
+//   }
+// }
 .side-bar {
   display: inline-block;
   background-color: #fff;
   height: calc(100vh - 167px);
   width: 250px;
+  position: relative;
+
+  &.hide {
+    width: 0px;
+    // animation-name: turn-out;
+    // animation-duration: 0.3s;
+    .side-top {
+      padding: 0px;
+    }
+  }
 
   &.full-height {
     height: calc(100vh - 60px);
@@ -514,6 +548,7 @@ export default {
   .side-top {
     padding: 20px 12px;
     border-bottom: 1px solid #e8e8e8;
+    position: relative;
 
     .side-top-label {
       font-size: 12px;
@@ -528,6 +563,19 @@ export default {
       font-weight: 500;
       color: rgba(0, 0, 0, 0.9);
       line-height: 20px;
+    }
+
+    .left-shrink-btn {
+      position: absolute;
+      right: -15px;
+      top: 30%;
+      cursor: pointer;
+      height: 80px;
+      width: 15px;
+      line-height: 80px;
+      z-index: 99;
+      box-shadow: 0px 2px 8px 0px rgb(200 201 204 / 50%);
+      border-radius: 0px 50px 50px 0px/0px 50px 50px 0px;
     }
   }
 
