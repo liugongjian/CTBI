@@ -31,10 +31,15 @@
 <script>
 import { getDataFiles, deleteDataFile } from '@/api/dataSource'
 import CommonTable from '@/components/CommonTable'
-import { getDateTime } from '@/utils/optionUtils'
 export default {
   name: 'DataFiles',
   components: { CommonTable },
+  props: {
+    currentRow: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       tableData: [],
@@ -128,21 +133,9 @@ export default {
           }
         })
     },
-    createDataSet(dataSource) {
-      const currentTime = getDateTime()
+    createDataSet() {
       const query = {
-        _id: '',
-        displayName: '',
-        comment: '',
-        sqlId: '',
-        fields: [],
-        folderId: null,
-        isFolder: false,
-        creatorId: '',
-        dataSourceId: dataSource?._id ?? '',
-        dataSourceName: dataSource?.displayName ?? '',
-        creatorName: '',
-        createdTime: currentTime
+        dataSourceId: this.currentRow?._id ?? ''
       }
       this.$router.push({
         path: '/dataManage/dataSet/edit',
@@ -177,6 +170,9 @@ export default {
       margin-left: 12px;
       color: #FA8334;
     }
+  }
+  .el-button--text {
+    font-weight: 400;
   }
 }
 </style>

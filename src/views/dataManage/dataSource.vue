@@ -1,8 +1,8 @@
 <template>
   <div class="data-source">
-    <div class="data-source__title">
+    <!-- <div class="data-source__title">
       <span>数据源</span>
-    </div>
+    </div> -->
     <div class="data-source__content">
       <div class="data-source__header">
         <div class="head-title">数据源</div>
@@ -116,7 +116,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-files__lists" />
+        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-files__lists" :current-row="currentRow" />
         <div v-else class="data-file__list">
           <div class="research-file">
             <el-input
@@ -127,7 +127,7 @@
               @keyup.enter.native="searchFiles"
             />
             <span>
-              <el-button class="create-data" @click="toCreateDataSet">SQL创建数据集</el-button>
+              <el-button class="create-data" @click="toCreateDataSet(currentRow)">SQL创建数据集</el-button>
             </span>
           </div>
           <common-table
@@ -190,7 +190,6 @@
 import { encryptAes } from '@/utils/encrypt'
 import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataSourceList, editSources, detailSource } from '@/api/dataSource'
 import CommonTable from '@/components/CommonTable/index.vue'
-import { getDateTime } from '@/utils/optionUtils'
 import dataFiles from './dataFiles.vue'
 
 export default {
@@ -314,20 +313,8 @@ export default {
       this.dialogVisible = false
     },
     toCreateDataSet(dataSource) {
-      const currentTime = getDateTime()
       const query = {
-        _id: '',
-        displayName: '',
-        comment: '',
-        sqlId: '',
-        fields: [],
-        folderId: null,
-        isFolder: false,
-        creatorId: '',
-        dataSourceId: dataSource && dataSource._id || '',
-        dataSourceName: dataSource && dataSource.displayName || '',
-        creatorName: '',
-        createdTime: currentTime
+        dataSourceId: dataSource && dataSource._id || ''
       }
       this.$router.push({
         path: '/dataManage/dataSet/edit',
@@ -587,7 +574,8 @@ export default {
   font-size: 12px;
   color: rgba(0,0,0,0.90);
   text-align: left;
-  line-height: 42px;
+  height: 32px;
+  line-height: 32px;
   font-weight: 500;
 }
 ::v-deep .common-table .table.el-table td .cell {
@@ -595,7 +583,8 @@ export default {
   font-size: 12px;
   color: rgba(0, 0, 0, 0.65);
   text-align: left;
-  line-height: 42px;
+  height: 32px;
+  line-height: 32px;
   font-weight: 400;
 }
 .table-detail {
@@ -783,8 +772,7 @@ export default {
   &__content {
     position: relative;
     background: #fff;
-    margin-top: 16px;
-    height: calc(100vh - 125px);
+    height: calc(100vh - 100px);
     font-size: 12px;
   }
 
