@@ -85,7 +85,6 @@
             ref="tree"
             node-key="_id"
             :data="treeData"
-            :current-node-key="dataSet.id"
             highlight-current
             :props="defaultProps"
             :filter-node-method="filterNode"
@@ -155,7 +154,12 @@ export default {
       const option = []
       this.layout.forEach(item => {
         if (item.option.dataSet.id) {
-          option.push(item.option.dataSet)
+          const data = option.find(ele => {
+            return ele.id === item.option.dataSet.id
+          })
+          if (!data) {
+            option.push(item.option.dataSet)
+          }
         }
       })
       return option
@@ -168,6 +172,12 @@ export default {
     dataSet: {
       handler (val) {
         this.$emit('reflashValue', val.id)
+        this.defaultExpand = []
+        this.defaultExpand.push(val.id)
+        if (this.$refs.tree) {
+          const id = val.id.length > 0 ? val.id : []
+          this.$refs.tree.setCurrentKey(id)
+        }
       },
       immediate: true,
       deep: true
@@ -252,9 +262,6 @@ export default {
     callback (val) {
       this.dataSet.id = val.id
       this.dataSet.name = val.name
-      this.defaultExpand = []
-      this.defaultExpand.push(val.id)
-      this.$refs.tree.setCurrentKey(val.id)
     }
   }
 }
