@@ -42,3 +42,13 @@ export function getBriefToolList () {
   })
   return briefTools
 }
+
+export const chartCategory = [
+  { category: 'indicator', name: '指标' },
+  { category: 'table', name: '表格' },
+  { category: 'trend', name: '趋势' },
+  { category: 'comparator', name: '比较' },
+  { category: 'distribution', name: '分布' },
+  { category: 'relation', name: '关系' },
+  { category: 'space', name: '空间' }
+]
