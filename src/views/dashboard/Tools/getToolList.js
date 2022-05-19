@@ -1,3 +1,15 @@
+
+// 在指标看板第一级显示的图标
+const brief = [
+  'KanBanSummary',
+  'TableChart',
+  'LineChart',
+  'StackedBarChart',
+  'PieChart',
+  'FunnelChart',
+  'ColorMapChart'
+]
+
 /**
  * 获取所有配置项的js文件
  * js文件名应该与组件一致
@@ -16,4 +28,17 @@ export function getToolList () {
     return
   })
   return dataJson
+}
+
+/**
+ * 获取所有配置项的js文件
+ * js文件名应该与组件一致
+ */
+export function getBriefToolList () {
+  const tools = getToolList()
+  const briefTools = {}
+  brief.forEach(item => {
+    briefTools[item] = tools[item]
+  })
+  return briefTools
 }
