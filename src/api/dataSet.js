@@ -132,3 +132,13 @@ export function getFullList () {
 export function getDataSetData (id, body) {
   return http.post(`/dataSets/${id}/data`, body)
 }
+
+// 新建文件夹判重
+export function existsFolder (params) {
+  return http.get(`/folders/exists`, params)
+}
+
+// 新建数据集判重
+export function existsDataSet (params) {
+  return http.get(`/dataSets/exists`, params)
+}
