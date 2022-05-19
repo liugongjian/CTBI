@@ -22,6 +22,11 @@
           <i class="el-icon-warning-outline m-l-10" />
         </el-tooltip>
       </div>
+      <!-- 隐藏模块，用于解决标题不显示出现的布局问题 -->
+      <div
+        class="card-header-hidden"
+        style="width:0"
+      />
       <div class="card-header-tail">
         <!-- 指标筛选模块 -->
         <el-select

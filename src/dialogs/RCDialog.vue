@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import dialogMinix from '@/dialogs/dialogMixin'
+import dialogMixin from '@/mixins/dialogMixin'
 
 export default {
   name: 'RCDialog',
-  mixins: [dialogMinix]
+  mixins: [dialogMixin]
 }
 </script>

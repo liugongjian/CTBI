@@ -21,6 +21,7 @@ import * as echarts from 'echarts'
 // v-echarts
 import VECharts from 'vue-echarts'
 Vue.component('v-chart', VECharts)
+
 // 以阻止 vue 在启动时生成生产提示
 Vue.config.productionTip = false
 

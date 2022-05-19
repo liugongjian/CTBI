@@ -148,4 +148,7 @@ export default {
   display: flex;
   justify-content: center;
 }
+::v-deep .el-collapse-item__header,::v-deep .el-collapse-item__wrap{
+  background: #383B47;
+}
 </style>

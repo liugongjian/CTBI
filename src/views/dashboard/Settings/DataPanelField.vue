@@ -10,6 +10,7 @@
           @drop.stop="handleTargetDrop($event,name,item,item.name)"
         >
           <div class="field-area-header">
+            <span>*</span>
             <div class="area-name">{{ item.name }}</div>
           </div>
           <div>
@@ -21,10 +22,10 @@
                   class="field-box-wrapper"
                 >
                   <div
-                    :class="name==='dimension'?'dimension-field-box':'measure-field-box'"
+                    :class="name==='Dimension'?'dimension-field-box':'measure-field-box'"
                     class="base-field-box"
                   >
-                    <span class="field-caption">{{ el.label }}</span>
+                    <span class="field-caption">{{ el.displayColumn }}</span>
                     <div class="right-hover-icons">
                       <span
                         style="cursor:pointer;marign-left:3px;"
@@ -45,22 +46,31 @@
           </div>
         </div>
       </div>
-      <el-input
-        v-model="val"
-        type="textarea"
-        autosize
-        placeholder="请输入内容"
-      />
-      <el-button
-        type="primary"
-        @click="reflashStore"
-      >更新</el-button>
+      <div class="update-wrapper">
+        <div class="result-display">
+          <span class="m-r-8">结果展示</span>
+          <div>
+            <input
+              v-model="limit"
+              type="number"
+              class="limit-input"
+            >
+          </div>
+        </div>
+        <el-button
+          type="primary"
+          @click="reflashStore"
+        >更新</el-button>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script>
 import store from '@/store'
+import { getDataSetData } from '@/api/dataSet'
+import { deepClone } from '@/utils/optionUtils'
 export default {
   name: 'DataPanelField',
   props: {
@@ -75,7 +85,8 @@ export default {
   },
   data () {
     return {
-      val: ''
+      dataValue: [],
+      limit: 100 // 结果展示条数
     }
   },
   mounted () {
@@ -150,18 +161,18 @@ export default {
     // ]
     // 进度条
     // 词云数据
-    const dataValue = [
-      { name: 'Sam S Club', value: 10000 }, { name: 'Macys', value: 6181 },
-      { name: 'Amy Schumer', value: 4386 }, { name: 'Jurassic World', value: 4055 },
-      { name: 'Charter Communications', value: 2467 }, { name: 'Chick Fil A', value: 2244 },
-      { name: 'Planet Fitness', value: 1898 }, { name: 'Pitch Perfect', value: 1484 },
-      { name: 'Express', value: 1112 }, { name: 'Home', value: 965 },
-      { name: 'Johnny Depp', value: 847 }, { name: 'Lena Dunham', value: 582 },
-      { name: 'Lewis Hamilton', value: 555 }, { name: 'KXAN', value: 550 },
-      { name: 'Mary Ellen Mark', value: 462 }, { name: 'Farrah Abraham', value: 366 },
-      { name: 'Rita Ora', value: 360 }, { name: 'Serena Williams', value: 282 },
-      { name: 'NCAA baseball tournament', value: 273 }, { name: 'Point Break', value: 265 }
-    ]
+    // const dataValue = [
+    //   { name: 'Sam S Club', value: 10000 }, { name: 'Macys', value: 6181 },
+    //   { name: 'Amy Schumer', value: 4386 }, { name: 'Jurassic World', value: 4055 },
+    //   { name: 'Charter Communications', value: 2467 }, { name: 'Chick Fil A', value: 2244 },
+    //   { name: 'Planet Fitness', value: 1898 }, { name: 'Pitch Perfect', value: 1484 },
+    //   { name: 'Express', value: 1112 }, { name: 'Home', value: 965 },
+    //   { name: 'Johnny Depp', value: 847 }, { name: 'Lena Dunham', value: 582 },
+    //   { name: 'Lewis Hamilton', value: 555 }, { name: 'KXAN', value: 550 },
+    //   { name: 'Mary Ellen Mark', value: 462 }, { name: 'Farrah Abraham', value: 366 },
+    //   { name: 'Rita Ora', value: 360 }, { name: 'Serena Williams', value: 282 },
+    //   { name: 'NCAA baseball tournament', value: 273 }, { name: 'Point Break', value: 265 }
+    // ]
     // 看板
     // const dataValue = [
     //   {
@@ -190,7 +201,6 @@ export default {
     //     ]
     //   }
     // ]
-    this.val = JSON.stringify(dataValue)
   },
   methods: {
     // 当拖拽在当前元素上时
@@ -205,18 +215,18 @@ export default {
       if (data.type === name) {
         // 判断是否已经存在
         const dataIndex = item.value.findIndex(el => {
-          return el.id === data.id
+          return el._id === data._id
         })
         if (dataIndex !== -1) {
           this.$message({
-            message: `已存在该对象 ${data.label}`,
+            message: `已存在该对象 ${data.displayColumn}`,
             type: 'warning'
           })
         } else {
           item.value.push(data)
         }
       } else {
-        const dataName = data.type === 'measure' ? '度量' : '维度'
+        const dataName = data.type === 'Measure' ? '度量' : '维度'
         this.$message({
           message: `不支持添加${dataName}到[${itemName}]上`,
           type: 'warning'
@@ -226,23 +236,52 @@ export default {
     // 删除字段
     hanldDelete (item, el) {
       const dataIndex = item.value.findIndex(ele => {
-        return ele.id === el.id
+        return ele._id === el._id
       })
       item.value.splice(dataIndex, 1)
     },
     // 更新
-    reflashStore () {
+    async reflashStore () {
+      const dataSource = deepClone(this.option.dataSource)
+      this.dataValue = []
+      for (const i in dataSource) {
+        if (dataSource[i].value.length === 0) {
+          this.$message({
+            message: `${dataSource[i].name}缺少必填字段`,
+            type: 'error'
+          })
+          return
+        }
+        for (let j = 0; j < dataSource[i].value.length; j++) {
+          await this.getData(dataSource[i]['value'][j])
+        }
+      }
       const data = store.state.app.dataOption.find(item => {
         return item.i === this.identify
       })
       // 判断是否已经存在
+      const val = deepClone(this.dataValue)
       if (data) {
-        data.dataValue = JSON.parse(this.val)// 更新数据
+        data.dataValue = val// 更新数据
       } else {
         store.state.app.dataOption.push({
-          dataValue: JSON.parse(this.val),
+          dataValue: val,
           i: this.identify
         })
+      }
+    },
+
+    // 获取详细数据
+    async getData (item) {
+      try {
+        const body = {
+          limit: this.limit,
+          selectFields: [{ displayColumn: item.displayColumn }]
+        }
+        const res = await getDataSetData(item.dataSetID, body)
+        this.dataValue.push(res)
+      } catch (error) {
+        console.log(error)
       }
     }
   }

@@ -204,22 +204,6 @@ export const http = {
         resolve()
       })
     })
-  },
-  // put请求 参数为body
-  putDataSet (url, data) {
-    return new Promise((resolve, reject) => {
-      service({
-        method: 'put',
-        url,
-        data
-      })
-        .then((res) => {
-          resolve(res.data ?? res)
-        })
-        .catch((err) => {
-          reject(err)
-        })
-    })
   }
 }
 
