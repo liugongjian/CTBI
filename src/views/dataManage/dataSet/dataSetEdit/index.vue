@@ -89,7 +89,10 @@
       </div>
 
       <div class="d-f">
-        <div :class="[{'full-height': !toggleContent, 'hide': isShrinkLeft}, 'side-bar']">
+        <div
+          v-resize-width="{max: 500, min: 0}"
+          :class="[{'full-height': !toggleContent, 'hide': isShrinkLeft}, 'side-bar']"
+        >
           <div class="side-top">
             <div v-show="toggleContent">
               <div class="side-top-label"><span>选择数据源</span></div>
@@ -110,13 +113,13 @@
               <div class="side-top-label"><span>当前数据源</span></div>
               <div><span class="side-top-text">{{ dataInfo.dataSourceName }}</span></div>
             </div>
-            <!-- 收缩按钮 -->
-            <div
-              class="left-shrink-btn bg-c-fff"
-              @click="isShrinkLeft = !isShrinkLeft"
-            >
-              <i :class="{'el-icon-arrow-right': isShrinkLeft, 'el-icon-arrow-left': !isShrinkLeft}" />
-            </div>
+          </div>
+          <!-- 收缩按钮 -->
+          <div
+            class="left-shrink-btn bg-c-fff"
+            @click="isShrinkLeft = !isShrinkLeft"
+          >
+            <i :class="{'el-icon-arrow-right': isShrinkLeft, 'el-icon-arrow-left': !isShrinkLeft}" />
           </div>
           <div class="side-content">
             <div class="side-content-title">
@@ -476,7 +479,12 @@ export default {
     },
     dragend (e) {
       const clientHeight = document.body.clientHeight
-      if (e.clientY > (clientHeight) || e.clientY < 200) {
+      if (e.clientY < 200) {
+        const height = window.innerHeight - 200
+        this.draggableContainerHeight.height = height + 'px'
+        return
+      }
+      if (e.clientY > (clientHeight)) {
         return
       }
       this.isShrink = (e.clientY > (clientHeight / 2))
@@ -533,7 +541,7 @@ export default {
   position: relative;
 
   &.hide {
-    width: 0px;
+    width: 0px !important;
     // animation-name: turn-out;
     // animation-duration: 0.3s;
     .side-top {
@@ -564,19 +572,19 @@ export default {
       color: rgba(0, 0, 0, 0.9);
       line-height: 20px;
     }
+  }
 
-    .left-shrink-btn {
-      position: absolute;
-      right: -15px;
-      top: 30%;
-      cursor: pointer;
-      height: 80px;
-      width: 15px;
-      line-height: 80px;
-      z-index: 99;
-      box-shadow: 0px 2px 8px 0px rgb(200 201 204 / 50%);
-      border-radius: 0px 50px 50px 0px/0px 50px 50px 0px;
-    }
+  .left-shrink-btn {
+    position: absolute;
+    right: -15px;
+    top: 50px;
+    cursor: pointer;
+    height: 80px;
+    width: 15px;
+    line-height: 80px;
+    z-index: 99;
+    box-shadow: 0px 2px 8px 0px rgb(200 201 204 / 50%);
+    border-radius: 0px 50px 50px 0px/0px 50px 50px 0px;
   }
 
   .side-content {
