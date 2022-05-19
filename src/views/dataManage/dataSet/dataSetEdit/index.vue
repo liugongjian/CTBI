@@ -218,13 +218,6 @@ import { deepClone } from '@/utils/optionUtils'
 export default {
   components: { Runner, Resetter, TableList, EditSql },
   data () {
-    this.rules = {
-      displayName: [
-        { required: true, message: '请输入数据集名称', trigger: 'blur' },
-        { pattern: regex.DATASET_NAME_REGEX, message: '字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成，不超过50个字符', trigger: 'change' },
-        { validator: this.existDataSet, trigger: 'blur' }
-      ]
-    }
     return {
       regex: regex,
       // 数据集名称是否错误
@@ -305,8 +298,8 @@ export default {
           this.errorInputText = '字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成，不超过50个字符'
           return '数据集名称不符合规范'
         }
-        return null
       }
+      return null
     },
     // 获取数据集详情
     async getDetail () {
@@ -407,18 +400,18 @@ export default {
       this.editDataInfo = deepClone(this.dataInfo)
     },
     // 确认编辑
-    async confirmEdit() {
-      const body = {
-        _id: this.dataInfo.sql._id,
-        sql: this.dataInfo.sql.sql,
-        dataSourceId: this.dataInfo.dataSourceId,
-        sqlVariables: this.dataInfo.sql.sqlVariables
-      }
+    async confirmEdit () {
       // 判断数据集名称
       const checkDisplayName = this.checkDisplayName()
+
       if (checkDisplayName) {
         this.$message.error(checkDisplayName)
         return
+      } else {
+        const flag = await this.existDataSet()
+        if (flag) {
+          return
+        }
       }
       // 判断sql是否为空
       if (this.editDataInfo.sql.sql === '' || regex.EMPTY_REGEX.test(this.editDataInfo.sql.sql)) {
@@ -545,11 +538,12 @@ export default {
       this.$refs.resetter.setTableHeight(this.draggableContainerHeight.height)
     },
     async existDataSet (rule, value, callback) {
-      const isExist = await existsDataSet({ excludeId: this.dataInfo._id, displayName: this.dataInfo.displayName })
+      const isExist = await existsDataSet({ excludeId: this.editDataInfo._id, displayName: this.editDataInfo.displayName })
       if (isExist) {
-        callback(new Error('数据集名称已存在！'))
+        this.$message.error('数据集名称已存在！')
+        return true
       }
-      callback()
+      return false
     }
   }
 }
