@@ -34,7 +34,7 @@
           </div>
           <div>
             <el-input
-              v-model="dataInfo.displayName"
+              v-model="editDataInfo.displayName"
               style="width: 300px;"
               :class="{'error-input': isErrorName}"
               max-length="50"
@@ -97,7 +97,7 @@
             <div v-show="toggleContent">
               <div class="side-top-label"><span>选择数据源</span></div>
               <el-select
-                v-model="dataInfo.dataSourceId"
+                v-model="editDataInfo.dataSourceId"
                 placeholder="请选择"
                 @change="handleChangeDataSource"
               >
@@ -143,20 +143,20 @@
               ref="sqlEdit"
               :tables="hintOptions"
               edit-height="calc(100vh - 110px)"
-              :value="currentSqlStatement"
+              :value="editDataInfo.sql.sql"
               @changeTextarea="sqlStatementChange($event)"
             />
             <div
               v-else
               class="p-16-16 h-100p"
-              @dblclick="toggleContent = !toggleContent"
+              @dblclick.stop="gotoEdit"
             >
-              <span>{{ currentSqlStatement }}</span>
+              <span>{{ dataInfo.sql.sql }}</span>
               <div class="edit-sql-btn">
                 <el-button
                   type="text"
                   icon="el-icon-edit-outline"
-                  @click.stop="toggleContent = !toggleContent"
+                  @click.stop="gotoEdit"
                 >编辑</el-button>
               </div>
             </div>
@@ -223,6 +223,7 @@ export default {
       // 数据集名称是否错误
       isErrorName: false,
       errorInputText: '',
+      // 回显&提交的数据
       dataInfo: {
         _id: '',
         // 脚本集名称
@@ -238,11 +239,20 @@ export default {
         // 脚本集SQL信息
         sql: { _id: '', sql: '' }
       },
+      // 编辑中的数据
+      editDataInfo: {
+        // 脚本集名称
+        displayName: '',
+        // 数据源id
+        dataSourceId: '',
+        // 数据源名称
+        dataSourceName: '',
+        // 脚本集SQL信息
+        sql: { _id: '', sql: '' }
+      },
       saveBtnLoading: false,
       // sql 编辑器提示语合集
       hintOptions: {},
-      // sql脚本
-      currentSqlStatement: '',
       // 展示预览 & 运行记录
       toggleContent: true,
       // 数据源下拉框选值
@@ -253,6 +263,7 @@ export default {
       dataTableLoading: false,
       // 收缩
       isShrink: false,
+      // 左侧栏收缩
       isShrinkLeft: false,
       draggableContainerHeight: { height: '400px' },
       // 运行结果集
@@ -270,6 +281,7 @@ export default {
       this.handleChangeDataSource(queryDataSourceId)
     }
     const data = this.$route.query
+    // 存在id，获取数据集详情
     if (data._id) {
       this.getDetail()
       this.toggleContent = false
@@ -277,26 +289,28 @@ export default {
   },
   methods: {
     checkDisplayName () {
-      if (this.dataInfo.displayName === '') {
+      if (this.editDataInfo.displayName === '') {
         this.errorInputText = '数据集名称不能为空'
+        return '数据集名称不能为空'
       } else {
-        this.isErrorName = !regex.DATASET_NAME_REGEX.test(this.dataInfo.displayName)
+        this.isErrorName = !regex.DATASET_NAME_REGEX.test(this.editDataInfo.displayName)
         if (this.isErrorName) {
           this.errorInputText = '字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成，不超过50个字符'
+          return '数据集名称不符合规范'
         }
+        return null
       }
     },
     // 获取数据集详情
     async getDetail () {
       const result = await getDataSetsInfo(this.$route.query._id)
-      Object.assign(this.dataInfo, result)
-      // 映射sql
-      this.currentSqlStatement = this.dataInfo.sql.sql
-      this.formatSqlData()
-
+      this.dataInfo = deepClone(result)
+      this.editDataInfo = deepClone(result)
       this.historyLogTableData = this.dataInfo.sql.history
       await this.getDataSourceList()
-      this.handleChangeDataSource(this.dataInfo.dataSourceId)
+      this.handleChangeDataSource(this.editDataInfo.dataSourceId)
+      // 存在详情，需要回显数据源名称
+      this.dataInfo.dataSourceName = deepClone(this.editDataInfo.dataSourceName)
     },
     // 打开保存窗口
     showSaveDialog () {
@@ -333,41 +347,36 @@ export default {
     },
     // 格式化 sql 编辑器
     formatSqlData () {
-      this.dataInfo.sql.sql = this.currentSqlStatement
-      const formatSql = format(this.currentSqlStatement).replaceAll('$ ', '$').replaceAll('{ ', '{').replaceAll(' }', '}')
+      const formatSql = format(this.editDataInfo.sql.sql).replaceAll('$ ', '$').replaceAll('{ ', '{').replaceAll(' }', '}')
       this.$refs.sqlEdit?.editor.setValue(formatSql)
     },
     // 参数设置
     showParamsSetDrawer () {
-      const sqlVariablesTableData = deepClone(this.dataInfo.sql.sqlVariables)
-      this.$dialog.show('DatasetParamsDrawer', { sql: this.dataInfo.sql.sql, sqlVariablesTableData }, (variable) => {
-        this.dataInfo.sql.sqlVariables = variable
+      const sqlVariablesTableData = deepClone(this.editDataInfo.sql.sqlVariables)
+      this.$dialog.show('DatasetParamsDrawer', { sql: this.editDataInfo.sql.sql, sqlVariablesTableData }, (variable) => {
+        this.editDataInfo.sql.sqlVariables = variable
       })
     },
     // 获取改变的sql语句
     sqlStatementChange (sql) {
-      this.currentSqlStatement = sql
-      this.dataInfo.sql.sql = sql
+      this.editDataInfo.sql.sql = sql
     },
     // 运行
     async runSql () {
       // dataSourceId & sql语句  必须
       const body = {
-        sql: this.currentSqlStatement,
-        dataSourceId: this.dataInfo.dataSourceId,
-        type: this.dataInfo.dataSourceType,
-        _id: this.dataInfo.sql._id,
-        sqlVariables: this.dataInfo.sql.sqlVariables
-      }
-      if (this.sqlVariables && this.sqlVariables.length > 0) {
-        body.sqlVariables = this.sqlVariables
+        sql: this.editDataInfo.sql.sql,
+        dataSourceId: this.editDataInfo.dataSourceId,
+        type: this.editDataInfo.dataSourceType,
+        _id: this.editDataInfo.sql._id,
+        sqlVariables: this.editDataInfo.sql.sqlVariables
       }
       try {
         this.resultPreviewLoading = true
         const data = await runtimeForSql(body)
         this.resultData = Object.assign({ success: true }, data.result)
-        if (this.dataInfo.sql._id !== data._id) {
-          this.dataInfo.sql._id = data._id
+        if (this.editDataInfo.sql._id !== data._id) {
+          this.editDataInfo.sql._id = data._id
         }
         this.getHistory()
       } catch (error) {
@@ -379,23 +388,40 @@ export default {
     async getHistory () {
       if (this.dataInfo.sql._id) {
         try {
-          const data = await getSqlRunningLogs(this.dataInfo.sql._id)
+          const data = await getSqlRunningLogs(this.editDataInfo.sql._id)
           this.historyLogTableData = data.slice()
         } catch (error) {
           console.log(error)
         }
       }
     },
+    gotoEdit () {
+      this.toggleContent = !this.toggleContent
+      this.editDataInfo = deepClone(this.dataInfo)
+    },
     // 确认编辑
     async confirmEdit () {
+      // 判断数据集名称
+      const checkDisplayName = this.checkDisplayName()
+      if (checkDisplayName) {
+        this.$message.error(checkDisplayName)
+        return
+      }
+      // 判断sql是否为空
+      if (this.editDataInfo.sql.sql === '' || regex.EMPTY_REGEX.test(this.editDataInfo.sql.sql)) {
+        this.$message.error('SQL脚本不能为空')
+        return
+      }
+
       try {
         const body = {
-          _id: this.dataInfo.sql._id,
-          sql: this.dataInfo.sql.sql,
-          dataSourceId: this.dataInfo.dataSourceId,
-          sqlVariables: this.dataInfo.sql.sqlVariables
+          _id: this.editDataInfo.sql._id,
+          sql: this.editDataInfo.sql.sql,
+          dataSourceId: this.editDataInfo.dataSourceId,
+          sqlVariables: this.editDataInfo.sql.sqlVariables
         }
         const data = await confirmEditSql(body)
+        Object.assign(this.dataInfo, this.editDataInfo)
         Object.assign(this.dataInfo.sql, data.sql)
         this.dataInfo.fields = data.fields
         this.$message({
@@ -404,7 +430,7 @@ export default {
         })
         this.toggleContent = false
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     },
     checkExit () {
@@ -413,12 +439,25 @@ export default {
       })
     },
     handlerToggleContent () {
-      if (this.dataInfo.sql._id) {
+      // 判断数据是否发生变更
+      // 这边仅针对数据集名称、SQL脚本、数据源ID
+      let flag = false
+      if (this.dataInfo.dataSourceId !== this.editDataInfo.dataSourceId ||
+        this.dataInfo.displayName !== this.editDataInfo.displayName ||
+        this.dataInfo.sql._id !== this.editDataInfo.sql._id ||
+        this.dataInfo.sql.sql !== this.editDataInfo.sql.sql) {
+        flag = true
+      }
+      if (flag) {
         this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内容将不被保存，请问您是否确认返回？' }, () => {
           this.toggleContent = !this.toggleContent
         })
       } else {
         this.toggleContent = !this.toggleContent
+        // 这里是编码上的坑，如果把编辑页与详情页分开就不需要刷新数据源列表
+        if (this.dataInfo.dataSourceId !== this.editDataInfo.dataSourceId) {
+          this.handleChangeDataSource(this.dataInfo.dataSourceId)
+        }
       }
     },
     // 获取数据源列表
@@ -436,10 +475,10 @@ export default {
       try {
         const currentDataSource = this.dataSourceOptions.find(item => item._id === val)
         const type = currentDataSource?.type || ''
-        this.dataInfo.dataSourceId = val
-        this.dataInfo.sql.dataSourceId = val
-        this.dataInfo.dataSourceName = currentDataSource?.displayName
-        this.dataInfo.dataSourceType = type
+        this.editDataInfo.dataSourceId = val
+        this.editDataInfo.sql.dataSourceId = val
+        this.editDataInfo.dataSourceName = currentDataSource?.displayName
+        this.editDataInfo.dataSourceType = type
 
         if (type === 'file') {
           const result = await dataFiles()
@@ -536,6 +575,7 @@ export default {
 .side-bar {
   display: inline-block;
   background-color: #fff;
+  border-right: 1px solid #dddddd;
   height: calc(100vh - 167px);
   width: 250px;
   position: relative;
@@ -550,7 +590,7 @@ export default {
   }
 
   &.full-height {
-    height: calc(100vh - 60px);
+    height: calc(100vh - 50px);
   }
 
   .side-top {

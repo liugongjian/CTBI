@@ -19,7 +19,11 @@
             label="类型"
             width="80"
             show-overflow-tooltip
-          />
+          >
+            <template slot-scope="scope">
+              {{ scope.row.type | extractTypeFilter }}
+            </template>
+          </el-table-column>
           <el-table-column
             prop="name"
             label="变量名"
@@ -35,7 +39,10 @@
                 v-model="scope.row.dataType"
                 placeholder="请选择"
               >
-                <template v-if="scope.row.dataType" #prefix>
+                <template
+                  v-if="scope.row.dataType"
+                  #prefix
+                >
                   <svg-icon :icon-class="`data-type-option-${scope.row.dataType}`" />
                 </template>
                 <el-option
@@ -44,11 +51,10 @@
                   :label="item.label"
                   :value="item.value"
                 >
-                  <span
-                    class="data-type-option"
-                  ><svg-icon
-                    :icon-class="`data-type-option-${item.value}`"
-                  /><span class="label">{{ item.label }}</span></span>
+                  <span class="data-type-option">
+                    <svg-icon :icon-class="`data-type-option-${item.value}`" />
+                    <span class="label">{{ item.label }}</span>
+                  </span>
                 </el-option>
               </el-select>
             </template>
@@ -58,8 +64,17 @@
             width="260"
           >
             <template #header>
-              <span>查询默认值</span><el-tooltip class="item" effect="dark" content="默认值生效范围支持“仅编辑页”和“全局生效”两种模式：仅编辑页-只在数据集编辑页生效，全局生效-在仪表板等下游也生效" placement="top">
-                <svg-icon style="cursor:pointer" icon-class="data-type-info" />
+              <span>查询默认值</span>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="默认值生效范围支持“仅编辑页”和“全局生效”两种模式：仅编辑页-只在数据集编辑页生效，全局生效-在仪表板等下游也生效"
+                placement="top"
+              >
+                <svg-icon
+                  style="cursor:pointer"
+                  icon-class="data-type-info"
+                />
               </el-tooltip>
             </template>
             <template slot-scope="scope">
@@ -261,13 +276,13 @@ export default {
   }
 }
 .el-select-dropdown__item.hover {
-  background: #FEF5EE;
+  background: #fef5ee;
 }
 
 .el-select-dropdown__item.selected {
   .data-type-option {
     .label {
-      color: #FA8334;
+      color: #fa8334;
     }
   }
 }
