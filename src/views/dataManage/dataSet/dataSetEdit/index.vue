@@ -212,12 +212,19 @@ import Runner from '@/views/dataManage/dataSet/dataSetEdit/Runner'
 import Resetter from '@/views/dataManage/dataSet/dataSetEdit/Resetter'
 import TableList from '@/views/dataManage/dataSet/dataSetEdit/TableList'
 import EditSql from '@/components/SqlEditor/index.vue'
-import { getDataSetsInfo, runtimeForSql, getSqlRunningLogs, confirmEditSql, getDataSourceData, dataFiles, getDataTable, updateDataSet } from '@/api/dataSet'
+import { getDataSetsInfo, runtimeForSql, getSqlRunningLogs, confirmEditSql, getDataSourceData, dataFiles, getDataTable, updateDataSet, existsDataSet } from '@/api/dataSet'
 import { deepClone } from '@/utils/optionUtils'
 
 export default {
   components: { Runner, Resetter, TableList, EditSql },
   data () {
+    this.rules = {
+      displayName: [
+        { required: true, message: '请输入数据集名称', trigger: 'blur' },
+        { pattern: regex.DATASET_NAME_REGEX, message: '字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成，不超过50个字符', trigger: 'change' },
+        { validator: this.existDataSet, trigger: 'blur' }
+      ]
+    }
     return {
       regex: regex,
       // 数据集名称是否错误
@@ -387,14 +394,14 @@ export default {
       }
     },
     // 确认编辑
-    async confirmEdit () {
+    async confirmEdit() {
+      const body = {
+        _id: this.dataInfo.sql._id,
+        sql: this.dataInfo.sql.sql,
+        dataSourceId: this.dataInfo.dataSourceId,
+        sqlVariables: this.dataInfo.sql.sqlVariables
+      }
       try {
-        const body = {
-          _id: this.dataInfo.sql._id,
-          sql: this.dataInfo.sql.sql,
-          dataSourceId: this.dataInfo.dataSourceId,
-          sqlVariables: this.dataInfo.sql.sqlVariables
-        }
         const data = await confirmEditSql(body)
         Object.assign(this.dataInfo.sql, data.sql)
         this.dataInfo.fields = data.fields
@@ -491,6 +498,13 @@ export default {
       this.draggableContainerHeight.height = (clientHeight - e.clientY) + 'px'
       this.$refs.runner.setTableHeight(this.draggableContainerHeight.height)
       this.$refs.resetter.setTableHeight(this.draggableContainerHeight.height)
+    },
+    async existDataSet (rule, value, callback) {
+      const isExist = await existsDataSet({ excludeId: this.dataInfo._id, displayName: this.dataInfo.displayName })
+      if (isExist) {
+        callback(new Error('数据集名称已存在！'))
+      }
+      callback()
     }
   }
 }

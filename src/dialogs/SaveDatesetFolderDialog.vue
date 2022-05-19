@@ -45,7 +45,7 @@
 <script>
 import dialogMixin from '@/mixins/dialogMixin'
 import regex from '@/constants/regex'
-import { createFolders, updateFolderName } from '@/api/dataSet'
+import { createFolders, updateFolderName, existsFolder } from '@/api/dataSet'
 
 export default {
   name: 'SaveDatesetFolderDialog',
@@ -58,7 +58,8 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入数据集名称', trigger: 'change' },
-          { pattern: regex.FOLDER_REGEX, message: '名称输入有误，请参考下方提示', trigger: 'change' }
+          { pattern: regex.FOLDER_REGEX, message: '名称输入有误，请参考下方提示', trigger: 'change' },
+          { validator: this.existFolder, trigger: 'blur' }
         ]
       },
       title: '新建文件夹'
@@ -101,6 +102,13 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    async existFolder (rule, value, callback) {
+      const isExist = await existsFolder({ type: 'dataSet', name: this.form.name, excludeId: this.form._id })
+      if (isExist) {
+        callback(new Error('文件夹名称已存在！'))
+      }
+      callback()
     }
   }
 }
