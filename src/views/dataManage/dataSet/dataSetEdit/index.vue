@@ -440,7 +440,7 @@ export default {
       }
     },
     checkExit () {
-      this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内容将不被保存，请问您是否确认返回？' }, () => {
+      this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内容将不被保存，请问您是否确认返回？', title: '提示' }, () => {
         this.$router.go(-1)
       })
     },
@@ -455,7 +455,7 @@ export default {
         flag = true
       }
       if (flag) {
-        this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内容将不被保存，请问您是否确认返回？' }, () => {
+        this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内容将不被保存，请问您是否确认返回？', title: '提示' }, () => {
           this.toggleContent = !this.toggleContent
         })
       } else {

@@ -194,7 +194,7 @@ export default {
     this.query()
   },
   methods: {
-    cellClass(row) {
+    cellClass (row) {
       if (row.columnIndex === 0 && row.row[0].type === 'selection') {
         return 'disable-header-selection'
       }
@@ -263,20 +263,7 @@ export default {
     },
     // 删除数据集
     deleteDataSet (row) {
-      const h = this.$createElement
-      this.$msgbox({
-        title: '删除提示',
-        message: h('p', null, [
-          h('svg-icon', ('svg-icon', {
-            attrs: { iconClass: 'warning', style: 'width:1.5em;height:1.5em;margin-right:10px;vertical-align: -0.35em;' }
-          })),
-          h('span', null, `确定删除数据集${row.displayName}?`)
-        ]),
-        showCancelButton: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        closeOnClickModal: false
-      }).then(async () => {
+      this.$dialog.show('TipDialog', { content: `确定删除数据集${row.displayName}?` }, async () => {
         try {
           const data = await delDataSet(row._id)
           if (data) {
@@ -293,7 +280,6 @@ export default {
     },
     // 文件夹删除事件
     async deleteFolder (row) {
-      const h = this.$createElement
       let existDataset = false
       if (row.children?.length >= 1) {
         existDataset = true
@@ -302,32 +288,9 @@ export default {
         existDataset = childrenData.length >= 1
       }
       if (existDataset) {
-        this.$msgbox({
-          title: '删除提示',
-          message: h('p', null, [
-            h('svg-icon', ('svg-icon', {
-              attrs: { iconClass: 'warning', style: 'width:1.5em;height:1.5em;margin-right:10px;vertical-align: -0.35em;' }
-            })),
-            h('span', null, '该文件夹下已存在数据集，请移除后再删除！')
-          ]),
-          showCancelButton: false,
-          confirmButtonText: '确定',
-          closeOnClickModal: false
-        })
+        this.$dialog.show('TipDialog', { content: '该文件夹下已存在数据集，请移除后再删除！' })
       } else {
-        this.$msgbox({
-          title: '删除提示',
-          message: h('p', null, [
-            h('svg-icon', ('svg-icon', {
-              attrs: { iconClass: 'warning', style: 'width:1.5em;height:1.5em;margin-right:10px;vertical-align: -0.35em;' }
-            })),
-            h('span', null, `确定删除文件夹${row.name}?`)
-          ]),
-          showCancelButton: true,
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          closeOnClickModal: false
-        }).then(async () => {
+        this.$dialog.show('TipDialog', { content: `确定删除文件夹${row.name}?` }, async () => {
           try {
             const data = await delFolders(row._id)
             if (data) {
@@ -365,10 +328,10 @@ export default {
         this.query()
       })
     },
-    handleClearSelection() {
+    handleClearSelection () {
       this.$refs.multipleTable.clearSelection()
     },
-    handleSelecTable(row) {
+    handleSelecTable (row) {
       return !row.isFolder
     },
     select (selection, row) {
@@ -398,7 +361,7 @@ export default {
   .info {
     margin-right: 24px;
     margin-left: 0;
-    color: #FA8334;
+    color: #fa8334;
     line-height: 20px;
     font-weight: 400;
   }

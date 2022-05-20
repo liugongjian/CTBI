@@ -5,12 +5,14 @@
   >
     <div>
       <div class="title">{{ title }}</div>
-      <div>
-        <svg-icon
-          icon-class="warning"
-          style="margin-right: 16px;width: 16px;height: 16px;"
-        />
-        <span>{{ content }}</span>
+      <div class="d-f">
+        <div>
+          <svg-icon
+            icon-class="warning"
+            style="margin-right: 16px;width: 16px;height: 16px;"
+          />
+        </div>
+        <div><span>{{ content }}</span></div>
       </div>
     </div>
     <span slot="footer">
@@ -38,7 +40,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 ::v-deep .el-dialog__header {
-  padding: 0px;
+  padding: 8px;
   border-bottom: 0px solid #ddd;
 }
 ::v-deep .el-dialog__body {
