@@ -9,14 +9,13 @@
       <div :class="showWrapper?'setting-panel-wrapper-fold':'setting-panel-wrapper-unfold'">
         <!-- 顶部菜单模块 -->
         <div class="change-chart-type-menu">
-          <span
-            class="panel-icon"
-            @click="toggleWrapperFold"
-          >
+          <!-- 图例切换 -->
+          <ChartSwitchHeader v-if="showWrapper" class="change-type" :chart-name="option.theme.Basic.Title.text" :icon-name="currentChart" @click.native="changeChart" />
+          <span class="panel-icon" @click="toggleWrapperFold">
             <svg-icon :icon-class="showWrapper?'panel-fold':'panel-unfold'" />
           </span>
         </div>
-        <el-container v-show="showWrapper">
+        <el-container v-if="showWrapper && !showChartTypes">
           <el-tabs v-model="activeNames">
             <el-tab-pane
               label="字段"
@@ -38,8 +37,10 @@
               name="3"
             />
           </el-tabs>
-
         </el-container>
+        <el-contaioner v-else-if="showChartTypes">
+          <ChartSwitcher />
+        </el-contaioner>
         <div
           v-show="showWrapper===false"
           style="height:calc(100vh - 190px)"
@@ -109,18 +110,24 @@ import store from '@/store'
 import Styles from '@/views/dashboard/Settings/Styles'
 import DataPanelField from './DataPanelField.vue'
 import DataPanel from './DataPanel.vue'
+import ChartSwitchHeader from '@/views/dashboard/Settings/ChartSwitchHeader.vue'
+import ChartSwitcher from '@/views/dashboard/Settings/ChartSwitcher.vue'
+
 export default {
   name: 'Settings',
   components: {
     Styles,
     DataPanelField,
-    DataPanel
+    DataPanel,
+    ChartSwitchHeader,
+    ChartSwitcher
   },
   data () {
     return {
       showWrapper: true,
       showData: true,
-      activeNames: '2'
+      activeNames: '2',
+      showChartTypes: false
     }
   },
   computed: {
@@ -131,7 +138,14 @@ export default {
       const temp = store.state.app.layout.find(item => {
         return item.i === this.currentLayoutId
       })
+      console.log('人间正道是沧桑呐  ', temp)
       return temp.option
+    },
+    currentChart () {
+      const temp = store.state.app.layout.find(item => {
+        return item.i === this.currentLayoutId
+      })
+      return temp.is
     }
   },
 
@@ -147,7 +161,16 @@ export default {
     },
     toggleDataFold () {
       this.showData = !this.showData
+    },
+    changeChart() {
+      console.log('做社会的脊梁   展示  ')
+      this.showChartTypes = !this.showChartTypes
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.change-type {
+  cursor: pointer;
+}
+</style>
