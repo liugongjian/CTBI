@@ -1,6 +1,69 @@
 <template>
   <div class="header-tool">
-    <div
+    <div class="tools-container">
+      <div class="tool-btn">
+        <svg-icon
+          :icon-class="'tools-story-line'"
+          style="font-size: 18px;"
+        />
+      </div>
+      <div class="tool-btn">
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            100%<i class="el-icon-arrow-down el-icon--right" />
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>25%</el-dropdown-item>
+            <el-dropdown-item>50%</el-dropdown-item>
+            <el-dropdown-item>75%</el-dropdown-item>
+            <el-dropdown-item>100%</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+    </div>
+    <div class="tools-container">
+      <div class="tool-btn">
+        <icon-dropdown :drop-downs="queryList" :main="'tools-query'" @resolve="resolveDropdown" />
+      </div>
+      <div class="tool-btn">
+        <svg-icon
+          :icon-class="'tools-tab'"
+          style="font-size: 18px;"
+        />
+      </div>
+      <div class="tool-btn">
+        <icon-dropdown :drop-downs="richEditorList" :main="'tools-rich'" @resolve="resolveDropdown" />
+      </div>
+    </div>
+    <div class="tools-container">
+      <div
+        v-for="(item,name, index) in briefTooList"
+        :key="name + index"
+        class="droppable-element tool-btn"
+        draggable="true"
+        unselectable="on"
+        @click.stop="addItem(name,item)"
+        @drag.stop="drag($event, name,item)"
+        @dragend="dragend($event, name,item)"
+      >
+        <svg-icon
+          :icon-class="name"
+          style="font-size: 30px;"
+        />
+      </div>
+      <div class="tool-btn horizontal" @click="panelShow">
+        <svg-icon
+          :icon-class="'tools-more'"
+          style="font-size: 30px;"
+        />
+        <svg-icon
+          :icon-class="'tools-arrow'"
+          style="font-size: 8px;"
+        />
+      </div>
+    </div>
+    <chart-list-panel v-if="showPanel" :tool-list="toolList" @addItem="addItem" @drag="drag" @dragend="dragend" />
+    <!-- <div
       v-for="(item,name, index) in toolList"
       :key="name + index"
       class="droppable-element"
@@ -14,7 +77,7 @@
         :icon-class="name"
         style="font-size: 30px;"
       />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -22,14 +85,28 @@
 const DragPos = { 'x': 1, 'y': 1, 'w': 1, 'h': 1, 'i': null }
 const mouseXY = { 'x': 1, 'y': 1 }
 import store from '@/store'
-import { getToolList } from './getToolList'
+import { getToolList, getBriefToolList } from './getToolList'
+import IconDropdown from './component/IconDropdown.vue'
+import ChartListPanel from './component/ChartListPanel.vue'
 export default {
   name: 'Tools',
-  components: {},
+  components: {
+    IconDropdown,
+    ChartListPanel
+  },
   data () {
     return {
       layoutIndex: 100,
-      toolList: {}
+      toolList: {},
+      briefTooList: {},
+      showPanel: false,
+      queryList: [
+        { svg: 'tools-story-line', command: 'composite-query-component' }
+      ],
+      richEditorList: [
+        { svg: 'tools-story-line', command: 'picture' },
+        { svg: 'tools-story-line', command: 'iframe' }
+      ]
     }
   },
   computed: {
@@ -52,6 +129,7 @@ export default {
 
     // 获取json文件中的配置项信息
     this.toolList = getToolList()
+    this.briefTooList = getBriefToolList()
     store.dispatch('app/updateToolList', this.toolList)
   },
   methods: {
@@ -164,6 +242,12 @@ export default {
         })
         parentGridLayout.dragEvent('dragend', i, DragPos.x, DragPos.y, 2, 12)
       }
+    },
+    resolveDropdown(command) {
+      console.log('command:', command)
+    },
+    panelShow() {
+      this.showPanel = !this.showPanel
     }
   }
 }
@@ -172,8 +256,22 @@ export default {
 .header-tool {
   display: flex;
   align-items: center;
+  .tools-container{
+      display: flex;
+      align-items: center;
+      .tool-btn{
+          margin-left: 16px;
+      }
+  }
   .droppable-element {
     margin: 0px 5px;
+  }
+  .horizontal{
+      display: flex;
+      align-items: center;
+      svg {
+          margin: 2px;
+      }
   }
 }
 </style>
