@@ -60,7 +60,7 @@
 
 <script>
 import dialogMixin from '@/mixins/dialogMixin'
-import { updateDataSet } from '@/api/dataSet'
+import { updateDataSet, existsDataSet } from '@/api/dataSet'
 import regex from '@/constants/regex'
 
 export default {
@@ -71,7 +71,8 @@ export default {
     this.rules = {
       displayName: [
         { required: true, message: '请输入数据集名称', trigger: 'blur' },
-        { pattern: regex.STRING_REGEX2, message: '名称输入有误，请参考下方提示', trigger: 'blur' }
+        { pattern: regex.STRING_REGEX2, message: '名称输入有误，请参考下方提示', trigger: 'blur' },
+        { validator: this.existDataSet, trigger: 'blur' }
       ],
       comment: [
         { whitespace: true, message: '描述不能全为空格' }
@@ -100,6 +101,13 @@ export default {
           this.loading = false
         }
       })
+    },
+    async existDataSet (rule, value, callback) {
+      const isExist = await existsDataSet({ excludeId: this.dataSetAttr._id, displayName: this.dataSetAttr.displayName })
+      if (isExist) {
+        callback(new Error('数据集名称已存在！'))
+      }
+      callback()
     }
   }
 }

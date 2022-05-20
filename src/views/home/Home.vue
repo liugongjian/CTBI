@@ -11,6 +11,13 @@
       @click="showDialog"
     >点击打开弹窗</el-button>
     <b-select v-model="test" />
+
+    <div
+      v-resize-width="{max: 500, min: 0}"
+      style="width: 300px; height: 300px; border: 1px solid red;"
+    >
+      自定义调整右侧宽度指令
+    </div>
   </div>
 </template>
 
