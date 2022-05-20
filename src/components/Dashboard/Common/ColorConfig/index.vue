@@ -107,23 +107,29 @@ export default {
 }
 .color {
   display: flex;
-  margin-top: 10px;
+  align-items: center;
   .label {
     display: inline-block;
-    min-width: 56px;
-    margin-right: 5px;
+    margin-right: 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 500;
   }
   .color-select {
     height: 24px;
     flex: 1;
     display: flex;
     align-items: center;
-    border: 1px solid #5c606a;
+    border: 1px solid rgba(221,221,221,0.25);
+    border-radius: 2px;
     margin-right: 5px;
     padding-right: 5px;
     span {
       margin-left: 8px;
       flex: 1;
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+      font-weight: 500;
     }
   }
 

@@ -37,7 +37,7 @@
         title="坐标轴"
         name="3"
       >
-        <el-tabs v-model="activeName">
+        <el-tabs v-model="activeName" class="axis-tab">
           <el-tab-pane
             v-for="(item,name,key) in option['Axis']"
             :key="key"
@@ -145,7 +145,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 ::v-deep .el-tabs__nav-scroll {
-  display: flex;
+  // display: flex;
   justify-content: center;
 }
 ::v-deep .el-collapse-item__header,::v-deep .el-collapse-item__wrap{

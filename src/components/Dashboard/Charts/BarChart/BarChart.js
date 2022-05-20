@@ -156,7 +156,7 @@ export default {
         'seriesOption': [], // 从数据中拿到系列的名字
         'SeriesChartLabel': { // 某个系列显示图表标签
           'check': false, // 默认未选中
-          'color': '' // 颜色
+          'color': '#383B47' // 颜色
         },
         'SeriesMaximum': { // 最值
           'check': false // 默认未选中
