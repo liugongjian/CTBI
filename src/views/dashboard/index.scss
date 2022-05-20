@@ -355,7 +355,6 @@
   }
   .el-collapse{
     border-top: 0px;
-    border-bottom: 1px solid rgba(239,242,245,0.10);
     .el-collapse-item{
       .el-collapse-item__header{
         font-size: 12px;
@@ -363,8 +362,22 @@
         font-weight: 500;
         padding: 0 16px;
         border-top: 1px solid rgba(239,242,245,0.10);
+        border-bottom: 0px;
       }
+      .el-collapse-item__header:last-of-type{
+        border-bottom: 1px solid rgba(239,242,245,0.10);
+
+      }
+      .el-collapse-item__content{
+        background: #424550;
+        padding: 12px 16px 0px 16px;
+      }
+      .el-collapse-item__wrap{
+        border-bottom: 0px;
+      }
+      
     }
+    
   }
   
 }

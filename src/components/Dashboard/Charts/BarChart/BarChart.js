@@ -30,7 +30,7 @@ export default {
     'Basic': { // 基础属性
       'Title': { // 标题组件
         'text': '柱图', // 标题名称
-        'color': '#333', // 标题颜色
+        'color': '#000', // 标题颜色
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
       },

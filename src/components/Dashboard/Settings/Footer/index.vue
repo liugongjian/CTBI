@@ -8,7 +8,7 @@
       class="editor-item-container"
       :class="{'box-disabled':!option.show}"
     >
-      <div><span>尾注内容：</span>
+      <div><span style="margin-right: 8px">尾注内容</span>
         <span
           class="el-icon-edit-outline"
           style="cursor:pointer"
