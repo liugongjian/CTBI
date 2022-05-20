@@ -48,8 +48,27 @@ export const constantRoutes = [
         path: 'page',
         name: 'dataSetEdit',
         hidden: true,
-        meta: { activeMenu: '/dataManage/dataSet' },
         component: () => import('@/views/dataManage/dataSet/dataSetEdit/index.vue')
+      }
+    ]
+  },
+  {
+    path: '/dashboard/',
+    name: 'dashboard',
+    component: () => import('@/views/dashboard/index.vue'),
+    meta: { title: '仪表盘', icon: 'dashboard', affix: true, keepAlive: true }
+  },
+  {
+    path: '/dashboard',
+    redirect: '/dashboard/page',
+    component: BlankLayout,
+    children: [
+      {
+        path: 'page',
+        name: 'dashboard',
+        hidden: true,
+        component: () => import('@/views/dashboard/index.vue'),
+        meta: { title: '仪表盘', icon: 'dashboard', affix: true, keepAlive: true }
       }
     ]
   },

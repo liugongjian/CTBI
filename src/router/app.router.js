@@ -6,16 +6,10 @@ const apps = [
     meta: { title: '首页', icon: 'dashboard', affix: true }
   },
   {
-    path: '/dashboard/',
-    name: 'dashboard',
-    component: () => import('@/views/dashboard/index.vue'),
-    meta: { title: '仪表盘', icon: 'dashboard', affix: true, keepAlive: true }
-  },
-  {
     path: '/dashboardList/',
     name: 'dashboard',
     component: () => import('@/views/dashboard/list.vue'),
-    meta: { title: '仪表盘列表', icon: 'dashboard', affix: true }
+    meta: { title: '仪表盘', icon: 'dashboard', affix: true }
   },
   {
     path: '/dataManage',
@@ -36,14 +30,6 @@ const apps = [
         component: () => import('@/views/dataManage/dataSet/index.vue'),
         meta: { title: '数据集', icon: 'dashboard', affix: true }
       }
-      // 需要去除布局，提出到base.router.js实现
-      // {
-      //   path: 'dataSet/edit',
-      //   name: 'dataSetEdit',
-      //   hidden: true,
-      //   meta: { activeMenu: '/dataManage/dataSet' },
-      //   component: () => import('@/views/dataManage/dataSet/dataSetEdit/index.vue')
-      // }
     ]
   },
   {
