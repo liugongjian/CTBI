@@ -38,9 +38,9 @@
             />
           </el-tabs>
         </el-container>
-        <el-contaioner v-else-if="showChartTypes">
+        <el-container v-else-if="showChartTypes">
           <ChartSwitcher />
-        </el-contaioner>
+        </el-container>
         <div
           v-show="showWrapper===false"
           style="height:calc(100vh - 190px)"
@@ -138,7 +138,6 @@ export default {
       const temp = store.state.app.layout.find(item => {
         return item.i === this.currentLayoutId
       })
-      console.log('人间正道是沧桑呐  ', temp)
       return temp.option
     },
     currentChart () {
@@ -163,7 +162,6 @@ export default {
       this.showData = !this.showData
     },
     changeChart() {
-      console.log('做社会的脊梁   展示  ')
       this.showChartTypes = !this.showChartTypes
     }
   }

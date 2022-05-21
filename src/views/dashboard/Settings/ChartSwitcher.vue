@@ -14,7 +14,7 @@
       :key="index"
       class="types"
     >
-      <h3>{{ item.name }}</h3>
+      <h3 style="color: aliceblue;">{{ item.name }}</h3>
       <div
         v-for="(sub,name,i) in filterTools(toolList, item.type)"
         :key="name+i"
@@ -95,6 +95,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.switcher {
+  background: #383B47;
+}
+
 .header {
   display: contents;
 }
