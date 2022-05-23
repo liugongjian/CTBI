@@ -18,7 +18,6 @@
         >
           <svg-icon
             :icon-class="item.value"
-            style="font-size: 30px;"
             @click="changeHandler(item.value)"
           />
         </el-tooltip>
@@ -122,9 +121,11 @@ export default {
 .svg-container {
   cursor: pointer;
   display: inline-block;
-  height: 32px;
-  width: 32px;
+  height: 30px;
+  width: 30px;
   margin-right: 8px;
+  line-height: 32px;
+  text-align: center;
 }
 .svg-container.active{
   border: 1px solid rgba(250,131,52,1);

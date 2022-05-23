@@ -3,7 +3,7 @@
     <div class="editor-item-title">请选择系列</div>
     <el-select
       v-model="option.selectValue"
-      style="margin-top:12px"
+      class="m-t-12"
       placeholder="请选择"
       @change="selectSeries"
     >
