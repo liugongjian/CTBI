@@ -37,8 +37,8 @@
           class="upload-img-wrapper"
         >
           <img
-            :src="option.imgUrl"
             v-if="option.imgUrl"
+            :src="option.imgUrl"
             style="width:12px;height:12px"
           >
         </div>

@@ -1,1 +1,42 @@
-<svg t="1650267262715" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4276" width="128" height="128"><path d="M836.367 796.384H971.17V11.636H836.367v784.748z m-240.716 0h134.802V363.086H595.65v433.298z m-240.723 0h134.803V252.358H354.928v544.026z m-240.718 0h134.804v-284.05H114.21v284.05z m0 0" fill="#706EE7" p-id="4277"></path><path d="M932.655 131.994c4.814 0 9.631 4.819 14.445 4.819 14.445 9.625 19.258 28.884 9.626 43.328l-14.44 14.445c-62.59 28.883-129.99 48.14-192.575 72.211-28.89 14.445-48.146 33.703-62.59 57.774-24.071 48.146-48.142 101.105-72.213 154.06-9.631 19.258-24.076 38.516-38.515 52.96-43.333 38.515-101.106 57.773-158.88 52.96-19.256 0-43.327-9.632-62.585-14.445-9.626-4.814-19.257-9.626-33.701-14.445-62.587-28.884-134.804 0-168.5 62.59-14.445 24.071-24.077 52.955-33.703 77.03 0 4.814-4.814 9.627-9.631 14.44-9.626 4.819-19.258 9.631-28.884 4.819-9.631 0-19.257-9.631-24.07-19.258-4.82-9.631-4.82-19.258 0-24.076 9.625-24.07 24.07-52.954 33.696-77.03 9.632-19.258 24.075-38.515 38.515-52.955 43.334-43.333 96.288-62.592 158.879-57.773 24.07 0 43.329 9.626 67.399 19.257 9.631 4.814 19.258 9.627 33.703 14.44 14.443 4.818 28.883 9.63 43.327 9.63 38.515 4.814 72.218-9.63 101.102-33.7 9.631-9.627 19.257-24.071 28.888-38.516 24.07-48.142 48.14-101.1 72.217-154.06 14.439-28.884 38.515-57.774 67.399-77.032 9.63-4.812 24.07-14.443 33.701-19.257l187.763-72.217h9.627" fill="#29C287" p-id="4278"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>组合图</title>
+    <defs>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-2">
+            <stop stop-color="#C7C6CA" offset="0%"></stop>
+            <stop stop-color="#E5E5E7" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-3">
+            <stop stop-color="#C7C6CA" offset="0%"></stop>
+            <stop stop-color="#E5E5E7" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-4">
+            <stop stop-color="#C7C6CA" offset="0%"></stop>
+            <stop stop-color="#E5E5E7" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-5">
+            <stop stop-color="#C7C6CA" offset="0%"></stop>
+            <stop stop-color="#E5E5E7" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-6">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="组合图" fill-rule="nonzero">
+            <polygon id="路径" fill="url(#linearGradient-1)" points="0 917.735849 1024 917.735849 1024 1024 0 1024"></polygon>
+            <g id="编组-138" transform="translate(93.090909, 338.113208)">
+                <polygon id="路径" fill="url(#linearGradient-2)" points="0 295.178197 112.152382 295.178197 112.152382 531.320755 3.73542467e-14 531.320755"></polygon>
+                <polygon id="路径" fill="url(#linearGradient-3)" points="448.609524 177.106918 560.761903 177.106918 560.761903 531.320755 448.609524 531.320755"></polygon>
+                <polygon id="路径" fill="url(#linearGradient-4)" points="672.914283 59.0356398 785.066668 59.0356398 785.066668 531.320755 672.914283 531.320755"></polygon>
+                <polygon id="路径" fill="url(#linearGradient-5)" points="224.304762 0 333.653333 0 333.653333 531.320755 224.304762 531.320755"></polygon>
+            </g>
+            <polygon id="路径备份-37" fill="url(#linearGradient-6)" points="541.803325 424.293307 314.099044 236.992755 156.713714 382.246162 93.0909091 290.506815 307.40172 91.7393476 548.500648 286.684958 970.423771 0 1024 99.3844055"></polygon>
+        </g>
+    </g>
+</svg>

@@ -112,8 +112,8 @@ export default {
 .svg-container {
   cursor: pointer;
   display: inline-block;
-  height: 32px;
-  width: 32px;
+  height: 30px;
+  width: 30px;
   margin-right: 8px;
   line-height: 32px;
   text-align: center;
