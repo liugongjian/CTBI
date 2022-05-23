@@ -136,6 +136,7 @@ export default {
     hideDimensionMeasure (item) {
       if (item.attributes) {
         item.attributes[0].isHidden = !item.attributes[0].isHidden
+        this.$emit('reset')
       }
     },
     // 切换维度或者度量

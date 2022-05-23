@@ -4,25 +4,23 @@
       图表类型
     </div>
     <div class="editor-item-container">
-      <span
+      <el-tooltip
         v-for="(item, index) in typeOption"
         :key="index"
-        class="svg-container"
-        :class="{'active': option.type===item.value}"
+        effect="dark"
+        :content="item.name"
+        placement="top"
       >
-        <el-tooltip
-          class="item"
-          effect="dark"
-          :content="item.name"
-          placement="top"
+        <span
+          class="svg-container"
+          :class="{'active': option.type===item.value}"
         >
           <svg-icon
             :icon-class="item.value"
-            style="font-size: 30px;"
             @click="changeHandler(item.value)"
           />
-        </el-tooltip>
-      </span>
+        </span>
+      </el-tooltip>
     </div>
   </div>
 </template>
@@ -122,9 +120,11 @@ export default {
 .svg-container {
   cursor: pointer;
   display: inline-block;
-  height: 32px;
-  width: 32px;
+  height: 30px;
+  width: 30px;
   margin-right: 8px;
+  line-height: 32px;
+  text-align: center;
 }
 .svg-container.active{
   border: 1px solid rgba(250,131,52,1);

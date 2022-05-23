@@ -11,7 +11,8 @@
         style="margin-right: 8px; height: 32px; width: 20px;"
       />
       <b-tooltip
-        :content="table.name"
+        :title="`${table.name}<br><span style='line-height: 20px; color: rgba(0, 0, 0, 0.3);'>${table.comment}</span>`"
+        :content="`${table.name}<span style='margin-left: 8px; color: rgba(0, 0, 0, 0.3);'>${table.comment}</span>`"
         class="h-c-p table-name"
       />
       <span class="table-btn">
@@ -131,10 +132,11 @@ export default {
   height: calc(100vh - 315px);
 
   &.full-height {
-    height: calc(100vh - 235px);
+    height: calc(100vh - 250px);
   }
 
   .main-list {
+    padding: 0px 8px 0px 0px;
     .table-btn {
       display: none;
     }
@@ -149,6 +151,7 @@ export default {
     }
 
     &:hover {
+      background-color: #fef5ee;
       .table-name {
         width: 150px;
       }

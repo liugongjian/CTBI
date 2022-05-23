@@ -1,11 +1,22 @@
 <template>
   <el-drawer
-    title="参数配置"
     :before-close="handleCloseSettingParam"
     :wrapper-closable="false"
     :size="630"
     :visible.sync="dialogVisible"
   >
+    <template slot="title">
+      <div>
+        参数配置
+        <el-tooltip
+          effect="light"
+          placement="right"
+        >
+          <div slot="content">参数：WHERE条件中添加${物理字段名:<br>参数变量名}；占位符：SQL中替换字符<br>${替换的字符}。在查询控件中可引用。</div>
+          <i class="el-icon-warning-outline" />
+        </el-tooltip>
+      </div>
+    </template>
     <div class="set-param-drawer">
       <div class="set-param-drawer-main">
         <el-table

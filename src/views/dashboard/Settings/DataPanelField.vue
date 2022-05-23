@@ -47,6 +47,33 @@
         </div>
       </div>
       <div class="update-wrapper">
+        <div class="auto-refresh-wrapper">
+          <el-checkbox
+            v-model="autoRefresh"
+            label="自动刷新"
+            @change="handleRefresh"
+          />
+          <input
+            v-if="autoRefresh"
+            v-model="time"
+            type="number"
+            class="limit-input"
+          >
+          <el-select
+            v-if="autoRefresh"
+            v-model="unit"
+            popper-class="setting-select"
+            placeholder="请选择"
+            @change="selectUnit"
+          >
+            <el-option
+              v-for="item in unitOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
         <div class="result-display">
           <span class="m-r-8">结果展示</span>
           <div>
@@ -86,7 +113,35 @@ export default {
   data () {
     return {
       dataValue: [],
-      limit: 100 // 结果展示条数
+      limit: 100, // 结果展示条数
+      autoRefresh: false, // 自动刷新
+      unitOption: [{
+        value: 'minute',
+        label: '分'
+      }, {
+        value: 'second',
+        label: '秒'
+      }],
+      time: 10,
+      unit: 'minute',
+      interVal: null
+    }
+  },
+  watch: {
+    time: {
+      handler (val) {
+        if (this.autoRefresh) {
+          // 开启自动刷新的定时器
+          const time = 1000 * val * (this.unit === 'minute' ? 60 : 1)
+          this.interVal = setInterval(() => {
+            this.reflashStore()
+          }, time)
+        } else {
+          clearInterval(this.interVal)
+          this.interVal = null
+        }
+      },
+      deep: true
     }
   },
   mounted () {
@@ -202,6 +257,10 @@ export default {
     //   }
     // ]
   },
+  beforeDestroy() {
+    clearInterval(this.interVal)
+    this.interVal = null
+  },
   methods: {
     // 当拖拽在当前元素上时
     hanldDragOver (e) {
@@ -239,6 +298,31 @@ export default {
         return ele._id === el._id
       })
       item.value.splice(dataIndex, 1)
+    },
+    // 自动刷新
+    handleRefresh (val) {
+      if (val) {
+        // 开启自动刷新的定时器
+        const time = 1000 * this.time * (this.unit === 'minute' ? 60 : 1)
+        this.interVal = setInterval(() => {
+          this.reflashStore()
+        }, time)
+      } else {
+        clearInterval(this.interVal)
+        this.interVal = null
+      }
+    },
+    selectUnit(val) {
+      if (this.autoRefresh) {
+        // 开启自动刷新的定时器
+        const time = 1000 * this.time * (val === 'minute' ? 60 : 1)
+        this.interVal = setInterval(() => {
+          this.reflashStore()
+        }, time)
+      } else {
+        clearInterval(this.interVal)
+        this.interVal = null
+      }
     },
     // 更新
     async reflashStore () {

@@ -1,1 +1,27 @@
-<svg t="1649399853469" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9899" width="128" height="128"><path d="M128 512l256-256 256 256 256-256v640H128V512z" fill="#4A8BFE" p-id="9900"></path><path d="M896 928H128a32 32 0 0 1-32-32V512a32 32 0 0 1 9.28-22.72l256-256a32 32 0 0 1 45.44 0l233.28 233.6 233.28-233.6a32 32 0 0 1 34.88-6.72A32 32 0 0 1 928 256v640a32 32 0 0 1-32 32zM160 864h704V333.12l-201.28 201.6a32 32 0 0 1-45.44 0L384 301.12l-224 224z" fill="#4A8BFE" p-id="9901"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1073px" height="1024px" viewBox="0 0 1073 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>面积图</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="面积图" transform="translate(-0.000000, 0.000000)" fill-rule="nonzero">
+            <g id="编组-9">
+                <polygon id="路径备份-43" fill="url(#linearGradient-1)" transform="translate(536.380953, 976.572633) rotate(90.000000) translate(-536.380953, -976.572633) " points="488.953586 440.19168 583.80832 440.19168 583.80832 1512.95359 488.953586 1512.95359"></polygon>
+                <path d="M336.13209,0 C493.470939,0 486.319058,290.888203 604.321938,290.888203 C722.324816,290.888203 700.870432,141.807296 826.026452,141.807296 C1022.69875,141.807296 1072.76191,796.304478 1072.76191,796.304478 L1071.52176,796.359436 C1062.76596,748.282103 1005.31433,476.329497 826.026452,476.329497 C700.870432,476.329497 722.324816,549.051548 604.321938,549.051548 C486.319058,549.051548 493.470939,403.607446 336.13209,403.607446 C157.253188,403.607446 16.5997029,756.6839 1.36835978,796.334198 L0.682676419,796.255941 L0.872525683,795.274769 C13.2154397,729.909718 155.097656,0 336.13209,0 Z" id="形状结合备份-3" fill="url(#linearGradient-2)"></path>
+            </g>
+            <path d="M9.75238107e-06,842.583538 C9.75238107e-06,842.583538 146.611667,446.248426 336.13209,446.248426 C493.470939,446.248426 486.319058,591.692529 604.321938,591.692529 C722.324816,591.692529 700.870432,518.970477 826.026452,518.970477 C1022.69875,518.970477 1072.76191,846.219065 1072.76191,846.219065 L9.75238107e-06,846.219065 L9.75238107e-06,842.583538 Z" id="路径备份-42" fill="url(#linearGradient-3)"></path>
+        </g>
+    </g>
+</svg>

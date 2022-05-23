@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="1252px" height="1024px" viewBox="0 0 1252 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>编组</title>
+    <title>编组 2</title>
     <defs>
         <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
             <stop stop-color="#E4E3E7" offset="0%"></stop>
@@ -8,20 +8,26 @@
         </linearGradient>
         <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
             <stop stop-color="#FFB676" stop-opacity="0.9" offset="0%"></stop>
-            <stop stop-color="#F98436" offset="100%"></stop>
+            <stop stop-color="#FA8435" offset="100%"></stop>
         </linearGradient>
         <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
             <stop stop-color="#FEC08B" stop-opacity="0.9" offset="0%"></stop>
-            <stop stop-color="#F98436" offset="100%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#FEC08B" stop-opacity="0.9" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
         </linearGradient>
     </defs>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="编组" transform="translate(0.000000, -0.000000)" fill-rule="nonzero">
-            <g id="矩形备份-2" fill="url(#linearGradient-1)">
-                <path d="M1251.55556,0 L0,0 L0,1024 L1251.55556,1024 L1251.55556,0 Z M1194.66667,58.1818182 L1194.66667,965.76 L56.8888889,965.76 L56.8888889,58.1818182 L1194.66667,58.1818182 Z" id="矩形备份"></path>
+        <g id="编组-2" fill-rule="nonzero">
+            <g id="编组">
+                <path d="M1251.55556,0 L0,0 L0,1024 L1251.55556,1024 L1251.55556,0 Z M1194.66667,58.1818182 L1194.66667,965.76 L56.8888889,965.76 L56.8888889,58.1818182 L1194.66667,58.1818182 Z" id="矩形" fill="url(#linearGradient-1)"></path>
+                <path d="M779.377778,203.942584 L472.177778,203.942584 L472.177778,388.899522 L779.377778,388.899522 L779.377778,203.942584 Z M756.622222,227.2 L756.622222,365.614545 L494.933333,365.614545 L494.933333,227.2 L756.622222,227.2 Z" id="路径备份-33" fill="url(#linearGradient-2)"></path>
+                <path d="M1149.15556,203.942584 L841.955556,203.942584 L841.955556,388.899522 L1149.15556,388.899522 L1149.15556,203.942584 Z M1126.4,227.2 L1126.4,365.614545 L864.711111,365.614545 L864.711111,227.2 L1126.4,227.2 Z" id="路径备份-34" fill="url(#linearGradient-2)"></path>
             </g>
-            <polygon id="路径备份-47" fill="url(#linearGradient-2)" points="113.777778 210.788304 625.777778 210.788304 625.777778 368.879532 113.777778 368.879532"></polygon>
-            <polygon id="路径备份-48" fill="url(#linearGradient-3)" points="113.777778 474.273684 1137.77778 474.273684 1137.77778 843.153215 113.777778 843.153215"></polygon>
+            <polygon id="路径备份-31" fill="url(#linearGradient-3)" points="113.777778 210.788304 398.222222 210.788304 398.222222 368.879532 113.777778 368.879532"></polygon>
+            <polygon id="路径-3" fill="url(#linearGradient-4)" points="1137.77778 421.576608 1137.77778 843.153215 113.777778 843.153215 113.777778 564.179151 234.147535 503.729892 346.04189 632.364914 421.158713 461.095495 513.55012 605.475339 625.777778 503.729892 714.712366 605.475339 804.208799 421.576608 964.555793 564.179151"></polygon>
         </g>
     </g>
 </svg>

@@ -57,16 +57,6 @@ a {
     font-size: 12px;
     color: rgba(255,255,255,0.75);
     font-weight: 500;
-    .axis-tab{
-      margin-top: -12px;
-      
-      .el-tabs__header{
-        padding: 0 20px !important;
-      }
-      font-size: 14px;
-      color: rgba(255,255,255,0.90);
-      font-weight: 400;
-    }
   }
   // 输入框样式
   .el-input--small{
@@ -89,6 +79,19 @@ a {
       font-size: 12px;
       color: rgba(255,255,255,0.25);
       font-weight: 400;
+    }
+  }
+  // 计数器的样式
+  .el-input-number--small{
+    line-height: 22px;
+    .el-input-number__decrease,.el-input-number__increase{
+      line-height: 11px !important;
+      height: 11px !important;
+      background: transparent;
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+      font-weight: 400;
+      border-color: rgba(221,221,221,0.25) !important;
     }
   }
   // 颜色选择器样式
@@ -140,6 +143,15 @@ a {
       margin-right: 0px;
     }
   }
+  .el-radio-button--small .el-radio-button__inner{
+    height: 24px;
+    padding: 5px 15px;
+    background-color: transparent;
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 500;
+    border: 1px solid rgba(221, 221, 221, 0.25) !important;
+  }
   // 下拉选择框
   .el-select .el-input .el-select__caret{
     line-height: 24px;
@@ -148,7 +160,7 @@ a {
   // 置灰样式
   .box-disabled {
     cursor: not-allowed;
-    opacity: .4;
+    opacity: .3;
 
     &>* {
       pointer-events: none;
@@ -180,34 +192,13 @@ a {
   }
 }
 
-// 滚动条样式优化
-::-webkit-scrollbar {
-  width: 6px;
-  height: 10px;
-  /**/
-}
-
-// 外层轨道
-::-webkit-scrollbar-track {
-  background: #383B47;
-}
-
-// 滚动的滑块
-::-webkit-scrollbar-thumb {
-  background: rgba(221,221,221,0.25);
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(221,221,221,0.25);
-}
-
 // element tooltip light 样式
 .el-tooltip__popper.is-light {
   border-width: 0px !important;
   box-shadow: 0px 2px 8px 0px rgba(200, 201, 204, 0.5);
 
   .popper__arrow {
+    color: #fff;
     border-top-color: #fff !important;
   }
 }
