@@ -6,7 +6,7 @@
         :key="index"
         class="chart-type"
       >
-        <el-button>{{ item.name }}</el-button>
+        <el-button class="button-chart">{{ item.name }}</el-button>
       </span>
     </div>
     <div
@@ -21,7 +21,7 @@
         class="sub-chart"
       >
         <el-tooltip popper-class="content">
-          <el-button><svg-icon :icon-class="name" style="font-size:20px;" /></el-button>
+          <el-button class="button-chart"><svg-icon :icon-class="name" style="font-size:20px;" /></el-button>
           <div slot="content">
             <ChartDescription :chart-name="name" />
           </div>
@@ -129,22 +129,28 @@ export default {
 .types {
   margin-top: 10px;
   margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+.button-chart {
+  background-color: rgba($color: #383b47, $alpha: 1);
+  color: aliceblue;
 }
 </style>
 <style lang="scss">
 .content.el-tooltip__popper[x-placement^="top"] .popper__arrow {
-  border-top-color: rgba($color: #6f6a6ab1, $alpha: 0.6);
+  border-top-color: rgba($color: #000000b1, $alpha: 0.6);
 }
 .content.el-tooltip__popper[x-placement^="top"] .popper__arrow:after {
-  border-top-color: rgba($color: #6f6a6ab1, $alpha: 0.6);
+  border-top-color: rgba($color: #000000b1, $alpha: 0.6);
 }
 .is-dark.content.el-tooltip__popper[x-placement^="bottom"] .popper__arrow {
-  border-bottom-color: rgba($color: #6f6a6ab1, $alpha: 0.6);
+  border-bottom-color: rgba($color: #000000b1, $alpha: 0.6);
 }
 .is-dark.content.el-tooltip__popper[x-placement^="bottom"] .popper__arrow:after {
-  border-bottom-color: rgba($color: #6f6a6ab1, $alpha: 0.6);
+  border-bottom-color: rgba($color: #000000b1, $alpha: 0.6);
 }
 .content {
-  background: rgba($color: #6f6a6ab1, $alpha: 0.9) !important;
+  background: rgba($color: #000000b1, $alpha: 0.8) !important;
 }
 </style>

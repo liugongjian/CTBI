@@ -1,1 +1,29 @@
-<svg t="1649663659652" class="icon" viewBox="0 0 1233 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="14016" width="128" height="128"><path d="M131.010348 208.075259H1078.908749v651.198495H131.010348V208.075259z" fill="#3AA0FF" p-id="14017"></path><path d="M131.010348 859.273754V614.592662C207.111947 487.43556 317.892756 427.710254 452.75635 427.710254c203.258702 0 389.177799 211.928504 626.152399 152.203198v279.360302H131.010348z" fill="#4ECB73" p-id="14018"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1126px" height="1024px" viewBox="0 0 1126 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-3">
+            <stop stop-color="#C7C6CA" offset="0%"></stop>
+            <stop stop-color="#E5E5E7" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="百分比堆积面积图" transform="translate(-0.000000, 0.000000)" fill-rule="nonzero">
+            <g id="编组">
+                <polygon id="路径备份-45" fill="url(#linearGradient-1)" transform="translate(562.999996, 974.159294) rotate(90.000000) translate(-562.999996, -974.159294) " points="513.159289 411.159298 612.840702 411.159298 612.840702 1537.15929 513.159289 1537.15929"></polygon>
+                <g id="fsux_图表_百分比堆积图备份-2" transform="translate(0.000010, 318.220350)" fill="url(#linearGradient-2)">
+                    <path d="M0,521.994888 L0,225.173618 C90.4843964,71.649025 221.177629,0 382.035928,0 C623.32135,0 844.5,255.880736 1125.99999,184.233084 L1125.99999,521.994888 L0,521.994888 L0,521.994888 Z" id="路径"></path>
+                </g>
+                <path d="M1126,450.347235 C844.50001,521.994888 623.32136,266.114151 382.035938,266.114151 C221.177639,266.114151 90.4844067,337.763176 1.02063625e-05,491.287769 L1.02063625e-05,491.287769 L1.02063625e-05,0 L1126,0 L1126,450.347235 Z" id="形状结合" fill="url(#linearGradient-3)"></path>
+            </g>
+        </g>
+    </g>
+</svg>
