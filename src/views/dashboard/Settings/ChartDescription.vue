@@ -158,7 +158,6 @@ export default {
     }
   },
   mounted () {
-    console.log('巴拉巴拉    ', this.chartName)
   }
   // methods: {
   // }
