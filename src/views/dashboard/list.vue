@@ -144,6 +144,13 @@
               </template>
             </el-table-column>
           </el-table>
+          <Pagination
+            class="pagination"
+            :total="pageInfo.total"
+            :page-num="pageInfo.pageNum"
+            :page-size="pageInfo.pageSize"
+            @pagination="handlePageChange"
+          />
         </div>
 
         <!-- 各种 弹窗 & 抽屉 -->
@@ -299,12 +306,14 @@ import {
 } from '@/api/dashboard'
 import FolderEdit from './FolderEdit'
 import FolderTree from './FolderTree'
+import Pagination from '@/components/Pagination/index.vue'
 import moment from 'moment'
 export default {
   name: 'DataSet',
   components: {
     FolderEdit,
-    FolderTree
+    FolderTree,
+    Pagination
   },
   data() {
     const validateName = (rule, value, callback) => {
@@ -361,7 +370,12 @@ export default {
       currentShareInfo: null,
       treeVisible: false,
       moveDashboardIds: [],
-      onSearched: false
+      onSearched: false,
+      pageInfo: {
+        total: 0,
+        pageNum: 1,
+        pageSize: 10
+      }
     }
   },
   computed: {
@@ -383,29 +397,35 @@ export default {
       this.serachName = ''
       this.tableData = []
       this.isAllDataShow = true
+      this.pageInfo = {
+        total: 0,
+        pageNum: 1,
+        pageSize: this.pageInfo.pageSize
+      }
       this.getTableData()
     },
     // 获取 tableData
-    async getTableData(searchkey = '') {
+    async getTableData() {
       this.dataLoading = true
       try {
-        const data = await getDashboardList('isPaging=0' + searchkey)
-        const result = data.result
-        if (searchkey) {
-          const temp = []
-          result.forEach(item => {
-            if (item.directory) {
-              item.childNode.forEach(child => {
-                temp.push({ ...child, path: `根目录/${item.name}` })
-              })
-            } else {
-              temp.push({ ...item, path: '根目录' })
-            }
-          })
-          this.tableData = temp
-        } else {
-          this.tableData = result
+        const searchkey = this.serachName
+        const params = {
+          isPaging: 0,
+          pageNum: this.pageInfo.pageNum,
+          pageSize: this.pageInfo.pageSize
         }
+        if (searchkey) {
+          params.searchkey = searchkey
+        }
+        const paramsStr = Object.entries(params).map(ar => `${ar[0]}=${ar[1]}`).join('&')
+        const data = await getDashboardList(paramsStr)
+        const { result, pageInfo } = data
+        this.pageInfo = {
+          total: pageInfo.totalItems,
+          pageNum: pageInfo.page,
+          pageSize: pageInfo.limit
+        }
+        this.tableData = result
         this.onSearched = !!searchkey
       } catch (error) {
         console.log(error)
@@ -414,8 +434,8 @@ export default {
     },
     // 查询
     async query() {
-      const searchkey = this.serachName ? `&searchkey=${this.serachName}` : ''
-      this.getTableData(searchkey)
+      // const searchkey = this.serachName ? `&searchkey=${this.serachName}` : ''
+      this.getTableData()
     },
     // 新建文件夹
     createFolder() {
@@ -672,6 +692,14 @@ export default {
     },
     formatTime(row) {
       return row.lastUpdatedTime ? moment.utc(row.lastUpdatedTime).local().format('YYYY-MM-DD HH:mm:ss') : '-'
+    },
+    handlePageChange(data) {
+      console.log(data)
+      this.pageInfo = {
+        ...this.pageInfo,
+        ...data
+      }
+      this.getTableData()
     }
   }
 }
@@ -686,7 +714,6 @@ export default {
     background: #fff;
     padding: 16px;
     padding-top: 0;
-    height: calc(100vh - 160px);
   }
 }
 
@@ -838,4 +865,10 @@ export default {
     }
   }
 }
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0;
+  }
 </style>
