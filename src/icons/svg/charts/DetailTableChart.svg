@@ -1,1 +1,27 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="icon" width="200px" height="200.00px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M102.4 128v768h819.2V128H102.4z m555.8784 192h204.8v132.9152h-204.8V320zM365.7216 836.9152h-204.8v-135.8592h204.8v135.8592z m0-194.944h-204.8V512h204.8v129.9712z m0-189.056h-204.8V320h204.8v132.9152z m234.0608 384H424.192v-135.8592h175.5648v135.8592z m0-194.944H424.192V512h175.5648v129.9712z m0-189.056H424.192V320h175.5648v132.9152z m263.296 384h-204.8v-135.8592h204.8v135.8592z m0-194.944h-204.8V512h204.8v129.9712z" fill="#5D7092" /><path d="M102.4 128v204.8h819.2V128z" fill="#0B69E6" /></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1252px" height="1024px" viewBox="0 0 1252 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>明细表</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FFB676" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="明细表" fill-rule="nonzero">
+            <g id="编组-7">
+                <polygon id="路径" fill="url(#linearGradient-1)" points="0 0 1251.55556 0 1251.55556 255.999999 0 255.999999"></polygon>
+                <path d="M0,319.999999 L375.466666,319.999999 L375.466666,511.999999 L0,511.999999 L0,319.999999 Z M438.044444,319.999999 L813.511111,319.999999 L813.511111,511.999999 L438.044444,511.999999 L438.044444,319.999999 Z M876.088889,319.999999 L1251.55556,319.999999 L1251.55556,511.999999 L876.088889,511.999999 L876.088889,319.999999 Z M0,832 L375.466666,832 L375.466666,1024 L0,1024 L0,832 Z M438.044444,832 L813.511111,832 L813.511111,1024 L438.044444,1024 L438.044444,832 Z M876.088889,832 L1251.55556,832 L1251.55556,1024 L876.088889,1024 L876.088889,832 Z" id="形状" fill="url(#linearGradient-2)"></path>
+            </g>
+            <path d="M0,575.999999 L375.466666,575.999999 L375.466666,767.999999 L0,767.999999 L0,575.999999 Z M438.044444,575.999999 L813.511111,575.999999 L813.511111,767.999999 L438.044444,767.999999 L438.044444,575.999999 Z M876.088889,575.999999 L1251.55556,575.999999 L1251.55556,767.999999 L876.088889,767.999999 L876.088889,575.999999 Z" id="形状" fill="url(#linearGradient-3)"></path>
+        </g>
+    </g>
+</svg>
