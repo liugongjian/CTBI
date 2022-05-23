@@ -83,3 +83,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.tool-header{
+    position: relative;
+}
+</style>

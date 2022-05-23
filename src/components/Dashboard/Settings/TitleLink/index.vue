@@ -12,13 +12,14 @@
           <el-input
             v-model="option.text"
             placeholder="链接跳转"
+            style="width: 104px"
           />
           <el-tooltip
             placement="top"
             effect="dark"
             content="建议按左侧宽度填写内容，超出将按...显示"
           >
-            <i class="el-icon-warning-outline m-l-5" />
+            <i class="el-icon-warning-outline" />
           </el-tooltip>
         </div>
       </div>
@@ -30,13 +31,14 @@
           <el-input
             v-model="option.url"
             placeholder="https://"
+            style="width: 116px"
             @blur="completeUrl"
           />
         </div>
       </div>
 
       <!-- 打开方式 -->
-      <div class="editor-item-container"><span>打开方式</span>
+      <div class="editor-item-container"><span style="margin-right: 8px">打开方式</span>
         <el-radio-group v-model="option.openType">
           <el-radio label="blank">新窗口</el-radio>
           <el-radio label="dialog">弹窗</el-radio>

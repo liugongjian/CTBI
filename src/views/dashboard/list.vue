@@ -685,8 +685,8 @@ export default {
   &-content {
     background: #fff;
     padding: 16px;
-    margin-top: 16px;
-    height: calc(100vh - 50px);
+    padding-top: 0;
+    height: calc(100vh - 160px);
   }
 }
 

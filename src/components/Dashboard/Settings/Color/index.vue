@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-object-container">
+  <div v-if="typeof option.show === 'undefined' ? true : option.show" class="editor-object-container">
     <div>
       <ColorConfig
         :color-data.sync="color"
@@ -32,17 +32,21 @@ export default {
     // 监听数据变化 变化后触发radar组件变化
     color: {
       handler (val) {
-        console.log(this.color)
+        // console.log(this.color)
         this.option.color = val
       },
       deep: true
     }
   },
+  mounted() {
+    this.getColor()
+  },
   methods: {
     getColor () {
       store.state.app.layout.forEach(item => {
         if (item.i === store.state.app.currentLayoutId) {
-          this.color = item.option.theme.ComponentOption.Color.color
+          const option = item.option.theme.ComponentOption || item.option.theme.DisplayConfig
+          this.color = option.Color.color
         }
       })
     }

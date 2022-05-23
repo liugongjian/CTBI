@@ -8,7 +8,7 @@
         <div class="d-f">
           <div
             :class="[{'active': activeTagName === 1}, 'tab-block']"
-            @click="activeTagName = 1"
+            @click="activeTagName = 1;refreshPreview()"
           >数据预览</div>
           <div
             :class="[{'active': activeTagName === 2}, 'tab-block']"
@@ -50,165 +50,123 @@
               slot-scope="{ node, data }"
               class="custom-tree-node d-f f-b-c w-100p"
             >
-              <div :class="getDisplayColumnClass">
-                <b-tooltip :content="data.displayColumn" />
+              <div :class="[{ 'hide-tree-node': (data.attributes && data.attributes[0].isHidden) }, 'd-f']">
+                <svg-icon
+                  v-if="data.attributes"
+                  style="width: 20px;height: 18px;margin-right: 6px;"
+                  :icon-class="typeTransform(data.attributes)"
+                />
+                <b-tooltip
+                  :content="data.displayColumn"
+                  width="100px"
+                />
               </div>
               <div
                 v-if="node.isLeaf"
                 class="p-r-10 gear-btn"
               >
-                <el-dropdown trigger="click">
-                  <el-button type="text">
-                    <svg-icon icon-class="gear" />
-                  </el-button>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item
-                      icon="el-icon-edit-outline"
-                      @click.native="editDimensionMeasure(data)"
-                    >编辑</el-dropdown-item>
-                    <el-dropdown-item @click.native="() => {copyDimensionMeasure(data)}">
-                      <svg-icon
-                        icon-class="file-copy"
-                        style="margin-right: 5px;"
-                      />复制
-                    </el-dropdown-item>
-                    <template v-if="data.attributes">
-                      <el-dropdown-item @click.native="hideDimensionMeasure(data)">
-                        <span v-if="!data.attributes[0].isHidden">
-                          <svg-icon
-                            icon-class="m-eye-close"
-                            style="margin-right: 5px;"
-                          />隐藏
-                        </span>
-                        <span v-else>
-                          <svg-icon
-                            icon-class="eye-open"
-                            style="margin-right: 5px;"
-                          />显示
-                        </span>
-                      </el-dropdown-item>
-                    </template>
-                    <el-dropdown-item
-                      icon="el-icon-delete"
-                      @click.native="() => {deleteDimensionMeasure(data)}"
-                    >删除</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                <gear-btn
+                  :active-tag-name="activeTagName"
+                  :data="data"
+                  :fields="fields"
+                  @reset="getDimensionMeasureData(fields);refreshPreview();"
+                />
               </div>
             </div>
           </el-tree>
         </div>
 
         <!-- right -->
+        <!-- gutter-th 由于表头与表体不对齐，el-table会默认追加gutter，这边选择隐藏 -->
         <div class="data-preview-right">
           <el-table
             :data="dimensionMeasureTableData"
+            class="gutter-th"
             :height="tableHeight"
+            empty-text=" "
             style="width: 100%"
             stripe
           >
             <el-table-column
               v-for="(parent, i) in dimensionMeasure"
-              :key="`column-p-${parent.label}-${i}`"
+              :key="`column-p-${i}`"
               :label="parent.displayColumn"
-              :class-name="`m-column-${i}`"
+              :class-name="`m-column-${parent._id}`"
             >
-              <template #header="{ column }">
-                <div>{{ column.label }}</div>
-              </template>
-              <span
+              <el-table-column
                 v-for="(v, index) in parent.children"
-                :key="`column-child-${v.displayColumn}-${index}`"
+                :key="`column-child-${index}`"
+                class-name="display-none"
               >
                 <el-table-column
-                  v-if="!v.attributes[0].isHidden"
-                  :prop="v.column"
-                  width="120"
+                  v-if="(v.attributes && !v.attributes[0].isHidden)"
+                  :prop="v.displayColumn"
+                  width="95"
                   class-name="column-child"
                   :label="v.displayColumn"
                   show-overflow-tooltip
                 >
                   <template #header="{ column }">
-                    <b-tooltip :content="column.label" />
+                    <b-tooltip
+                      :content="column.label"
+                      width="80px"
+                    />
                     <div class="d-f f-b-c">
-                      <div>{{ v.attributes[0].dataType }}</div>
-                      <div class="gear-btn">
-                        <el-dropdown trigger="click">
-                          <el-button type="text">
-                            <svg-icon icon-class="gear" />
-                          </el-button>
-                          <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item
-                              icon="el-icon-edit-outline"
-                              @click.native="editDimensionMeasure(v)"
-                            >编辑</el-dropdown-item>
-                            <el-dropdown-item @click.native="copyDimensionMeasure(v)">
-                              <svg-icon
-                                icon-class="file-copy"
-                                style="margin-right: 5px;"
-                              />复制
-                            </el-dropdown-item>
-                            <el-dropdown-item @click.native="hideDimensionMeasure(v)">
-                              <span v-if="!v.attributes[0].isHidden">
-                                <svg-icon
-                                  icon-class="m-eye-close"
-                                  style="margin-right: 5px;"
-                                />隐藏
-                              </span>
-                              <span v-else>
-                                <svg-icon
-                                  icon-class="eye-open"
-                                  style="margin-right: 5px;"
-                                />显示
-                              </span>
-                            </el-dropdown-item>
-                            <el-dropdown-item
-                              icon="el-icon-delete"
-                              @click.native="deleteDimensionMeasure(v)"
-                            >删除</el-dropdown-item>
-                          </el-dropdown-menu>
-                        </el-dropdown>
+                      <div>
+                        <svg-icon
+                          style="width: 20px;"
+                          :icon-class="typeTransform(v.attributes)"
+                        />
                       </div>
+                      <gear-btn
+                        :active-tag-name="activeTagName"
+                        :data="v"
+                        :fields="fields"
+                        @reset="getDimensionMeasureData(fields);refreshPreview();"
+                      />
                     </div>
                   </template>
                 </el-table-column>
-              </span>
+              </el-table-column>
             </el-table-column>
-
-            <template slot="empty">
-              <div style="text-align: center;margin-top: 38px;">
-                <svg-icon
-                  style="width: 371px; height: 200px;"
-                  icon-class="refresh-preview"
-                />
-                <div
-                  class="result-bg-tip"
-                  style="line-height: 20px;"
-                >
-                  <div>
-                    你可以点击右侧的
-                    <span style="font-weight: 400;color: #595959; font-size:14px;">
-                      <i class="el-icon-refresh" /> 刷新预览
-                    </span>
-                  </div>
-                  <div>
-                    来预览并配置数据
-                  </div>
+          </el-table>
+          <div
+            v-if="dimensionMeasureTableData.length === 0"
+            style="position: absolute; top: 40%; left: 40%;"
+          >
+            <div style="text-align: center;margin-top: 38px; width: 100%;">
+              <svg-icon
+                style="width: 371px; height: 200px;"
+                icon-class="refresh-preview"
+              />
+              <div
+                class="result-bg-tip"
+                style="line-height: 20px;"
+              >
+                <div>
+                  你可以点击右侧的
+                  <span style="font-weight: 400;color: #595959; font-size:14px;">
+                    <i class="el-icon-refresh" /> 刷新预览
+                  </span>
+                </div>
+                <div>
+                  来预览并配置数据
                 </div>
               </div>
-            </template>
-          </el-table>
+            </div>
+          </div>
         </div>
       </div>
       <div v-show="activeTagName === 2">
         <el-table
           :data="dimensionMeasure"
           :height="tableHeight"
-          row-key="index"
+          row-key="$treeNodeId"
           default-expand-all
+          :row-class-name="tableRowClassName"
           style="width: 100%"
           header-row-class-name="m-table-header"
-          :tree-props="{children: 'children', hasChildren: 'isFolder'}"
+          :tree-props="{children: 'children'}"
         >
           <el-table-column
             label="名称字段"
@@ -216,14 +174,22 @@
             min-width="360"
           >
             <template slot-scope="scope">
-              <span v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'">
+              <div
+                v-if="scope.row._id === 1 || scope.row._id === 2"
+                style="display: inline-block;"
+              >
+                <div class="left-divider" />
                 {{ scope.row.displayColumn }}
-              </span>
+              </div>
               <span
                 v-else
                 style="display: inline-block;width: calc(100% - 60px);"
               >
-                <el-input v-model="scope.row.displayColumn" />
+                <re-input
+                  v-model="scope.row.displayColumn"
+                  :max-length="50"
+                  :blur-fun="(newVal, oldVal) => {return handlerBlur(newVal, oldVal, scope.row.index)}"
+                />
               </span>
             </template>
           </el-table-column>
@@ -237,19 +203,12 @@
             min-width="180"
           >
             <template slot-scope="scope">
-              <span v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-              <span v-else>
-                <el-select
+              <span v-if="scope.row._id !== 1 && scope.row._id !== 2">
+                <b-select
                   v-model="scope.row.attributes[0].dataType"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in dataTypeOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
+                  :options="dataTypeOptions"
+                  @change="scope.row.attributes[0].format = ''"
+                />
               </span>
             </template>
           </el-table-column>
@@ -258,19 +217,11 @@
             min-width="180"
           >
             <template slot-scope="scope">
-              <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-              <div v-else>
-                <el-select
+              <div v-if="scope.row._id !== 1 && scope.row._id !== 2 && scope.row.type === 'Measure'">
+                <b-select
                   v-model="scope.row.attributes[0].format"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in formatMap[scope.row.attributes[0].dataType]"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
+                  :options="formatMap[scope.row.attributes[0].dataType]"
+                />
               </div>
             </template>
           </el-table-column>
@@ -279,8 +230,7 @@
             min-width="180"
           >
             <template slot-scope="scope">
-              <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-              <div v-else>
+              <div v-if="scope.row._id !== 1 && scope.row._id !== 2">
                 <el-input
                   v-model="scope.row.comment"
                   placeholder="请输入内容"
@@ -290,30 +240,17 @@
           </el-table-column>
           <el-table-column
             label="操作"
-            min-width="200"
+            fixed="right"
+            min-width="150"
           >
             <template slot-scope="scope">
-              <div v-if="scope.row.displayColumn === '维度' || scope.row.displayColumn === '度量'" />
-              <div
-                v-else
-                class="result-preview-batch-configuration-table-options"
-              >
-                <el-button
-                  type="text"
-                  @click="copyDimensionMeasure(scope.row)"
-                >复制</el-button>
-                <el-divider direction="vertical" />
-                <el-button
-                  type="text"
-                  @click="deleteDimensionMeasure(scope.row)"
-                >删除</el-button>
-                <el-divider direction="vertical" />
-                <el-button
-                  type="text"
-                  @click="hideDimensionMeasure(scope.row)"
-                >
-                  {{ scope.row.attributes[0].isHidden ? '取消隐藏' : '隐藏' }}
-                </el-button>
+              <div v-if="scope.row._id !== 1 && scope.row._id !== 2">
+                <gear-btn
+                  :active-tag-name="activeTagName"
+                  :data="scope.row"
+                  :fields="fields"
+                  @reset="getDimensionMeasureData(fields);refreshPreview()"
+                />
               </div>
             </template>
           </el-table-column>
@@ -324,10 +261,14 @@
 </template>
 
 <script>
-import { deepClone } from '@/utils/optionUtils'
 import { getPreviewData } from '@/api/dataSet'
+import regex from '@/constants/regex'
+import { transformDataTypeIcon } from '@/utils/optionUtils'
+import GearBtn from '@/views/dataManage/dataSet/dataSetEdit/GearBtn'
+import ReInput from '@/views/dataManage/dataSet/dataSetEdit/ReInput'
 
 export default {
+  components: { GearBtn, ReInput },
   props: {
     fields: {
       type: Array,
@@ -346,7 +287,17 @@ export default {
         children: 'children',
         label: 'displayColumn'
       },
-      dimensionMeasure: [],
+      dimensionMeasure: [{
+        _id: 1,
+        displayColumn: '维度',
+        index: 'dimension_p_1',
+        children: []
+      }, {
+        _id: 2,
+        index: 'measure_p_1',
+        displayColumn: '度量',
+        children: []
+      }],
       dimensionMeasureTableData: [],
       dataTypeOptions: [
         {
@@ -403,18 +354,26 @@ export default {
   watch: {
     fields: {
       handler (n, o) {
-        this.dimensionMeasure = this.getDimensionMeasureData(n)
+        this.getDimensionMeasureData(n)
       },
       deep: true
     }
   },
   methods: {
+    tableRowClassName ({ row, rowIndex }) {
+      if (row._id === 1) {
+        return 'dimension-column-row'
+      } else if (row._id === 2) {
+        return 'measure-column-row'
+      }
+      return ''
+    },
     filterColumns () {
       if (this.inputFieldName) {
         const filter = this.fields.filter(field => field.displayColumn.indexOf(this.inputFieldName) > -1)
-        this.dimensionMeasure = this.getDimensionMeasureData(filter)
+        this.getDimensionMeasureData(filter)
       } else {
-        this.dimensionMeasure = this.getDimensionMeasureData(this.fields)
+        this.getDimensionMeasureData(this.fields)
       }
     },
     getRowKey (row) {
@@ -449,50 +408,52 @@ export default {
       const res = [{
         _id: 1,
         displayColumn: '维度',
+        index: 'dimension_p_1',
         children: []
       }, {
         _id: 2,
+        index: 'measure_p_1',
         displayColumn: '度量',
         children: []
       }]
       fields.forEach((item, index) => {
+        item.index = item.type + '_' + index
         if (item.type === 'Dimension') {
-          res[0].children.push({ index, ...item })
+          res[0].children.push(item)
         } else {
-          res[1].children.push({ index, ...item })
+          res[1].children.push(item)
         }
       })
+      if (res[1].children.length === 0) {
+        res.splice(1, 1)
+      }
+      if (res[0].children.length === 0) {
+        res.splice(0, 1)
+      }
+      this.dimensionMeasure = res
       return res
     },
-    // 编辑数据预览中的字段
-    editDimensionMeasure (item) {
-      this.$dialog.show('EditDimensionMeasureDialog', { form: item }, (data) => {
-        if (!data.displayColumn) {
-          data.displayColumn = data.column
+    typeTransform (data) {
+      if (typeof data === 'string') {
+        return transformDataTypeIcon(data)
+      } else {
+        const type = data ? data[0].dataType : ''
+        return transformDataTypeIcon(type)
+      }
+    },
+    handlerBlur (newVal, oldVal, index) {
+      if (regex.DATASET_NAME_REGEX.test(newVal)) {
+        const temp = this.fields.find(item => { return (item.displayColumn === newVal && item.index !== index) })
+        if (temp) {
+          this.$message.error('字段名称和其他对象存在重名，请检查！')
+          return false
+        } else {
+          return true
         }
-        Object.assign(item, data)
-      })
-    },
-    // 复制数据预览中的字段
-    copyDimensionMeasure (item) {
-      const copyItem = Object.assign(deepClone(item), { _id: '', displayColumn: item.displayColumn + '_副本' })
-      this.$set(this.fields, this.fields.length, copyItem)
-      this.dimensionMeasure = this.getDimensionMeasureData(this.fields)
-    },
-    // 删除数据预览中的字段
-    deleteDimensionMeasure (item) {
-      this.$dialog.show('TipDialog', {}, () => {
-        const index = this.fields.findIndex(field => field._id === item._id)
-        this.fields.splice(index, 1)
-      })
-      this.dimensionMeasure = this.getDimensionMeasureData(this.fields)
-    },
-    // 隐藏
-    hideDimensionMeasure (item) {
-      item.attributes[0].isHidden = !item.attributes[0].isHidden
-    },
-    getDisplayColumnClass (data) {
-      return { 'hide-tree-node': (data.attributes && (data.attributes[0] && data.attributes[0].isHidden)) }
+      } else {
+        this.$message.error('字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成！')
+        return false
+      }
     }
   }
 }
@@ -546,6 +507,7 @@ export default {
       .data-preview-left {
         width: 200px;
         flex: 0 0 200px;
+        border-right: 1px solid #dddddd;
         overflow-y: auto;
         overflow-x: hidden;
 
@@ -565,19 +527,50 @@ export default {
 
       .data-preview-right {
         overflow: auto;
+        width: 100%;
       }
     }
   }
 }
+
+// 由于表头与表体不对齐，el-table会默认追加gutter，这边选择隐藏
+::v-deep .gutter-th {
+  .is-group.has-gutter {
+    tr th.gutter {
+      display: none !important;
+      width: 0px !important;
+    }
+  }
+}
+
+.left-divider {
+  position: absolute;
+  width: 4px;
+  background-color: #fa8334;
+  height: calc(100% + 2px);
+  left: 0px;
+  top: -1px;
+}
+
+::v-deep .dimension-column-row > td,
+.dimension-column-row:hover > td {
+  background: rgba(145, 159, 248, 0.11) !important;
+}
+
+::v-deep .measure-column-row > td,
+.measure-column-row:hover > td {
+  background: rgba(99, 205, 159, 0.11) !important;
+}
+
 // 维度样式
-::v-deep .m-column-0 {
+::v-deep .m-column-1 {
   background-color: #919ff8 !important;
   font-size: 12px;
   font-weight: 500;
   color: #fff;
 }
 // 度量样式
-::v-deep .m-column-1 {
+::v-deep .m-column-2 {
   background-color: #63cd9f !important;
   font-size: 12px;
   font-weight: 500;
@@ -592,5 +585,13 @@ export default {
   font-weight: 400;
   line-height: 20px;
   background-color: #fff !important;
+}
+::v-deep .display-none {
+  height: 0px;
+  display: none !important;
+}
+::v-deep .el-table--group,
+.el-table--border {
+  border-width: 0px;
 }
 </style>

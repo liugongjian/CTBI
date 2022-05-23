@@ -41,46 +41,165 @@ a {
 }
 
 .editor-object-container {
-  margin: 10px 0px;
-
+  padding-bottom: 12px;
+  .editor-item-title {
+    margin: 0px 8px;
+    margin-left: 0;
+    line-height: 20px;
+    display: inline-block;
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 500;
+  }
   .editor-item-container {
-    padding-left: 22px;
-
-    .editor-item-title {
-      margin: 4px 8px;
-      margin-left: 0;
-      line-height: 20px;
-      display: inline-block;
+    padding-left: 24px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 500;
+    .axis-tab{
+      margin-top: -12px;
+      
+      .el-tabs__header{
+        padding: 0 20px !important;
+      }
+      font-size: 14px;
+      color: rgba(255,255,255,0.90);
+      font-weight: 400;
     }
   }
+  // 输入框样式
+  .el-input--small{
+    height: 24px;
+    padding-right: 8px;
+  }
+  .el-input--small .el-input__inner{
+    height: 24px !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(221,221,221,0.25) !important;
+    border-radius: 2px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
+    &::placeholder {
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+      font-weight: 400;
+    }
+  }
+  // 颜色选择器样式
+  .el-color-picker--small{
+    height: 24px;
+  }
+  .el-color-picker--small .el-color-picker__trigger{
+    height: 24px;
+    width: 24px;
+    border: 1px solid rgba(221,221,221,0.25);
+    border-radius: 2px;
+  }
+  .el-color-picker--small .el-color-picker__mask{
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+  }
+  // radio 样式
+  .el-radio-group{
+    margin-top: -3px;
+    .el-radio{
+      margin-right: 8px;
+      .el-radio__input{
+        height: 12px;
+        width: 12px;
+        margin-right: 8px;
+        .el-radio__inner{
+          height: 100%;
+          width: 100%;
+          border: 1px solid rgba(104,106,114,1);
+          background-color: transparent;
+        }
+      }
+      // 选中
+      .el-radio__input.is-checked .el-radio__inner{
+        border-color: #FA8334;
+      }
+      .el-radio__input.is-checked .el-radio__inner::after{
+        background-color: #FA8334;
+      }
+      .el-radio__label{
+        font-size: 12px;
+        color: rgba(255,255,255,0.75);
+        font-weight: 500;
+        padding-left: 0;
+      }
+    }
+    .el-radio:last-child{
+      margin-right: 0px;
+    }
+  }
+  // 下拉选择框
+  .el-select .el-input .el-select__caret{
+    line-height: 24px;
+    font-size: 12px;
+  }
+  // 置灰样式
   .box-disabled {
     cursor: not-allowed;
-    opacity: .3;
+    opacity: .4;
 
     &>* {
       pointer-events: none;
     }
   }
+  // 复选框样式
+  .el-checkbox{
+    margin-right: 15px;
+  }
+  .el-checkbox__inner{
+    height: 12px;
+    width: 12px;
+    background-color: transparent;
+    border: 1px solid rgba(104,106,114,1);
+    &::after{
+      height: 6px;
+      left: 3px;
+      top: 0px;
+    }
+  }
+  .el-checkbox__label{
+    padding-left: 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 500;
+  }
+  .el-checkbox__input.is-checked+.el-checkbox__label{
+    color: rgba(255,255,255,0.75);
+  }
 }
 
 // 滚动条样式优化
-::-webkit-scrollbar-track {
-  background: #fff;
-  border-radius: 0;
-}
-
 ::-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 10px;
+  /**/
 }
 
+// 外层轨道
+::-webkit-scrollbar-track {
+  background: #383B47;
+}
+
+// 滚动的滑块
 ::-webkit-scrollbar-thumb {
-  cursor: pointer;
+  background: rgba(221,221,221,0.25);
   border-radius: 8px;
-  background: #DDDDDD;
-  transition: color .2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(221,221,221,0.25);
 }
 
 // element tooltip light 样式
@@ -124,5 +243,10 @@ a {
 
 .CodeMirror {
   height: 100% !important;
-  background-color: #F0F2F4 !important;
+  background-color: #F0F2F4;
+}
+
+.el-input__inner {
+  border-radius: 2px !important;
+  border: 1px solid #DDDDDD;
 }

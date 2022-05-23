@@ -117,3 +117,28 @@ export function getTableInfo (id, tableName) {
 export function getFileTableInfo (tableName) {
   return http.get(`/dataFiles/table/info`, { tableName })
 }
+
+// 查询数据集详情
+export function getDataSetsData (id) {
+  return http.get(`/dataSets/${id}`)
+}
+
+// 查询数据集列表包括文件夹下的数据集
+export function getFullList () {
+  return http.get(`/dataSets/fullList`)
+}
+
+// 查询维度/度量数据
+export function getDataSetData (id, body) {
+  return http.post(`/dataSets/${id}/data`, body)
+}
+
+// 新建文件夹判重
+export function existsFolder (params) {
+  return http.get(`/folders/exists`, params)
+}
+
+// 新建数据集判重
+export function existsDataSet (params) {
+  return http.get(`/dataSets/exists`, params)
+}

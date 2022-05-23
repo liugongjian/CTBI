@@ -1,13 +1,13 @@
 <template>
   <el-tooltip
     :content="content"
-    placement="top-start"
+    :placement="placement"
     :effect="effect"
     :disabled="!isShowTooltip"
   >
     <span
       class="ellipsis-text"
-      :style="{width: width + 'px'}"
+      :style="{width: width}"
       @mouseenter="visibilityChange($event)"
       v-html="content"
     />
@@ -31,11 +31,15 @@ export default {
     },
     width: {
       type: String,
-      default: '130'
+      default: '130px'
     },
     effect: {
       type: String,
-      default: 'dark'
+      default: 'light'
+    },
+    placement: {
+      type: String,
+      default: 'top-start'
     }
   },
   data () {
@@ -65,5 +69,6 @@ export default {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

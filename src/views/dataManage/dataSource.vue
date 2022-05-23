@@ -1,8 +1,8 @@
 <template>
   <div class="data-source">
-    <div class="data-source__title">
+    <!-- <div class="data-source__title">
       <span>数据源</span>
-    </div>
+    </div> -->
     <div class="data-source__content">
       <div class="data-source__header">
         <div class="head-title">数据源</div>
@@ -116,7 +116,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-files__list" />
+        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-files__lists" :current-row="currentRow" />
         <div v-else class="data-file__list">
           <div class="research-file">
             <el-input
@@ -127,7 +127,7 @@
               @keyup.enter.native="searchFiles"
             />
             <span>
-              <el-button class="create-data" @click="toCreateDataSet">SQL创建数据集</el-button>
+              <el-button class="create-data" @click="toCreateDataSet(currentRow)">SQL创建数据集</el-button>
             </span>
           </div>
           <common-table
@@ -190,8 +190,8 @@
 import { encryptAes } from '@/utils/encrypt'
 import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataSourceList, editSources, detailSource } from '@/api/dataSource'
 import CommonTable from '@/components/CommonTable/index.vue'
-import { getDateTime } from '@/utils/optionUtils'
 import dataFiles from './dataFiles.vue'
+
 export default {
   name: 'DataSource',
   components: {
@@ -221,15 +221,15 @@ export default {
       // sortOrder: 'asc',
       searchkey: '',
       connectLoading: false,
+      dataSourceLoading: false,
       notEdit: true,
       editform: {},
-      currentRow: 0,
+      currentRow: '',
       dialogVisible: false,
       fileType: {
         'mysql': 'MySQL数据源',
         'mongodb': 'MongoDB数据源',
-        'file': '本地数据源',
-        '': '?'
+        'file': '本地数据源'
       },
       status: '',
       search: '',
@@ -313,20 +313,8 @@ export default {
       this.dialogVisible = false
     },
     toCreateDataSet(dataSource) {
-      const currentTime = getDateTime()
       const query = {
-        _id: '',
-        displayName: '',
-        comment: '',
-        sqlId: '',
-        fields: [],
-        folderId: null,
-        isFolder: false,
-        creatorId: '',
-        dataSourceId: dataSource && dataSource._id || '',
-        dataSourceName: dataSource && dataSource.displayName || '',
-        creatorName: '',
-        createdTime: currentTime
+        dataSourceId: dataSource && dataSource._id || ''
       }
       this.$router.push({
         path: '/dataManage/dataSet/edit',
@@ -401,8 +389,10 @@ export default {
       this.handleCurrentChange(this.currentRow)
     },
     async handleCurrentChange(val) {
-      console.log('editval------------', val)
       try {
+        if (!val) {
+          return
+        }
         this.currentRow = val
         if (val.type === 'file') {
           this.isShowDataFiles = true
@@ -498,9 +488,12 @@ export default {
       }
       if (command === 'localFile') {
         this.$dialog.show('UploadFileDialog', {}, () => {
-          if (this.isShowDataFiles) {
+          const currentRow = this.filterdDatasources.find(item => item.type === 'file')
+          this.$refs.singleTable.setCurrentRow(currentRow)
+          this.isShowDataFiles = true
+          this.$nextTick(() => {
             this.$refs.dataFiles.getDataFiles()
-          }
+          })
         })
       }
     },
@@ -556,8 +549,10 @@ export default {
         if (result === true) {
           this.dialogVisible = false
           if (this.notEdit) {
-            await postDataSourceList(testForm)
+            const newForm = await postDataSourceList(testForm)
             await this.getDatasource()
+            const currentRow = this.filterdDatasources.find(item => item._id === newForm._id)
+            this.$refs.singleTable.setCurrentRow(currentRow)
           } else {
             await editSources(this.currentId, testForm)
             await this.getDatasource()
@@ -579,7 +574,8 @@ export default {
   font-size: 12px;
   color: rgba(0,0,0,0.90);
   text-align: left;
-  line-height: 42px;
+  height: 32px;
+  line-height: 32px;
   font-weight: 500;
 }
 ::v-deep .common-table .table.el-table td .cell {
@@ -587,7 +583,8 @@ export default {
   font-size: 12px;
   color: rgba(0, 0, 0, 0.65);
   text-align: left;
-  line-height: 42px;
+  height: 32px;
+  line-height: 32px;
   font-weight: 400;
 }
 .table-detail {
@@ -600,6 +597,9 @@ export default {
   height: 32px;
   background: #FA8334;
   border-radius: 2px;
+}
+::v-deep .el-dropdown {
+  height: 48px;
 }
 .newFile {
   font-family: PingFangSC-Regular;
@@ -698,7 +698,7 @@ export default {
 .research-file {
   display: flex;
   justify-content: flex-end;
-  line-height: 68px;
+  line-height: 66px;
 }
 .head-title {
   position: absolute;
@@ -772,8 +772,7 @@ export default {
   &__content {
     position: relative;
     background: #fff;
-    margin-top: 16px;
-    height: calc(100vh - 125px);
+    height: calc(100vh - 100px);
     font-size: 12px;
   }
 
@@ -788,15 +787,17 @@ export default {
     overflow: auto;
   }
 }
-.data-files__list {
+.data-files__lists {
   flex: 2;
+  padding-left: 10px;
+  border-left: 1px solid #EBEEF5;
   height: calc(100vh - 250px);
   overflow: auto;
 
 }
 .data-file__list {
   flex: 2;
-  padding: 0 24px 10px 10px;
+  padding: 0 24px 10px 15px;
   border-left: 1px solid #EBEEF5;
   height: calc(100vh - 250px);
   overflow: auto;

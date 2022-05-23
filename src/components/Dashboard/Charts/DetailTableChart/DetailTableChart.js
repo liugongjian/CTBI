@@ -1,4 +1,6 @@
 // 折线图配置项信息
+
+import { colorTheme } from '@/constants/color.js'
 /**
  * type: {
  *    indicator: 指标,
@@ -51,6 +53,14 @@ export default {
         'show': false,
         'active': 'stripe' // stripe 斑马 border 线框 simple 简版 verySimple 极简
       },
+      'TableThemeSimple': {
+        'show': true,
+        'type': 'default'
+      },
+      'Color': { // 颜色设置
+        'title': '配色设置',
+        'color': colorTheme['defaultColor']
+      },
       'ListHeader': {
         'head': false
       },
@@ -69,6 +79,17 @@ export default {
       },
       'NewLine': {
         'show': false
+      },
+      'PaginationSettor': {
+        'disable': false,
+        'show': true,
+        'pageSize': 10
+      },
+      'IndicatorGroup': {
+        'show': false
+      },
+      'ColumnWidth': {
+        'type': 'selfadapting'
       }
     }
   },
