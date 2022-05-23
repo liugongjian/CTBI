@@ -20,7 +20,13 @@
         :key="name+i"
         class="sub-chart"
       >
-        <el-button><svg-icon :icon-class="name" style="font-size:20px;" /></el-button>
+        <el-tooltip popper-class="content">
+          <el-button><svg-icon :icon-class="name" style="font-size:20px;" /></el-button>
+          <div slot="content">
+            <ChartDescription :chart-name="name" />
+          </div>
+        </el-tooltip>
+
       </div>
     </div>
   </div>
@@ -29,9 +35,13 @@
 <script>
 // import store from '@/store'
 import { getToolList } from '@/views/dashboard/Tools/getToolList.js'
+import ChartDescription from './ChartDescription.vue'
 
 export default {
   name: 'ChartSwitcher',
+  components: {
+    ChartDescription
+  },
   props: {
     option: {
       type: Object,
@@ -106,13 +116,35 @@ export default {
 .chart-type {
   display: inline-flex;
   margin: 5px;
-  width: 48px;
+  // width: 48px;
   font-size: 20px;
 }
 
 .sub-chart {
   display: inline-flex;
   margin: 5px;
-  width: 50px;
+  // width: 50px;
+}
+
+.types {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+</style>
+<style lang="scss">
+.content.el-tooltip__popper[x-placement^="top"] .popper__arrow {
+  border-top-color: rgba($color: #6f6a6ab1, $alpha: 0.6);
+}
+.content.el-tooltip__popper[x-placement^="top"] .popper__arrow:after {
+  border-top-color: rgba($color: #6f6a6ab1, $alpha: 0.6);
+}
+.is-dark.content.el-tooltip__popper[x-placement^="bottom"] .popper__arrow {
+  border-bottom-color: rgba($color: #6f6a6ab1, $alpha: 0.6);
+}
+.is-dark.content.el-tooltip__popper[x-placement^="bottom"] .popper__arrow:after {
+  border-bottom-color: rgba($color: #6f6a6ab1, $alpha: 0.6);
+}
+.content {
+  background: rgba($color: #6f6a6ab1, $alpha: 0.9) !important;
 }
 </style>

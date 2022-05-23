@@ -38,7 +38,8 @@
             />
           </el-tabs>
         </el-container>
-        <el-container v-else-if="showChartTypes">
+        <!-- 图例切换模块 -->
+        <el-container v-else-if="showChartTypes" class="chart-type-switch">
           <ChartSwitcher />
         </el-container>
         <div
@@ -170,5 +171,8 @@ export default {
 <style lang="scss" scoped>
 .change-type {
   cursor: pointer;
+}
+.chart-type-switch {
+  overflow: auto;
 }
 </style>
