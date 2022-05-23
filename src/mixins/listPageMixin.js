@@ -7,7 +7,8 @@ export default {
     return {
       dataList: [], // 列表数据
       selectedRows: [], // 列表选中行
-      paginationLayout: 'prev, pager, next, sizes',
+      pageSizes: [20, 30, 40, 50, 100],
+      paginationLayout: 'total, prev, pager, next, sizes, jumper',
       queryForm: {
         page: 1, // 当前页
         limit: 20, // 每页显示条目个数
@@ -16,14 +17,17 @@ export default {
     }
   },
   methods: {
-    /* 重置页码 */
-    handlePaginationChange (e) {
-      this.queryForm.pageNo = e.current
-      this.queryForm.pageSize = e.pageSize
+    //
+    handleSizeChange (e) {
+      this.queryForm.limit = e
+      this.query()
+    },
+    handleCurrentChange (current) {
+      this.queryForm.page = current
       this.query()
     },
     reFilter () {
-      this.queryForm.pageNo = 1
+      this.queryForm.page = 1
       this.query()
     },
     /* 接口请求，使用queryImpl */
@@ -64,15 +68,15 @@ export default {
     handleSelectAll () {
       if (
         this.selectedRows.length ===
-        Math.min(this.queryForm.pageSize, this.dataList.length)
+        Math.min(this.queryForm.limit, this.dataList.length)
       ) {
         this.selectedRows = []
       } else {
         this.selectedRows = []
         for (
           let i = 0;
-          // 表格当前页数据数组长度 < pageSize 时, 全选数量为当前数据数组长度
-          i < Math.min(this.queryForm.pageSize, this.dataList.length);
+          // 表格当前页数据数组长度 < limit 时, 全选数量为当前数据数组长度
+          i < Math.min(this.queryForm.limit, this.dataList.length);
           i++
         ) {
           this.selectedRows.push(this.dataList[i])

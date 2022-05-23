@@ -80,10 +80,12 @@
           >运行</el-button>
           <el-button
             type="primary"
+            :loading="editLoading"
             @click="confirmEdit"
           >确认编辑</el-button>
           <el-button
             type="text"
+            :disabled="editLoading"
             @click="handlerToggleContent"
           ><i class="el-icon-close" /></el-button>
         </div>
@@ -271,7 +273,8 @@ export default {
       resultData: { success: true },
       resultPreviewLoading: false,
       // 历史记录集
-      historyLogTableData: []
+      historyLogTableData: [],
+      editLoading: false
     }
   },
   async created () {
@@ -387,7 +390,7 @@ export default {
     },
     // 获取历史记录
     async getHistory () {
-      if (this.dataInfo.sql._id) {
+      if (this.editDataInfo.sql._id) {
         try {
           const data = await getSqlRunningLogs(this.editDataInfo.sql._id)
           this.historyLogTableData = data.slice()
@@ -403,6 +406,11 @@ export default {
     // 确认编辑
     async confirmEdit () {
       // 判断sql是否为空
+      if (!this.editDataInfo.dataSourceId) {
+        this.$message.error('请选择数据源')
+        return
+      }
+      // 判断sql是否为空
       if (this.editDataInfo.sql.sql === '' || regex.EMPTY_REGEX.test(this.editDataInfo.sql.sql)) {
         this.$message.error('SQL脚本不能为空')
         return
@@ -415,6 +423,7 @@ export default {
           dataSourceId: this.editDataInfo.dataSourceId,
           sqlVariables: this.editDataInfo.sql.sqlVariables
         }
+        this.editLoading = true
         const data = await confirmEditSql(body)
         Object.assign(this.dataInfo, this.editDataInfo)
         Object.assign(this.dataInfo.sql, data.sql)
@@ -424,6 +433,7 @@ export default {
           type: 'success'
         })
         this.toggleContent = false
+        this.editLoading = false
       } catch (error) {
         console.error(error)
       }
