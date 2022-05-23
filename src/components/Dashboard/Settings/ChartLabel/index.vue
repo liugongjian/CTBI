@@ -3,66 +3,70 @@
     <div class="editor-object-container">
       <el-checkbox
         v-model="option.check"
-        label="显示标签"
+        label="显示图表标签"
         @change="handleSeriesLabel"
       />
-      <el-checkbox-group
-        v-if="labelOptions.length>0"
-        v-model="option.checkList"
-        :disabled="!option.check"
-      >
-        <el-checkbox
-          v-for="(item, index) in labelOptions"
-          :key="index"
-          :label="item.label"
-        />
-      </el-checkbox-group>
+      <div v-if="labelOptions.length>0" class="editor-item-container">
+        <el-checkbox-group
+          v-model="option.checkList"
+          :disabled="!option.check"
+        >
+          <el-checkbox
+            v-for="(item, index) in labelOptions"
+            :key="index"
+            :label="item.label"
+          />
+        </el-checkbox-group>
+      </div>
     </div>
     <div
       v-if="option.type==='FunnelChart'"
       class="editor-object-container"
     >
-      <div>转换率计算方式</div>
-      <el-radio
-        v-model="option.funnelTransform"
-        :label="1"
-      >占上一层的百分比</el-radio>
-      <el-radio
-        v-model="option.funnelTransform"
-        :label="2"
-      >占第一层的百分比</el-radio>
+      <div class="editor-item-title">转换率计算方式</div>
+      <el-radio-group v-model="option.funnelTransform">
+        <el-radio
+          :label="1"
+        >占上一层的百分比</el-radio>
+        <el-radio
+          :label="2"
+        >占第一层的百分比</el-radio>
+      </el-radio-group>
     </div>
     <div
       v-if="option.precisionShow"
       class="editor-object-container"
     >
-      <span>设置完成占比小数位数</span>
-      <el-select
-        v-model="option.precision"
-        placeholder="请选择"
+      <div class="editor-item-title">设置完成占比小数位数</div>
+      <div
+        class="editor-item-container"
       >
-        <el-option
-          v-for="item in precisionOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
+        <el-select
+          v-model="option.precision"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in precisionOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </div>
     </div>
     <div
       v-if="option.labelShow"
       class="editor-object-container"
-      style="display: flex;align-items: center"
     >
-      <span>数据标签展示方式</span>
-      <el-radio
-        v-model="option.labelShow"
-        :label="1"
-      >智能显示</el-radio>
-      <el-radio
-        v-model="option.labelShow"
-        :label="2"
-      >全量显示</el-radio>
+      <div class="editor-item-title">数据标签展示方式</div>
+      <div
+        class="editor-item-container"
+      >
+        <el-radio-group v-model="option.labelShow">
+          <el-radio :label="1">智能显示</el-radio>
+          <el-radio :label="2">全量显示</el-radio>
+        </el-radio-group>
+      </div>
     </div>
   </div>
 </template>

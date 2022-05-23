@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <div class="editor-object-container">
-      <div>请选择系列</div>
-      <el-select
+  <div class="editor-object-container" style="padding-bottom: 0px">
+    <div class="editor-item-title">请选择系列</div>
+    <el-select
         v-model="option.selectValue"
+        style="margin-top:12px"
         placeholder="请选择"
         @change="selectSeries"
       >
@@ -13,8 +13,7 @@
           :label="item.label"
           :value="item.value"
         />
-      </el-select>
-    </div>
+    </el-select>
     <div
       v-if="option.remarkShow"
       class="editor-object-container flex-align-center"
@@ -27,7 +26,7 @@
     </div>
     <div
       v-if="option.SeriesChartLabel"
-      class="editor-object-container flex-align-center"
+      class="editor-object-container flex-align-center m-t-12"
     >
       <el-checkbox
         v-model="option.SeriesChartLabel.check"
@@ -35,15 +34,17 @@
         @change="(e)=>{setSeriesOption(e,'showLabel')}"
       />
       <el-color-picker
-        v-model="option.color"
+        v-model="option.SeriesChartLabel.color"
+        style="margin-left: 8px;"
         show-alpha
         :predefine="predefineColors"
         :disabled="!option.SeriesChartLabel.check"
+        :class="{'box-disabled':!option.SeriesChartLabel.check}"
         @change="(e)=>{setSeriesOption(e,'labelColor')}"
       />
     </div>
-    <div class="editor-object-container">
-      <div v-if="option.SeriesMark&&option.SeriesMark.show" style="display: flex" class="color-row">
+    <div v-if="option.SeriesMark&&option.SeriesMark.show" class="editor-object-container">
+      <div style="display: flex" class="color-row">
         <el-checkbox v-model="option.SeriesMark.check" @change="(e)=>{setSeriesOption(e,'showMark')}">显示标记点</el-checkbox>
         <el-select
           v-model="option.SeriesMark.markType"
@@ -84,8 +85,8 @@
         />
       </div>
     </div>
-    <div class="editor-object-container">
-      <div v-if="option.SeriesLine&&option.SeriesLine.show" style="display: flex" class="color-row">
+    <div v-if="option.SeriesLine&&option.SeriesLine.show" class="editor-object-container">
+      <div style="display: flex" class="color-row">
         <span>线条样式</span>
         <el-select
           v-model="option.SeriesLine.lineType"

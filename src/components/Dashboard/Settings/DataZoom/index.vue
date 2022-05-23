@@ -1,11 +1,15 @@
 <template>
-  <div>
-    显示缩略轴
-    <el-radio-group v-model="option.showDataZoom">
-      <el-radio label="auto">智能适配</el-radio>
-      <el-radio label="show">显示</el-radio>
-      <el-radio label="hide">不显示</el-radio>
-    </el-radio-group>
+  <div class="editor-object-container">
+    <div class="editor-item-title">
+      显示缩略轴
+    </div>
+    <div class="editor-item-container">
+      <el-radio-group v-model="option.showDataZoom">
+        <el-radio label="auto">智能适配</el-radio>
+        <el-radio label="show">显示</el-radio>
+        <el-radio label="hide">不显示</el-radio>
+      </el-radio-group>
+    </div>
   </div>
 </template>
 

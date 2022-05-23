@@ -10,6 +10,7 @@
           @drop.stop="handleTargetDrop($event,name,item,item.name)"
         >
           <div class="field-area-header">
+            <span>*</span>
             <div class="area-name">{{ item.name }}</div>
           </div>
           <div>
@@ -48,7 +49,7 @@
       <div class="update-wrapper">
         <div class="result-display">
           <span class="m-r-8">结果展示</span>
-          <div class="w-60">
+          <div>
             <input
               v-model="limit"
               type="number"

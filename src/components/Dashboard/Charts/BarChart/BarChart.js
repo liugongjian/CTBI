@@ -30,7 +30,7 @@ export default {
     'Basic': { // 基础属性
       'Title': { // 标题组件
         'text': '柱图', // 标题名称
-        'color': '#333', // 标题颜色
+        'color': '#000', // 标题颜色
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
       },
@@ -156,7 +156,7 @@ export default {
         'seriesOption': [], // 从数据中拿到系列的名字
         'SeriesChartLabel': { // 某个系列显示图表标签
           'check': false, // 默认未选中
-          'color': '' // 颜色
+          'color': '#383B47' // 颜色
         },
         'SeriesMaximum': { // 最值
           'check': false // 默认未选中

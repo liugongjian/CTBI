@@ -1,13 +1,14 @@
 <template>
   <div class="editor-object-container">
-    <div>
+    <div class="editor-item-title">
       图表类型
     </div>
     <div class="editor-item-container">
       <span
         v-for="(item, index) in typeOption"
         :key="index"
-        style="cursor: pointer"
+        class="svg-container"
+        :class="{'active': option.type===item.value}"
       >
         <el-tooltip
           class="item"
@@ -117,5 +118,15 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.svg-container {
+  cursor: pointer;
+  display: inline-block;
+  height: 32px;
+  width: 32px;
+  margin-right: 8px;
+}
+.svg-container.active{
+  border: 1px solid rgba(250,131,52,1);
+}
 </style>
