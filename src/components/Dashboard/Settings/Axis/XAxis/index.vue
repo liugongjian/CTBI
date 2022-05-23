@@ -59,9 +59,9 @@
         label="显示网格线"
       />
     </div>
-    <div class="color-row m-t-12">
+    <div class="color-row m-t-12" :class="!option.showSplit ? 'box-disabled' : ''">
       <el-dropdown :disabled="!option.showSplit" @command="handleSplitType">
-        <div class="dropdown-link" :class="!option.showSplit ? 'box-disabled' : ''">
+        <div class="dropdown-link">
           <svg-icon
             :icon-class="`${option.lineType}-line`"
             style="font-size: 15px;"
@@ -126,20 +126,25 @@ export default {
 .color-row{
   display: flex;
   &>div{
-    margin: 2px 5px;
+    margin: 0px 8px 0px 0px;
   }
   .el-dropdown{
     min-width: 50px;
+    .disabled{
+      background: #F5F7FA;
+    }
   }
   .dropdown-link{
     display: flex;
     justify-content: center;
     align-items:center;
     border: 1px solid rgba(221,221,221,0.25);
-    padding: 0 2px;
     border-radius: 2px;
-    height: 100%;
     width: 100%;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 400;
+    height: 22px;
     i {
       font:#DCDFE6
     }

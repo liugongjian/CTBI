@@ -76,6 +76,46 @@
       .el-tabs__nav-wrap::after{
         height: 0px;
       }
+      .el-collapse-item__header,.el-collapse-item__wrap{
+        background: #383B47;
+      }
+    }
+    .axis-tab{
+      margin-top: -12px !important;
+      font-size: 14px;
+      color: rgba(255,255,255,0.90);
+      font-weight: 400;
+      .el-tabs__header{
+        padding: 0px !important;
+        .el-tabs__nav-wrap{
+          margin: 0 -10px 0px -16px;
+          .el-tabs__nav-scroll{
+            border-bottom: 1px solid rgba(239,242,245,0.20);
+            padding-left: 16px;
+          }
+        }
+      }
+      
+    }
+    // 滚动条样式优化
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 100px;
+    }
+    
+    // 外层轨道
+    ::-webkit-scrollbar-track {
+      background: #383B47;
+    }
+    
+    // 滚动的滑块
+    ::-webkit-scrollbar-thumb {
+      background: rgba(221,221,221,0.25);
+      border-radius: 8px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(221,221,221,0.25);
     }
   }
   .config-item{

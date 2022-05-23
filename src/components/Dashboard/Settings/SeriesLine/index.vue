@@ -68,7 +68,7 @@ export default {
 .color-row{
     display: flex;
     &>div{
-        margin: 2px 5px;
+        margin: 0px 5px 0px 0px;
     }
     .el-dropdown{
         min-width: 50px;
@@ -80,11 +80,14 @@ export default {
         display: flex;
         justify-content: center;
         align-items:center;
-        border: 1px solid #DCDFE6;
-        padding: 0 2px;
+        // border: 1px solid #DCDFE6;
         border-radius: 5px;
         height: 100%;
         width: 100%;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.75);
+        font-weight: 400;
+        height: 24px;
         i {
             font:#DCDFE6
         }

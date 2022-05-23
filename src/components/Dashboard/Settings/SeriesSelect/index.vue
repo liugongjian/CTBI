@@ -2,17 +2,17 @@
   <div class="editor-object-container" style="padding-bottom: 0px">
     <div class="editor-item-title">请选择系列</div>
     <el-select
-        v-model="option.selectValue"
-        style="margin-top:12px"
-        placeholder="请选择"
-        @change="selectSeries"
-      >
-        <el-option
-          v-for="item in option.seriesOption"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
+      v-model="option.selectValue"
+      style="margin-top:12px"
+      placeholder="请选择"
+      @change="selectSeries"
+    >
+      <el-option
+        v-for="item in option.seriesOption"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
     </el-select>
     <div
       v-if="option.remarkShow"
