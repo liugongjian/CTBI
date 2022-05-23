@@ -217,7 +217,8 @@
               style="margin-right: 16px"
             />
             <span
-              v-if="cureentData && cureentData.directory && cureentData.childNode.length > 0">该文件夹下面有仪表板，请移除后再删除</span>
+              v-if="cureentData && cureentData.directory && cureentData.childNode.length > 0"
+            >该文件夹下面有仪表板，请移除后再删除</span>
             <span v-else>确定删除该{{ cureentData && cureentData.directory ? '文件夹' : '仪表板' }}吗？</span>
           </div>
           <div
