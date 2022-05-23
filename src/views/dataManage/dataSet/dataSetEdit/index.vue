@@ -23,7 +23,8 @@
     <div>
       <div
         v-show="toggleContent"
-        class="d-f p-16-16 f-b-s bg-c-f8f8f8 h-40"
+        class="d-f f-b-s bg-c-f8f8f8"
+        style="height: 52px;padding: 16px 16px 0px 16px;"
       >
         <div class="d-f">
           <div>
@@ -401,18 +402,6 @@ export default {
     },
     // 确认编辑
     async confirmEdit () {
-      // 判断数据集名称
-      const checkDisplayName = this.checkDisplayName()
-
-      if (checkDisplayName) {
-        this.$message.error(checkDisplayName)
-        return
-      } else {
-        const flag = await this.existDataSet()
-        if (flag) {
-          return
-        }
-      }
       // 判断sql是否为空
       if (this.editDataInfo.sql.sql === '' || regex.EMPTY_REGEX.test(this.editDataInfo.sql.sql)) {
         this.$message.error('SQL脚本不能为空')
@@ -604,7 +593,7 @@ export default {
   }
 
   &.full-height {
-    height: calc(100vh - 50px);
+    height: calc(100vh - 55px);
   }
 
   .side-top {

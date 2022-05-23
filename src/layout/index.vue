@@ -36,7 +36,7 @@ export default {
   padding: 0px;
 }
 .el-main {
-  height: calc(100vh - 50px);
+  height: calc(100vh - 45px);
   background-color: #f2f2f2;
 }
 </style>

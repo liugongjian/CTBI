@@ -3,7 +3,7 @@
     :title="title"
     :visible.sync="dialogVisible"
     :close-on-click-modal="false"
-    width="50%"
+    width="480px"
   >
     <el-form
       ref="ruleForm"

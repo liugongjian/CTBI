@@ -1,10 +1,12 @@
 <template>
   <el-tooltip
-    :content="content"
     :placement="placement"
     :effect="effect"
     :disabled="!isShowTooltip"
   >
+    <template slot="content">
+      <span v-html="titleShow" />
+    </template>
     <span
       class="ellipsis-text"
       :style="{width: width}"
@@ -40,12 +42,20 @@ export default {
     placement: {
       type: String,
       default: 'top-start'
+    },
+    title: {
+      type: String,
+      default: ''
     }
   },
   data () {
     return {
+      titleShow: '',
       isShowTooltip: false
     }
+  },
+  created () {
+    this.titleShow = this.title || this.content
   },
   methods: {
     visibilityChange (event) {

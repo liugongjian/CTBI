@@ -126,6 +126,9 @@
                       />
                     </div>
                   </template>
+                  <template slot-scope="{ row, column }">
+                    {{ row[column.property] | strEmptyFilter }}
+                  </template>
                 </el-table-column>
               </el-table-column>
             </el-table-column>
@@ -354,6 +357,7 @@ export default {
   watch: {
     fields: {
       handler (n, o) {
+        console.log(n)
         this.getDimensionMeasureData(n)
       },
       deep: true
@@ -508,6 +512,7 @@ export default {
         width: 200px;
         flex: 0 0 200px;
         border-right: 1px solid #dddddd;
+        border-left: 1px solid #dddddd;
         overflow-y: auto;
         overflow-x: hidden;
 
@@ -527,6 +532,7 @@ export default {
 
       .data-preview-right {
         overflow: auto;
+        padding: 0px 20px 0px 16px;
         width: 100%;
       }
     }

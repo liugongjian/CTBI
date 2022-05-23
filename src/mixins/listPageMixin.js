@@ -7,9 +7,10 @@ export default {
     return {
       dataList: [], // 列表数据
       selectedRows: [], // 列表选中行
+      paginationLayout: 'prev, pager, next, sizes',
       queryForm: {
-        pageNo: 1, // 当前页
-        pageSize: 10, // 每页显示条目个数
+        page: 1, // 当前页
+        limit: 20, // 每页显示条目个数
         total: 0
       }
     }

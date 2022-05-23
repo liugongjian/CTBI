@@ -19,7 +19,10 @@
               placeholder="请输入名称"
               style="margin-right: 12px"
             />
-            <el-button type="primary" @click="query">查询</el-button>
+            <el-button
+              type="primary"
+              @click="query"
+            >查询</el-button>
             <el-button @click="reset">重置</el-button>
           </div>
         </div>
@@ -29,8 +32,14 @@
           class="data-set-multiple"
         >
           <span>已选{{ multipleSelection.length }}项</span>
-          <el-button type="text" @click="moveTo()">移动到</el-button>
-          <el-button type="text" @click="clearSelection()">取消选择 </el-button>
+          <el-button
+            type="text"
+            @click="moveTo()"
+          >移动到</el-button>
+          <el-button
+            type="text"
+            @click="clearSelection()"
+          >取消选择 </el-button>
         </div>
 
         <!-- main -->
@@ -48,8 +57,17 @@
             @select="handleSelectionChange"
             @select-all="handleSelectAll"
           >
-            <el-table-column type="selection" width="55" :selectable="row => !row.directory" :render-header="renderSelectHeader" />
-            <el-table-column prop="name" label="名称" min-width="150">
+            <el-table-column
+              type="selection"
+              width="55"
+              :selectable="row => !row.directory"
+              :render-header="renderSelectHeader"
+            />
+            <el-table-column
+              prop="name"
+              label="名称"
+              min-width="150"
+            >
               <template slot-scope="scope">
                 <svg-icon
                   :icon-class="scope.row.directory ? 'folder' : 'board'"
@@ -63,7 +81,10 @@
                   <template slot="content">
                     <span class="tooltip-light-content">点击编辑仪表板</span>
                   </template>
-                  <el-button type="text" @click="edit(scope.row)">{{
+                  <el-button
+                    type="text"
+                    @click="edit(scope.row)"
+                  >{{
                     scope.row.name || scope.row.displayName
                   }}</el-button>
                 </el-tooltip>
@@ -79,8 +100,14 @@
               show-overflow-tooltip
             >
               <template slot-scope="scope">
-                <div v-if="!scope.row.directory" class="publish-status">
-                  <div class="status-tip" :class="`status-tip${scope.row.publishStatus}`" />
+                <div
+                  v-if="!scope.row.directory"
+                  class="publish-status"
+                >
+                  <div
+                    class="status-tip"
+                    :class="`status-tip${scope.row.publishStatus}`"
+                  />
                   <p>{{ scope.row.publishStatus === 1 ? "已发布" : scope.row.publishStatus === 2 ? "未发布" : "已下线" }}</p>
                 </div>
                 <div v-else>-</div>
@@ -96,7 +123,11 @@
                 <div style="color:#4393F4;">{{ scope.row.path }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="ownerName" label="创建者" min-width="60" />
+            <el-table-column
+              prop="ownerName"
+              label="创建者"
+              min-width="60"
+            />
             <el-table-column
               prop="lastUpdatedTime"
               label="修改时间"
@@ -114,30 +145,50 @@
                   :class="{ 'no-allowed': batchSelection }"
                 >
                   <span @click="edit(scope.row)">编辑</span>
-                  <el-divider v-if="scope.row.directory" direction="vertical" />
-                  <span v-if="scope.row.directory" @click="deleteData(scope.row)">删除</span>
-                  <el-divider v-if="!scope.row.directory" direction="vertical" />
-                  <span v-if="!scope.row.directory" @click="editDashboardAttribute(scope.row)">属性</span>
-                  <el-divider v-if="!scope.row.directory" direction="vertical" />
-                  <span v-if="!scope.row.directory" @click="edit(scope.row)">预览</span>
-                  <el-divider v-if="!scope.row.directory" direction="vertical" />
-                  <el-dropdown v-if="!scope.row.directory" class="data-more">
+                  <el-divider
+                    v-if="scope.row.directory"
+                    direction="vertical"
+                  />
+                  <span
+                    v-if="scope.row.directory"
+                    @click="deleteData(scope.row)"
+                  >删除</span>
+                  <el-divider
+                    v-if="!scope.row.directory"
+                    direction="vertical"
+                  />
+                  <span
+                    v-if="!scope.row.directory"
+                    @click="editDashboardAttribute(scope.row)"
+                  >属性</span>
+                  <el-divider
+                    v-if="!scope.row.directory"
+                    direction="vertical"
+                  />
+                  <span
+                    v-if="!scope.row.directory"
+                    @click="edit(scope.row)"
+                  >预览</span>
+                  <el-divider
+                    v-if="!scope.row.directory"
+                    direction="vertical"
+                  />
+                  <el-dropdown
+                    v-if="!scope.row.directory"
+                    class="data-more"
+                  >
                     <span>更多</span>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item
                         v-if="scope.row.publishStatus === 1"
                         @click.native="shareDashboard(scope.row)"
                       >公开</el-dropdown-item>
-                      <el-dropdown-item
-                        @click.native="moveTo(scope.row)"
-                      >移动到</el-dropdown-item>
+                      <el-dropdown-item @click.native="moveTo(scope.row)">移动到</el-dropdown-item>
                       <el-dropdown-item
                         v-if="scope.row.publishStatus === 1"
                         @click.native="cancelPublish(scope.row)"
                       >下线</el-dropdown-item>
-                      <el-dropdown-item
-                        @click.native="deleteData(scope.row)"
-                      >删除</el-dropdown-item>
+                      <el-dropdown-item @click.native="deleteData(scope.row)">删除</el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                 </div>
@@ -154,11 +205,18 @@
           width="480px"
         >
           <div class="data-set-didlog-del">
-            <svg-icon icon-class="warning" style="margin-right: 16px" />
-            <span v-if="cureentData && cureentData.directory && cureentData.childNode.length > 0">该文件夹下面有仪表板，请移除后再删除</span>
+            <svg-icon
+              icon-class="warning"
+              style="margin-right: 16px"
+            />
+            <span
+              v-if="cureentData && cureentData.directory && cureentData.childNode.length > 0">该文件夹下面有仪表板，请移除后再删除</span>
             <span v-else>确定删除该{{ cureentData && cureentData.directory ? '文件夹' : '仪表板' }}吗？</span>
           </div>
-          <div slot="footer" class="dialog-footer">
+          <div
+            slot="footer"
+            class="dialog-footer"
+          >
             <el-button @click="deleteDataVisible = false">取 消</el-button>
             <el-button
               type="primary"
@@ -173,10 +231,16 @@
           width="480px"
         >
           <div class="data-set-didlog-del">
-            <svg-icon icon-class="warning" style="margin-right: 16px" />
+            <svg-icon
+              icon-class="warning"
+              style="margin-right: 16px"
+            />
             <span>下线后该报表不可被查看</span>
           </div>
-          <div slot="footer" class="dialog-footer">
+          <div
+            slot="footer"
+            class="dialog-footer"
+          >
             <el-button @click="cancelPublishVisible = false">取 消</el-button>
             <el-button
               type="primary"
@@ -192,15 +256,28 @@
           @close="hiddenashboardAttribute"
         >
           <div class="data-set-didlog-main">
-            <el-form ref="attrForm" style="padding: 0px" :model="dashboardAttr" :rules="attrRules" label-width="40px">
-              <el-form-item label="名称" prop="name">
+            <el-form
+              ref="attrForm"
+              style="padding: 0px"
+              :model="dashboardAttr"
+              :rules="attrRules"
+              label-width="40px"
+            >
+              <el-form-item
+                label="名称"
+                prop="name"
+              >
                 <el-input
                   v-model="dashboardAttr.name"
                   placeholder="请输入仪表板名称"
                   style="width: 360px"
                 />
               </el-form-item>
-              <el-form-item label="描述" prop="description" style="margin-top: 30px">
+              <el-form-item
+                label="描述"
+                prop="description"
+                style="margin-top: 30px"
+              >
                 <el-input
                   v-model="dashboardAttr.description"
                   type="textarea"
@@ -210,10 +287,11 @@
               </el-form-item>
             </el-form>
           </div>
-          <div slot="footer" class="dialog-footer">
-            <el-button
-              @click="hiddenashboardAttribute"
-            >取 消</el-button>
+          <div
+            slot="footer"
+            class="dialog-footer"
+          >
+            <el-button @click="hiddenashboardAttribute">取 消</el-button>
             <el-button
               type="primary"
               @click="handleDashboardAttribute"
@@ -226,7 +304,10 @@
           :visible.sync="shareDashboardVisible"
           width="560px"
         >
-          <div v-if="!currentShareInfo || !currentShareInfo.shareUrl" class="shareEmpty">
+          <div
+            v-if="!currentShareInfo || !currentShareInfo.shareUrl"
+            class="shareEmpty"
+          >
             <img
               style="width: 371px; height: 200px"
               :src="require('../../assets/Image/dashboard/shareEmpty.png')"
@@ -238,7 +319,10 @@
               @click="() => executeShare()"
             >公开分享</el-button>
           </div>
-          <div v-else class="shareWrap">
+          <div
+            v-else
+            class="shareWrap"
+          >
             <div>
               <span class="shareTip">所有用户可以通过一下链接查看报表备份</span>
               <el-button
@@ -255,7 +339,10 @@
               >复制</el-button>
             </div>
             <div class="shareDate">
-              <el-form :model="currentShareInfo" style="padding: 0px">
+              <el-form
+                :model="currentShareInfo"
+                style="padding: 0px"
+              >
                 <el-form-item label="截止日期">
                   <el-date-picker
                     v-model="currentShareInfo.shareEndTime"
@@ -306,7 +393,7 @@ export default {
     FolderEdit,
     FolderTree
   },
-  data() {
+  data () {
     const validateName = (rule, value, callback) => {
       const name = value.trim()
       if (name === '') {
@@ -369,11 +456,11 @@ export default {
       return this.multipleSelection.filter((item) => !item.isFolder).length > 0
     }
   },
-  mounted() {
+  mounted () {
     this.init()
   },
   methods: {
-    init() {
+    init () {
       // element lazy数据会被缓存，需要清理
       this.$set(this.$refs.multipleTable.store.states, 'lazyTreeNodeMap', {})
       // 先清空数据，否则对拥有子层级的列表无法刷新data
@@ -386,7 +473,7 @@ export default {
       this.getTableData()
     },
     // 获取 tableData
-    async getTableData(searchkey = '') {
+    async getTableData (searchkey = '') {
       this.dataLoading = true
       try {
         const data = await getDashboardList('isPaging=0' + searchkey)
@@ -413,17 +500,17 @@ export default {
       this.dataLoading = false
     },
     // 查询
-    async query() {
+    async query () {
       const searchkey = this.serachName ? `&searchkey=${this.serachName}` : ''
       this.getTableData(searchkey)
     },
     // 新建文件夹
-    createFolder() {
+    createFolder () {
       this.folderDialogVisible = true
     },
 
     // 新建数据集
-    async createDashboard() {
+    async createDashboard () {
       const setting = {
         name: 'setting'
       }
@@ -439,25 +526,25 @@ export default {
       // })
     },
     // 重置
-    reset() {
+    reset () {
       this.init()
     },
     // 多选
-    handleSelectionChange(val) {
+    handleSelectionChange (val) {
       console.log(val, '多选')
       this.multipleSelection = val
     },
-    handleSelectAll(val) {
+    handleSelectAll (val) {
       console.log(val, '多选')
       // this.multipleSelection = val
     },
     // 取消选择
-    clearSelection() {
+    clearSelection () {
       this.$refs.multipleTable.clearSelection()
       this.multipleSelection = []
     },
     // table options
-    edit(val) {
+    edit (val) {
       if (this.batchSelection) return false
       if (val.directory) {
         this.cureentData = val
@@ -472,10 +559,10 @@ export default {
         })
       }
     },
-    loadDashboard(tree, treeNode, resolve) {
+    loadDashboard (tree, treeNode, resolve) {
       resolve(tree.childNode)
     },
-    editDashboardAttribute(val) {
+    editDashboardAttribute (val) {
       if (this.batchSelection) return false
       this.cureentData = val
       this.dashboardAttributeVisible = true
@@ -483,7 +570,7 @@ export default {
       // this.dashboardAttr.ownerId = val.owner
       this.dashboardAttr.description = val.desc
     },
-    handleDashboardAttribute() {
+    handleDashboardAttribute () {
       this.$refs['attrForm'].validate((valid) => {
         if (valid) {
           this.executeUpDashboardAttribute()
@@ -493,15 +580,15 @@ export default {
         }
       })
     },
-    resetForm() {
+    resetForm () {
       this.$refs['attrForm'].resetFields()
     },
-    hiddenashboardAttribute() {
+    hiddenashboardAttribute () {
       this.dashboardAttributeVisible = false
       this.cureentData = null
       this.resetForm()
     },
-    async executeUpDashboardAttribute() {
+    async executeUpDashboardAttribute () {
       const id = this.cureentData._id
       const params = {
         id,
@@ -520,16 +607,16 @@ export default {
         console.log(error)
       }
     },
-    showMore() {
+    showMore () {
       if (this.batchSelection) return false
       this.moreToolTipDisabled = false
     },
-    deleteData(val) {
+    deleteData (val) {
       if (this.batchSelection) return false
       this.cureentData = val
       this.deleteDataVisible = true
     },
-    async hanledeleteData() {
+    async hanledeleteData () {
       const { _id, directory, childNode } = this.cureentData
       if (directory && childNode.length > 0) {
         this.deleteDataVisible = false
@@ -552,7 +639,7 @@ export default {
         console.log(error)
       }
     },
-    moveTo(val) {
+    moveTo (val) {
       const ids = []
       if (val) {
         ids.push(val._id)
@@ -575,7 +662,7 @@ export default {
       this.moveDashboardIds = ids
       this.$refs.treeFolder.getFolders()
     },
-    handleFolderEdit(action) {
+    handleFolderEdit (action) {
       this.editFolder = null
       this.folderDialogVisible = false
       if (action !== 'cancel') {
@@ -584,7 +671,7 @@ export default {
         this.init()
       }
     },
-    async shareDashboard(data) {
+    async shareDashboard (data) {
       try {
         const info = await getShareInfo(data._id)
         this.cureentData = data
@@ -607,7 +694,7 @@ export default {
         console.log(error)
       }
     },
-    copyShareUrl() {
+    copyShareUrl () {
       if (navigator.clipboard) {
         navigator.clipboard.writeText(this.currentShareInfo.shareUrl)
         this.$message.success('复制成功')
@@ -624,10 +711,10 @@ export default {
         document.body.removeChild(textarea)
       }
     },
-    shareDateChange(e) {
+    shareDateChange (e) {
       this.executeShare(moment(e).format('YYYY-MM-DD'))
     },
-    async cancelShareDashboard() {
+    async cancelShareDashboard () {
       try {
         const result = await cancelShareDashboard(this.cureentData._id)
         this.$message.success(result)
@@ -638,12 +725,12 @@ export default {
         console.log(error)
       }
     },
-    cancelPublish(data) {
+    cancelPublish (data) {
       console.log(data)
       this.cureentData = data
       this.cancelPublishVisible = true
     },
-    async handleCancelPublish() {
+    async handleCancelPublish () {
       const id = this.cureentData._id
       const params = {
         ids: [id]
@@ -665,12 +752,12 @@ export default {
         this.init()
       }
     },
-    renderSelectHeader(h) {
+    renderSelectHeader (h) {
       return h('span', {}, [
         h('el-checkbox', { props: { disabled: true } })
       ])
     },
-    formatTime(row) {
+    formatTime (row) {
       return row.lastUpdatedTime ? moment.utc(row.lastUpdatedTime).local().format('YYYY-MM-DD HH:mm:ss') : '-'
     }
   }
@@ -774,43 +861,42 @@ export default {
     font-weight: 400;
     cursor: pointer;
   }
-
 }
-.dialog-footer{
+.dialog-footer {
   padding-top: 10px;
   margin-right: 20px;
 }
-.shareWrap{
+.shareWrap {
   font-size: 12px;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: rgba(0, 0, 0, 0.9);
   line-height: 20px;
-  .shareCopy{
+  .shareCopy {
     margin-top: 24px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    .shareCopyUrl{
+    .shareCopyUrl {
       width: 480px;
       height: 32px;
       padding: 0px 10px;
-      background: #F4F6F8;
+      background: #f4f6f8;
       box-sizing: border-box;
-      border: 1px solid rgba(223,225,229,1);
+      border: 1px solid rgba(223, 225, 229, 1);
       border-radius: 2.5px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      color: #666A77;
+      color: #666a77;
       line-height: 30px;
     }
   }
-  .shareDate{
+  .shareDate {
     margin-top: 24px;
   }
 }
-.shareEmpty{
+.shareEmpty {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -824,17 +910,17 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  .status-tip{
+  .status-tip {
     width: 8px;
     height: 8px;
-    background: #AEAEAE;
+    background: #aeaeae;
     border-radius: 4px;
     margin-right: 8px;
-    &1{
-        background: #52C41A;
+    &1 {
+      background: #52c41a;
     }
-    &2{
-        background: #1890FF;
+    &2 {
+      background: #1890ff;
     }
   }
 }
