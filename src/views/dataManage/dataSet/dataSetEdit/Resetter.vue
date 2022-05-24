@@ -8,7 +8,7 @@
         <div class="d-f">
           <div
             :class="[{'active': activeTagName === 1}, 'tab-block']"
-            @click="activeTagName = 1;refreshPreview()"
+            @click="activeTagName = 1;"
           >数据预览</div>
           <div
             :class="[{'active': activeTagName === 2}, 'tab-block']"
@@ -87,10 +87,10 @@
             :height="tableHeight"
             empty-text=" "
             stripe
-            border
           >
             <template v-for="(parent, i) in dimensionMeasure">
               <el-table-column
+                v-if="!parent.isHidden"
                 :key="`column-p-${i}`"
                 :label="parent.displayColumn"
                 :class-name="`m-column-${parent._id}`"
@@ -177,7 +177,7 @@
         <el-table
           :data="dimensionMeasure"
           :height="tableHeight"
-          row-key="$treeNodeId"
+          row-key="index"
           default-expand-all
           :row-class-name="tableRowClassName"
           style="width: 100%"
@@ -304,19 +304,7 @@ export default {
         label: 'displayColumn'
       },
       previewLoading: false,
-      dimensionMeasure: [{
-        _id: 1,
-        displayColumn: '维度',
-        icon: 'dimension-icon',
-        index: 'dimension_p_1',
-        children: []
-      }, {
-        _id: 2,
-        index: 'measure_p_1',
-        icon: 'measure-icon',
-        displayColumn: '度量',
-        children: []
-      }],
+      dimensionMeasure: [],
       dimensionMeasureTableData: [],
       dataTypeOptions: [
         {
@@ -373,7 +361,6 @@ export default {
   watch: {
     fields: {
       handler (n, o) {
-        console.log(n)
         this.getDimensionMeasureData(n)
       },
       deep: true
@@ -425,7 +412,6 @@ export default {
         this.previewLoading = false
       }
     },
-    // 获取tree data
     getDimensionMeasureData (fields) {
       if (!fields) return []
       const res = [{
@@ -441,19 +427,31 @@ export default {
         displayColumn: '度量',
         children: []
       }]
+      let dimensionHiddenLength = 0
+      let measureHiddenLength = 0
       fields.forEach((item, index) => {
         item.index = item.type + '_' + index
         if (item.type === 'Dimension') {
+          if (item.attributes[0].isHidden) {
+            dimensionHiddenLength += 1
+          } else if (typeof item.attributes[0].isHidden === 'undefined') {
+            item.attributes[0].isHidden = false
+          }
           res[0].children.push(item)
         } else {
+          if (item.attributes[0].isHidden) {
+            measureHiddenLength += 1
+          } else if (typeof item.attributes[0].isHidden === 'undefined') {
+            item.attributes[0].isHidden = false
+          }
           res[1].children.push(item)
         }
       })
-      if (res[1].children.length === 0) {
-        res.splice(1, 1)
+      if (res[1].children.length === 0 || res[1].children.length === measureHiddenLength) {
+        res[1].isHidden = true
       }
-      if (res[0].children.length === 0) {
-        res.splice(0, 1)
+      if (res[0].children.length === 0 || res[0].children.length === dimensionHiddenLength) {
+        res[0].isHidden = true
       }
       this.dimensionMeasure = res
       return res

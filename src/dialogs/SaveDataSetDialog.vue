@@ -2,6 +2,7 @@
   <el-dialog
     title="保存数据集"
     :visible.sync="dialogVisible"
+    :close-on-click-modal="false"
     width="480px"
   >
     <el-form

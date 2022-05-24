@@ -2,6 +2,7 @@
   <el-dialog
     title="选择数据集"
     :visible.sync="dialogVisible"
+    :close-on-click-modal="false"
     width="75%"
   >
     <div class="content">
