@@ -10,7 +10,7 @@
           @drop.stop="handleTargetDrop($event,name,item,item.name)"
         >
           <div class="field-area-header">
-            <span>*</span>
+            <span v-if="isRequired(item)">*</span>
             <div class="area-name">{{ item.name }}</div>
           </div>
           <div>
@@ -25,6 +25,8 @@
                     :class="name==='Dimension'?'dimension-field-box':'measure-field-box'"
                     class="base-field-box"
                   >
+                    <svg-icon v-if="name==='Dimension'" icon-class="dimension" />
+                    <svg-icon v-else icon-class="measure" />
                     <span class="field-caption">{{ el.displayColumn }}</span>
                     <div class="right-hover-icons">
                       <span
@@ -262,6 +264,16 @@ export default {
     this.interVal = null
   },
   methods: {
+    // 判断是否必填
+    isRequired(val) {
+      if (val.name.indexOf('主值轴') > -1) {
+        return false
+      }
+      if (val.name.indexOf('副值轴') > -1) {
+        return false
+      }
+      return true
+    },
     // 当拖拽在当前元素上时
     hanldDragOver (e) {
       e.preventDefault()
@@ -270,8 +282,8 @@ export default {
     // 拖拽结束
     handleTargetDrop (e, name, item, itemName) {
       const data = JSON.parse(e.dataTransfer.getData('data'))
-      // 判断拖拽元素是否在对应元素上
-      if (data.type === name) {
+      // 判断拖拽元素是否在对应元素上 副值轴 name是Measure1 data.type是Measure
+      if (name.indexOf(data.type) > -1) {
         // 判断是否已经存在
         const dataIndex = item.value.findIndex(el => {
           return el._id === data._id
@@ -328,8 +340,16 @@ export default {
     async reflashStore () {
       const dataSource = deepClone(this.option.dataSource)
       this.dataValue = []
+      // 如果有主值轴和副值轴 那么两者一者有值即可
+      if (dataSource['Measure'].value.length === 0 && dataSource['Measure1'].value.length === 0) {
+        this.$message({
+          message: `主值轴/副值轴区域缺少度量项`,
+          type: 'error'
+        })
+        return
+      }
       for (const i in dataSource) {
-        if (dataSource[i].value.length === 0) {
+        if (dataSource[i].value.length === 0 && dataSource[i].name.indexOf('主值轴') < 0 && dataSource[i].name.indexOf('副值轴') < 0) {
           this.$message({
             message: `${dataSource[i].name}缺少必填字段`,
             type: 'error'
@@ -337,7 +357,11 @@ export default {
           return
         }
         for (let j = 0; j < dataSource[i].value.length; j++) {
-          await this.getData(dataSource[i]['value'][j])
+          if (dataSource[i]['name'] === '副值轴/度量') {
+            await this.getData(dataSource[i]['value'][j], true)
+          } else {
+            await this.getData(dataSource[i]['value'][j], false)
+          }
         }
       }
       const data = store.state.app.dataOption.find(item => {
@@ -356,14 +380,14 @@ export default {
     },
 
     // 获取详细数据
-    async getData (item) {
+    async getData (item, isMeasure1) {
       try {
         const body = {
           limit: this.limit,
           selectFields: [{ displayColumn: item.displayColumn }]
         }
         const res = await getDataSetData(item.dataSetID, body)
-        this.dataValue.push(res)
+        this.dataValue.push({ isMeasure1, ...res })
       } catch (error) {
         console.log(error)
       }

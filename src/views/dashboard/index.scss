@@ -319,7 +319,7 @@
             align-items: center;
             margin: 1px;
             font-size: 12px;
-            height: 24px;
+            height: 28px;
             position: relative;
             margin: 8px;
             .base-field-box{
@@ -349,12 +349,19 @@
               }
             }
             .dimension-field-box{
-              border: 1px solid #2e74ff;
-              background-color: rgba(46,116,255,.15);
+              background: rgba(255,172,46,0.10);
+              border: 1px solid rgba(255,172,46,0.3);
+              border-radius: 2px;
             }
             .measure-field-box {
-              border: 1px solid #26bf59;
-              background-color: rgba(38,191,89,.15);
+              background: rgba(117,209,100,0.10);
+              border: 1px solid rgba(117,209,100,1);
+              border-radius: 2px;
+            }
+            .svg-icon{
+              width: 20px;
+              height: 20px;
+              margin-right: 2px;
             }
           }
           .blank-area-tip{

@@ -64,7 +64,10 @@ export default {
           data: legendData
         },
         'xAxis': this.xAxis,
-        'tooltip': this.tooltip,
+        // 'tooltip': this.tooltip,
+        'tooltip': {
+          trigger: 'axis'
+        },
         'yAxis': this.yAxis,
         'markPoint': this.markPoint,
         'dataset': {

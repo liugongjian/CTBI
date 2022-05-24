@@ -4,6 +4,7 @@
     <el-select
       v-model="option.selectValue"
       class="m-t-12"
+      popper-class="setting-select"
       placeholder="请选择"
       @change="selectSeries"
     >
@@ -18,7 +19,7 @@
       v-if="option.remarkShow"
       class="editor-object-container flex-align-center"
     >
-      <span>别名</span>
+      <span class="editor-item-title">别名</span>
       <el-input
         v-model="option.remark"
         @input="(e)=>{setSeriesOption(e,'remark')}"
@@ -48,8 +49,10 @@
         <el-checkbox v-model="option.SeriesMark.check" @change="(e)=>{setSeriesOption(e,'showMark')}">显示标记点</el-checkbox>
         <el-select
           v-model="option.SeriesMark.markType"
+          popper-class="setting-select"
           placeholder="请输入内容"
           :disabled="!option.SeriesMark.check"
+          :class="{'box-disabled':!option.SeriesMark.check}"
           @change="(e)=>{setSeriesOption(e,'markType')}"
         >
           <svg-icon
@@ -85,17 +88,18 @@
         />
       </div>
     </div>
-    <div v-if="option.SeriesLine&&option.SeriesLine.show" class="editor-object-container">
+    <!-- <div v-if="option.SeriesLine&&option.SeriesLine.show" class="editor-object-container">
       <div style="display: flex" class="color-row">
-        <span>线条样式</span>
+        <span class="editor-item-title" style="width: 56px">线条样式</span>
         <el-select
           v-model="option.SeriesLine.lineType"
+          popper-class="setting-select"
           placeholder="请输入内容"
           @change="(e)=>{setSeriesOption(e,'lineType')}"
         >
           <svg-icon
             slot="prefix"
-            :icon-class="`${option.lineType}-line`"
+            :icon-class="`${option.SeriesLine.lineType}-line`"
           />
           <el-option
             v-for="(item,index) in lineTypes"
@@ -110,6 +114,28 @@
         </el-select>
       </div>
 
+    </div> -->
+    <div v-if="option.SeriesLine&&option.SeriesLine.show" class="editor-object-container">
+      <div class="color-row">
+        <span class="editor-item-title" style="width: 56px">线条样式</span>
+        <el-dropdown popper-class="setting-select" @command="(e)=>{setSeriesOption(e,'lineType')}">
+          <div class="dropdown-link">
+            <svg-icon
+              :icon-class="`${option.SeriesLine.lineType}-line`"
+              style="font-size: 15px;"
+            />
+            <i class="el-icon-arrow-down el-icon--right" />
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="(item,index) in lineTypes" :key="index" :command="item.value">
+              <svg-icon
+                :icon-class="`${item.value}-line`"
+                style="font-size: 15px;"
+              />
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </div>
   </div>
 </template>
@@ -193,6 +219,9 @@ export default {
     },
     // 图表标签、标记点、最值、线条样式存入对应的系列中
     setSeriesOption (val, type) {
+      if (type === 'lineType') {
+        this.option.SeriesLine.lineType = val
+      }
       this.option.seriesOption.forEach((item) => {
         if (item.value === this.option.selectValue) {
           item[type] = val
@@ -217,7 +246,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.label {
-  margin-top: 20px;
+.color-row{
+  display: flex;
+  align-items: center;
+  &>div{
+    margin: 0px 8px 0px 0px;
+  }
+  .el-dropdown{
+    min-width: 50px;
+    .disabled{
+      background: #F5F7FA;
+    }
+  }
+  .dropdown-link{
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    border: 1px solid rgba(221,221,221,0.25);
+    border-radius: 2px;
+    width: 100%;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 400;
+    height: 22px;
+    i {
+      font:#DCDFE6
+    }
+  }
 }
 </style>

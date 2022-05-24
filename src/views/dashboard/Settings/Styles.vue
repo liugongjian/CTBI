@@ -126,14 +126,14 @@ export default {
     }
   },
   watch: {
-    'option.ComponentOption.TwisYAxis.check': {
+    'option.ComponentOption.TwisYAxis': {
       handler (val) {
-        if (val) {
+        if (val.check) {
           const Y1Axis = JSON.parse(JSON.stringify(this.option.Axis.YAxis))
           Y1Axis.cname = '右Y轴'
           this.$set(this.option.Axis, 'Y1Axis', Y1Axis)
         } else {
-          if (this.option.Axis?.Y1Axis) {
+          if (!val.check && this.option.Axis?.Y1Axis) {
             this.$delete(this.option.Axis, 'Y1Axis')
           }
         }
@@ -147,7 +147,4 @@ export default {
 ::v-deep .el-tabs__nav-scroll {
   justify-content: center;
 }
-// ::v-deep .el-collapse-item__header,::v-deep .el-collapse-item__wrap{
-//   background: #383B47;
-// }
 </style>
