@@ -435,6 +435,7 @@ export default {
           if (item.attributes[0].isHidden) {
             dimensionHiddenLength += 1
           } else if (typeof item.attributes[0].isHidden === 'undefined') {
+            // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
             item.attributes[0].isHidden = false
           }
           res[0].children.push(item)
@@ -442,6 +443,7 @@ export default {
           if (item.attributes[0].isHidden) {
             measureHiddenLength += 1
           } else if (typeof item.attributes[0].isHidden === 'undefined') {
+            // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
             item.attributes[0].isHidden = false
           }
           res[1].children.push(item)

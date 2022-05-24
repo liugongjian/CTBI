@@ -241,14 +241,15 @@ export default {
     async loadDataSet (tree, treeNode, resolve) {
       const folderId = tree._id
       try {
-        const data = await getDataSetsFolders({ folderId })
+        // isPaging : 是否分页，分页1，不分页0，不传默认分页
+        const data = await getDataSetsFolders({ folderId, isPaging: 0 })
         // 数据塞入展示数组中，全选使用
         this.dataList.forEach(item => {
           if (item._id === tree._id) {
-            item.children = data
+            item.children = data.result
           }
         })
-        resolve(data)
+        resolve(data.result)
       } catch (error) {
         console.log(error)
       }
