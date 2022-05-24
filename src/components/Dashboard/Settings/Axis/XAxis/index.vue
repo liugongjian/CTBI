@@ -37,7 +37,7 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-select v-model="option.lineWidth" :disabled="!option.show">
+      <el-select v-model="option.lineWidth" :disabled="!option.show" popper-class="setting-select">
         <el-option
           v-for="(item,key) in pixels"
           :key="key"
@@ -63,7 +63,7 @@
       <el-dropdown :disabled="!option.showSplit" @command="handleSplitType">
         <div class="dropdown-link">
           <svg-icon
-            :icon-class="`${option.lineType}-line`"
+            :icon-class="`${option.splitType}-line`"
             style="font-size: 15px;"
           />
           <i class="el-icon-arrow-down el-icon--right" />
@@ -77,7 +77,7 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-select v-model="option.splitWidth" :disabled="!option.showSplit">
+      <el-select v-model="option.splitWidth" :disabled="!option.showSplit" popper-class="setting-select">
         <el-option
           v-for="(item,key) in pixels"
           :key="key"

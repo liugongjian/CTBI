@@ -31,8 +31,7 @@ export default {
       'Title': { // 标题组件
         'text': '柱图', // 标题名称
         'color': '#000', // 标题颜色
-        'show': true, // 是否显示标题
-        'testShow': false // 测试显示
+        'show': true // 是否显示标题
       },
       'TestTitle': { // 测试组件间交互组件
         'testShow': false

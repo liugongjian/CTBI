@@ -352,8 +352,11 @@ export default {
           // 轴标签
           'axisLabel': {
             'show': XAxis.showAxisLabel,
-            rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
-            interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 'auto'
+            // auto 智能显示 sparse 强制稀疏 condense 最多展示
+            rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 45,
+            interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
+            width: 100,
+            overflow: 'truncate'
           },
           // 轴刻度线
           'axisTick': {
