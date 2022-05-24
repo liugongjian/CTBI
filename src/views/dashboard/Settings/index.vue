@@ -102,6 +102,7 @@
       class="page-config-panel"
     >
       <div class="page-config-top">页面设置</div>
+      <page-style />
     </div>
   </div>
 </template>
@@ -113,6 +114,7 @@ import DataPanelField from './DataPanelField.vue'
 import DataPanel from './DataPanel.vue'
 import ChartSwitchHeader from '@/views/dashboard/Settings/ChartSwitchHeader.vue'
 import ChartSwitcher from '@/views/dashboard/Settings/ChartSwitcher.vue'
+import PageStyle from './components/PageStyle.vue'
 
 export default {
   name: 'Settings',
@@ -121,7 +123,8 @@ export default {
     DataPanelField,
     DataPanel,
     ChartSwitchHeader,
-    ChartSwitcher
+    ChartSwitcher,
+    PageStyle
   },
   data () {
     return {
