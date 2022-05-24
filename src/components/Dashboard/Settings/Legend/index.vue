@@ -4,24 +4,23 @@
       显示图例
     </div>
     <div class="editor-item-container flex-align-center">
-      <span
+      <el-tooltip
         v-for="(item, index) in typeOptions"
         :key="index"
-        class="svg-container"
-        :class="{'active': type===item.value}"
+        effect="dark"
+        :content="item.name"
+        placement="top"
       >
-        <el-tooltip
-          class="item"
-          effect="dark"
-          :content="item.name"
-          placement="top"
+        <span
+          class="svg-container"
+          :class="{'active': type===item.value}"
         >
           <svg-icon
             :icon-class="item.value"
             @click="changeHandler(item.value, index)"
           />
-        </el-tooltip>
-      </span>
+        </span>
+      </el-tooltip>
     </div>
   </div>
 </template>

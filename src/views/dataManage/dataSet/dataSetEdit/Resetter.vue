@@ -8,7 +8,7 @@
         <div class="d-f">
           <div
             :class="[{'active': activeTagName === 1}, 'tab-block']"
-            @click="activeTagName = 1;refreshPreview()"
+            @click="activeTagName = 1;"
           >数据预览</div>
           <div
             :class="[{'active': activeTagName === 2}, 'tab-block']"
@@ -69,7 +69,7 @@
                   :active-tag-name="activeTagName"
                   :data="data"
                   :fields="fields"
-                  @reset="getDimensionMeasureData(fields);refreshPreview();"
+                  @reset="getDimensionMeasureData(fields);"
                 />
               </div>
             </div>
@@ -80,78 +80,94 @@
         <!-- gutter-th 由于表头与表体不对齐，el-table会默认追加gutter，这边选择隐藏 -->
         <div class="data-preview-right">
           <el-table
+            v-loading="previewLoading"
+            element-loading-text="拼命加载中"
             :data="dimensionMeasureTableData"
             class="gutter-th"
             :height="tableHeight"
             empty-text=" "
-            style="width: 100%"
             stripe
           >
-            <el-table-column
-              v-for="(parent, i) in dimensionMeasure"
-              :key="`column-p-${i}`"
-              :label="parent.displayColumn"
-              :class-name="`m-column-${parent._id}`"
-            >
+            <template v-for="(parent, i) in dimensionMeasure">
               <el-table-column
-                v-for="(v, index) in parent.children"
-                :key="`column-child-${index}`"
-                class-name="display-none"
+                v-if="!parent.isHidden"
+                :key="`column-p-${i}`"
+                :label="parent.displayColumn"
+                :class-name="`m-column-${parent._id}`"
               >
-                <el-table-column
-                  v-if="(v.attributes && !v.attributes[0].isHidden)"
-                  :prop="v.displayColumn"
-                  width="95"
-                  class-name="column-child"
-                  :label="v.displayColumn"
-                  show-overflow-tooltip
-                >
-                  <template #header="{ column }">
-                    <b-tooltip
-                      :content="column.label"
-                      width="80px"
-                    />
-                    <div class="d-f f-b-c">
-                      <div>
-                        <svg-icon
-                          style="width: 20px;"
-                          :icon-class="typeTransform(v.attributes)"
-                        />
-                      </div>
-                      <gear-btn
-                        :active-tag-name="activeTagName"
-                        :data="v"
-                        :fields="fields"
-                        @reset="getDimensionMeasureData(fields);refreshPreview();"
+                <template #header="{ column }">
+                  <div class="d-f">
+                    <div>
+                      <svg-icon
+                        style="width: 12px; height: 12px;margin-right: 6px;"
+                        :icon-class="parent.icon"
                       />
                     </div>
-                  </template>
-                </el-table-column>
+                    <div>
+                      {{ column.label }}
+                    </div>
+                  </div>
+                </template>
+                <template v-for="(v, index) in parent.children">
+                  <el-table-column
+                    v-if="(v.attributes && !v.attributes[0].isHidden)"
+                    :key="`column-child-${index}`"
+                    :prop="v.displayColumn"
+                    width="95"
+                    class-name="column-child"
+                    :label="v.displayColumn"
+                    show-overflow-tooltip
+                  >
+                    <template #header="{ column }">
+                      <b-tooltip
+                        :content="column.label"
+                        width="80px"
+                      />
+                      <div class="d-f f-b-c">
+                        <div>
+                          <svg-icon
+                            style="width: 20px;"
+                            :icon-class="typeTransform(v.attributes)"
+                          />
+                        </div>
+                        <gear-btn
+                          :active-tag-name="activeTagName"
+                          :data="v"
+                          :fields="fields"
+                          @reset="getDimensionMeasureData(fields);"
+                        />
+                      </div>
+                    </template>
+                    <template slot-scope="{ row, column }">
+                      {{ row[column.property] | strEmptyFilter }}
+                    </template>
+                  </el-table-column>
+                </template>
               </el-table-column>
-            </el-table-column>
+            </template>
           </el-table>
-          <div
-            v-if="dimensionMeasureTableData.length === 0"
-            style="position: absolute; top: 40%; left: 40%;"
-          >
-            <div style="text-align: center;margin-top: 38px; width: 100%;">
-              <svg-icon
-                style="width: 371px; height: 200px;"
-                icon-class="refresh-preview"
-              />
-              <div
-                class="result-bg-tip"
-                style="line-height: 20px;"
-              >
-                <div>
-                  你可以点击右侧的
-                  <span style="font-weight: 400;color: #595959; font-size:14px;">
-                    <i class="el-icon-refresh" /> 刷新预览
-                  </span>
-                </div>
-                <div>
-                  来预览并配置数据
-                </div>
+        </div>
+        <div
+          v-if="dimensionMeasureTableData.length === 0"
+          style="position: absolute; top: 40%; left: 40%;"
+        >
+          <div style="text-align: center;margin-top: 38px; width: 100%;">
+            <svg-icon
+              style="width: 371px; height: 200px;"
+              icon-class="refresh-preview"
+            />
+            <div
+              class="result-bg-tip"
+              style="line-height: 20px;"
+            >
+              <div>
+                你可以点击右侧的
+                <span style="font-weight: 400;color: #595959; font-size:14px;">
+                  <i class="el-icon-refresh" /> 刷新预览
+                </span>
+              </div>
+              <div>
+                来预览并配置数据
               </div>
             </div>
           </div>
@@ -161,7 +177,7 @@
         <el-table
           :data="dimensionMeasure"
           :height="tableHeight"
-          row-key="$treeNodeId"
+          row-key="index"
           default-expand-all
           :row-class-name="tableRowClassName"
           style="width: 100%"
@@ -249,7 +265,7 @@
                   :active-tag-name="activeTagName"
                   :data="scope.row"
                   :fields="fields"
-                  @reset="getDimensionMeasureData(fields);refreshPreview()"
+                  @reset="getDimensionMeasureData(fields);"
                 />
               </div>
             </template>
@@ -287,17 +303,8 @@ export default {
         children: 'children',
         label: 'displayColumn'
       },
-      dimensionMeasure: [{
-        _id: 1,
-        displayColumn: '维度',
-        index: 'dimension_p_1',
-        children: []
-      }, {
-        _id: 2,
-        index: 'measure_p_1',
-        displayColumn: '度量',
-        children: []
-      }],
+      previewLoading: false,
+      dimensionMeasure: [],
       dimensionMeasureTableData: [],
       dataTypeOptions: [
         {
@@ -396,39 +403,57 @@ export default {
         fields: this.fields
       }
       try {
+        this.previewLoading = true
         const data = await getPreviewData(body)
         this.dimensionMeasureTableData = data.data.slice()
       } catch (error) {
         console.log(error)
+      } finally {
+        this.previewLoading = false
       }
     },
-    // 获取tree data
     getDimensionMeasureData (fields) {
       if (!fields) return []
       const res = [{
         _id: 1,
         displayColumn: '维度',
+        icon: 'dimension-icon',
         index: 'dimension_p_1',
         children: []
       }, {
         _id: 2,
         index: 'measure_p_1',
+        icon: 'measure-icon',
         displayColumn: '度量',
         children: []
       }]
+      let dimensionHiddenLength = 0
+      let measureHiddenLength = 0
       fields.forEach((item, index) => {
         item.index = item.type + '_' + index
         if (item.type === 'Dimension') {
+          if (item.attributes[0].isHidden) {
+            dimensionHiddenLength += 1
+          } else if (typeof item.attributes[0].isHidden === 'undefined') {
+            // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
+            item.attributes[0].isHidden = false
+          }
           res[0].children.push(item)
         } else {
+          if (item.attributes[0].isHidden) {
+            measureHiddenLength += 1
+          } else if (typeof item.attributes[0].isHidden === 'undefined') {
+            // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
+            item.attributes[0].isHidden = false
+          }
           res[1].children.push(item)
         }
       })
-      if (res[1].children.length === 0) {
-        res.splice(1, 1)
+      if (res[1].children.length === 0 || res[1].children.length === measureHiddenLength) {
+        res[1].isHidden = true
       }
-      if (res[0].children.length === 0) {
-        res.splice(0, 1)
+      if (res[0].children.length === 0 || res[0].children.length === dimensionHiddenLength) {
+        res[0].isHidden = true
       }
       this.dimensionMeasure = res
       return res
@@ -508,6 +533,7 @@ export default {
         width: 200px;
         flex: 0 0 200px;
         border-right: 1px solid #dddddd;
+        border-left: 1px solid #dddddd;
         overflow-y: auto;
         overflow-x: hidden;
 
@@ -527,6 +553,7 @@ export default {
 
       .data-preview-right {
         overflow: auto;
+        padding-left: 16px;
         width: 100%;
       }
     }
@@ -589,9 +616,5 @@ export default {
 ::v-deep .display-none {
   height: 0px;
   display: none !important;
-}
-::v-deep .el-table--group,
-.el-table--border {
-  border-width: 0px;
 }
 </style>

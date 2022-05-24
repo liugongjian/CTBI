@@ -23,7 +23,8 @@
     <div>
       <div
         v-show="toggleContent"
-        class="d-f p-16-16 f-b-s bg-c-f8f8f8 h-40"
+        class="d-f f-b-s bg-c-f8f8f8"
+        style="height: 52px;padding: 16px 16px 0px 16px;"
       >
         <div class="d-f">
           <div>
@@ -79,10 +80,12 @@
           >运行</el-button>
           <el-button
             type="primary"
+            :loading="editLoading"
             @click="confirmEdit"
           >确认编辑</el-button>
           <el-button
             type="text"
+            :disabled="editLoading"
             @click="handlerToggleContent"
           ><i class="el-icon-close" /></el-button>
         </div>
@@ -270,7 +273,8 @@ export default {
       resultData: { success: true },
       resultPreviewLoading: false,
       // 历史记录集
-      historyLogTableData: []
+      historyLogTableData: [],
+      editLoading: false
     }
   },
   async created () {
@@ -386,7 +390,7 @@ export default {
     },
     // 获取历史记录
     async getHistory () {
-      if (this.dataInfo.sql._id) {
+      if (this.editDataInfo.sql._id) {
         try {
           const data = await getSqlRunningLogs(this.editDataInfo.sql._id)
           this.historyLogTableData = data.slice()
@@ -401,17 +405,10 @@ export default {
     },
     // 确认编辑
     async confirmEdit () {
-      // 判断数据集名称
-      const checkDisplayName = this.checkDisplayName()
-
-      if (checkDisplayName) {
-        this.$message.error(checkDisplayName)
+      // 判断sql是否为空
+      if (!this.editDataInfo.dataSourceId) {
+        this.$message.error('请选择数据源')
         return
-      } else {
-        const flag = await this.existDataSet()
-        if (flag) {
-          return
-        }
       }
       // 判断sql是否为空
       if (this.editDataInfo.sql.sql === '' || regex.EMPTY_REGEX.test(this.editDataInfo.sql.sql)) {
@@ -426,6 +423,7 @@ export default {
           dataSourceId: this.editDataInfo.dataSourceId,
           sqlVariables: this.editDataInfo.sql.sqlVariables
         }
+        this.editLoading = true
         const data = await confirmEditSql(body)
         Object.assign(this.dataInfo, this.editDataInfo)
         Object.assign(this.dataInfo.sql, data.sql)
@@ -435,6 +433,7 @@ export default {
           type: 'success'
         })
         this.toggleContent = false
+        this.editLoading = false
       } catch (error) {
         console.error(error)
       }
@@ -604,7 +603,7 @@ export default {
   }
 
   &.full-height {
-    height: calc(100vh - 50px);
+    height: calc(100vh - 55px);
   }
 
   .side-top {

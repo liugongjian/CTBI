@@ -2,6 +2,7 @@
   <el-dialog
     title="保存数据集"
     :visible.sync="dialogVisible"
+    :close-on-click-modal="false"
     width="480px"
   >
     <el-form
@@ -31,18 +32,14 @@
         label="位置"
         class="m-t-8"
       >
-        <el-select
+        <b-select-tree
           v-model="dataInfo.folderId"
-          placeholder="请选择"
-          style="width: 100%"
-        >
-          <el-option
-            v-for="item in folderList"
-            :key="item._id"
-            :label="item.name"
-            :value="item._id"
-          />
-        </el-select>
+          leaf-icon="folder"
+          :close-on-click="true"
+          :indent="0"
+          :data="folderList"
+          :default-expand-all="true"
+        />
       </el-form-item>
     </el-form>
     <span
@@ -123,12 +120,8 @@ export default {
     },
     async getFolder () {
       const { result } = await getFolderLists()
-      const folders = [{ _id: null, name: '根目录' }, ...result]
+      const folders = [{ _id: '', name: '根目录', children: [...result] }]
       this.folderList = folders
-    },
-    // 名称规则校验
-    validateName (rule, value, callback) {
-
     },
     async existDataSet (rule, value, callback) {
       const isExist = await existsDataSet({ displayName: this.dataInfo.displayName })

@@ -42,6 +42,7 @@ module.exports = {
       '/api': {
         // 测试环境地址
         target: 'http://139.196.10.0:888/ctbibackend/',
+        // target: 'http://127.0.0.1:7040/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/'

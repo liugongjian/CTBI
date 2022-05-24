@@ -54,6 +54,7 @@
         :data="dataList"
         tooltip-effect="dark"
         style="width: 100%"
+        height="calc(100vh - 200px)"
         row-key="_id"
         :load="loadDataSet"
         :tree-props="{children: 'children', hasChildren: 'isFolder'}"
@@ -134,11 +135,6 @@
                 type="text"
                 @click="gotoDataSetEdit(scope.row)"
               >编辑</el-button>
-              <!-- <el-divider direction="vertical" />
-              <el-button
-                type="text"
-                @click="createDashboard(scope.row)"
-              >新建仪表盘</el-button> -->
               <el-divider direction="vertical" />
               <el-button
                 type="text"
@@ -171,6 +167,17 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        background
+        style="float: right;margin-top: 6px;"
+        :current-page.sync="queryForm.page"
+        :page-size="queryForm.limit"
+        :page-sizes="pageSizes"
+        :layout="paginationLayout"
+        :total="queryForm.total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </page-view>
 </template>
@@ -225,7 +232,7 @@ export default {
           this.$set(this.$refs.multipleTable.store.states, 'lazyTreeNodeMap', {})
           this.$set(this.$refs.multipleTable.store.states, 'treeData', {})
         }
-        this.setResult(data, data.length)
+        this.setResult(data.result, data.pageInfo.totalItems)
       } catch (error) {
         console.log(error)
       }
@@ -234,14 +241,15 @@ export default {
     async loadDataSet (tree, treeNode, resolve) {
       const folderId = tree._id
       try {
-        const data = await getDataSetsFolders({ folderId })
+        // isPaging : 是否分页，分页1，不分页0，不传默认分页
+        const data = await getDataSetsFolders({ folderId, isPaging: 0 })
         // 数据塞入展示数组中，全选使用
         this.dataList.forEach(item => {
           if (item._id === tree._id) {
-            item.children = data
+            item.children = data.result
           }
         })
-        resolve(data)
+        resolve(data.result)
       } catch (error) {
         console.log(error)
       }
@@ -370,5 +378,9 @@ export default {
   .el-button--text {
     font-weight: 400;
   }
+}
+
+::v-deep .el-pagination__jump {
+  margin-left: 0px !important;
 }
 </style>
