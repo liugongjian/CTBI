@@ -78,6 +78,14 @@
       }
       .el-collapse-item__header,.el-collapse-item__wrap{
         background: #383B47;
+        color: #fff;
+        border: none;
+      }
+      .el-tabs__content{
+          padding: 0 10px;
+          .el-checkbox__label{
+              color: #fff;
+          }
       }
     }
     .axis-tab{
