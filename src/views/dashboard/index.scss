@@ -1,6 +1,6 @@
 .bi-header{
   display: flex;
-  background-color: #081126;
+  background-color: #2D303B;
   user-select: none;
   position: relative;
   height: 50px !important;
@@ -10,22 +10,23 @@
   .bi-header-container {
     display: flex;
     align-items: center;
-    flex-shrink: 0;
+    width: 100%;
+    justify-content: space-between;
     .bi-header-btn {
-    min-width: 108px;
-    height: 26px;
-    border-radius: 20px;
-    border: 1px solid #2e74ff;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    margin-left: 24px;
-    &.default {
-      background: transparent;
+      min-width: 108px;
+      height: 26px;
+      border-radius: 20px;
+      border: 1px solid #2e74ff;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 24px;
+      &.default {
+        background: transparent;
+      }
     }
-  }
   }
 }
 .tool-header{
