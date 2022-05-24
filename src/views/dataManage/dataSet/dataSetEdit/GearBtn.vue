@@ -129,35 +129,31 @@ export default {
       this.$dialog.show('TipDialog', {}, () => {
         const index = this.fields.findIndex(field => { return item.index === field.index })
         this.fields.splice(index, 1)
-        this.$emit('reset')
       })
     },
     // 隐藏
     hideDimensionMeasure (item) {
       if (item.attributes) {
         item.attributes[0].isHidden = !item.attributes[0].isHidden
-        this.$emit('reset')
       }
     },
     // 切换维度或者度量
     transformType (data) {
       if (data.type === 'Measure') {
         data.type = 'Dimension'
-      } else {
+      } else if (data.type === 'Dimension') {
         data.type = 'Measure'
       }
       // 将字段放到最后
       const index = this.fields.findIndex(field => { return data.index === field.index })
       this.fields.splice(index, 1)
       this.fields.push(data)
-
-      this.$emit('reset')
     },
     // 获取切换文本
     getTransformText (type) {
       if (type === 'Measure') {
         return '转换为' + constants.DatasetType.Dimension
-      } else {
+      } else if (type === 'Dimension') {
         return '转换为' + constants.DatasetType.Measure
       }
     }

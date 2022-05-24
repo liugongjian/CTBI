@@ -203,7 +203,9 @@ export const transformDataTypeIcon = function (type) {
     return 'data-type-option-text'
   } else if (type.indexOf('date') > -1 || type.indexOf('time') > -1) {
     return 'data-type-option-date'
-  } else if (type.indexOf('int') > -1 || type.indexOf('number') > -1) {
+  } else if (type.indexOf('int') > -1 ||
+    type.indexOf('number') > -1 ||
+    type.indexOf('float') > -1) {
     return 'data-type-option-number'
   }
   return ''
