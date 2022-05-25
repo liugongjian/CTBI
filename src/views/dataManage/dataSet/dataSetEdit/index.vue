@@ -131,8 +131,8 @@
             <table-list
               v-loading="dataTableLoading"
               :table-list="dataTableList"
-              :type="dataInfo.dataSourceType"
-              :data-source-id="dataInfo.dataSourceId"
+              :type="editDataInfo.dataSourceType"
+              :data-source-id="editDataInfo.dataSourceId"
               :toggle-content="toggleContent"
             />
           </div>
@@ -499,6 +499,10 @@ export default {
         this.editDataInfo.sql.dataSourceId = val
         this.editDataInfo.dataSourceName = currentDataSource?.displayName
         this.editDataInfo.dataSourceType = type
+        // this.dataInfo.dataSourceId = val
+        // this.dataInfo.sql.dataSourceId = val
+        // this.dataInfo.dataSourceName = currentDataSource?.displayName
+        // this.dataInfo.dataSourceType = type
 
         if (type === 'file') {
           const result = await dataFiles()
