@@ -136,12 +136,12 @@
     // 滚动的滑块
     ::-webkit-scrollbar-thumb {
       background: rgba(221,221,221,0.25);
-      border-radius: 8px;
+      border-radius: 6px;
     }
     
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(221,221,221,0.25);
-    }
+    // ::-webkit-scrollbar-thumb:hover {
+    //   background: rgba(221,221,221,0.25);
+    // }
   }
   .config-item{
     cursor: pointer;

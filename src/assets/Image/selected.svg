@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 12备份</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="配置/选择图表组件" transform="translate(-1068.000000, -122.000000)">
+            <g id="编组-12备份" transform="translate(1068.000000, 122.000000)">
+                <path d="M14,0 L14,0 L14,10.8888889 C14,12.6071081 12.7463973,14 11.2,14 L0,14 L0,14" id="路径" fill="#FA8334"></path>
+                <polyline id="路径" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" transform="translate(9.000000, 9.000000) rotate(-45.000000) translate(-9.000000, -9.000000) " points="11 10 7 10 7 8"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>
