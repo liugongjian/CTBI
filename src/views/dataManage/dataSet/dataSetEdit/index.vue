@@ -292,10 +292,10 @@ export default {
     }
   },
   mounted () {
-    window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
+    window.addEventListener('beforeunload', this.beforeunloadHandler)
   },
-  destroyed () {
-    window.removeEventListener('beforeunload', e => this.beforeunloadHandler(e))
+  beforeDestroy () {
+    window.removeEventListener('beforeunload', this.beforeunloadHandler)
   },
   methods: {
     beforeunloadHandler (e) {
