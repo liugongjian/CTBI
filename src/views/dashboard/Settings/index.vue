@@ -10,7 +10,7 @@
         <!-- 顶部菜单模块 -->
         <div class="change-chart-type-menu">
           <!-- 图例切换 -->
-          <ChartSwitchHeader v-if="showWrapper" class="change-type" :chart-name="option.theme.Basic.Title.text" :icon-name="currentChart" @click.native="changeChart" />
+          <ChartSwitchHeader v-if="showWrapper" class="change-type" :chart-name="option.theme.Basic.Title.text" :icon-name="currentChart" :show-chart-types="showChartTypes" @click.native="changeChart" />
           <span class="panel-icon" @click="toggleWrapperFold">
             <svg-icon :icon-class="showWrapper?'panel-fold':'panel-unfold'" />
           </span>
@@ -39,8 +39,8 @@
           </el-tabs>
         </el-container>
         <!-- 图例切换模块 -->
-        <el-container v-else-if="showChartTypes" class="chart-type-switch">
-          <ChartSwitcher />
+        <el-container v-show="showChartTypes" class="chart-type-switch">
+          <ChartSwitcher :option="option" />
         </el-container>
         <div
           v-show="showWrapper===false"

@@ -159,17 +159,22 @@ export default {
   },
   mounted () {
   }
-  // methods: {
-  // }
 }
 </script>
 <style lang="scss" scoped>
 .detail {
   width: 240px;
+  // background: rgba(0,0,0,0.65);
+  background-color: transparent;
+  font-size: 12px;
+  color: #FFFFFF;
+  letter-spacing: 0;
+  text-align: left;
+  line-height: 20px;
+  font-weight: 400;
   p {
     margin-top: 10px;
     margin-bottom: 10px;
-    font-size: 14px;
   }
 }
 </style>
