@@ -22,7 +22,7 @@
         :h="item.h"
         :i="item.i"
       >
-        <ComponentBlock :option="item">
+        <ComponentBlock :option="item" :style="chartsStyles">
           <component
             :is="item.is"
             :identify="item.i"
@@ -45,6 +45,9 @@ export default {
   computed: {
     layout () {
       return store.state.app.layout
+    },
+    chartsStyles() {
+      return this.$store.state.settings.chartsStyles
     }
   },
   mounted () {
