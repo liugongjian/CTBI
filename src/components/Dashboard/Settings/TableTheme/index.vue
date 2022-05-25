@@ -82,7 +82,4 @@ export default {
   text-align: center;
   cursor: pointer;
 }
-.active{
-  border: 1px solid red;
-}
 </style>

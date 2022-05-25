@@ -27,7 +27,6 @@
       />
       <el-popover
         placement="top-end"
-        width="365"
         trigger="click"
         :class="{'box-disabled':!option.showImg}"
       >
