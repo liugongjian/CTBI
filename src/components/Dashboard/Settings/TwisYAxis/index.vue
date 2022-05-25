@@ -5,7 +5,7 @@
       v-model="option.check"
       label="显示双Y轴"
     />
-    <span v-else>显示双Y轴</span>
+    <span v-else class="editor-item-title">显示双Y轴</span>
     <div
       class="editor-item-container"
       :class="{'box-disabled':(option.show&&!option.check)}"

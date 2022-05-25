@@ -168,27 +168,27 @@ export const formatDataValue = function (data) {
   }
   return dataValue
 }
-export const formatDataValue1 = function (data) {
-  const dataValue = []
-  data.forEach(item => {
-    if (item.fields[0].type === 'Dimension') {
-      const dataOption = []
-      item.data.forEach(ele => {
-        dataOption.push(ele[item.fields[0].displayColumn])
-      })
-      dataOption.unshift(item.fields[0].displayColumn)
-      dataValue.unshift(dataOption)
-    } else {
-      const dataOption = []
-      item.data.forEach(ele => {
-        dataOption.push(ele[item.fields[0].displayColumn])
-      })
-      dataOption.unshift(item.fields[0].displayColumn)
-      dataValue.push(dataOption)
-    }
-  })
-  return dataValue
-}
+// export const formatDataValue1 = function (data) {
+//   const dataValue = []
+//   data.forEach(item => {
+//     if (item.fields[0].type === 'Dimension') {
+//       const dataOption = []
+//       item.data.forEach(ele => {
+//         dataOption.push(ele[item.fields[0].displayColumn])
+//       })
+//       dataOption.unshift(item.fields[0].displayColumn)
+//       dataValue.unshift(dataOption)
+//     } else {
+//       const dataOption = []
+//       item.data.forEach(ele => {
+//         dataOption.push(ele[item.fields[0].displayColumn])
+//       })
+//       dataOption.unshift(item.fields[0].displayColumn)
+//       dataValue.push(dataOption)
+//     }
+//   })
+//   return dataValue
+// }
 
 /**
  * 将字段类型转换为图标
@@ -203,7 +203,9 @@ export const transformDataTypeIcon = function (type) {
     return 'data-type-option-text'
   } else if (type.indexOf('date') > -1 || type.indexOf('time') > -1) {
     return 'data-type-option-date'
-  } else if (type.indexOf('int') > -1 || type.indexOf('number') > -1) {
+  } else if (type.indexOf('int') > -1 ||
+    type.indexOf('number') > -1 ||
+    type.indexOf('float') > -1) {
     return 'data-type-option-number'
   }
   return ''

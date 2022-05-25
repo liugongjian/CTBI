@@ -8,7 +8,7 @@
         <div class="d-f">
           <div
             :class="[{'active': activeTagName === 1}, 'tab-block']"
-            @click="activeTagName = 1;refreshPreview()"
+            @click="activeTagName = 1;refreshPreview();"
           >数据预览</div>
           <div
             :class="[{'active': activeTagName === 2}, 'tab-block']"
@@ -69,7 +69,7 @@
                   :active-tag-name="activeTagName"
                   :data="data"
                   :fields="fields"
-                  @reset="getDimensionMeasureData(fields);"
+                  @reset="getDimensionMeasureData(fields);refreshPreview();"
                 />
               </div>
             </div>
@@ -87,10 +87,10 @@
             :height="tableHeight"
             empty-text=" "
             stripe
-            border
           >
             <template v-for="(parent, i) in dimensionMeasure">
               <el-table-column
+                v-if="!parent.isHidden"
                 :key="`column-p-${i}`"
                 :label="parent.displayColumn"
                 :class-name="`m-column-${parent._id}`"
@@ -108,10 +108,10 @@
                     </div>
                   </div>
                 </template>
-                <template v-for="(v, index) in parent.children">
+                <template v-for="(v) in parent.children">
                   <el-table-column
                     v-if="(v.attributes && !v.attributes[0].isHidden)"
-                    :key="`column-child-${index}`"
+                    :key="`column-child-${v.index}-${v.$treeNodeId}`"
                     :prop="v.displayColumn"
                     width="95"
                     class-name="column-child"
@@ -134,7 +134,7 @@
                           :active-tag-name="activeTagName"
                           :data="v"
                           :fields="fields"
-                          @reset="getDimensionMeasureData(fields);"
+                          @reset="getDimensionMeasureData(fields);refreshPreview();"
                         />
                       </div>
                     </template>
@@ -177,7 +177,7 @@
         <el-table
           :data="dimensionMeasure"
           :height="tableHeight"
-          row-key="$treeNodeId"
+          row-key="index"
           default-expand-all
           :row-class-name="tableRowClassName"
           style="width: 100%"
@@ -265,7 +265,7 @@
                   :active-tag-name="activeTagName"
                   :data="scope.row"
                   :fields="fields"
-                  @reset="getDimensionMeasureData(fields);"
+                  @reset="getDimensionMeasureData(fields);refreshPreview();"
                 />
               </div>
             </template>
@@ -304,19 +304,7 @@ export default {
         label: 'displayColumn'
       },
       previewLoading: false,
-      dimensionMeasure: [{
-        _id: 1,
-        displayColumn: '维度',
-        icon: 'dimension-icon',
-        index: 'dimension_p_1',
-        children: []
-      }, {
-        _id: 2,
-        index: 'measure_p_1',
-        icon: 'measure-icon',
-        displayColumn: '度量',
-        children: []
-      }],
+      dimensionMeasure: [],
       dimensionMeasureTableData: [],
       dataTypeOptions: [
         {
@@ -373,7 +361,6 @@ export default {
   watch: {
     fields: {
       handler (n, o) {
-        console.log(n)
         this.getDimensionMeasureData(n)
       },
       deep: true
@@ -425,7 +412,6 @@ export default {
         this.previewLoading = false
       }
     },
-    // 获取tree data
     getDimensionMeasureData (fields) {
       if (!fields) return []
       const res = [{
@@ -441,19 +427,33 @@ export default {
         displayColumn: '度量',
         children: []
       }]
+      let dimensionHiddenLength = 0
+      let measureHiddenLength = 0
       fields.forEach((item, index) => {
         item.index = item.type + '_' + index
         if (item.type === 'Dimension') {
+          if (item.attributes[0].isHidden) {
+            dimensionHiddenLength += 1
+          } else if (typeof item.attributes[0].isHidden === 'undefined') {
+            // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
+            item.attributes[0].isHidden = false
+          }
           res[0].children.push(item)
-        } else {
+        } else if (item.type === 'Measure') {
+          if (item.attributes[0].isHidden) {
+            measureHiddenLength += 1
+          } else if (typeof item.attributes[0].isHidden === 'undefined') {
+            // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
+            item.attributes[0].isHidden = false
+          }
           res[1].children.push(item)
         }
       })
-      if (res[1].children.length === 0) {
-        res.splice(1, 1)
+      if (res[1].children.length === 0 || res[1].children.length === measureHiddenLength) {
+        res[1].isHidden = true
       }
-      if (res[0].children.length === 0) {
-        res.splice(0, 1)
+      if (res[0].children.length === 0 || res[0].children.length === dimensionHiddenLength) {
+        res[0].isHidden = true
       }
       this.dimensionMeasure = res
       return res

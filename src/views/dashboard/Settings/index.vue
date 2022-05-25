@@ -10,7 +10,7 @@
         <!-- 顶部菜单模块 -->
         <div class="change-chart-type-menu">
           <!-- 图例切换 -->
-          <ChartSwitchHeader v-if="showWrapper" class="change-type" :chart-name="option.theme.Basic.Title.text" :icon-name="currentChart" @click.native="changeChart" />
+          <ChartSwitchHeader v-if="showWrapper" class="change-type" :chart-name="option.theme.Basic.Title.text" :icon-name="currentChart" :show-chart-types="showChartTypes" @click.native="changeChart" />
           <span class="panel-icon" @click="toggleWrapperFold">
             <svg-icon :icon-class="showWrapper?'panel-fold':'panel-unfold'" />
           </span>
@@ -39,8 +39,8 @@
           </el-tabs>
         </el-container>
         <!-- 图例切换模块 -->
-        <el-container v-else-if="showChartTypes" class="chart-type-switch">
-          <ChartSwitcher />
+        <el-container v-show="showChartTypes&&showWrapper" class="chart-type-switch">
+          <ChartSwitcher :option="option" />
         </el-container>
         <div
           v-show="showWrapper===false"
@@ -102,6 +102,7 @@
       class="page-config-panel"
     >
       <div class="page-config-top">页面设置</div>
+      <page-style />
     </div>
   </div>
 </template>
@@ -113,6 +114,7 @@ import DataPanelField from './DataPanelField.vue'
 import DataPanel from './DataPanel.vue'
 import ChartSwitchHeader from '@/views/dashboard/Settings/ChartSwitchHeader.vue'
 import ChartSwitcher from '@/views/dashboard/Settings/ChartSwitcher.vue'
+import PageStyle from './components/PageStyle.vue'
 
 export default {
   name: 'Settings',
@@ -121,7 +123,8 @@ export default {
     DataPanelField,
     DataPanel,
     ChartSwitchHeader,
-    ChartSwitcher
+    ChartSwitcher,
+    PageStyle
   },
   data () {
     return {

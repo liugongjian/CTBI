@@ -37,7 +37,7 @@ export default {
       handler (val) {
         val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (this.dataValue) {
-          this.dataValue = deepClone(getDataValueById(this.identify))
+          this.dataValue = this.formatDataValue(deepClone(getDataValueById(this.identify)))
           this.getOption()
         }
       },
@@ -49,7 +49,7 @@ export default {
           return item.i === this.identify
         })
         if (isData !== -1) {
-          this.dataValue = deepClone(getDataValueById(this.identify))
+          this.dataValue = this.formatDataValue(deepClone(getDataValueById(this.identify)))
           // 拿到数据中的系列名字
           this.getSeriesOptions(this.dataValue)
           // 拿到数据的系列名字 并设置颜色
@@ -65,6 +65,23 @@ export default {
     this.dataOption = store.state.app.dataOption
   },
   methods: {
+    // 组合图特有的 数据 转换方法
+    formatDataValue(data) {
+      const dataValue = []
+      const temp = []
+      data.forEach((item, index) => {
+        temp.push(item.fields[0].displayColumn + `${item.isMeasure1 ? '-1' : ''}`)
+      })
+      dataValue.push(temp)
+      for (let j = 0; j < data[0].data.length; j++) {
+        const temp1 = []
+        for (let i = 0; i < data.length; i++) {
+          temp1.push(data[i].data[j][data[i].fields[0].displayColumn])
+        }
+        dataValue.push(temp1)
+      }
+      return dataValue
+    },
     getOption () {
       const { ComponentOption, Axis } = this.storeOption.theme
       this.getSeries()

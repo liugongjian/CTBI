@@ -6,7 +6,9 @@
         <el-select
           v-model="option.markType"
           placeholder="请输入内容"
+          popper-class="setting-select"
           :disabled="!option.check"
+          :class="{'box-disabled':!option.check}"
         >
           <svg-icon
             slot="prefix"

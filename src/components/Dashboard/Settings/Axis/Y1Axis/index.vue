@@ -35,30 +35,29 @@
           </el-radio-group>
         </div>
       </div>
-      <div class="editor-item-container m-t-12">
-        <el-select v-if="option.formatType === '1'" v-model="option.lang" placeholder="请选择">
+      <div v-if="option.formatType === '1'" class="p-l-24">
+        <el-select v-model="option.lang" placeholder="请选择" popper-class="setting-select">
           <el-option label="自动适配（中文）" value="chinese-simplified" />
           <el-option label="自动适配（繁体）" value="chinese-complicated" />
           <el-option label="自动适配（英文）" value="english" />
         </el-select>
       </div>
 
-      <div v-if="option.formatType === '2'">
-        <div
-          class="editor-item-container m-t-12"
-        >
-          <el-radio-group v-model="option.numberFormat">
-            <el-radio-button label="number">#数值 </el-radio-button>
-            <el-radio-button label="percent">%百分比 </el-radio-button>
-          </el-radio-group>
-        </div>
-        <div class="editor-item-container flex-align-center">
-          <span class="editor-item-title" style="width: 56px">小数位数</span>
-          <el-input-number v-model="option.numberDigit" controls-position="right" label="小数位数" :min="0" :max="5" />
-        </div>
-        <div class="editor-item-container">
-          <el-checkbox v-model="option.kSeperator" label="使用千分位分隔符" />
-        </div>
+      <div
+        v-if="option.formatType === '2'"
+        class="editor-item-container m-t-12"
+      >
+        <el-radio-group v-model="option.numberFormat">
+          <el-radio-button label="number">#数值 </el-radio-button>
+          <el-radio-button label="percent">%百分比 </el-radio-button>
+        </el-radio-group>
+      </div>
+      <div class="editor-item-container flex-align-center">
+        <span class="editor-item-title" style="width: 56px">小数位数</span>
+        <el-input-number v-model="option.numberDigit" controls-position="right" label="小数位数" :min="0" :max="5" />
+      </div>
+      <div class="editor-item-container">
+        <el-checkbox v-model="option.kSeperator" label="使用千分位分隔符" />
       </div>
       <el-input v-if="option.formatType === '3'" v-model="option.formatRegx" />
     </template>
@@ -69,7 +68,7 @@
 import XAxis from '../XAxis/index.vue'
 
 export default {
-  name: 'YAxis',
+  name: 'Y1Axis',
   components: { XAxis },
   props: {
     option: {

@@ -3,10 +3,12 @@
     title="编辑字段"
     width="600px"
     :visible.sync="dialogVisible"
+    :close-on-click-modal="false"
   >
     <el-form
       ref="form"
       :model="form"
+      @submit.native.prevent
     >
       <el-form-item
         label="字段名称"
