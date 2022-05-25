@@ -131,8 +131,8 @@
             <table-list
               v-loading="dataTableLoading"
               :table-list="dataTableList"
-              :type="dataInfo.dataSourceType"
-              :data-source-id="dataInfo.dataSourceId"
+              :type="editDataInfo.dataSourceType"
+              :data-source-id="editDataInfo.dataSourceId"
               :toggle-content="toggleContent"
             />
           </div>
@@ -291,7 +291,20 @@ export default {
       this.toggleContent = false
     }
   },
+  mounted () {
+    window.addEventListener('beforeunload', this.beforeunloadHandler)
+  },
+  beforeDestroy () {
+    window.removeEventListener('beforeunload', this.beforeunloadHandler)
+  },
   methods: {
+    beforeunloadHandler (e) {
+      e = e || window.event
+      if (e) {
+        e.returnValue = '你所做的更改可能未保存。'
+      }
+      return '你所做的更改可能未保存。'
+    },
     checkDisplayName () {
       if (this.editDataInfo.displayName === '') {
         this.errorInputText = '数据集名称不能为空'
@@ -315,6 +328,8 @@ export default {
       this.handleChangeDataSource(this.editDataInfo.dataSourceId)
       // 存在详情，需要回显数据源名称
       this.dataInfo.dataSourceName = deepClone(this.editDataInfo.dataSourceName)
+      // 获取历史记录详情
+      this.getHistory()
     },
     // 打开保存窗口
     showSaveDialog () {
@@ -484,6 +499,10 @@ export default {
         this.editDataInfo.sql.dataSourceId = val
         this.editDataInfo.dataSourceName = currentDataSource?.displayName
         this.editDataInfo.dataSourceType = type
+        // this.dataInfo.dataSourceId = val
+        // this.dataInfo.sql.dataSourceId = val
+        // this.dataInfo.dataSourceName = currentDataSource?.displayName
+        // this.dataInfo.dataSourceType = type
 
         if (type === 'file') {
           const result = await dataFiles()

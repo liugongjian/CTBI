@@ -8,7 +8,7 @@
         <div class="d-f">
           <div
             :class="[{'active': activeTagName === 1}, 'tab-block']"
-            @click="activeTagName = 1;"
+            @click="activeTagName = 1;refreshPreview();"
           >数据预览</div>
           <div
             :class="[{'active': activeTagName === 2}, 'tab-block']"
@@ -69,7 +69,7 @@
                   :active-tag-name="activeTagName"
                   :data="data"
                   :fields="fields"
-                  @reset="getDimensionMeasureData(fields);"
+                  @reset="getDimensionMeasureData(fields);refreshPreview();"
                 />
               </div>
             </div>
@@ -108,10 +108,10 @@
                     </div>
                   </div>
                 </template>
-                <template v-for="(v, index) in parent.children">
+                <template v-for="(v) in parent.children">
                   <el-table-column
                     v-if="(v.attributes && !v.attributes[0].isHidden)"
-                    :key="`column-child-${index}`"
+                    :key="`column-child-${v.index}-${v.$treeNodeId}`"
                     :prop="v.displayColumn"
                     width="95"
                     class-name="column-child"
@@ -134,7 +134,7 @@
                           :active-tag-name="activeTagName"
                           :data="v"
                           :fields="fields"
-                          @reset="getDimensionMeasureData(fields);"
+                          @reset="getDimensionMeasureData(fields);refreshPreview();"
                         />
                       </div>
                     </template>
@@ -265,7 +265,7 @@
                   :active-tag-name="activeTagName"
                   :data="scope.row"
                   :fields="fields"
-                  @reset="getDimensionMeasureData(fields);"
+                  @reset="getDimensionMeasureData(fields);refreshPreview();"
                 />
               </div>
             </template>
@@ -439,7 +439,7 @@ export default {
             item.attributes[0].isHidden = false
           }
           res[0].children.push(item)
-        } else {
+        } else if (item.type === 'Measure') {
           if (item.attributes[0].isHidden) {
             measureHiddenLength += 1
           } else if (typeof item.attributes[0].isHidden === 'undefined') {

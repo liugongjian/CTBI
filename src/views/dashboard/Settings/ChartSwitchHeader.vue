@@ -3,7 +3,8 @@
     <span class="chart-type">
       <svg-icon :icon-class="iconName" />
       {{ chartName }}
-      <i class="el-icon-arrow-down el-icon--right" />
+      <i v-if="!showChartTypes" class="el-icon-arrow-down el-icon--right" />
+      <i v-else class="el-icon-arrow-up el-icon--right" />
     </span>
   </div>
 </template>
@@ -24,6 +25,10 @@ export default {
     iconName: {
       type: String,
       default: ''
+    },
+    showChartTypes: {
+      type: Boolean,
+      default: false
     }
   }
 }
