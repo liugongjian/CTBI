@@ -14,7 +14,7 @@
           />
         </el-header>
         <!-- 画布主体 -->
-        <el-main class="main-layout">
+        <el-main class="main-layout" :style="layoutStyles">
           <div
             id="content"
             @dragover="dragover"
@@ -43,6 +43,11 @@ export default {
   components: {
     Widget, Settings, Tools, Navbar
   },
+  computed: {
+    layoutStyles() {
+      return this.$store.state.settings.layoutStyles
+    }
+  },
   mounted () {
     // 获取本地数据，进行画布初始化
     if (localStorage.getItem('layout')) {
@@ -52,6 +57,10 @@ export default {
     if (localStorage.getItem('dataOption')) {
       const dataOption = JSON.parse(localStorage.getItem('dataOption'))
       this.$store.state.app.dataOption = dataOption
+    }
+    if (localStorage.getItem('layoutStyles')) {
+      const layoutStyles = JSON.parse(localStorage.getItem('layoutStyles'))
+      this.$store.state.settings.layoutStyles = layoutStyles
     }
   },
   methods: {
