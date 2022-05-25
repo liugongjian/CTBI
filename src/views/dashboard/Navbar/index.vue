@@ -6,7 +6,7 @@
         :src="require('../../../assets/Image/dashboard/name.png')"
       >
       <el-input
-        v-devicel="name"
+        v-model="name"
         placeholder="请输入仪表板名称"
         class="nameInput"
       />
@@ -36,7 +36,7 @@
         @click="save"
       >保存</button>
       <button
-        class="bi-header-btn default"
+        class="bi-header-btn default primary"
         @click="saveAndShare"
       >保存并发布</button>
       <div v-if="false" class="more">
@@ -52,9 +52,10 @@
           style="width: 4px; height: 14px"
           :src="require('../../../assets/Image/dashboard/more.png')"
         ></span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click.native="moveTo()">另存为</el-dropdown-item>
+        <el-dropdown-menu slot="dropdown" class="more-dropdown">
+          <el-dropdown-item icon="el-icon-document-copy" @click.native="copy()">另存为</el-dropdown-item>
           <el-dropdown-item
+            icon="el-icon-bottom-right"
             @click.native="cancelPublish()"
           >下线</el-dropdown-item>
         </el-dropdown-menu>
@@ -85,7 +86,9 @@ export default {
     save () {
     },
     saveAndShare () {
-    }
+    },
+    copy() {},
+    cancelPublish() {}
   }
 }
 </script>
@@ -164,4 +167,22 @@ export default {
     }
   }
 }
+.more-dropdown{
+  border-color: #323541;
+  background: #323541;
+  color: #F8F8F8;
+  top: 42px !important;
+}
+.more-dropdown li{
+  background: #323541;
+  color: #F8F8F8;
+  &:hover{
+    color: #fff;
+    background: #2D303B;
+  }
+}
+.el-popper ::v-deep .popper__arrow{
+    border-bottom-color: #323541 !important;
+    visibility: hidden;
+  }
 </style>

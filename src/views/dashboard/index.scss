@@ -16,8 +16,8 @@
       min-width: 108px;
       height: 26px;
       border-radius: 20px;
-      border: 1px solid #2e74ff;
-      color: #fff;
+      border: 1px solid #FA8334;
+      color: #F8F8F8;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -25,6 +25,10 @@
       margin-left: 24px;
       &.default {
         background: transparent;
+      }
+      &.primary {
+        background: #FA8334;
+        border: 0px;
       }
     }
   }
