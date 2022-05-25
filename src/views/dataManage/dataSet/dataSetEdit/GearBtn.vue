@@ -148,6 +148,7 @@ export default {
       const index = this.fields.findIndex(field => { return data.index === field.index })
       this.fields.splice(index, 1)
       this.fields.push(data)
+      this.$emit('reset')
     },
     // 获取切换文本
     getTransformText (type) {

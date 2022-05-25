@@ -291,7 +291,20 @@ export default {
       this.toggleContent = false
     }
   },
+  mounted () {
+    window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
+  },
+  destroyed () {
+    window.removeEventListener('beforeunload', e => this.beforeunloadHandler(e))
+  },
   methods: {
+    beforeunloadHandler (e) {
+      e = e || window.event
+      if (e) {
+        e.returnValue = '你所做的更改可能未保存。'
+      }
+      return '你所做的更改可能未保存。'
+    },
     checkDisplayName () {
       if (this.editDataInfo.displayName === '') {
         this.errorInputText = '数据集名称不能为空'
@@ -315,6 +328,8 @@ export default {
       this.handleChangeDataSource(this.editDataInfo.dataSourceId)
       // 存在详情，需要回显数据源名称
       this.dataInfo.dataSourceName = deepClone(this.editDataInfo.dataSourceName)
+      // 获取历史记录详情
+      this.getHistory()
     },
     // 打开保存窗口
     showSaveDialog () {
