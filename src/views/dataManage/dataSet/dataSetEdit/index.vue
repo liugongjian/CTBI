@@ -114,7 +114,7 @@
             </div>
             <div v-show="!toggleContent">
               <div class="side-top-label"><span>当前数据源</span></div>
-              <div><span class="side-top-text">{{ dataInfo.dataSourceName }}</span></div>
+              <div><span class="side-top-text">{{ editDataInfo.displayName }}</span></div>
             </div>
           </div>
           <!-- 收缩按钮 -->
