@@ -39,7 +39,7 @@
           </el-tabs>
         </el-container>
         <!-- 图例切换模块 -->
-        <el-container v-show="showChartTypes" class="chart-type-switch">
+        <el-container v-show="showChartTypes&&showWrapper" class="chart-type-switch">
           <ChartSwitcher :option="option" />
         </el-container>
         <div

@@ -22,6 +22,7 @@
         v-for="(sub,name,i) in filterTools(toolList, item.type)"
         :key="name+i"
         class="sub-chart"
+        :class="name===option.theme.Basic.ChartType.type?'active':''"
       >
         <el-tooltip popper-class="content" placement="top-start">
           <svg-icon :icon-class="name" style="font-size:26px;" />
@@ -35,7 +36,6 @@
 </template>
 
 <script>
-// import store from '@/store'
 import { getToolList } from '@/views/dashboard/Tools/getToolList.js'
 import ChartDescription from './ChartDescription.vue'
 
@@ -48,14 +48,6 @@ export default {
     option: {
       type: Object,
       default: () => { }
-    },
-    chartName: {
-      type: String,
-      default: ''
-    },
-    iconName: {
-      type: String,
-      default: ''
     }
   },
   data () {
@@ -131,12 +123,12 @@ export default {
   // 滚动的滑块
   ::-webkit-scrollbar-thumb {
     background: rgba(221,221,221,0.25);
-    border-radius: 8px;
+    border-radius: 6px;
   }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(221,221,221,0.25);
-  }
+  // ::-webkit-scrollbar-thumb:hover {
+  //   background: rgba(221,221,221,0.25);
+  // }
   .types {
     .title{
       font-size: 12px;
@@ -159,6 +151,10 @@ export default {
       &:hover{
         border: 1px solid rgba(255,255,255,1);
       }
+    }
+    .sub-chart.active{
+      border: 1px solid rgba(250,131,52,1);
+      border-radius: 2px;
     }
   }
   .chart-type {
