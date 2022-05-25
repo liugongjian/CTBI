@@ -76,9 +76,14 @@ export default {
         'orient': 'horizontal',
         'type': 'scroll'
       },
+      // 'Color': { // 颜色设置
+      //   'title': '配色设置',
+      //   'color': colorTheme['defaultColor']
+      // },
       'Color': { // 颜色设置
         'title': '配色设置',
-        'color': colorTheme['defaultColor']
+        'color': colorTheme['官方'],
+        'theme': '官方'
       },
       'TwisYAxis': { // 双Y轴
         'show': true, // 是否必须显示双y轴的复选框

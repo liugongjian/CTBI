@@ -1,16 +1,21 @@
 <template>
   <div v-if="typeof option.show === 'undefined' ? true : option.show" class="editor-object-container">
     <div>
-      <ColorConfig
+      <!-- <ColorConfig
         :color-data.sync="color"
         :title="option.title"
+        @showColor="getColor"
+      /> -->
+      <ColorConfig
+        :option="option"
         @showColor="getColor"
       />
     </div>
   </div>
 </template>
 <script>
-import ColorConfig from '@/components/Dashboard/Common/ColorConfig'
+// import ColorConfig from '@/components/Dashboard/Common/ColorConfig'
+import ColorConfig from './ColorConfig.vue'
 import store from '@/store'
 export default {
   name: 'Color',

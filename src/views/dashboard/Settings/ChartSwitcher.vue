@@ -73,9 +73,9 @@ export default {
         { name: '关系',
           type: 'relation'
         },
-        { name: '时序',
-          type: 'sequence'
-        },
+        // { name: '时序',
+        //   type: 'sequence'
+        // },
         { name: '空间',
           type: 'space'
         }
