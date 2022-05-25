@@ -171,7 +171,7 @@ export default {
   border-color: #323541;
   background: #323541;
   color: #F8F8F8;
-  top: 42px !important;
+  top: 40px !important;
 }
 .more-dropdown li{
   background: #323541;
