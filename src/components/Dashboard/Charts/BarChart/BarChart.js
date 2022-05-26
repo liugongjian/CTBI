@@ -76,10 +76,6 @@ export default {
         'orient': 'horizontal',
         'type': 'scroll'
       },
-      // 'Color': { // 颜色设置
-      //   'title': '配色设置',
-      //   'color': colorTheme['defaultColor']
-      // },
       'Color': { // 颜色设置
         'title': '配色设置',
         'color': colorTheme['官方'],

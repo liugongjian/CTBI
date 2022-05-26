@@ -92,7 +92,7 @@ export default {
       const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
       val[0].forEach((item, index) => {
         if (index) {
-          const idx = (index) % colorValue.length
+          const idx = (index - 1) % colorValue.length
           color.push({ name: item, color: colorValue[idx].value, remark: item })
         }
       })
@@ -354,10 +354,11 @@ export default {
           'axisLabel': {
             'show': XAxis.showAxisLabel,
             // auto 智能显示 sparse 强制稀疏 condense 最多展示
-            rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 45,
-            interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
-            width: 100,
-            overflow: 'truncate'
+            'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 45,
+            'interval': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
+            'width': 300,
+            'overflow': 'truncate',
+            'padding': 4
           },
           // 轴刻度线
           'axisTick': {

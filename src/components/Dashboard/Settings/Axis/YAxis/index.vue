@@ -52,14 +52,14 @@
           <el-radio-button label="percent">%百分比 </el-radio-button>
         </el-radio-group>
       </div>
-      <div class="editor-item-container flex-align-center">
+      <div v-if="option.formatType === '2'" class="editor-item-container flex-align-center">
         <span class="editor-item-title" style="width: 56px">小数位数</span>
         <el-input-number v-model="option.numberDigit" controls-position="right" label="小数位数" :min="0" :max="5" />
       </div>
-      <div class="editor-item-container">
+      <div v-if="option.formatType === '2'" class="editor-item-container">
         <el-checkbox v-model="option.kSeperator" label="使用千分位分隔符" />
       </div>
-      <el-input v-if="option.formatType === '3'" v-model="option.formatRegx" />
+      <el-input v-if="option.formatType === '3'" v-model="option.formatRegx" placeholder="例如 #,##0.00%" class="editor-item-container" />
     </template>
   </x-axis>
 </template>

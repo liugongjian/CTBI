@@ -46,7 +46,9 @@ export default {
         'color': colorOption,
         'legend': componentOption.Legend,
         'xAxis': this.xAxis,
-        'tooltip': this.tooltip,
+        'tooltip': {
+          trigger: 'axis'
+        },
         'yAxis': this.yAxis,
         'dataset': {
           'source': this.dataValue
