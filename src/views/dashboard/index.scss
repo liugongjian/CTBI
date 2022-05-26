@@ -93,6 +93,7 @@
             font-size: 12px;
             color: #FFFFFF;
             font-weight: 500;
+            height: 41px;
             padding: 0 16px;
             border-top: 1px solid rgba(239,242,245,0.10);
             border-bottom: 0px;
@@ -613,8 +614,9 @@
     height: 48px;
     line-height: 48px;
     background: #2d3240;
-    color: #fff;
+    color: rgba(255,255,255,0.90);
     font-size: 14px;
+    font-weight: 500;
     padding: 0 12px;
     border-bottom: 1px solid hsla(0,0%,85%,.15);
   }
