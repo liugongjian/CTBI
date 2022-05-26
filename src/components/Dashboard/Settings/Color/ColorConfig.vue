@@ -10,11 +10,20 @@
         <div
           slot="reference"
           class="color-container"
+          @click="handleArrow"
         >
           <div class="color-block">
             <span v-for="(item, index) in colorTheme[option.theme]" :key="index" class="color-row" :style="`background-color: ${item.value}`" />
           </div>
           <span class="label">{{ option.theme }}</span>
+          <i
+            v-if="arrowDown"
+            class="el-icon-arrow-down el-icon--right"
+          />
+          <i
+            v-else
+            class="el-icon-arrow-up el-icon--right"
+          />
         </div>
       </el-popover>
     </div>
@@ -74,7 +83,8 @@ export default {
   },
   data () {
     return {
-      colorTheme
+      colorTheme,
+      arrowDown: true
     //   colorIcon: 'down',
     //   showColorConfig: false,
     //   colorValue: null,
@@ -84,6 +94,9 @@ export default {
     }
   },
   methods: {
+    handleArrow() {
+      this.arrowDown = !this.arrowDown
+    }
     // showSelected (item) {
     //   return this.colorData[this.active]?.color === item
     // },
@@ -137,6 +150,12 @@ export default {
     border-radius: 2px;
     padding: 5px 8px;
     padding-right: 0px;
+    i{
+      margin-right: 8px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.75);
+      font-weight: 500;
+    }
   }
   .color-block{
     width: 48px;

@@ -90,10 +90,11 @@ export default {
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
       const color = []
+      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
       val[0].forEach((item, index) => {
         if (index) {
-          const idx = (index) % colorTheme['defaultColor'].length
-          color.push({ name: item, color: colorTheme['defaultColor'][idx].value, remark: item })
+          const idx = (index - 1) % colorValue.length
+          color.push({ name: item, color: colorValue[idx].value, remark: item })
         }
       })
 
@@ -355,7 +356,10 @@ export default {
           'axisLabel': {
             'show': XAxis.showAxisLabel,
             'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
-            'interval': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 'auto'
+            'interval': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
+            'width': 300,
+            'overflow': 'truncate',
+            'padding': 4
           },
           'position': this.storeOption.theme.ComponentOption.ChartAlign.align === 'left' ? 'left' : 'right',
           // 轴刻度线

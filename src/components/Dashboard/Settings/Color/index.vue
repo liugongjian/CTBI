@@ -1,11 +1,6 @@
 <template>
   <div v-if="typeof option.show === 'undefined' ? true : option.show" class="editor-object-container">
     <div>
-      <!-- <ColorConfig
-        :color-data.sync="color"
-        :title="option.title"
-        @showColor="getColor"
-      /> -->
       <ColorConfig
         :option="option"
         @showColor="getColor"
@@ -14,7 +9,6 @@
   </div>
 </template>
 <script>
-// import ColorConfig from '@/components/Dashboard/Common/ColorConfig'
 import ColorConfig from './ColorConfig.vue'
 import store from '@/store'
 export default {
@@ -37,7 +31,6 @@ export default {
     // 监听数据变化 变化后触发radar组件变化
     color: {
       handler (val) {
-        // console.log(this.color)
         this.option.color = val
       },
       deep: true
