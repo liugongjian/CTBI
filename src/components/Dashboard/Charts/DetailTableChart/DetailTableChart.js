@@ -46,6 +46,9 @@ export default {
       },
       'Edition': {
         'edition': 'newEdition' // 版本切换
+      },
+      'ChartType': { // 图表类型 必须有 用于组件切换
+        'type': 'DetailTableChart'
       }
     },
     'DisplayConfig': {

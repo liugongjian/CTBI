@@ -63,6 +63,9 @@ export default {
         'style1': { 'name': '标准', value: 'funnel-standard' }, // 漏斗图 标准
         'style2': { 'name': '转化分析', value: 'funnel-horizontal' }, // 漏斗图 转化分析
         'style': 'funnel'
+      },
+      'ChartType': { // 图表类型 必须有 用于组件切换
+        'type': 'FunnelChart'
       }
     },
     'ComponentOption': { // 图表样式

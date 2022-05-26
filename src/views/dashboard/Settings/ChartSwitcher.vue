@@ -19,15 +19,15 @@
     >
       <div class="title">{{ item.name }}</div>
       <div
-        v-for="(sub,name,i) in filterTools(toolList, item.type)"
-        :key="name+i"
+        v-for="(item1,i) in filterTools(toolList, item)"
+        :key="item1+i"
         class="sub-chart"
-        :class="name===option.theme.Basic.ChartType.type?'active':''"
+        :class="item1.name===option.theme.Basic.ChartType.type?'active':''"
       >
         <el-tooltip popper-class="content" placement="top-start">
-          <svg-icon :icon-class="name" style="font-size:26px;" />
+          <svg-icon :icon-class="item1.name" style="font-size:26px;" />
           <div slot="content">
-            <ChartDescription :chart-name="name" />
+            <ChartDescription :chart-name="item1.name" />
           </div>
         </el-tooltip>
       </div>
@@ -89,13 +89,18 @@ export default {
   },
   methods: {
     filterTools(toolList, type) {
+      const list = []
       const res = JSON.parse(JSON.stringify(toolList))
       Object.keys(res).forEach(item => {
-        if (res[item].type !== type) {
+        if (res[item].type !== type.type) {
           delete res[item]
+        } else {
+          res[item].name = item
+          list.push(res[item])
         }
       })
-      return res
+      list?.sort((prev, next) => prev.order - next.order)
+      return list
     },
     goAuchor(id) {
       this.type = id.split('#')[1]

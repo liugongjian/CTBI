@@ -51,6 +51,9 @@ export default {
         'url': '', // 链接地址
         'show': false, // 是否展示链接地址
         'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
+      },
+      'ChartType': { // 图表类型
+        'type': 'WordCloudChart'
       }
     },
     'ComponentOption': { // 图表样式

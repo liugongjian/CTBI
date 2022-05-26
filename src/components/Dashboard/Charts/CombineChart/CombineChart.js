@@ -52,6 +52,9 @@ export default {
         'showImg': false, // 是否使用背景图片
         'imgUrl': '', // 背景图片地址
         'imgSize': 'containRight' // 背景图片尺寸位置
+      },
+      'ChartType': { // 图表类型 必须有 用于组件切换
+        'type': 'CombineChart' // 线图 面积图 堆积面积图 百分比堆叠面积图
       }
     },
     'ComponentOption': { // 图表样式
@@ -82,7 +85,8 @@ export default {
       },
       'Color': { // 颜色设置
         'title': '配色设置',
-        'color': colorTheme['defaultColor']
+        'color': colorTheme['官方'],
+        'theme': '官方'
       },
       'Legend': { // 图例
         'show': true,

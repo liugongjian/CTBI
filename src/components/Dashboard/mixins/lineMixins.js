@@ -74,10 +74,11 @@ export default {
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
       const color = []
+      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
       val[0].forEach((item, index) => {
         if (index) {
-          const idx = (index) % colorTheme['defaultColor'].length
-          color.push({ name: item.split('-')[0], color: colorTheme['defaultColor'][idx].value, remark: item[0] })
+          const idx = (index - 1) % colorValue.length
+          color.push({ name: item, color: colorValue[idx].value, remark: item })
         }
       })
 
@@ -131,8 +132,11 @@ export default {
           // 轴标签
           axisLabel: {
             show: XAxis.showAxisLabel,
+            // auto 智能显示 sparse 强制稀疏 condense 最多展示
             rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
-            interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 'auto'
+            interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
+            width: 300,
+            overflow: 'truncate'
           },
           // 轴刻度线
           axisTick: {

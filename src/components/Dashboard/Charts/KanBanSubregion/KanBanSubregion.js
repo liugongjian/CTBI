@@ -57,6 +57,9 @@ export default {
         'showImg': false, // 是否使用背景图片
         'imgUrl': '', // 背景图片地址
         'imgSize': 'containRight' // 背景图片尺寸位置
+      },
+      'ChartType': { // 图表类型 必须有 用于组件切换
+        'type': 'KanBanSubregion'
       }
     },
     ComponentOption: {
