@@ -1,5 +1,5 @@
 <template>
-  <div class="setting-panel">
+  <div class="setting-panel editor-object-container">
     <el-container>
       <el-tabs v-model="activeName">
         <el-tab-pane
