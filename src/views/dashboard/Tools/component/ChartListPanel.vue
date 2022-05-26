@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     addItem(name, item) {
-      this.$emit('addItem', name, item)
+      this.$emit('addItem', name, item, true)
     },
     drag($event, name, item) {
       this.$emit('drag', $event, name, item)

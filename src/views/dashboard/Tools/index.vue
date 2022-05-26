@@ -142,7 +142,11 @@ export default {
   },
   methods: {
     // 图标点击添加组件到画布
-    addItem (name, item) {
+    addItem (name, item, submenu) {
+      // 点击展开菜单的图标 收起菜单
+      if (submenu) {
+        this.panelShow()
+      }
       const i = name + this.layoutIndex + new Date().getTime()
       // 防止指向问题
       const option = JSON.parse(JSON.stringify(item))
