@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container class="editor-object-container">
     <el-header class="bi-header">
       <!-- 设置栏 -->
       <Navbar />

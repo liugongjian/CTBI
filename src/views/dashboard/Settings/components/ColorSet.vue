@@ -22,12 +22,19 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-button @click="selfDefined">自定义</el-button>
+      <el-button class="customize" @click="selfDefined">
+        <svg-icon icon-class="customize" />
+        自定义
+      </el-button>
     </div>
-    <div v-if="isSelfDefined" class="editor-object-container">
+    <div v-if="isSelfDefined" class="color-customize">
       <span class="title">自定义</span>
-      <div v-for="(color,index) in themes[activeIndex].colors" :key="index" :class="{'active' : activeIndex2 === index}" class="color-panel">
-        <el-color-picker :value="color" size="small" @change="val => changeSelfColor(val,index)" />
+      <div
+        v-for="(color, index) in themes[activeIndex].colors"
+        :key="index"
+        class="color-panel"
+      >
+        <el-color-picker :value="color" size="small" @active-change="changeSelfColor" />
       </div>
     </div>
   </div>
@@ -47,13 +54,15 @@ export default {
       isSelfDefined: false,
       themes: [
         {
-          name: '浅色',
-          color: '#fff',
-          colors: ['#1A7DFF', '#FF751A', '#16CAD6', '#7067F5', '#66A3CC', '#FFAE0F', '#DB7972', '#96B1FA', '#34AD8D', '#F593AD', '#8C90B8', '#CCB18F']
+          name: '官方',
+          colors: ['#3369FF', '#FF6A00', '#35D2B8', '#8B8AE6', '#47B359', '#FFD119', '#FFCA80', '#BEB8EA', '#A2D95E', '#8C7BC2', '#A1B0E6', '#E8DC99']
         }, {
-          name: '深色',
-          color: '#2C3040',
-          colors: ['#1A7DFF', '#FF751A', '#16CAD6', '#7067F5', '#66A3CC', '#FFAE0F', '#DB7972', '#96B1FA', '#34AD8D', '#F593AD', '#8C90B8', '#CCB18F']
+          name: '商务',
+          colors: ['#4886FF', '#49B0F5', '#47B359', '#83EEF4', '#4987E9', '#F8D300', '#FFCA80', '#BEB8EA', '#A2D95E', '#8C7BC2', '#A1B0E6', '#E8DC99']
+        },
+        {
+          name: '经典',
+          colors: ['#2F8AE6', '#35AEE4', '#19D8E6', '#3ECC9C', '#8ADD7A', '#BFE673', '#FEDF66', '#FEB267', '#FA7D64', '#E7678F', '#B45FBB', '#717CDC']
         }
       ]
     }
@@ -67,20 +76,28 @@ export default {
       this.isSelfDefined = !this.isSelfDefined
     },
     changeSelfColor(val, index) {
+      console.log(val, index)
       this.activeIndex2 = index
       this.themes[this.activeIndex].colors[index] = val
     }
   }
-
 }
 </script>
 
 <style lang="scss" scoped>
 .editor-object-container {
   display: flex;
+  align-items: center;
   .title{
-      color: white;
+      color: rgba(255,255,255,0.75);
+      font-weight: 500;
+      font-size: 12px;
       margin-right: 10px;
+  }
+  .customize {
+    background: #424550;
+    color:#C7C6CA;
+    border: 1px solid rgba(221,221,221,0.25);
   }
   ::v-deep .el-color-picker__trigger{
       border: none;
@@ -88,12 +105,13 @@ export default {
   .color-select{
       padding-left: 10px;
       margin-right: 10px;
-      .colors{
-          margin-left: 15px;
+      border: 1px solid rgba(221,221,221,0.25);
+      .colors {
+        margin-left: 15px;
       }
-      i{
-          color: white;
-          margin-left:110px;
+      i {
+        color: white;
+        margin-left:110px;
       }
   }
   .el-button{
@@ -106,16 +124,16 @@ export default {
         display: none !important;
     }
   }
-  .color-panel{
-      box-sizing: border-box;
-      height: 27px;
-  }
+  // .color-panel{
+  //     box-sizing: border-box;
+  //     height: 27px;
+  // }
 }
-.el-dropdown-menu__item{
+.el-dropdown-menu__item {
     display: flex;
     align-items: center;
     .label{
-        margin-left: 5px;
+      margin-left: 5px;
     }
 }
 .color-select{
@@ -126,10 +144,16 @@ export default {
     width: 230px;
     height: 24px;
 }
-.el-dropdown-menu{
+.el-dropdown-menu {
     width: 244px;
 }
 .active{
     border: 1px solid #FA8334;
+}
+.color-customize {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
 }
 </style>

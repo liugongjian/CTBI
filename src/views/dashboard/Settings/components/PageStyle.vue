@@ -8,9 +8,8 @@
         >
           <el-collapse>
             <el-collapse-item title="仪表板主题" name="1">
-              <div class="editor-item-container">
-                <span class="title">主题模板</span>
-                <el-button type="text" icon="el-icon-edit">自定义</el-button>
+              <div class="title">
+                主题模板
               </div>
               <el-carousel arrow="always" :loop="false" :autoplay="false">
                 <el-carousel-item v-for="(item,index) in carouselItems" :key="index">
@@ -31,21 +30,21 @@
             <el-collapse-item title="全局配置" name="2">
               <Theme />
               <ColorSet />
-              <div class="editor-item-container with-icon">
-                <el-checkbox>渐变色彩样式</el-checkbox>
+              <div class="config-item-container">
+                <el-checkbox v-model="gradient">渐变色彩样式</el-checkbox>
                 <el-tooltip placement="top">
                   <div slot="content">渐变样式作用于指示类、趋势类以及比较类图表</div>
-                  <svg-icon icon-class="tools-i" style="color:white" />
+                  <svg-icon icon-class="tools-i" class="svg-tool" />
                 </el-tooltip>
               </div>
-              <div class="editor-item-container with-icon">
+              <div class="config-item-container">
                 <span class="title">间距</span>
-                <el-radio-group>
+                <el-radio-group v-model="padding">
                   <el-radio :label="3">紧凑</el-radio>
                   <el-radio :label="6">宽松</el-radio>
                 </el-radio-group>
               </div>
-              <div class="editor-item-container with-icon">
+              <div class="config-item-container">
                 <span class="title">圆角</span>
                 <el-radio-group v-model="chartRadius">
                   <el-radio :label="'0px'">无</el-radio>
@@ -54,33 +53,21 @@
                 </el-radio-group>
               </div>
             </el-collapse-item>
-            <el-collapse-item title="仪表板标题区" name="3">
-              <span style="color:white">非同源级联配置项</span>
-            </el-collapse-item>
-            <el-collapse-item title="图表背景" name="4">
-              <span style="color:white">非同源级联配置项</span>
-            </el-collapse-item>
-            <el-collapse-item title="图表标题" name="5">
-              <span style="color:white">非同源级联配置项</span>
-            </el-collapse-item>
           </el-collapse>
         </el-tab-pane>
-        <el-tab-pane
-          label="高级"
-          name="2"
-        >
+        <el-tab-pane label="高级" name="2">
           <el-collapse>
-            <el-collapse-item title="基础设置" name="1">
+            <el-collapse-item title="基础设置" name="basicSet" class="basic-set">
               <div>
-                <el-checkbox>显示水印</el-checkbox>
+                <el-checkbox v-model="watermark">显示水印</el-checkbox>
               </div>
-              <div>
-                <el-checkbox>允许下载</el-checkbox>
+              <div style="margin-bottom: 12px">
+                <el-checkbox v-model="canDownload">允许下载</el-checkbox>
               </div>
             </el-collapse-item>
-            <el-collapse-item title="级联条件" name="2">
+            <!-- <el-collapse-item title="级联条件" name="2">
               <span style="color:white">非同源级联配置项</span>
-            </el-collapse-item>
+            </el-collapse-item> -->
           </el-collapse>
         </el-tab-pane>
       </el-tabs>
@@ -117,7 +104,11 @@ export default {
         { src: picsrc3, template: 'template10', style: { background: 'black' } }
       ],
       carouselActiveIndex: 0,
-      chartRadius: '0px'
+      chartRadius: '0px',
+      padding: 3,
+      gradient: false,
+      watermark: false,
+      canDownload: false
     }
   },
   computed: {
@@ -144,33 +135,62 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.setting-panel{
-    ::v-deep .el-tabs__header{
-        padding-left: 150px !important;
+.setting-panel {
+  .el-container .el-tabs ::v-deep .el-tabs__header {
+    padding: 0 80px 0 90px;
+  }
+  ::v-deep .el-tabs__item {
+    padding: 0 80px;
+  }
+  .title {
+    color: rgba(255,255,255,0.75);
+    font-weight: 500;
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+  .config-item-container {
+    margin-bottom: 12px;
+    .svg-tool {
+      margin-left: 7px;
+      cursor: pointer;
+      font-size: 14px;
     }
+  }
+  .basic-set {
+    font-size: 12px;
+  }
+  .el-collapse-item:last-child {
+    margin-bottom: 0;
+  }
+  .el-container .el-tabs .el-collapse .el-collapse-item  ::v-deep .el-collapse-item__wrap {
+    background: #424550;
+  }
 }
-.el-carousel ::v-deep .el-carousel__container {
-  height: 150px;
+.el-carousel--horizontal {
+  padding: 0 20px;
+  ::v-deep .el-carousel__container {
+    height: 160px;
+  }
 }
-.carousel-item-wrapper{
-    display: inline-grid;
-    grid-template-columns: repeat(3, 33.33%);
-    grid-template-rows: repeat(2, 50%);
-    grid-gap: 5px 5px;
-    padding:0 10% 0 8%;
+.carousel-item-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 8px;
+    grid-row-gap: 5px;
     &__item{
         width: 111px;
-        height: 68px;
+        height: 65px;
         img{
             width: 100%;
             height: 100%;
         }
     }
     &__item.active{
-        border: 1px solid #FA8334;
+      border: 1px solid #FA8334;
     }
 }
-.title{
+.title {
     color:#fff;
     margin-right: 15px;
 }
