@@ -16,6 +16,7 @@
 export default {
   'type': 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
+  'order': 5, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
   'theme': { // 样式组件、配置合集
@@ -56,6 +57,9 @@ export default {
         'style2': { 'name': '环形', value: 'annularType' },
         'style3': { 'name': '水波图', value: 'waterWave' },
         'style': 'barType' // 默认配置
+      },
+      'ChartType': { // 图表类型
+        'type': 'ProgressChart'
       }
     },
     'ComponentOption': { // 图表样式

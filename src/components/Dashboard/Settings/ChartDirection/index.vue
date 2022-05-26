@@ -4,8 +4,12 @@
       <div class="editor-item-title">图表展示方向</div>
       <div class="editor-item-container">
         <el-radio-group v-model="option.direction">
-          <el-radio :label="1">水平</el-radio>
-          <el-radio :label="2">垂直</el-radio>
+          <el-radio :label="1">
+            <svg-icon icon-class="horizontal" style="margin-right:5px" />水平
+          </el-radio>
+          <el-radio :label="2">
+            <svg-icon icon-class="vertical" style="margin-right:5px" />垂直
+          </el-radio>
         </el-radio-group>
       </div>
     </div>

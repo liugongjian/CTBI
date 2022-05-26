@@ -16,7 +16,7 @@
 import { colorTheme } from '@/constants/color.js'
 export default {
   type: 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
-  isShow: true, // 是否展示该组件, 用于控制该组件是否在tools中显示
+  isShow: false, // 是否展示该组件, 用于控制该组件是否在tools中显示
   version: '', // 版本号
   field: {}, // 字段
   theme: {
@@ -57,6 +57,9 @@ export default {
         'showImg': false, // 是否使用背景图片
         'imgUrl': '', // 背景图片地址
         'imgSize': 'containRight' // 背景图片尺寸位置
+      },
+      'ChartType': { // 图表类型 必须有 用于组件切换
+        'type': 'KanBanSubregion'
       }
     },
     ComponentOption: {

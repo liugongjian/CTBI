@@ -17,6 +17,7 @@ import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'distribution', // 组件类型, 用于管理组件类型集合,例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
+  order: 1, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
   'theme': { // 样式组件、配置合集
@@ -49,6 +50,9 @@ export default {
         'style1': { 'name': '饼形', value: 'pie' }, // pie 饼形 ring 环形
         'style2': { 'name': '环形', value: 'ring' }, // pie 饼形 ring 环形
         'style': 'pie'
+      },
+      'ChartType': { // 图表类型
+        'type': 'PieChart'
       }
     },
     'ComponentOption': { // 图表样式

@@ -16,6 +16,7 @@
 export default {
   'type': 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
+  'order': 4, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
   'theme': { // 样式组件、配置合集
@@ -49,6 +50,9 @@ export default {
         'style2': { 'name': '扇形', value: 'fan' },
         'style3': { 'name': '刻度', value: 'calibration' },
         'style': 'standard' // 默认配置
+      },
+      'ChartType': { // 图表类型 必须有 用于组件切换
+        'type': 'DashboardChart'
       }
     },
     'ComponentOption': { // 图表样式

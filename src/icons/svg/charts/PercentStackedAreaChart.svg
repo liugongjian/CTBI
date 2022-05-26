@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1126px" height="1024px" viewBox="0 0 1126 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>编组</title>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
         <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
             <stop stop-color="#E5E5E7" offset="0%"></stop>
@@ -16,13 +15,16 @@
         </linearGradient>
     </defs>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="百分比堆积面积图" transform="translate(-0.000000, 0.000000)" fill-rule="nonzero">
-            <g id="编组">
-                <polygon id="路径备份-45" fill="url(#linearGradient-1)" transform="translate(562.999996, 974.159294) rotate(90.000000) translate(-562.999996, -974.159294) " points="513.159289 411.159298 612.840702 411.159298 612.840702 1537.15929 513.159289 1537.15929"></polygon>
-                <g id="fsux_图表_百分比堆积图备份-2" transform="translate(0.000010, 318.220350)" fill="url(#linearGradient-2)">
-                    <path d="M0,521.994888 L0,225.173618 C90.4843964,71.649025 221.177629,0 382.035928,0 C623.32135,0 844.5,255.880736 1125.99999,184.233084 L1125.99999,521.994888 L0,521.994888 L0,521.994888 Z" id="路径"></path>
+        <g id="编组-51">
+            <rect id="矩形备份-62" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="编组-136备份-5" transform="translate(42.666667, 85.333333)" fill-rule="nonzero">
+                <g id="编组-11">
+                    <polygon id="路径备份-45" fill="url(#linearGradient-1)" transform="translate(469.333333, 811.799410) rotate(90.000000) translate(-469.333333, -811.799410) " points="427.79941 342.466077 510.867257 342.466077 510.867257 1281.13274 427.79941 1281.13274"></polygon>
+                    <g id="fsux_图表_百分比堆积图备份-2" transform="translate(0.000000, 265.183619)" fill="url(#linearGradient-2)">
+                        <path d="M0,434.995734 L0,187.644679 C75.4304506,59.7075202 184.380168,0 318.476371,0 C519.618987,0 704.000281,213.233944 938.666667,153.527569 L938.666667,434.995734 L0,434.995734 L0,434.995734 Z" id="路径"></path>
+                    </g>
+                    <path d="M938.666667,375.289359 C704.000281,434.995735 519.618987,221.76179 318.476371,221.76179 C184.380168,221.76179 75.4304506,281.46931 0,409.406469 L0,409.406469 L0,0 L938.666667,0 Z" id="形状结合" fill="url(#linearGradient-3)"></path>
                 </g>
-                <path d="M1126,450.347235 C844.50001,521.994888 623.32136,266.114151 382.035938,266.114151 C221.177639,266.114151 90.4844067,337.763176 1.02063625e-05,491.287769 L1.02063625e-05,491.287769 L1.02063625e-05,0 L1126,0 L1126,450.347235 Z" id="形状结合" fill="url(#linearGradient-3)"></path>
             </g>
         </g>
     </g>

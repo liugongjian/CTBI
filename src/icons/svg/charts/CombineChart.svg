@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>组合图</title>
     <defs>
         <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-1">
             <stop stop-color="#E5E5E7" offset="0%"></stop>
@@ -28,15 +27,20 @@
         </linearGradient>
     </defs>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="组合图" fill-rule="nonzero">
-            <polygon id="路径" fill="url(#linearGradient-1)" points="0 917.735849 1024 917.735849 1024 1024 0 1024"></polygon>
-            <g id="编组-138" transform="translate(93.090909, 338.113208)">
-                <polygon id="路径" fill="url(#linearGradient-2)" points="0 295.178197 112.152382 295.178197 112.152382 531.320755 3.73542467e-14 531.320755"></polygon>
-                <polygon id="路径" fill="url(#linearGradient-3)" points="448.609524 177.106918 560.761903 177.106918 560.761903 531.320755 448.609524 531.320755"></polygon>
-                <polygon id="路径" fill="url(#linearGradient-4)" points="672.914283 59.0356398 785.066668 59.0356398 785.066668 531.320755 672.914283 531.320755"></polygon>
-                <polygon id="路径" fill="url(#linearGradient-5)" points="224.304762 0 333.653333 0 333.653333 531.320755 224.304762 531.320755"></polygon>
+        <g id="编组-52">
+            <rect id="矩形备份-63" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="编组-139备份-7" transform="translate(42.666667, 85.333333)" fill-rule="nonzero">
+                <g id="编组-12">
+                    <polygon id="路径" fill="url(#linearGradient-1)" points="0 764.779874 938.666667 764.779874 938.666667 853.333333 0 853.333333"></polygon>
+                    <g id="编组-138" transform="translate(85.333333, 281.761006)">
+                        <polygon id="路径" fill="url(#linearGradient-2)" points="0 245.981831 102.80635 245.981831 102.80635 442.767296 3.42413928e-14 442.767296"></polygon>
+                        <polygon id="路径" fill="url(#linearGradient-3)" points="411.225397 147.589099 514.031746 147.589099 514.031746 442.767296 411.225397 442.767296"></polygon>
+                        <polygon id="路径" fill="url(#linearGradient-4)" points="616.838095 49.1963666 719.644444 49.1963666 719.644444 442.767296 616.838095 442.767296"></polygon>
+                        <polygon id="路径" fill="url(#linearGradient-5)" points="205.612699 0 305.848889 0 305.848889 442.767296 205.612699 442.767296"></polygon>
+                    </g>
+                    <polygon id="路径备份-37" fill="url(#linearGradient-6)" points="496.653047 353.577756 287.924123 197.493963 143.654238 318.538469 85.3333333 242.089012 281.78491 76.4494565 502.79226 238.904131 889.555121 0 938.666667 82.8203378"></polygon>
+                </g>
             </g>
-            <polygon id="路径备份-37" fill="url(#linearGradient-6)" points="541.803325 424.293307 314.099044 236.992755 156.713714 382.246162 93.0909091 290.506815 307.40172 91.7393476 548.500648 286.684958 970.423771 0 1024 99.3844055"></polygon>
         </g>
     </g>
 </svg>

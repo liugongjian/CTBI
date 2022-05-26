@@ -115,10 +115,11 @@ export default {
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
       const color = []
+      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
       val[0].forEach((item, index) => {
         if (index) {
-          const idx = (index) % colorTheme['defaultColor'].length
-          color.push({ name: item.split('-')[0], color: colorTheme['defaultColor'][idx].value, remark: item[0] })
+          const idx = (index - 1) % colorValue.length
+          color.push({ name: item.split('-')[0], color: colorValue[idx].value, remark: item[0] })
         }
       })
 
