@@ -1,12 +1,12 @@
 <template>
-  <div class="header-tool">
+  <div class="header-tool" @click="panelShow">
     <div class="tools-container">
-      <div class="tool-btn">
+      <!-- <div class="tool-btn">
         <svg-icon
           :icon-class="'tools-story-line'"
           style="font-size: 18px;"
         />
-      </div>
+      </div> -->
       <div class="tool-btn">
         <el-dropdown>
           <span class="el-dropdown-link">
@@ -22,44 +22,51 @@
       </div>
     </div>
     <div class="tools-container">
-      <div class="tool-btn">
+      <!-- <div class="tool-btn">
         <icon-dropdown :drop-downs="queryList" :main="'tools-query'" @resolve="resolveDropdown" />
-      </div>
-      <div class="tool-btn">
+      </div> -->
+      <!-- <div class="tool-btn">
         <svg-icon
           :icon-class="'tools-tab'"
           style="font-size: 18px;"
         />
-      </div>
-      <div class="tool-btn">
+      </div> -->
+      <!-- <div class="tool-btn">
         <icon-dropdown :drop-downs="richEditorList" :main="'tools-rich'" @resolve="resolveDropdown" />
-      </div>
+      </div> -->
     </div>
     <div class="tools-container">
       <div
         v-for="(item,name, index) in briefTooList"
         :key="name + index"
-        class="droppable-element tool-btn"
+        class="droppable-element tool-btn chart-tool"
         draggable="true"
         unselectable="on"
         @click.stop="addItem(name,item)"
         @drag.stop="drag($event, name,item)"
         @dragend="dragend($event, name,item)"
       >
-        <svg-icon
-          :icon-class="name"
-          style="font-size: 30px;"
-        />
+        <el-tooltip effect="dark" :content="item.theme.Basic.Title.text" placement="top">
+          <svg-icon
+            :icon-class="name"
+            style="font-size: 22px;"
+          />
+        </el-tooltip>
       </div>
-      <div class="tool-btn horizontal" @click="panelShow">
+      <div class="tool-btn horizontal">
         <svg-icon
           :icon-class="'tools-more'"
-          style="font-size: 30px;"
+          style="font-size: 22px;"
         />
         <svg-icon
           :icon-class="'tools-arrow'"
-          style="font-size: 8px;"
+          style="font-size: 8px;margin-left: 8px;"
         />
+      </div>
+    </div>
+    <div class="setting-container">
+      <div class="tool-setting" @click.stop>
+        <svg-icon icon-class="tools-setting" style="font-size: 14px;margin-left: 16px;" />
       </div>
     </div>
     <chart-list-panel v-if="showPanel" :tool-list="toolList" @addItem="addItem" @drag="drag" @dragend="dragend" />
@@ -86,12 +93,12 @@ const DragPos = { 'x': 1, 'y': 1, 'w': 1, 'h': 1, 'i': null }
 const mouseXY = { 'x': 1, 'y': 1 }
 import store from '@/store'
 import { getToolList, getBriefToolList } from './getToolList'
-import IconDropdown from './component/IconDropdown.vue'
+// import IconDropdown from './component/IconDropdown.vue'
 import ChartListPanel from './component/ChartListPanel.vue'
 export default {
   name: 'Tools',
   components: {
-    IconDropdown,
+    // IconDropdown,
     ChartListPanel
   },
   data () {
@@ -130,6 +137,7 @@ export default {
     // 获取json文件中的配置项信息
     this.toolList = getToolList()
     this.briefTooList = getBriefToolList()
+    console.log(this.briefTooList)
     store.dispatch('app/updateToolList', this.toolList)
   },
   methods: {
@@ -255,23 +263,43 @@ export default {
 <style lang="scss" scoped>
 .header-tool {
   display: flex;
+  width: 100%;
   align-items: center;
+  cursor: pointer;
   .tools-container{
       display: flex;
       align-items: center;
+      svg {
+        cursor: pointer;
+      }
       .tool-btn{
-          margin-left: 16px;
+        margin: 0px 3px;
       }
   }
   .droppable-element {
-    margin: 0px 5px;
+    margin: 0px 3px;
+    svg {
+        padding: 5px;
+        &:hover {
+        background: rgba(255,255,255,0.10);
+        border-radius: 2px;
+      }
+    }
   }
   .horizontal{
-      display: flex;
-      align-items: center;
-      svg {
-          margin: 2px;
-      }
+    display: flex;
+    margin-left: 8px;
+    align-items: center;
+    cursor: pointer;
+  }
+  .setting-container {
+    svg {
+      cursor: pointer;
+    }
+    position: absolute;
+    right: 20px;
+    display: flex;
+    align-items: center;
   }
 }
 </style>

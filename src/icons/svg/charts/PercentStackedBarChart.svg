@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1084px" height="1024px" viewBox="0 0 1084 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>百分比堆积柱状图</title>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
         <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
             <stop stop-color="#FEC08B" offset="0%"></stop>
@@ -36,15 +35,20 @@
         </linearGradient>
     </defs>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="百分比堆积柱状图" fill-rule="nonzero">
-            <polygon id="路径" fill="url(#linearGradient-1)" points="874.189636 0 1083.10765 0 1083.10765 591.963947 874.189636 591.963947"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-2)" points="581.313922 63.0126541 790.231932 63.0126541 790.231932 1024 581.313922 1024"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-3)" points="289.325707 0 498.243716 0 498.243716 779.759403 289.325707 779.759403"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-4)" points="874.189636 593.206449 1083.10765 593.206449 1083.10765 1023.8225 874.189636 1023.8225"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-5)" points="581.313922 0 790.231932 0 790.231932 557.883862 581.313922 557.883862"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-6)" points="289.858208 730.059281 498.776216 730.059281 498.776216 1023.8225 289.858208 1023.8225"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-7)" points="0 0 208.918011 0 208.918011 689.589185 0 689.589185"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-8)" points="0 511.733748 208.918011 511.733748 208.918011 1023.8225 0 1023.8225"></polygon>
+        <g id="编组-55" transform="translate(-0.000000, 0.000000)">
+            <rect id="矩形备份-160" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_百分比堆积柱状图备份-8" transform="translate(42.666667, 85.333333)" fill-rule="nonzero">
+                <g id="编组-20">
+                    <polygon id="路径" fill="url(#linearGradient-1)" points="757.609527 0 938.666667 0 938.666667 493.303288 757.609527 493.303288"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-2)" points="503.791107 52.510545 684.848246 52.510545 684.848246 853.333333 503.791107 853.333333"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="250.741833 0 431.798973 0 431.798973 649.799503 250.741833 649.799503"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-4)" points="757.609527 494.338707 938.666667 494.338707 938.666667 853.185416 757.609527 853.185416"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-5)" points="503.791107 0 684.848246 0 684.848246 464.903219 503.791107 464.903219"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-6)" points="251.203322 608.382735 432.26046 608.382735 432.26046 853.185416 251.203322 853.185416"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-7)" points="0 0 181.05714 0 181.05714 574.657653 0 574.657653"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-8)" points="0 426.444791 181.05714 426.444791 181.05714 853.185416 0 853.185416"></polygon>
+                </g>
+            </g>
         </g>
     </g>
 </svg>

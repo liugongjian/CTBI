@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1073px" height="1024px" viewBox="0 0 1073 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>漏斗图</title>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
         <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
             <stop stop-color="#FEC08B" offset="0%"></stop>
@@ -16,10 +15,15 @@
         </linearGradient>
     </defs>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="漏斗图" fill-rule="nonzero">
-            <polygon id="路径" fill="url(#linearGradient-1)" points="123.78022 384 189.106215 640.000001 842.390708 640.000001 907.721611 384"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-2)" points="448.700778 1024 582.796015 1024 783.941393 767.999999 247.56044 767.999999"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-3)" points="1072.7619 0 1005.71185 256 67.045022 256 0 0"></polygon>
+        <g id="编组-67">
+            <rect id="矩形备份-153" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_漏斗图备份-6" transform="translate(42.666667, 85.333333)" fill-rule="nonzero">
+                <g id="编组-31">
+                    <polygon id="路径" fill="url(#linearGradient-1)" points="108.307692 320 165.467938 533.333333 737.09187 533.333333 794.25641 320"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-2)" points="392.613181 853.333333 509.946514 853.333333 685.948718 640 216.615385 640 392.613181 853.333333"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="938.666667 0 879.997865 213.333333 58.6643942 213.333333 0 0 938.666667 0"></polygon>
+                </g>
+            </g>
         </g>
     </g>
 </svg>
