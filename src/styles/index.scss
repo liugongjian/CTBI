@@ -157,6 +157,12 @@ a {
     line-height: 24px;
     font-size: 12px;
   }
+  .el-select .el-tag{
+    background-color: transparent;
+    border: 1px solid rgba(221, 221, 221, 0.25) !important;
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+  }
   // 置灰样式
   .box-disabled {
     cursor: not-allowed;
@@ -189,6 +195,14 @@ a {
   }
   .el-checkbox__input.is-checked+.el-checkbox__label{
     color: rgba(255,255,255,0.75);
+  }
+  .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner{
+    background-color: transparent;
+    border-color: transparent;
+  }
+  .el-checkbox__input.is-disabled .el-checkbox__inner{
+    background-color: transparent;
+    border-color: transparent;
   }
 }
 

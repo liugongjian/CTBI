@@ -1,5 +1,5 @@
 <template>
-  <div v-if="typeOption.length>0" class="editor-object-container">
+  <div class="editor-object-container">
     <div class="editor-item-title">
       图表类型
     </div>

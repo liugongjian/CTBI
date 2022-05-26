@@ -29,9 +29,6 @@ export default {
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
       },
-      'TestTitle': { // 测试组件间交互组件
-        'testShow': false
-      },
       'Mark': { // 备注
         'show': false, // 是否显示备注
         'position': 'onChart', // 备注出现位置
@@ -46,9 +43,6 @@ export default {
       },
       'Edition': {
         'edition': 'newEdition' // 版本切换
-      },
-      'ChartType': { // 图表类型 必须有 用于组件切换
-        'type': 'DetailTableChart'
       }
     },
     'DisplayConfig': {

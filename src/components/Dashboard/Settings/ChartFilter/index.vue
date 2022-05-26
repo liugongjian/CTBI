@@ -10,6 +10,7 @@
         v-model="option.filteredSery"
         :disabled="!option.showFilter"
         :multiple="option.isMultiple"
+        popper-class="setting-select"
       >
         <el-option
           v-for="item in option.indicatorOption"

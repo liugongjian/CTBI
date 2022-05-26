@@ -6,7 +6,7 @@
         label="显示图表标签"
         @change="handleSeriesLabel"
       />
-      <div v-if="labelOptions.length>0" class="editor-item-container">
+      <div v-if="labelOptions.length>0" class="editor-item-container" :class="!option.check?'box-disabled':''">
         <el-checkbox-group
           v-model="option.checkList"
           :disabled="!option.check"

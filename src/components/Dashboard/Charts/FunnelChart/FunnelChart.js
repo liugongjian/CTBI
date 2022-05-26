@@ -34,9 +34,6 @@ export default {
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
       },
-      'TestTitle': { // 测试组件间交互组件
-        'testShow': false
-      },
       'Mark': { // 备注
         'show': false, // 是否显示备注
         'position': 'onChart', // 备注出现位置
@@ -63,9 +60,6 @@ export default {
         'style1': { 'name': '标准', value: 'funnel-standard' }, // 漏斗图 标准
         'style2': { 'name': '转化分析', value: 'funnel-horizontal' }, // 漏斗图 转化分析
         'style': 'funnel'
-      },
-      'ChartType': { // 图表类型 必须有 用于组件切换
-        'type': 'FunnelChart'
       }
     },
     'ComponentOption': { // 图表样式

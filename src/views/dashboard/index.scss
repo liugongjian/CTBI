@@ -144,10 +144,25 @@
       background: rgba(221,221,221,0.25);
       border-radius: 6px;
     }
+  }
+  .el-container.chart-type-switch{
+    // 滚动条样式优化
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 100px;
+    }
     
-    // ::-webkit-scrollbar-thumb:hover {
-    //   background: rgba(221,221,221,0.25);
-    // }
+    // 外层轨道
+    &::-webkit-scrollbar-track {
+      background: #383B47;
+    }
+    
+    // 滚动的滑块
+    &::-webkit-scrollbar-thumb {
+      background: rgba(221,221,221,0.25);
+      border-radius: 6px;
+    }
+
   }
   .config-item{
     cursor: pointer;
@@ -183,6 +198,15 @@
   }
   .popper__arrow{
     display: none;
+  }
+}
+// 多选的select 下拉框
+.setting-select.is-multiple{
+  .el-select-dropdown__item.selected,.el-select-dropdown__item.selected.hover{
+    background: #434755;
+    font-size: 12px;
+    color: #F8F8F8;
+    font-weight: 400;
   }
 }
 .setting-dropdown{

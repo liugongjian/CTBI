@@ -26,7 +26,6 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (this.dataValue) {
           this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
           this.getOption()
@@ -344,7 +343,7 @@ export default {
       if (!ComponentOption.TwisYAxis.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
-      const data = getDataValueById(this.identify)
+      const data = formatDataValue(deepClone(getDataValueById(this.identify)))
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'line',

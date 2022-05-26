@@ -27,9 +27,6 @@ export default {
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
       },
-      'TestTitle': { // 测试组件间交互组件
-        'testShow': false
-      },
       'Mark': { // 备注
         'show': false, // 是否显示备注
         'position': 'onChart', // 备注出现位置
@@ -57,9 +54,6 @@ export default {
         'style2': { 'name': '环形', value: 'annularType' },
         'style3': { 'name': '水波图', value: 'waterWave' },
         'style': 'barType' // 默认配置
-      },
-      'ChartType': { // 图表类型
-        'type': 'WaterRippleChart'
       }
     },
     'ComponentOption': { // 图表样式

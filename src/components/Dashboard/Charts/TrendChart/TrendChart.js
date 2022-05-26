@@ -27,9 +27,6 @@ export default {
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
       },
-      'TestTitle': { // 测试组件间交互组件
-        'testShow': false
-      },
       'Mark': { // 备注
         'show': false, // 是否显示备注
         'position': 'onChart', // 备注出现位置
@@ -51,9 +48,6 @@ export default {
         'showImg': false, // 是否使用背景图片
         'imgUrl': '', // 背景图片地址
         'imgSize': 'containRight' // 背景图片尺寸位置
-      },
-      'ChartType': { // 图表类型
-        'type': 'TrendChart'
       }
     },
     'ComponentOption': { // 图表样式
