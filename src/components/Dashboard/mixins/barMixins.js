@@ -179,17 +179,17 @@ export default {
     // 将数据转换成百分比
     valueToPercent () {
       const sumArr = []
-      for (let ii = 0; ii < this.dataValue[0].length - 1; ii++) {
+      for (let ii = 0; ii < this.dataValue.length - 1; ii++) {
         sumArr.push(0)
       }
-      for (let i = 1; i < this.dataValue.length; i++) {
+      for (let i = 1; i < this.dataValue[0].length; i++) {
         for (let j = 0; j < sumArr.length; j++) {
-          sumArr[j] += this.dataValue[i][j + 1]
+          sumArr[j] += this.dataValue[j + 1][i]
         }
       }
-      for (let i = 1; i < this.dataValue.length; i++) {
+      for (let i = 1; i < this.dataValue[0].length; i++) {
         for (let j = 0; j < sumArr.length; j++) {
-          this.dataValue[i][j + 1] = (this.dataValue[i][j + 1] / sumArr[j] * 100).toFixed(2)
+          this.dataValue[j + 1][i] = (this.dataValue[j + 1][i] / sumArr[j] * 100).toFixed(2)
         }
       }
     },
@@ -357,8 +357,7 @@ export default {
             'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 45,
             'interval': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
             'width': 300,
-            'overflow': 'truncate',
-            'padding': 4
+            'overflow': 'truncate'
           },
           // 轴刻度线
           'axisTick': {

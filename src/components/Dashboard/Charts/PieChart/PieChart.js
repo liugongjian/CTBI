@@ -50,6 +50,9 @@ export default {
         'style1': { 'name': '饼形', value: 'pie' }, // pie 饼形 ring 环形
         'style2': { 'name': '环形', value: 'ring' }, // pie 饼形 ring 环形
         'style': 'pie'
+      },
+      'ChartType': { // 图表类型
+        'type': 'PieChart'
       }
     },
     'ComponentOption': { // 图表样式

@@ -53,6 +53,9 @@ export default {
         'show': false, // 是否展示链接地址
         'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
       },
+      'ChartType': { // 图表类型 必须有 用于组件切换
+        'type': 'ColorMapChart'
+      },
       MapStyleTemplates: { // 样式模板
         type: 'defaultMap'// 模板类型 1.defaultMap 默认；2.simpleMap 极简底图； 3.3DMap 3D填充
       }

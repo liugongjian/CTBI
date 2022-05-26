@@ -46,7 +46,7 @@
     </div>
     <div v-if="option.SeriesMark&&option.SeriesMark.show" class="editor-object-container">
       <div style="display: flex" class="color-row">
-        <el-checkbox v-model="option.SeriesMark.check" @change="(e)=>{setSeriesOption(e,'showMark')}">显示标记点</el-checkbox>
+        <el-checkbox v-model="option.SeriesMark.check" style="margin-right:8px" @change="(e)=>{setSeriesOption(e,'showMark')}">显示标记点</el-checkbox>
         <el-select
           v-model="option.SeriesMark.markType"
           popper-class="setting-select"
@@ -118,7 +118,7 @@
     <div v-if="option.SeriesLine&&option.SeriesLine.show" class="editor-object-container">
       <div class="color-row">
         <span class="editor-item-title" style="width: 56px">线条样式</span>
-        <el-dropdown popper-class="setting-select" @command="(e)=>{setSeriesOption(e,'lineType')}">
+        <el-dropdown trigger="click" placement="bottom" @command="(e)=>{setSeriesOption(e,'lineType')}">
           <div class="dropdown-link">
             <svg-icon
               :icon-class="`${option.SeriesLine.lineType}-line`"
@@ -126,7 +126,7 @@
             />
             <i class="el-icon-arrow-down el-icon--right" />
           </div>
-          <el-dropdown-menu slot="dropdown">
+          <el-dropdown-menu slot="dropdown" class="setting-dropdown">
             <el-dropdown-item v-for="(item,index) in lineTypes" :key="index" :command="item.value">
               <svg-icon
                 :icon-class="`${item.value}-line`"
@@ -154,19 +154,22 @@ export default {
     return {
       // 颜色集合
       predefineColors: ['#1a7dff', '#ff751a', '#16cad6', '#ffae0f', '#34ad8d', '#f593ad', '#8c90b8', '#96b1fa', '#ccb18f'],
-      markTypes: [{
-        label: '圆形',
-        value: 'circle'
-      }, {
-        label: '空心圆',
-        value: 'emptyCircle'
-      }, {
-        label: '菱形',
-        value: 'diamond'
-      }, {
-        label: '空心菱形',
-        value: 'hollowDiamond'
-      }],
+      markTypes: [
+        {
+          label: '圆形',
+          value: 'circle'
+        }, {
+          label: '空心圆',
+          value: 'emptyCircle'
+        }, {
+          label: '菱形',
+          value: 'diamond'
+        }
+        // {
+        //   label: '空心菱形',
+        //   value: 'hollowDiamond'
+        // }
+      ],
       lineTypes: [{
         label: 'solid',
         value: 'solid'

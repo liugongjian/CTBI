@@ -358,8 +358,7 @@ export default {
             'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
             'interval': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
             'width': 300,
-            'overflow': 'truncate',
-            'padding': 4
+            'overflow': 'truncate'
           },
           'position': this.storeOption.theme.ComponentOption.ChartAlign.align === 'left' ? 'left' : 'right',
           // 轴刻度线
