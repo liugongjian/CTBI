@@ -38,7 +38,6 @@
         v-model="option.SeriesChartLabel.color"
         style="margin-left: 8px;"
         show-alpha
-        :predefine="predefineColors"
         :disabled="!option.SeriesChartLabel.check"
         :class="{'box-disabled':!option.SeriesChartLabel.check}"
         @change="(e)=>{setSeriesOption(e,'labelColor')}"
@@ -153,7 +152,7 @@ export default {
   data () {
     return {
       // 颜色集合
-      predefineColors: ['#1a7dff', '#ff751a', '#16cad6', '#ffae0f', '#34ad8d', '#f593ad', '#8c90b8', '#96b1fa', '#ccb18f'],
+      // predefineColors: ['#1a7dff', '#ff751a', '#16cad6', '#ffae0f', '#34ad8d', '#f593ad', '#8c90b8', '#96b1fa', '#ccb18f'],
       markTypes: [
         {
           label: '圆形',

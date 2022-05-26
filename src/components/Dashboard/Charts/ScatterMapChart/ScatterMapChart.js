@@ -28,9 +28,6 @@ export default {
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
       },
-      'TestTitle': { // 测试组件间交互组件
-        'testShow': false
-      },
       'Mark': { // 备注
         'show': false, // 是否显示备注
         'position': 'onChart', // 备注出现位置
@@ -39,9 +36,6 @@ export default {
       'Footer': { // 尾注
         'show': false, // 是否显示尾注
         'text': ''// 尾注信息
-      },
-      'ChartType': { // 图表类型
-        'type': 'ScatterMapChart'
       }
     },
     'ComponentOption': { // 图表样式

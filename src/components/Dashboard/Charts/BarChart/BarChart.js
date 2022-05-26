@@ -34,9 +34,6 @@ export default {
         'color': '#000', // 标题颜色
         'show': true // 是否显示标题
       },
-      'TestTitle': { // 测试组件间交互组件
-        'testShow': false
-      },
       'Mark': { // 备注
         'show': false, // 是否显示备注
         'position': 'onChart', // 备注出现位置
@@ -142,6 +139,7 @@ export default {
         'max': 0,
         'autoMin': true,
         'autoMax': true,
+        'autoEnlarge': false,
         'formatType': '1',
         'lang': 'chinese-simplified',
         'numberFormat': 'number',
