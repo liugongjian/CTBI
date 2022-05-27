@@ -11,7 +11,6 @@
 </template>
 
 <script>
-// import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import lineMixins from '@/components/Dashboard/mixins/lineMixins'
 
 export default {
@@ -41,12 +40,21 @@ export default {
       ComponentOption.Color.color.forEach(item => {
         colorOption.push(item.color)
       })
+      // 获取指标筛选中的图例数据
+      const legendData = []
+      this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
+        legendData.push({ name: item.value })
+      })
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
       this.chartOption = {
         grid: this.grid,
         color: colorOption,
-        legend: ComponentOption.Legend,
+        // legend: ComponentOption.Legend,
+        legend: {
+          ...ComponentOption.Legend,
+          data: legendData
+        },
         xAxis: this.xAxis,
         tooltip: {
           trigger: 'axis',

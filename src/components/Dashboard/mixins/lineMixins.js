@@ -28,7 +28,7 @@ export default {
       handler (val) {
         if (this.dataValue) {
           this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
-          this.getOption()
+          // this.getOption()
         }
       },
       deep: true

@@ -353,7 +353,7 @@ export default {
           'axisLabel': {
             'show': XAxis.showAxisLabel,
             // auto 智能显示 sparse 强制稀疏 condense 最多展示
-            'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 45,
+            'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
             'interval': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
             'width': 300,
             'overflow': 'truncate'

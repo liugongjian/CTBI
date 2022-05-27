@@ -178,10 +178,8 @@ export default {
     },
     // 恢复默认
     reset () {
-      console.log('dadad')
       this.value = this.optionImgSize
       this.option.imgSize = this.value
-      console.log('dadad')
     },
     // 上传图片前钩子
     beforeUpload (file) {

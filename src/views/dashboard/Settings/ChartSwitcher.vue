@@ -91,7 +91,6 @@ export default {
     this.toolList = getToolList()
     this.storeOption = getLayoutById(store.state.app.currentLayoutId)
     this.goAuchor('#' + this.option.type)
-    console.log('adadqqqq', this.option, this.storeOption)
   },
   methods: {
     filterTools(toolList, type) {

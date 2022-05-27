@@ -74,7 +74,6 @@ export default {
         item.color = colorTheme[key][index].value
         return item
       })
-      console.log(',,,', this.option.color)
       this.$forceUpdate()
     }
   }
