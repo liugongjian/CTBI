@@ -8,7 +8,7 @@ export default {
   },
   methods: {
     formatYLabel (value, YAxisSet) {
-      const { formatType, lang, numberFormat, numberDigit, kSeperator } = YAxisSet
+      const { formatType, lang, numberFormat, numberDigit, kSeperator, formatRegx } = YAxisSet
       const isEnglish = lang === 'english'
       if (formatType === '1') { // 自动适配
         return isEnglish ? addEnglishUnit(value, 0) : addChineseUnit(value, lang === 'chinese-simplified', 0)
@@ -20,7 +20,7 @@ export default {
         }
         return value
       } else if (formatType === '3') { // 手动输入，TODO 功能未完成
-        return value
+        return value + formatRegx
       }
     }
   }

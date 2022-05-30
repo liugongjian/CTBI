@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1127px" height="1024px" viewBox="0 0 1127 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>柱图</title>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
         <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
             <stop stop-color="#FEC08B" offset="0%"></stop>
@@ -20,11 +19,16 @@
         </linearGradient>
     </defs>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="柱图" fill-rule="nonzero">
-            <polygon id="路径" fill="url(#linearGradient-1)" points="0 512 225.28 512 225.28 1024 0 1024"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-2)" points="337.92 0 563.2 0 563.2 1024 337.92 1024"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-3)" points="619.52 341.333334 844.8 341.333334 844.8 1024 619.52 1024"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-4)" points="901.12 682.666665 1126.4 682.666665 1126.4 1024 901.12 1024"></polygon>
+        <g id="编组-53">
+            <rect id="矩形备份-58" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_柱状图备份-8" transform="translate(42.666667, 85.333333)" fill-rule="nonzero">
+                <g id="编组-13">
+                    <polygon id="路径" fill="url(#linearGradient-1)" points="0 426.666667 187.733333 426.666667 187.733333 853.333333 0 853.333333"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-2)" points="281.6 0 469.333333 0 469.333333 853.333333 281.6 853.333333"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="516.266667 284.444444 704 284.444444 704 853.333333 516.266667 853.333333"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-4)" points="750.933333 568.888889 938.666667 568.888889 938.666667 853.333333 750.933333 853.333333"></polygon>
+                </g>
+            </g>
         </g>
     </g>
 </svg>

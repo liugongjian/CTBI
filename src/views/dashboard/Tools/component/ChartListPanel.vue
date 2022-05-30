@@ -4,19 +4,21 @@
       <div class="chart-list-panel__category__title">{{ cate.name }}</div>
       <div class="chart-list-panel__category__tools">
         <div
-          v-for="(item,name, index) in filterTools(toolList, cate)"
-          :key="name + index"
+          v-for="(item, index) in filterTools(toolList, cate)"
+          :key="item.name + index"
           class="droppable-element svg"
           draggable="true"
           unselectable="on"
-          @click.stop="addItem(name,item)"
-          @drag.stop="drag($event, name,item)"
-          @dragend="dragend($event, name,item)"
+          @click.stop="addItem(item.name,item)"
+          @drag.stop="drag($event, item.name,item)"
+          @dragend="dragend($event, item.name,item)"
         >
-          <svg-icon
-            :icon-class="name"
-            style="font-size: 30px;"
-          />
+          <el-tooltip effect="dark" :content="item.theme.Basic.Title.text" placement="top">
+            <svg-icon
+              :icon-class="item.name"
+              style="font-size: 22px;"
+            />
+          </el-tooltip>
         </div>
       </div>
     </div>
@@ -43,7 +45,7 @@ export default {
   },
   methods: {
     addItem(name, item) {
-      this.$emit('addItem', name, item)
+      this.$emit('addItem', name, item, true)
     },
     drag($event, name, item) {
       this.$emit('drag', $event, name, item)
@@ -52,13 +54,18 @@ export default {
       this.$emit('dragend', $event, name, item)
     },
     filterTools(toolList, category) {
+      const list = []
       const res = JSON.parse(JSON.stringify(toolList))
       Object.keys(res).forEach(item => {
         if (res[item].type !== category.category) {
           delete res[item]
+        } else {
+          res[item].name = item
+          list.push(res[item])
         }
       })
-      return res
+      list?.sort((prev, next) => prev.order - next.order)
+      return list
     }
   }
 }
@@ -69,8 +76,8 @@ export default {
     top: 48px;
     left: 0;
     z-index: 999;
-    border-right: 1px solid hsla(0,0%,85%,.15);
-    background-color: #393f4d;
+    width: calc(100vw - 436px);
+    background-color: #424550;
     padding: 12px 8px;
     display: flex;
     flex-wrap: wrap;
@@ -82,7 +89,8 @@ export default {
         &__title {
             align-self:start;
             color: white;
-            margin: 10px 8px;
+            margin-bottom: 3px;
+            margin-left: 7px;
         }
         &__tools{
             display: flex;
@@ -93,10 +101,16 @@ export default {
                 height: 100%;
                 width: 1px;
                 background: grey;
-                margin: 0 5px;
+                margin: 0 8px;
             }
             .svg {
-                margin: 0 5px;
+                margin: 0 3px;
+                cursor: pointer;
+                padding: 5px;
+                &:hover {
+                  background: rgba(255,255,255,0.10);
+                  border-radius: 2px;
+                }
             }
         }
     }

@@ -1,16 +1,14 @@
 <template>
   <div
-    class="editor-object-container flex-align-center"
+    class="editor-object-container"
   >
-    <span>图表对齐方式</span>
-    <el-radio
-      v-model="option.align"
-      label="left"
-    >左对齐</el-radio>
-    <el-radio
-      v-model="option.align"
-      label="right"
-    >右对齐</el-radio>
+    <div class="editor-item-title">图表对齐方式</div>
+    <div class="editor-item-container">
+      <el-radio-group v-model="option.align">
+        <el-radio label="left">左对齐</el-radio>
+        <el-radio label="right">右对齐</el-radio>
+      </el-radio-group>
+    </div>
   </div>
 </template>
 

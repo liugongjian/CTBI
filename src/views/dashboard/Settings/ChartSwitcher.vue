@@ -19,20 +19,16 @@
     >
       <div class="title">{{ item.name }}</div>
       <div
-        v-for="(sub,name,i) in filterTools(toolList, item.type)"
-        :key="name+i"
+        v-for="(item1,i) in filterTools(toolList, item)"
+        :key="item1+i"
         class="sub-chart"
-        :class="name===option.theme.Basic.ChartType.type?'active':''"
+        :class="item1.name===storeOption.is?'active':''"
+        @click.stop="changeHandler(item1.name)"
       >
-        <el-tooltip popper-class="content">
-          <el-button class="button-chart">
-            <svg-icon
-              :icon-class="name"
-              style="font-size:20px;"
-            />
-          </el-button>
+        <el-tooltip popper-class="content" placement="top-start">
+          <svg-icon :icon-class="item1.name" style="font-size:26px;" />
           <div slot="content">
-            <ChartDescription :chart-name="name" />
+            <ChartDescription :chart-name="item1.name" />
           </div>
         </el-tooltip>
       </div>
@@ -43,6 +39,8 @@
 <script>
 import { getToolList } from '@/views/dashboard/Tools/getToolList.js'
 import ChartDescription from './ChartDescription.vue'
+import store from '@/store'
+import { getLayoutById } from '@/utils/optionUtils'
 
 export default {
   name: 'ChartSwitcher',
@@ -58,38 +56,31 @@ export default {
   data () {
     return {
       toolList: {},
+      storeOption: {},
       type: this.option.type,
       types: [
-        {
-          name: '指标',
+        { name: '指标',
           type: 'indicator'
         },
-        {
-          name: '表格',
+        { name: '表格',
           type: 'table'
         },
-        {
-          name: '趋势',
+        { name: '趋势',
           type: 'trend'
         },
-        {
-          name: '比较',
+        { name: '比较',
           type: 'comparator'
         },
-        {
-          name: '分布',
+        { name: '分布',
           type: 'distribution'
         },
-        {
-          name: '关系',
+        { name: '关系',
           type: 'relation'
         },
-        {
-          name: '时序',
-          type: 'sequence'
-        },
-        {
-          name: '空间',
+        // { name: '时序',
+        //   type: 'sequence'
+        // },
+        { name: '空间',
           type: 'space'
         }
       ]
@@ -98,50 +89,47 @@ export default {
   },
   mounted () {
     this.toolList = getToolList()
+    this.storeOption = getLayoutById(store.state.app.currentLayoutId)
     this.goAuchor('#' + this.option.type)
   },
   methods: {
-    filterTools (toolList, type) {
+    filterTools(toolList, type) {
+      const list = []
       const res = JSON.parse(JSON.stringify(toolList))
       Object.keys(res).forEach(item => {
-        if (res[item].type !== type) {
+        if (res[item].type !== type.type) {
           delete res[item]
+        } else {
+          res[item].name = item
+          list.push(res[item])
         }
       })
-      return res
+      list?.sort((prev, next) => prev.order - next.order)
+      return list
     },
     goAuchor(id) {
       this.type = id.split('#')[1]
       document.querySelector(id).scrollIntoView(true)
       var auchor = this.$el.querySelector(id)
       document.body.scrollTop = auchor.offsetTop
+    },
+    // 图标点击添加组件到画布
+    changeHandler (type) {
+      const storeOption = getLayoutById(store.state.app.currentLayoutId)
+      const dataSource = JSON.parse(JSON.stringify(storeOption.option.dataSource))
+      const dataSet = JSON.parse(JSON.stringify(storeOption.option.dataSet))
+      storeOption.option = JSON.parse(JSON.stringify(store.state.app.toolList[type]))
+      storeOption.option.dataSource = dataSource
+      storeOption.option.dataSet = dataSet
+      storeOption.is = type
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 .switcher {
-  background: #383b47;
+  background: #383B47;
   padding: 12px 2px 0px 16px;
-  // 滚动条样式优化
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 100px;
-  }
-  // 外层轨道
-  ::-webkit-scrollbar-track {
-    background: #383B47;
-  }
-
-  // 滚动的滑块
-  ::-webkit-scrollbar-thumb {
-    background: rgba(221,221,221,0.25);
-    border-radius: 6px;
-  }
-
-  // ::-webkit-scrollbar-thumb:hover {
-  //   background: rgba(221,221,221,0.25);
-  // }
   .types {
     .title{
       font-size: 12px;
@@ -210,17 +198,16 @@ export default {
 
 </style>
 <style lang="scss">
-.content.el-tooltip__popper[x-placement^='top'] .popper__arrow {
+.content.el-tooltip__popper[x-placement^="top"] .popper__arrow {
   border-top-color: rgba(0,0,0,0.65);
 }
-.content.el-tooltip__popper[x-placement^='top'] .popper__arrow:after {
+.content.el-tooltip__popper[x-placement^="top"] .popper__arrow:after {
   border-top-color: rgba(0,0,0,0.65);
 }
-.is-dark.content.el-tooltip__popper[x-placement^='bottom'] .popper__arrow {
+.is-dark.content.el-tooltip__popper[x-placement^="bottom"] .popper__arrow {
   border-bottom-color: rgba(0,0,0,0.65);
 }
-.is-dark.content.el-tooltip__popper[x-placement^='bottom']
-  .popper__arrow:after {
+.is-dark.content.el-tooltip__popper[x-placement^="bottom"] .popper__arrow:after {
   border-bottom-color: rgba(0,0,0,0.65);
 }
 .content {

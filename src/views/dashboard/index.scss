@@ -93,6 +93,7 @@
             font-size: 12px;
             color: #FFFFFF;
             font-weight: 500;
+            height: 41px;
             padding: 0 16px;
             border-top: 1px solid rgba(239,242,245,0.10);
             border-bottom: 0px;
@@ -143,10 +144,25 @@
       background: rgba(221,221,221,0.25);
       border-radius: 6px;
     }
+  }
+  .el-container.chart-type-switch{
+    // 滚动条样式优化
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 100px;
+    }
     
-    // ::-webkit-scrollbar-thumb:hover {
-    //   background: rgba(221,221,221,0.25);
-    // }
+    // 外层轨道
+    &::-webkit-scrollbar-track {
+      background: #383B47;
+    }
+    
+    // 滚动的滑块
+    &::-webkit-scrollbar-thumb {
+      background: rgba(221,221,221,0.25);
+      border-radius: 6px;
+    }
+
   }
   .config-item{
     cursor: pointer;
@@ -166,26 +182,96 @@
     }
   }
 }
+// select选择框的 下拉样式 、dropdown的下拉样式
 .setting-select{
   border-radius: 2px;
   border: 0px;
   background: #323541;
   box-shadow: 1px 2px 10px 0px rgb(50 53 65 / 51%);
-  
   .el-select-dropdown__item,.el-select-dropdown__item.selected{
     font-size: 12px;
     color: #F8F8F8;
     font-weight: 400;
   }
-  .el-select-dropdown__item.hover{
+  .el-select-dropdown__item.hover,.el-dropdown-menu__item.hover{
     background: #434755;
   }
   .popper__arrow{
     display: none;
   }
 }
-.el-popper[x-placement^=bottom]{
+// 多选的select 下拉框
+.setting-select.is-multiple{
+  .el-select-dropdown__item.selected,.el-select-dropdown__item.selected.hover{
+    background: #434755;
+    font-size: 12px;
+    color: #F8F8F8;
+    font-weight: 400;
+  }
+}
+.setting-dropdown{
+  border-radius: 2px;
+  border: 0px;
+  background: #323541;
+  min-width: 52px;
+  box-shadow: 1px 2px 10px 0px rgb(50 53 65 / 51%);
+  .el-dropdown-menu__item:hover{
+    background: #434755;
+    font-size: 12px;
+    color: #F8F8F8;
+    font-weight: 400;
+    
+  }
+  .popper__arrow{
+    display: none;
+  }
+}
+.setting-select.el-popper[x-placement^=bottom],.setting-dropdown.el-popper[x-placement^=bottom]{
   margin-top: 2px;
+}
+// 颜色设置的popper
+.color-popover{
+  padding: 0px !important;
+  .popper__arrow {
+    display: none !important;
+  }
+  .label {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 500;
+    font-size: 12px;
+    color: rgba(0,0,0,0.65);
+    font-weight: 400;
+  }
+  .label.active {
+    color: #000;
+  }
+  .color-container{
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    cursor: pointer;
+    &:hover {
+      background-color: #ebeef5;
+    }
+  }
+  .color-container.active{
+    background-color: #ebeef5;
+  }
+  .color-block{
+    width: 48px;
+    height: 16px;
+    line-height: 7px;
+    margin-right: 8px;
+    .color-row{
+      display: inline-block;
+      width: 8px;
+      height: 8px
+    }
+  }
+
 }
 .data-panel{
   border-left: 1px solid hsla(0,0%,85%,.15);
@@ -552,8 +638,9 @@
     height: 48px;
     line-height: 48px;
     background: #2d3240;
-    color: #fff;
+    color: rgba(255,255,255,0.90);
     font-size: 14px;
+    font-weight: 500;
     padding: 0 12px;
     border-bottom: 1px solid hsla(0,0%,85%,.15);
   }

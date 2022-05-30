@@ -20,7 +20,7 @@
       label="显示坐标轴"
     />
     <div class="color-row m-t-12">
-      <el-dropdown :disabled="!option.show" @command="handleAxisType">
+      <el-dropdown :disabled="!option.show" trigger="click" placement="bottom" @command="handleAxisType">
         <div class="dropdown-link" :class="!option.show ? 'disabled' : ''">
           <svg-icon
             :icon-class="`${option.lineType}-line`"
@@ -28,7 +28,7 @@
           />
           <i class="el-icon-arrow-down el-icon--right" />
         </div>
-        <el-dropdown-menu slot="dropdown">
+        <el-dropdown-menu slot="dropdown" class="setting-dropdown">
           <el-dropdown-item v-for="(type,index) in lineTypes" :key="index" :command="type">
             <svg-icon
               :icon-class="`${type}-line`"
@@ -60,7 +60,7 @@
       />
     </div>
     <div class="color-row m-t-12" :class="!option.showSplit ? 'box-disabled' : ''">
-      <el-dropdown :disabled="!option.showSplit" @command="handleSplitType">
+      <el-dropdown :disabled="!option.showSplit" trigger="click" placement="bottom" @command="handleSplitType">
         <div class="dropdown-link">
           <svg-icon
             :icon-class="`${option.splitType}-line`"
@@ -68,7 +68,7 @@
           />
           <i class="el-icon-arrow-down el-icon--right" />
         </div>
-        <el-dropdown-menu slot="dropdown">
+        <el-dropdown-menu slot="dropdown" class="setting-dropdown">
           <el-dropdown-item v-for="(type,index) in lineTypes" :key="index" :command="type">
             <svg-icon
               :icon-class="`${type}-line`"
@@ -145,6 +145,7 @@ export default {
     color: rgba(255, 255, 255, 0.75);
     font-weight: 400;
     height: 22px;
+    cursor: pointer;
     i {
       font:#DCDFE6
     }

@@ -1,23 +1,26 @@
 <template>
   <x-axis :option="option">
     <template v-slot:unit>
-      <div class="flex-align-center row m-t-12" :class="option.autoMax ? 'box-disabled' : ''" @keydown.8.stop="">
-        <div class="editor-item-title" style="width: 36px">最大值</div>
-        <el-input v-model="option.max" :disabled="option.autoMax" />
+      <div class="flex-align-center row m-t-12" @keydown.8.stop="">
+        <div class="editor-item-title" style="width: 36px" :class="option.autoMax ? 'box-disabled' : ''">最大值</div>
+        <el-input v-model="option.max" :disabled="option.autoMax" :class="option.autoMax ? 'box-disabled' : ''" />
         <el-checkbox
           v-model="option.autoMax"
           label="自动"
+          :class="option.autoEnlarge ? 'box-disabled' : ''"
         />
       </div>
-      <div class="flex-align-center row m-t-12" :class="option.autoMin ? 'box-disabled' : ''" @keydown.8.stop="">
-        <div class="editor-item-title" style="width: 36px">最小值</div>
-        <el-input v-model="option.min" :disabled="option.autoMin" />
+      <div class="flex-align-center row m-t-12" @keydown.8.stop="">
+        <div class="editor-item-title" style="width: 36px" :class="option.autoMin ? 'box-disabled' : ''">最小值</div>
+        <el-input v-model="option.min" :disabled="option.autoMin" :class="option.autoMin ? 'box-disabled' : ''" />
         <el-checkbox
           v-model="option.autoMin"
           label="自动"
+          :class="option.autoEnlarge ? 'box-disabled' : ''"
         />
       </div>
       <el-checkbox
+        v-model="option.autoEnlarge"
         class="m-t-12"
         label="自动放大数值差异"
       />
@@ -52,14 +55,14 @@
           <el-radio-button label="percent">%百分比 </el-radio-button>
         </el-radio-group>
       </div>
-      <div class="editor-item-container flex-align-center">
+      <div v-if="option.formatType === '2'" class="editor-item-container flex-align-center">
         <span class="editor-item-title" style="width: 56px">小数位数</span>
         <el-input-number v-model="option.numberDigit" controls-position="right" label="小数位数" :min="0" :max="5" />
       </div>
-      <div class="editor-item-container">
+      <div v-if="option.formatType === '2'" class="editor-item-container">
         <el-checkbox v-model="option.kSeperator" label="使用千分位分隔符" />
       </div>
-      <el-input v-if="option.formatType === '3'" v-model="option.formatRegx" />
+      <el-input v-if="option.formatType === '3'" v-model="option.formatRegx" placeholder="例如 #,##0.00%" class="editor-item-container" />
     </template>
   </x-axis>
 </template>

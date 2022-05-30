@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1073px" height="1024px" viewBox="0 0 1073 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>编组</title>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
         <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
             <stop stop-color="#FEC08B" offset="0%"></stop>
@@ -22,25 +21,22 @@
             <stop stop-color="#E5E5E7" offset="0%"></stop>
             <stop stop-color="#C7C6CA" offset="100%"></stop>
         </linearGradient>
-        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-6">
-            <stop stop-color="#FEC08B" offset="0%"></stop>
-            <stop stop-color="#FA8334" offset="100%"></stop>
-        </linearGradient>
-        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-7">
-            <stop stop-color="#E5E5E7" offset="0%"></stop>
-            <stop stop-color="#C7C6CA" offset="100%"></stop>
-        </linearGradient>
     </defs>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="编组" fill-rule="nonzero">
-            <polygon id="路径" fill="url(#linearGradient-1)" points="0 563.679759 206.873951 563.679759 206.873951 1022.2103 0 1022.2103"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-2)" points="290.149367 0 497.025136 0 497.025136 958.744503 290.149367 958.744503"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-3)" points="579.251429 396.938716 786.12538 396.938716 786.12538 1022.2103 579.251429 1022.2103"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-4)" points="0 230.939202 206.872134 230.939202 206.872134 564.419452 0 564.419452"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-3)" points="290.151186 396.24445 497.025136 396.24445 497.025136 1021.51603 290.151186 1021.51603"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-5)" points="578.84414 299.809274 785.716273 299.809274 785.716273 633.289525 578.84414 633.289525"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-6)" points="865.887954 398.72842 1072.7619 398.72842 1072.7619 1024 865.887954 1024"></polygon>
-            <polygon id="路径" fill="url(#linearGradient-7)" points="865.887954 285.154587 1072.76009 285.154587 1072.76009 618.634841 865.887954 618.634841"></polygon>
+        <g id="编组-54">
+            <rect id="矩形备份-156" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_堆积柱状图备份-9" transform="translate(42.666667, 85.333333)" fill-rule="nonzero">
+                <g id="编组-18">
+                    <polygon id="路径" fill="url(#linearGradient-1)" points="0 469.733132 181.014707 469.733132 181.014707 851.841913 0 851.841913"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-2)" points="253.880696 0 434.896994 0 434.896994 798.953755 253.880696 798.953755"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="506.845 330.782263 687.859707 330.782263 687.859707 851.841913 506.845 851.841913"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-4)" points="0 190.782668 181.013117 190.782668 181.013117 468.682878 0 468.682878"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="253.882287 330.203709 434.896994 330.203709 434.896994 851.263359 253.882287 851.263359"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-4)" points="506.488623 249.841062 687.501741 249.841062 687.501741 527.741272 506.488623 527.741272"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="757.65196 332.273683 938.666667 332.273683 938.666667 853.333333 757.65196 853.333333"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-5)" points="757.65196 237.628823 938.665076 237.628823 938.665076 515.529033 757.65196 515.529033"></polygon>
+                </g>
+            </g>
         </g>
     </g>
 </svg>

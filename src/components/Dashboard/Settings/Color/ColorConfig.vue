@@ -1,0 +1,172 @@
+<template>
+  <div ref="colorConfig" class="container">
+    <div class="color">
+      <span class="label">{{ option.title }}</span>
+      <el-popover
+        placement="bottom-end"
+        trigger="click"
+      >
+        <color-inner :option="option" />
+        <div
+          slot="reference"
+          class="color-container"
+          @click="handleArrow"
+        >
+          <div class="color-block">
+            <span v-for="(item, index) in colorTheme[option.theme]" :key="index" class="color-row" :style="`background-color: ${item.value}`" />
+          </div>
+          <span class="label">{{ option.theme }}</span>
+          <i
+            v-if="arrowDown"
+            class="el-icon-arrow-down el-icon--right"
+          />
+          <i
+            v-else
+            class="el-icon-arrow-up el-icon--right"
+          />
+        </div>
+      </el-popover>
+    </div>
+    <!-- <div class="color" @click="handleShowColor">
+      <span class="label">{{ title }}</span>
+      <div class="color-select">
+        <span>自定义</span>
+        <svg-icon
+          :icon-class="colorIcon"
+          style="font-size: 20px"
+        />
+      </div>
+    </div>
+    <div v-show="showColorConfig" class="color-config">
+      <div class="field">
+        <label>字段项</label>
+        <div>
+          <div v-for="(item,index) in colorData" :key="index" class="item" :class="{active: active === index}" @click="changeActive(index)">
+            <span v-if="item.remark" class="box" :style="{backgroundColor: item.color}" />
+            {{ item.remark }}
+          </div>
+        </div>
+      </div>
+      <div class="color-container">
+        <div>
+          <label>色系</label>
+        </div>
+        <div class="color-box">
+          <div v-for="(item,index) in defaultColor" :key="index" class="box" style="cursor:pointer;" :style="{backgroundColor: item}" @click="handleColor(item)">
+            <svg-icon
+              v-show="showSelected(item)"
+              icon-class="selected"
+              style="font-size: 16px; z-index:1"
+            />
+          </div>
+        </div>
+        <div class="setting">
+          自定义 <el-color-picker v-model="colorValue" size="mini" @change="changeColorValue" />
+        </div>
+      </div>
+    </div> -->
+  </div>
+</template>
+
+<script>
+import { colorTheme } from '@/constants/color.js'
+import ColorInner from './ColorInner.vue'
+export default {
+  name: 'ColorConfig',
+  components: { ColorInner },
+  props: {
+    option: {
+      type: Object,
+      default: () => { }
+
+    }
+  },
+  data () {
+    return {
+      colorTheme,
+      arrowDown: true
+    //   colorIcon: 'down',
+    //   showColorConfig: false,
+    //   colorValue: null,
+    //   active: 0,
+    //   // 默认颜色
+    //   defaultColor: ['#1a7dff', '#ff751a', '#16cad6', '#ffae0f', '#34ad8d', '#f593ad', '#8c90b8', '#96b1fa', '#ccb18f']
+    }
+  },
+  methods: {
+    handleArrow() {
+      this.arrowDown = !this.arrowDown
+    }
+    // showSelected (item) {
+    //   return this.colorData[this.active]?.color === item
+    // },
+    // async handleShowColor () {
+    //   this.colorIcon = this.colorIcon === 'down' ? 'upward' : 'down'
+    //   this.showColorConfig = this.colorIcon === 'upward'
+    //   await this.$emit('showColor')
+    //   this.setActiveColor()
+    // },
+    // handleColor (item) {
+    //   const data = deepClone(this.colorData)
+    //   data[this.active].color = item
+    //   this.$emit('update:color-data', data)
+    // },
+    // changeActive (index) {
+    //   this.colorValue = null
+    //   this.active = index
+    //   this.setActiveColor()
+    // },
+    // // 将选中的字段颜色 添加到展示中
+    // setActiveColor () {
+    //   if (!this.defaultColor.find(item => item === this.colorData[this.active].color)) {
+    //     if (this.defaultColor.length >= 9) {
+    //       this.defaultColor.shift()
+    //     }
+    //     this.defaultColor.unshift(this.colorData[this.active]?.color)
+    //   }
+    // },
+    // changeColorValue (val) {
+    //   this.handleColor(val)
+    // }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.color {
+  display: flex;
+  align-items: center;
+  .label {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 500;
+  }
+  .color-container{
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(221,221,221,0.25);
+    border-radius: 2px;
+    padding: 5px 8px;
+    padding-right: 0px;
+    i{
+      margin-right: 8px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.75);
+      font-weight: 500;
+    }
+  }
+  .color-block{
+    width: 48px;
+    height: 16px;
+    line-height: 7px;
+    margin-right: 8px;
+    .color-row{
+      display: inline-block;
+      width: 8px;
+      height: 8px
+    }
+  }
+}
+</style>
