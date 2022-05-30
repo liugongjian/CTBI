@@ -5,20 +5,24 @@
         v-for="(item,index) in types"
         :key="index"
         class="chart-type"
+        :class="item.type===type?'active':''"
+        @click="goAuchor(`#${item.type}`)"
       >
-        <el-button class="button-chart">{{ item.name }}</el-button>
+        <span>{{ item.name }}</span>
       </span>
     </div>
     <div
       v-for="(item,index) in types"
+      :id="item.type"
       :key="index"
       class="types"
     >
-      <h3 style="color: aliceblue;">{{ item.name }}</h3>
+      <div class="title">{{ item.name }}</div>
       <div
         v-for="(sub,name,i) in filterTools(toolList, item.type)"
         :key="name+i"
         class="sub-chart"
+        :class="name===option.theme.Basic.ChartType.type?'active':''"
       >
         <el-tooltip popper-class="content">
           <el-button class="button-chart">
@@ -31,14 +35,12 @@
             <ChartDescription :chart-name="name" />
           </div>
         </el-tooltip>
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import store from '@/store'
 import { getToolList } from '@/views/dashboard/Tools/getToolList.js'
 import ChartDescription from './ChartDescription.vue'
 
@@ -51,19 +53,12 @@ export default {
     option: {
       type: Object,
       default: () => { }
-    },
-    chartName: {
-      type: String,
-      default: ''
-    },
-    iconName: {
-      type: String,
-      default: ''
     }
   },
   data () {
     return {
       toolList: {},
+      type: this.option.type,
       types: [
         {
           name: '指标',
@@ -103,6 +98,7 @@ export default {
   },
   mounted () {
     this.toolList = getToolList()
+    this.goAuchor('#' + this.option.type)
   },
   methods: {
     filterTools (toolList, type) {
@@ -113,6 +109,12 @@ export default {
         }
       })
       return res
+    },
+    goAuchor(id) {
+      this.type = id.split('#')[1]
+      document.querySelector(id).scrollIntoView(true)
+      var auchor = this.$el.querySelector(id)
+      document.body.scrollTop = auchor.offsetTop
     }
   }
 }
@@ -120,51 +122,108 @@ export default {
 <style lang="scss" scoped>
 .switcher {
   background: #383b47;
+  padding: 12px 2px 0px 16px;
+  // 滚动条样式优化
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 100px;
+  }
+  // 外层轨道
+  ::-webkit-scrollbar-track {
+    background: #383B47;
+  }
+
+  // 滚动的滑块
+  ::-webkit-scrollbar-thumb {
+    background: rgba(221,221,221,0.25);
+    border-radius: 6px;
+  }
+
+  // ::-webkit-scrollbar-thumb:hover {
+  //   background: rgba(221,221,221,0.25);
+  // }
+  .types {
+    .title{
+      font-size: 12px;
+      color: rgba(255,255,255,0.90);
+      font-weight: 500;
+      margin: 12px 0;
+
+    }
+    .sub-chart {
+      display: inline-flex;
+      margin-right: 17px;
+      margin-bottom: 8px;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(221,221,221,0.65);
+      border-radius: 2px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      &:hover{
+        border: 1px solid rgba(255,255,255,1);
+      }
+    }
+    .sub-chart.active{
+      border: 1px solid rgba(250,131,52,1);
+      border-radius: 2px;
+    }
+  }
+  .chart-type {
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 2px;
+    height: 22px;
+    line-height: 22px;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 8px;
+    margin-bottom: 12px;
+    span{
+      font-size: 12px;
+      color: #FFFFFF;
+      font-weight: 400;
+      padding: 0 10px;
+    }
+    &:hover{
+      border: 1px solid rgba(255,255,255,1);
+    }
+  }
+  .chart-type.active{
+    border: 1px solid rgba(250,131,52,1);
+    border-radius: 2px;
+    position: relative;
+    &::after{
+      display: block;
+      content: " ";
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      background-image: url(../../../assets/Image/selected.svg);
+      background-size: 15px;
+      background-repeat: no-repeat;
+      width: 15px;
+      height: 15px;
+    }
+  }
 }
 
-.header {
-  display: contents;
-}
-
-.chart-type {
-  display: inline-flex;
-  margin: 5px;
-  // width: 48px;
-  font-size: 20px;
-}
-
-.sub-chart {
-  display: inline-flex;
-  margin: 5px;
-  // width: 50px;
-}
-
-.types {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-left: 10px;
-}
-
-.button-chart {
-  background-color: rgba($color: #383b47, $alpha: 1);
-  color: aliceblue;
-}
 </style>
 <style lang="scss">
 .content.el-tooltip__popper[x-placement^='top'] .popper__arrow {
-  border-top-color: rgba($color: #000000b1, $alpha: 0.6);
+  border-top-color: rgba(0,0,0,0.65);
 }
 .content.el-tooltip__popper[x-placement^='top'] .popper__arrow:after {
-  border-top-color: rgba($color: #000000b1, $alpha: 0.6);
+  border-top-color: rgba(0,0,0,0.65);
 }
 .is-dark.content.el-tooltip__popper[x-placement^='bottom'] .popper__arrow {
-  border-bottom-color: rgba($color: #000000b1, $alpha: 0.6);
+  border-bottom-color: rgba(0,0,0,0.65);
 }
 .is-dark.content.el-tooltip__popper[x-placement^='bottom']
   .popper__arrow:after {
-  border-bottom-color: rgba($color: #000000b1, $alpha: 0.6);
+  border-bottom-color: rgba(0,0,0,0.65);
 }
 .content {
-  background: rgba($color: #000000b1, $alpha: 0.8) !important;
+  background: rgba(0,0,0,0.65) !important;
 }
 </style>
