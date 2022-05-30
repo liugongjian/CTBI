@@ -7,7 +7,7 @@
     <!-- 数据字段名 -->
     <div class="editor-item-container" :class="{'box-disabled':!option.showFilter}">
       <el-select
-        v-model="option.filteredSery"
+        v-model="option.selectedIndicator"
         :disabled="!option.showFilter"
         :multiple="option.isMultiple"
         popper-class="setting-select"

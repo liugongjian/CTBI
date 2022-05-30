@@ -117,15 +117,15 @@ export default {
     // 拿到数据中的指标
     getIndicatorOptions (val) {
       const indicatorOptions = []
-      const filteredSery = []
+      const selectedIndicator = []
       val[0].forEach((item, index) => {
         if (index) {
           indicatorOptions.push({ value: item, label: item })
-          filteredSery.push(item)
+          selectedIndicator.push(item)
         }
       })
       this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption = indicatorOptions
-      this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery = filteredSery
+      this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator = selectedIndicator
     },
     // 双y轴设置
     twisYAxisConfig (componentOption) {

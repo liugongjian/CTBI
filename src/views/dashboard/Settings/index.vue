@@ -92,7 +92,7 @@
         </div>
         <div
           v-show="showData===false"
-          style="height:calc(100vh - 100px)"
+          style="height:calc(100vh - 98px)"
         >
           <!-- showItem展开面板，1:字段；2：样式；3：高级 -->
           <div
@@ -102,7 +102,7 @@
         </div>
         <data-panel
           v-show="showData"
-          style="height:calc(100vh - 100px)"
+          style="height:calc(100vh - 98px)"
           :option="option.dataSource"
           :data-set="option.dataSet"
         />

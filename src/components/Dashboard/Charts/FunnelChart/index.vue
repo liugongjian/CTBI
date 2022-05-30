@@ -63,7 +63,6 @@ export default {
   },
   methods: {
     getOption () {
-      console.log('狗子变了')
       const componentOption = this.storeOption.theme.ComponentOption
       this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
       this.dataTransformer()
@@ -244,7 +243,6 @@ export default {
       }
       // 底部梯形 or 三角形
       this.minSize = item.triangle === 'true' ? '0' : '10%'
-      console.log('? ', this.minSize)
     },
     dataTransformer () {
       // 构建出 lastData\firstData 多个series叠加

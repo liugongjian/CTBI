@@ -43,7 +43,7 @@ export default {
   methods: {
     getOption () {
       const { ComponentOption, FunctionalOption } = this.storeOption.theme
-      this.transfromData(FunctionalOption.ChartFilter.filteredSery)
+      this.transfromData(FunctionalOption.ChartFilter.selectedIndicator)
       this.getPercentStackSeries(ComponentOption, FunctionalOption)
 
       // 系列配置-图表标签相关

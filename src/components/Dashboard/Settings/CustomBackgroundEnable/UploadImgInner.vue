@@ -56,12 +56,12 @@
         <div class="upload-img-card">
           <div>
             <el-upload
-              action="#"
-              :before-upload="beforeUpload"
+              action="fakerAction"
+              class="avatar-uploader"
               :show-file-list="false"
-              :on-change="getLocalImg"
-              :on-success="onSuccess"
-              :file-list="fileList"
+              accept="image/png, image/jpeg, image/jpg"
+              :before-upload="beforeUpload"
+              :http-request="(params) =>saveload(params,'imgaddr')"
             >
               <el-button
                 size="small"
@@ -118,6 +118,7 @@
 </template>
 
 <script>
+import { uploadImg } from '@/api/dataSource'
 export default {
   name: 'UploadImgInner',
   props: {
@@ -183,36 +184,66 @@ export default {
     },
     // 上传图片前钩子
     beforeUpload (file) {
-      const imgType = ['image/jpeg', 'image/png', 'image/gif']
-      const isType = imgType.includes(file.type)
+      const isJPG = file.type
       const isLt1M = file.size / 1024 / 1024 < 1
-      if (!isType) {
-        this.$message.error('图片上传格式错误!')
+      if (isJPG !== 'image/jpeg' && isJPG !== 'image/png' && isJPG !== 'image/jpg') {
+        this.$message({
+          message: '图片只能是 jpg、png、jpeg 格式!',
+          type: 'error'
+        })
       }
       if (!isLt1M) {
-        this.$message.error('图片上传大小最大为1M!')
+        this.$message({
+          message: '上传封面图片大小不能超过 2MB!',
+          type: 'error'
+        })
       }
-      // return isType && isLt1M
-      return false // 有后端接口时删除，换成上面代码
+      return isJPG && isLt1M
+    },
+    // 上传附件
+    saveload (data, val) {
+      if (data.file.type === 'image/jpeg' || data.file.type === 'image/png') {
+        const formData = new FormData()
+        formData.append('img', data.file)
+        // 发送http请求
+        uploadImg(formData, ({ total, loaded }) => {
+          // 文件进度条控制
+          data.onProgress({ percent: Math.round(loaded / total * 100) })
+        }).then((res) => {
+          if (res) {
+            if (val === 'imgaddr') {
+              this.option.imgUrl = process.env.VUE_APP_BASE_API + `/dataFiles/img?path=${res}`
+              this.isUpload = true
+            }
+          }
+        }).catch(res => {
+          this.loading = false
+          this.$message.error({
+            type: 'error',
+            message: `上传图片失败`,
+            duration: 500
+          })
+        })
+      }
     },
 
-    // 获取上传图片的本地路径，有后端接口时需删除
-    getLocalImg (event) {
-      let url = ''
-      if (window.createObjectURL !== undefined) {
-        url = window.createObjectURL(event.raw)
-      } else if (window.URL !== undefined) {
-        url = window.URL.createObjectURL(event.raw)
-      } else if (window.webkitURL !== undefined) {
-        url = window.webkitURL.createObjectURL(event.raw)
-      }
-      this.option.imgUrl = url
-    },
+    // // 获取上传图片的本地路径，有后端接口时需删除
+    // getLocalImg (event) {
+    //   let url = ''
+    //   if (window.createObjectURL !== undefined) {
+    //     url = window.createObjectURL(event.raw)
+    //   } else if (window.URL !== undefined) {
+    //     url = window.URL.createObjectURL(event.raw)
+    //   } else if (window.webkitURL !== undefined) {
+    //     url = window.webkitURL.createObjectURL(event.raw)
+    //   }
+    //   this.option.imgUrl = url
+    // },
 
-    // 图片上传成功后
-    onSuccess (res) {
-      this.isUpload = true
-    },
+    // // 图片上传成功后
+    // onSuccess (res) {
+    //   this.isUpload = true
+    // },
 
     // 选择背景图片尺寸
     changeImgSize () {
@@ -238,7 +269,6 @@ export default {
     padding: 24px;
   }
   .material-content {
-    overflow: auto;
     box-sizing: border-box;
     span{
       font-size: 12px;
@@ -275,6 +305,7 @@ export default {
     overflow: auto;
     height: 204px;
     box-sizing: border-box;
+    min-width: 348px;
     .el-upload__tip{
       display: inline;
       font-size: 12px;

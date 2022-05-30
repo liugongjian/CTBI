@@ -44,6 +44,13 @@ export default {
         'show': false, // 是否展示链接地址
         'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
       },
+      'CustomBackgroundEnable': { // 自定义背景填充
+        'color': '', // 卡片颜色
+        'show': false, // 是否使用自定义背景填充
+        'showImg': false, // 是否使用背景图片
+        'imgUrl': '', // 背景图片地址
+        'imgSize': 'containRight' // 背景图片尺寸位置
+      },
       'ChartType': { // 图表类型
         'type': 'LineChart' // 线图 面积图 堆积面积图 百分比堆叠面积图
       }
@@ -141,7 +148,7 @@ export default {
       'ChartFilter': {
         'showFilter': false,
         'isMultiple': true, // 是否多选
-        'filteredSery': [], // 选中的指标
+        'selectedIndicator': [], // 选中的指标
         'indicatorOption': [] // 指标集合
       }
     },

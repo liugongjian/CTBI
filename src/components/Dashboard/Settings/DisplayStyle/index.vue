@@ -100,7 +100,6 @@ export default {
   watch: {},
   created () { },
   mounted () {
-    console.log('漏斗    漏斗！！！   ', this.option)
   },
   methods: {
     changeHandler (type) {

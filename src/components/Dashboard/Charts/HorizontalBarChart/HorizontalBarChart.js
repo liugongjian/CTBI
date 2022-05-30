@@ -103,7 +103,7 @@ export default {
       'ChartFilter': { // 指标筛选指示
         'showFilter': false,
         'isMultiple': true, // 是否多选
-        'filteredSery': [], // 选中的指标
+        'selectedIndicator': [], // 选中的指标
         'indicatorOption': [] // 指标集合
       }
     },
