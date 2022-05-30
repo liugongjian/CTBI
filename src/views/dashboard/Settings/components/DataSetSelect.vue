@@ -25,7 +25,7 @@
             class="cube-box-title"
             @click="showOptionList=!showOptionList"
           >
-            <div><i class="el-icon-success swrapper-icon" />已使用·{{ selectOption.length }}</div>
+            <div><i class="el-icon-success swapper-icon" />已使用·{{ selectOption.length }}</div>
             <div><span :class="showOptionList?'el-icon-arrow-up':'el-icon-arrow-down'" /></div>
           </div>
           <ul
@@ -35,7 +35,7 @@
             <li
               v-for="(item,index) in selectOption"
               :key="index"
-              @click="hanldClickOption(item.id,item.name)"
+              @click="handleClickOption(item.id,item.name)"
             ><span class="cube-list-caption">{{ item.name }}</span>
               <i
                 v-if="item.id===dataSet.id"
@@ -48,7 +48,7 @@
 
         <!-- 数据集树模块 -->
         <div class="tree-box-title">
-          <div><i class="el-icon-box swrapper-icon" />全部</div>
+          <div><i class="el-icon-box swapper-icon" />全部</div>
           <div class="tree-box-title-r">
             <span
               class="viw-btn"
@@ -228,7 +228,7 @@ export default {
     },
 
     // 点击已使用选项
-    hanldClickOption (id, name) {
+    handleClickOption (id, name) {
       this.dataSet.id = id
       this.dataSet.name = name
       this.showOption = false
@@ -405,7 +405,7 @@ $base-bgc: #fa8334;
     }
   }
 }
-.swrapper-icon {
+.swapper-icon {
   color: hsla(0, 0%, 100%, 0.5);
   margin-right: 4px;
 }

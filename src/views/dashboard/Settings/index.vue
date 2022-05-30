@@ -10,9 +10,19 @@
         <!-- 顶部菜单模块 -->
         <div class="change-chart-type-menu">
           <!-- 图例切换 -->
-          <ChartSwitchHeader v-if="showWrapper" class="change-type" :chart-name="option.theme.Basic.Title.text" :icon-name="currentChart" :show-chart-types="showChartTypes" @click.native="changeChart" />
-          <span class="panel-icon" @click="toggleWrapperFold">
-            <svg-icon :icon-class="showWrapper?'panel-fold':'panel-unfold'" />
+          <ChartSwitchHeader
+            v-if="showWrapper"
+            class="change-type"
+            :chart-name="option.theme.Basic.Title.text"
+            :icon-name="currentChart"
+            :show-chart-types="showChartTypes"
+            @click.native="changeChart"
+          />
+          <span
+            class="panel-icon"
+            @click="toggleWrapperFold"
+          >
+            <svg-icon :icon-class="showWrapper?'panel-unfold':'panel-fold'" />
           </span>
         </div>
         <el-container v-if="showWrapper && !showChartTypes">
@@ -39,7 +49,10 @@
           </el-tabs>
         </el-container>
         <!-- 图例切换模块 -->
-        <el-container v-show="showChartTypes&&showWrapper" class="chart-type-switch">
+        <el-container
+          v-show="showChartTypes&&showWrapper"
+          class="chart-type-switch"
+        >
           <ChartSwitcher :option="option" />
         </el-container>
         <div
@@ -74,12 +87,12 @@
             class="panel-icon"
             @click="toggleDataFold"
           >
-            <svg-icon :icon-class="showData?'panel-fold':'panel-unfold'" />
+            <svg-icon :icon-class="showData?'panel-unfold':'panel-fold'" />
           </span>
         </div>
         <div
           v-show="showData===false"
-          style="height:calc(100vh - 190px)"
+          style="height:calc(100vh - 100px)"
         >
           <!-- showItem展开面板，1:字段；2：样式；3：高级 -->
           <div
@@ -89,7 +102,7 @@
         </div>
         <data-panel
           v-show="showData"
-          style="height:calc(100vh - 190px)"
+          style="height:calc(100vh - 100px)"
           :option="option.dataSource"
           :data-set="option.dataSet"
         />
@@ -165,7 +178,7 @@ export default {
     toggleDataFold () {
       this.showData = !this.showData
     },
-    changeChart() {
+    changeChart () {
       this.showChartTypes = !this.showChartTypes
     }
   }

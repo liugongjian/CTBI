@@ -47,7 +47,8 @@
         <div class="tree-wrapper">
           <div class="data-panel-dimension-tree">
             <div class="data-panel-tree-title">
-              <div>维度<i class="el-icon-warning-outline m-l-10" /></div>
+              <div>维度</div>
+              <!-- <i class="el-icon-warning-outline m-l-10" /> -->
             </div>
             <el-tree
               ref="dimension_tree"
@@ -73,7 +74,8 @@
           </div>
           <div class="data-panel-measure-tree">
             <div class="data-panel-tree-title">
-              <div>度量<i class="el-icon-warning-outline m-l-10" /></div>
+              <div>度量</div>
+              <!-- <i class="el-icon-warning-outline m-l-10" /> -->
             </div>
             <el-tree
               ref="measure_tree"
