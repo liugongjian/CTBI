@@ -5,7 +5,7 @@
     :close-on-click-modal="false"
     width="75%"
   >
-    <div class="content">
+    <div class="cube-content">
       <div class="cube-tree-panel">
         <el-tabs v-model="activeName">
           <el-tab-pane
@@ -50,7 +50,7 @@
               <li
                 v-for="(item,index) in selectOption"
                 :key="index"
-                @click="hanldClickOption(item.id,item.name)"
+                @click="handleClickOption(item.id,item.name)"
               ><span class="cube-list-caption">{{ item.name }}</span>
                 <i
                   v-if="item.id===dataSetValue.id"
@@ -181,7 +181,7 @@ export default {
       }
     },
     // 点击已使用选项
-    hanldClickOption (id, name) {
+    handleClickOption (id, name) {
       this.dataSetValue.id = id
       this.dataSetValue.name = name
       this.getTableData(id)
@@ -272,7 +272,7 @@ $base-bgc: #2e74ff;
 * {
   box-sizing: border-box;
 }
-.content {
+.cube-content {
   display: flex;
   height: 460px;
 }

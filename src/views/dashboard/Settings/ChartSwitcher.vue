@@ -21,7 +21,12 @@
         class="sub-chart"
       >
         <el-tooltip popper-class="content">
-          <el-button class="button-chart"><svg-icon :icon-class="name" style="font-size:20px;" /></el-button>
+          <el-button class="button-chart">
+            <svg-icon
+              :icon-class="name"
+              style="font-size:20px;"
+            />
+          </el-button>
           <div slot="content">
             <ChartDescription :chart-name="name" />
           </div>
@@ -60,28 +65,36 @@ export default {
     return {
       toolList: {},
       types: [
-        { name: '指标',
+        {
+          name: '指标',
           type: 'indicator'
         },
-        { name: '表格',
+        {
+          name: '表格',
           type: 'table'
         },
-        { name: '趋势',
+        {
+          name: '趋势',
           type: 'trend'
         },
-        { name: '比较',
+        {
+          name: '比较',
           type: 'comparator'
         },
-        { name: '分布',
+        {
+          name: '分布',
           type: 'distribution'
         },
-        { name: '关系',
+        {
+          name: '关系',
           type: 'relation'
         },
-        { name: '时序',
+        {
+          name: '时序',
           type: 'sequence'
         },
-        { name: '空间',
+        {
+          name: '空间',
           type: 'space'
         }
       ]
@@ -92,7 +105,7 @@ export default {
     this.toolList = getToolList()
   },
   methods: {
-    filterTools(toolList, type) {
+    filterTools (toolList, type) {
       const res = JSON.parse(JSON.stringify(toolList))
       Object.keys(res).forEach(item => {
         if (res[item].type !== type) {
@@ -106,7 +119,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .switcher {
-  background: #383B47;
+  background: #383b47;
 }
 
 .header {
@@ -138,16 +151,17 @@ export default {
 }
 </style>
 <style lang="scss">
-.content.el-tooltip__popper[x-placement^="top"] .popper__arrow {
+.content.el-tooltip__popper[x-placement^='top'] .popper__arrow {
   border-top-color: rgba($color: #000000b1, $alpha: 0.6);
 }
-.content.el-tooltip__popper[x-placement^="top"] .popper__arrow:after {
+.content.el-tooltip__popper[x-placement^='top'] .popper__arrow:after {
   border-top-color: rgba($color: #000000b1, $alpha: 0.6);
 }
-.is-dark.content.el-tooltip__popper[x-placement^="bottom"] .popper__arrow {
+.is-dark.content.el-tooltip__popper[x-placement^='bottom'] .popper__arrow {
   border-bottom-color: rgba($color: #000000b1, $alpha: 0.6);
 }
-.is-dark.content.el-tooltip__popper[x-placement^="bottom"] .popper__arrow:after {
+.is-dark.content.el-tooltip__popper[x-placement^='bottom']
+  .popper__arrow:after {
   border-bottom-color: rgba($color: #000000b1, $alpha: 0.6);
 }
 .content {

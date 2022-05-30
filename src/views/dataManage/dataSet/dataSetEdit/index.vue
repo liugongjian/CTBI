@@ -7,7 +7,7 @@
           class="el-icon-arrow-left h-c-p m-r-8"
           @click="checkExit"
         />
-        <span>{{ dataInfo.displayName || '未命名' }}</span>
+        <span>{{ editDataInfo.displayName || '未命名' }}</span>
       </div>
       <div class="edit-wrap-header-r">
         <el-button
@@ -229,28 +229,28 @@ export default {
       // 回显&提交的数据
       dataInfo: {
         _id: '',
-        // 脚本集名称
+        // 数据集名称
         displayName: '',
         // 数据源id
         dataSourceId: '',
         // 数据源名称
         dataSourceName: '',
-        // 目录地址
+        // 目录ID
         folderId: null,
         // 数据源类型
         dataSourceType: '',
-        // 脚本集SQL信息
+        // 数据集SQL信息
         sql: { _id: '', sql: '' }
       },
       // 编辑中的数据
       editDataInfo: {
-        // 脚本集名称
+        // 数据集名称
         displayName: '',
         // 数据源id
         dataSourceId: '',
         // 数据源名称
         dataSourceName: '',
-        // 脚本集SQL信息
+        // 数据集SQL信息
         sql: { _id: '', sql: '' }
       },
       saveBtnLoading: false,

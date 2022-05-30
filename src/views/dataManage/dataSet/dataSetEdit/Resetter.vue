@@ -297,14 +297,18 @@ export default {
   },
   data () {
     return {
+      // tab标识 1：数据预览； 2：批量配置
       activeTagName: 1,
+      // 数据预览中搜索输入框值
       inputFieldName: '',
       defaultProps: {
         children: 'children',
         label: 'displayColumn'
       },
       previewLoading: false,
+      // 维度&度量 表头
       dimensionMeasure: [],
+      // 维度&度量 表格数据
       dimensionMeasureTableData: [],
       dataTypeOptions: [
         {

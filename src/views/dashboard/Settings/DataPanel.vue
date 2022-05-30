@@ -6,7 +6,7 @@
           <data-set-select
             :data-set="dataSet"
             :option="option"
-            @reflashValue="reflashValue"
+            @refreshValue="refreshValue"
           />
         </div>
         <div
@@ -19,23 +19,38 @@
         </div>
       </div>
     </div>
-    <div v-loading="dataSetLoading">
+    <div
+      v-loading="dataSetLoading"
+      element-loading-background="#323541"
+    >
       <div
         v-show="Dimension.length>0||Measure.length>0"
         class="data-panel-tree"
       >
-        <el-input
-          v-model="filterText"
-          prefix-icon="el-icon-search"
-          placeholder="输入关键字搜索"
-        />
+        <div class="tree-box-input-wrapper">
+          <span class="d-f">
+            <div>
+              <i class="el-icon-search" />
+            </div>
+            <div class="tree-box-input">
+              <input
+                v-model="filterText"
+                placeholder="输入关键词搜索"
+              >
+              <i
+                class="el-icon-close"
+                @click="filterText = ''"
+              />
+            </div>
+          </span>
+        </div>
         <div class="tree-wrapper">
           <div class="data-panel-dimension-tree">
             <div class="data-panel-tree-title">
               <div>维度<i class="el-icon-warning-outline m-l-10" /></div>
             </div>
             <el-tree
-              ref="tree"
+              ref="dimension_tree"
               class="filter-tree"
               :data="Dimension"
               :props="defaultProps"
@@ -61,7 +76,7 @@
               <div>度量<i class="el-icon-warning-outline m-l-10" /></div>
             </div>
             <el-tree
-              ref="tree"
+              ref="measure_tree"
               class="filter-tree"
               :data="Measure"
               :props="defaultProps"
@@ -120,12 +135,13 @@ export default {
   },
   watch: {
     filterText (val) {
-      this.$refs.tree.filter(val)
+      this.$refs.dimension_tree.filter(val)
+      this.$refs.measure_tree.filter(val)
     }
   },
   methods: {
     // 更新数据
-    async reflashValue (id) {
+    async refreshValue (id) {
       if (id) {
         this.dataSetLoading = true
         try {
@@ -154,8 +170,9 @@ export default {
     },
     // 过滤树形数据
     filterNode (value, data) {
+      console.log(value)
       if (!value) return true
-      return data.label.indexOf(value) !== -1
+      return data.displayColumn.indexOf(value) !== -1
     },
     // 节点拖拽
     allowDrop (draggingNode, dropNode, type) {
@@ -216,6 +233,39 @@ export default {
   }
 }
 </script>
-
-<style>
+<style lang="scss" scoped>
+.tree-box-input-wrapper {
+  padding: 0 8px;
+  margin-bottom: 4px;
+  position: relative;
+  i {
+    cursor: pointer;
+    position: relative;
+    top: 2px;
+  }
+  .tree-box-input {
+    position: relative;
+    padding-right: 12px;
+    width: 100%;
+    input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.1);
+      color: #fff;
+      padding: 0 8px;
+      // 去除input聚焦时的边框
+      outline: none;
+      border: 0px;
+      height: 24px;
+      line-height: 24px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    i {
+      position: absolute;
+      top: 5px;
+      right: 0px;
+    }
+  }
+}
 </style>

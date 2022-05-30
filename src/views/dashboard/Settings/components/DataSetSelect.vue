@@ -61,21 +61,22 @@
             />
           </div>
         </div>
-        <div class="tree-box-input">
-          <el-input
-            v-model="filterText"
-            placeholder="输入关键词搜索"
-          >
-            <i
-              slot="prefix"
-              class="el-input__icon el-icon-search"
-            />
-            <i
-              slot="suffix"
-              class="el-input__icon el-icon-close"
-              @click="filterText=''"
-            />
-          </el-input>
+        <div class="tree-box-input-wrapper">
+          <span class="d-f">
+            <div>
+              <i class="el-icon-search" />
+            </div>
+            <div class="tree-box-input">
+              <input
+                v-model="filterText"
+                placeholder="输入关键词搜索"
+              >
+              <i
+                class="el-icon-close"
+                @click="filterText = ''"
+              />
+            </div>
+          </span>
         </div>
         <div
           v-loading="dataLoading"
@@ -89,8 +90,25 @@
             :props="defaultProps"
             :filter-node-method="filterNode"
             :default-expanded-keys="defaultExpand"
+            :expand-on-click-node="false"
             @node-click="clickTreeNode"
-          />
+          >
+            <div slot-scope="{ node, data }">
+              <div class="d-f">
+                <div>
+                  <svg-icon
+                    v-if="data.isFolder"
+                    style="color: #fff;margin-right: 4px;"
+                    icon-class="white-folder"
+                  />
+                </div>
+                <b-tooltip
+                  :content="data.name"
+                  width="100px"
+                />
+              </div>
+            </div>
+          </el-tree>
 
         </div>
         <!-- 数据集树模块END -->
@@ -171,7 +189,7 @@ export default {
     },
     dataSet: {
       handler (val) {
-        this.$emit('reflashValue', val.id)
+        this.$emit('refreshValue', val.id)
         this.defaultExpand = []
         this.defaultExpand.push(val.id)
         if (this.$refs.tree) {
@@ -268,7 +286,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$base-bgc: #2e74ff;
+$base-bgc: #fa8334;
 * {
   box-sizing: border-box;
 }
@@ -407,12 +425,38 @@ $base-bgc: #2e74ff;
     }
   }
 }
-.tree-box-input {
+.tree-box-input-wrapper {
   padding: 0 8px;
   margin-bottom: 4px;
   position: relative;
   i {
     cursor: pointer;
+    position: relative;
+    top: 2px;
+  }
+  .tree-box-input {
+    position: relative;
+    padding-right: 12px;
+    width: 100%;
+    input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.1);
+      color: #fff;
+      padding: 0 8px;
+      // 去除input聚焦时的边框
+      outline: none;
+      border: 0px;
+      height: 24px;
+      line-height: 24px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    i {
+      position: absolute;
+      top: 5px;
+      right: 0px;
+    }
   }
 }
 .tree-box-option {
