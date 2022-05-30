@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bi-header-out">
     <div class="bi-header-container">
       <div class="nameWrap">
         <img
@@ -198,8 +198,8 @@ export default {
     async showDashboardAttribute () {
       await this.getFolders()
       this.dashboardAttributeVisible = true
-      this.dashboardAttr.name = this.name
-      this.dashboardAttr.directoryId = this.dashboard.directoryId || '-1'
+      this.dashboardAttr.name = this.saveMode === 'copy' ? '' : this.name
+      this.dashboardAttr.directoryId = this.saveMode === 'copy' ? '-1' : (this.dashboard.directoryId || '-1')
     },
     copy() {
       this.saveMode = 'copy'
@@ -214,8 +214,14 @@ export default {
       this.resetForm()
     },
     handleDashboardAttribute() {
-      this.dashboardAttributeVisible = false
-      this.resetForm()
+      this.$refs['attrForm'].validate((valid) => {
+        if (valid) {
+          this.hiddenDashboardAttribute()
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     async getFolders() {
       try {
@@ -236,6 +242,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.bi-header-out{
+  width: 100%;
+}
 .nameWrap{
   display: flex;
   justify-content: flex-start;
