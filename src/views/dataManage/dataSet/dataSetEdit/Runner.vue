@@ -168,7 +168,9 @@ export default {
   },
   data () {
     return {
+      // tab标识 1：运行结果； 2：历史记录
       activeTagName: 1,
+      // 表格高度 控制表格滚动区域
       tableHeight: 320
     }
   },

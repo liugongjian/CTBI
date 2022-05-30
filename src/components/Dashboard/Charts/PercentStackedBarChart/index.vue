@@ -29,7 +29,7 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery)
+      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator)
       this.getPercentStackSeries(componentOption)
       // 系列配置
       this.setSeriesItem()
@@ -46,7 +46,9 @@ export default {
         'color': colorOption,
         'legend': componentOption.Legend,
         'xAxis': this.xAxis,
-        'tooltip': this.tooltip,
+        'tooltip': {
+          trigger: 'axis'
+        },
         'yAxis': this.yAxis,
         'dataset': {
           'source': this.dataValue

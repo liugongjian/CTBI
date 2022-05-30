@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>饼图</title>
     <defs>
         <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
             <stop stop-color="#FEC08B" offset="0%"></stop>
@@ -12,10 +11,13 @@
         </linearGradient>
     </defs>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="饼图" fill-rule="nonzero">
-            <g id="编组">
-                <path d="M456.803601,567.196397 L456.803601,38.0676359 C201.755124,57.1007846 0,270.274192 0,529.1301 C0,803.211725 220.788273,1024 494.8699,1024 C753.724467,1024 966.899214,822.244873 985.932362,567.196397 L456.803601,567.196397 Z" id="路径" fill="url(#linearGradient-1)"></path>
-                <path d="M532.936197,0 L532.936197,491.063803 L1024,491.063803 C1008.77295,228.4018 795.596861,15.2270544 532.936197,0 Z" id="路径" fill="url(#linearGradient-2)"></path>
+        <g id="编组-62">
+            <rect id="矩形备份-155" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_饼图备份-8" transform="translate(42.666667, 42.666667)" fill-rule="nonzero">
+                <g id="编组-27">
+                    <path d="M418.736634,519.930033 L418.736634,34.8953329 C184.942197,52.342386 0,247.751343 0,485.035926 C0,736.277416 202.38925,938.666667 453.63074,938.666667 C690.914097,938.666667 886.324281,753.724469 903.771334,519.930033 L418.736634,519.930033 Z" id="路径" fill="url(#linearGradient-1)"></path>
+                    <path d="M488.524846,0 L488.524846,450.14182 L938.666667,450.14182 C924.708534,209.368317 729.297123,13.9581332 488.524846,0 Z" id="路径" fill="url(#linearGradient-2)"></path>
+                </g>
             </g>
         </g>
     </g>

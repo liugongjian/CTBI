@@ -24,6 +24,7 @@ import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'comparator', // 组件类型, 用于管理组件类型集合，例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
+  order: 3, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
   'theme': { // 样式组件、配置合集
@@ -33,9 +34,6 @@ export default {
         'color': '#333', // 标题颜色
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
-      },
-      'TestTitle': { // 测试组件间交互组件
-        'testShow': false
       },
       'Mark': { // 备注
         'show': false, // 是否显示备注
@@ -79,7 +77,8 @@ export default {
       },
       'Color': { // 颜色设置
         'title': '配色设置',
-        'color': colorTheme['defaultColor']
+        'color': colorTheme['官方'],
+        'theme': '官方'
       },
       'TwisYAxis': { // 双Y轴
         'show': true, // 是否必须显示双y轴的复选框
@@ -101,7 +100,7 @@ export default {
       'ChartFilter': { // 指标筛选指示
         'showFilter': false,
         'isMultiple': true, // 是否多选
-        'filteredSery': [], // 选中的指标
+        'selectedIndicator': [], // 选中的指标
         'indicatorOption': [] // 指标集合
       }
     },
@@ -141,6 +140,7 @@ export default {
         'max': 0,
         'autoMin': true,
         'autoMax': true,
+        'autoEnlarge': false,
         'formatType': '1',
         'lang': 'chinese-simplified',
         'numberFormat': 'number',

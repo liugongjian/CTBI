@@ -14,7 +14,6 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (this.dataValue) {
           this.dataValue = deepClone(getDataValueById(this.identify))
           this.getOption()
@@ -82,7 +81,7 @@ export default {
       })
 
       this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption = indicatorOptions
-      this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery = indicatorOptions[0].value
+      this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator = indicatorOptions[0].value
     },
     // 合并数据为其他 val val为1 就是保留最大的一个数据 其他数据合并为其他
     transfromData (val, indicator) {

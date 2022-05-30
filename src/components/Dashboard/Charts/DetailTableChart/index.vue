@@ -58,9 +58,7 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        console.log('val.theme.DisplayConfig:', val.theme.DisplayConfig)
         if (val.theme.DisplayConfig.TableTheme.visible) {
-          val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
           this.stripe = val.theme.DisplayConfig.TableTheme.active === 'stripe'
           this.border = val.theme.DisplayConfig.TableTheme.active === 'border'
           const colorType = val.theme.DisplayConfig.TableTheme.colorType

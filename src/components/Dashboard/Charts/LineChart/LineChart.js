@@ -18,6 +18,7 @@ import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'trend', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
+  order: 1, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
   'theme': { // 样式组件、配置合集
@@ -27,9 +28,6 @@ export default {
         'color': '#333', // 标题颜色
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
-      },
-      'TestTitle': { // 测试组件间交互组件
-        'testShow': false
       },
       'Mark': { // 备注
         'show': false, // 是否显示备注
@@ -45,6 +43,13 @@ export default {
         'url': '', // 链接地址
         'show': false, // 是否展示链接地址
         'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
+      },
+      'CustomBackgroundEnable': { // 自定义背景填充
+        'color': '', // 卡片颜色
+        'show': false, // 是否使用自定义背景填充
+        'showImg': false, // 是否使用背景图片
+        'imgUrl': '', // 背景图片地址
+        'imgSize': 'containRight' // 背景图片尺寸位置
       },
       'ChartType': { // 图表类型
         'type': 'LineChart' // 线图 面积图 堆积面积图 百分比堆叠面积图
@@ -76,7 +81,8 @@ export default {
       },
       'Color': { // 颜色设置
         'title': '配色设置',
-        'color': colorTheme['defaultColor']
+        'color': colorTheme['官方'],
+        'theme': '官方'
       },
       'TwisYAxis': { // 双Y轴
         'show': true, // 是否必须显示双y轴
@@ -120,6 +126,7 @@ export default {
         'max': 0,
         'autoMin': true,
         'autoMax': true,
+        'autoEnlarge': false,
         'formatType': '1',
         'lang': 'chinese-simplified',
         'numberFormat': 'number',
@@ -141,7 +148,7 @@ export default {
       'ChartFilter': {
         'showFilter': false,
         'isMultiple': true, // 是否多选
-        'filteredSery': [], // 选中的指标
+        'selectedIndicator': [], // 选中的指标
         'indicatorOption': [] // 指标集合
       }
     },
@@ -169,9 +176,6 @@ export default {
           'lineType': 'solid' // 默认实线
         }
       }
-      // 'SeriesAxis': {
-      //   'type': 'default'
-      // }
     }
   },
   'advance': {}, // 高级

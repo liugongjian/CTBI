@@ -43,3 +43,12 @@ export function connectTest(body) {
 export function detailSource(params) {
   return http.get(`/dataSources/${params.id}/table/info`, params)
 }
+// 上传图片
+export function uploadImg(data) {
+  return http.post('/dataFiles/img', data)
+}
+
+// 获取图片
+export function downloadImg(path) {
+  return http.get(`/dataFiles/img?path=${path}`)
+}
