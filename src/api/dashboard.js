@@ -62,6 +62,6 @@ export function publishDashboard (id) {
 
 // 获取仪表板详情
 export function getDashboardDetail (id) {
-  return http.put(`/dashboard/${id}`)
+  return http.get(`/dashboard/${id}`)
 }
 
