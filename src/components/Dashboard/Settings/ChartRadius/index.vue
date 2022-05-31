@@ -1,18 +1,21 @@
 <template>
-  <div class="editor-object-container">
-    半径比例
-    <el-select
-      v-model="option[1]"
-      placeholder="请选择"
-      @change="changeHandler"
-    >
-      <el-option
-        v-for="item in radiusList"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-      />
-    </el-select>
+  <div class="editor-object-container flex-align-center">
+    <div class="editor-item-title" style="width:56px">半径比例</div>
+    <div style="flex: 1">
+      <el-select
+        v-model="option[1]"
+        placeholder="请选择"
+        popper-class="setting-select"
+        @change="changeHandler"
+      >
+        <el-option
+          v-for="item in radiusList"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </div>
   </div>
 </template>
 
