@@ -71,7 +71,7 @@ export default {
         tooltip: {
           trigger: 'item',
           formatter: (data) => {
-            return data.name + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
+            return data.data[0] + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
           }
         },
         grid: this.grid,
@@ -107,7 +107,7 @@ export default {
               normal: {
                 color: (data) => {
                   if (color[0].name) {
-                    const colorTemp = color.find((item) => { return data.name === item.name })
+                    const colorTemp = color.find((item) => { return data.data[0] === item.name })
                     return colorTemp ? colorTemp.color : 'red'
                   } else {
                     const index = (data.dataIndex) % color.length
@@ -121,10 +121,10 @@ export default {
               formatter: function (data) {
                 let formatter = ''
                 if (checkList.includes('维度')) {
-                  if (SeriesSetting && data.name === SeriesSetting.SeriesSelect.selectValue) {
+                  if (SeriesSetting && data.data[0] === SeriesSetting.SeriesSelect.selectValue) {
                     formatter += SeriesSetting.SeriesSelect.remark + ' '
                   } else {
-                    formatter += data.name + ' '
+                    formatter += data.data[0] + ' '
                   }
                 }
                 if (checkList.includes('度量')) {

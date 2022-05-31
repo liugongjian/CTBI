@@ -79,12 +79,12 @@ export default {
             let nameTemp = ''
             if (SeriesSetting) {
               SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
-                if (item.value === data.name) {
+                if (item.value === data.data[0]) {
                   nameTemp = item.remark
                 }
               })
             } else {
-              nameTemp = data.name
+              nameTemp = data.data[0]
             }
             return nameTemp + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
           }
@@ -92,7 +92,8 @@ export default {
         grid: this.grid,
         legend: {
           ...ComponentOption.Legend,
-          formatter: (name) => {
+          formatter: function (name) {
+            console.log('da22222', name)
             if (SeriesSetting) {
               let nameTemp = ''
               SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
@@ -126,7 +127,7 @@ export default {
               shadowColor: 'rgba(0, 0, 0, 0.5)',
               color: (data) => {
                 if (color[0].name) {
-                  const colorTemp = color.find((item) => { return data.name === item.name })
+                  const colorTemp = color.find((item) => { return data.data[0] === item.name })
                   return colorTemp ? colorTemp.color : 'red'
                 } else {
                   const index = (data.dataIndex) % color.length
@@ -142,13 +143,13 @@ export default {
                   if (SeriesSetting) {
                     let nameTemp = ''
                     SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
-                      if (item.value === data.name) {
+                      if (item.value === data.data[0]) {
                         nameTemp = item.remark
                       }
                     })
                     formatter += nameTemp + ' '
                   } else {
-                    formatter += data.name + ' '
+                    formatter += data.data[0] + ' '
                   }
                 }
                 if (checkList.includes('度量')) {

@@ -1,7 +1,7 @@
 // 饼图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
-import { getLayoutOptionById, getDataValueById, deepClone } from '@/utils/optionUtils'
+import { getLayoutOptionById, getDataValueById, deepClone, formatDataValue } from '@/utils/optionUtils'
 import store from '@/store'
 export default {
   mixins: [baseMixins],
@@ -15,7 +15,7 @@ export default {
     storeOption: {
       handler (val) {
         if (this.dataValue) {
-          this.dataValue = deepClone(getDataValueById(this.identify))
+          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
           this.getOption()
         }
       },
@@ -27,7 +27,7 @@ export default {
           return item.i === this.identify
         })
         if (isData !== -1) {
-          this.dataValue = deepClone(getDataValueById(this.identify))
+          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
           // 拿到数据中的系列名字
           this.getSeriesOptions(this.dataValue)
           // 拿到数据的系列名字 并设置颜色
@@ -61,10 +61,11 @@ export default {
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
       const color = []
+      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
       val.forEach((item, index) => {
         if (index) {
-          const idx = (index) % colorTheme['defaultColor'].length
-          color.push({ name: item[0], color: colorTheme['defaultColor'][idx].value, remark: item[0] })
+          const idx = (index) % colorValue.length
+          color.push({ name: item[0], color: colorValue[idx].value, remark: item[0] })
         }
       })
 
