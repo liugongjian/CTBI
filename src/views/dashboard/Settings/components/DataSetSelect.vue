@@ -171,7 +171,7 @@ export default {
     selectOption () {
       const option = []
       this.layout.forEach(item => {
-        if (item.option.dataSet.id) {
+        if (item.option.dataSet?.id) {
           const data = option.find(ele => {
             return ele.id === item.option.dataSet.id
           })
@@ -189,12 +189,16 @@ export default {
     },
     dataSet: {
       handler (val) {
-        this.$emit('refreshValue', val.id)
-        this.defaultExpand = []
-        this.defaultExpand.push(val.id)
-        if (this.$refs.tree) {
-          const id = val.id.length > 0 ? val.id : []
-          this.$refs.tree.setCurrentKey(id)
+        if (val) {
+          this.$emit('refreshValue', val.id)
+          this.defaultExpand = []
+          this.defaultExpand.push(val.id)
+          if (this.$refs.tree) {
+            const id = val.id.length > 0 ? val.id : []
+            this.$refs.tree.setCurrentKey(id)
+          }
+        } else {
+          console.error('DataSetSelect: line 195 缺失参数【dataSet】', val)
         }
       },
       immediate: true,
