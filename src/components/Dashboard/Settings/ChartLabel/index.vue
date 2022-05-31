@@ -35,15 +35,16 @@
     </div>
     <div
       v-if="option.precisionShow"
-      class="editor-object-container"
+      class="editor-object-container flex-align-center"
     >
-      <div class="editor-item-title">设置完成占比小数位数</div>
+      <div class="editor-item-title" style="width: 120px">设置完成占比小数位数</div>
       <div
-        class="editor-item-container"
+        style="flex: 1"
       >
         <el-select
           v-model="option.precision"
           placeholder="请选择"
+          popper-class="setting-select"
         >
           <el-option
             v-for="item in precisionOptions"
@@ -56,12 +57,10 @@
     </div>
     <div
       v-if="option.labelShow"
-      class="editor-object-container"
+      class="editor-object-container flex-align-center"
     >
-      <div class="editor-item-title">数据标签展示方式</div>
-      <div
-        class="editor-item-container"
-      >
+      <div class="editor-item-title" style="width: 96px">数据标签展示方式</div>
+      <div style="flex: 1">
         <el-radio-group v-model="option.labelShow">
           <el-radio :label="1">智能显示</el-radio>
           <el-radio :label="2">全量显示</el-radio>
