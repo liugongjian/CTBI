@@ -261,7 +261,7 @@
           title="属性"
           :visible.sync="dashboardAttributeVisible"
           width="480px"
-          @close="hiddenashboardAttribute"
+          @close="hiddenDashboardAttribute"
         >
           <div class="data-set-didlog-main">
             <el-form
@@ -299,7 +299,7 @@
             slot="footer"
             class="dialog-footer"
           >
-            <el-button @click="hiddenashboardAttribute">取 消</el-button>
+            <el-button @click="hiddenDashboardAttribute">取 消</el-button>
             <el-button
               type="primary"
               @click="handleDashboardAttribute"
@@ -604,7 +604,7 @@ export default {
     resetForm () {
       this.$refs['attrForm'].resetFields()
     },
-    hiddenashboardAttribute () {
+    hiddenDashboardAttribute () {
       this.dashboardAttributeVisible = false
       this.cureentData = null
       this.resetForm()

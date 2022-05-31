@@ -2,7 +2,7 @@
   <el-container>
     <el-header class="bi-header">
       <!-- 设置栏 -->
-      <Navbar />
+      <Navbar :dashboard="dashboard" :mode="mode" />
     </el-header>
     <el-container>
       <el-container>
@@ -39,9 +39,18 @@ import Tools from './Tools'
 import Navbar from './Navbar'
 // 导入样式
 import '@/views/dashboard/index.scss'
+import { getDashboardDetail } from '@/api/dashboard'
 export default {
   components: {
     Widget, Settings, Tools, Navbar
+  },
+  data() {
+    return {
+      dashboard: {
+        name: ''
+      },
+      mode: this.$route.query.mode || 'edit'
+    }
   },
   computed: {
     layoutStyles() {
@@ -62,8 +71,17 @@ export default {
       const layoutStyles = JSON.parse(localStorage.getItem('layoutStyles'))
       this.$store.state.settings.layoutStyles = layoutStyles
     }
+    this.getDashboardData()
   },
   methods: {
+    async getDashboardData() {
+      const { id } = this.$route.query
+      if (id) {
+        const result = await getDashboardDetail(id)
+        console.log(result)
+        this.dashboard = result
+      }
+    },
     dragover (event) {
       event.preventDefault()
       event.dataTransfer.dropEffect = 'copy'

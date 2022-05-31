@@ -86,7 +86,7 @@ export default {
     'FunctionalOption': { // 功能配置
       'ChartFilter': {
         'showFilter': true,
-        'filteredSery': '', // 选中的指标
+        'selectedIndicator': '', // 选中的指标
         'indicatorOption': [] // 指标集合
       }
     }

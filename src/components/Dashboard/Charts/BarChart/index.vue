@@ -29,7 +29,7 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery)
+      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator)
       this.getSeries(componentOption) // 获取Series
 
       // 将图表转为堆积柱状图
