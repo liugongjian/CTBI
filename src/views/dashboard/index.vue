@@ -117,14 +117,15 @@ export default {
     }
     console.log('destroyed')
     // localStorage.removeItem(this.saveName)
-    localStorage.removeItem(this.saveTagName)
+    // localStorage.removeItem(this.saveTagName)
     window.removeEventListener('beforeunload', this.beforeunload)
   },
   methods: {
     recoverDashboard() {
       const saveName = this.saveName
       const saveData = localStorage.getItem(saveName)
-      if (saveData) {
+      const saveTag = localStorage.getItem(this.saveTagName)
+      if (saveData && saveTag !== 'saved') {
         this.recoverVisible = true
       }
     },
@@ -177,6 +178,9 @@ export default {
       if (action === 'changeMode') {
         this.mode = data
         console.log(JSON.stringify(this.layout))
+      }
+      if (action === 'saveSuccess') {
+        localStorage.setItem(this.saveTagName, 'saved')
       }
     },
     saveDashboardToLocal() {

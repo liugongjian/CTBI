@@ -91,10 +91,10 @@
             </el-form-item>
             <el-form-item
               label="位置"
-              prop="directoryId"
+              prop="folderId"
               style="margin-top: 30px"
             >
-              <el-select v-model="dashboardAttr.directoryId" placeholder="请选择" style="width: 360px">
+              <el-select v-model="dashboardAttr.folderId" placeholder="请选择" style="width: 360px">
                 <el-option
                   v-for="item in folderTree"
                   :key="item.id"
@@ -130,7 +130,8 @@
 </template>
 
 <script>
-import { getFolderTree } from '@/api/dashboard'
+import { getFolderTree, saveDashboard } from '@/api/dashboard'
+import store from '@/store'
 export default {
   name: 'Dashboard',
   props: {
@@ -161,7 +162,7 @@ export default {
       dashboardAttributeVisible: false,
       dashboardAttr: {
         name: '',
-        directoryId: ''
+        folderId: ''
       },
       attrRules: {
         name: [
@@ -205,7 +206,7 @@ export default {
       await this.getFolders()
       this.dashboardAttributeVisible = true
       this.dashboardAttr.name = this.saveMode === 'copy' ? '' : this.name
-      this.dashboardAttr.directoryId = this.saveMode === 'copy' ? '-1' : (this.dashboard.directoryId || '-1')
+      this.dashboardAttr.folderId = this.saveMode === 'copy' ? '-1' : (this.dashboard.directoryId || '-1')
     },
     copy() {
       this.saveMode = 'copy'
@@ -222,12 +223,39 @@ export default {
     handleDashboardAttribute() {
       this.$refs['attrForm'].validate((valid) => {
         if (valid) {
-          this.hiddenDashboardAttribute()
+          // this.hiddenDashboardAttribute()
+          this.saveDashboard()
         } else {
           console.log('error submit!!')
           return false
         }
       })
+    },
+    // 新建数据集
+    async saveDashboard () {
+      const id = this.saveMode === 'copy' ? null : (this.dashboard._id || null)
+      const finalId = this.saveMode === 'copy' ? null : id
+      const params = {
+        id: finalId,
+        setting: JSON.stringify(store.state.app.layout),
+        ...this.dashboardAttr
+      }
+      await saveDashboard(params)
+      this.hiddenDashboardAttribute()
+      if (this.saveMode !== 'copy') {
+        this.name = this.dashboardAttr.name
+        this.$emit('handleChange', {
+          action: 'saveSuccess',
+          data: this.dashboardAttr
+        })
+      }
+      if (!id) {
+        this.$router.push({
+          query: {
+            book: 'book'
+          }
+        })
+      }
     },
     async getFolders() {
       try {
