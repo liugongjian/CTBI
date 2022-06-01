@@ -28,7 +28,7 @@ export default {
   },
   watch: {
     'storeOption.theme.ComponentOption.PercentStack': {
-      handler(val) {
+      handler (val) {
         this.storeOption.theme.ComponentOption.ChartLabel.type = this.type
         if (val.isStack && !val.isPercent) {
           this.storeOption.theme.ComponentOption.ChartLabel.type = 'StackedAreaChart'
@@ -43,7 +43,7 @@ export default {
   methods: {
     getOption () {
       const { ComponentOption, FunctionalOption } = this.storeOption.theme
-      this.transfromData(FunctionalOption.ChartFilter.selectedIndicator)
+      this.transformData(FunctionalOption.ChartFilter.selectedIndicator)
       this.getPercentStackSeries(ComponentOption, FunctionalOption)
 
       // 系列配置-图表标签相关

@@ -153,6 +153,13 @@ export const getDateTime = () => {
  * @returns {Array}
  */
 export const formatDataValue = function (data) {
+  /**
+   * {
+   *  isMeasure: ,
+   *  data:  [],
+   *  fields: []
+   * }
+   */
   const dataValue = []
   const temp = []
   data.forEach((item, index) => {

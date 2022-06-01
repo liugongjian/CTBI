@@ -30,7 +30,7 @@ export default {
   methods: {
     getOption () {
       const { ComponentOption, FunctionalOption } = this.storeOption.theme
-      this.transfromData(FunctionalOption.ChartFilter.selectedIndicator)
+      this.transformData(FunctionalOption.ChartFilter.selectedIndicator)
       this.getSeries(ComponentOption, FunctionalOption)
 
       // 系列配置-图表标签相关
