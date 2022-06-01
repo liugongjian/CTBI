@@ -240,20 +240,14 @@ export default {
         setting: JSON.stringify(store.state.app.layout),
         ...this.dashboardAttr
       }
-      await saveDashboard(params)
+      const result = await saveDashboard(params)
+      this.$message.success('保存成功')
+      console.log(result)
       this.hiddenDashboardAttribute()
       if (this.saveMode !== 'copy') {
-        this.name = this.dashboardAttr.name
         this.$emit('handleChange', {
           action: 'saveSuccess',
-          data: this.dashboardAttr
-        })
-      }
-      if (!id) {
-        this.$router.push({
-          query: {
-            book: 'book'
-          }
+          data: result
         })
       }
     },

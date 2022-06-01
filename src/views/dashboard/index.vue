@@ -116,8 +116,8 @@ export default {
       clearTimeout(this.timer)
     }
     console.log('destroyed')
-    // localStorage.removeItem(this.saveName)
-    // localStorage.removeItem(this.saveTagName)
+    localStorage.removeItem(this.saveName)
+    localStorage.removeItem(this.saveTagName)
     window.removeEventListener('beforeunload', this.beforeunload)
   },
   methods: {
@@ -147,6 +147,12 @@ export default {
         const result = await getDashboardDetail(id)
         console.log(result)
         this.dashboard = result
+        if (!this.recoverVisible) {
+          const settings = result.setting ? JSON.parse(result.setting) : null
+          if (settings && Array.isArray(settings)) {
+            store.dispatch('app/updateLayout', settings)
+          }
+        }
       }
     },
     dragover (event) {
@@ -180,7 +186,16 @@ export default {
         console.log(JSON.stringify(this.layout))
       }
       if (action === 'saveSuccess') {
+        if (!this.dashboardId) {
+          localStorage.removeItem(this.saveName)
+          localStorage.removeItem(this.saveTagName)
+          this.saveName = 'dashboard-' + data._id
+          this.saveTagName = this.saveName + '-tag'
+          this.dashboardId = data._id
+        }
+        localStorage.setItem(this.saveName, JSON.stringify(this.layout))
         localStorage.setItem(this.saveTagName, 'saved')
+        this.dashboard = data
       }
     },
     saveDashboardToLocal() {
