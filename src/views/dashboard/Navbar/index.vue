@@ -137,7 +137,9 @@ export default {
     // eslint-disable-next-line vue/require-default-prop
     dashboard: Object,
     // eslint-disable-next-line vue/require-default-prop
-    mode: String
+    mode: String.prototype,
+    // eslint-disable-next-line vue/require-default-prop
+    handleChange: Function
   },
   data() {
     const validateName = (rule, value, callback) => {
@@ -185,7 +187,11 @@ export default {
       this.device = device
     },
     changeMode() {
-      this.mode = this.mode === 'edit' ? 'preview' : 'edit'
+      // this.mode = this.mode === 'edit' ? 'preview' : 'edit'
+      this.$emit('handleChange', {
+        action: 'changeMode',
+        data: this.mode === 'edit' ? 'preview' : 'edit'
+      })
     },
     save () {
       this.saveMode = 'save'
