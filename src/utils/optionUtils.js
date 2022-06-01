@@ -153,7 +153,6 @@ export const getDateTime = () => {
  * @returns {Array}
  */
 export const formatDataValue = function (data) {
-  console.log('dadadaw22', data)
   const dataValue = []
   const temp = []
   data.forEach((item, index) => {
