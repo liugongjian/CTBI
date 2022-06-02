@@ -100,6 +100,9 @@ export const getLayoutById = function (identify) {
  * @returns {Object}
  */
 export const getLayoutOptionById = function (identify) {
+  if (!identify) {
+    identify = store.state.app.currentLayoutId
+  }
   const layout = store.state.app.layout
   const obj = layout.find((item) => {
     return item.i === identify
@@ -117,15 +120,19 @@ export const getLayoutOptionById = function (identify) {
  * @returns {Object}
  */
 export const getDataValueById = function (identify) {
+  if (!identify) {
+    identify = store.state.app.currentLayoutId
+  }
   const dataOption = store.state.app.dataOption
   const obj = dataOption.find((item) => {
-    return item.i === identify
+    console.log(item.id, identify, item.id === identify)
+    return item.id === identify
   })
   if (obj && JSON.stringify(obj) !== '{}') {
     return obj.dataValue
   }
   console.warn(`获取 ${identify} 组件数据信息为空`)
-  return {}
+  return null
 }
 
 /**
@@ -152,19 +159,38 @@ export const getDateTime = () => {
  * @param {Array} data
  * @returns {Array}
  */
-export const formatDataValue = function (data) {
+export const formatDataValue = function (chartData) {
   const dataValue = []
-  const temp = []
-  data.forEach((item, index) => {
-    temp.push(item.fields[0].displayColumn)
-  })
-  dataValue.push(temp)
-  for (let j = 0; j < data[0].data.length; j++) {
-    const temp1 = []
-    for (let i = 0; i < data.length; i++) {
-      temp1.push(data[i].data[j][data[i].fields[0].displayColumn])
+  const DimensionKey = []
+  const MeasureKey = []
+  const { data, fields } = chartData
+  if (data && data.length > 0) {
+    for (const key in fields) {
+      if (Object.hasOwnProperty.call(fields, key)) {
+        const element = fields[key]
+        if (key === 'Dimension') {
+          element.fields.forEach(field => {
+            DimensionKey.push(field.displayColumn)
+          })
+        } else if (key === 'Measure') {
+          element.fields.forEach(field => {
+            MeasureKey.push(field.displayColumn)
+          })
+        }
+      }
     }
-    dataValue.push(temp1)
+    dataValue.push([DimensionKey.join('-'), ...MeasureKey])
+    data.forEach(item => {
+      const dimensionData = []
+      const measureData = []
+      DimensionKey.forEach(dim => {
+        dimensionData.push(item[dim])
+      })
+      MeasureKey.forEach(mea => {
+        measureData.push(item[mea])
+      })
+      dataValue.push([dimensionData.join('-'), ...measureData])
+    })
   }
   return dataValue
 }

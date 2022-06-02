@@ -29,7 +29,7 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator)
+      this.transformData(this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator)
       this.getPercentStackSeries(componentOption)
       // 系列配置
       this.setSeriesItem()

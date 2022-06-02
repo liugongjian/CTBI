@@ -54,7 +54,7 @@ export default {
       const { num } = ComponentOption.MergeOther
       const mergeShow = ComponentOption.MergeOther.show
       if (mergeShow && num > 0) {
-        that.transfromData(ComponentOption.MergeOther.num, FunctionalOption.ChartFilter.selectedIndicator)
+        that.transformData(ComponentOption.MergeOther.num, FunctionalOption.ChartFilter.selectedIndicator)
       }
       // 取到颜色配置
       const color = ComponentOption.Color.color

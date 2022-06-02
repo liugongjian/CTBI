@@ -188,26 +188,6 @@ export default {
         }
       ]
     },
-    // 设置图例与图表距离
-    setGrid (legend) {
-      if (legend.top === 'auto' && legend.left === 'center') { // 图例在上
-        this.grid = {
-          top: 50
-        }
-      } else if (legend.top === 'bottom' && legend.left === 'center') { // 图例在下
-        this.grid = {
-          bottom: 50
-        }
-      } else if (legend.top === 'center' && legend.left === 'auto') { // 图例在左
-        this.grid = {
-          left: 120
-        }
-      } else if (legend.top === 'center' && legend.left === 'right') { // 图例在右
-        this.grid = {
-          right: 120
-        }
-      }
-    },
     // 系列设置
     setSeriesItem () {
       const { SeriesSelect } = this.storeOption.theme.SeriesSetting
@@ -279,13 +259,13 @@ export default {
       }
       return connectNulls
     },
-    transfromData (indicator) {
+    transformData (indicator) {
       const data = []
       for (let i = 1; i < this.dataValue.length; i++) {
         data.push([this.dataValue[i][0]])
       }
       indicator.forEach(item => {
-      // 取到指标的下标 如 2015年 index为1
+        // 取到指标的下标 如 2015年 index为1
         const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
         // 取除维度以外的第1列为vlaue
         for (let i = 1; i < this.dataValue.length; i++) {

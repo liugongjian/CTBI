@@ -1,5 +1,8 @@
 <template>
-  <div class="editor-object-container" style="padding-bottom: 0px">
+  <div
+    class="editor-object-container"
+    style="padding-bottom: 0px"
+  >
     <div class="editor-item-title">请选择系列</div>
     <el-select
       v-model="option.selectValue"
@@ -45,9 +48,19 @@
         @change="(e)=>{setSeriesOption(e,'labelColor')}"
       />
     </div>
-    <div v-if="option.SeriesMark&&option.SeriesMark.show" class="editor-object-container">
-      <div style="display: flex" class="color-row">
-        <el-checkbox v-model="option.SeriesMark.check" style="margin-right:8px" @change="(e)=>{setSeriesOption(e,'showMark')}">显示标记点</el-checkbox>
+    <div
+      v-if="option.SeriesMark&&option.SeriesMark.show"
+      class="editor-object-container"
+    >
+      <div
+        style="display: flex"
+        class="color-row"
+      >
+        <el-checkbox
+          v-model="option.SeriesMark.check"
+          style="margin-right:8px"
+          @change="(e)=>{setSeriesOption(e,'showMark')}"
+        >显示标记点</el-checkbox>
         <el-select
           v-model="option.SeriesMark.markType"
           popper-class="setting-select"
@@ -67,9 +80,8 @@
             :value="item.value"
           >
             <span style="float: left">
-              <svg-icon
-                :icon-class="`${item.value}-mark`"
-              /></span>
+              <svg-icon :icon-class="`${item.value}-mark`" />
+            </span>
 
             <span style="float: right">{{ item.label }}</span>
           </el-option>
@@ -116,10 +128,20 @@
       </div>
 
     </div> -->
-    <div v-if="option.SeriesLine&&option.SeriesLine.show" class="editor-object-container">
+    <div
+      v-if="option.SeriesLine&&option.SeriesLine.show"
+      class="editor-object-container"
+    >
       <div class="color-row">
-        <span class="editor-item-title" style="width: 56px">线条样式</span>
-        <el-dropdown trigger="click" placement="bottom" @command="(e)=>{setSeriesOption(e,'lineType')}">
+        <span
+          class="editor-item-title"
+          style="width: 56px"
+        >线条样式</span>
+        <el-dropdown
+          trigger="click"
+          placement="bottom"
+          @command="(e)=>{setSeriesOption(e,'lineType')}"
+        >
           <div class="dropdown-link">
             <svg-icon
               :icon-class="`${option.SeriesLine.lineType}-line`"
@@ -127,8 +149,15 @@
             />
             <i class="el-icon-arrow-down el-icon--right" />
           </div>
-          <el-dropdown-menu slot="dropdown" class="setting-dropdown">
-            <el-dropdown-item v-for="(item,index) in lineTypes" :key="index" :command="item.value">
+          <el-dropdown-menu
+            slot="dropdown"
+            class="setting-dropdown"
+          >
+            <el-dropdown-item
+              v-for="(item,index) in lineTypes"
+              :key="index"
+              :command="item.value"
+            >
               <svg-icon
                 :icon-class="`${item.value}-line`"
                 style="font-size: 15px;"
@@ -234,7 +263,7 @@ export default {
       // 如果是设置别名 需要把别名更新到 配置设置 组件的color集合中
       if (type === 'remark') {
         store.state.app.layout.forEach(item => {
-          if (item.i === store.state.app.currentLayoutId) {
+          if (item.id === store.state.app.currentLayoutId) {
             item.option.theme.ComponentOption.Color.color.forEach((j) => {
               if (j.name === this.option.selectValue) {
                 j.remark = val
@@ -250,23 +279,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.color-row{
+.color-row {
   display: flex;
   align-items: center;
-  &>div{
+  & > div {
     margin: 0px 8px 0px 0px;
   }
-  .el-dropdown{
+  .el-dropdown {
     min-width: 50px;
-    .disabled{
-      background: #F5F7FA;
+    .disabled {
+      background: #f5f7fa;
     }
   }
-  .dropdown-link{
+  .dropdown-link {
     display: flex;
     justify-content: center;
-    align-items:center;
-    border: 1px solid rgba(221,221,221,0.25);
+    align-items: center;
+    border: 1px solid rgba(221, 221, 221, 0.25);
     border-radius: 2px;
     width: 100%;
     font-size: 12px;
@@ -274,7 +303,7 @@ export default {
     font-weight: 400;
     height: 22px;
     i {
-      font:#DCDFE6
+      font: #dcdfe6;
     }
   }
 }

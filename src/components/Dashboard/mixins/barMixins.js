@@ -1,7 +1,7 @@
 // 柱图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
-import { getLayoutOptionById, getDataValueById } from '@/utils/optionUtils'
+import { getLayoutOptionById } from '@/utils/optionUtils'
 import { deepClone, formatDataValue } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 import store from '@/store'
@@ -27,33 +27,12 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        if (this.dataValue) {
-          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
-          this.getOption()
-        }
-      },
-      deep: true
-    },
-    dataOption: {
-      handler (val) {
-        const isData = val.findIndex(item => {
-          return item.i === this.identify
-        })
-        if (isData !== -1) {
-          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
-          // 拿到数据中的系列名字
-          this.getSeriesOptions(this.dataValue)
-          // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
-          // 拿到数据中的指标
-          this.getIndicatorOptions(this.dataValue)
-          this.getOption()
-        }
+        this.getOption()
       },
       deep: true
     },
     'storeOption.theme.ComponentOption.PercentStack': {
-      handler(val) {
+      handler (val) {
         this.storeOption.theme.ComponentOption.ChartLabel.type = this.type
         if (val.isStack && !val.isPercent) {
           this.storeOption.theme.ComponentOption.ChartLabel.type = 'StackedBarChart'
@@ -70,7 +49,18 @@ export default {
     this.dataOption = store.state.app.dataOption
   },
   methods: {
-
+    // 图表重绘事件，继承于baseMixins
+    reloadImpl () {
+      this.dataValue = formatDataValue(deepClone(this.chartData))
+      console.log(this.dataValue, 'reloadImpl')
+      // 拿到数据中的系列名字
+      this.getSeriesOptions(this.dataValue)
+      // 拿到数据的系列名字 并设置颜色
+      this.getColor(this.dataValue)
+      // 拿到数据中的指标
+      this.getIndicatorOptions(this.dataValue)
+      this.getOption()
+    },
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
       // 为空时，进行初始化
@@ -177,47 +167,55 @@ export default {
     },
     // 将数据转换成百分比
     valueToPercent () {
-      const sumArr = []
-      for (let ii = 0; ii < this.dataValue.length - 1; ii++) {
-        sumArr.push(0)
-      }
-      for (let i = 1; i < this.dataValue[0].length; i++) {
-        for (let j = 0; j < sumArr.length; j++) {
-          sumArr[j] += this.dataValue[j + 1][i]
+      if (this.dataValue && this.dataValue.length > 0) {
+        const sumArr = []
+        for (let ii = 1; ii < this.dataValue.length - 1; ii++) {
+          sumArr.push(0)
         }
-      }
-      for (let i = 1; i < this.dataValue[0].length; i++) {
-        for (let j = 0; j < sumArr.length; j++) {
-          this.dataValue[j + 1][i] = (this.dataValue[j + 1][i] / sumArr[j] * 100).toFixed(2)
+        for (let i = 1; i < this.dataValue[0].length; i++) {
+          for (let j = 0; j < sumArr.length; j++) {
+            sumArr[j] += this.dataValue[i][j + 1]
+          }
+        }
+        for (let i = 1; i < this.dataValue[0].length; i++) {
+          for (let j = 0; j < sumArr.length; j++) {
+            this.dataValue[j + 1][i] = (this.dataValue[j + 1][i] / sumArr[j] * 100).toFixed(2)
+          }
         }
       }
     },
 
     // 根据筛选的指标获取对应数据
-    transfromData (indicator) {
-      const data = []
-      for (let i = 1; i < this.dataValue.length; i++) {
-        data.push([this.dataValue[i][0]])
-      }
-      indicator.forEach(item => {
-      // 取到指标的下标 如 2015年 index为1
-        const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
-        // 取除维度以外的第1列为vlaue
+    transformData (indicator) {
+      if (this.dataValue && this.dataValue.length > 0) {
+        const data = []
         for (let i = 1; i < this.dataValue.length; i++) {
-          data[i - 1].push(this.dataValue[i][indicatorIdx])
+          data.push([this.dataValue[i][0]])
         }
-      })
-      data.unshift([this.dataValue[0][0], ...indicator])
-      this.dataValue = data
+        indicator.forEach(item => {
+          // 取到指标的下标 如 2015年 index为1
+          const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
+          // 取除维度以外的第1列为vlaue
+          for (let i = 1; i < this.dataValue.length; i++) {
+            data[i - 1].push(this.dataValue[i][indicatorIdx])
+          }
+        })
+        data.unshift([this.dataValue[0][0], ...indicator])
+        this.dataValue = data
+      }
     },
 
     // 获取堆积柱状图
     getStackSeries (componentOption) {
       this.series = []
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.setAxis()
       // 双Y轴设置
       this.twisYAxisConfig(componentOption)
@@ -243,26 +241,27 @@ export default {
       // 插入一个假数据用于生成总计的label
       this.dataValue[0].push('总计')
       for (let i = 1; i < this.dataValue.length; i++) {
-        this.dataValue[i] = [...this.dataValue[i], 0]
+        let total = 0
+        this.dataValue[i].forEach((item, index) => {
+          if (index > 0) {
+            total += Number.parseFloat(item)
+          }
+        })
+        this.dataValue[i] = [...this.dataValue[i], total]
       }
       this.series.push({
         type: 'bar',
+        color: 'transparent',
+        barWidth: '0',
         label: {
+          color: '#000',
           show: componentOption.ChartLabel.check && this.checkList.includes('总计'), // 标签显示
-          position: 'top',
-          formatter: function (params) {
-            let dataTotal = 0
-            for (let i = 1; i < params.value.length; i++) {
-              dataTotal += params.value[i]
-            }
-            return dataTotal
-          }
+          position: 'top'
         },
-        stack: 'Total',
+        barGap: '-100%',
         labelLayout: {
           hideOverlap: componentOption.ChartLabel.labelShow === 1 // 1.智能显示，2.全量显示 标签
-        },
-        itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
+        }
       })
     },
 
@@ -270,9 +269,13 @@ export default {
     getPercentStackSeries (componentOption) {
       this.series = []
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.setAxis()
       // 双Y轴设置
       this.twisYAxisConfig(componentOption)
@@ -281,7 +284,6 @@ export default {
       if (!componentOption.TwisYAxis.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
-      const data = formatDataValue(deepClone(getDataValueById(this.identify)))
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'bar',
@@ -290,7 +292,7 @@ export default {
             show: componentOption.ChartLabel.check, // 标签显示
             formatter: function (params) {
               const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
-              const isMeasure = that.checkList.includes('度量') ? `${data[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+              const isMeasure = that.checkList.includes('度量') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
               return isPercent + '\n' + isMeasure
             }
           },
@@ -408,27 +410,7 @@ export default {
           name: YAxis.showTitle ? (YAxis.unit ? `${YAxis.title}(${YAxis.unit})` : YAxis.title) : ''
         }
       ]
-    },
-
-    // 设置图例与图表距离
-    setGrid (legend) {
-      if (legend.top === 'auto' && legend.left === 'center') { // 图例在上
-        this.grid = {
-          top: 50
-        }
-      } else if (legend.top === 'bottom' && legend.left === 'center') { // 图例在下
-        this.grid = {
-          bottom: 50
-        }
-      } else if (legend.top === 'center' && legend.left === 'auto') { // 图例在左
-        this.grid = {
-          left: 120
-        }
-      } else if (legend.top === 'center' && legend.left === 'right') { // 图例在右
-        this.grid = {
-          right: 120
-        }
-      }
     }
+
   }
 }

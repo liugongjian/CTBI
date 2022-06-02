@@ -85,7 +85,7 @@ export default {
       this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator = indicatorOptions[0].value
     },
     // 合并数据为其他 val val为1 就是保留最大的一个数据 其他数据合并为其他
-    transfromData (val, indicator) {
+    transformData (val, indicator) {
       // 取到指标的下标 如 2015年 index为1
       const indicatorIdx = this.dataValue[0].indexOf(indicator) > -1 ? this.dataValue[0].indexOf(indicator) : 1
       // 取除维度以外的第1列为vlaue
@@ -111,26 +111,6 @@ export default {
         aTemp[i] = [].concat([data[i - 1].name, data[i - 1].value])
       }
       this.dataValue = aTemp
-    },
-    // 设置图例与图表距离
-    setGrid (legend) {
-      if (legend.top === 'auto' && legend.left === 'center') { // 图例在上
-        this.grid = {
-          top: 50
-        }
-      } else if (legend.top === 'bottom' && legend.left === 'center') { // 图例在下
-        this.grid = {
-          bottom: 50
-        }
-      } else if (legend.top === 'center' && legend.left === 'auto') { // 图例在左
-        this.grid = {
-          left: 120
-        }
-      } else if (legend.top === 'center' && legend.left === 'right') { // 图例在右
-        this.grid = {
-          right: 120
-        }
-      }
     }
 
   }
