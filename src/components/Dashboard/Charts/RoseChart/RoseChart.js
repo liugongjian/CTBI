@@ -96,10 +96,12 @@ export default {
   'dataSource': {
     'Dimension': { // 维度
       'name': '扇区标签/维度',
+      'require': true,
       'value': []
     },
     'Measure': { // 度量
       'name': '扇区角度/度量',
+      'require': true,
       'value': []
     }
   }, // 数据集

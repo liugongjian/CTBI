@@ -14,16 +14,15 @@ export default {
     /* 获取不同类型的series 0代表主轴 1代表副轴*/
     getSeries () {
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.series = []
       for (let i = 1; i <= seriesLength; i++) {
-        // if (this.dataValue[0][i].indexOf('-0') > -1) {
-        //   this.series.push({ type: 'bar', name: this.dataValue[0][i].split('-0')[0] })
-        // } else {
-        //   this.series.push({ type: 'line', yAxisIndex: 1, name: this.dataValue[0][i].split('-1')[0] })
-        // }
         if (this.dataValue[0][i].indexOf('-1') > -1) {
           this.series.push({ type: 'line', yAxisIndex: 1, name: this.dataValue[0][i].split('-1')[0] })
         } else {

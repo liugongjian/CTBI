@@ -26,31 +26,22 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        // if (this.dataValue) {
-        //   this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
-        //   // this.getOption()
-        // }
+        this.getOption()
+      },
+      deep: true
+    },
+    // 图表类型切换
+    'storeOption.is': {
+      handler (val) {
+        const isData = this.dataOption.findIndex(item => {
+          return item.id === this.identify
+        })
+        if (isData !== -1) {
+          this.$bus.$emit('interReload', [this.identify], 100, false)
+        }
       },
       deep: true
     }
-    // dataOption: {
-    //   handler (val) {
-    //     const isData = val.findIndex(item => {
-    //       return item.i === this.identify
-    //     })
-    //     if (isData !== -1) {
-    //       this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
-    //       // 拿到数据中的系列名字
-    //       this.getSeriesOptions(this.dataValue)
-    //       // 拿到数据的系列名字 并设置颜色
-    //       this.getColor(this.dataValue)
-    //       // 拿到数据中的指标
-    //       this.getIndicatorOptions(this.dataValue)
-    //       this.getOption()
-    //     }
-    //   },
-    //   deep: true
-    // }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
@@ -60,7 +51,6 @@ export default {
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
       this.dataValue = formatDataValue(deepClone(this.chartData))
-      console.log(this.dataValue, 'reloadImpl')
       // 拿到数据中的系列名字
       this.getSeriesOptions(this.dataValue)
       // 拿到数据的系列名字 并设置颜色
@@ -110,18 +100,20 @@ export default {
     },
     // 将数据转换成百分比
     valueToPercent () {
-      const sumArr = []
-      for (let ii = 0; ii < this.dataValue.length - 1; ii++) {
-        sumArr.push(0)
-      }
-      for (let i = 1; i < this.dataValue[0].length; i++) {
-        for (let j = 0; j < sumArr.length; j++) {
-          sumArr[j] += this.dataValue[j + 1][i]
+      if (this.dataValue && this.dataValue.length > 0) {
+        const sumArr = []
+        for (let ii = 0; ii < this.dataValue.length - 1; ii++) {
+          sumArr.push(0)
         }
-      }
-      for (let i = 1; i < this.dataValue[0].length; i++) {
-        for (let j = 0; j < sumArr.length; j++) {
-          this.dataValue[j + 1][i] = (this.dataValue[j + 1][i] / sumArr[j] * 100).toFixed(2)
+        for (let i = 1; i < this.dataValue[0].length; i++) {
+          for (let j = 0; j < sumArr.length; j++) {
+            sumArr[j] += this.dataValue[j + 1][i]
+          }
+        }
+        for (let i = 1; i < this.dataValue[0].length; i++) {
+          for (let j = 0; j < sumArr.length; j++) {
+            this.dataValue[j + 1][i] = (this.dataValue[j + 1][i] / sumArr[j] * 100).toFixed(2)
+          }
         }
       }
     },
@@ -272,28 +264,34 @@ export default {
       return connectNulls
     },
     transformData (indicator) {
-      const data = []
-      for (let i = 1; i < this.dataValue.length; i++) {
-        data.push([this.dataValue[i][0]])
-      }
-      indicator.forEach(item => {
-        // 取到指标的下标 如 2015年 index为1
-        const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
-        // 取除维度以外的第1列为vlaue
+      if (this.dataValue && this.dataValue.length > 0) {
+        const data = []
         for (let i = 1; i < this.dataValue.length; i++) {
-          data[i - 1].push(this.dataValue[i][indicatorIdx])
+          data.push([this.dataValue[i][0]])
         }
-      })
-      data.unshift([this.dataValue[0][0], ...indicator])
-      this.dataValue = data
+        indicator.forEach(item => {
+        // 取到指标的下标 如 2015年 index为1
+          const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
+          // 取除维度以外的第1列为vlaue
+          for (let i = 1; i < this.dataValue.length; i++) {
+            data[i - 1].push(this.dataValue[i][indicatorIdx])
+          }
+        })
+        data.unshift([this.dataValue[0][0], ...indicator])
+        this.dataValue = data
+      }
     },
     // 获取堆积图
     getStackSeries (ComponentOption, FunctionalOption) {
       this.series = []
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.setAxis()
       // 双Y轴设置
       this.twisYAxisConfig(ComponentOption)
@@ -324,9 +322,13 @@ export default {
     getPercentStackSeries (ComponentOption, FunctionalOption) {
       this.series = []
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.setAxis()
       // 双Y轴设置
       this.twisYAxisConfig(ComponentOption)

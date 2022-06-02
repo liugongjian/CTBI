@@ -36,7 +36,7 @@ export default {
       const { ComponentOption, SeriesSetting, FunctionalOption } = that.storeOption.theme
 
       // 取到指标的下标 如 2015年 index为1
-      const indicatorIdx = that.dataValue[0].indexOf(FunctionalOption.ChartFilter.selectedIndicator) > -1 ? that.dataValue[0].indexOf(FunctionalOption.ChartFilter.selectedIndicator) : 1
+      const indicatorIdx = that.dataValue && that.dataValue[0].indexOf(FunctionalOption.ChartFilter.selectedIndicator) > -1 ? that.dataValue[0].indexOf(FunctionalOption.ChartFilter.selectedIndicator) : 1
 
       // 半径变化
       const radius = that.radius.map(item => {

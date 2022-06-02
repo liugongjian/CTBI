@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { getLayoutOptionById, getDataValueById, deepClone } from '@/utils/optionUtils'
+import { getLayoutOptionById, getDataValueById, deepClone, formatDataValue } from '@/utils/optionUtils'
 import combineMixins from '@/components/Dashboard/mixins/combineMixins'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 import store from '@/store'
@@ -35,25 +35,18 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        if (this.dataValue) {
-          this.dataValue = this.formatDataValue(deepClone(getDataValueById(this.identify)))
-          this.getOption()
-        }
+        this.getOption()
       },
       deep: true
     },
-    dataOption: {
+    // 图表类型切换
+    'storeOption.is': {
       handler (val) {
-        const isData = val.findIndex(item => {
-          return item.i === this.identify
+        const isData = this.dataOption.findIndex(item => {
+          return item.id === this.identify
         })
         if (isData !== -1) {
-          this.dataValue = this.formatDataValue(deepClone(getDataValueById(this.identify)))
-          // 拿到数据中的系列名字
-          this.getSeriesOptions(this.dataValue)
-          // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
-          this.getOption()
+          this.$bus.$emit('interReload', [this.identify], 100, false)
         }
       },
       deep: true
@@ -64,20 +57,88 @@ export default {
     this.dataOption = store.state.app.dataOption
   },
   methods: {
-    // 组合图特有的 数据 转换方法
-    formatDataValue(data) {
-      const dataValue = []
-      const temp = []
-      data.forEach((item, index) => {
-        temp.push(item.fields[0].displayColumn + `${item.isMeasure1 ? '-1' : ''}`)
-      })
-      dataValue.push(temp)
-      for (let j = 0; j < data[0].data.length; j++) {
-        const temp1 = []
-        for (let i = 0; i < data.length; i++) {
-          temp1.push(data[i].data[j][data[i].fields[0].displayColumn])
+    // 图表重绘事件，继承于baseMixins
+    reloadImpl () {
+      // 判断主值轴和副值轴二者是否有一
+      if (this.isHaveMeasure(deepClone(this.chartData))) {
+        this.dataValue = this.formatDataValue(deepClone(this.chartData))
+        // 拿到数据中的系列名字
+        this.getSeriesOptions(this.dataValue)
+        // 拿到数据的系列名字 并设置颜色
+        this.getColor(this.dataValue)
+        this.getOption()
+      }
+    },
+    isHaveMeasure(chartData) {
+      const { data, fields } = chartData
+      let flagMeasure = false
+      let flagMeasureSecond = false
+      if (data && data.length > 0) {
+        for (const key in fields) {
+          if (Object.hasOwnProperty.call(fields, key)) {
+            const element = fields[key]
+            if (key === 'Measure' && element.fields.length > 0) {
+              flagMeasure = true
+            }
+            if (key === 'MeasureSecond' && element.fields.length > 0) {
+              flagMeasureSecond = true
+            }
+          }
         }
-        dataValue.push(temp1)
+      }
+
+      if (!flagMeasure && !flagMeasureSecond) {
+        this.$message({
+          message: `主值轴/副值轴区域缺少度量项`,
+          type: 'error'
+        })
+        return false
+      } else {
+        return true
+      }
+    },
+    // 组合图特有的 数据 转换方法
+    formatDataValue(chartData) {
+      const dataValue = []
+      const DimensionKey = []
+      const MeasureKey = []
+      const MeasureSecondKey = []
+      const { data, fields } = chartData
+      if (data && data.length > 0) {
+        for (const key in fields) {
+          if (Object.hasOwnProperty.call(fields, key)) {
+            const element = fields[key]
+            if (key === 'Dimension') {
+              element.fields.forEach(field => {
+                DimensionKey.push(field.displayColumn)
+              })
+            } else if (key === 'Measure') {
+              element.fields.forEach(field => {
+                MeasureKey.push(field.displayColumn)
+              })
+            } else if (key === 'MeasureSecond') {
+              element.fields.forEach(field => {
+                MeasureSecondKey.push(field.displayColumn + '-1')
+              })
+            }
+          }
+        }
+        dataValue.push([DimensionKey.join('-'), ...MeasureKey, ...MeasureSecondKey])
+        data.forEach(item => {
+          const dimensionData = []
+          const measureData = []
+          const measureSecondData = []
+          DimensionKey.forEach(dim => {
+            dimensionData.push(item[dim])
+          })
+          MeasureKey.forEach(mea => {
+            measureData.push(item[mea])
+          })
+          MeasureSecondKey.forEach(mea => {
+            measureSecondData.push(item[mea.split('-')[0]])
+          })
+          dataValue.push([dimensionData.join('-'), ...measureData, ...measureSecondData])
+        })
       }
       return dataValue
     },

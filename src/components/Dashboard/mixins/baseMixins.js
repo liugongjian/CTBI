@@ -65,7 +65,7 @@ export default {
           return item.id === this.identify
         })
         // 判断是否已经存在
-        const val = deepClone(this.dataValue)
+        const val = deepClone(this.chartData)
         if (storeDataOption) {
           storeDataOption.dataValue = val// 更新数据
         } else {

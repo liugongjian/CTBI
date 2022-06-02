@@ -1,8 +1,7 @@
 // 柱图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
-import { getLayoutOptionById } from '@/utils/optionUtils'
-import { deepClone, formatDataValue } from '@/utils/optionUtils'
+import { deepClone, formatDataValue, getLayoutOptionById } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 import store from '@/store'
 export default {
@@ -28,6 +27,18 @@ export default {
     storeOption: {
       handler (val) {
         this.getOption()
+      },
+      deep: true
+    },
+    // 图表类型切换
+    'storeOption.is': {
+      handler (val) {
+        const isData = this.dataOption.findIndex(item => {
+          return item.id === this.identify
+        })
+        if (isData !== -1) {
+          this.$bus.$emit('interReload', [this.identify], 100, false)
+        }
       },
       deep: true
     },
@@ -169,12 +180,12 @@ export default {
     valueToPercent () {
       if (this.dataValue && this.dataValue.length > 0) {
         const sumArr = []
-        for (let ii = 1; ii < this.dataValue.length - 1; ii++) {
+        for (let ii = 0; ii < this.dataValue.length - 1; ii++) {
           sumArr.push(0)
         }
         for (let i = 1; i < this.dataValue[0].length; i++) {
           for (let j = 0; j < sumArr.length; j++) {
-            sumArr[j] += this.dataValue[i][j + 1]
+            sumArr[j] += this.dataValue[j + 1][i]
           }
         }
         for (let i = 1; i < this.dataValue[0].length; i++) {
