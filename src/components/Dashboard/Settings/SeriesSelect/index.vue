@@ -17,13 +17,15 @@
     </el-select>
     <div
       v-if="option.remarkShow"
-      class="editor-object-container flex-align-center"
+      class="editor-object-container flex-align-center m-t-12"
     >
-      <span class="editor-item-title">别名</span>
-      <el-input
-        v-model="option.remark"
-        @input="(e)=>{setSeriesOption(e,'remark')}"
-      />
+      <span class="editor-item-title" style="width:24px">别名</span>
+      <div style="flex: 1">
+        <el-input
+          v-model="option.remark"
+          @input="(e)=>{setSeriesOption(e,'remark')}"
+        />
+      </div>
     </div>
     <div
       v-if="option.SeriesChartLabel"
