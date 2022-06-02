@@ -1,4 +1,4 @@
-
+import store from '@/store'
 import { getDataSetData } from '@/api/dataSet'
 import { getLayoutOptionById, getDataValueById, deepClone } from '@/utils/optionUtils'
 // 图表组件的公共混入
@@ -60,6 +60,20 @@ export default {
         const res = await getDataSetData(dataSetId, body)
         res.fields = transformFields
         this.chartData = res
+
+        const storeDataOption = store.state.app.dataOption.find(item => {
+          return item.id === this.identify
+        })
+        // 判断是否已经存在
+        const val = deepClone(this.dataValue)
+        if (storeDataOption) {
+          storeDataOption.dataValue = val// 更新数据
+        } else {
+          store.state.app.dataOption.push({
+            dataValue: val,
+            id: this.identify
+          })
+        }
       } catch (error) {
         console.log(error)
       }
