@@ -1,6 +1,6 @@
 
 import { getDataSetData } from '@/api/dataSet'
-import { getLayoutOptionById } from '@/utils/optionUtils'
+import { getLayoutOptionById, getDataValueById, deepClone } from '@/utils/optionUtils'
 // 图表组件的公共混入
 export default {
   data () {
@@ -25,15 +25,22 @@ export default {
     /**
      * 组件重新加载数据事件，需要 组件内加载事件reloadImpl 支持
      * @param {Array} ids 组件id
+     * @param {Number} limit 数据限制条数
+     * @param {Boolean} isReload 是否重新发送请求获取
      */
-    async interReload (ids, limit) {
+    async interReload (ids, limit, isReload) {
       if (ids && ids.indexOf(this.identify) > -1) {
-        await this.getData(limit)
+        await this.getData(limit, isReload)
         this.reloadImpl()
       }
     },
     // 获取详细数据
-    async getData (limit = 1000) {
+    async getData (limit = 1000, isReload = true) {
+      const storeDataValue = getDataValueById()
+      if (storeDataValue && !isReload) {
+        this.chartData = deepClone(storeDataValue)
+        return
+      }
       const option = getLayoutOptionById()
       const { dataSource } = option
       let selectFields = []

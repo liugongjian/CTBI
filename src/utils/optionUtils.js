@@ -120,6 +120,9 @@ export const getLayoutOptionById = function (identify) {
  * @returns {Object}
  */
 export const getDataValueById = function (identify) {
+  if (!identify) {
+    identify = store.state.app.currentLayoutId
+  }
   const dataOption = store.state.app.dataOption
   const obj = dataOption.find((item) => {
     console.log(item.id, identify, item.id === identify)
@@ -129,7 +132,7 @@ export const getDataValueById = function (identify) {
     return obj.dataValue
   }
   console.warn(`获取 ${identify} 组件数据信息为空`)
-  return {}
+  return null
 }
 
 /**
