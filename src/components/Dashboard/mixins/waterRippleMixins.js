@@ -9,7 +9,7 @@ export default {
     getColor (val) {
       const color = []
       val.forEach((item, index) => {
-        color.push({ name: item.name, color: colorTheme['defaultColor'][index].value })
+        color.push({ name: item.name, color: colorTheme['官方'][index].value })
       })
       this.storeOption.theme.ComponentOption.progressStyle.color = color
     },

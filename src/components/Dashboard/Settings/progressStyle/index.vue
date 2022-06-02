@@ -2,7 +2,7 @@
   <div class="editor-object-container">
     <div class="item-num">
       <span>每行展示个数设置(最多)</span>
-      <el-select v-model="option.showNum" class="w-select" placeholder="请选择">
+      <el-select v-model="option.showNum" popper-class="setting-select" class="w-select" placeholder="请选择">
         <el-option
           v-for="item in showNumOptions"
           :key="item"
@@ -11,12 +11,12 @@
         />
       </el-select>
     </div>
-    <div>
+    <div class="editor-item-title">
       主指标
       <div v-for="(item, index) in option.indicators" :key="index" class="indicators">
         {{ item.name }}
         <el-color-picker v-model="item.color" />
-        <el-select v-model="item.fontSize" class="w-select" placeholder="请选择">
+        <el-select v-model="item.fontSize" popper-class="setting-select" class="w-select" placeholder="请选择">
           <el-option
             v-for="data in fontSizeOptions"
             :key="data"
@@ -26,7 +26,7 @@
         </el-select>
       </div>
     </div>
-    <div>
+    <div class="editor-item-title">
       <el-checkbox v-model="option.value.show">显示当前值/目标值</el-checkbox>
       <div class="box">
         <span>当前值-展示名称</span>
@@ -39,7 +39,7 @@
       <div class="box">
         <span>样式</span>
         <el-color-picker v-model="option.value.style.color" />
-        <el-select v-model="option.value.style.fontSize" class="w-select" placeholder="请选择">
+        <el-select v-model="option.value.style.fontSize" popper-class="setting-select" class="w-select" placeholder="请选择">
           <el-option
             v-for="data in fontSizeOptions"
             :key="data"
@@ -101,6 +101,7 @@ export default {
 .item-num {
   display: flex;
   align-items: center;
+  color: #d0d0d3;
   .w-select {
     margin-left: 5px;
     flex: 1;
