@@ -252,7 +252,8 @@ export default {
     beforeunload(e) {
       console.log(e)
       const saveTag = localStorage.getItem(this.saveTagName)
-      if (saveTag !== 'saved') {
+      const saveData = localStorage.getItem(this.saveName)
+      if (saveTag !== 'saved' && saveData) {
         e.returnValue = '你还没有保存'
       }
     }
