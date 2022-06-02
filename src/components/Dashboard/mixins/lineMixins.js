@@ -26,37 +26,49 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        if (this.dataValue) {
-          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
-          // this.getOption()
-        }
-      },
-      deep: true
-    },
-    dataOption: {
-      handler (val) {
-        const isData = val.findIndex(item => {
-          return item.i === this.identify
-        })
-        if (isData !== -1) {
-          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
-          // 拿到数据中的系列名字
-          this.getSeriesOptions(this.dataValue)
-          // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
-          // 拿到数据中的指标
-          this.getIndicatorOptions(this.dataValue)
-          this.getOption()
-        }
+        // if (this.dataValue) {
+        //   this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
+        //   // this.getOption()
+        // }
       },
       deep: true
     }
+    // dataOption: {
+    //   handler (val) {
+    //     const isData = val.findIndex(item => {
+    //       return item.i === this.identify
+    //     })
+    //     if (isData !== -1) {
+    //       this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
+    //       // 拿到数据中的系列名字
+    //       this.getSeriesOptions(this.dataValue)
+    //       // 拿到数据的系列名字 并设置颜色
+    //       this.getColor(this.dataValue)
+    //       // 拿到数据中的指标
+    //       this.getIndicatorOptions(this.dataValue)
+    //       this.getOption()
+    //     }
+    //   },
+    //   deep: true
+    // }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
     this.dataOption = store.state.app.dataOption
   },
   methods: {
+    // 图表重绘事件，继承于baseMixins
+    reloadImpl () {
+      this.dataValue = formatDataValue(deepClone(this.chartData))
+      console.log(this.dataValue, 'reloadImpl')
+      // 拿到数据中的系列名字
+      this.getSeriesOptions(this.dataValue)
+      // 拿到数据的系列名字 并设置颜色
+      this.getColor(this.dataValue)
+      // 拿到数据中的指标
+      this.getIndicatorOptions(this.dataValue)
+      this.getOption()
+    },
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
       const seriesOption = []

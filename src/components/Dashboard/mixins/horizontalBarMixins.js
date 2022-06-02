@@ -27,31 +27,28 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        if (this.dataValue) {
-          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
-          this.getOption()
-        }
+        this.getOption()
       },
       deep: true
     },
-    dataOption: {
-      handler (val) {
-        const isData = val.findIndex(item => {
-          return item.i === this.identify
-        })
-        if (isData !== -1) {
-          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
-          // 拿到数据中的系列名字
-          this.getSeriesOptions(this.dataValue)
-          // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
-          // 拿到数据中的指标
-          this.getIndicatorOptions(this.dataValue)
-          this.getOption()
-        }
-      },
-      deep: true
-    },
+    // dataOption: {
+    //   handler (val) {
+    //     const isData = val.findIndex(item => {
+    //       return item.i === this.identify
+    //     })
+    //     if (isData !== -1) {
+    //       this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
+    //       // 拿到数据中的系列名字
+    //       this.getSeriesOptions(this.dataValue)
+    //       // 拿到数据的系列名字 并设置颜色
+    //       this.getColor(this.dataValue)
+    //       // 拿到数据中的指标
+    //       this.getIndicatorOptions(this.dataValue)
+    //       this.getOption()
+    //     }
+    //   },
+    //   deep: true
+    // },
     'storeOption.theme.ComponentOption.PercentStack': {
       handler (val) {
         this.storeOption.theme.ComponentOption.ChartLabel.type = this.type
@@ -71,7 +68,18 @@ export default {
     this.dataOption = store.state.app.dataOption
   },
   methods: {
-
+    // 图表重绘事件，继承于baseMixins
+    reloadImpl () {
+      this.dataValue = formatDataValue(deepClone(this.chartData))
+      console.log(this.dataValue, 'reloadImpl')
+      // 拿到数据中的系列名字
+      this.getSeriesOptions(this.dataValue)
+      // 拿到数据的系列名字 并设置颜色
+      this.getColor(this.dataValue)
+      // 拿到数据中的指标
+      this.getIndicatorOptions(this.dataValue)
+      this.getOption()
+    },
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
       // 为空时，进行初始化

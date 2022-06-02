@@ -160,6 +160,7 @@ export const getDateTime = () => {
  * @returns {Array}
  */
 export const formatDataValue = function (chartData) {
+  console.log('11', chartData)
   const dataValue = []
   const DimensionKey = []
   const MeasureKey = []
@@ -192,29 +193,9 @@ export const formatDataValue = function (chartData) {
       dataValue.push([dimensionData.join('-'), ...measureData])
     })
   }
+  console.log('22', dataValue)
   return dataValue
 }
-// export const formatDataValue1 = function (data) {
-//   const dataValue = []
-//   data.forEach(item => {
-//     if (item.fields[0].type === 'Dimension') {
-//       const dataOption = []
-//       item.data.forEach(ele => {
-//         dataOption.push(ele[item.fields[0].displayColumn])
-//       })
-//       dataOption.unshift(item.fields[0].displayColumn)
-//       dataValue.unshift(dataOption)
-//     } else {
-//       const dataOption = []
-//       item.data.forEach(ele => {
-//         dataOption.push(ele[item.fields[0].displayColumn])
-//       })
-//       dataOption.unshift(item.fields[0].displayColumn)
-//       dataValue.push(dataOption)
-//     }
-//   })
-//   return dataValue
-// }
 
 /**
  * 将字段类型转换为图标
