@@ -6,7 +6,11 @@
         label="显示图表标签"
         @change="handleSeriesLabel"
       />
-      <div v-if="labelOptions.length>0" class="editor-item-container" :class="!option.check?'box-disabled':''">
+      <div
+        v-if="labelOptions.length>0"
+        class="editor-item-container"
+        :class="!option.check?'box-disabled':''"
+      >
         <el-checkbox-group
           v-model="option.checkList"
           :disabled="!option.check"
@@ -25,22 +29,19 @@
     >
       <div class="editor-item-title">转换率计算方式</div>
       <el-radio-group v-model="option.funnelTransform">
-        <el-radio
-          :label="1"
-        >占上一层的百分比</el-radio>
-        <el-radio
-          :label="2"
-        >占第一层的百分比</el-radio>
+        <el-radio :label="1">占上一层的百分比</el-radio>
+        <el-radio :label="2">占第一层的百分比</el-radio>
       </el-radio-group>
     </div>
     <div
       v-if="option.precisionShow"
       class="editor-object-container flex-align-center"
     >
-      <div class="editor-item-title" style="width: 120px">设置完成占比小数位数</div>
       <div
-        style="flex: 1"
-      >
+        class="editor-item-title"
+        style="width: 120px"
+      >设置完成占比小数位数</div>
+      <div style="flex: 1">
         <el-select
           v-model="option.precision"
           placeholder="请选择"
@@ -59,7 +60,10 @@
       v-if="option.labelShow"
       class="editor-object-container flex-align-center"
     >
-      <div class="editor-item-title" style="width: 96px">数据标签展示方式</div>
+      <div
+        class="editor-item-title"
+        style="width: 96px"
+      >数据标签展示方式</div>
       <div style="flex: 1">
         <el-radio-group v-model="option.labelShow">
           <el-radio :label="1">智能显示</el-radio>
@@ -177,7 +181,7 @@ export default {
     // 联动改变 系列选择中的图表标签复选框值
     handleSeriesLabel (val) {
       store.state.app.layout.forEach(item => {
-        if (item.i === store.state.app.currentLayoutId) {
+        if (item.id === store.state.app.currentLayoutId) {
           if (item.option.theme.SeriesSetting.SeriesSelect.SeriesChartLabel) {
             item.option.theme.SeriesSetting.SeriesSelect.seriesOption.map((item) => {
               item.showLabel = val

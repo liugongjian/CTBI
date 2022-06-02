@@ -27,7 +27,6 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (this.dataValue) {
           this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
           this.getOption()

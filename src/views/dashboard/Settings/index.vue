@@ -153,13 +153,13 @@ export default {
     },
     option () {
       const temp = store.state.app.layout.find(item => {
-        return item.i === this.currentLayoutId
+        return item.id === this.currentLayoutId
       })
       return temp.option
     },
     currentChart () {
       const temp = store.state.app.layout.find(item => {
-        return item.i === this.currentLayoutId
+        return item.id === this.currentLayoutId
       })
       return temp.is
     }

@@ -1,8 +1,13 @@
+
 import { getDataSetData } from '@/api/dataSet'
+import { getLayoutOptionById } from '@/utils/optionUtils'
 // 图表组件的公共混入
 export default {
   data () {
-    return {}
+    return {
+      // 图表组件数据
+      chartData: {}
+    }
   },
   props: {
     identify: {
@@ -14,31 +19,43 @@ export default {
     this.$bus.$on('interReload', this.interReload)
   },
   beforeDestroy () {
+    this.$bus.$off('interReload', this.interReload)
   },
   methods: {
     /**
      * 组件重新加载数据事件，需要 组件内加载事件reloadImpl 支持
      * @param {Array} ids 组件id
      */
-    interReload (ids) {
+    async interReload (ids, limit) {
       if (ids && ids.indexOf(this.identify) > -1) {
+        await this.getData(limit)
         this.reloadImpl()
       }
     },
     // 获取详细数据
-    async getData (selectFields, dataSetID) {
-      try {
-        const body = {
-          limit: this.limit,
-          selectFields
+    async getData (limit = 1000) {
+      const option = getLayoutOptionById()
+      const { dataSource } = option
+      let selectFields = []
+      const transformFields = {}
+      for (const key in dataSource) {
+        const source = dataSource[key]
+        selectFields = selectFields.concat(source.value)
+        transformFields[key] = {
+          'name': source.name,
+          'fields': source.value
         }
-        const dataSetId = dataSetID || selectFields[0].dataSetID
+      }
+
+      try {
+        const body = { limit, selectFields }
+        const dataSetId = selectFields[0].dataSetID
         const res = await getDataSetData(dataSetId, body)
-        return res
+        res.fields = transformFields
+        this.chartData = res
       } catch (error) {
         console.log(error)
       }
-      return null
     },
     // 设置图例与图表距离
     setGrid (legend) {

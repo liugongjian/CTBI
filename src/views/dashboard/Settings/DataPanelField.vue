@@ -103,6 +103,7 @@
 </template>
 
 <script>
+import { deepClone } from '@/utils/optionUtils'
 export default {
   name: 'DataPanelField',
   props: {
@@ -219,41 +220,18 @@ export default {
     },
     // 更新
     refreshStore () {
-      // const dataSource = deepClone(this.option.dataSource)
-      // let selectFields = []
-      // const transformFields = {}
-      // for (const key in dataSource) {
-      //   if (dataSource[key].value.length === 0 && dataSource[key].require) {
-      //     this.$message({
-      //       message: `${dataSource[key].name}缺少必填字段`,
-      //       type: 'error'
-      //     })
-      //     return
-      //   }
-      //   selectFields = selectFields.concat(dataSource[key].value)
-      //   transformFields[key] = {
-      //     'name': dataSource[key].name,
-      //     'fields': dataSource[key].value
-      //   }
-      // }
-      // const dataValue = await this.getData(selectFields, false)
-      // dataValue.fields = transformFields
-      // const data = store.state.app.dataOption.find(item => {
-      //   return item.i === this.identify
-      // })
-      // console.log(JSON.stringify(dataValue))
-      // // 判断是否已经存在
-      // if (data) {
-      //   data.dataValue = dataValue// 更新数据
-      // } else {
-      //   store.state.app.dataOption.push({
-      //     dataValue: dataValue,
-      //     i: this.identify
-      //   })
-      // }
-
+      const dataSource = deepClone(this.option.dataSource)
+      for (const key in dataSource) {
+        if (dataSource[key].value.length === 0 && dataSource[key].require) {
+          this.$message({
+            message: `${dataSource[key].name}缺少必填字段`,
+            type: 'error'
+          })
+          return
+        }
+      }
       // 事件总线通知组件刷新数据
-      this.$bus.$emit('interReload', [this.identify])
+      this.$bus.$emit('interReload', [this.identify], this.limit)
     }
 
   }
