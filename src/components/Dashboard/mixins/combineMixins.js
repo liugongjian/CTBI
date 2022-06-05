@@ -14,16 +14,15 @@ export default {
     /* 获取不同类型的series 0代表主轴 1代表副轴*/
     getSeries () {
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.series = []
       for (let i = 1; i <= seriesLength; i++) {
-        // if (this.dataValue[0][i].indexOf('-0') > -1) {
-        //   this.series.push({ type: 'bar', name: this.dataValue[0][i].split('-0')[0] })
-        // } else {
-        //   this.series.push({ type: 'line', yAxisIndex: 1, name: this.dataValue[0][i].split('-1')[0] })
-        // }
         if (this.dataValue[0][i].indexOf('-1') > -1) {
           this.series.push({ type: 'line', yAxisIndex: 1, name: this.dataValue[0][i].split('-1')[0] })
         } else {
@@ -124,26 +123,6 @@ export default {
       })
 
       this.storeOption.theme.ComponentOption.Color.color = color
-    },
-    // 设置图例与图表距离
-    setGrid (legend) {
-      if (legend.top === 'auto' && legend.left === 'center') { // 图例在上
-        this.grid = {
-          top: 50
-        }
-      } else if (legend.top === 'bottom' && legend.left === 'center') { // 图例在下
-        this.grid = {
-          bottom: 50
-        }
-      } else if (legend.top === 'center' && legend.left === 'auto') { // 图例在左
-        this.grid = {
-          left: 120
-        }
-      } else if (legend.top === 'center' && legend.left === 'right') { // 图例在右
-        this.grid = {
-          right: 120
-        }
-      }
     }
   }
 }

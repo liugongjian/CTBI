@@ -2,7 +2,10 @@
   <div class="editor-object-container">
     <div class="editor-item-container">
       指标关系
-      <el-radio-group v-model="option.relation" @change="changeRelation">
+      <el-radio-group
+        v-model="option.relation"
+        @change="changeRelation"
+      >
         <el-radio label="parataxis">并列</el-radio>
         <el-radio label="deputy">主副</el-radio>
       </el-radio-group>
@@ -16,20 +19,41 @@
     </div>
     <div class="editor-item-container lineNum">
       每行最多
-      <el-input-number v-model="option.lineNum" controls-position="right" :min="1" :max="99" />
+      <el-input-number
+        v-model="option.lineNum"
+        controls-position="right"
+        :min="1"
+        :max="99"
+      />
     </div>
     <div class="editor-item-container">
       <el-checkbox v-model="option.dimension">显示维度名称</el-checkbox>
     </div>
-    <div v-if="option.relation === 'deputy'" class="editor-item-container">
+    <div
+      v-if="option.relation === 'deputy'"
+      class="editor-item-container"
+    >
       <el-checkbox v-model="option.indicators">显示主指标名称</el-checkbox>
     </div>
     <div class="editor-item-container">
       <el-checkbox v-model="option.fontStyle.show">设置字体样式</el-checkbox>
-      <div v-for="(item,index) in option.fontStyle.data" v-show="item.show" :key="index" class="dimension">
+      <div
+        v-for="(item,index) in option.fontStyle.data"
+        v-show="item.show"
+        :key="index"
+        class="dimension"
+      >
         {{ item.name }}
-        <el-color-picker v-model="item.color" :disabled="getDisabled(item.name)" />
-        <el-select v-model="item.fontSize" :disabled="getDisabled(item.name)" class="w-select" placeholder="请选择">
+        <el-color-picker
+          v-model="item.color"
+          :disabled="getDisabled(item.name)"
+        />
+        <el-select
+          v-model="item.fontSize"
+          :disabled="getDisabled(item.name)"
+          class="w-select"
+          placeholder="请选择"
+        >
           <el-option
             v-for="data in fontSizeOptions"
             :key="data"
@@ -44,19 +68,30 @@
           <div>
             数值
             <div>
-              <el-color-picker v-model="option.fontStyle.target.valColor" :disabled="!option.fontStyle.show" />
+              <el-color-picker
+                v-model="option.fontStyle.target.valColor"
+                :disabled="!option.fontStyle.show"
+              />
             </div>
           </div>
           <div>
             名称
             <div>
-              <el-color-picker v-model="option.fontStyle.target.nameColor" :disabled="!option.fontStyle.show" />
+              <el-color-picker
+                v-model="option.fontStyle.target.nameColor"
+                :disabled="!option.fontStyle.show"
+              />
             </div>
           </div>
           <div>
             大小
             <div>
-              <el-select v-model="option.fontStyle.target.fontSize" :disabled="!option.fontStyle.show" class="w-select" placeholder="请选择">
+              <el-select
+                v-model="option.fontStyle.target.fontSize"
+                :disabled="!option.fontStyle.show"
+                class="w-select"
+                placeholder="请选择"
+              >
                 <el-option
                   v-for="data in fontSizeOptions"
                   :key="data"
@@ -84,7 +119,10 @@
         </el-radio-group>
       </template>
     </div>
-    <div class="editor-item-container" style="height:500px">
+    <div
+      class="editor-item-container"
+      style="height:500px"
+    >
       <el-checkbox v-model="option.modified">显示指标修饰图</el-checkbox>
       <template v-if="option.modified">
         <ColorConfig
@@ -98,9 +136,16 @@
             <el-radio label="static">静态</el-radio>
           </el-radio-group>
         </div>
-        <div v-if="option.type === 'img'" class="dimension">
+        <div
+          v-if="option.type === 'img'"
+          class="dimension"
+        >
           图片字段
-          <el-select v-model="value" class="w-select" placeholder="请选择">
+          <el-select
+            v-model="value"
+            class="w-select"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -109,8 +154,15 @@
             />
           </el-select>
         </div>
-        <div v-else class="dimension">
-          <el-select v-model="svgValue" class="w-select" placeholder="请选择">
+        <div
+          v-else
+          class="dimension"
+        >
+          <el-select
+            v-model="svgValue"
+            class="w-select"
+            placeholder="请选择"
+          >
             <el-option
               v-for="(item,index) in option.setSvg"
               :key="index"
@@ -128,7 +180,10 @@
             width="365"
             trigger="click"
           >
-            <UploadSvg :option="option" :svg-value="svgValue" />
+            <UploadSvg
+              :option="option"
+              :svg-value="svgValue"
+            />
             <div
               slot="reference"
               class="upload-img-wrapper"
@@ -161,7 +216,7 @@ export default {
       default: () => { }
     }
   },
-  data() {
+  data () {
     return {
       value: null,
       svgValue: '',
@@ -171,7 +226,7 @@ export default {
     }
   },
   computed: {
-    getSvgVal() {
+    getSvgVal () {
       return this.option.setSvg.find(item => item.name === this.svgValue)?.svg || ''
     }
   },
@@ -188,13 +243,13 @@ export default {
   methods: {
     getColor () {
       store.state.app.layout.forEach(item => {
-        if (item.i === store.state.app.currentLayoutId) {
+        if (item.id === store.state.app.currentLayoutId) {
           this.colorData = item.option.theme.StyleConfig.IndexQuickly.color
           console.log(this.colorData, 'hah')
         }
       })
     },
-    changeRelation(val) {
+    changeRelation (val) {
       if (val === 'deputy') {
         this.option.fontStyle.data.forEach(item => {
           if (item.name !== '维度名称') {
@@ -216,7 +271,7 @@ export default {
         })
       }
     },
-    getDisabled(name) {
+    getDisabled (name) {
       if (name === '维度名称') {
         return !this.option.dimension || !this.option.fontStyle.show
       } else if (name === '主指标名称') {
@@ -237,26 +292,26 @@ export default {
   }
 }
 .dimension {
-    display: flex;
-    align-items: center;
-    .el-color-picker {
-      margin: 0 5px;
-    }
-    .w-select {
-      flex: 1;
-    }
+  display: flex;
+  align-items: center;
+  .el-color-picker {
+    margin: 0 5px;
   }
-  .svgValue {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .w-select {
+    flex: 1;
   }
-  .upload-img-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 40px;
-    width: 40px;
-    background-color: #686e6e;
-  }
+}
+.svgValue {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.upload-img-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 40px;
+  background-color: #686e6e;
+}
 </style>

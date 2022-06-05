@@ -1,8 +1,16 @@
 <template>
   <div>
     <div class="editor-object-container">
-      <div v-if="option.show" style="display: flex" class="color-row">
-        <el-checkbox v-model="option.check" style="margin-right:8px" @change="handleSeriesMark">显示标记点</el-checkbox>
+      <div
+        v-if="option.show"
+        style="display: flex"
+        class="color-row"
+      >
+        <el-checkbox
+          v-model="option.check"
+          style="margin-right:8px"
+          @change="handleSeriesMark"
+        >显示标记点</el-checkbox>
         <el-select
           v-model="option.markType"
           placeholder="请输入内容"
@@ -21,9 +29,8 @@
             :value="item.value"
           >
             <span style="float: left">
-              <svg-icon
-                :icon-class="`${item.value}-mark`"
-              /></span>
+              <svg-icon :icon-class="`${item.value}-mark`" />
+            </span>
 
             <span style="float: right">{{ item.label }}</span>
           </el-option>
@@ -70,9 +77,9 @@ export default {
   },
   methods: {
     // 联动改变 系列选择中的显示标记点复选框值
-    handleSeriesMark(val) {
+    handleSeriesMark (val) {
       store.state.app.layout.forEach(item => {
-        if (item.i === store.state.app.currentLayoutId) {
+        if (item.id === store.state.app.currentLayoutId) {
           if (item.option.theme.SeriesSetting.SeriesSelect.SeriesMark) {
             item.option.theme.SeriesSetting.SeriesSelect.seriesOption.map((item) => {
               item.showMark = val
