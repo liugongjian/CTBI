@@ -10,8 +10,9 @@
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
+import { deepClone, formatDataValue, getDataValueById, getLayoutOptionById } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
+import store from "@/store";
 
 export default {
   name: 'ScatterChart',
@@ -24,35 +25,51 @@ export default {
   },
   data () {
     return {
+      // storeOption: {},
+      // chartOption: {},
+      // dataValue: [],
       storeOption: {},
       chartOption: {},
-      dataValue: [
-        ['价格', '数量'],
-        [820, 410],
-        [932, 320],
-        [901, 300],
-        [934, 380],
-        [1290, 430],
-        [1330, 480],
-        [1320, 460]
-      ]
+      dataValue: null,
+      dataOption: [],
+      series: [],
+      xAxis: { type: 'category' },
+      yAxis: {},
+      grid: {}
     }
   },
   watch: {
     storeOption: {
       handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
+        // val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
+        // if (JSON.stringify(val.dataSource) !== '{}') {
+        //   this.dataValue = val.dataSource
+        // }
+        if (this.dataValue) {
+          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
         }
         this.getOption()
+      },
+      deep: true
+    },
+    dataOption: {
+      handler (val) {
+        const isData = val.findIndex(item => {
+          return item.i === this.identify
+        })
+        if (isData !== -1) {
+          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
+          this.getOption()
+        }
       },
       deep: true
     }
   },
   mounted () {
+    // this.storeOption = getLayoutOptionById(this.identify)
+    // this.getOption()
     this.storeOption = getLayoutOptionById(this.identify)
-    this.getOption()
+    this.dataOption = store.state.app.dataOption
   },
   methods: {
     getOption () {
