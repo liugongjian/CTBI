@@ -799,46 +799,6 @@ export default {
   padding-top: 10px;
   margin-right: 20px;
 }
-.shareWrap {
-  font-size: 12px;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.9);
-  line-height: 20px;
-  .shareCopy {
-    margin-top: 24px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    .shareCopyUrl {
-      width: 480px;
-      height: 32px;
-      padding: 0px 10px;
-      background: #f4f6f8;
-      box-sizing: border-box;
-      border: 1px solid rgba(223, 225, 229, 1);
-      border-radius: 2.5px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      color: #666a77;
-      line-height: 30px;
-    }
-  }
-  .shareDate {
-    margin-top: 24px;
-  }
-}
-.shareEmpty {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.45);
-}
 .publish-status {
   display: flex;
   justify-content: flex-start;
