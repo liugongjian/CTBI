@@ -15,7 +15,7 @@
           </div>
           <div class="data-set-header-r">
             <el-input
-              v-model="serachName"
+              v-model="searchName"
               placeholder="请输入名称"
               style="margin-right: 12px"
             />
@@ -180,7 +180,6 @@
                     <span>更多</span>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item
-                        v-if="scope.row.publishStatus === 1"
                         @click.native="shareDashboard(scope.row)"
                       >公开</el-dropdown-item>
                       <el-dropdown-item @click.native="moveTo(scope.row)">移动到</el-dropdown-item>
@@ -306,64 +305,6 @@
             >确 定</el-button>
           </div>
         </el-dialog>
-
-        <el-dialog
-          title="公开链接分享"
-          :visible.sync="shareDashboardVisible"
-          width="560px"
-        >
-          <div
-            v-if="!currentShareInfo || !currentShareInfo.shareUrl"
-            class="shareEmpty"
-          >
-            <img
-              style="width: 371px; height: 200px"
-              :src="require('../../assets/Image/dashboard/shareEmpty.png')"
-            >
-            <p>开启后，所有获得分享链接的人都可以查看内容</p>
-            <el-button
-              style="margin-top: 14px;"
-              type="primary"
-              @click="() => executeShare()"
-            >公开分享</el-button>
-          </div>
-          <div
-            v-else
-            class="shareWrap"
-          >
-            <div>
-              <span class="shareTip">所有用户可以通过一下链接查看报表备份</span>
-              <el-button
-                style="color:#FA8334; border-color: #FA8334;font-size:12px; margin-left: 14px;height: 32px;"
-                @click="cancelShareDashboard"
-              >不再公开</el-button>
-            </div>
-            <div class="shareCopy">
-              <div class="shareCopyUrl">{{ currentShareInfo.shareUrl }}</div>
-              <el-button
-                type="primary"
-                style="font-size:12px; border-top-left-radius: 0px; border-bottom-left-radius: 0px;margin-left: -3px;z-index: 99;"
-                @click="copyShareUrl"
-              >复制</el-button>
-            </div>
-            <div class="shareDate">
-              <el-form
-                :model="currentShareInfo"
-                style="padding: 0px"
-              >
-                <el-form-item label="截止日期">
-                  <el-date-picker
-                    v-model="currentShareInfo.shareEndTime"
-                    type="date"
-                    placeholder="选择日期"
-                    :clearable="false"
-                    @change="shareDateChange"
-                  />
-                </el-form-item>
-              </el-form>
-            </div>
-          </div>
-        </el-dialog>
       </div>
       <FolderEdit
         :visible="folderDialogVisible"
@@ -376,6 +317,7 @@
         :ids="moveDashboardIds"
         @handleAction="handleMoveDashboard"
       />
+      <ShareDialog ref="shareDialog" from="list" :data="cureentData" @handleAction="handleFolderEdit" />
     </div>
   </page-view>
 </template>
@@ -386,13 +328,11 @@ import {
   getDashboardList,
   batchDeleteResources,
   batchCancelPublishDashboards,
-  updateFolderOrDashboardProperties,
-  getShareInfo,
-  shareDashboard,
-  cancelShareDashboard
+  updateFolderOrDashboardProperties
 } from '@/api/dashboard'
 import FolderEdit from './FolderEdit'
 import FolderTree from './FolderTree'
+import ShareDialog from './ShareDialog'
 import Pagination from '@/components/Pagination/index.vue'
 import moment from 'moment'
 export default {
@@ -400,7 +340,8 @@ export default {
   components: {
     FolderEdit,
     FolderTree,
-    Pagination
+    Pagination,
+    ShareDialog
   },
   data () {
     const validateName = (rule, value, callback) => {
@@ -425,7 +366,7 @@ export default {
       }
     }
     return {
-      serachName: '',
+      searchName: '',
       // 表格数据
       tableData: [],
       dataLoading: true,
@@ -451,10 +392,8 @@ export default {
       // 仪表板相关
       folderDialogVisible: false,
       cancelPublishVisible: false,
-      shareDashboardVisible: false,
       editFolder: null,
       users: [],
-      currentShareInfo: null,
       treeVisible: false,
       moveDashboardIds: [],
       onSearched: false,
@@ -481,7 +420,7 @@ export default {
       this.currentFloder = null
       this.cureentData = null
       this.multipleSelection = []
-      this.serachName = ''
+      this.searchName = ''
       this.tableData = []
       this.isAllDataShow = true
       this.pageInfo = {
@@ -495,7 +434,7 @@ export default {
     async getTableData() {
       this.dataLoading = true
       try {
-        const searchkey = this.serachName
+        const searchkey = this.searchName
         const params = {
           isPaging: 0,
           pageNum: this.pageInfo.pageNum,
@@ -521,7 +460,7 @@ export default {
     },
     // 查询
     async query () {
-      // const searchkey = this.serachName ? `&searchkey=${this.serachName}` : ''
+      // const searchkey = this.searchName ? `&searchkey=${this.searchName}` : ''
       this.getTableData()
     },
     // 新建文件夹
@@ -682,58 +621,8 @@ export default {
       }
     },
     async shareDashboard (data) {
-      try {
-        const info = await getShareInfo(data._id)
-        this.cureentData = data
-        this.currentShareInfo = info
-        this.shareDashboardVisible = true
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    async executeShare (endDate) {
-      try {
-        const shareEndTime = endDate || moment().add(1, 'days').format('YYYY-MM-DD')
-        const params = {
-          _id: this.cureentData._id,
-          shareEndTime
-        }
-        const info = await shareDashboard(params)
-        this.currentShareInfo = { ...info, shareEndTime }
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    copyShareUrl () {
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(this.currentShareInfo.shareUrl)
-        this.$message.success('复制成功')
-      } else {
-        const textarea = document.createElement('textarea')
-        document.body.appendChild(textarea)
-        textarea.style.position = 'fixed'
-        textarea.style.clip = 'rect(0 0 0 0)'
-        textarea.style.top = '10px'
-        textarea.value = this.currentShareInfo.shareUrl
-        textarea.select()
-        document.execCommand('copy', true)
-        this.$message.success('复制成功')
-        document.body.removeChild(textarea)
-      }
-    },
-    shareDateChange (e) {
-      this.executeShare(moment(e).format('YYYY-MM-DD'))
-    },
-    async cancelShareDashboard () {
-      try {
-        const result = await cancelShareDashboard(this.cureentData._id)
-        this.$message.success(result)
-        this.cureentData = null
-        this.currentShareInfo = null
-        this.shareDashboardVisible = false
-      } catch (error) {
-        console.log(error)
-      }
+      this.cureentData = data
+      this.$refs['shareDialog'].shareDashboard(data)
     },
     cancelPublish (data) {
       console.log(data)

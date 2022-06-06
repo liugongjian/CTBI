@@ -126,14 +126,19 @@
         </div>
       </el-dialog>
     </div>
+    <ShareDialog ref="shareDialog" from="edit" :data="dashboard" @handleAction="handleFolderEdit" />
   </div>
 </template>
 
 <script>
 import { getFolderTree, saveDashboard } from '@/api/dashboard'
+import ShareDialog from '../ShareDialog'
 import store from '@/store'
 export default {
   name: 'Dashboard',
+  components: {
+    ShareDialog
+  },
   props: {
     // eslint-disable-next-line vue/require-default-prop
     dashboard: Object,
@@ -233,22 +238,26 @@ export default {
     },
     // 新建数据集
     async saveDashboard () {
-      const id = this.saveMode === 'copy' ? null : (this.dashboard._id || null)
-      const finalId = this.saveMode === 'copy' ? null : id
+      const isCopy = this.saveMode === 'copy'
+      const id = isCopy ? null : (this.dashboard._id || null)
+      const finalId = isCopy ? null : id
       const params = {
         id: finalId,
         setting: JSON.stringify(store.state.app.layout),
         ...this.dashboardAttr
       }
       const result = await saveDashboard(params)
-      this.$message.success('保存成功')
+      this.$message.success(isCopy ? '另存为成功' : '保存成功')
       console.log(result)
       this.hiddenDashboardAttribute()
-      if (this.saveMode !== 'copy') {
+      if (!isCopy) {
         this.$emit('handleChange', {
           action: 'saveSuccess',
           data: result
         })
+      }
+      if (this.saveMode === 'saveAndShare') {
+        this.$refs['shareDialog'].shareDashboard(result)
       }
     },
     async getFolders() {
@@ -265,6 +274,9 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    async shareDashboard (data) {
+      this.$refs['shareDialog'].shareDashboard(data)
     }
   }
 }
