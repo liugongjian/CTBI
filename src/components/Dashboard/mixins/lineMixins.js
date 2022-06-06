@@ -67,7 +67,6 @@ export default {
           seriesOption.push({ value: item, label: item })
         }
       })
-
       this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
       this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
       this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
@@ -82,7 +81,7 @@ export default {
           color.push({ name: item, color: colorValue[idx].value, remark: item })
         }
       })
-
+      console.log(color, 'color折线图')
       this.storeOption.theme.ComponentOption.Color.color = color
     },
     // 拿到数据中的指标
