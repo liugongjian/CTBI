@@ -167,7 +167,7 @@
                   />
                   <span
                     v-if="!scope.row.directory"
-                    @click="edit(scope.row)"
+                    @click="preview(scope.row)"
                   >预览</span>
                   <el-divider
                     v-if="!scope.row.directory"
@@ -317,7 +317,7 @@
         :ids="moveDashboardIds"
         @handleAction="handleMoveDashboard"
       />
-      <ShareDialog ref="shareDialog" from="list" :data="cureentData" @handleAction="handleFolderEdit" />
+      <ShareDialog ref="shareDialog" from="list" :data="cureentData" @handleAction="handleShareChange" />
     </div>
   </page-view>
 </template>
@@ -508,6 +508,22 @@ export default {
         })
       }
     },
+    preview (val) {
+      if (this.batchSelection) return false
+      if (val.directory) {
+        this.cureentData = val
+        this.folderDialogVisible = true
+        this.editFolder = val
+      } else {
+        this.$router.push({
+          path: '/dashboard',
+          query: {
+            id: val._id,
+            mode: 1
+          }
+        })
+      }
+    },
     loadDashboard (tree, treeNode, resolve) {
       resolve(tree.childNode)
     },
@@ -666,6 +682,17 @@ export default {
         ...data
       }
       this.getTableData()
+    },
+    handleShareChange(data) {
+      const { id, publishStatus } = data
+      const newTableData = this.tableData.map(item => {
+        const obj = { ...item }
+        if (item._id === id) {
+          obj.publishStatus = publishStatus
+        }
+        return obj
+      })
+      this.tableData = newTableData
     }
   }
 }

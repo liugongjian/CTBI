@@ -67,7 +67,7 @@ import {
 import moment from 'moment'
 
 export default {
-  name: 'FolderEdit',
+  name: 'ShareDialog',
   props: {
     // eslint-disable-next-line vue/require-default-prop
     data: Object,
@@ -128,6 +128,7 @@ export default {
         const info = await shareDashboard(params)
         this.currentShareInfo = { ...info, shareEndTime }
         this.shareDashboardVisible = true
+        this.$emit('handleAction', { id: this.currentData._id, publishStatus: 1 })
       } catch (error) {
         console.log(error)
       }
@@ -155,6 +156,7 @@ export default {
     async cancelShareDashboard () {
       try {
         const result = await cancelShareDashboard(this.currentData._id)
+        this.$emit('handleAction', { id: this.currentData._id, publishStatus: -1 })
         this.$message.success(result)
         this.currentData = null
         this.currentShareInfo = null

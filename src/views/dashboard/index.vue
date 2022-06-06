@@ -78,7 +78,7 @@ export default {
       dashboard: {
         name: ''
       },
-      mode: this.$route.query.mode || 'edit',
+      mode: this.$route.query.mode === '1' ? 'preview' : 'edit',
       dashboardId,
       recoverVisible: false,
       loading: false,

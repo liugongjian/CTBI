@@ -126,7 +126,7 @@
         </div>
       </el-dialog>
     </div>
-    <ShareDialog ref="shareDialog" from="edit" :data="dashboard" @handleAction="handleFolderEdit" />
+    <ShareDialog ref="shareDialog" from="edit" :data="dashboard" @handleAction="handleShareChange" />
   </div>
 </template>
 
@@ -277,6 +277,9 @@ export default {
     },
     async shareDashboard (data) {
       this.$refs['shareDialog'].shareDashboard(data)
+    },
+    handleShareChange(data) {
+      console.log(data)
     }
   }
 }
