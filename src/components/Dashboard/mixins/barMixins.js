@@ -63,7 +63,6 @@ export default {
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
       this.dataValue = formatDataValue(deepClone(this.chartData))
-      console.log(this.dataValue, 'reloadImpl')
       // 拿到数据中的系列名字
       this.getSeriesOptions(this.dataValue)
       // 拿到数据的系列名字 并设置颜色

@@ -75,13 +75,13 @@ export default {
       padding: 6px;
     }
     .shape-icon {
-      border: 1px solid #FFF;
+      border: 1px solid transparent;
     }
     .shape-icon:hover {
-      border-color: #616571;
+      border: 1px solid #616571;
     }
     .pitch {
-      border-color:  #2e74ff !important;
+     border: 1px solid  #fa8334 !important;
     }
   }
 </style>

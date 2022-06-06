@@ -66,6 +66,22 @@ export default {
     }
   },
   'advance': {}, // 高级
-  'dataSource': {}// 数据集
+  'dataSource': {
+    'Dimension': { // 维度
+      'name': '词标签/维度',
+      'require': true,
+      'value': []
+    },
+    'Measure': { // 度量
+      'name': '词大小/度量',
+      'require': false,
+      'tooltip': '无度量时维度出现频次决定词大小',
+      'value': []
+    }
+  }, // 数据集
+  'dataSet': { // 当前正在使用的数据集
+    'id': '', // 数据集ID
+    'name': '' // 数据集名称
+  }
 }
 
