@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { getLayoutOptionById, getDataValueById, deepClone, formatDataValue } from '@/utils/optionUtils'
+import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import combineMixins from '@/components/Dashboard/mixins/combineMixins'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 import store from '@/store'

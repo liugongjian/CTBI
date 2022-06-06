@@ -12,11 +12,12 @@
 <script>
 import { deepClone, formatDataValue, getDataValueById, getLayoutOptionById } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
-import store from "@/store";
+import baseMixins from '@/components/Dashboard/mixins/baseMixins'
+import store from '@/store'
 
 export default {
   name: 'ScatterChart',
-  mixins: [YAxis],
+  mixins: [YAxis, baseMixins],
   props: {
     identify: {
       type: String,
@@ -25,9 +26,6 @@ export default {
   },
   data () {
     return {
-      // storeOption: {},
-      // chartOption: {},
-      // dataValue: [],
       storeOption: {},
       chartOption: {},
       dataValue: null,
@@ -41,10 +39,6 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        // val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        // if (JSON.stringify(val.dataSource) !== '{}') {
-        //   this.dataValue = val.dataSource
-        // }
         if (this.dataValue) {
           this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
         }
@@ -66,15 +60,21 @@ export default {
     }
   },
   mounted () {
-    // this.storeOption = getLayoutOptionById(this.identify)
-    // this.getOption()
     this.storeOption = getLayoutOptionById(this.identify)
     this.dataOption = store.state.app.dataOption
   },
   methods: {
+    reloadImpl () {
+      this.dataValue = formatDataValue(deepClone(this.chartData))
+      this.getOption()
+    },
     getOption () {
       const { Legend, Slider } = this.storeOption.theme.ComponentOption
       const { XAxis, YAxis } = this.storeOption.theme.Axis
+      let measureLen = 1
+      if (this.chartData?.fields?.Measure) {
+        measureLen = this.chartData.fields.Measure?.fields?.length
+      }
       this.chartOption = {
         tooltip: {
           show: true,
@@ -159,14 +159,10 @@ export default {
         dataset: {
           source: this.dataValue
         },
-        'series': [
-          {
-            'symbolSize': Slider.symbolSize,
-            'type': 'scatter'
-            // 'data': this.dataValue,
-            // 'name': '图例'
-          }
-        ]
+        'series': Array(measureLen).fill({
+          'symbolSize': Slider.symbolSize,
+          'type': 'scatter'
+        })
       }
     }
   }
