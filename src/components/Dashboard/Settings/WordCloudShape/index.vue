@@ -13,8 +13,10 @@
       >
         <el-tooltip class="item" effect="dark" :content="item.name" placement="top">
           <svg-icon
+            class="shape-icon"
+            :class="{pitch: item.value === option.shape}"
             :icon-class="item.value"
-            style="font-size: 30px;"
+            style="font-size: 16px;"
             @click="changeHandler(item.value)"
           />
         </el-tooltip>
@@ -65,5 +67,21 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.editor-item-container {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  .shape-icon {
+    padding: 6px;
+    margin-right: 5px;
+    border: 1px solid transparent;
+  }
+  .shape-icon:hover {
+    border: 1px solid #616571;
+  }
+  .pitch {
+    border: 1px solid  #fa8334 !important;
+  }
+}
 </style>
