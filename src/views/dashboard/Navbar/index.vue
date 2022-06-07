@@ -56,6 +56,7 @@
           <el-dropdown-menu slot="dropdown" class="more-dropdown">
             <el-dropdown-item icon="el-icon-document-copy" @click.native="copy()">另存为</el-dropdown-item>
             <el-dropdown-item
+              v-if="dashboard.publishStatus === 1"
               icon="el-icon-bottom-right"
               @click.native="cancelPublish()"
             >下线</el-dropdown-item>
@@ -131,7 +132,7 @@
 </template>
 
 <script>
-import { getFolderTree, saveDashboard } from '@/api/dashboard'
+import { getFolderTree, saveDashboard, cancelShareDashboard } from '@/api/dashboard'
 import ShareDialog from '../ShareDialog'
 import store from '@/store'
 export default {
@@ -143,7 +144,7 @@ export default {
     // eslint-disable-next-line vue/require-default-prop
     dashboard: Object,
     // eslint-disable-next-line vue/require-default-prop
-    mode: String.prototype,
+    mode: String,
     // eslint-disable-next-line vue/require-default-prop
     handleChange: Function
   },
@@ -217,7 +218,15 @@ export default {
       this.saveMode = 'copy'
       this.showDashboardAttribute()
     },
-    cancelPublish() {},
+    async cancelPublish() {
+      try {
+        const result = await cancelShareDashboard(this.dashboard._id)
+        this.handleShareChange({ publishStatus: -1 })
+        this.$message.success(result)
+      } catch (error) {
+        console.log(error)
+      }
+    },
     resetForm () {
       this.$refs['attrForm'].resetFields()
     },
@@ -279,7 +288,12 @@ export default {
       this.$refs['shareDialog'].shareDashboard(data)
     },
     handleShareChange(data) {
+      console.log(this.dashboard)
       console.log(data)
+      this.$emit('handleChange', {
+        action: 'changeShare',
+        data
+      })
     }
   }
 }
