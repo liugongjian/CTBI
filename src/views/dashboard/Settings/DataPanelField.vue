@@ -12,6 +12,14 @@
           <div class="field-area-header">
             <span v-if="item.require">*</span>
             <div class="area-name">{{ item.name }}</div>
+            <el-tooltip
+              v-if="item.tooltip"
+              effect="dark"
+              :content="item.tooltip"
+              placement="top"
+            >
+              <i class="el-icon-warning-outline" />
+            </el-tooltip>
           </div>
           <div>
             <div class="field-area-body">

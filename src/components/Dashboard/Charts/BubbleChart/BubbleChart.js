@@ -34,7 +34,7 @@ export default {
         'type': 'scroll'
       },
       'Slider': { // 数据点大小
-        'symbolSize': 8, // 默认大小
+        'symbolSize': 2, // 默认大小
         'minSize': 1, // 最小值
         'maxSize': 40 // 最大值
       }
@@ -85,5 +85,18 @@ export default {
     }
   },
   'advance': {}, // 高级
-  'dataSource': {}// 数据集
+  'dataSource': {
+    'Dimension': { // 维度
+      'name': 'X轴/维度或度量',
+      'value': []
+    },
+    'Measure': { // 度量
+      'name': 'Y轴/度量',
+      'value': []
+    }
+  }, // 数据集
+  'dataSet': { // 当前正在使用的数据集
+    'id': '', // 数据集ID
+    'name': '' // 数据集名称
+  }
 }
