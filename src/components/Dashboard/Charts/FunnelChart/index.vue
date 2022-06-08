@@ -23,6 +23,7 @@ export default {
   },
   data () {
     return {
+      rectangle: false, // 自定义属性，用于切换矩形
       storeOption: {},
       chartOption: {},
       sort: 'none',
@@ -79,7 +80,12 @@ export default {
       const that = this
       this.chartOption = {
         animation: false,
-        legend: componentOption.Legend,
+        legend: {
+          ...componentOption.Legend,
+          formatter: function(name) {
+            return name || '未命名'
+          }
+        },
         tooltip: {
           trigger: 'item',
           formatter: function (params) {
@@ -100,9 +106,13 @@ export default {
             minSize: this.minSize,
             sort: this.sort,
             width: this.width,
+            rectangle: this.rectangle, // 自定义属性用于切换 矩形
             label: {
               show: true,
-              position: 'inside'
+              position: 'outside',
+              formatter: function(params) {
+                return params.name || '未命名'
+              }
             },
             labelLine: {
               length: 10,
@@ -131,6 +141,7 @@ export default {
             left: '58%',
             minSize: this.minSize,
             sort: this.sort,
+            rectangle: this.rectangle, // 自定义属性用于切换 矩形
             width: '5%',
             label: {
               position: 'inside',
@@ -151,6 +162,7 @@ export default {
             type: 'funnel',
             left: '58%',
             minSize: this.minSize,
+            rectangle: this.rectangle, // 自定义属性用于切换 矩形
             sort: this.sort,
             width: '5%',
             label: {
@@ -163,7 +175,7 @@ export default {
               opacity: 0,
               color: 'rgba(111, 255, 255, 0)',
               borderWidth: 0
-            },
+            }
             // data: this.lastData
             // Ensure outer shape will not be over inner shape when hover.
           },
@@ -172,6 +184,7 @@ export default {
             type: 'funnel',
             left: '58%',
             minSize: this.minSize,
+            rectangle: this.rectangle, // 自定义属性用于切换 矩形
             sort: this.sort,
             width: '5%',
             label: {
@@ -184,7 +197,7 @@ export default {
               opacity: 1,
               color: 'rgba(1, 255, 255, 0)',
               borderWidth: 0
-            },
+            }
             // data: this.firstData
             // Ensure outer shape will not be over inner shape when hover.
           }
@@ -194,6 +207,7 @@ export default {
     // 静态样式初始化
     displayStyleHandler (item) {
       // 默认情况下，无序、梯形
+      this.rectangle = false // 重置，默认梯形
       if (item.default) {
         this.sort = 'none'
         this.minSize = '10%'
@@ -203,7 +217,7 @@ export default {
         this.minSize = '10%'
       } else if (item.rectangle) {
         // 矩形，似乎需要修改源码
-        alert('暂时没有矩形哦')
+        this.rectangle = true
       }
       // 显示类别标签的位置
       if (item.labelPos) {
