@@ -1,0 +1,51 @@
+diff --git a/node_modules/echarts/dist/echarts.js b/node_modules/echarts/dist/echarts.js
+index 7504e68..721e6dc 100644
+--- a/node_modules/echarts/dist/echarts.js
++++ b/node_modules/echarts/dist/echarts.js
+@@ -50841,6 +50841,7 @@
+ 
+     function funnelLayout(ecModel, api) {
+       ecModel.eachSeriesByType('funnel', function (seriesModel) {
++        console.log('会过来吗？？？')
+         var data = seriesModel.getData();
+         var valueDim = data.mapDimension('value');
+         var sort = seriesModel.get('sort');
+@@ -50946,6 +50947,7 @@
+ 
+             var start = getLinePoints(idx, x);
+             var end = getLinePoints(nextIdx, x + width);
++            console.log('会过来1111吗？？？')
+             x += width + gap;
+             data.setItemLayout(idx, {
+               points: start.concat(end.slice().reverse())
+diff --git a/node_modules/echarts/lib/chart/funnel/funnelLayout.js b/node_modules/echarts/lib/chart/funnel/funnelLayout.js
+index c144b21..a2f8b01 100644
+--- a/node_modules/echarts/lib/chart/funnel/funnelLayout.js
++++ b/node_modules/echarts/lib/chart/funnel/funnelLayout.js
+@@ -232,6 +232,7 @@ export default function funnelLayout(ecModel, api) {
+     var indices = getSortedIndices(data, sort);
+     var x = viewRect.x;
+     var y = viewRect.y;
++    var rectangle = seriesModel.option.rectangle
+     var sizeExtent = orient === 'horizontal' ? [parsePercent(seriesModel.get('minSize'), viewHeight), parsePercent(seriesModel.get('maxSize'), viewHeight)] : [parsePercent(seriesModel.get('minSize'), viewWidth), parsePercent(seriesModel.get('maxSize'), viewWidth)];
+     var dataExtent = data.getDataExtent(valueDim);
+     var min = seriesModel.get('min');
+@@ -326,7 +327,7 @@ export default function funnelLayout(ecModel, api) {
+         }
+         
+         var start = getLinePoints(idx, x);
+-        var end = getLinePoints(nextIdx, x + width);
++        var end = rectangle ? getLinePoints(idx, x + width) : getLinePoints(nextIdx, x + width);
+         x += width + gap;
+         data.setItemLayout(idx, {
+           points: start.concat(end.slice().reverse())
+@@ -345,7 +346,8 @@ export default function funnelLayout(ecModel, api) {
+         }
+ 
+         var start = getLinePoints(idx, y);
+-        var end = getLinePoints(nextIdx, y + height);
++        var end = rectangle ? getLinePoints(idx,y + height) : getLinePoints(nextIdx, y + height);
++        // var end = getLinePoints(nextIdx, y + height);
+         y += height + gap;
+         data.setItemLayout(idx, {
+           points: start.concat(end.slice().reverse())
