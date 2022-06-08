@@ -206,14 +206,17 @@ export default {
   'dataSource': {
     'Dimension': { // 维度
       'name': '类别轴/维度',
+      'require': true,
       'value': []
     },
     'Measure': { // 度量 或主轴
       'name': '主值轴/度量',
+      'require': false,
       'value': []
     },
-    'Measure1': { // 副轴
+    'MeasureSecond': { // 副轴
       'name': '副值轴/度量',
+      'require': false,
       'value': []
     }
   },

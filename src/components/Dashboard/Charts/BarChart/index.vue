@@ -15,12 +15,6 @@ import barMixins from '@/components/Dashboard/mixins/barMixins'
 export default {
   name: 'BarChart',
   mixins: [barMixins],
-  props: {
-    identify: {
-      type: String,
-      default: ''
-    }
-  },
   data () {
     return {
       type: 'BarChart'// 图表类型 1.柱图；2.堆积柱状图；3.百分比堆积柱状图
@@ -29,7 +23,7 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator)
+      this.transformData(this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator)
       this.getSeries(componentOption) // 获取Series
 
       // 将图表转为堆积柱状图
@@ -86,9 +80,13 @@ export default {
     getSeries (componentOption) {
       this.series = []
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.setAxis()
 
       // 双Y轴设置

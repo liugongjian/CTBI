@@ -91,10 +91,10 @@
             </el-form-item>
             <el-form-item
               label="位置"
-              prop="directoryId"
+              prop="folderId"
               style="margin-top: 30px"
             >
-              <el-select v-model="dashboardAttr.directoryId" placeholder="请选择" style="width: 360px">
+              <el-select v-model="dashboardAttr.folderId" placeholder="请选择" style="width: 360px">
                 <el-option
                   v-for="item in folderTree"
                   :key="item.id"
@@ -130,14 +130,17 @@
 </template>
 
 <script>
-import { getFolderTree } from '@/api/dashboard'
+import { getFolderTree, saveDashboard } from '@/api/dashboard'
+import store from '@/store'
 export default {
   name: 'Dashboard',
   props: {
     // eslint-disable-next-line vue/require-default-prop
     dashboard: Object,
     // eslint-disable-next-line vue/require-default-prop
-    mode: String
+    mode: String.prototype,
+    // eslint-disable-next-line vue/require-default-prop
+    handleChange: Function
   },
   data() {
     const validateName = (rule, value, callback) => {
@@ -159,7 +162,7 @@ export default {
       dashboardAttributeVisible: false,
       dashboardAttr: {
         name: '',
-        directoryId: ''
+        folderId: ''
       },
       attrRules: {
         name: [
@@ -185,7 +188,11 @@ export default {
       this.device = device
     },
     changeMode() {
-      this.mode = this.mode === 'edit' ? 'preview' : 'edit'
+      // this.mode = this.mode === 'edit' ? 'preview' : 'edit'
+      this.$emit('handleChange', {
+        action: 'changeMode',
+        data: this.mode === 'edit' ? 'preview' : 'edit'
+      })
     },
     save () {
       this.saveMode = 'save'
@@ -199,7 +206,7 @@ export default {
       await this.getFolders()
       this.dashboardAttributeVisible = true
       this.dashboardAttr.name = this.saveMode === 'copy' ? '' : this.name
-      this.dashboardAttr.directoryId = this.saveMode === 'copy' ? '-1' : (this.dashboard.directoryId || '-1')
+      this.dashboardAttr.folderId = this.saveMode === 'copy' ? '-1' : (this.dashboard.directoryId || '-1')
     },
     copy() {
       this.saveMode = 'copy'
@@ -216,12 +223,33 @@ export default {
     handleDashboardAttribute() {
       this.$refs['attrForm'].validate((valid) => {
         if (valid) {
-          this.hiddenDashboardAttribute()
+          // this.hiddenDashboardAttribute()
+          this.saveDashboard()
         } else {
           console.log('error submit!!')
           return false
         }
       })
+    },
+    // 新建数据集
+    async saveDashboard () {
+      const id = this.saveMode === 'copy' ? null : (this.dashboard._id || null)
+      const finalId = this.saveMode === 'copy' ? null : id
+      const params = {
+        id: finalId,
+        setting: JSON.stringify(store.state.app.layout),
+        ...this.dashboardAttr
+      }
+      const result = await saveDashboard(params)
+      this.$message.success('保存成功')
+      console.log(result)
+      this.hiddenDashboardAttribute()
+      if (this.saveMode !== 'copy') {
+        this.$emit('handleChange', {
+          action: 'saveSuccess',
+          data: result
+        })
+      }
     },
     async getFolders() {
       try {

@@ -1,5 +1,8 @@
 <template>
-  <div v-if="typeof option.show === 'undefined' ? true : option.show" class="editor-object-container">
+  <div
+    v-if="typeof option.show === 'undefined' ? true : option.show"
+    class="editor-object-container"
+  >
     <div>
       <ColorConfig
         :option="option"
@@ -36,13 +39,13 @@ export default {
       deep: true
     }
   },
-  mounted() {
+  mounted () {
     this.getColor()
   },
   methods: {
     getColor () {
       store.state.app.layout.forEach(item => {
-        if (item.i === store.state.app.currentLayoutId) {
+        if (item.id === store.state.app.currentLayoutId) {
           const option = item.option.theme.ComponentOption || item.option.theme.DisplayConfig
           this.color = option.Color.color
         }

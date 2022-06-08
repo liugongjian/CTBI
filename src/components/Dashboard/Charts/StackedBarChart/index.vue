@@ -29,7 +29,7 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator)
+      this.transformData(this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator)
       this.getStackSeries(componentOption)
       // 如果选择百分比，转为百分比堆积柱状图
       if (componentOption.PercentStack.isPercent) {
@@ -60,7 +60,9 @@ export default {
         },
         'xAxis': this.xAxis,
         'tooltip': {
-          trigger: 'axis'
+          'show': true,
+          'trigger': 'axis',
+          'formatter': this.tooltipFormatter
         },
         'yAxis': this.yAxis,
         'dataset': {
@@ -76,6 +78,26 @@ export default {
         },
         'series': this.series
       }
+    },
+    tooltipFormatter (params) {
+      let result = ''
+      let Total = 0
+      params.forEach((item, index) => {
+        const { data, seriesName, marker, color } = item
+        if (seriesName !== '总计') {
+          if (index === 0) {
+            result += '<div>' + data[0] + '</div>'
+          }
+
+          result += `<div style="line-height: 25px;">${marker}</span>
+            <span style="color: ${color};">${seriesName}</span>
+            <span style="float: right;margin-left: 20px;">${data[index + 1]}</span>
+          </div>`
+          Total += Number.parseInt(data[index + 1])
+        }
+      })
+      result += `<div style="line-height: 25px;font-weight: 700;">总计<span style="float: right;font-weight: 700;">${Total}</span></div>`
+      return result
     }
   }
 }

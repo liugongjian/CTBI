@@ -29,7 +29,7 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator)
+      this.transformData(this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator)
       this.getSeries(componentOption) // 获取Series
 
       // 将图表转为堆积条形图
@@ -86,9 +86,13 @@ export default {
     getSeries (componentOption) {
       this.series = []
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.setAxis()
 
       // 双Y轴设置

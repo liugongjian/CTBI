@@ -1,16 +1,17 @@
 <template>
   <div style="width: 100%; height: 100%">
-    <div v-if="dataValue" class="kbs-wrap">
+    <div v-if="dataValue.length>0" class="kbs-wrap">
       <subregion :data="dataValue" :option="getOption" :series="getKanBanSeries" />
     </div>
-    <div v-else>数据为空</div>
+    <div v-else class="empty">数据为空</div>
   </div>
 </template>
 
 <script>
-import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
+import { getLayoutOptionById } from '@/utils/optionUtils'
 import KanBanSubregionMixins from '@/components/Dashboard/mixins/kanBanSubregionMixins'
 import subregion from './subregion.vue'
+import store from '@/store'
 export default {
   name: 'KanBanSubregion',
   components: {
@@ -27,6 +28,7 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
+      dataOption: [],
       dataValue: [
         // {
         //   'name': '东北',
@@ -67,32 +69,30 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
-        }
+        // val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
+        // if (JSON.stringify(val.dataSource) !== '{}') {
+        //   this.dataValue = val.dataSource
+        // }
       },
       deep: true
-    },
-    'storeOption.dataSource': {
-      handler (val) {
-        if (JSON.stringify(val) !== '{}') {
-          this.dataValue = deepClone(val)
-          // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
-          // 拿到名字 并设置svg
-          this.getNameSvg(this.dataValue)
-          // 拿到系列和值
-          this.getDataSeries(this.dataValue)
-        }
-      }
     }
+    // 'storeOption.dataSource': {
+    //   handler (val) {
+    //     if (JSON.stringify(val) !== '{}') {
+    //       this.dataValue = deepClone(val)
+    //       // 拿到数据的系列名字 并设置颜色
+    //       this.getColor(this.dataValue)
+    //       // 拿到名字 并设置svg
+    //       this.getNameSvg(this.dataValue)
+    //       // 拿到系列和值
+    //       this.getDataSeries(this.dataValue)
+    //     }
+    //   }
+    // }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
-    // this.getOption()
-  },
-  methods: {
-    // getOption () {}
+    this.dataOption = store.state.app.dataOption
   }
 }
 </script>

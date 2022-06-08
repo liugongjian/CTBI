@@ -2,10 +2,10 @@
 import store from '@/store'
 export default {
   computed: {
-    visible() {
+    visible () {
       let res = false
       store.state.app.layout.forEach(item => {
-        if (item.i === store.state.app.currentLayoutId) {
+        if (item.id === store.state.app.currentLayoutId) {
           res = item.option.theme.Basic.Edition.edition === 'newEdition'
         }
       })

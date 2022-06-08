@@ -389,8 +389,7 @@ import {
   updateFolderOrDashboardProperties,
   getShareInfo,
   shareDashboard,
-  cancelShareDashboard,
-  saveDashboard
+  cancelShareDashboard
 } from '@/api/dashboard'
 import FolderEdit from './FolderEdit'
 import FolderTree from './FolderTree'
@@ -532,19 +531,9 @@ export default {
 
     // 新建数据集
     async createDashboard () {
-      const setting = {
-        name: 'setting'
-      }
-      const params = {
-        name: '看板' + Math.round(Math.random() * 40),
-        setting: JSON.stringify(setting),
-        isPublish: Math.round(Math.random() * 40) % 2 === 0
-      }
-      await saveDashboard(params)
-      this.init()
-      // this.$router.push({
-      //   path: '/dashboard'
-      // })
+      this.$router.push({
+        path: '/dashboard'
+      })
     },
     // 重置
     reset () {

@@ -142,7 +142,7 @@ export default {
       data.detail.color = label.value.color
       data.detail.textStyle.fontSize = label.value.fontSize
       // 百分比 数值切换
-      data.detail.formatter = label.format ? this.dataValue : `${(this.dataValue / data.max * 100).toFixed(label.decimal)}%`
+      data.detail.formatter = label.format ? this.dataValue.value : `${(this.dataValue.value / data.max * 100).toFixed(label.decimal)}%`
       // 副标签控制
       this.title.textStyle.color = label.deputy.color
       this.title.textStyle.fontSize = label.deputy.fontSize
@@ -155,7 +155,6 @@ export default {
       this.setStyle(style)
       this.setConfigSize(ConfigSize)
       this.setConfigLabel(Label)
-      console.log(this.dataValue, 'this.dataValue')
       this.series[0].data[0] = this.dataValue
       this.chartOption = {
         tooltip: {

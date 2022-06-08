@@ -29,7 +29,7 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator)
+      this.transformData(this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator)
       this.getStackSeries(componentOption)
       // 如果选择百分比，转为百分比堆积条形图
       if (componentOption.PercentStack.isPercent) {

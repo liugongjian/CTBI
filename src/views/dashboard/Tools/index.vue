@@ -1,5 +1,8 @@
 <template>
-  <div class="header-tool" @click="panelShow">
+  <div
+    class="header-tool"
+    @click="panelShow"
+  >
     <div class="tools-container">
       <!-- <div class="tool-btn">
         <svg-icon
@@ -46,7 +49,11 @@
         @drag.stop="drag($event, name,item)"
         @dragend="dragend($event, name,item)"
       >
-        <el-tooltip effect="dark" :content="item.theme.Basic.Title.text" placement="top">
+        <el-tooltip
+          effect="dark"
+          :content="item.theme.Basic.Title.text"
+          placement="top"
+        >
           <svg-icon
             :icon-class="name"
             style="font-size: 22px;"
@@ -65,11 +72,23 @@
       </div>
     </div>
     <div class="setting-container">
-      <div class="tool-setting" @click.stop>
-        <svg-icon icon-class="tools-setting" style="font-size: 14px;margin-left: 16px;" />
+      <div
+        class="tool-setting"
+        @click.stop
+      >
+        <svg-icon
+          icon-class="tools-setting"
+          style="font-size: 14px;margin-left: 16px;"
+        />
       </div>
     </div>
-    <chart-list-panel v-if="showPanel" :tool-list="toolList" @addItem="addItem" @drag="drag" @dragend="dragend" />
+    <chart-list-panel
+      v-if="showPanel"
+      :tool-list="toolList"
+      @addItem="addItem"
+      @drag="drag"
+      @dragend="dragend"
+    />
     <!-- <div
       v-for="(item,name, index) in toolList"
       :key="name + index"
@@ -93,6 +112,7 @@ const DragPos = { 'x': 1, 'y': 1, 'w': 1, 'h': 1, 'i': null }
 const mouseXY = { 'x': 1, 'y': 1 }
 import store from '@/store'
 import { getToolList, getBriefToolList } from './getToolList'
+import { nanoid } from 'nanoid'
 // import IconDropdown from './component/IconDropdown.vue'
 import ChartListPanel from './component/ChartListPanel.vue'
 export default {
@@ -147,7 +167,7 @@ export default {
       if (submenu) {
         this.panelShow()
       }
-      const i = name + this.layoutIndex + new Date().getTime()
+      const id = nanoid()
       // 防止指向问题
       const option = JSON.parse(JSON.stringify(item))
       this.addLayout({
@@ -155,7 +175,8 @@ export default {
         y: this.layout.length + (this.colNum || 12), // puts it at the bottom
         w: 12,
         h: 2,
-        i,
+        id,
+        i: id,
         is: name,
         option
       })
@@ -255,10 +276,10 @@ export default {
         parentGridLayout.dragEvent('dragend', i, DragPos.x, DragPos.y, 2, 12)
       }
     },
-    resolveDropdown(command) {
+    resolveDropdown (command) {
       console.log('command:', command)
     },
-    panelShow() {
+    panelShow () {
       this.showPanel = !this.showPanel
     }
   }
@@ -270,27 +291,27 @@ export default {
   width: 100%;
   align-items: center;
   cursor: pointer;
-  .tools-container{
-      display: flex;
-      align-items: center;
-      svg {
-        cursor: pointer;
-      }
-      .tool-btn{
-        margin: 0px 3px;
-      }
+  .tools-container {
+    display: flex;
+    align-items: center;
+    svg {
+      cursor: pointer;
+    }
+    .tool-btn {
+      margin: 0px 3px;
+    }
   }
   .droppable-element {
     margin: 0px 3px;
     svg {
-        padding: 5px;
-        &:hover {
-        background: rgba(255,255,255,0.10);
+      padding: 5px;
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
         border-radius: 2px;
       }
     }
   }
-  .horizontal{
+  .horizontal {
     display: flex;
     margin-left: 8px;
     align-items: center;

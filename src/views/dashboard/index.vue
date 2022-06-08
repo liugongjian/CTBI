@@ -1,13 +1,13 @@
 <template>
-  <el-container>
+  <el-container v-loading="loading && !recoverVisible">
     <el-header class="bi-header">
       <!-- 设置栏 -->
-      <Navbar :dashboard="dashboard" :mode="mode" />
+      <Navbar :dashboard="dashboard" :mode="mode" @handleChange="handleNavbarChange" />
     </el-header>
     <el-container>
       <el-container>
         <!-- 工具栏 -->
-        <el-header class="tool-header">
+        <el-header v-if="mode === 'edit'" class="tool-header">
           <Tools
             @getGridLayout="getGridLayout"
             @getParentRect="getParentRect"
@@ -25,10 +25,33 @@
         </el-main>
       </el-container>
       <!-- 配置项 -->
-      <div>
+      <div v-if="mode === 'edit'">
         <Settings />
       </div>
     </el-container>
+    <el-dialog
+      title="恢复提示"
+      :visible.sync="recoverVisible"
+      width="480px"
+    >
+      <div class="data-set-didlog-del">
+        <svg-icon
+          icon-class="warning"
+          style="margin-right: 16px"
+        />
+        <span>该仪表板内容上次未正常保存，是否恢复上次内容？</span>
+      </div>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="cancelRecover">不</el-button>
+        <el-button
+          type="primary"
+          @click="confirmRecover"
+        >恢复</el-button>
+      </div>
+    </el-dialog>
   </el-container>
 </template>
 
@@ -37,6 +60,8 @@ import Settings from './Settings/index.vue'
 import Widget from './Widget/index.vue'
 import Tools from './Tools'
 import Navbar from './Navbar'
+import store from '@/store'
+import _ from 'lodash'
 // 导入样式
 import '@/views/dashboard/index.scss'
 import { getDashboardDetail } from '@/api/dashboard'
@@ -45,14 +70,25 @@ export default {
     Widget, Settings, Tools, Navbar
   },
   data() {
+    const dashboardId = this.$route.query.id || ''
+    this.timer = null
+    this.saveName = 'dashboard-' + (dashboardId || 'new')
+    this.saveTagName = this.saveName + '-tag'
     return {
       dashboard: {
         name: ''
       },
-      mode: this.$route.query.mode || 'edit'
+      mode: this.$route.query.mode || 'edit',
+      dashboardId,
+      recoverVisible: false,
+      loading: false,
+      useRecover: false
     }
   },
   computed: {
+    layout () {
+      return store.state.app.layout
+    },
     layoutStyles() {
       return this.$store.state.settings.layoutStyles
     }
@@ -72,14 +108,69 @@ export default {
       this.$store.state.settings.layoutStyles = layoutStyles
     }
     this.getDashboardData()
+    this.saveDashboardToLocal()
+    this.recoverDashboard()
+    window.addEventListener('beforeunload', this.beforeunload)
+  },
+  destroyed() {
+    if (this.timer) {
+      console.log('destroyed')
+      clearTimeout(this.timer)
+    }
+    console.log('destroyed')
+    localStorage.removeItem(this.saveName)
+    localStorage.removeItem(this.saveTagName)
+    window.removeEventListener('beforeunload', this.beforeunload)
   },
   methods: {
+    recoverDashboard() {
+      const saveName = this.saveName
+      const saveData = localStorage.getItem(saveName)
+      const saveTag = localStorage.getItem(this.saveTagName)
+      if (saveData && saveTag !== 'saved') {
+        this.recoverVisible = true
+      }
+    },
+    confirmRecover() {
+      const saveName = this.saveName
+      const saveData = localStorage.getItem(saveName)
+      this.useRecover = true
+      console.log(saveData)
+      store.dispatch('app/updateLayout', JSON.parse(saveData))
+      this.resetRecover()
+    },
+    cancelRecover() {
+      this.useRecover = false
+      const result = this.dashboard
+      const settings = result.setting ? JSON.parse(result.setting) : null
+      if (settings && Array.isArray(settings)) {
+        store.dispatch('app/updateLayout', settings)
+      }
+      this.resetRecover()
+    },
+    resetRecover() {
+      this.recoverVisible = false
+      localStorage.removeItem(this.saveName)
+      localStorage.removeItem(this.saveTagName)
+    },
     async getDashboardData() {
-      const { id } = this.$route.query
+      const id = this.dashboardId
       if (id) {
-        const result = await getDashboardDetail(id)
-        console.log(result)
-        this.dashboard = result
+        try {
+          this.loading = true
+          const result = await getDashboardDetail(id)
+          console.log(result)
+          this.loading = false
+          this.dashboard = result
+          if (!this.recoverVisible && !this.useRecover) {
+            const settings = result.setting ? JSON.parse(result.setting) : null
+            if (settings && Array.isArray(settings)) {
+              store.dispatch('app/updateLayout', settings)
+            }
+          }
+        } catch (e) {
+          this.loading = false
+        }
       }
     },
     dragover (event) {
@@ -106,6 +197,65 @@ export default {
         x: domRec.x,
         y: domRec.y
       })
+    },
+    handleNavbarChange({ action, data }) {
+      if (action === 'changeMode') {
+        this.mode = data
+        console.log(JSON.stringify(this.layout))
+      }
+      if (action === 'saveSuccess') {
+        if (!this.dashboardId) {
+          localStorage.removeItem(this.saveName)
+          localStorage.removeItem(this.saveTagName)
+          this.saveName = 'dashboard-' + data._id
+          this.saveTagName = this.saveName + '-tag'
+          this.dashboardId = data._id
+        }
+        localStorage.setItem(this.saveName, JSON.stringify(this.layout))
+        localStorage.setItem(this.saveTagName, 'saved')
+        this.dashboard = data
+      }
+    },
+    saveDashboardToLocal() {
+      console.log('saveDashboardToLocal')
+      const saveName = this.saveName
+      const saveTagName = this.saveTagName
+      this.timer = setTimeout(() => {
+        if (!this.recoverVisible) {
+          const nextData = JSON.stringify(this.layout)
+          const saveData = localStorage.getItem(saveName)
+          // const saveTag = localStorage.getItem(saveTagName)
+          if (saveData) {
+            if (!_.isEqual(JSON.parse(nextData), JSON.parse(saveData))) {
+              localStorage.setItem(saveName, nextData)
+              localStorage.setItem(saveTagName, 'unsaved')
+              console.log('saveDashboardToLocal12345')
+            }
+          } else {
+            const setting = this.dashboard.setting
+            if (setting) {
+              if (!_.isEqual(JSON.parse(nextData), JSON.parse(setting))) {
+                localStorage.setItem(saveName, nextData)
+                localStorage.setItem(saveTagName, 'unsaved')
+                console.log('123saveDashboardToLocal')
+              }
+            } else {
+              localStorage.setItem(saveName, nextData)
+              localStorage.setItem(saveTagName, 'unsaved')
+              console.log('67723saveDashboardToLocal')
+            }
+          }
+        }
+        this.saveDashboardToLocal()
+      }, 10 * 1000)
+    },
+    beforeunload(e) {
+      console.log(e)
+      const saveTag = localStorage.getItem(this.saveTagName)
+      const saveData = localStorage.getItem(this.saveName)
+      if (saveTag !== 'saved' && saveData) {
+        e.returnValue = '你还没有保存'
+      }
     }
   }
 }
