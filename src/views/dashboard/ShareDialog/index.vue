@@ -3,6 +3,7 @@
     title="发布"
     :visible.sync="shareDashboardVisible"
     width="560px"
+    @close="close"
   >
     <el-form
       ref="shareForm"
@@ -22,7 +23,7 @@
         />
       </el-form-item>
       <el-form-item label="密码" prop="sharePassword">
-        <el-input v-model="currentShareInfo.sharePassword" class="input" placeholder="请输入分享密码" />
+        <el-input v-model="currentShareInfo.sharePassword" class="input" placeholder="请输入分享密码" @input="shareChange" />
         <el-button class="random" type="text" @click="randomPwd">随机生成</el-button>
       </el-form-item>
       <el-form-item label="白名单" prop="whiteList">
@@ -32,24 +33,28 @@
           type="textarea"
           :rows="2"
           placeholder="多个地址以英文逗号分隔"
+          @input="shareChange"
         />
       </el-form-item>
     </el-form>
-    <p class="shareCopyUrl">{{ currentShareInfo.shareUrl }}</p>
+    <p v-if="currentData.shareUrl" class="shareCopyUrl">{{ currentData.shareUrl }}</p>
     <div
       slot="footer"
       class="dialog-footer"
     >
-      <el-button @click="shareDashboardVisible = false">取 消</el-button>
+      <el-button @click="close">取 消</el-button>
       <el-button
+        v-if="needShareAgain && currentData.shareUrl"
         type="primary"
         @click="executeShare"
-      >确 定</el-button>
+      >重新发布</el-button>
       <el-button
+        v-if="!needShareAgain && !currentData.shareUrl"
         type="primary"
         @click="executeShare"
-      >再次发布</el-button>
+      >确定</el-button>
       <el-button
+        v-if="currentData.shareUrl"
         type="primary"
         @click="copyShareUrl"
       >一键复制</el-button>
@@ -59,11 +64,28 @@
 
 <script>
 import {
-  getShareInfo,
   shareDashboard,
   cancelShareDashboard
 } from '@/api/dashboard'
 import moment from 'moment'
+function randomPassword(size = 10) {
+  const lower = 'abcdefghijkmlnopqrstwvxyz'
+  const upper = lower.toUpperCase()
+  const str = upper + lower
+  const num = '0123456789'
+  const special = '#$,@'
+  const strArray = (str + num + special).split('')
+  const length = strArray.length
+  const result = []
+  for (let i = 0; i < size; i++) {
+    if (i === 0) {
+      result.push(strArray[Math.round(Math.random() * str.length)])
+    } else {
+      result.push(strArray[Math.round(Math.random() * length)])
+    }
+  }
+  return result.join('')
+}
 
 export default {
   name: 'ShareDialog',
@@ -78,11 +100,13 @@ export default {
   data () {
     return {
       currentShareInfo: {
-        shareEndTime: '',
+        shareEndTime: moment().add(1, 'days').format('YYYY-MM-DD'),
         sharePassword: '',
         whiteList: ''
       },
-      currentData: this.data,
+      oldShareInfo: {},
+      needShareAgain: false,
+      currentData: this.data || {},
       shareDashboardVisible: false,
       shareRules: {
         shareEndTime: [
@@ -94,7 +118,7 @@ export default {
       },
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() < (Date.now() - 24 * 60 * 60 * 1000)
+          return time.getTime() < Date.now()
         }
       }
     }
@@ -113,45 +137,54 @@ export default {
     console.log(this.data)
   },
   methods: {
-    async shareDashboard (data) {
-      try {
-        this.currentData = data
-        if (this.from === 'edit') {
-          this.executeShare()
-        } else {
-          if (data.publishStatus === 1) {
-            const info = await getShareInfo(data._id)
-            this.currentShareInfo = info
-          } else {
-            this.currentShareInfo = null
-          }
-
-          this.shareDashboardVisible = true
-        }
-      } catch (error) {
-        console.log(error)
+    showShare (data) {
+      console.log(data)
+      this.shareDashboardVisible = true
+      this.currentData = { ...data }
+      this.currentShareInfo = {
+        shareEndTime: data.shareEndTime ? data.shareEndTime : moment().add(1, 'days').format('YYYY-MM-DD'),
+        sharePassword: data.sharePassword || '',
+        whiteList: data.whiteList ? data.whiteList.join(',') : ''
       }
+      this.oldShareInfo = { ...this.currentShareInfo }
+      this.needShareAgain = false
     },
-    async executeShare (endDate) {
+    async executeShare () {
+      this.$refs['shareForm'].validate((valid) => {
+        if (valid) {
+          this.executeSubmit()
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    async executeSubmit () {
       try {
-        const shareEndTime = endDate || moment().add(1, 'days').format('YYYY-MM-DD')
+        const { shareEndTime, sharePassword, whiteList } = this.currentShareInfo
         const params = {
           _id: this.currentData._id,
-          sharePassword: 'hfdsahhfd7wk,hjSD',
           shareEndTime,
-          whiteList: []
+          sharePassword,
+          whiteList: whiteList ? whiteList.split(',') : []
         }
         const info = await shareDashboard(params)
-        this.currentShareInfo = { ...info, shareEndTime }
-        this.shareDashboardVisible = true
-        this.$emit('handleAction', { id: this.currentData._id, publishStatus: 1 })
+        this.$message.success('发布成功')
+        console.log(info)
+        this.currentData = { ...this.currentData, ...info }
+        this.needShareAgain = false
+        this.oldShareInfo = { ...this.currentShareInfo }
+        this.$emit('handleAction', { id: this.currentData._id, publishStatus: 1, ...info, shareEndTime,
+          sharePassword,
+          whiteList: whiteList ? whiteList.split(',') : [] })
       } catch (error) {
         console.log(error)
       }
     },
     copyShareUrl () {
+      const shareContent = '分享链接：' + this.currentData.shareUrl + '\t\n' + '密码：' + this.currentShareInfo.sharePassword + '\t\n' + '有效期至：' + this.currentShareInfo.shareEndTime
       if (navigator.clipboard) {
-        navigator.clipboard.writeText(this.currentShareInfo.shareUrl)
+        navigator.clipboard.writeText(shareContent)
         this.$message.success('复制成功')
       } else {
         const textarea = document.createElement('textarea')
@@ -159,7 +192,7 @@ export default {
         textarea.style.position = 'fixed'
         textarea.style.clip = 'rect(0 0 0 0)'
         textarea.style.top = '10px'
-        textarea.value = this.currentShareInfo.shareUrl
+        textarea.value = shareContent
         textarea.select()
         document.execCommand('copy', true)
         this.$message.success('复制成功')
@@ -167,7 +200,8 @@ export default {
       }
     },
     shareDateChange (e) {
-      this.executeShare(moment(e).format('YYYY-MM-DD'))
+      this.currentShareInfo.shareEndTime = moment(e).format('YYYY-MM-DD')
+      this.testInfo()
     },
     async cancelShareDashboard () {
       try {
@@ -184,8 +218,27 @@ export default {
     randomPwd() {
       this.currentShareInfo = {
         ...this.currentShareInfo,
-        sharePassword: 'sfdsfdsafdsa'
+        sharePassword: randomPassword()
       }
+      this.testInfo()
+    },
+    close() {
+      this.resetForm()
+      this.shareDashboardVisible = false
+    },
+    resetForm() {
+      this.$refs['shareForm'].resetFields()
+    },
+    shareChange() {
+      this.testInfo()
+    },
+    testInfo() {
+      if (!this.currentData.shareUrl) {
+        return
+      }
+      const items = ['shareEndTime', 'sharePassword', 'whiteList']
+      const isChange = items.some(item => this.oldShareInfo[item] !== this.currentShareInfo[item])
+      this.needShareAgain = isChange
     }
 
   }
