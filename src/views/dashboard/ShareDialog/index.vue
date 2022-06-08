@@ -233,6 +233,9 @@ export default {
       this.testInfo()
     },
     testInfo() {
+      if (!this.currentData.shareUrl) {
+        return
+      }
       const items = ['shareEndTime', 'sharePassword', 'whiteList']
       const isChange = items.some(item => this.oldShareInfo[item] !== this.currentShareInfo[item])
       this.needShareAgain = isChange
