@@ -50,10 +50,10 @@
         </el-container>
         <!-- 图例切换模块 -->
         <el-container
-          v-show="showChartTypes&&showWrapper"
+          v-if="showChartTypes&&showWrapper"
           class="chart-type-switch"
         >
-          <ChartSwitcher :option="option" />
+          <ChartSwitcher :type="option.type" />
         </el-container>
         <div
           v-show="showWrapper===false"
@@ -153,13 +153,13 @@ export default {
     },
     option () {
       const temp = store.state.app.layout.find(item => {
-        return item.i === this.currentLayoutId
+        return item.id === this.currentLayoutId
       })
       return temp.option
     },
     currentChart () {
       const temp = store.state.app.layout.find(item => {
-        return item.i === this.currentLayoutId
+        return item.id === this.currentLayoutId
       })
       return temp.is
     }

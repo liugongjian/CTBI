@@ -61,7 +61,8 @@ export default {
       'ChartRadius': ['0%', '45%'], // 饼图半径
       'Color': { // 颜色设置
         'title': '配色设置',
-        'color': colorTheme['defaultColor']
+        'color': colorTheme['官方'],
+        'theme': '官方'
       },
       'MergeOther': { // 合并数据为其他
         'show': false, // 是否选中
@@ -91,7 +92,7 @@ export default {
     },
     'FunctionalOption': { // 功能配置
       'ChartFilter': {
-        'showFilter': true,
+        'showFilter': false,
         'selectedIndicator': '', // 选中的指标
         'indicatorOption': [] // 指标集合
       }
@@ -100,11 +101,13 @@ export default {
   'advance': {}, // 高级
   'dataSource': {
     'Dimension': { // 维度
-      'name': '类别轴/维度',
+      'name': '扇区标签/维度',
+      'require': true,
       'value': []
     },
     'Measure': { // 度量
-      'name': '值轴/度量',
+      'name': '扇区角度/度量',
+      'require': true,
       'value': []
     }
   }, // 数据集

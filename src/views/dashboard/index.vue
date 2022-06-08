@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container v-loading="loading && !recoverVisible">
     <el-header class="bi-header">
       <!-- 设置栏 -->
       <Navbar :dashboard="dashboard" :mode="mode" @handleChange="handleNavbarChange" />
@@ -78,9 +78,11 @@ export default {
       dashboard: {
         name: ''
       },
-      mode: this.$route.query.mode || 'edit',
+      mode: this.$route.query.mode === '1' ? 'preview' : 'edit',
       dashboardId,
-      recoverVisible: false
+      recoverVisible: false,
+      loading: false,
+      useRecover: false
     }
   },
   computed: {
@@ -93,10 +95,10 @@ export default {
   },
   mounted () {
     // 获取本地数据，进行画布初始化
-    if (localStorage.getItem('layout')) {
-      const layout = JSON.parse(localStorage.getItem('layout'))
-      this.$store.state.app.layout = layout
-    }
+    // if (localStorage.getItem('layout')) {
+    //   const layout = JSON.parse(localStorage.getItem('layout'))
+    //   this.$store.state.app.layout = layout
+    // }
     if (localStorage.getItem('dataOption')) {
       const dataOption = JSON.parse(localStorage.getItem('dataOption'))
       this.$store.state.app.dataOption = dataOption
@@ -132,11 +134,21 @@ export default {
     confirmRecover() {
       const saveName = this.saveName
       const saveData = localStorage.getItem(saveName)
+      this.useRecover = true
       console.log(saveData)
       store.dispatch('app/updateLayout', JSON.parse(saveData))
-      this.cancelRecover()
+      this.resetRecover()
     },
     cancelRecover() {
+      this.useRecover = false
+      const result = this.dashboard
+      const settings = result.setting ? JSON.parse(result.setting) : null
+      if (settings && Array.isArray(settings)) {
+        store.dispatch('app/updateLayout', settings)
+      }
+      this.resetRecover()
+    },
+    resetRecover() {
       this.recoverVisible = false
       localStorage.removeItem(this.saveName)
       localStorage.removeItem(this.saveTagName)
@@ -144,14 +156,20 @@ export default {
     async getDashboardData() {
       const id = this.dashboardId
       if (id) {
-        const result = await getDashboardDetail(id)
-        console.log(result)
-        this.dashboard = result
-        if (!this.recoverVisible) {
-          const settings = result.setting ? JSON.parse(result.setting) : null
-          if (settings && Array.isArray(settings)) {
-            store.dispatch('app/updateLayout', settings)
+        try {
+          this.loading = true
+          const result = await getDashboardDetail(id)
+          console.log(result)
+          this.loading = false
+          this.dashboard = result
+          if (!this.recoverVisible && !this.useRecover) {
+            const settings = result.setting ? JSON.parse(result.setting) : null
+            if (settings && Array.isArray(settings)) {
+              store.dispatch('app/updateLayout', settings)
+            }
           }
+        } catch (e) {
+          this.loading = false
         }
       }
     },
@@ -197,6 +215,9 @@ export default {
         localStorage.setItem(this.saveTagName, 'saved')
         this.dashboard = data
       }
+      if (action === 'changeShare') {
+        this.dashboard = { ...this.dashboard, publishStatus: data.publishStatus }
+      }
     },
     saveDashboardToLocal() {
       console.log('saveDashboardToLocal')
@@ -214,8 +235,18 @@ export default {
               console.log('saveDashboardToLocal12345')
             }
           } else {
-            localStorage.setItem(saveName, nextData)
-            console.log('saveDashboardToLocal123456')
+            const setting = this.dashboard.setting
+            if (setting) {
+              if (!_.isEqual(JSON.parse(nextData), JSON.parse(setting))) {
+                localStorage.setItem(saveName, nextData)
+                localStorage.setItem(saveTagName, 'unsaved')
+                console.log('123saveDashboardToLocal')
+              }
+            } else {
+              localStorage.setItem(saveName, nextData)
+              localStorage.setItem(saveTagName, 'unsaved')
+              console.log('67723saveDashboardToLocal')
+            }
           }
         }
         this.saveDashboardToLocal()
@@ -223,8 +254,11 @@ export default {
     },
     beforeunload(e) {
       console.log(e)
-      e.returnValue = '你还没有保存'
-      e.preventDefault()
+      const saveTag = localStorage.getItem(this.saveTagName)
+      const saveData = localStorage.getItem(this.saveName)
+      if (saveTag !== 'saved' && saveData) {
+        e.returnValue = '你还没有保存'
+      }
     }
   }
 }

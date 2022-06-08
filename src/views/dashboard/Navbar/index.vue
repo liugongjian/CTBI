@@ -56,6 +56,7 @@
           <el-dropdown-menu slot="dropdown" class="more-dropdown">
             <el-dropdown-item icon="el-icon-document-copy" @click.native="copy()">另存为</el-dropdown-item>
             <el-dropdown-item
+              v-if="dashboard.publishStatus === 1"
               icon="el-icon-bottom-right"
               @click.native="cancelPublish()"
             >下线</el-dropdown-item>
@@ -126,19 +127,24 @@
         </div>
       </el-dialog>
     </div>
+    <ShareDialog ref="shareDialog" from="edit" :data="dashboard" @handleAction="handleShareChange" />
   </div>
 </template>
 
 <script>
-import { getFolderTree, saveDashboard } from '@/api/dashboard'
+import { getFolderTree, saveDashboard, cancelShareDashboard } from '@/api/dashboard'
+import ShareDialog from '../ShareDialog'
 import store from '@/store'
 export default {
   name: 'Dashboard',
+  components: {
+    ShareDialog
+  },
   props: {
     // eslint-disable-next-line vue/require-default-prop
     dashboard: Object,
     // eslint-disable-next-line vue/require-default-prop
-    mode: String.prototype,
+    mode: String,
     // eslint-disable-next-line vue/require-default-prop
     handleChange: Function
   },
@@ -212,7 +218,15 @@ export default {
       this.saveMode = 'copy'
       this.showDashboardAttribute()
     },
-    cancelPublish() {},
+    async cancelPublish() {
+      try {
+        const result = await cancelShareDashboard(this.dashboard._id)
+        this.handleShareChange({ publishStatus: -1 })
+        this.$message.success(result)
+      } catch (error) {
+        console.log(error)
+      }
+    },
     resetForm () {
       this.$refs['attrForm'].resetFields()
     },
@@ -233,22 +247,26 @@ export default {
     },
     // 新建数据集
     async saveDashboard () {
-      const id = this.saveMode === 'copy' ? null : (this.dashboard._id || null)
-      const finalId = this.saveMode === 'copy' ? null : id
+      const isCopy = this.saveMode === 'copy'
+      const id = isCopy ? null : (this.dashboard._id || null)
+      const finalId = isCopy ? null : id
       const params = {
         id: finalId,
         setting: JSON.stringify(store.state.app.layout),
         ...this.dashboardAttr
       }
       const result = await saveDashboard(params)
-      this.$message.success('保存成功')
+      this.$message.success(isCopy ? '另存为成功' : '保存成功')
       console.log(result)
       this.hiddenDashboardAttribute()
-      if (this.saveMode !== 'copy') {
+      if (!isCopy) {
         this.$emit('handleChange', {
           action: 'saveSuccess',
           data: result
         })
+      }
+      if (this.saveMode === 'saveAndShare') {
+        this.$refs['shareDialog'].shareDashboard(result)
       }
     },
     async getFolders() {
@@ -265,6 +283,17 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    async shareDashboard (data) {
+      this.$refs['shareDialog'].shareDashboard(data)
+    },
+    handleShareChange(data) {
+      console.log(this.dashboard)
+      console.log(data)
+      this.$emit('handleChange', {
+        action: 'changeShare',
+        data
+      })
     }
   }
 }

@@ -48,16 +48,15 @@ export default {
     ChartDescription
   },
   props: {
-    option: {
-      type: Object,
-      default: () => { }
+    type: {
+      type: String,
+      default: ''
     }
   },
   data () {
     return {
       toolList: {},
       storeOption: {},
-      type: this.option.type,
       types: [
         { name: '指标',
           type: 'indicator'
@@ -87,10 +86,18 @@ export default {
 
     }
   },
+  watch: {
+    type: {
+      handler (val) {
+        this.storeOption = getLayoutById(store.state.app.currentLayoutId)
+      },
+      deep: true
+    }
+  },
   mounted () {
     this.toolList = getToolList()
     this.storeOption = getLayoutById(store.state.app.currentLayoutId)
-    this.goAuchor('#' + this.option.type)
+    this.goAuchor('#' + this.type)
   },
   methods: {
     filterTools(toolList, type) {

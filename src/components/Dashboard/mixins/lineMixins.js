@@ -26,27 +26,18 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        if (this.dataValue) {
-          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
-          // this.getOption()
-        }
+        this.getOption()
       },
       deep: true
     },
-    dataOption: {
+    // 图表类型切换
+    'storeOption.is': {
       handler (val) {
-        const isData = val.findIndex(item => {
-          return item.i === this.identify
+        const isData = this.dataOption.findIndex(item => {
+          return item.id === this.identify
         })
         if (isData !== -1) {
-          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
-          // 拿到数据中的系列名字
-          this.getSeriesOptions(this.dataValue)
-          // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
-          // 拿到数据中的指标
-          this.getIndicatorOptions(this.dataValue)
-          this.getOption()
+          this.$bus.$emit('interReload', [this.identify], 100, false)
         }
       },
       deep: true
@@ -57,6 +48,17 @@ export default {
     this.dataOption = store.state.app.dataOption
   },
   methods: {
+    // 图表重绘事件，继承于baseMixins
+    reloadImpl () {
+      this.dataValue = formatDataValue(deepClone(this.chartData))
+      // 拿到数据中的系列名字
+      this.getSeriesOptions(this.dataValue)
+      // 拿到数据的系列名字 并设置颜色
+      this.getColor(this.dataValue)
+      // 拿到数据中的指标
+      this.getIndicatorOptions(this.dataValue)
+      this.getOption()
+    },
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
       const seriesOption = []
@@ -65,7 +67,6 @@ export default {
           seriesOption.push({ value: item, label: item })
         }
       })
-
       this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
       this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
       this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
@@ -80,7 +81,7 @@ export default {
           color.push({ name: item, color: colorValue[idx].value, remark: item })
         }
       })
-
+      console.log(color, 'color折线图')
       this.storeOption.theme.ComponentOption.Color.color = color
     },
     // 拿到数据中的指标
@@ -98,18 +99,20 @@ export default {
     },
     // 将数据转换成百分比
     valueToPercent () {
-      const sumArr = []
-      for (let ii = 0; ii < this.dataValue.length - 1; ii++) {
-        sumArr.push(0)
-      }
-      for (let i = 1; i < this.dataValue[0].length; i++) {
-        for (let j = 0; j < sumArr.length; j++) {
-          sumArr[j] += this.dataValue[j + 1][i]
+      if (this.dataValue && this.dataValue.length > 0) {
+        const sumArr = []
+        for (let ii = 0; ii < this.dataValue.length - 1; ii++) {
+          sumArr.push(0)
         }
-      }
-      for (let i = 1; i < this.dataValue[0].length; i++) {
-        for (let j = 0; j < sumArr.length; j++) {
-          this.dataValue[j + 1][i] = (this.dataValue[j + 1][i] / sumArr[j] * 100).toFixed(2)
+        for (let i = 1; i < this.dataValue[0].length; i++) {
+          for (let j = 0; j < sumArr.length; j++) {
+            sumArr[j] += this.dataValue[j + 1][i]
+          }
+        }
+        for (let i = 1; i < this.dataValue[0].length; i++) {
+          for (let j = 0; j < sumArr.length; j++) {
+            this.dataValue[j + 1][i] = (this.dataValue[j + 1][i] / sumArr[j] * 100).toFixed(2)
+          }
         }
       }
     },
@@ -188,26 +191,6 @@ export default {
         }
       ]
     },
-    // 设置图例与图表距离
-    setGrid (legend) {
-      if (legend.top === 'auto' && legend.left === 'center') { // 图例在上
-        this.grid = {
-          top: 50
-        }
-      } else if (legend.top === 'bottom' && legend.left === 'center') { // 图例在下
-        this.grid = {
-          bottom: 50
-        }
-      } else if (legend.top === 'center' && legend.left === 'auto') { // 图例在左
-        this.grid = {
-          left: 120
-        }
-      } else if (legend.top === 'center' && legend.left === 'right') { // 图例在右
-        this.grid = {
-          right: 120
-        }
-      }
-    },
     // 系列设置
     setSeriesItem () {
       const { SeriesSelect } = this.storeOption.theme.SeriesSetting
@@ -279,29 +262,35 @@ export default {
       }
       return connectNulls
     },
-    transfromData (indicator) {
-      const data = []
-      for (let i = 1; i < this.dataValue.length; i++) {
-        data.push([this.dataValue[i][0]])
-      }
-      indicator.forEach(item => {
-      // 取到指标的下标 如 2015年 index为1
-        const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
-        // 取除维度以外的第1列为vlaue
+    transformData (indicator) {
+      if (this.dataValue && this.dataValue.length > 0) {
+        const data = []
         for (let i = 1; i < this.dataValue.length; i++) {
-          data[i - 1].push(this.dataValue[i][indicatorIdx])
+          data.push([this.dataValue[i][0]])
         }
-      })
-      data.unshift([this.dataValue[0][0], ...indicator])
-      this.dataValue = data
+        indicator.forEach(item => {
+        // 取到指标的下标 如 2015年 index为1
+          const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
+          // 取除维度以外的第1列为vlaue
+          for (let i = 1; i < this.dataValue.length; i++) {
+            data[i - 1].push(this.dataValue[i][indicatorIdx])
+          }
+        })
+        data.unshift([this.dataValue[0][0], ...indicator])
+        this.dataValue = data
+      }
     },
     // 获取堆积图
     getStackSeries (ComponentOption, FunctionalOption) {
       this.series = []
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.setAxis()
       // 双Y轴设置
       this.twisYAxisConfig(ComponentOption)
@@ -332,9 +321,13 @@ export default {
     getPercentStackSeries (ComponentOption, FunctionalOption) {
       this.series = []
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.setAxis()
       // 双Y轴设置
       this.twisYAxisConfig(ComponentOption)

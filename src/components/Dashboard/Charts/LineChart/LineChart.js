@@ -182,10 +182,12 @@ export default {
   'dataSource': {
     'Dimension': { // 维度
       'name': '类别轴/维度',
+      'require': true,
       'value': []
     },
     'Measure': { // 度量
       'name': '值轴/度量',
+      'require': true,
       'value': []
     }
   }, // 数据集

@@ -11,7 +11,7 @@
           </span>
           {{ item.name }}
         </div>
-        <div v-for="(subItem, i) in item.data" :key="i" class="content">
+        <div v-for="(subItem, i) in item.data" :key="i" class="measure">
           <template v-if="i === 0 && option.relation === 'deputy'">
             <span v-show="option.indicators" :style="getRelation">{{ subItem.title }}</span>
             <span :style="getRelationVal">{{ getSeries(subItem) }}</span>
@@ -51,28 +51,28 @@ export default {
   computed: {
     getSeries() {
       return function({ title, value }) {
-        const { prefix, suffix } = this.series.dataSeries.find(item => item.title === title) || {}
+        const { prefix, suffix } = this.series.dataSeries?.find(item => item.title === title) || {}
         return `${prefix}${value}${suffix}`
       }
     },
     getPrefix() {
       return function(name) {
-        return this.series.dataSeries.find(item => item.title === name)?.prefix || ''
+        return this.series.dataSeries?.find(item => item.title === name)?.prefix || ''
       }
     },
     getSuffix() {
       return function(name) {
-        return this.series.dataSeries.find(item => item.title === name)?.suffix || ''
+        return this.series.dataSeries?.find(item => item.title === name)?.suffix || ''
       }
     },
     getSvgIcon () {
       return function(name) {
-        return this.option.setSvg.find(item => item.name === name).svg
+        return this.option.setSvg?.find(item => item.name === name)?.svg
       }
     },
     getRound() {
       return function(name) {
-        return { 'background-color': this.option.color.find(item => item.name === name).color }
+        return { 'background-color': this.option.color?.find(item => item.name === name)?.color }
       }
     },
     getItem() {
@@ -174,10 +174,11 @@ export default {
       border-left: 1px solid #e5e5e5;
     }
   }
-  .content {
+  .measure {
     display: flex;
     justify-content:space-between;
     flex-wrap: wrap;
+    background-color: #fff;
   }
 }
 .round {

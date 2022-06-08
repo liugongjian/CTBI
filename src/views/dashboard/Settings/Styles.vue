@@ -128,13 +128,15 @@ export default {
   watch: {
     'option.ComponentOption.TwisYAxis': {
       handler (val) {
-        if (val.check) {
-          const Y1Axis = JSON.parse(JSON.stringify(this.option.Axis.YAxis))
-          Y1Axis.cname = '右Y轴'
-          this.$set(this.option.Axis, 'Y1Axis', Y1Axis)
-        } else {
-          if (!val.check && this.option.Axis?.Y1Axis) {
-            this.$delete(this.option.Axis, 'Y1Axis')
+        if (val) {
+          if (val.check) {
+            const Y1Axis = JSON.parse(JSON.stringify(this.option.Axis.YAxis))
+            Y1Axis.cname = '右Y轴'
+            this.$set(this.option.Axis, 'Y1Axis', Y1Axis)
+          } else {
+            if (!val.check && this.option.Axis?.Y1Axis) {
+              this.$delete(this.option.Axis, 'Y1Axis')
+            }
           }
         }
       },

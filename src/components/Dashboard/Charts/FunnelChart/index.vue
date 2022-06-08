@@ -11,8 +11,10 @@
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
+import baseMixins from '../../mixins/baseMixins'
 export default {
   name: 'FunnelChart',
+  mixins: [baseMixins],
   props: {
     identify: {
       type: String,
@@ -31,16 +33,8 @@ export default {
       labelFormatter: '{c}%',
       tooltipFormatter: '',
       labelPos: '6%',
-      dataValue: [{ value: 60, name: 'Visit' },
-        { value: 40, name: 'Inquiry' },
-        { value: 20, name: 'Order' },
-        { value: 80, name: 'Click' },
-        { value: 100, name: 'Show' }],
-      transTmpData: [{ value: 60, name: 'Visit' },
-        { value: 40, name: 'Inquiry' },
-        { value: 20, name: 'Order' },
-        { value: 80, name: 'Click' },
-        { value: 100, name: 'Show' }],
+      dataValue: [],
+      transTmpData: [],
       calcData: [],
       lastData: [],
       firstData: []
@@ -49,9 +43,9 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
-        }
+        // if (JSON.stringify(val.dataSource) !== '{}') {
+        //   this.dataValue = val.dataSource
+        // }
         this.getOption()
       },
       deep: true
@@ -62,6 +56,22 @@ export default {
     this.getOption()
   },
   methods: {
+    reloadImpl () {
+      this.formatDataValue(this.chartData)
+      this.getOption()
+    },
+    formatDataValue (chartData) {
+      const data = []
+      const key = chartData.fields.Measure.fields[0].column
+      chartData.data.forEach(item => {
+        data.push({
+          'name': item.type,
+          'value': item[key]
+        })
+      })
+      this.dataValue = data
+      this.transTmpData = data
+    },
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
       this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
@@ -122,10 +132,6 @@ export default {
             minSize: this.minSize,
             sort: this.sort,
             width: '5%',
-            // tooltip: {
-            //   trigger: 'item',
-            //   formatter: this.tooltipFormatter
-            // },
             label: {
               position: 'inside',
               formatter: this.labelFormatter,
@@ -150,12 +156,15 @@ export default {
             label: {
               show: false
             },
+            labelLine: {
+              show: false
+            },
             itemStyle: {
-              opacity: 1,
+              opacity: 0,
               color: 'rgba(111, 255, 255, 0)',
               borderWidth: 0
-            },
-            data: this.lastData
+            }
+            // data: this.lastData
             // Ensure outer shape will not be over inner shape when hover.
           },
           {
@@ -168,12 +177,15 @@ export default {
             label: {
               show: false
             },
+            labelLine: {
+              show: false
+            },
             itemStyle: {
-              opacity: 0.5,
+              opacity: 1,
               color: 'rgba(1, 255, 255, 0)',
               borderWidth: 0
-            },
-            data: this.firstData
+            }
+            // data: this.firstData
             // Ensure outer shape will not be over inner shape when hover.
           }
         ]

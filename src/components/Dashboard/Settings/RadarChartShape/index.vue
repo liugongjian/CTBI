@@ -1,6 +1,6 @@
 <template>
   <div class="editor-object-container">
-    <div>
+    <div class="editor-item-title">
       展示样式
     </div>
     <div

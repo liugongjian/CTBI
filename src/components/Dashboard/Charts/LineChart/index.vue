@@ -30,7 +30,7 @@ export default {
   methods: {
     getOption () {
       const { ComponentOption, FunctionalOption } = this.storeOption.theme
-      this.transfromData(FunctionalOption.ChartFilter.selectedIndicator)
+      this.transformData(FunctionalOption.ChartFilter.selectedIndicator)
       this.getSeries(ComponentOption, FunctionalOption)
 
       // 系列配置-图表标签相关
@@ -84,9 +84,13 @@ export default {
     getSeries (ComponentOption, FunctionalOption) {
       this.series = []
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.setAxis()
 
       // 双Y轴设置
