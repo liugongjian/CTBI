@@ -1,12 +1,12 @@
 <template>
   <div v-if="visible" class="editor-object-container">
-    <span>列宽调整</span>
+    <span class="editor-item-title">列宽调整</span>
     <el-radio-group v-model="option.type">
       <el-radio label="selfadapting ">按容器自适应</el-radio>
       <el-radio label="selfdefine">自定义</el-radio>
     </el-radio-group>
     <div>
-      <el-descriptions :colon="false" :column="1">
+      <!-- <el-descriptions :colon="false" :column="1">
         <el-descriptions-item label="省份">
           <el-checkbox v-model="check">自动</el-checkbox>
           <el-input-number
@@ -16,7 +16,7 @@
             :min="25"
           />
         </el-descriptions-item>
-      </el-descriptions>
+      </el-descriptions> -->
     </div>
   </div>
 </template>

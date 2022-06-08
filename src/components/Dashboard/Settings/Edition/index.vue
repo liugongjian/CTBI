@@ -1,6 +1,7 @@
 <template>
   <div class="editor-object-container">
-    <div><span class="edition">版本切换</span>
+    <span class="editor-item-title">版本切换</span>
+    <div class="editor-item-container">
       <el-radio-group v-model="option.edition">
         <el-radio label="newEdition" @change="dialogVisible = true">新版明细表</el-radio>
         <el-radio label="oldEdition">旧版</el-radio>
@@ -58,7 +59,4 @@ export default {
 </script>
 
 <style>
-.edition {
-    margin: 20px
-}
 </style>
