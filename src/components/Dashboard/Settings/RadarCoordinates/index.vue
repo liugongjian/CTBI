@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="coordinates" @click="changeCoordinates">坐标轴
+    <div class="coordinates editor-item-title" @click="changeCoordinates">坐标轴
       <svg-icon
         :icon-class="coordinatesIcon"
         style="font-size: 20px;"
@@ -10,8 +10,8 @@
       v-show="coordinatesIcon === 'packup'"
       class="editor-item-container"
     >
-      <div style="display: flex; align-items: center">
-        最大值
+      <div style="display: flex; align-items: center; color: rgba(255, 255, 255, 0.75)">
+        <span>最大值</span>
         <el-input-number
           v-model="option.maxValue"
           controls-position="right"
@@ -23,7 +23,7 @@
           label="自动"
         />
       </div>
-      <div style="display: flex;align-items: center">
+      <div style="display: flex;align-items: center;color: rgba(255, 255, 255, 0.75)">
         最小值
         <el-input-number
           v-model="option.minValue"
@@ -73,6 +73,7 @@ export default {
   align-items: center;
   width: 100%;
   margin-bottom: 5px;
-  background-color: #eee;
+  color: rgba(255, 255, 255, 0.75);
+  // background-color: #eee;
 }
 </style>

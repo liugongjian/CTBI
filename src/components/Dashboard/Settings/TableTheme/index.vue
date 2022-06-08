@@ -11,10 +11,10 @@
           @click="handleType('stripe')"
         >
           <div><img
-              src="./image/table1.png"
-              alt=""
-              :class="`${option.active==='stripe'?'active': ''}`"
-            ></div>
+            src="./image/table1.png"
+            alt=""
+            :class="`${option.active==='stripe'?'active': ''}`"
+          ></div>
           <div>斑马线</div>
         </div>
         <div
@@ -22,10 +22,10 @@
           @click="handleType('border')"
         >
           <div><img
-              src="./image/table2.png"
-              alt=""
-              :class="`${option.active==='border'?'active': ''}`"
-            ></div>
+            src="./image/table2.png"
+            alt=""
+            :class="`${option.active==='border'?'active': ''}`"
+          ></div>
           <div>线框</div>
         </div>
       </div>
@@ -35,10 +35,10 @@
           @click="handleType('simple')"
         >
           <div><img
-              src="./image/table3.png"
-              alt=""
-              :class="`${option.active==='simple'?'active': ''}`"
-            ></div>
+            src="./image/table3.png"
+            alt=""
+            :class="`${option.active==='simple'?'active': ''}`"
+          ></div>
           <div>简版</div>
         </div>
         <div
@@ -46,10 +46,10 @@
           @click="handleType('verySimple')"
         >
           <div><img
-              src="./image/table4.png"
-              alt=""
-              :class="`${option.active==='verySimple'?'active': ''}`"
-            ></div>
+            src="./image/table4.png"
+            alt=""
+            :class="`${option.active==='verySimple'?'active': ''}`"
+          ></div>
           <div>极简</div>
         </div>
       </div>
