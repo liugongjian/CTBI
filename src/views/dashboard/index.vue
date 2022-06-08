@@ -216,7 +216,7 @@ export default {
         this.dashboard = data
       }
       if (action === 'changeShare') {
-        this.dashboard = { ...this.dashboard, publishStatus: data.publishStatus }
+        this.dashboard = { ...this.dashboard, ...data }
       }
     },
     saveDashboardToLocal() {
