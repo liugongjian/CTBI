@@ -1,59 +1,58 @@
 <template>
   <el-dialog
-    title="公开链接分享"
+    title="发布"
     :visible.sync="shareDashboardVisible"
     width="560px"
   >
-    <div
-      v-if="!currentShareInfo || !currentShareInfo.shareUrl"
-      class="shareEmpty"
+    <el-form
+      ref="shareForm"
+      :model="currentShareInfo"
+      style="padding: 0px"
+      :rules="shareRules"
+      label-width="70px"
     >
-      <img
-        style="width: 371px; height: 200px"
-        :src="require('../../../assets/Image/dashboard/shareEmpty.png')"
-      >
-      <p>开启后，所有获得分享链接的人都可以查看内容</p>
+      <el-form-item label="有效期" prop="shareEndTime">
+        <el-date-picker
+          v-model="currentShareInfo.shareEndTime"
+          type="date"
+          placeholder="选择日期"
+          :clearable="false"
+          :picker-options="pickerOptions"
+          @change="shareDateChange"
+        />
+      </el-form-item>
+      <el-form-item label="密码" prop="sharePassword">
+        <el-input v-model="currentShareInfo.sharePassword" class="input" placeholder="请输入分享密码" />
+        <el-button class="random" type="text" @click="randomPwd">随机生成</el-button>
+      </el-form-item>
+      <el-form-item label="白名单" prop="whiteList">
+        <el-input
+          v-model="currentShareInfo.whiteList"
+          class="input"
+          type="textarea"
+          :rows="2"
+          placeholder="多个地址以英文逗号分隔"
+        />
+      </el-form-item>
+    </el-form>
+    <p class="shareCopyUrl">{{ currentShareInfo.shareUrl }}</p>
+    <div
+      slot="footer"
+      class="dialog-footer"
+    >
+      <el-button @click="shareDashboardVisible = false">取 消</el-button>
       <el-button
-        style="margin-top: 14px;"
         type="primary"
-        @click="() => executeShare()"
-      >公开分享</el-button>
-    </div>
-    <div
-      v-else
-      class="shareWrap"
-    >
-      <div>
-        <span class="shareTip">所有用户可以通过一下链接查看报表备份</span>
-        <el-button
-          style="color:#FA8334; border-color: #FA8334;font-size:12px; margin-left: 14px;height: 32px;"
-          @click="cancelShareDashboard"
-        >不再公开</el-button>
-      </div>
-      <div class="shareCopy">
-        <div class="shareCopyUrl">{{ currentShareInfo.shareUrl }}</div>
-        <el-button
-          type="primary"
-          style="font-size:12px; border-top-left-radius: 0px; border-bottom-left-radius: 0px;margin-left: -3px;z-index: 99;"
-          @click="copyShareUrl"
-        >复制</el-button>
-      </div>
-      <div class="shareDate">
-        <el-form
-          :model="currentShareInfo"
-          style="padding: 0px"
-        >
-          <el-form-item label="截止日期">
-            <el-date-picker
-              v-model="currentShareInfo.shareEndTime"
-              type="date"
-              placeholder="选择日期"
-              :clearable="false"
-              @change="shareDateChange"
-            />
-          </el-form-item>
-        </el-form>
-      </div>
+        @click="executeShare"
+      >确 定</el-button>
+      <el-button
+        type="primary"
+        @click="executeShare"
+      >再次发布</el-button>
+      <el-button
+        type="primary"
+        @click="copyShareUrl"
+      >一键复制</el-button>
     </div>
   </el-dialog>
 </template>
@@ -78,9 +77,26 @@ export default {
   },
   data () {
     return {
-      currentShareInfo: null,
+      currentShareInfo: {
+        shareEndTime: '',
+        sharePassword: '',
+        whiteList: ''
+      },
       currentData: this.data,
-      shareDashboardVisible: false
+      shareDashboardVisible: false,
+      shareRules: {
+        shareEndTime: [
+          { required: true, message: '请输入日期', trigger: 'blur' }
+        ],
+        sharePassword: [
+          { required: true, message: '请输入密码', trigger: 'blur' }
+        ]
+      },
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < (Date.now() - 24 * 60 * 60 * 1000)
+        }
+      }
     }
   },
   computed: {},
@@ -164,6 +180,12 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    randomPwd() {
+      this.currentShareInfo = {
+        ...this.currentShareInfo,
+        sharePassword: 'sfdsfdsafdsa'
+      }
     }
 
   }
@@ -176,29 +198,31 @@ export default {
   font-weight: 400;
   color: rgba(0, 0, 0, 0.9);
   line-height: 20px;
-  .shareCopy {
-    margin-top: 24px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    .shareCopyUrl {
-      width: 480px;
-      height: 32px;
-      padding: 0px 10px;
-      background: #f4f6f8;
-      box-sizing: border-box;
-      border: 1px solid rgba(223, 225, 229, 1);
-      border-radius: 2.5px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      color: #666a77;
-      line-height: 30px;
-    }
-  }
   .shareDate {
     margin-top: 24px;
   }
+}
+.input{
+  width: 360px;
+}
+.random{
+  margin-left: 14px;
+}
+.shareCopyUrl {
+  margin-top: 24px;
+  margin-left: 70px;
+  width: 360px;
+  height: 54px;
+  padding: 0px 10px;
+  background: #f4f6f8;
+  box-sizing: border-box;
+  border: 1px solid rgba(223, 225, 229, 1);
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: rgba(0,0,0,0.65);
+  line-height: 20px;
+  font-weight: 400;
+  border-radius: 2.5px;
 }
 .shareEmpty {
   display: flex;
@@ -209,5 +233,9 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: rgba(0, 0, 0, 0.45);
+}
+.dialog-footer {
+  padding-top: 10px;
+  margin-right: 20px;
 }
 </style>
