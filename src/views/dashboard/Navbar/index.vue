@@ -266,7 +266,7 @@ export default {
         })
       }
       if (this.saveMode === 'saveAndShare') {
-        this.$refs['shareDialog'].shareDashboard(result)
+        this.$refs['shareDialog'].showShare(result)
       }
     },
     async getFolders() {
@@ -285,7 +285,7 @@ export default {
       }
     },
     async shareDashboard (data) {
-      this.$refs['shareDialog'].shareDashboard(data)
+      this.$refs['shareDialog'].showShare(data)
     },
     handleShareChange(data) {
       console.log(this.dashboard)

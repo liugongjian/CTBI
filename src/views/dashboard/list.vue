@@ -181,7 +181,7 @@
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item
                         @click.native="shareDashboard(scope.row)"
-                      >公开</el-dropdown-item>
+                      >发布</el-dropdown-item>
                       <el-dropdown-item @click.native="moveTo(scope.row)">移动到</el-dropdown-item>
                       <el-dropdown-item
                         v-if="scope.row.publishStatus === 1"
@@ -327,7 +327,7 @@
 import {
   getDashboardList,
   batchDeleteResources,
-  batchCancelPublishDashboards,
+  cancelShareDashboard,
   updateFolderOrDashboardProperties
 } from '@/api/dashboard'
 import FolderEdit from './FolderEdit'
@@ -638,7 +638,7 @@ export default {
     },
     async shareDashboard (data) {
       this.cureentData = data
-      this.$refs['shareDialog'].shareDashboard(data)
+      this.$refs['shareDialog'].showShare(data)
     },
     cancelPublish (data) {
       console.log(data)
@@ -647,11 +647,8 @@ export default {
     },
     async handleCancelPublish () {
       const id = this.cureentData._id
-      const params = {
-        ids: [id]
-      }
       try {
-        const data = await batchCancelPublishDashboards(params)
+        const data = await cancelShareDashboard(id)
         this.$message.success(data)
         this.cancelPublishVisible = false
         this.cureentData = null
@@ -684,11 +681,11 @@ export default {
       this.getTableData()
     },
     handleShareChange(data) {
-      const { id, publishStatus } = data
+      const { id, ...rest } = data
       const newTableData = this.tableData.map(item => {
-        const obj = { ...item }
+        let obj = { ...item }
         if (item._id === id) {
-          obj.publishStatus = publishStatus
+          obj = { ...item, ...rest }
         }
         return obj
       })
