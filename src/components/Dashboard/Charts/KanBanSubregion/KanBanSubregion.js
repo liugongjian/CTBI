@@ -16,7 +16,7 @@
 import { colorTheme } from '@/constants/color.js'
 export default {
   type: 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
-  isShow: false, // 是否展示该组件, 用于控制该组件是否在tools中显示
+  isShow: true, // 是否展示该组件, 用于控制该组件是否在tools中显示
   version: '', // 版本号
   field: {}, // 字段
   theme: {
@@ -25,7 +25,7 @@ export default {
       // 基础属性
       Title: {
         // 标题组件
-        text: '看板_分区域', // 标题名称
+        text: '指标看板', // 标题名称
         color: '#333', // 标题颜色
         show: true, // 是否显示标题
         testShow: false // 测试显示
@@ -98,5 +98,20 @@ export default {
     }
   },
   advance: {}, // 高级
-  dataSource: {} // 数据集
+  'dataSource': {
+    'Dimension': { // 维度
+      'name': '看板标签/维度',
+      'require': true,
+      'value': []
+    },
+    'Measure': { // 度量
+      'name': '看板指标/度量',
+      'require': true,
+      'value': []
+    }
+  }, // 数据集
+  'dataSet': { // 当前正在使用的数据集
+    'id': '', // 数据集ID
+    'name': '' // 数据集名称
+  }
 }

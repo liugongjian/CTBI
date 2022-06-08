@@ -13,7 +13,7 @@
     <div v-if="getValueShow" class="text" :style="styleDesc">
       <span>{{ option.value.current }} {{ data.value }}</span>
       <br>
-      <span>{{ option.value.target }} {{ data.target }}</span>
+      <span>{{ option.value.target }} {{ target }}</span>
     </div>
   </div>
 </template>
