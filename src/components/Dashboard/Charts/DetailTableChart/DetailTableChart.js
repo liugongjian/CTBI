@@ -1,6 +1,4 @@
 // 折线图配置项信息
-
-import { colorTheme } from '@/constants/color.js'
 /**
  * type: {
  *    indicator: 指标,
@@ -15,6 +13,7 @@ import { colorTheme } from '@/constants/color.js'
  *    other: 其他
  *  }
  * */
+import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'table', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -51,16 +50,18 @@ export default {
         'show': false,
         'active': 'stripe' // stripe 斑马 border 线框 simple 简版 verySimple 极简
       },
-      'TableThemeSimple': {
-        'show': true,
-        'type': 'default'
+      // 'TableThemeSimple': {
+      //   'show': true,
+      //   'type': 'default'
+      // },
+      'ListHeader': {
+        'head': false
       },
       'Color': { // 颜色设置
         'title': '配色设置',
-        'color': colorTheme['defaultColor']
-      },
-      'ListHeader': {
-        'head': false
+        'color': colorTheme['官方'],
+        'theme': '官方',
+        'show': false
       },
       'Sequence': { // 是否显示序号
         'show': false,
@@ -92,5 +93,15 @@ export default {
     }
   },
   'advance': {}, // 高级
-  'dataSource': {}// 数据集
+  'dataSource': {
+    'DimensionOrMeasure': { // 维度
+      'name': '数值列/维度或度量',
+      'require': false,
+      'value': []
+    }
+  }, // 数据集
+  'dataSet': { // 当前正在使用的数据集
+    'id': '', // 数据集ID
+    'name': '' // 数据集名称
+  }
 }

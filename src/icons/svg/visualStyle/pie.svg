@@ -1,1 +1,24 @@
-<svg t="1649754781035" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4755" width="128" height="128"><path d="M492.501333 102.954667C255.872 102.954667 64 294.826667 64 531.498667 64 768.128 255.872 960 492.501333 960c236.672 0 428.544-191.872 428.544-428.501333H492.501333" fill="#597EF7" p-id="4756"></path><path d="M531.498667 64C768.128 64 960 255.872 960 492.501333H531.498667" fill="#04CB94" p-id="4757"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-62">
+            <rect id="矩形备份-155" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_饼图备份-8" transform="translate(42.666667, 42.666667)" fill-rule="nonzero">
+                <g id="编组-27">
+                    <path d="M418.736634,519.930033 L418.736634,34.8953329 C184.942197,52.342386 0,247.751343 0,485.035926 C0,736.277416 202.38925,938.666667 453.63074,938.666667 C690.914097,938.666667 886.324281,753.724469 903.771334,519.930033 L418.736634,519.930033 Z" id="路径" fill="url(#linearGradient-1)"></path>
+                    <path d="M488.524846,0 L488.524846,450.14182 L938.666667,450.14182 C924.708534,209.368317 729.297123,13.9581332 488.524846,0 Z" id="路径" fill="url(#linearGradient-2)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

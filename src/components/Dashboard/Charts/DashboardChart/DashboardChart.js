@@ -89,5 +89,19 @@ export default {
     }
   },
   'advance': {}, // 高级
-  'dataSource': {}// 数据集
+  // 'dataSource': {}// 数据集
+  'dataSource': {
+    // 'Dimension': { // 维度
+    //   'name': '类别轴/维度',
+    //   'value': []
+    // },
+    'Measure': { // 度量
+      'name': '指针角度/度量',
+      'value': []
+    }
+  }, // 数据集
+  'dataSet': { // 当前正在使用的数据集
+    'id': '', // 数据集ID
+    'name': '' // 数据集名称
+  }
 }

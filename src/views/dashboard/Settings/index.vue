@@ -50,10 +50,10 @@
         </el-container>
         <!-- 图例切换模块 -->
         <el-container
-          v-show="showChartTypes&&showWrapper"
+          v-if="showChartTypes&&showWrapper"
           class="chart-type-switch"
         >
-          <ChartSwitcher :option="option" />
+          <ChartSwitcher :type="option.type" />
         </el-container>
         <div
           v-show="showWrapper===false"
