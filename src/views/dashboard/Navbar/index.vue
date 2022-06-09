@@ -293,7 +293,9 @@ export default {
       const result = await saveDashboard(params)
       this.$message.success(isCopy ? '另存为成功' : '保存成功')
       console.log(result)
-      this.hiddenDashboardAttribute()
+      if (!id) {
+        this.hiddenDashboardAttribute()
+      }
       if (!isCopy) {
         this.$emit('handleChange', {
           action: 'saveSuccess',

@@ -230,6 +230,7 @@ export default {
       if (action === 'changeMode') {
         this.mode = data
       }
+      console.log(action, data)
       if (action === 'saveSuccess') {
         if (!this.dashboardId) {
           localStorage.removeItem(this.saveName)
