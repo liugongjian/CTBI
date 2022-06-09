@@ -53,7 +53,7 @@ export default {
         'style1': { 'name': '条形', value: 'barType' },
         'style2': { 'name': '环形', value: 'annularType' },
         'style3': { 'name': '水波图', value: 'waterWave' },
-        'style': 'barType' // 默认配置
+        'style': 'waterWave' // 默认配置
       }
     },
     'ComponentOption': { // 图表样式

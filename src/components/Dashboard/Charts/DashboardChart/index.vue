@@ -78,8 +78,10 @@ export default {
           },
           axisLabel: {
             show: true,
-            distance: 25
-            // formatter: '' // 控制百分比 原始值
+            distance: 25,
+            formatter: (params) => {
+              return params
+            } // 控制百分比 原始值
           },
           title: {
             show: true,
@@ -96,10 +98,10 @@ export default {
             }
           },
           data: [
-            {
-              'value': 50,
-              'name': '速度'
-            }
+            // {
+            //   'value': 50,
+            //   'name': '速度'
+            // }
           ]
         }
 
@@ -109,7 +111,6 @@ export default {
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
     this.dataOption = store.state.app.dataOption
-    // this.getOption()
   },
   methods: {
     setStyle (style) {
@@ -148,13 +149,25 @@ export default {
       this.title.textStyle.fontSize = label.deputy.fontSize
       this.title.text = label.format ? `占比: ${(this.dataValue.value / data.max * 100).toFixed(label.deputy.decimal)}%` : `实际: ${this.dataValue.value}`
     },
+    setScale(scale) {
+      this.series[0].splitLine.show = scale.show
+      this.series[0].axisLabel.show = scale.show
+      this.series[0].axisLabel.formatter = (params) => {
+        if (scale.type === 'original') {
+          return params
+        } else {
+          return (params / this.series[0].max * 100).toFixed(0) + '%'
+        }
+      }
+    },
     getOption () {
       const { Basic: { VisualStyle: { style } }, ComponentOption, StyleConfig } = this.storeOption.theme
       const { ConfigSize } = ComponentOption
-      const { Label } = StyleConfig
+      const { Label, Scale } = StyleConfig
       this.setStyle(style)
       this.setConfigSize(ConfigSize)
       this.setConfigLabel(Label)
+      this.setScale(Scale)
       this.series[0].data[0] = this.dataValue
       this.chartOption = {
         tooltip: {
