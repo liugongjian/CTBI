@@ -144,6 +144,7 @@ export default {
     console.log('destroyed')
     localStorage.removeItem(this.saveName)
     localStorage.removeItem(this.saveTagName)
+    this.updateStoreData({ layout: [], layoutStyles: [] })
     this.mode = 'edit'
     window.removeEventListener('beforeunload', this.beforeunload)
   },
