@@ -169,7 +169,7 @@ export default {
       this.useRecover = false
       const result = this.dashboard
       const settings = result.setting ? JSON.parse(result.setting) : null
-      if (settings && Array.isArray(settings)) {
+      if (settings) {
         this.updateStoreData(settings)
         // store.dispatch('app/updateLayout', settings)
       }
@@ -191,7 +191,7 @@ export default {
           this.dashboard = result
           if (!this.recoverVisible && !this.useRecover) {
             const settings = result.setting ? JSON.parse(result.setting) : null
-            if (settings && Array.isArray(settings)) {
+            if (settings) {
               // store.dispatch('app/updateLayout', settings)
               this.updateStoreData(settings)
             }
