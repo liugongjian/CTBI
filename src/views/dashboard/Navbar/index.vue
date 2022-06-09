@@ -153,7 +153,7 @@ export default {
     const validateName = (rule, value, callback) => {
       const name = value.trim()
       if (name === '') {
-        callback(new Error('请输入文件夹名称'))
+        callback(new Error('请输入仪表板名称'))
       } else {
         const reg = /^[\u4e00-\u9fa5\w|\[\]\(\)\/\\]{1,50}$/
         if (!reg.test(name)) {
@@ -203,11 +203,41 @@ export default {
     },
     save () {
       this.saveMode = 'save'
-      this.showDashboardAttribute()
+      if (this.dashboard._id) {
+        const tip = this.testNameValid()
+        if (tip) {
+          this.$message.warning(tip)
+        } else {
+          this.saveDashboard({ name: this.name })
+        }
+      } else {
+        this.showDashboardAttribute()
+      }
     },
     saveAndShare () {
       this.saveMode = 'saveAndShare'
-      this.showDashboardAttribute()
+      if (this.dashboard._id) {
+        const tip = this.testNameValid()
+        if (tip) {
+          this.$message.warning(tip)
+        } else {
+          this.saveDashboard({ name: this.name })
+        }
+      } else {
+        this.showDashboardAttribute()
+      }
+    },
+    testNameValid() {
+      const name = this.name.trim()
+      if (name === '') {
+        return '请输入仪表板名称'
+      } else {
+        const reg = /^[\u4e00-\u9fa5\w|\[\]\(\)\/\\]{1,50}$/
+        if (!reg.test(name)) {
+          return '仪表板名称错误，支持中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号, 长度不超过50'
+        }
+      }
+      return ''
     },
     async showDashboardAttribute () {
       await this.getFolders()
@@ -247,7 +277,7 @@ export default {
       })
     },
     // 新建数据集
-    async saveDashboard () {
+    async saveDashboard (obj) {
       const isCopy = this.saveMode === 'copy'
       const id = isCopy ? null : (this.dashboard._id || null)
       const finalId = isCopy ? null : id
@@ -258,7 +288,7 @@ export default {
       const params = {
         id: finalId,
         setting: JSON.stringify(data),
-        ...this.dashboardAttr
+        ...(obj || this.dashboardAttr)
       }
       const result = await saveDashboard(params)
       this.$message.success(isCopy ? '另存为成功' : '保存成功')
@@ -270,7 +300,7 @@ export default {
           data: result
         })
       }
-      if (this.saveMode === 'saveAndShare') {
+      if (this.saveMode === 'saveAndShare' && !this.dashboard.shareUrl) {
         this.$refs['shareDialog'].showShare(result)
       }
     },
