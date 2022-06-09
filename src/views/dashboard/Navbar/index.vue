@@ -2,8 +2,9 @@
   <div class="bi-header-out">
     <div class="bi-header-container">
       <div class="nameWrap">
+        <div class="back" @click="back"><i class="el-icon-arrow-left" /></div>
         <img
-          style="width: 18px; height: 17px"
+          style="width: 18px; height: 17px; margin-left:16px;"
           :src="require('../../../assets/Image/dashboard/name.png')"
         >
         <el-input
@@ -56,6 +57,7 @@
           <el-dropdown-menu slot="dropdown" class="more-dropdown">
             <el-dropdown-item icon="el-icon-document-copy" @click.native="copy()">另存为</el-dropdown-item>
             <el-dropdown-item
+              v-if="dashboard.publishStatus === 1"
               icon="el-icon-bottom-right"
               @click.native="cancelPublish()"
             >下线</el-dropdown-item>
@@ -131,7 +133,7 @@
 </template>
 
 <script>
-import { getFolderTree, saveDashboard } from '@/api/dashboard'
+import { getFolderTree, saveDashboard, cancelShareDashboard } from '@/api/dashboard'
 import ShareDialog from '../ShareDialog'
 import store from '@/store'
 export default {
@@ -143,7 +145,7 @@ export default {
     // eslint-disable-next-line vue/require-default-prop
     dashboard: Object,
     // eslint-disable-next-line vue/require-default-prop
-    mode: String.prototype,
+    mode: String,
     // eslint-disable-next-line vue/require-default-prop
     handleChange: Function
   },
@@ -217,7 +219,15 @@ export default {
       this.saveMode = 'copy'
       this.showDashboardAttribute()
     },
-    cancelPublish() {},
+    async cancelPublish() {
+      try {
+        const result = await cancelShareDashboard(this.dashboard._id)
+        this.handleShareChange({ publishStatus: -1 })
+        this.$message.success(result)
+      } catch (error) {
+        console.log(error)
+      }
+    },
     resetForm () {
       this.$refs['attrForm'].resetFields()
     },
@@ -257,7 +267,7 @@ export default {
         })
       }
       if (this.saveMode === 'saveAndShare') {
-        this.$refs['shareDialog'].shareDashboard(result)
+        this.$refs['shareDialog'].showShare(result)
       }
     },
     async getFolders() {
@@ -276,10 +286,18 @@ export default {
       }
     },
     async shareDashboard (data) {
-      this.$refs['shareDialog'].shareDashboard(data)
+      this.$refs['shareDialog'].showShare(data)
     },
     handleShareChange(data) {
+      console.log(this.dashboard)
       console.log(data)
+      this.$emit('handleChange', {
+        action: 'changeShare',
+        data
+      })
+    },
+    back() {
+      this.$router.go(-1)
     }
   }
 }
@@ -292,6 +310,17 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  .back{
+    width: 48px;
+    height: 50px;
+    background: #020202;
+    margin-left: -20px;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .nameInput{
     width: 200px;
   }
@@ -300,6 +329,12 @@ export default {
     border: 0;
     color: #fff;
   }
+}
+::v-deep .el-dialog__footer {
+  padding: 0px;
+}
+.dialog-footer{
+  padding-top: 10px;
 }
 .device {
   width: 120px;
@@ -346,6 +381,7 @@ export default {
 .operation {
   display: flex;
   align-items: center;
+  height: 50px;
   .divider{
     width: 1px;
     height: 20px;

@@ -10,7 +10,7 @@
     <div v-if="getValueShow" class="desc" :style="styleDesc">
       <span>{{ option.value.current }} {{ data.value }}</span>
       <span class="symbol">|</span>
-      <span>{{ option.value.target }} {{ data.target }}</span>
+      <span>{{ option.value.target }} {{ target }}</span>
     </div>
   </div>
 </template>

@@ -95,10 +95,10 @@ export default {
   },
   mounted () {
     // 获取本地数据，进行画布初始化
-    if (localStorage.getItem('layout')) {
-      const layout = JSON.parse(localStorage.getItem('layout'))
-      this.$store.state.app.layout = layout
-    }
+    // if (localStorage.getItem('layout')) {
+    //   const layout = JSON.parse(localStorage.getItem('layout'))
+    //   this.$store.state.app.layout = layout
+    // }
     if (localStorage.getItem('dataOption')) {
       const dataOption = JSON.parse(localStorage.getItem('dataOption'))
       this.$store.state.app.dataOption = dataOption
@@ -214,6 +214,9 @@ export default {
         localStorage.setItem(this.saveName, JSON.stringify(this.layout))
         localStorage.setItem(this.saveTagName, 'saved')
         this.dashboard = data
+      }
+      if (action === 'changeShare') {
+        this.dashboard = { ...this.dashboard, ...data }
       }
     },
     saveDashboardToLocal() {

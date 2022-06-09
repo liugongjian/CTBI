@@ -30,11 +30,11 @@
                   class="field-box-wrapper"
                 >
                   <div
-                    :class="name==='Dimension'?'dimension-field-box':'measure-field-box'"
+                    :class="el.type==='Dimension'?'dimension-field-box':'measure-field-box'"
                     class="base-field-box"
                   >
                     <svg-icon
-                      v-if="name==='Dimension'"
+                      v-if="el.type==='Dimension'"
                       icon-class="dimension"
                     />
                     <svg-icon
@@ -187,11 +187,13 @@ export default {
           item.value.push(data)
         }
       } else {
-        const dataName = data.type === 'Measure' ? '度量' : '维度'
-        this.$message({
-          message: `不支持添加${dataName}到[${itemName}]上`,
-          type: 'warning'
-        })
+        if (data.type !== 'DimensionOrMeasure') {
+          const dataName = data.type === 'Measure' ? '度量' : '维度'
+          this.$message({
+            message: `不支持添加${dataName}到[${itemName}]上`,
+            type: 'warning'
+          })
+        }
       }
     },
     // 删除字段

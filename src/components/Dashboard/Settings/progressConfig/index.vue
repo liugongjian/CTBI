@@ -1,11 +1,11 @@
 <template>
   <div class="editor-object-container">
-    <span>设置目标值</span>
+    <span class="editor-item-title">设置目标值</span>
     <div v-for="(data,index) in option.cfgTargetOption" :key="index" class="item">
       <div>{{ data.name }}</div>
       <div class="box">
         <span>目标类型</span>
-        <el-select v-model="data.type" class="w-select" placeholder="请选择">
+        <el-select v-model="data.type" popper-class="setting-select" class="w-select" placeholder="请选择">
           <el-option
             v-for="item in typeOptions"
             :key="item.value"
@@ -17,7 +17,7 @@
       <div class="box">
         <span>目标值</span>
         <el-input v-if="data.type === 1" v-model="data.fixedVal" class="w-input" placeholder="请输入内容" />
-        <el-select v-else v-model="data.dynamicVal" class="w-select" placeholder="请选择">
+        <el-select v-else v-model="data.dynamicVal" popper-class="setting-select" class="w-select" placeholder="请选择">
           <el-option
             v-for="(item,i) in option.cfgTargetOption"
             :key="i"
@@ -38,7 +38,7 @@
         </el-select>
       </div>
     </div>
-    <span>
+    <span class="editor-item-title">
       完成占比计算方式
       <el-tooltip effect="dark" content="仅当目标值为负数时，选择的计算方式才生效" placement="top">
         <svg-icon
@@ -47,7 +47,7 @@
         />
       </el-tooltip>
     </span>
-    <el-select v-model="option.proportion.type" placeholder="请选择">
+    <el-select v-model="option.proportion.type" popper-class="setting-select" placeholder="请选择">
       <el-option
         v-for="item in proportionOptions"
         :key="item.value"
@@ -56,10 +56,10 @@
       />
     </el-select>
     <div class="decimal">
-      <span>
+      <span class="editor-item-title">
         设置完成占比小数位数
       </span>
-      <el-select v-model="option.proportion.decimal" class="decimal-select" placeholder="请选择">
+      <el-select v-model="option.proportion.decimal" popper-class="setting-select" class="decimal-select" placeholder="请选择">
         <el-option
           v-for="item in decimalOptions"
           :key="item"
@@ -107,14 +107,15 @@ export default {
 .item {
   padding: 5px 0;
   margin-bottom: 5px;
-  background-color: #c6cddb;
+  background-color: #434a59;
+  color: rgba(255, 255, 255, 0.75);
   .box {
-    text-align: right;
+    text-align: left;
   }
   .w-select, .w-input {
     margin-left: 5px;
     margin-right: 5px;
-    width: 150px;
+    width: 130px;
   }
 }
 .decimal {
