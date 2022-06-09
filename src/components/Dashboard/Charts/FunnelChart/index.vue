@@ -163,7 +163,7 @@ export default {
               opacity: 0,
               color: 'rgba(111, 255, 255, 0)',
               borderWidth: 0
-            },
+            }
             // data: this.lastData
             // Ensure outer shape will not be over inner shape when hover.
           },
@@ -184,7 +184,7 @@ export default {
               opacity: 1,
               color: 'rgba(1, 255, 255, 0)',
               borderWidth: 0
-            },
+            }
             // data: this.firstData
             // Ensure outer shape will not be over inner shape when hover.
           }

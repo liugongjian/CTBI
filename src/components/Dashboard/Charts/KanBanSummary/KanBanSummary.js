@@ -15,7 +15,7 @@
  * */
 export default {
   type: 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
-  isShow: true, // 是否展示该组件, 用于控制该组件是否在tools中显示
+  isShow: false, // 是否展示该组件, 用于控制该组件是否在tools中显示
   version: '', // 版本号
   field: {}, // 字段
   theme: {
@@ -58,5 +58,9 @@ export default {
     }
   },
   advance: {}, // 高级
-  dataSource: {} // 数据集
+  dataSource: {}, // 数据集
+  'dataSet': { // 当前正在使用的数据集
+    'id': '', // 数据集ID
+    'name': '' // 数据集名称
+  }
 }
