@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-3">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-4">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-5">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-57">
+            <rect id="矩形备份-171" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_堆积柱状图-(1)备份-7" transform="translate(128.000000, 85.333333)" fill-rule="nonzero">
+                <g id="编组-22">
+                    <polygon id="路径" fill="url(#linearGradient-1)" points="345.240181 0 345.240181 164.558825 1.34227793 164.558825 1.34227793 0"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-2)" points="768 230.800633 768 395.360904 48.9416207 395.360904 48.9416207 230.800633"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="470.295963 460.768181 470.295963 625.327006 1.34227793 625.327006 1.34227793 460.768181"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-4)" points="596.295599 0 596.295599 164.557379 346.185409 164.557379 346.185409 0"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="470.816662 230.802079 470.816662 395.360904 1.8629771 395.360904 1.8629771 230.802079"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-4)" points="543.143044 460.444203 543.143044 625.001583 293.032855 625.001583 293.032855 460.444203"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="468.953685 688.774509 468.953685 853.333333 3.02011359e-14 853.333333 0 688.774509"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-5)" points="554.13406 688.774509 554.13406 853.331887 304.023871 853.331887 304.023871 688.774509"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

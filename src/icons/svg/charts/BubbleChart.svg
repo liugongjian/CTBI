@@ -1,2 +1,25 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1650537309007" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1778" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><defs><style type="text/css">@font-face { font-family: feedback-iconfont; src: url("//at.alicdn.com/t/font_1031158_u69w8yhxdu.woff2?t=1630033759944") format("woff2"), url("//at.alicdn.com/t/font_1031158_u69w8yhxdu.woff?t=1630033759944") format("woff"), url("//at.alicdn.com/t/font_1031158_u69w8yhxdu.ttf?t=1630033759944") format("truetype"); }
-</style></defs><path d="M736 256m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z" fill="#4A8BFE" p-id="1779"></path><path d="M800 512m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z" fill="#4A8BFE" p-id="1780"></path><path d="M528 592m-112 0a112 112 0 1 0 224 0 112 112 0 1 0-224 0Z" fill="#4A8BFE" p-id="1781"></path><path d="M704 832m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z" fill="#4A8BFE" p-id="1782"></path><path d="M864 704m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" fill="#4A8BFE" p-id="1783"></path><path d="M272 784m-80 0a80 80 0 1 0 160 0 80 80 0 1 0-160 0Z" fill="#4A8BFE" p-id="1784"></path><path d="M192 544m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z" fill="#4A8BFE" p-id="1785"></path><path d="M368 368m-80 0a80 80 0 1 0 160 0 80 80 0 1 0-160 0Z" fill="#4A8BFE" p-id="1786"></path><path d="M208 240m-48 0a48 48 0 1 0 96 0 48 48 0 1 0-96 0Z" fill="#4A8BFE" p-id="1787"></path><path d="M528 176m-48 0a48 48 0 1 0 96 0 48 48 0 1 0-96 0Z" fill="#4A8BFE" p-id="1788"></path><path d="M496 816m-48 0a48 48 0 1 0 96 0 48 48 0 1 0-96 0Z" fill="#4A8BFE" p-id="1789"></path><path d="M592 368m-48 0a48 48 0 1 0 96 0 48 48 0 1 0-96 0Z" fill="#4A8BFE" p-id="1790"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-69">
+            <rect id="矩形备份-161" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_气泡图备份-7" transform="translate(42.666667, 42.666667)" fill-rule="nonzero">
+                <g id="编组-33">
+                    <path d="M328.523653,305.062707 C328.523653,473.54856 465.100507,610.143013 633.58636,610.143013 C802.089813,610.143013 938.666667,473.54856 938.666667,305.062707 C938.666667,136.576854 802.089813,0 633.58636,0 C465.118107,0 328.523653,136.576854 328.523653,305.062707 Z" id="路径" fill="url(#linearGradient-1)"></path>
+                    <path d="M0,727.465347 C0,844.101276 94.565391,938.666667 211.20132,938.666667 C327.837249,938.666667 422.40264,844.101276 422.40264,727.465347 C422.40264,610.829418 327.837249,516.264027 211.20132,516.264027 C94.565391,516.264027 0,610.829418 0,727.465347 Z" id="路径" fill="url(#linearGradient-2)"></path>
+                    <path d="M610.143013,797.865787 C610.143013,875.627965 673.181715,938.666667 750.943893,938.666667 C828.706072,938.666667 891.744773,875.627965 891.744773,797.865787 C891.744773,720.103608 828.706072,657.064907 750.943893,657.064907 C673.181715,657.064907 610.143013,720.103608 610.143013,797.865787 Z" id="路径" fill="url(#linearGradient-1)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

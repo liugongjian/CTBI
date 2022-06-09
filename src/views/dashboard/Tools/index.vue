@@ -1,6 +1,95 @@
 <template>
-  <div class="header-tool">
-    <div
+  <div
+    class="header-tool"
+    @click="panelShow"
+  >
+    <div class="tools-container">
+      <!-- <div class="tool-btn">
+        <svg-icon
+          :icon-class="'tools-story-line'"
+          style="font-size: 18px;"
+        />
+      </div> -->
+      <div class="tool-btn">
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            100%<i class="el-icon-arrow-down el-icon--right" />
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>25%</el-dropdown-item>
+            <el-dropdown-item>50%</el-dropdown-item>
+            <el-dropdown-item>75%</el-dropdown-item>
+            <el-dropdown-item>100%</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+    </div>
+    <div class="tools-container">
+      <!-- <div class="tool-btn">
+        <icon-dropdown :drop-downs="queryList" :main="'tools-query'" @resolve="resolveDropdown" />
+      </div> -->
+      <!-- <div class="tool-btn">
+        <svg-icon
+          :icon-class="'tools-tab'"
+          style="font-size: 18px;"
+        />
+      </div> -->
+      <!-- <div class="tool-btn">
+        <icon-dropdown :drop-downs="richEditorList" :main="'tools-rich'" @resolve="resolveDropdown" />
+      </div> -->
+    </div>
+    <div class="tools-container">
+      <div
+        v-for="(item,name, index) in briefTooList"
+        :key="name + index"
+        class="droppable-element tool-btn chart-tool"
+        draggable="true"
+        unselectable="on"
+        @click.stop="addItem(name,item)"
+        @drag.stop="drag($event, name,item)"
+        @dragend="dragend($event, name,item)"
+      >
+        <el-tooltip
+          effect="dark"
+          :content="item.theme.Basic.Title.text"
+          placement="top"
+        >
+          <svg-icon
+            :icon-class="name"
+            style="font-size: 22px;"
+          />
+        </el-tooltip>
+      </div>
+      <div class="tool-btn horizontal">
+        <svg-icon
+          :icon-class="'tools-more'"
+          style="font-size: 22px;"
+        />
+        <svg-icon
+          :icon-class="'tools-arrow'"
+          style="font-size: 8px;margin-left: 8px;"
+        />
+      </div>
+    </div>
+    <div class="setting-container">
+      <div
+        class="tool-setting"
+        @click.stop
+      >
+        <svg-icon
+          icon-class="tools-setting"
+          style="font-size: 14px;margin-left: 16px;"
+        />
+      </div>
+    </div>
+    <chart-list-panel
+      v-if="showPanel"
+      :tool-list="toolList"
+      @addItem="addItem"
+      @drag="drag"
+      @dragend="dragend"
+    />
+    <!-- <div
       v-for="(item,name, index) in toolList"
       :key="name + index"
       class="droppable-element"
@@ -14,7 +103,7 @@
         :icon-class="name"
         style="font-size: 30px;"
       />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -22,14 +111,29 @@
 const DragPos = { 'x': 1, 'y': 1, 'w': 1, 'h': 1, 'i': null }
 const mouseXY = { 'x': 1, 'y': 1 }
 import store from '@/store'
-import { getToolList } from './getToolList'
+import { getToolList, getBriefToolList } from './getToolList'
+import { nanoid } from 'nanoid'
+// import IconDropdown from './component/IconDropdown.vue'
+import ChartListPanel from './component/ChartListPanel.vue'
 export default {
   name: 'Tools',
-  components: {},
+  components: {
+    // IconDropdown,
+    ChartListPanel
+  },
   data () {
     return {
       layoutIndex: 100,
-      toolList: {}
+      toolList: {},
+      briefTooList: {},
+      showPanel: false,
+      queryList: [
+        { svg: 'tools-story-line', command: 'composite-query-component' }
+      ],
+      richEditorList: [
+        { svg: 'tools-story-line', command: 'picture' },
+        { svg: 'tools-story-line', command: 'iframe' }
+      ]
     }
   },
   computed: {
@@ -52,12 +156,18 @@ export default {
 
     // 获取json文件中的配置项信息
     this.toolList = getToolList()
+    this.briefTooList = getBriefToolList()
+    console.log(this.briefTooList)
     store.dispatch('app/updateToolList', this.toolList)
   },
   methods: {
     // 图标点击添加组件到画布
-    addItem (name, item) {
-      const i = name + this.layoutIndex + new Date().getTime()
+    addItem (name, item, submenu) {
+      // 点击展开菜单的图标 收起菜单
+      if (submenu) {
+        this.panelShow()
+      }
+      const id = nanoid()
       // 防止指向问题
       const option = JSON.parse(JSON.stringify(item))
       this.addLayout({
@@ -65,7 +175,8 @@ export default {
         y: this.layout.length + (this.colNum || 12), // puts it at the bottom
         w: 12,
         h: 2,
-        i,
+        id,
+        i: id,
         is: name,
         option
       })
@@ -164,6 +275,12 @@ export default {
         })
         parentGridLayout.dragEvent('dragend', i, DragPos.x, DragPos.y, 2, 12)
       }
+    },
+    resolveDropdown (command) {
+      console.log('command:', command)
+    },
+    panelShow () {
+      this.showPanel = !this.showPanel
     }
   }
 }
@@ -171,9 +288,43 @@ export default {
 <style lang="scss" scoped>
 .header-tool {
   display: flex;
+  width: 100%;
   align-items: center;
+  cursor: pointer;
+  .tools-container {
+    display: flex;
+    align-items: center;
+    svg {
+      cursor: pointer;
+    }
+    .tool-btn {
+      margin: 0px 3px;
+    }
+  }
   .droppable-element {
-    margin: 0px 5px;
+    margin: 0px 3px;
+    svg {
+      padding: 5px;
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+      }
+    }
+  }
+  .horizontal {
+    display: flex;
+    margin-left: 8px;
+    align-items: center;
+    cursor: pointer;
+  }
+  .setting-container {
+    svg {
+      cursor: pointer;
+    }
+    position: absolute;
+    right: 20px;
+    display: flex;
+    align-items: center;
   }
 }
 </style>

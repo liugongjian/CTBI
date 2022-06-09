@@ -1,28 +1,26 @@
 <template>
-  <div style="width:100%;height:100%;">
+  <div style="width: 100%; height: 100%">
     <div v-if="dataValue" class="box">
-      <div v-for="(item,index) in dataValue" :key="index" class="item" :style="{width: showNumStyle}">
-        <component :is="isComponent" :data="item" :option="progressStyle" :progress-config="progressConfig" />
-      </div>
+      <Progress
+        :store-option="storeOption"
+        :data-value="dataValue"
+      />
     </div>
     <div v-else>数据为空</div>
   </div>
 </template>
 
 <script>
-import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
-import progressMixins from '@/components/Dashboard/mixins/progressMixins'
-import barType from './barType.vue'
-import annularType from './annularType.vue'
-import waterWave from './waterWave.vue'
+import { getLayoutOptionById } from '@/utils/optionUtils'
+import waterRippleMixins from '@/components/Dashboard/mixins/waterRippleMixins'
+import Progress from '@/components/Dashboard/Common/Progress'
+import store from '@/store'
 export default {
   name: 'ProgressChart',
   components: {
-    barType,
-    annularType,
-    waterWave
+    Progress
   },
-  mixins: [progressMixins],
+  mixins: [waterRippleMixins],
   props: {
     identify: {
       type: String,
@@ -33,49 +31,13 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
+      dataOption: [],
       dataValue: []
-    }
-  },
-  computed: {
-    showNumStyle () {
-      const showNum = this.storeOption.theme?.ComponentOption?.progressStyle.showNum || 1
-      return `${1 / showNum * 100}%`
-    },
-    progressStyle () {
-      return this.storeOption.theme?.ComponentOption?.progressStyle || {}
-    },
-    progressConfig () {
-      return this.storeOption.theme?.FunctionalOption.progressConfig || {}
-    },
-    isComponent () {
-      return this.storeOption.theme.Basic.VisualStyle.style || 'barType'
-    }
-  },
-  watch: {
-    storeOption: {
-      handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = deepClone(val.dataSource)
-        }
-        console.log('hah')
-      },
-      deep: true
-    },
-    'storeOption.dataSource': {
-      handler (val) {
-        if (JSON.stringify(val) !== '{}') {
-          this.dataValue = deepClone(val)
-          // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
-          // 获取目标值
-          this.getCfgTargetOption(this.dataValue)
-        }
-      }
     }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
+    this.dataOption = store.state.app.dataOption
   }
 }
 </script>

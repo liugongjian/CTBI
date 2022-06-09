@@ -10,12 +10,14 @@
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
+import { deepClone, formatDataValue, getDataValueById, getLayoutOptionById } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
+import baseMixins from '@/components/Dashboard/mixins/baseMixins'
+import store from '@/store'
 
 export default {
   name: 'ScatterChart',
-  mixins: [YAxis],
+  mixins: [YAxis, baseMixins],
   props: {
     identify: {
       type: String,
@@ -26,38 +28,53 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
-      dataValue: [
-        ['价格', '数量'],
-        [820, 410],
-        [932, 320],
-        [901, 300],
-        [934, 380],
-        [1290, 430],
-        [1330, 480],
-        [1320, 460]
-      ]
+      dataValue: null,
+      dataOption: [],
+      series: [],
+      xAxis: { type: 'category' },
+      yAxis: {},
+      grid: {}
     }
   },
   watch: {
     storeOption: {
       handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
+        if (this.dataValue) {
+          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
         }
         this.getOption()
+      },
+      deep: true
+    },
+    dataOption: {
+      handler (val) {
+        const isData = val.findIndex(item => {
+          return item.i === this.identify
+        })
+        if (isData !== -1) {
+          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
+          this.getOption()
+        }
       },
       deep: true
     }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
-    this.getOption()
+    this.dataOption = store.state.app.dataOption
   },
   methods: {
+    reloadImpl () {
+      this.dataValue = formatDataValue(deepClone(this.chartData))
+      this.getOption()
+    },
     getOption () {
       const { Legend, Slider } = this.storeOption.theme.ComponentOption
       const { XAxis, YAxis } = this.storeOption.theme.Axis
+      let measureLen = 1
+      if (this.chartData?.fields?.Measure) {
+        measureLen = this.chartData.fields.Measure?.fields?.length
+      }
       this.chartOption = {
         tooltip: {
           show: true,
@@ -142,14 +159,10 @@ export default {
         dataset: {
           source: this.dataValue
         },
-        'series': [
-          {
-            'symbolSize': Slider.symbolSize,
-            'type': 'scatter'
-            // 'data': this.dataValue,
-            // 'name': '图例'
-          }
-        ]
+        'series': Array(measureLen).fill({
+          'symbolSize': Slider.symbolSize,
+          'type': 'scatter'
+        })
       }
     }
   }

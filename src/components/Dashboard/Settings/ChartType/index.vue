@@ -1,27 +1,29 @@
 <template>
   <div class="editor-object-container">
-    <div>
+    <div class="editor-item-title">
       图表类型
     </div>
-    <div class="editor-item-container">
-      <span
+    <div class="editor-item-container flex-align-center">
+      <div
         v-for="(item, index) in typeOption"
         :key="index"
-        style="cursor: pointer"
+        @click.stop="changeHandler(item.value)"
       >
         <el-tooltip
-          class="item"
           effect="dark"
           :content="item.name"
           placement="top"
         >
-          <svg-icon
-            :icon-class="item.value"
-            style="font-size: 30px;"
-            @click="changeHandler(item.value)"
-          />
+          <span
+            class="svg-container"
+            :class="{'active': option.type===item.value}"
+          >
+            <svg-icon
+              :icon-class="item.value"
+            />
+          </span>
         </el-tooltip>
-      </span>
+      </div>
     </div>
   </div>
 </template>
@@ -66,6 +68,18 @@ export default {
             name: '百分比堆积柱状图',
             value: 'PercentStackedBarChart'
           }
+        ],
+        [
+          {
+            name: '条形图',
+            value: 'HorizontalBarChart'
+          }, {
+            name: '堆积条形图',
+            value: 'StackedHorizontalBarChart'
+          }, {
+            name: '百分比堆积条形图',
+            value: 'PSHorizontalBarChart'
+          }
         ]
       ]
     }
@@ -94,8 +108,10 @@ export default {
     changeHandler (type) {
       const storeOption = getLayoutById(store.state.app.currentLayoutId)
       const dataSource = JSON.parse(JSON.stringify(storeOption.option.dataSource))
+      const dataSet = JSON.parse(JSON.stringify(storeOption.option.dataSet))
       storeOption.option = JSON.parse(JSON.stringify(store.state.app.toolList[type]))
       storeOption.option.dataSource = dataSource
+      storeOption.option.dataSet = dataSet
       storeOption.is = type
     }
   }
@@ -103,5 +119,17 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.svg-container {
+  cursor: pointer;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  margin-right: 8px;
+  line-height: 32px;
+  text-align: center;
+}
+.svg-container.active{
+  border: 1px solid rgba(250,131,52,1);
+}
 </style>

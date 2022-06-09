@@ -5,13 +5,16 @@
       v-model="option.check"
       label="显示双Y轴"
     />
-    <span v-else>显示双Y轴</span>
-    <div class="editor-item-container">
+    <span v-else class="editor-item-title">显示双Y轴</span>
+    <div
+      class="editor-item-container"
+      :class="{'box-disabled':(option.show&&!option.check)}"
+    >
       <el-radio-group
         v-model="option.twisType"
         :disabled="option.show&&!option.check"
       >
-        <div
+        <span
           v-for="(item,index) in options"
           :key="index"
         >
@@ -32,10 +35,10 @@
           >
             <i
               class="el-icon-warning-outline"
-              style="font-size:14px"
+              style="font-size:12px;margin: 0 8px 8px -3px;"
             />
           </el-tooltip>
-        </div>
+        </span>
       </el-radio-group>
     </div>
   </div>

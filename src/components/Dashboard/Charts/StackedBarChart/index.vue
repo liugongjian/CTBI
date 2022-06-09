@@ -29,11 +29,8 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.transfromData(this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery)
+      this.transformData(this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator)
       this.getStackSeries(componentOption)
-      if (componentOption.PercentStack.isPercent) {
-        this.getPercentStackSeries(componentOption)
-      }
       // 如果选择百分比，转为百分比堆积柱状图
       if (componentOption.PercentStack.isPercent) {
         this.getPercentStackSeries(componentOption)
@@ -48,12 +45,25 @@ export default {
       })
       // 设置图例与图表距离
       this.setGrid(componentOption.Legend)
+
+      // 获取指标筛选中的图例数据
+      const legendData = []
+      this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
+        legendData.push({ name: item.value })
+      })
       this.chartOption = {
         'grid': this.grid,
         'color': colorOption,
-        'legend': componentOption.Legend,
+        'legend': {
+          ...componentOption.Legend,
+          data: legendData
+        },
         'xAxis': this.xAxis,
-        'tooltip': this.tooltip,
+        'tooltip': {
+          'show': true,
+          'trigger': 'axis',
+          'formatter': this.tooltipFormatter
+        },
         'yAxis': this.yAxis,
         'dataset': {
           'source': this.dataValue
@@ -68,6 +78,26 @@ export default {
         },
         'series': this.series
       }
+    },
+    tooltipFormatter (params) {
+      let result = ''
+      let Total = 0
+      params.forEach((item, index) => {
+        const { data, seriesName, marker, color } = item
+        if (seriesName !== '总计') {
+          if (index === 0) {
+            result += '<div>' + data[0] + '</div>'
+          }
+
+          result += `<div style="line-height: 25px;">${marker}</span>
+            <span style="color: ${color};">${seriesName}</span>
+            <span style="float: right;margin-left: 20px;">${data[index + 1]}</span>
+          </div>`
+          Total += Number.parseInt(data[index + 1])
+        }
+      })
+      result += `<div style="line-height: 25px;font-weight: 700;">总计<span style="float: right;font-weight: 700;">${Total}</span></div>`
+      return result
     }
   }
 }

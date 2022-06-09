@@ -1,6 +1,6 @@
 <template>
   <div class="editor-object-container">
-    <div>
+    <div class="editor-item-title">
       可视化样式
     </div>
     <div
@@ -55,7 +55,6 @@ export default {
   methods: {
     // 图标点击添加组件到画布
     changeHandler (val) {
-      console.log('what   ?    ', val)
       this.option.style = val
     }
   }
@@ -68,21 +67,20 @@ export default {
   display: flex;
 }
 .box {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    margin-left: 5px;
-    .shape-icon {
-      padding: 6px;
-    }
-    .shape-icon {
-      border: 1px solid #FFF;
-    }
-    .shape-icon:hover {
-      border-color: #616571;
-    }
-    .pitch {
-      border-color:  #2e74ff !important;
-    }
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-left: 5px;
+  .shape-icon {
+    padding: 6px;
+    margin-right: 5px;
+    border: 1px solid transparent;
   }
+  .shape-icon:hover {
+    border: 1px solid #616571;
+  }
+  .pitch {
+    border: 1px solid  #fa8334 !important;
+  }
+}
 </style>

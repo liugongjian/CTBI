@@ -6,34 +6,34 @@ const apps = [
     meta: { title: '首页', icon: 'dashboard', affix: true }
   },
   {
-    path: '/editor',
-    name: 'Editor',
-    component: () => import('@/components/Editor/index.vue'),
-    meta: { title: 'SQl', icon: 'dashboard', affix: true }
-  },
-  {
-    path: '/dashboard/',
+    path: '/dashboardList/',
     name: 'dashboard',
-    component: () => import('@/views/dashboard/index.vue'),
+    component: () => import('@/views/dashboard/list.vue'),
     meta: { title: '仪表盘', icon: 'dashboard', affix: true }
   },
+  // {
+  //   path: '/dashboardList1/',
+  //   name: 'dashboard1',
+  //   component: () => import('@/views/dashboard/index.vue'),
+  //   meta: { title: '仪表盘1', icon: 'dashboard', affix: true }
+  // },
   {
     path: '/dataManage',
     name: 'dataManage',
-    redirect: '/dataSource',
+    redirect: '/dataManage/dataSource',
     meta: { title: '数据管理', icon: 'dashboard', affix: true },
     component: () => import('@/views/dataManage/index.vue'),
     children: [
       {
-        path: '/dataSource',
+        path: 'dataSource',
         name: 'dataSource',
         component: () => import('@/views/dataManage/dataSource.vue'),
         meta: { title: '数据源', icon: 'dashboard', affix: true }
       },
       {
-        path: '/dataSet',
+        path: 'dataSet',
         name: 'dataSet',
-        component: () => import('@/views/dataManage/dataSet.vue'),
+        component: () => import('@/views/dataManage/dataSet/index.vue'),
         meta: { title: '数据集', icon: 'dashboard', affix: true }
       }
     ]
@@ -43,11 +43,6 @@ const apps = [
     name: 'userManage',
     component: () => import('@/views/systemManage/userManage.vue'),
     meta: { title: '账号管理', icon: 'dashboard', affix: true }
-  },
-  {
-    path: '/dataSet/edit',
-    name: 'dataSetEdit',
-    component: () => import('@/views/dataManage/dataSetEdit/index.vue')
   }
 ]
 export default apps

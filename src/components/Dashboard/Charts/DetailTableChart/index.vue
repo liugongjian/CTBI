@@ -1,0 +1,142 @@
+<template>
+  <div style="width:100%;height:100%;">
+    <div v-if="dataValue && dataValue.tableData">
+      <table-chart
+        :table-columns="dataValue.columns"
+        :table-data="dataValue.tableData"
+        :page-num.sync="pageNum"
+        :page-size.sync="pageSize"
+        :total="dataValue.total"
+        :loading="tableLoading"
+        :is-show-pagination="isShowPagination"
+        :is-show-default-option="true"
+        :stripe="stripe"
+        :border="border"
+        :header="header"
+        :sequence="sequence"
+        :sequence-name="sequenceName"
+        :row-style="rowStyle"
+        @refresh="refresh"
+      />
+    </div>
+    <div v-else>数据为空</div>
+  </div>
+</template>
+
+<script>
+import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
+import tableMixins from '@/components/Dashboard/mixins/tableMixins'
+import baseMixins from '@/components/Dashboard/mixins/baseMixins'
+import TableChart from '../../Common/Table'
+import store from '@/store'
+
+export default {
+  name: 'DetailTableChart',
+  components: { TableChart },
+  mixins: [tableMixins, baseMixins],
+  props: {
+    identify: {
+      type: String,
+      default: ''
+    }
+  },
+  data () {
+    return {
+      dataValue: null,
+      columns: [],
+      isShowPagination: true,
+      pageNum: 1,
+      pageSize: 20,
+      tableLoading: false,
+      storeOption: {},
+      dataOption: [],
+      stripe: true, // 斑马线
+      border: false, // 线框
+      header: false, // 不显示列头
+      sequence: false, // 是否展示序号
+      sequenceName: '序号',
+      rowStyle: {}
+    }
+  },
+  watch: {
+    storeOption: {
+      handler (val) {
+        if (val.theme.DisplayConfig.TableTheme.show) {
+          debugger
+          this.stripe = val.theme.DisplayConfig.TableTheme.active === 'stripe'
+          this.border = val.theme.DisplayConfig.TableTheme.active === 'border'
+          const colorType = val.theme.DisplayConfig.TableTheme.colorType
+          const color = colorType === 'gray' ? colorType : (colorType === 'themeColor' ? 'blue' : val.theme.DisplayConfig.Color.color[0].color)
+          this.rowStyle = val.theme.DisplayConfig.TableTheme.active === 'simple' ? { 'border-bottom': `3px ${color} solid` } : {}
+        } else {
+          debugger
+          if (val.theme.DisplayConfig.TableThemeSimple.show) {
+            switch (val.theme.DisplayConfig.TableThemeSimple.type) {
+              case 'simple-no-head':
+                this.stripe = true
+                val.theme.DisplayConfig.ListHeader.head = true
+                this.border = false
+                break
+              case 'simple':
+                this.stripe = false
+                val.theme.DisplayConfig.ListHeader.head = false
+                this.border = true
+                break
+              default:
+                this.stripe = true
+                val.theme.DisplayConfig.ListHeader.head = false
+                this.border = false
+            }
+          }
+        }
+        this.header = val.theme.DisplayConfig.ListHeader.head
+        this.sequence = val.theme.DisplayConfig.Sequence.show
+        this.sequenceName = val.theme.DisplayConfig.Sequence.name
+        // this.isShowPagination = val.theme.DisplayConfig.
+        // if (JSON.stringify(val.dataSource) !== '{}') {
+        //   this.dataValue = deepClone(val.dataSource)
+        //   this.columns = this.dataValue.columns.map((item) => {
+        //     item.fixed = false
+        //     return item
+        //   })
+        // }
+      },
+      deep: true
+    },
+    // 图表类型切换
+    'storeOption.is': {
+      handler (val) {
+        const isData = this.dataOption.findIndex(item => {
+          return item.id === this.identify
+        })
+        if (isData !== -1) {
+          this.$bus.$emit('interReload', [this.identify], 100, false)
+        }
+      },
+      deep: true
+    }
+  },
+  mounted () {
+    this.storeOption = getLayoutOptionById(this.identify)
+    this.dataOption = store.state.app.dataOption
+  },
+  methods: {
+    refresh() {
+      console.log('重新请求数据')
+    },
+    // 图表重绘事件，继承于baseMixins
+    reloadImpl () {
+      this.dataValue = this.formatDataValue(deepClone(this.chartData))
+    },
+    formatDataValue(data) {
+      const tableData = [{ 'name': 'Sam S Club', 'value': 10000 }, { 'name': 'a Club', 'value': 12122 }]
+      const columns = [{ prop: 'name', label: '姓名' }, { prop: 'value', label: '价格' }]
+      const dataValue = { tableData, total: tableData.length, columns }
+      return dataValue
+    }
+  }
+}
+</script>
+
+<style>
+</style>

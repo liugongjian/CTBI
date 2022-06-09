@@ -23,6 +23,7 @@
 export default {
   'type': 'relation', // 组件类型, 用于管理组件类型集合，例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
+  'order': 1, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
   'theme': { // 样式组件、配置合集
@@ -32,9 +33,6 @@ export default {
         'color': '#333', // 标题颜色
         'show': true, // 是否显示标题
         'testShow': false // 测试显示
-      },
-      'TestTitle': { // 测试组件间交互组件
-        'testShow': false
       },
       'Mark': { // 备注
         'show': false, // 是否显示备注
@@ -93,5 +91,18 @@ export default {
     }
   },
   'advance': {}, // 高级
-  'dataSource': {} // 数据集
+  'dataSource': {
+    'Dimension': { // 维度
+      'name': '漏斗分层/维度',
+      'value': []
+    },
+    'Measure': { // 度量
+      'name': '漏斗层宽/度量',
+      'value': []
+    }
+  }, // 数据集
+  'dataSet': { // 当前正在使用的数据集
+    'id': '', // 数据集ID
+    'name': '' // 数据集名称
+  }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1186px" height="1024px" viewBox="0 0 1186 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>线图</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#C7C6CA" offset="0%"></stop>
+            <stop stop-color="#E5E5E7" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FFB676" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="线图" transform="translate(0.000000, 0.000000)" fill-rule="nonzero">
+            <polygon id="路径备份-46" fill="url(#linearGradient-1)" transform="translate(592.842105, 972.330277) rotate(90.000000) translate(-592.842105, -972.330277) " points="541.172382 379.488172 644.511828 379.488172 644.511828 1565.17238 541.172382 1565.17238"></polygon>
+            <g id="fsux_图表_折线图备份-4" transform="translate(2.343235, 0.000000)">
+                <polygon id="路径" fill="url(#linearGradient-2)" points="546.669315 821.884714 269.255677 621.524673 77.5120853 776.905839 0 678.769986 261.096284 466.143505 554.828708 674.681651 1068.86044 368.007651 1134.13273 474.321612"></polygon>
+                <polygon id="路径" fill="url(#linearGradient-3)" points="546.669315 453.877062 269.255677 253.517021 77.5120853 408.898189 0 310.762336 261.096284 98.1358531 554.828708 306.674001 1068.86044 0 1134.13273 106.31396"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

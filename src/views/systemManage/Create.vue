@@ -34,7 +34,7 @@
                 />
                 <div slot="content">
                   <div>1. 密码为数字、大写字母、小写字母、特殊符号（@$!%*#_~?&）的组合</div>
-                  <div>2. 长度限制为8-20位</div>
+                  <div>2. 长度限制为12-26位</div>
                   <div>3. 不能包含账号信息、字典序及键盘序</div>
                 </div>
               </el-tooltip>
@@ -69,10 +69,10 @@
             <el-input v-model="form.email" size="small" placeholder="请输入邮箱" />
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button size="small" @click="handleClose">取 消</el-button>
-          <el-button type="primary" size="small" @click="handleCreate">确 定</el-button>
-        </div>
+      </div>
+      <div slot="footer">
+        <el-button size="small" @click="handleClose">取 消</el-button>
+        <el-button type="primary" size="small" @click="handleCreate">确 定</el-button>
       </div>
     </el-dialog>
     <Success :success-visible.sync="successVisible" :success-data="successData" @refresh="refresh" />
@@ -80,9 +80,11 @@
 </template>
 
 <script>
+import { encryptAes } from '@/utils/encrypt'
 import { validEmail, validPhone } from '@/utils/validate'
 import { exists, createUser } from '@/api/userManage'
 import { deepClone } from '@/utils/optionUtils'
+import _ from 'lodash'
 import { validPassword, validContinuousChar, validKeyboardContinuousChar } from '@/utils/validate'
 import Success from './Success'
 
@@ -102,6 +104,7 @@ export default {
         { required: true, message: '请输入账号名', trigger: 'blur' },
         { pattern: /^[\w]*$/, message: '账号名仅支持英文、数字', trigger: 'blur' },
         { pattern: /^[^0-9].*$/, message: '账号名不能以数字开头', trigger: 'blur' },
+        { max: 50, message: '最多只能输入50字符', trigger: 'blur' },
         { validator: this.validateExists, trigger: 'blur' }
       ],
       password: [
@@ -111,7 +114,8 @@ export default {
       ],
       realName: [
         { required: true, message: '请输入真实姓名', trigger: 'blur' },
-        { pattern: /^[\u4E00-\u9FA5A-Za-z]+$/, message: '真实姓名只允许输入中文和英文', trigger: 'blur' }
+        { pattern: /^[\u4E00-\u9FA5A-Za-z]+$/, message: '真实姓名只允许输入中文和英文', trigger: 'blur' },
+        { max: 100, message: '最多只能输入100字符', trigger: 'blur' }
       ],
       phone: [
         { required: true, message: '请输入手机号', trigger: 'blur' },
@@ -164,8 +168,10 @@ export default {
         if (valid) {
           try {
             this.loading = true
+            const encryptedPswd = encryptAes(this.form.password)
             const params = {
-              ...this.form,
+              ..._.omit(this.form, ['password']),
+              password: encryptedPswd,
               from: 'platform'
             }
             const data = await createUser(params)
@@ -195,10 +201,9 @@ export default {
       callback()
     },
     createNewPassword () {
-      console.log(this.form)
       const newPasswordArray = []
-      // 密码8-20位
-      const passwordLength = Math.floor(Math.random() * 13) + 8
+      // 密码12-26位
+      const passwordLength = Math.floor(Math.random() * 15) + 12
       const str = '0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM@$!%*#_~?&^'
       for (let index = 0; index < passwordLength; index++) {
         const tag = Math.floor(Math.random() * str.length)
@@ -215,7 +220,6 @@ export default {
           return
         }
         this.form.password = newPassword
-        console.log(this.form, newPassword)
         return
       }
       this.createNewPassword()
@@ -224,8 +228,7 @@ export default {
       const params = rule.field === 'userName' ? { userName: value } : rule.field === 'phone' ? { phone: value } : { email: value }
       const label = rule.field === 'userName' ? '账号名' : rule.field === 'phone' ? '手机号' : '邮箱'
       const isExist = await exists({ ...params, from: 'platform' })
-      console.log(isExist, rule)
-      if (isExist.data) {
+      if (isExist) {
         callback(new Error(`${label}已存在`))
       }
       callback()
@@ -235,7 +238,7 @@ export default {
     },
     validatePassword (rule, value, callback) {
       if (!validPassword(value)) {
-        callback(new Error('密码应包括数字、小写字母、大写字母和特殊符号四种类型字符(长度为8-26位)'))
+        callback(new Error('密码应包括数字、小写字母、大写字母和特殊符号四种类型字符(长度为12-26位)'))
         return
       }
       if (validContinuousChar(value)) {
@@ -285,8 +288,6 @@ export default {
 .dialog-footer {
   display: flex;
   justify-content: center;
-  padding: 10px 20px 0;
   margin: 0 -20px -10px;
-  border-top: 1px solid #f1f1f1;
 }
 </style>

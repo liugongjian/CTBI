@@ -14,6 +14,7 @@
 import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import combineMixins from '@/components/Dashboard/mixins/combineMixins'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
+import store from '@/store'
 export default {
   name: 'CombineChart',
   mixins: [combineMixins, YAxis],
@@ -27,37 +28,120 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
+      dataOption: [],
       dataValue: null
     }
   },
   watch: {
     storeOption: {
       handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = deepClone(val.dataSource)// 深拷贝，避免修改数据
-          this.getOption()
-        }
+        this.getOption()
       },
       deep: true
     },
-    'storeOption.dataSource': {
+    // 图表类型切换
+    'storeOption.is': {
       handler (val) {
-        if (JSON.stringify(val) !== '{}') {
-          this.dataValue = deepClone(val)
-          // 拿到数据中的系列名字
-          this.getSeriesOptions(this.dataValue)
-          // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
-          this.getOption()
+        const isData = this.dataOption.findIndex(item => {
+          return item.id === this.identify
+        })
+        if (isData !== -1) {
+          this.$bus.$emit('interReload', [this.identify], 100, false)
         }
-      }
+      },
+      deep: true
     }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
+    this.dataOption = store.state.app.dataOption
   },
   methods: {
+    // 图表重绘事件，继承于baseMixins
+    reloadImpl () {
+      // 判断主值轴和副值轴二者是否有一
+      if (this.isHaveMeasure(deepClone(this.chartData))) {
+        this.dataValue = this.formatDataValue(deepClone(this.chartData))
+        // 拿到数据中的系列名字
+        this.getSeriesOptions(this.dataValue)
+        // 拿到数据的系列名字 并设置颜色
+        this.getColor(this.dataValue)
+        this.getOption()
+      }
+    },
+    isHaveMeasure(chartData) {
+      const { data, fields } = chartData
+      let flagMeasure = false
+      let flagMeasureSecond = false
+      if (data && data.length > 0) {
+        for (const key in fields) {
+          if (Object.hasOwnProperty.call(fields, key)) {
+            const element = fields[key]
+            if (key === 'Measure' && element.fields.length > 0) {
+              flagMeasure = true
+            }
+            if (key === 'MeasureSecond' && element.fields.length > 0) {
+              flagMeasureSecond = true
+            }
+          }
+        }
+      }
+
+      if (!flagMeasure && !flagMeasureSecond) {
+        this.$message({
+          message: `主值轴/副值轴区域缺少度量项`,
+          type: 'error'
+        })
+        return false
+      } else {
+        return true
+      }
+    },
+    // 组合图特有的 数据 转换方法
+    formatDataValue(chartData) {
+      const dataValue = []
+      const DimensionKey = []
+      const MeasureKey = []
+      const MeasureSecondKey = []
+      const { data, fields } = chartData
+      if (data && data.length > 0) {
+        for (const key in fields) {
+          if (Object.hasOwnProperty.call(fields, key)) {
+            const element = fields[key]
+            if (key === 'Dimension') {
+              element.fields.forEach(field => {
+                DimensionKey.push(field.displayColumn)
+              })
+            } else if (key === 'Measure') {
+              element.fields.forEach(field => {
+                MeasureKey.push(field.displayColumn)
+              })
+            } else if (key === 'MeasureSecond') {
+              element.fields.forEach(field => {
+                MeasureSecondKey.push(field.displayColumn + '-1')
+              })
+            }
+          }
+        }
+        dataValue.push([DimensionKey.join('-'), ...MeasureKey, ...MeasureSecondKey])
+        data.forEach(item => {
+          const dimensionData = []
+          const measureData = []
+          const measureSecondData = []
+          DimensionKey.forEach(dim => {
+            dimensionData.push(item[dim])
+          })
+          MeasureKey.forEach(mea => {
+            measureData.push(item[mea])
+          })
+          MeasureSecondKey.forEach(mea => {
+            measureSecondData.push(item[mea.split('-')[0]])
+          })
+          dataValue.push([dimensionData.join('-'), ...measureData, ...measureSecondData])
+        })
+      }
+      return dataValue
+    },
     getOption () {
       const { ComponentOption, Axis } = this.storeOption.theme
       this.getSeries()

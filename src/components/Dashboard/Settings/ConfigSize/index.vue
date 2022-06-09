@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="editor-object-container">
     <div class="coordinates" @click="changeCoordinates">功能设置
       <svg-icon
         :icon-class="coordinatesIcon"
@@ -10,7 +10,7 @@
       v-show="coordinatesIcon === 'packup'"
       class="editor-item-container"
     >
-      <div>设置起点值</div>
+      <div class="color">设置起点值</div>
       <el-radio-group v-model="option.startType">
         <el-radio label="fixed">固定值</el-radio>
         <el-radio label="dynamic">动态值</el-radio>
@@ -23,7 +23,7 @@
           style="width: 100px"
         />
         <template v-else>
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="value" popper-class="setting-select" placeholder="请选择">
             <el-option
               v-for="item in fieldOptions"
               :key="item.value"
@@ -31,7 +31,7 @@
               :value="item.value"
             />
           </el-select>
-          <el-select v-model="option.dynamicStart.type" placeholder="请选择">
+          <el-select v-model="option.dynamicStart.type" popper-class="setting-select" placeholder="请选择">
             <el-option
               v-for="item in aggregationOptions"
               :key="item.value"
@@ -41,7 +41,7 @@
           </el-select>
         </template>
       </div>
-      <div>设置终点值</div>
+      <div class="color">设置终点值</div>
       <el-radio-group v-model="option.endType">
         <el-radio label="fixed">固定值</el-radio>
         <el-radio label="dynamic">动态值</el-radio>
@@ -54,7 +54,7 @@
           style="width: 100px"
         />
         <template v-else>
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="value" popper-class="setting-select" placeholder="请选择">
             <el-option
               v-for="item in fieldOptions"
               :key="item.value"
@@ -62,7 +62,7 @@
               :value="item.value"
             />
           </el-select>
-          <el-select v-model="option.dynamicEnd.type" placeholder="请选择">
+          <el-select v-model="option.dynamicEnd.type" popper-class="setting-select" placeholder="请选择">
             <el-option
               v-for="item in aggregationOptions"
               :key="item.value"
@@ -113,6 +113,11 @@ export default {
   align-items: center;
   width: 100%;
   margin-bottom: 5px;
-  background-color: #eee;
+  color: rgba(255, 255, 255, 0.75);
+  // background-color: #eee;
+
 }
+.color {
+    color: rgba(255, 255, 255, 0.75);
+  }
 </style>

@@ -1,2 +1,27 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1649382594125" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1834" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32"><defs><style type="text/css">@font-face { font-family: feedback-iconfont; src: url("//at.alicdn.com/t/font_1031158_u69w8yhxdu.woff2?t=1630033759944") format("woff2"), url("//at.alicdn.com/t/font_1031158_u69w8yhxdu.woff?t=1630033759944") format("woff"), url("//at.alicdn.com/t/font_1031158_u69w8yhxdu.ttf?t=1630033759944") format("truetype"); }
-</style></defs><path d="M683.52 798.515H340.992L234.496 465.101l278.016-206.08L790.528 465.1 683.52 798.515z m-324.096-26.112h305.664l94.72-297.37L512 291.38 264.192 475.034l95.232 297.37z" p-id="1835"></path><path d="M827.904 1023.898H196.608L0 409.293 512 29.49l512 379.802-196.096 614.605z m-609.792-30.772H806.4l182.784-572.364L512 67.072 34.816 420.762l183.296 572.364z" p-id="1836"></path><path d="M499.2 39.424h25.6v487.27h-25.6z" p-id="1837"></path><path d="M1011.251 398.694l5.632 25.447-502.016 115.097-5.632-25.446z" p-id="1838"></path><path d="M522.65 519.475l305.766 481.28-21.504 14.234-305.715-481.331z" p-id="1839"></path><path d="M500.94 519.475l21.505 14.183-308.839 486.144-21.504-14.132z" p-id="1840"></path><path d="M19.2 400.18l495.514 113.612-5.632 25.446L13.568 425.626z" p-id="1841"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FFB676" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-64">
+            <rect id="矩形备份-163" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_雷达图备份-7" transform="translate(42.666667, 0.000000)" fill-rule="nonzero">
+                <path d="M469.332555,1024 C466.145705,1024 462.32055,1023.39376 459.765777,1021.57948 L9.5667768,775.080899 C3.1868497,772.0497 0,765.996175 0,759.330493 L0,264.519056 C0,257.854854 3.1868497,252.401652 9.5667768,248.76865 L459.765777,2.27007206 C466.145704,-0.756690688 472.519405,-0.756690688 478.899332,2.27007206 L929.106116,248.76865 C935.479817,251.801328 938.666667,257.854854 938.666667,264.519056 L938.666667,758.724254 C938.666667,765.389934 935.479817,770.841657 929.106116,774.474659 L478.899332,1021.57948 C476.350786,1023.39376 472.519405,1024 469.332555,1024 Z M38.2577681,748.431486 L469.332555,984.63138 L900.407342,748.431486 L900.407342,276.025783 L469.332555,39.8184952 L38.2577681,276.025783 L38.2577681,748.431486 Z" id="形状" fill="url(#linearGradient-1)"></path>
+                <polygon id="路径" fill-opacity="0.75" fill="url(#linearGradient-2)" points="465.507401 113.710253 819.420562 322.660409 704.639472 631.538103 465.505844 681.205407 102.665766 713.302107 159.417228 349.910148"></polygon>
+                <polygon id="路径" fill="url(#linearGradient-3)" points="465.507401 268.152058 695.074251 394.731969 800.288564 686.046454 465.507401 812.630801 235.94055 631.538103 264.637768 403.816695"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

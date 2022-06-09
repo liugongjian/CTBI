@@ -1,5 +1,6 @@
 import store from '@/store'
 import Layout from '@/layout/index.vue'
+import BlankLayout from '@/layout/BlankLayout.vue'
 import apps from '@/router/app.router'
 /**
 * Note: sub-menu only appear when route children.length >= 1
@@ -36,6 +37,39 @@ export const constantRoutes = [
     component: Layout,
     children: [
       ...apps
+    ]
+  },
+  {
+    path: '/dataManage/dataSet/edit',
+    redirect: '/dataManage/dataSet/edit/page',
+    component: BlankLayout,
+    children: [
+      {
+        path: 'page',
+        name: 'dataSetEdit',
+        hidden: true,
+        component: () => import('@/views/dataManage/dataSet/dataSetEdit/index.vue')
+      }
+    ]
+  },
+  {
+    path: '/dashboard/',
+    name: 'dashboard',
+    component: () => import('@/views/dashboard/index.vue'),
+    meta: { title: '仪表盘', icon: 'dashboard', affix: true, keepAlive: true }
+  },
+  {
+    path: '/dashboard',
+    redirect: '/dashboard/page',
+    component: BlankLayout,
+    children: [
+      {
+        path: 'page',
+        name: 'dashboard',
+        hidden: true,
+        component: () => import('@/views/dashboard/index.vue'),
+        meta: { title: '仪表盘', icon: 'dashboard', affix: true, keepAlive: true }
+      }
     ]
   },
   {

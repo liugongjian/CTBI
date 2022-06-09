@@ -1,0 +1,223 @@
+<template>
+  <div class="switcher">
+    <div class="header">
+      <span
+        v-for="(item,index) in types"
+        :key="index"
+        class="chart-type"
+        :class="item.type===type?'active':''"
+        @click="goAuchor(`#${item.type}`)"
+      >
+        <span>{{ item.name }}</span>
+      </span>
+    </div>
+    <div
+      v-for="(item,index) in types"
+      :id="item.type"
+      :key="index"
+      class="types"
+    >
+      <div class="title">{{ item.name }}</div>
+      <div
+        v-for="(item1,i) in filterTools(toolList, item)"
+        :key="item1+i"
+        class="sub-chart"
+        :class="item1.name===storeOption.is?'active':''"
+        @click.stop="changeHandler(item1.name)"
+      >
+        <el-tooltip popper-class="content" placement="top-start">
+          <svg-icon :icon-class="item1.name" style="font-size:26px;" />
+          <div slot="content">
+            <ChartDescription :chart-name="item1.name" />
+          </div>
+        </el-tooltip>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { getToolList } from '@/views/dashboard/Tools/getToolList.js'
+import ChartDescription from './ChartDescription.vue'
+import store from '@/store'
+import { getLayoutById } from '@/utils/optionUtils'
+
+export default {
+  name: 'ChartSwitcher',
+  components: {
+    ChartDescription
+  },
+  props: {
+    type: {
+      type: String,
+      default: ''
+    }
+  },
+  data () {
+    return {
+      toolList: {},
+      storeOption: {},
+      types: [
+        { name: '指标',
+          type: 'indicator'
+        },
+        { name: '表格',
+          type: 'table'
+        },
+        { name: '趋势',
+          type: 'trend'
+        },
+        { name: '比较',
+          type: 'comparator'
+        },
+        { name: '分布',
+          type: 'distribution'
+        },
+        { name: '关系',
+          type: 'relation'
+        },
+        // { name: '时序',
+        //   type: 'sequence'
+        // },
+        { name: '空间',
+          type: 'space'
+        }
+      ]
+
+    }
+  },
+  watch: {
+    type: {
+      handler (val) {
+        this.storeOption = getLayoutById(store.state.app.currentLayoutId)
+      },
+      deep: true
+    }
+  },
+  mounted () {
+    this.toolList = getToolList()
+    this.storeOption = getLayoutById(store.state.app.currentLayoutId)
+    this.goAuchor('#' + this.type)
+  },
+  methods: {
+    filterTools(toolList, type) {
+      const list = []
+      const res = JSON.parse(JSON.stringify(toolList))
+      Object.keys(res).forEach(item => {
+        if (res[item].type !== type.type) {
+          delete res[item]
+        } else {
+          res[item].name = item
+          list.push(res[item])
+        }
+      })
+      list?.sort((prev, next) => prev.order - next.order)
+      return list
+    },
+    goAuchor(id) {
+      this.type = id.split('#')[1]
+      document.querySelector(id).scrollIntoView(true)
+      var auchor = this.$el.querySelector(id)
+      document.body.scrollTop = auchor.offsetTop
+    },
+    // 图标点击添加组件到画布
+    changeHandler (type) {
+      const storeOption = getLayoutById(store.state.app.currentLayoutId)
+      const dataSource = JSON.parse(JSON.stringify(storeOption.option.dataSource))
+      const dataSet = JSON.parse(JSON.stringify(storeOption.option.dataSet))
+      storeOption.option = JSON.parse(JSON.stringify(store.state.app.toolList[type]))
+      storeOption.option.dataSource = dataSource
+      storeOption.option.dataSet = dataSet
+      storeOption.is = type
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+.switcher {
+  background: #383B47;
+  padding: 12px 2px 0px 16px;
+  .types {
+    .title{
+      font-size: 12px;
+      color: rgba(255,255,255,0.90);
+      font-weight: 500;
+      margin: 12px 0;
+
+    }
+    .sub-chart {
+      display: inline-flex;
+      margin-right: 17px;
+      margin-bottom: 8px;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(221,221,221,0.65);
+      border-radius: 2px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      &:hover{
+        border: 1px solid rgba(255,255,255,1);
+      }
+    }
+    .sub-chart.active{
+      border: 1px solid rgba(250,131,52,1);
+      border-radius: 2px;
+    }
+  }
+  .chart-type {
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 2px;
+    height: 22px;
+    line-height: 22px;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 8px;
+    margin-bottom: 12px;
+    span{
+      font-size: 12px;
+      color: #FFFFFF;
+      font-weight: 400;
+      padding: 0 10px;
+    }
+    &:hover{
+      border: 1px solid rgba(255,255,255,1);
+    }
+  }
+  .chart-type.active{
+    border: 1px solid rgba(250,131,52,1);
+    border-radius: 2px;
+    position: relative;
+    &::after{
+      display: block;
+      content: " ";
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      background-image: url(../../../assets/Image/selected.svg);
+      background-size: 15px;
+      background-repeat: no-repeat;
+      width: 15px;
+      height: 15px;
+    }
+  }
+}
+
+</style>
+<style lang="scss">
+.content.el-tooltip__popper[x-placement^="top"] .popper__arrow {
+  border-top-color: rgba(0,0,0,0.65);
+}
+.content.el-tooltip__popper[x-placement^="top"] .popper__arrow:after {
+  border-top-color: rgba(0,0,0,0.65);
+}
+.is-dark.content.el-tooltip__popper[x-placement^="bottom"] .popper__arrow {
+  border-bottom-color: rgba(0,0,0,0.65);
+}
+.is-dark.content.el-tooltip__popper[x-placement^="bottom"] .popper__arrow:after {
+  border-bottom-color: rgba(0,0,0,0.65);
+}
+.content {
+  background: rgba(0,0,0,0.65) !important;
+}
+</style>

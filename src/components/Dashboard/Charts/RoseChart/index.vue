@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import pieMixins from '@/components/Dashboard/mixins/pieMixins'
 export default {
   name: 'RoseChart',
@@ -31,43 +30,13 @@ export default {
       radius: ['0', '75%']
     }
   },
-  watch: {
-    storeOption: {
-      handler (val) {
-        console.log('变了凸(艹皿艹 )    ', val)
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = deepClone(val.dataSource)
-          this.getOption()
-        }
-      },
-      deep: true
-    },
-    'storeOption.dataSource': {
-      handler (val) {
-        if (JSON.stringify(val) !== '{}') {
-          this.dataValue = deepClone(val)
-          // 拿到数据中的系列名字
-          this.getSeriesOptions(this.dataValue)
-          // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
-          // 拿到数据中的指标
-          this.getIndicatorOptions(this.dataValue)
-          this.getOption()
-        }
-      }
-    }
-  },
-  mounted () {
-    this.storeOption = getLayoutOptionById(this.identify)
-  },
   methods: {
     getOption () {
       const that = this
       const { ComponentOption, SeriesSetting, FunctionalOption } = that.storeOption.theme
 
       // 取到指标的下标 如 2015年 index为1
-      const indicatorIdx = that.dataValue[0].indexOf(FunctionalOption.ChartFilter.filteredSery) > -1 ? that.dataValue[0].indexOf(FunctionalOption.ChartFilter.filteredSery) : 1
+      const indicatorIdx = that.dataValue && that.dataValue[0].indexOf(FunctionalOption.ChartFilter.selectedIndicator) > -1 ? that.dataValue[0].indexOf(FunctionalOption.ChartFilter.selectedIndicator) : 1
 
       // 半径变化
       const radius = that.radius.map(item => {
@@ -81,7 +50,7 @@ export default {
       const { num } = ComponentOption.MergeOther
       const mergeShow = ComponentOption.MergeOther.show
       if (mergeShow && num > 1) {
-        that.transfromData(ComponentOption.MergeOther.num, FunctionalOption.ChartFilter.filteredSery)
+        that.transformData(ComponentOption.MergeOther.num, FunctionalOption.ChartFilter.selectedIndicator)
       }
       // 取到颜色配置
       const color = ComponentOption.Color.color
@@ -102,7 +71,7 @@ export default {
         tooltip: {
           trigger: 'item',
           formatter: (data) => {
-            return data.name + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
+            return data.data[0] + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
           }
         },
         grid: this.grid,
@@ -138,7 +107,7 @@ export default {
               normal: {
                 color: (data) => {
                   if (color[0].name) {
-                    const colorTemp = color.find((item) => { return data.name === item.name })
+                    const colorTemp = color.find((item) => { return data.data[0] === item.name })
                     return colorTemp ? colorTemp.color : 'red'
                   } else {
                     const index = (data.dataIndex) % color.length
@@ -152,10 +121,10 @@ export default {
               formatter: function (data) {
                 let formatter = ''
                 if (checkList.includes('维度')) {
-                  if (SeriesSetting && data.name === SeriesSetting.SeriesSelect.selectValue) {
+                  if (SeriesSetting && data.data[0] === SeriesSetting.SeriesSelect.selectValue) {
                     formatter += SeriesSetting.SeriesSelect.remark + ' '
                   } else {
-                    formatter += data.name + ' '
+                    formatter += data.data[0] + ' '
                   }
                 }
                 if (checkList.includes('度量')) {

@@ -1,9 +1,9 @@
 // 柱图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
-import { getLayoutOptionById } from '@/utils/optionUtils'
-import { deepClone } from '@/utils/optionUtils'
+import { deepClone, formatDataValue, getLayoutOptionById } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
+import store from '@/store'
 export default {
   mixins: [baseMixins, YAxis],
   data () {
@@ -11,6 +11,7 @@ export default {
       storeOption: {},
       chartOption: {},
       dataValue: null,
+      dataOption: [],
       series: [],
       xAxis: { type: 'category' },
       yAxis: {},
@@ -25,34 +26,51 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = deepClone(val.dataSource)// 深拷贝，避免修改数据
-          this.getOption()
+        this.getOption()
+      },
+      deep: true
+    },
+    // 图表类型切换
+    'storeOption.is': {
+      handler (val) {
+        const isData = this.dataOption.findIndex(item => {
+          return item.id === this.identify
+        })
+        if (isData !== -1) {
+          this.$bus.$emit('interReload', [this.identify], 100, false)
         }
       },
       deep: true
     },
-    'storeOption.dataSource': {
+    'storeOption.theme.ComponentOption.PercentStack': {
       handler (val) {
-        if (JSON.stringify(val) !== '{}') {
-          this.dataValue = deepClone(val)
-          // 拿到数据中的系列名字
-          this.getSeriesOptions(this.dataValue)
-          // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
-          // 拿到数据中的指标
-          this.getIndicatorOptions(this.dataValue)
-          this.getOption()
+        this.storeOption.theme.ComponentOption.ChartLabel.type = this.type
+        if (val.isStack && !val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'StackedBarChart'
         }
-      }
+        if (val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'PercentStackedBarChart'
+        }
+      },
+      deep: true
     }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
+    this.dataOption = store.state.app.dataOption
   },
   methods: {
-
+    // 图表重绘事件，继承于baseMixins
+    reloadImpl () {
+      this.dataValue = formatDataValue(deepClone(this.chartData))
+      // 拿到数据中的系列名字
+      this.getSeriesOptions(this.dataValue)
+      // 拿到数据的系列名字 并设置颜色
+      this.getColor(this.dataValue)
+      // 拿到数据中的指标
+      this.getIndicatorOptions(this.dataValue)
+      this.getOption()
+    },
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
       // 为空时，进行初始化
@@ -70,10 +88,11 @@ export default {
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
       const color = []
+      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
       val[0].forEach((item, index) => {
         if (index) {
-          const idx = (index) % colorTheme['defaultColor'].length
-          color.push({ name: item, color: colorTheme['defaultColor'][idx].value, remark: item })
+          const idx = (index - 1) % colorValue.length
+          color.push({ name: item, color: colorValue[idx].value, remark: item })
         }
       })
 
@@ -98,15 +117,15 @@ export default {
     // 拿到数据中的指标
     getIndicatorOptions (val) {
       const indicatorOptions = []
-      const filteredSery = []
+      const selectedIndicator = []
       val[0].forEach((item, index) => {
         if (index) {
           indicatorOptions.push({ value: item, label: item })
-          filteredSery.push(item)
+          selectedIndicator.push(item)
         }
       })
       this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption = indicatorOptions
-      this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery = filteredSery
+      this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator = selectedIndicator
     },
     // 双y轴设置
     twisYAxisConfig (componentOption) {
@@ -158,47 +177,55 @@ export default {
     },
     // 将数据转换成百分比
     valueToPercent () {
-      const sumArr = []
-      for (let ii = 0; ii < this.dataValue[0].length - 1; ii++) {
-        sumArr.push(0)
-      }
-      for (let i = 1; i < this.dataValue.length; i++) {
-        for (let j = 0; j < sumArr.length; j++) {
-          sumArr[j] += this.dataValue[i][j + 1]
+      if (this.dataValue && this.dataValue.length > 0) {
+        const sumArr = []
+        for (let ii = 0; ii < this.dataValue.length - 1; ii++) {
+          sumArr.push(0)
         }
-      }
-      for (let i = 1; i < this.dataValue.length; i++) {
-        for (let j = 0; j < sumArr.length; j++) {
-          this.dataValue[i][j + 1] = (this.dataValue[i][j + 1] / sumArr[j] * 100).toFixed(2)
+        for (let i = 1; i < this.dataValue[0].length; i++) {
+          for (let j = 0; j < sumArr.length; j++) {
+            sumArr[j] += this.dataValue[j + 1][i]
+          }
+        }
+        for (let i = 1; i < this.dataValue[0].length; i++) {
+          for (let j = 0; j < sumArr.length; j++) {
+            this.dataValue[j + 1][i] = (this.dataValue[j + 1][i] / sumArr[j] * 100).toFixed(2)
+          }
         }
       }
     },
 
     // 根据筛选的指标获取对应数据
-    transfromData (indicator) {
-      const data = []
-      for (let i = 1; i < this.dataValue.length; i++) {
-        data.push([this.dataValue[i][0]])
-      }
-      indicator.forEach(item => {
-      // 取到指标的下标 如 2015年 index为1
-        const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
-        // 取除维度以外的第1列为vlaue
+    transformData (indicator) {
+      if (this.dataValue && this.dataValue.length > 0) {
+        const data = []
         for (let i = 1; i < this.dataValue.length; i++) {
-          data[i - 1].push(this.dataValue[i][indicatorIdx])
+          data.push([this.dataValue[i][0]])
         }
-      })
-      data.unshift([this.dataValue[0][0], ...indicator])
-      this.dataValue = data
+        indicator.forEach(item => {
+          // 取到指标的下标 如 2015年 index为1
+          const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
+          // 取除维度以外的第1列为vlaue
+          for (let i = 1; i < this.dataValue.length; i++) {
+            data[i - 1].push(this.dataValue[i][indicatorIdx])
+          }
+        })
+        data.unshift([this.dataValue[0][0], ...indicator])
+        this.dataValue = data
+      }
     },
 
     // 获取堆积柱状图
     getStackSeries (componentOption) {
       this.series = []
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.setAxis()
       // 双Y轴设置
       this.twisYAxisConfig(componentOption)
@@ -224,26 +251,27 @@ export default {
       // 插入一个假数据用于生成总计的label
       this.dataValue[0].push('总计')
       for (let i = 1; i < this.dataValue.length; i++) {
-        this.dataValue[i] = [...this.dataValue[i], 0]
+        let total = 0
+        this.dataValue[i].forEach((item, index) => {
+          if (index > 0) {
+            total += Number.parseFloat(item)
+          }
+        })
+        this.dataValue[i] = [...this.dataValue[i], total]
       }
       this.series.push({
         type: 'bar',
+        color: 'transparent',
+        barWidth: '0',
         label: {
+          color: '#000',
           show: componentOption.ChartLabel.check && this.checkList.includes('总计'), // 标签显示
-          position: 'top',
-          formatter: function (params) {
-            let dataTotal = 0
-            for (let i = 1; i < params.value.length; i++) {
-              dataTotal += params.value[i]
-            }
-            return dataTotal
-          }
+          position: 'top'
         },
-        stack: 'Total',
+        barGap: '-100%',
         labelLayout: {
           hideOverlap: componentOption.ChartLabel.labelShow === 1 // 1.智能显示，2.全量显示 标签
-        },
-        itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
+        }
       })
     },
 
@@ -251,9 +279,13 @@ export default {
     getPercentStackSeries (componentOption) {
       this.series = []
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.setAxis()
       // 双Y轴设置
       this.twisYAxisConfig(componentOption)
@@ -270,7 +302,7 @@ export default {
             show: componentOption.ChartLabel.check, // 标签显示
             formatter: function (params) {
               const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
-              const isMeasure = that.checkList.includes('度量') ? `${that.storeOption.dataSource[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+              const isMeasure = that.checkList.includes('度量') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
               return isPercent + '\n' + isMeasure
             }
           },
@@ -297,7 +329,8 @@ export default {
         })
         if (option) {
           const { labelColor, showLabel, showMax } = option
-          item.label.show = showLabel
+          const ChartLabel = this.storeOption.theme.ComponentOption.ChartLabel
+          item.label.show = ChartLabel.type === 'StackedBarChart' ? (this.checkList.includes('度量') && ChartLabel.check) || showLabel : ChartLabel.check || showLabel
           item.label.color = labelColor
           if (showMax) {
             item.markPoint = {
@@ -331,8 +364,11 @@ export default {
           // 轴标签
           'axisLabel': {
             'show': XAxis.showAxisLabel,
-            rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
-            interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 'auto'
+            // auto 智能显示 sparse 强制稀疏 condense 最多展示
+            'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
+            'interval': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
+            'width': 300,
+            'overflow': 'truncate'
           },
           // 轴刻度线
           'axisTick': {
@@ -384,27 +420,7 @@ export default {
           name: YAxis.showTitle ? (YAxis.unit ? `${YAxis.title}(${YAxis.unit})` : YAxis.title) : ''
         }
       ]
-    },
-
-    // 设置图例与图表距离
-    setGrid (legend) {
-      if (legend.top === 'auto' && legend.left === 'center') { // 图例在上
-        this.grid = {
-          top: 50
-        }
-      } else if (legend.top === 'bottom' && legend.left === 'center') { // 图例在下
-        this.grid = {
-          bottom: 50
-        }
-      } else if (legend.top === 'center' && legend.left === 'auto') { // 图例在左
-        this.grid = {
-          left: 120
-        }
-      } else if (legend.top === 'center' && legend.left === 'right') { // 图例在右
-        this.grid = {
-          right: 120
-        }
-      }
     }
+
   }
 }

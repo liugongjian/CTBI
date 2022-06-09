@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>饼图</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="饼图" fill-rule="nonzero">
+            <g id="编组">
+                <path d="M456.803601,567.196397 L456.803601,38.0676359 C201.755124,57.1007846 0,270.274192 0,529.1301 C0,803.211725 220.788273,1024 494.8699,1024 C753.724467,1024 966.899214,822.244873 985.932362,567.196397 L456.803601,567.196397 Z" id="路径" fill="url(#linearGradient-1)"></path>
+                <path d="M532.936197,0 L532.936197,491.063803 L1024,491.063803 C1008.77295,228.4018 795.596861,15.2270544 532.936197,0 Z" id="路径" fill="url(#linearGradient-2)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

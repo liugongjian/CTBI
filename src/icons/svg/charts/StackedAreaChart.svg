@@ -1,1 +1,31 @@
-<svg t="1649663610360" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13647" width="128" height="128"><path d="M128 379.733333L381.866667 128 597.333333 296.533333 891.733333 128v765.866667H128z" fill="#4C64FE" opacity=".6" p-id="13648"></path><path d="M891.733333 893.866667V300.8L597.333333 469.333333l-215.466666-168.533333L128 552.533333v341.333334z" fill="#4C64FE" p-id="13649"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-50">
+            <rect id="矩形备份-61" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="编组-141备份-5" transform="translate(42.666667, 85.333333)" fill-rule="nonzero">
+                <g id="编组-10">
+                    <polygon id="路径备份-44" fill="url(#linearGradient-1)" transform="translate(469.333333, 811.799410) rotate(90.000000) translate(-469.333333, -811.799410) " points="427.79941 342.466077 510.867257 342.466077 510.867257 1281.13274 427.79941 1281.13274"></polygon>
+                    <g id="fsux_图表_堆积面积图备份-2" transform="translate(0.000000, 303.952802)" fill="url(#linearGradient-2)">
+                        <path d="M0,211.032649 L0,390.79646 L938.666667,390.79646 L938.666667,85.9772359 C880.521109,171.950274 805.758073,211.032649 722.689643,211.032649 C589.781049,211.032649 506.71262,0 332.271485,0 C207.667169,0 99.6814454,70.3459659 0,211.032649 Z" id="路径"></path>
+                    </g>
+                    <path d="M938.666667,346.609327 C880.521109,439.59925 805.758073,481.871421 722.689643,481.871421 C589.781049,481.871421 506.71262,253.614865 332.271485,253.614865 C207.667169,253.614865 99.6814454,329.702276 0,481.871421 L0,287.430104 C91.3727065,92.9944634 199.362891,0 323.962746,0 C515.02136,0 539.939769,211.348369 697.771234,211.348369 C805.758073,211.34837 888.825386,169.077334 938.666667,92.9944635 L938.666667,92.9944635 L938.666667,346.609327 Z" id="形状结合" fill="url(#linearGradient-3)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

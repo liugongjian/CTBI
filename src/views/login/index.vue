@@ -67,33 +67,18 @@ export default {
     color: #F0914B;
     font: 44px "PingFang SC"
   }
-  .button {
-    background: #F0914B;
-    width: 100%;
-    height: 50px;
-    color: #FFF;
-    font-size: 18px;
-    border:#f0914b;
-    border-radius: 10px;
-  }
-  .button:hover {
-    background: #f0914b;
-    color: #fff;
-    border:#f0914b
-  }
-  .button:focus {
-    background: #f0914b;
-    color: #fff;
-    border:#f0914b
-  }
   .form {
     width: 330px;
   }
     .el-input {
       display: inline-block;
-      width:273px;
+      width: 75%;
+    }
+    .el-form-item__error {
+      padding-left: 6em;
     }
     .el-input__inner {
+      padding: 0px;
       border-top-width: 0px;
       border-left-width: 0px;
       border-right-width: 0px;
@@ -105,7 +90,12 @@ export default {
       border-color: #f0914b
     }
     .el-input__inner::-webkit-input-placeholder {
+      width: 84px;
+      height: 20px;
+      font-family: PingFangSC-Medium;
       font-size: 14px;
+      color: #D8D8D8;
+      font-weight: 500;
     }
   .title-size {
     width: 57px;
@@ -114,10 +104,6 @@ export default {
     font-size: 18px;
     color: #696969;
     }
-  .button-style {
-    position: relative;
-    margin-top: 58px;
-  }
   .shadow {
     z-index: -1;
     position: absolute;

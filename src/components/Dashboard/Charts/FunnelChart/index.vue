@@ -11,8 +11,10 @@
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
+import baseMixins from '../../mixins/baseMixins'
 export default {
   name: 'FunnelChart',
+  mixins: [baseMixins],
   props: {
     identify: {
       type: String,
@@ -21,6 +23,7 @@ export default {
   },
   data () {
     return {
+      rectangle: false, // 自定义属性，用于切换矩形
       storeOption: {},
       chartOption: {},
       sort: 'none',
@@ -31,16 +34,8 @@ export default {
       labelFormatter: '{c}%',
       tooltipFormatter: '',
       labelPos: '6%',
-      dataValue: [{ value: 60, name: 'Visit' },
-        { value: 40, name: 'Inquiry' },
-        { value: 20, name: 'Order' },
-        { value: 80, name: 'Click' },
-        { value: 100, name: 'Show' }],
-      transTmpData: [{ value: 60, name: 'Visit' },
-        { value: 40, name: 'Inquiry' },
-        { value: 20, name: 'Order' },
-        { value: 80, name: 'Click' },
-        { value: 100, name: 'Show' }],
+      dataValue: [],
+      transTmpData: [],
       calcData: [],
       lastData: [],
       firstData: []
@@ -49,10 +44,9 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
-        }
+        // if (JSON.stringify(val.dataSource) !== '{}') {
+        //   this.dataValue = val.dataSource
+        // }
         this.getOption()
       },
       deep: true
@@ -63,15 +57,35 @@ export default {
     this.getOption()
   },
   methods: {
+    reloadImpl () {
+      this.formatDataValue(this.chartData)
+      this.getOption()
+    },
+    formatDataValue (chartData) {
+      const data = []
+      const key = chartData.fields.Measure.fields[0].column
+      chartData.data.forEach(item => {
+        data.push({
+          'name': item.type,
+          'value': item[key]
+        })
+      })
+      this.dataValue = data
+      this.transTmpData = data
+    },
     getOption () {
-      console.log('狗子变了')
       const componentOption = this.storeOption.theme.ComponentOption
       this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
       this.dataTransformer()
       const that = this
       this.chartOption = {
         animation: false,
-        legend: componentOption.Legend,
+        legend: {
+          ...componentOption.Legend,
+          formatter: function(name) {
+            return name || '未命名'
+          }
+        },
         tooltip: {
           trigger: 'item',
           formatter: function (params) {
@@ -92,9 +106,13 @@ export default {
             minSize: this.minSize,
             sort: this.sort,
             width: this.width,
+            rectangle: this.rectangle, // 自定义属性用于切换 矩形
             label: {
               show: true,
-              position: 'inside'
+              position: 'outside',
+              formatter: function(params) {
+                return params.name || '未命名'
+              }
             },
             labelLine: {
               length: 10,
@@ -123,11 +141,8 @@ export default {
             left: '58%',
             minSize: this.minSize,
             sort: this.sort,
+            rectangle: this.rectangle, // 自定义属性用于切换 矩形
             width: '5%',
-            // tooltip: {
-            //   trigger: 'item',
-            //   formatter: this.tooltipFormatter
-            // },
             label: {
               position: 'inside',
               formatter: this.labelFormatter,
@@ -147,17 +162,21 @@ export default {
             type: 'funnel',
             left: '58%',
             minSize: this.minSize,
+            rectangle: this.rectangle, // 自定义属性用于切换 矩形
             sort: this.sort,
             width: '5%',
             label: {
               show: false
             },
+            labelLine: {
+              show: false
+            },
             itemStyle: {
-              opacity: 1,
+              opacity: 0,
               color: 'rgba(111, 255, 255, 0)',
               borderWidth: 0
-            },
-            data: this.lastData
+            }
+            // data: this.lastData
             // Ensure outer shape will not be over inner shape when hover.
           },
           {
@@ -165,17 +184,21 @@ export default {
             type: 'funnel',
             left: '58%',
             minSize: this.minSize,
+            rectangle: this.rectangle, // 自定义属性用于切换 矩形
             sort: this.sort,
             width: '5%',
             label: {
               show: false
             },
+            labelLine: {
+              show: false
+            },
             itemStyle: {
-              opacity: 0.5,
+              opacity: 1,
               color: 'rgba(1, 255, 255, 0)',
               borderWidth: 0
-            },
-            data: this.firstData
+            }
+            // data: this.firstData
             // Ensure outer shape will not be over inner shape when hover.
           }
         ]
@@ -184,6 +207,7 @@ export default {
     // 静态样式初始化
     displayStyleHandler (item) {
       // 默认情况下，无序、梯形
+      this.rectangle = false // 重置，默认梯形
       if (item.default) {
         this.sort = 'none'
         this.minSize = '10%'
@@ -193,7 +217,7 @@ export default {
         this.minSize = '10%'
       } else if (item.rectangle) {
         // 矩形，似乎需要修改源码
-        alert('暂时没有矩形哦')
+        this.rectangle = true
       }
       // 显示类别标签的位置
       if (item.labelPos) {
@@ -245,7 +269,6 @@ export default {
       }
       // 底部梯形 or 三角形
       this.minSize = item.triangle === 'true' ? '0' : '10%'
-      console.log('? ', this.minSize)
     },
     dataTransformer () {
       // 构建出 lastData\firstData 多个series叠加

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FFB676" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-46">
+            <rect id="矩形备份-50" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="编组-55备份-8" transform="translate(42.666667, 128.000000)" fill-rule="nonzero">
+                <g id="编组-55备份-5">
+                    <g id="编组-7">
+                        <polygon id="路径" fill="url(#linearGradient-1)" points="0 0 938.666667 0 938.666667 191.999999 0 191.999999"></polygon>
+                        <path d="M0,240 L281.6,240 L281.6,384 L0,384 L0,240 Z M328.533333,240 L610.133333,240 L610.133333,384 L328.533333,384 L328.533333,240 Z M657.066667,240 L938.666667,240 L938.666667,384 L657.066667,384 L657.066667,240 Z M0,624 L281.6,624 L281.6,768 L0,768 L0,624 Z M328.533333,624 L610.133333,624 L610.133333,768 L328.533333,768 L328.533333,624 Z M657.066667,624 L938.666667,624 L938.666667,768 L657.066667,768 L657.066667,624 Z" id="形状" fill="url(#linearGradient-2)"></path>
+                    </g>
+                    <path d="M0,432 L281.6,432 L281.6,576 L0,576 L0,432 Z M328.533333,432 L610.133333,432 L610.133333,576 L328.533333,576 L328.533333,432 Z M657.066667,432 L938.666667,432 L938.666667,576 L657.066667,576 L657.066667,432 Z" id="形状" fill="url(#linearGradient-3)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

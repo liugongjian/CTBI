@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="14px" height="12px" viewBox="0 0 14 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>文件夹 (1)@1x</title>
-    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="文件夹-(1)" fill="#2F77F1" fill-rule="nonzero">
-            <path d="M12.6,12 L1.4,12 C0.629999992,12 0,11.3647059 0,10.5882353 L0,1.4117647 C0,0.635294109 0.630000004,0 1.4,0 L5.425,0 C6.38749999,0.264705879 6.195,0.758823527 6.82500001,1.4117647 L7.2625,2.11764705 L12.6,2.11764705 C13.37,2.11764705 14,2.75294118 14,3.52941177 L14,10.5882353 C14,11.3647059 13.37,12 12.6,12 Z" id="路径"></path>
-        </g>
-    </g>
-</svg>

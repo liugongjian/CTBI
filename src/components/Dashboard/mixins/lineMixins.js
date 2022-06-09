@@ -1,16 +1,64 @@
 // 折线图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
+import { getLayoutOptionById, getDataValueById, deepClone, formatDataValue } from '@/utils/optionUtils'
+import store from '@/store'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 export default {
   mixins: [baseMixins, YAxis],
   data: function () {
     return {
+      storeOption: {},
+      chartOption: {},
+      dataValue: null,
+      dataOption: [],
       series: [],
-      yAxis: {}
+      xAxis: { type: 'category' },
+      yAxis: {},
+      grid: {}
     }
   },
+  computed: {
+    checkList () {
+      return this.storeOption.theme.ComponentOption.ChartLabel.checkList
+    }
+  },
+  watch: {
+    storeOption: {
+      handler (val) {
+        this.getOption()
+      },
+      deep: true
+    },
+    // 图表类型切换
+    'storeOption.is': {
+      handler (val) {
+        const isData = this.dataOption.findIndex(item => {
+          return item.id === this.identify
+        })
+        if (isData !== -1) {
+          this.$bus.$emit('interReload', [this.identify], 100, false)
+        }
+      },
+      deep: true
+    }
+  },
+  mounted () {
+    this.storeOption = getLayoutOptionById(this.identify)
+    this.dataOption = store.state.app.dataOption
+  },
   methods: {
+    // 图表重绘事件，继承于baseMixins
+    reloadImpl () {
+      this.dataValue = formatDataValue(deepClone(this.chartData))
+      // 拿到数据中的系列名字
+      this.getSeriesOptions(this.dataValue)
+      // 拿到数据的系列名字 并设置颜色
+      this.getColor(this.dataValue)
+      // 拿到数据中的指标
+      this.getIndicatorOptions(this.dataValue)
+      this.getOption()
+    },
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
       const seriesOption = []
@@ -19,7 +67,6 @@ export default {
           seriesOption.push({ value: item, label: item })
         }
       })
-
       this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
       this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
       this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
@@ -27,42 +74,45 @@ export default {
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
       const color = []
+      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
       val[0].forEach((item, index) => {
         if (index) {
-          const idx = (index) % colorTheme['defaultColor'].length
-          color.push({ name: item.split('-')[0], color: colorTheme['defaultColor'][idx].value, remark: item[0] })
+          const idx = (index - 1) % colorValue.length
+          color.push({ name: item, color: colorValue[idx].value, remark: item })
         }
       })
-
+      console.log(color, 'color折线图')
       this.storeOption.theme.ComponentOption.Color.color = color
     },
     // 拿到数据中的指标
     getIndicatorOptions (val) {
       const indicatorOptions = []
-      const filteredSery = []
+      const selectedIndicator = []
       val[0].forEach((item, index) => {
         if (index) {
           indicatorOptions.push({ value: item, label: item })
-          filteredSery.push(item)
+          selectedIndicator.push(item)
         }
       })
       this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption = indicatorOptions
-      this.storeOption.theme.FunctionalOption.ChartFilter.filteredSery = filteredSery
+      this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator = selectedIndicator
     },
     // 将数据转换成百分比
     valueToPercent () {
-      const sumArr = []
-      for (let ii = 0; ii < this.dataValue.length - 1; ii++) {
-        sumArr.push(0)
-      }
-      for (let i = 1; i < this.dataValue[0].length; i++) {
-        for (let j = 0; j < sumArr.length; j++) {
-          sumArr[j] += this.dataValue[j + 1][i]
+      if (this.dataValue && this.dataValue.length > 0) {
+        const sumArr = []
+        for (let ii = 0; ii < this.dataValue.length - 1; ii++) {
+          sumArr.push(0)
         }
-      }
-      for (let i = 1; i < this.dataValue[0].length; i++) {
-        for (let j = 0; j < sumArr.length; j++) {
-          this.dataValue[j + 1][i] = (this.dataValue[j + 1][i] / sumArr[j] * 100).toFixed(2)
+        for (let i = 1; i < this.dataValue[0].length; i++) {
+          for (let j = 0; j < sumArr.length; j++) {
+            sumArr[j] += this.dataValue[j + 1][i]
+          }
+        }
+        for (let i = 1; i < this.dataValue[0].length; i++) {
+          for (let j = 0; j < sumArr.length; j++) {
+            this.dataValue[j + 1][i] = (this.dataValue[j + 1][i] / sumArr[j] * 100).toFixed(2)
+          }
         }
       }
     },
@@ -84,8 +134,11 @@ export default {
           // 轴标签
           axisLabel: {
             show: XAxis.showAxisLabel,
+            // auto 智能显示 sparse 强制稀疏 condense 最多展示
             rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
-            interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 'auto'
+            interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
+            width: 300,
+            overflow: 'truncate'
           },
           // 轴刻度线
           axisTick: {
@@ -138,30 +191,9 @@ export default {
         }
       ]
     },
-    // 设置图例与图表距离
-    setGrid (legend) {
-      if (legend.top === 'auto' && legend.left === 'center') { // 图例在上
-        this.grid = {
-          top: 50
-        }
-      } else if (legend.top === 'bottom' && legend.left === 'center') { // 图例在下
-        this.grid = {
-          bottom: 50
-        }
-      } else if (legend.top === 'center' && legend.left === 'auto') { // 图例在左
-        this.grid = {
-          left: 120
-        }
-      } else if (legend.top === 'center' && legend.left === 'right') { // 图例在右
-        this.grid = {
-          right: 120
-        }
-      }
-    },
     // 系列设置
     setSeriesItem () {
       const { SeriesSelect } = this.storeOption.theme.SeriesSetting
-      // const { SeriesChartLabel, SeriesMaximum } = SeriesSelect
 
       this.series = this.series.map((item) => {
         const option = SeriesSelect.seriesOption.find(ele => {
@@ -169,7 +201,8 @@ export default {
         })
         if (option) {
           const { labelColor, showLabel, showMax, showMark, markType, lineType } = option
-          item.label.show = showLabel
+          const ChartLabel = this.storeOption.theme.ComponentOption.ChartLabel
+          item.label.show = item.label.show = ChartLabel.type === 'StackedBarChart' ? (this.checkList.includes('度量') && ChartLabel.check) || showLabel : ChartLabel.check || showLabel
           item.label.color = labelColor
           item.lineStyle = {
             type: lineType
@@ -229,29 +262,35 @@ export default {
       }
       return connectNulls
     },
-    transfromData (indicator) {
-      const data = []
-      for (let i = 1; i < this.dataValue.length; i++) {
-        data.push([this.dataValue[i][0]])
-      }
-      indicator.forEach(item => {
-      // 取到指标的下标 如 2015年 index为1
-        const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
-        // 取除维度以外的第1列为vlaue
+    transformData (indicator) {
+      if (this.dataValue && this.dataValue.length > 0) {
+        const data = []
         for (let i = 1; i < this.dataValue.length; i++) {
-          data[i - 1].push(this.dataValue[i][indicatorIdx])
+          data.push([this.dataValue[i][0]])
         }
-      })
-      data.unshift([this.dataValue[0][0], ...indicator])
-      this.dataValue = data
+        indicator.forEach(item => {
+        // 取到指标的下标 如 2015年 index为1
+          const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
+          // 取除维度以外的第1列为vlaue
+          for (let i = 1; i < this.dataValue.length; i++) {
+            data[i - 1].push(this.dataValue[i][indicatorIdx])
+          }
+        })
+        data.unshift([this.dataValue[0][0], ...indicator])
+        this.dataValue = data
+      }
     },
     // 获取堆积图
     getStackSeries (ComponentOption, FunctionalOption) {
       this.series = []
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.setAxis()
       // 双Y轴设置
       this.twisYAxisConfig(ComponentOption)
@@ -260,7 +299,7 @@ export default {
           type: 'line',
           name: this.dataValue[0][i + 1],
           label: {
-            show: ComponentOption.ChartLabel.check // 标签显示
+            show: ComponentOption.ChartLabel.check && this.checkList.includes('度量') // 标签显示
           },
           stack: 'Total',
           areaStyle: {},
@@ -282,29 +321,33 @@ export default {
     getPercentStackSeries (ComponentOption, FunctionalOption) {
       this.series = []
       let seriesLength = 0
-      this.dataValue.forEach(item => {
-        seriesLength = item.length - 1
-      })
+      if (this.dataValue && this.dataValue.length > 0) {
+        this.dataValue.forEach(item => {
+          seriesLength = item.length - 1
+        })
+      } else {
+        return
+      }
       this.setAxis()
       // 双Y轴设置
       this.twisYAxisConfig(ComponentOption)
       this.valueToPercent()
-      // const that = this
+      const that = this
       if (!ComponentOption.TwisYAxis.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
+      const data = formatDataValue(deepClone(getDataValueById(this.identify)))
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'line',
           name: this.dataValue[0][i + 1],
           label: {
-            show: ComponentOption.ChartLabel.check // 标签显示
-            // TODO
-            // formatter: function (params) {
-            //   const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
-            //   const isMeasure = that.checkList.includes('度量') ? `${that.storeOption.dataSource[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
-            //   return isPercent + '\n' + isMeasure
-            // }
+            show: ComponentOption.ChartLabel.check, // 标签显示
+            formatter: function (params) {
+              const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
+              const isMeasure = that.checkList.includes('度量') ? `${data[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+              return isPercent + '\n' + isMeasure
+            }
           },
           stack: 'Total',
           areaStyle: {},

@@ -1,20 +1,25 @@
 <template>
   <div style="width: 100%; height: 100%">
-    <v-chart
-      v-if="dataValue"
-      :option="chartOption"
-      autoresize
-    />
+    <div v-if="dataValue" class="box">
+      <Progress
+        :store-option="storeOption"
+        :data-value="dataValue"
+      />
+    </div>
     <div v-else>数据为空</div>
   </div>
 </template>
 
 <script>
-// import 'echarts-liquidfill'
 import { getLayoutOptionById } from '@/utils/optionUtils'
 import waterRippleMixins from '@/components/Dashboard/mixins/waterRippleMixins'
+import Progress from '@/components/Dashboard/Common/Progress'
+import store from '@/store'
 export default {
   name: 'WaterRippleChart',
+  components: {
+    Progress
+  },
   mixins: [waterRippleMixins],
   props: {
     identify: {
@@ -26,46 +31,47 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
-      dataValue: [0.6, 0.5, 0.4, 0.3]
+      dataOption: [],
+      dataValue: []
     }
   },
   watch: {
-    storeOption: {
-      handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
-          this.getOption()
-        }
-      },
-      deep: true
-    }
+    // storeOption: {
+    //   handler (val) {
+    //     if (JSON.stringify(val.dataSource) !== '{}') {
+    //       this.dataValue = deepClone(val.dataSource)
+    //     }
+    //   },
+    //   deep: true
+    // },
+    // 'storeOption.dataSource': {
+    //   handler (val) {
+    //     if (JSON.stringify(val) !== '{}') {
+    //       this.dataValue = deepClone(val)
+    //       // 拿到数据的系列名字 并设置颜色
+    //       this.getColor(this.dataValue)
+    //       // 获取目标值
+    //       this.getCfgTargetOption(this.dataValue)
+    //     }
+    //   }
+    // }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
-    this.getOption()
-  },
-  methods: {
-    getOption () {
-      // const componentOption = this.storeOption.theme.ComponentOption
-      this.chartOption = {
-        toolTip: {
-          show: true
-        },
-        label: {
-          fontSize: 20
-        },
-        series: [
-          {
-            name: '水波纹',
-            type: 'liquidFill',
-            data: this.dataValue
-          }
-        ]
-      }
-    }
+    this.dataOption = store.state.app.dataOption
   }
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.box {
+  height: 93%;
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  .item {
+    text-align: center;
+  }
+}
+</style>

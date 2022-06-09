@@ -1,1 +1,34 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1646999995640" class="icon" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2868" xmlns:xlink="http://www.w3.org/1999/xlink" width="200.1953125" height="200"><defs><style type="text/css"></style></defs><path d="M1024.562 896.211 0 896.211 0 127.789l64.035 0 0 704.387 960.527 0L1024.562 896.211zM320.176 768.141l-128.07 0L192.106 512l128.07 0L320.176 768.141zM512.281 768.141 384.211 768.141 384.211 255.859 512.281 255.859 512.281 768.141zM704.386 768.141l-128.07 0L576.316 383.93l128.07 0L704.386 768.141zM896.492 768.141l-128.07 0L768.422 191.824l128.07 0L896.492 768.141z" p-id="2869"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#BDBDC0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#BDBDC0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-53">
+            <rect id="矩形备份-58" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_柱状图备份-8" transform="translate(42.666667, 85.333333)" fill-rule="nonzero">
+                <g id="编组-13">
+                    <polygon id="路径" fill="url(#linearGradient-1)" points="0 426.666667 187.733333 426.666667 187.733333 853.333333 0 853.333333"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-2)" points="281.6 0 469.333333 0 469.333333 853.333333 281.6 853.333333"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="516.266667 284.444444 704 284.444444 704 853.333333 516.266667 853.333333"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-4)" points="750.933333 568.888889 938.666667 568.888889 938.666667 853.333333 750.933333 853.333333"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

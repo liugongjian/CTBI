@@ -20,7 +20,7 @@
         </el-input>
       </template>
       <template #lastLoginTime="{scope}">
-        <span>{{ scope.row.lastLoginTime | dateFilter }}</span>
+        <span>{{ scope.row.lastLoginTime | parseTime }}</span>
       </template>
       <template #status="{scope}">
         <div class="status">
@@ -78,18 +78,13 @@ export default {
       },
       {
         prop: 'email',
+        width: 250,
         label: '邮箱',
         fixed: false
       },
       {
-        prop: 'creator',
-        label: '创建者',
-        fixed: false,
-        ellipsis: true
-      },
-      {
         prop: 'lastLoginTime',
-        width: 200,
+        width: 150,
         label: '最后登录时间',
         fixed: false,
         slot: 'lastLoginTime',
@@ -97,6 +92,7 @@ export default {
       },
       {
         prop: 'status',
+        width: 100,
         label: '账号状态',
         fixed: false,
         slot: 'status'
@@ -198,7 +194,7 @@ export default {
   },
   computed: {
     columns () {
-      if (this.form.role === 'superUser') {
+      if (this.$store.state.user.userData.role === 'superUser') {
         return this.adminColumns
       }
       return this.simpleUserColumns
@@ -221,7 +217,6 @@ export default {
       try {
         this.tableLoading = true
         const params = {
-          // userName: 'admin',
           page: this.pageNum,
           limit: this.pageSize,
           sortBy: this.sortBy,
@@ -229,10 +224,13 @@ export default {
           isPaging: 1
         }
         const data = await getList(params)
-        this.tableData = data.data.list
-        this.pageNum = data.data.page
-        this.total = data.data.total
-        this.pageSize = data.data.limit
+        this.tableData = data.list
+        this.tableData.forEach((item) => {
+          item.creator = item.creatorId?.userName
+        })
+        this.pageNum = data.page
+        this.total = data.total
+        this.pageSize = data.limit
         this.tableDataCache = this.tableData
         this.tableLoading = false
       } catch (error) {
@@ -243,7 +241,7 @@ export default {
       }
     },
     logoutDisabled (row) {
-      return row.status === -1
+      return row.status === -1 || row.userName === this.$store.state.user.userData.userName
     },
     resetDisabled (row) {
       return row.from === 'ctyun'
@@ -336,7 +334,6 @@ export default {
       this.createVisible = true
     },
     handleSortChange ({ prop, order }) {
-      console.log(prop, order)
       this.sortBy = prop
       if (order) {
         this.sortOrder = order === 'ascending' ? 'asc' : 'desc'
@@ -355,7 +352,6 @@ export default {
 <style lang="scss" scoped>
 .user-list {
   font-size: 12px;
-  padding: 20px;
   .username-link {
     max-width: 100%;
     overflow: hidden;

@@ -11,9 +11,10 @@
     <div
       class="editor-item-container"
       :class="{'box-disabled':!option.show}"
+      style="display: flex"
     >
       <el-input v-model="option.text" />
-      <el-input v-model="option.color" />
+      <el-color-picker v-model="option.color" />
     </div>
   </div>
 </template>

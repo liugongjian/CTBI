@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>01_PC/01_Basic/24_error-circle@2x</title>
+    <defs>
+        <path d="M7,0 C10.8659932,0 14,3.13400675 14,7 C14,10.8659932 10.8659932,14 7,14 C3.13400675,14 0,10.8659932 0,7 C0,3.13400675 3.13400675,0 7,0 Z M7.028,8.96 C6.52542088,8.96 6.118,9.36742088 6.118,9.87 C6.118,10.3725791 6.52542088,10.78 7.028,10.78 C7.53057912,10.78 7.938,10.3725791 7.938,9.87 C7.938,9.36742088 7.53057912,8.96 7.028,8.96 Z M7.91,3.36 L6.16,3.36 L6.51,8.26 L7.56,8.26 L7.91,3.36 Z" id="path-1"></path>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="数据集管理/关闭气泡" transform="translate(-976.000000, -200.000000)">
+            <g id="编组-60备份" transform="translate(944.000000, 125.000000)">
+                <g id="error-circle备份" transform="translate(32.000000, 75.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="01_PC/01_Basic/24_error-circle" fill="#FAAD15" xlink:href="#path-1"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

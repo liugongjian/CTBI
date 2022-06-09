@@ -22,11 +22,16 @@
           <i class="el-icon-warning-outline m-l-10" />
         </el-tooltip>
       </div>
+      <!-- 隐藏模块，用于解决标题不显示出现的布局问题 -->
+      <div
+        class="card-header-hidden"
+        style="width:0"
+      />
       <div class="card-header-tail">
         <!-- 指标筛选模块 -->
         <el-select
           v-if="getParameter(option, 'theme.FunctionalOption.ChartFilter.showFilter')"
-          v-model="filteredSery"
+          v-model="selectedIndicator"
           :disabled="!getParameter(option, 'theme.FunctionalOption.ChartFilter.showFilter')"
           :multiple="getParameter(option, 'theme.FunctionalOption.ChartFilter.isMultiple')"
           @change="handleIndicator"
@@ -165,9 +170,9 @@ export default {
       }
       return styleObject
     },
-    filteredSery: {
+    selectedIndicator: {
       get () {
-        return this.getParameter(this.option, 'theme.FunctionalOption.ChartFilter.filteredSery')
+        return this.getParameter(this.option, 'theme.FunctionalOption.ChartFilter.selectedIndicator')
       },
       set () {
       }
@@ -197,7 +202,7 @@ export default {
 
     // 筛选指标方法
     handleIndicator (val) {
-      this.option.option.theme.FunctionalOption.ChartFilter.filteredSery = val
+      this.option.option.theme.FunctionalOption.ChartFilter.selectedIndicator = val
     }
 
   }

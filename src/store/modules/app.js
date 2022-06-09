@@ -3,7 +3,8 @@ const state = {
     ? localStorage.getItem('menuPath') : '/home',
   layout: [],
   currentLayoutId: '',
-  toolList: {}
+  toolList: {},
+  dataOption: []
 }
 
 const mutations = {

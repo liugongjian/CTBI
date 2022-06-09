@@ -1,99 +1,249 @@
 <template>
   <div class="tab-pane-content">
-    <el-input
-      v-model="val"
-      type="textarea"
-      autosize
-      placeholder="请输入内容"
-    />
-    <el-button
-      type="primary"
-      @click="reflashStore"
-    >更新</el-button>
+    <div class="data-panel-field-wrapper">
+      <div class="areas-wrapper">
+        <div
+          v-for="(item,name,index) in option.dataSource"
+          :key="index"
+          class="field-area-wrapper"
+          @dragover="handleDragOver"
+          @drop.stop="handleTargetDrop($event,name,item,item.name)"
+        >
+          <div class="field-area-header">
+            <span v-if="item.require">*</span>
+            <div class="area-name">{{ item.name }}</div>
+            <el-tooltip
+              v-if="item.tooltip"
+              effect="dark"
+              :content="item.tooltip"
+              placement="top"
+            >
+              <i class="el-icon-warning-outline" />
+            </el-tooltip>
+          </div>
+          <div>
+            <div class="field-area-body">
+              <div v-show="item.value && item.value.length>0">
+                <div
+                  v-for="(el,i) in item.value"
+                  :key="i"
+                  class="field-box-wrapper"
+                >
+                  <div
+                    :class="el.type==='Dimension'?'dimension-field-box':'measure-field-box'"
+                    class="base-field-box"
+                  >
+                    <svg-icon
+                      v-if="el.type==='Dimension'"
+                      icon-class="dimension"
+                    />
+                    <svg-icon
+                      v-else
+                      icon-class="measure"
+                    />
+                    <span class="field-caption">{{ el.displayColumn }}</span>
+                    <div class="right-hover-icons">
+                      <span
+                        style="cursor:pointer;margin-left:3px;"
+                        @click="handleDelete(item,el)"
+                      >
+                        <i class="el-icon-delete" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                v-show="!item.value||item.value.length===0"
+                class="blank-area-tip"
+                title="拖动数据字段到此处"
+              >拖动数据字段到此处</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="update-wrapper">
+        <div class="auto-refresh-wrapper">
+          <el-checkbox
+            v-model="autoRefresh"
+            label="自动刷新"
+            @change="handleRefresh"
+          />
+          <input
+            v-if="autoRefresh"
+            v-model="time"
+            type="number"
+            class="limit-input"
+          >
+          <el-select
+            v-if="autoRefresh"
+            v-model="unit"
+            popper-class="setting-select"
+            placeholder="请选择"
+            @change="selectUnit"
+          >
+            <el-option
+              v-for="item in unitOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+        <div class="result-display">
+          <span class="m-r-8">结果展示</span>
+          <div>
+            <input
+              v-model="limit"
+              type="number"
+              class="limit-input"
+            >
+          </div>
+        </div>
+        <el-button
+          type="primary"
+          @click="refreshStore"
+        >更新</el-button>
+      </div>
+
+    </div>
   </div>
 </template>
 
 <script>
-import { getLayoutById } from '@/utils/optionUtils'
+import { deepClone } from '@/utils/optionUtils'
 export default {
   name: 'DataPanelField',
   props: {
     identify: {
       type: String,
       default: ''
+    },
+    option: {
+      type: Object,
+      default: () => { }
     }
   },
   data () {
     return {
-      val: '',
-      typeOption: ['BarChart', 'StackedBarChart', 'PercentStackedBarChart']
+      limit: 100, // 结果展示条数
+      autoRefresh: false, // 自动刷新
+      unitOption: [{
+        value: 'minute',
+        label: '分'
+      }, {
+        value: 'second',
+        label: '秒'
+      }],
+      time: 10,
+      unit: 'minute',
+      interVal: null
+    }
+  },
+  watch: {
+    time: {
+      handler (val) {
+        if (this.autoRefresh) {
+          // 开启自动刷新的定时器
+          const time = 1000 * val * (this.unit === 'minute' ? 60 : 1)
+          this.interVal = setInterval(() => {
+            this.refreshStore()
+          }, time)
+        } else {
+          clearInterval(this.interVal)
+          this.interVal = null
+        }
+      },
+      deep: true
     }
   },
   mounted () {
-    // const dataValue = [
-    //   ['product', '2015', '2016', '2017'],
-    //   ['Matcha Latte', 43.3, 85.8, 93.7],
-    //   ['Matcha Latte11', 13.3, 85.8, 93.7],
-    //   ['Milk Tea1', 13.1, 73.4, 55.1],
-    //   ['Milk Tea2', 3.1, 73.4, 55.1],
-    //   ['Milk Tea6', 83.1, 73.4, 55.1],
-    //   ['Cheese Cocoa', 86.4, 65.2, 82.5],
-    //   ['Walnut Brownie', 72.4, 53.9, 39.1],
-    //   ['Tea', 22.1, 73.4, 55.1]
-    // ]
-    // 主轴-0标记 副轴-1标记 组合图专用数据
-    // const dataValue = [
-    //   ['date', '价格-0', '数量-0', '温度-1'],
-    //   ['Mon', 820, 410, 36],
-    //   ['Tue', 932, 320, 36.3],
-    //   ['Wed', 901, 300, 36.6],
-    //   ['Thu', 934, 380, 34],
-    //   ['Fri', 1290, 430, 39.6],
-    //   ['Sat', 1330, 480, 37.6],
-    //   ['Sun', 1320, 460, 38]
-    // ]
-    const dataValue = [
-      ['date', '价格', '数量', '温度'],
-      ['Mon', 820, 410, 36],
-      ['Tue', 932, 320, 36.3],
-      ['Wed', 901, 300, 36.6],
-      ['Thu', 934, 380, undefined],
-      ['Fri', 1290, 430, 39.6],
-      ['Sat', 1330, 480, 37.6],
-      ['Sun', 1320, 460, 38]
-    ]
-    // 雷达图
-    // const dataValue = [
-    //   ['实际支出', [5000, 14000, 28000, 26000, 42000, 21000]],
-    //   ['分配预算', [4200, 3000, 20000, 35000, 50000, 18000]]
-    // ]
-    // 进度条
-    // 词云数据
-    // const dataValue = [
-    //   { name: 'Sam S Club', value: 10000 }, { name: 'Macys', value: 6181 },
-    //   { name: 'Amy Schumer', value: 4386 }, { name: 'Jurassic World', value: 4055 },
-    //   { name: 'Charter Communications', value: 2467 }, { name: 'Chick Fil A', value: 2244 },
-    //   { name: 'Planet Fitness', value: 1898 }, { name: 'Pitch Perfect', value: 1484 },
-    //   { name: 'Express', value: 1112 }, { name: 'Home', value: 965 },
-    //   { name: 'Johnny Depp', value: 847 }, { name: 'Lena Dunham', value: 582 },
-    //   { name: 'Lewis Hamilton', value: 555 }, { name: 'KXAN', value: 550 },
-    //   { name: 'Mary Ellen Mark', value: 462 }, { name: 'Farrah Abraham', value: 366 },
-    //   { name: 'Rita Ora', value: 360 }, { name: 'Serena Williams', value: 282 },
-    //   { name: 'NCAA baseball tournament', value: 273 }, { name: 'Point Break', value: 265 }
-    // ]
-    // const dataValue = [
-    //   { name: '一月份订单', value: '200', target: '300' },
-    //   { name: '二月份订单', value: '100', target: '200' },
-    //   { name: '三月份订单', value: '300', target: '600' },
-    //   { name: '四月份订单', value: '500', target: '580' }
-    // ]
-    this.val = JSON.stringify(dataValue)
+  },
+  beforeDestroy () {
+    clearInterval(this.interVal)
+    this.interVal = null
   },
   methods: {
-    reflashStore () {
-      const layout = getLayoutById(this.identify)
-      layout.option.dataSource = JSON.parse(this.val)
+    // 当拖拽在当前元素上时
+    handleDragOver (e) {
+      e.preventDefault()
+      e.dataTransfer.dropEffect = 'copy'
+    },
+    // 拖拽结束
+    handleTargetDrop (e, name, item, itemName) {
+      const data = JSON.parse(e.dataTransfer.getData('data'))
+      // 判断拖拽元素是否在对应元素上 副值轴 name是Measure1 data.type是Measure
+      if (name.indexOf(data.type) > -1) {
+        // 判断是否已经存在
+        const dataIndex = item.value.findIndex(el => {
+          return el._id === data._id
+        })
+        if (dataIndex !== -1) {
+          this.$message({
+            message: `已存在该对象 ${data.displayColumn}`,
+            type: 'warning'
+          })
+        } else {
+          item.value.push(data)
+        }
+      } else {
+        if (data.type !== 'DimensionOrMeasure') {
+          const dataName = data.type === 'Measure' ? '度量' : '维度'
+          this.$message({
+            message: `不支持添加${dataName}到[${itemName}]上`,
+            type: 'warning'
+          })
+        }
+      }
+    },
+    // 删除字段
+    handleDelete (item, el) {
+      const dataIndex = item.value.findIndex(ele => {
+        return ele._id === el._id
+      })
+      item.value.splice(dataIndex, 1)
+    },
+    // 自动刷新
+    handleRefresh (val) {
+      if (val) {
+        // 开启自动刷新的定时器
+        const time = 1000 * this.time * (this.unit === 'minute' ? 60 : 1)
+        this.interVal = setInterval(() => {
+          this.refreshStore()
+        }, time)
+      } else {
+        clearInterval(this.interVal)
+        this.interVal = null
+      }
+    },
+    selectUnit (val) {
+      if (this.autoRefresh) {
+        // 开启自动刷新的定时器
+        const time = 1000 * this.time * (val === 'minute' ? 60 : 1)
+        this.interVal = setInterval(() => {
+          this.refreshStore()
+        }, time)
+      } else {
+        clearInterval(this.interVal)
+        this.interVal = null
+      }
+    },
+    // 更新
+    refreshStore () {
+      const dataSource = deepClone(this.option.dataSource)
+      for (const key in dataSource) {
+        if (dataSource[key].value.length === 0 && dataSource[key].require) {
+          this.$message({
+            message: `${dataSource[key].name}缺少必填字段`,
+            type: 'error'
+          })
+          return
+        }
+      }
+      // 事件总线通知组件刷新数据
+      this.$bus.$emit('interReload', [this.identify], this.limit)
     }
+
   }
 }
 </script>

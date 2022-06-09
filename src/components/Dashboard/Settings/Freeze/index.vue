@@ -1,7 +1,7 @@
 <template>
   <div class="editor-object-container">
     <el-checkbox v-model="option.show">冻结</el-checkbox>
-    <div :class="{'box-disabled':!option.show}">
+    <div :class="{'box-disabled':!option.show}" class="editor-item-container">
       <el-radio-group v-model="option.freezeChoose">
         <div>
           <el-radio label="head" @change="isshow = true">智能(表头)</el-radio>
@@ -9,7 +9,7 @@
         </div>
       </el-radio-group>
     </div>
-    <div class="arrange" :class="{'box-disabled': isshow}">
+    <div class="arrange editor-item-container" :class="{'box-disabled': isshow}">
       <div class="arrange-type">
         <div>第一列到</div>
         <el-input-number v-model="option.positive" controls-position="right" />
@@ -37,7 +37,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .arrange {
   display: flex;
 }

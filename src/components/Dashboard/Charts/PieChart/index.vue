@@ -13,9 +13,7 @@
 </template>
 
 <script>
-import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import pieMixins from '@/components/Dashboard/mixins/pieMixins'
-// import { colorTheme } from '@/constants/color.js'
 export default {
   name: 'PieChart',
   mixins: [pieMixins],
@@ -34,42 +32,13 @@ export default {
       color: []
     }
   },
-  watch: {
-    storeOption: {
-      handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = deepClone(val.dataSource)
-          this.getOption()
-        }
-      },
-      deep: true
-    },
-    'storeOption.dataSource': {
-      handler (val) {
-        if (JSON.stringify(val) !== '{}') {
-          this.dataValue = deepClone(val)
-          // 拿到数据中的系列名字
-          this.getSeriesOptions(this.dataValue)
-          // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
-          // 拿到数据中的指标
-          this.getIndicatorOptions(this.dataValue)
-          this.getOption()
-        }
-      }
-    }
-  },
-  mounted () {
-    this.storeOption = getLayoutOptionById(this.identify)
-  },
   methods: {
     getOption () {
       const that = this
       const { ComponentOption, Basic, SeriesSetting, FunctionalOption } = that.storeOption.theme
 
       // 取到指标的下标 如 2015年 index为1
-      const indicatorIdx = that.dataValue[0].indexOf(FunctionalOption.ChartFilter.filteredSery) > -1 ? that.dataValue[0].indexOf(FunctionalOption.ChartFilter.filteredSery) : 1
+      const indicatorIdx = that.dataValue && that.dataValue[0].indexOf(FunctionalOption.ChartFilter.selectedIndicator) > -1 ? that.dataValue[0].indexOf(FunctionalOption.ChartFilter.selectedIndicator) : 1
 
       // 半径变化
       that.radius = Basic.VisualStyle.style === 'pie' ? ['0', '75%'] : ['30%', '75%']
@@ -85,7 +54,7 @@ export default {
       const { num } = ComponentOption.MergeOther
       const mergeShow = ComponentOption.MergeOther.show
       if (mergeShow && num > 0) {
-        that.transfromData(ComponentOption.MergeOther.num, FunctionalOption.ChartFilter.filteredSery)
+        that.transformData(ComponentOption.MergeOther.num, FunctionalOption.ChartFilter.selectedIndicator)
       }
       // 取到颜色配置
       const color = ComponentOption.Color.color
@@ -110,12 +79,12 @@ export default {
             let nameTemp = ''
             if (SeriesSetting) {
               SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
-                if (item.value === data.name) {
+                if (item.value === data.data[0]) {
                   nameTemp = item.remark
                 }
               })
             } else {
-              nameTemp = data.name
+              nameTemp = data.data[0]
             }
             return nameTemp + ': ' + data.value[data.encode.value[0]] + ', ' + data.percent.toFixed(precision) + '%'
           }
@@ -123,7 +92,8 @@ export default {
         grid: this.grid,
         legend: {
           ...ComponentOption.Legend,
-          formatter: (name) => {
+          formatter: function (name) {
+            console.log('da22222', name)
             if (SeriesSetting) {
               let nameTemp = ''
               SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
@@ -157,7 +127,7 @@ export default {
               shadowColor: 'rgba(0, 0, 0, 0.5)',
               color: (data) => {
                 if (color[0].name) {
-                  const colorTemp = color.find((item) => { return data.name === item.name })
+                  const colorTemp = color.find((item) => { return data.data[0] === item.name })
                   return colorTemp ? colorTemp.color : 'red'
                 } else {
                   const index = (data.dataIndex) % color.length
@@ -173,13 +143,13 @@ export default {
                   if (SeriesSetting) {
                     let nameTemp = ''
                     SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
-                      if (item.value === data.name) {
+                      if (item.value === data.data[0]) {
                         nameTemp = item.remark
                       }
                     })
                     formatter += nameTemp + ' '
                   } else {
-                    formatter += data.name + ' '
+                    formatter += data.data[0] + ' '
                   }
                 }
                 if (checkList.includes('度量')) {
