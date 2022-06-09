@@ -2,8 +2,9 @@
   <div class="bi-header-out">
     <div class="bi-header-container">
       <div class="nameWrap">
+        <div class="back" @click="back"><i class="el-icon-arrow-left" /></div>
         <img
-          style="width: 18px; height: 17px"
+          style="width: 18px; height: 17px; margin-left:16px;"
           :src="require('../../../assets/Image/dashboard/name.png')"
         >
         <el-input
@@ -266,7 +267,7 @@ export default {
         })
       }
       if (this.saveMode === 'saveAndShare') {
-        this.$refs['shareDialog'].shareDashboard(result)
+        this.$refs['shareDialog'].showShare(result)
       }
     },
     async getFolders() {
@@ -285,7 +286,7 @@ export default {
       }
     },
     async shareDashboard (data) {
-      this.$refs['shareDialog'].shareDashboard(data)
+      this.$refs['shareDialog'].showShare(data)
     },
     handleShareChange(data) {
       console.log(this.dashboard)
@@ -294,6 +295,9 @@ export default {
         action: 'changeShare',
         data
       })
+    },
+    back() {
+      this.$router.go(-1)
     }
   }
 }
@@ -306,6 +310,17 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  .back{
+    width: 48px;
+    height: 50px;
+    background: #020202;
+    margin-left: -20px;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .nameInput{
     width: 200px;
   }
@@ -314,6 +329,12 @@ export default {
     border: 0;
     color: #fff;
   }
+}
+::v-deep .el-dialog__footer {
+  padding: 0px;
+}
+.dialog-footer{
+  padding-top: 10px;
 }
 .device {
   width: 120px;
@@ -360,6 +381,7 @@ export default {
 .operation {
   display: flex;
   align-items: center;
+  height: 50px;
   .divider{
     width: 1px;
     height: 20px;
