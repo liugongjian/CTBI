@@ -251,9 +251,13 @@ export default {
       const isCopy = this.saveMode === 'copy'
       const id = isCopy ? null : (this.dashboard._id || null)
       const finalId = isCopy ? null : id
+      const data = {
+        layout: store.state.app.layout,
+        layoutStyles: store.state.settings.layoutStyles
+      }
       const params = {
         id: finalId,
-        setting: JSON.stringify(store.state.app.layout),
+        setting: JSON.stringify(data),
         ...this.dashboardAttr
       }
       const result = await saveDashboard(params)
@@ -297,7 +301,9 @@ export default {
       })
     },
     back() {
-      this.$router.go(-1)
+      this.$emit('handleChange', {
+        action: 'back'
+      })
     }
   }
 }

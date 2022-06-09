@@ -52,6 +52,29 @@
         >恢复</el-button>
       </div>
     </el-dialog>
+    <el-dialog
+      title="未保存"
+      :visible.sync="unsavedVisible"
+      width="480px"
+    >
+      <div class="data-set-didlog-del">
+        <svg-icon
+          icon-class="warning"
+          style="margin-right: 16px"
+        />
+        <span>该仪表板内容还未保存，确定离开？</span>
+      </div>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="unsavedVisible = false">取消</el-button>
+        <el-button
+          type="primary"
+          @click="confirmBack"
+        >确定</el-button>
+      </div>
+    </el-dialog>
   </el-container>
 </template>
 
@@ -82,7 +105,8 @@ export default {
       dashboardId,
       recoverVisible: false,
       loading: false,
-      useRecover: false
+      useRecover: false,
+      unsavedVisible: false
     }
   },
   computed: {
@@ -99,14 +123,14 @@ export default {
     //   const layout = JSON.parse(localStorage.getItem('layout'))
     //   this.$store.state.app.layout = layout
     // }
-    if (localStorage.getItem('dataOption')) {
-      const dataOption = JSON.parse(localStorage.getItem('dataOption'))
-      this.$store.state.app.dataOption = dataOption
-    }
-    if (localStorage.getItem('layoutStyles')) {
-      const layoutStyles = JSON.parse(localStorage.getItem('layoutStyles'))
-      this.$store.state.settings.layoutStyles = layoutStyles
-    }
+    // if (localStorage.getItem('dataOption')) {
+    //   const dataOption = JSON.parse(localStorage.getItem('dataOption'))
+    //   this.$store.state.app.dataOption = dataOption
+    // }
+    // if (localStorage.getItem('layoutStyles')) {
+    //   const layoutStyles = JSON.parse(localStorage.getItem('layoutStyles'))
+    //   this.$store.state.settings.layoutStyles = layoutStyles
+    // }
     this.getDashboardData()
     this.saveDashboardToLocal()
     this.recoverDashboard()
@@ -136,7 +160,8 @@ export default {
       const saveData = localStorage.getItem(saveName)
       this.useRecover = true
       console.log(saveData)
-      store.dispatch('app/updateLayout', JSON.parse(saveData))
+      this.updateStoreData(JSON.parse(saveData))
+      // store.dispatch('app/updateLayout', JSON.parse(saveData))
       this.resetRecover()
     },
     cancelRecover() {
@@ -144,7 +169,8 @@ export default {
       const result = this.dashboard
       const settings = result.setting ? JSON.parse(result.setting) : null
       if (settings && Array.isArray(settings)) {
-        store.dispatch('app/updateLayout', settings)
+        this.updateStoreData(settings)
+        // store.dispatch('app/updateLayout', settings)
       }
       this.resetRecover()
     },
@@ -165,7 +191,8 @@ export default {
           if (!this.recoverVisible && !this.useRecover) {
             const settings = result.setting ? JSON.parse(result.setting) : null
             if (settings && Array.isArray(settings)) {
-              store.dispatch('app/updateLayout', settings)
+              // store.dispatch('app/updateLayout', settings)
+              this.updateStoreData(settings)
             }
           }
         } catch (e) {
@@ -201,7 +228,6 @@ export default {
     handleNavbarChange({ action, data }) {
       if (action === 'changeMode') {
         this.mode = data
-        console.log(JSON.stringify(this.layout))
       }
       if (action === 'saveSuccess') {
         if (!this.dashboardId) {
@@ -211,40 +237,54 @@ export default {
           this.saveTagName = this.saveName + '-tag'
           this.dashboardId = data._id
         }
-        localStorage.setItem(this.saveName, JSON.stringify(this.layout))
-        localStorage.setItem(this.saveTagName, 'saved')
+        this.updateLocalStorage('saved')
         this.dashboard = data
       }
       if (action === 'changeShare') {
         this.dashboard = { ...this.dashboard, ...data }
       }
+      if (action === 'back') {
+        this.handleBack()
+      }
+    },
+    handleBack() {
+      const saveTag = localStorage.getItem(this.saveTagName)
+      const saveData = localStorage.getItem(this.saveName)
+      if (saveTag !== 'saved' && saveData) {
+        this.unsavedVisible = true
+      } else {
+        this.$router.go(-1)
+      }
+    },
+    confirmBack() {
+      this.unsavedVisible = false
+      this.$router.go(-1)
     },
     saveDashboardToLocal() {
       console.log('saveDashboardToLocal')
       const saveName = this.saveName
-      const saveTagName = this.saveTagName
       this.timer = setTimeout(() => {
         if (!this.recoverVisible) {
-          const nextData = JSON.stringify(this.layout)
+          const data = {
+            layout: this.layout,
+            layoutStyles: this.layoutStyles
+          }
+          const nextData = JSON.stringify(data)
           const saveData = localStorage.getItem(saveName)
-          // const saveTag = localStorage.getItem(saveTagName)
           if (saveData) {
             if (!_.isEqual(JSON.parse(nextData), JSON.parse(saveData))) {
-              localStorage.setItem(saveName, nextData)
-              localStorage.setItem(saveTagName, 'unsaved')
               console.log('saveDashboardToLocal12345')
+              this.updateLocalStorage('unsaved')
             }
           } else {
             const setting = this.dashboard.setting
             if (setting) {
               if (!_.isEqual(JSON.parse(nextData), JSON.parse(setting))) {
-                localStorage.setItem(saveName, nextData)
-                localStorage.setItem(saveTagName, 'unsaved')
                 console.log('123saveDashboardToLocal')
+                this.updateLocalStorage('unsaved')
               }
             } else {
-              localStorage.setItem(saveName, nextData)
-              localStorage.setItem(saveTagName, 'unsaved')
+              this.updateLocalStorage('unsaved')
               console.log('67723saveDashboardToLocal')
             }
           }
@@ -253,11 +293,27 @@ export default {
       }, 10 * 1000)
     },
     beforeunload(e) {
-      console.log(e)
       const saveTag = localStorage.getItem(this.saveTagName)
       const saveData = localStorage.getItem(this.saveName)
       if (saveTag !== 'saved' && saveData) {
         e.returnValue = '你还没有保存'
+      }
+    },
+    updateLocalStorage (saveTag) {
+      const data = {
+        layout: this.layout,
+        layoutStyles: this.layoutStyles
+      }
+      localStorage.setItem(this.saveName, JSON.stringify(data))
+      localStorage.setItem(this.saveTagName, saveTag)
+    },
+    updateStoreData (data) {
+      const { layout, layoutStyles } = data
+      if (layout) {
+        store.dispatch('app/updateLayout', layout)
+      }
+      if (layoutStyles) {
+        store.dispatch('setting/changeSetting', { key: 'layoutStyles', value: layoutStyles })
       }
     }
   }
