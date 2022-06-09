@@ -221,9 +221,9 @@
             <template slot-scope="scope">
               <span v-if="scope.row._id !== 1 && scope.row._id !== 2">
                 <b-select
-                  v-model="scope.row.attributes[0].dataType"
+                  :value="scope.row.attributes[0].dataType"
                   :options="dataTypeOptions"
-                  @change="scope.row.attributes[0].format = ''"
+                  @change="(data) => {scope.row.attributes[0].format = '';handleChangeDataType(data);}"
                 />
               </span>
             </template>
@@ -314,6 +314,34 @@ export default {
         {
           value: 'number',
           label: '数字'
+        },
+        {
+          value: 'geography',
+          label: '地理',
+          children: [{
+            value: 'area',
+            label: '区域'
+          },
+          {
+            value: 'province',
+            label: '省/直辖市'
+          },
+          {
+            value: 'city',
+            label: '市'
+          },
+          {
+            value: 'county',
+            label: '区/县'
+          },
+          {
+            value: 'longitude',
+            label: '经度'
+          },
+          {
+            value: 'dimensionality',
+            label: '维度'
+          }]
         },
         {
           value: 'text',
@@ -463,12 +491,7 @@ export default {
       return res
     },
     typeTransform (data) {
-      if (typeof data === 'string') {
-        return transformDataTypeIcon(data)
-      } else {
-        const type = data ? data[0].dataType : ''
-        return transformDataTypeIcon(type)
-      }
+      return transformDataTypeIcon(data)
     },
     handlerBlur (newVal, oldVal, index) {
       if (regex.DATASET_NAME_REGEX.test(newVal)) {
@@ -483,6 +506,9 @@ export default {
         this.$message.error('字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成！')
         return false
       }
+    },
+    handleChangeDataType (type) {
+
     }
   }
 }

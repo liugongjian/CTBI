@@ -34,12 +34,8 @@
                     class="base-field-box"
                   >
                     <svg-icon
-                      v-if="el.type==='Dimension'"
-                      icon-class="dimension"
-                    />
-                    <svg-icon
-                      v-else
-                      icon-class="measure"
+                      style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 2px;"
+                      :icon-class="typeTransform(el.attributes)"
                     />
                     <span class="field-caption">{{ el.displayColumn }}</span>
                     <div class="right-hover-icons">
@@ -111,7 +107,7 @@
 </template>
 
 <script>
-import { deepClone } from '@/utils/optionUtils'
+import { deepClone, transformDataTypeIcon } from '@/utils/optionUtils'
 export default {
   name: 'DataPanelField',
   props: {
@@ -164,12 +160,20 @@ export default {
     this.interVal = null
   },
   methods: {
+    typeTransform (data) {
+      return transformDataTypeIcon(data)
+    },
     // 当拖拽在当前元素上时
     handleDragOver (e) {
       e.preventDefault()
       e.dataTransfer.dropEffect = 'copy'
     },
     // 拖拽结束
+    /**
+     * @param(String) name 当前元素
+     * @param(Object) item 组件配置项dataSource中的对象
+     * @param(String) itemName
+     */
     handleTargetDrop (e, name, item, itemName) {
       const data = JSON.parse(e.dataTransfer.getData('data'))
       // 判断拖拽元素是否在对应元素上 副值轴 name是Measure1 data.type是Measure

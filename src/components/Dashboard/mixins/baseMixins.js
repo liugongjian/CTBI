@@ -56,7 +56,7 @@ export default {
 
       try {
         const body = { limit, selectFields }
-        const dataSetId = selectFields[0].dataSetID
+        const dataSetId = option.dataSet.dataSet.id
         const res = await getDataSetData(dataSetId, body)
         res.fields = transformFields
         this.chartData = res

@@ -1,6 +1,6 @@
 <template>
   <div class="editor-object-container">
-    <div>
+    <div style="color: rgba(255, 255, 255, 0.75);">
       样式模板
     </div>
     <div class="editor-item-container flex-align-center">
@@ -14,14 +14,15 @@
           effect="dark"
           :content="item.name"
           placement="top"
-        ><div style="display:flex;flex-direction:column;align-items:center">
-          <svg-icon
-            :icon-class="item.value"
-            style="font-size: 30px;"
-            @click="changeHandler(item.value)"
-          />
-          <span>{{ item.name }}</span>
-        </div>
+        >
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <svg-icon
+              :icon-class="item.value"
+              style="font-size: 30px;"
+              @click="changeHandler(item.value)"
+            />
+            <span>{{ item.name }}</span>
+          </div>
 
         </el-tooltip>
       </div>
