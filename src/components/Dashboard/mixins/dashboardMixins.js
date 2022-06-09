@@ -8,8 +8,8 @@ export default {
       handler (val) {
         if (JSON.stringify(this.dataValue) !== '{}') {
           this.dataValue = this.formatData(formatDataValue(getDataValueById(this.identify)))
+          this.getOption()
         }
-        this.getOption()
       },
       deep: true
     },

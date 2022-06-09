@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="editor-object-container">
     <div class="coordinates editor-item-title" @click="changeCoordinates">坐标轴
       <svg-icon
         :icon-class="coordinatesIcon"
