@@ -16,12 +16,6 @@ import colorMapMixins from '@/components/Dashboard/mixins/colorMapMixins'
 export default {
   name: 'ColorMapChart',
   mixins: [colorMapMixins],
-  props: {
-    identify: {
-      type: String,
-      default: ''
-    }
-  },
   data () {
     return {
       storeOption: {},
@@ -29,13 +23,7 @@ export default {
       dataValue: [
         {
           name: '南海诸岛',
-          value: 10,
-          eventTotal: 100,
-          specialImportant: 10,
-          import: 10,
-          compare: 10,
-          common: 40,
-          specail: 20
+          value: 10
         },
         {
           name: '上海市',
