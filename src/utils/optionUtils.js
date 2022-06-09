@@ -160,7 +160,6 @@ export const getDateTime = () => {
  * @returns {Array}
  */
 export const formatDataValue = function (chartData) {
-  console.log('11', chartData)
   const dataValue = []
   const DimensionKey = []
   const MeasureKey = []
@@ -193,7 +192,6 @@ export const formatDataValue = function (chartData) {
       dataValue.push([dimensionData.join('-'), ...measureData])
     })
   }
-  console.log('22', dataValue)
   return dataValue
 }
 

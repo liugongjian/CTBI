@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-object-container">
+  <div class="editor-object-container color">
     数据主标签展示
     <el-radio-group v-model="option.format">
       <el-radio :label="true">显示指针值</el-radio>
@@ -8,7 +8,7 @@
     <div class="box">
       <label>名称</label>
       <el-color-picker v-model="option.name.color" />
-      <el-select v-model="option.name.fontSize" class="font-select" placeholder="请选择">
+      <el-select v-model="option.name.fontSize" popper-class="setting-select" class="font-select" placeholder="请选择">
         <el-option
           v-for="(item,index) in fontSizeOptions"
           :key="index"
@@ -20,7 +20,7 @@
     <div class="box">
       <label>数值</label>
       <el-color-picker v-model="option.value.color" />
-      <el-select v-model="option.value.fontSize" class="font-select" placeholder="请选择">
+      <el-select v-model="option.value.fontSize" popper-class="setting-select" class="font-select" placeholder="请选择">
         <el-option
           v-for="(item,index) in fontSizeOptions"
           :key="index"
@@ -31,7 +31,7 @@
     </div>
     <div v-show="!option.format" class="box">
       <label>设置完成占比小数位数</label>
-      <el-select v-model="option.decimal" class="font-select" placeholder="请选择">
+      <el-select v-model="option.decimal" popper-class="setting-select" class="font-select" placeholder="请选择">
         <el-option
           v-for="(item,index) in decimalOptions"
           :key="index"
@@ -45,7 +45,7 @@
       <div class="box">
         <label>样式</label>
         <el-color-picker v-model="option.deputy.color" />
-        <el-select v-model="option.deputy.fontSize" class="font-select" placeholder="请选择">
+        <el-select v-model="option.deputy.fontSize" popper-class="setting-select" class="font-select" placeholder="请选择">
           <el-option
             v-for="(item,index) in fontSizeOptions"
             :key="index"
@@ -56,7 +56,7 @@
       </div>
       <div v-show="option.format" class="box">
         <label>设置完成占比小数位数</label>
-        <el-select v-model="option.deputy.decimal" class="font-select" placeholder="请选择">
+        <el-select v-model="option.deputy.decimal" popper-class="setting-select" class="font-select" placeholder="请选择">
           <el-option
             v-for="(item,index) in decimalOptions"
             :key="index"
@@ -101,5 +101,8 @@ export default {
   .el-color-picker {
     margin: 0 5px;
   }
+}
+.color {
+  color: rgba(255, 255, 255, 0.75);
 }
 </style>

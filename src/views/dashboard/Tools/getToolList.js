@@ -1,7 +1,7 @@
 
 // 在指标看板第一级显示的图标
 const brief = [
-  'KanBanSummary',
+  'KanBanSubregion',
   'DetailTableChart',
   'LineChart',
   'BarChart',

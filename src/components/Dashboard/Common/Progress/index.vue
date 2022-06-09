@@ -43,7 +43,7 @@ export default {
       return this.storeOption.theme?.FunctionalOption.progressConfig || {}
     },
     isComponent () {
-      return this.storeOption.theme.Basic.VisualStyle.style || 'barType'
+      return this.storeOption.theme?.Basic?.VisualStyle.style || 'barType'
     }
   }
 }
