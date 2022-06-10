@@ -137,16 +137,17 @@ export default {
     window.addEventListener('beforeunload', this.beforeunload)
   },
   destroyed() {
-    if (this.timer) {
-      console.log('destroyed')
-      clearTimeout(this.timer)
-    }
-    console.log('destroyed')
-    localStorage.removeItem(this.saveName)
-    localStorage.removeItem(this.saveTagName)
-    this.updateStoreData({ layout: [], layoutStyles: [] })
-    this.mode = 'edit'
-    window.removeEventListener('beforeunload', this.beforeunload)
+    // if (this.timer) {
+    //   console.log('destroyed')
+    //   clearTimeout(this.timer)
+    // }
+    // console.log('destroyed')
+    // localStorage.removeItem(this.saveName)
+    // localStorage.removeItem(this.saveTagName)
+    // this.updateStoreData({ layout: [], layoutStyles: [] })
+    // this.mode = 'edit'
+    // window.removeEventListener('beforeunload', this.beforeunload)
+    this.destroyedData()
   },
   methods: {
     recoverDashboard() {
@@ -154,6 +155,9 @@ export default {
       const saveData = localStorage.getItem(saveName)
       const saveTag = localStorage.getItem(this.saveTagName)
       if (saveData && saveTag !== 'saved') {
+        if (this.testNewEmpty()) {
+          return
+        }
         this.recoverVisible = true
       }
     },
@@ -254,6 +258,10 @@ export default {
       const saveTag = localStorage.getItem(this.saveTagName)
       const saveData = localStorage.getItem(this.saveName)
       if (saveTag !== 'saved' && saveData) {
+        if (this.testNewEmpty()) {
+          this.$router.go(-1)
+          return
+        }
         this.unsavedVisible = true
       } else {
         this.$router.go(-1)
@@ -299,7 +307,13 @@ export default {
       const saveTag = localStorage.getItem(this.saveTagName)
       const saveData = localStorage.getItem(this.saveName)
       if (saveTag !== 'saved' && saveData) {
+        if (this.testNewEmpty()) {
+          this.destroyedData()
+          return
+        }
         e.returnValue = '你还没有保存'
+      } else {
+        this.destroyedData()
       }
     },
     updateLocalStorage (saveTag) {
@@ -318,6 +332,30 @@ export default {
       if (layoutStyles) {
         store.dispatch('setting/changeSetting', { key: 'layoutStyles', value: layoutStyles })
       }
+    },
+    testNewEmpty () {
+      if (this.saveName === 'dashboard-new') {
+        const saveData = localStorage.getItem(this.saveName)
+        if (saveData) {
+          const { layout } = JSON.parse(saveData)
+          if (layout && layout.length === 0) {
+            return true
+          }
+        }
+      }
+      return false
+    },
+    destroyedData () {
+      if (this.timer) {
+        console.log('destroyed')
+        clearTimeout(this.timer)
+      }
+      console.log('destroyed')
+      localStorage.removeItem(this.saveName)
+      localStorage.removeItem(this.saveTagName)
+      this.updateStoreData({ layout: [], layoutStyles: [] })
+      this.mode = 'edit'
+      window.removeEventListener('beforeunload', this.beforeunload)
     }
   }
 }
