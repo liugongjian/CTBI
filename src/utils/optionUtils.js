@@ -216,11 +216,11 @@ export const transformDataTypeIcon = function (data) {
     type.indexOf('number') > -1 ||
     type.indexOf('float') > -1) {
     return 'data-type-option-number'
-  } else if (type.indexOf('geography') > -1 ||
+  } else if (type.indexOf('granularity') > -1 ||
     type.indexOf('area') > -1 ||
     type.indexOf('province') > -1 ||
     type.indexOf('city') > -1 ||
-    type.indexOf('county') > -1 ||
+    type.indexOf('country') > -1 ||
     type.indexOf('longitude') > -1 ||
     type.indexOf('dimensionality') > -1) {
     return 'el-icon-location-information'
