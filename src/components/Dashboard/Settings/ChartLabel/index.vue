@@ -152,6 +152,13 @@ export default {
           }, {
             label: '百分比'
           }
+        ],
+        'RectangleTreeChart': [
+          {
+            label: '度量'
+          }, {
+            label: '百分比'
+          }
         ]
       },
       precisionOptions: [
