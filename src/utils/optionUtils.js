@@ -30,7 +30,7 @@ export const deepClone = function (origin) {
     }
     return val
   }), function (k, v) {
-    if (v.indexOf && v.indexOf('function') > -1) {
+    if (v && v.indexOf && v.indexOf('function') > -1) {
       // eslint-disable-next-line no-eval
       return eval('(function(){return ' + v + ' })()')
     }

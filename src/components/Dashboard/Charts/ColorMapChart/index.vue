@@ -24,42 +24,68 @@ export default {
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.dataValue = this.getSeriesData()
-      this.chartOption = {
-        legend: componentOption.Legend,
-        visualMap: {
-          show: true,
-          type: 'piecewise',
-          orient: 'horizontal',
-          text: ['100', '0'],
-          min: 0,
-          max: 100,
-          realtime: false,
-          calculable: true
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: '{b}<br/>{c}'
-        },
-        series: [
-          {
-            type: 'map',
-            map: 'china',
-            roam: true,
-            label: {
-              show: true
-            },
-            labelLayout: {
-              hideOverlap: true
-            },
-            data: this.dataValue
-          }
-        ]
+      const seriesOption = this.getSeriesOption()
+      if (seriesOption) {
+        this.dataValue = seriesOption.data
+        const min = Number.parseFloat(seriesOption.min)
+        const max = Number.parseFloat(seriesOption.max)
+
+        this.chartOption = {
+          legend: componentOption.Legend,
+          visualMap: {
+            show: true,
+            orient: 'horizontal',
+            type: 'continuous',
+            // visualMapContinuous 组件两端文本
+            text: [seriesOption.max, seriesOption.min],
+            // 指定 visualMapContinuous 组件的允许的最小值。'min' 必须用户指定。
+            min,
+            // 指定 visualMapContinuous 组件的允许的最大值。'max' 必须用户指定
+            max,
+            realtime: true,
+            calculable: true,
+            color: ['#FFAC2E', '#FFE4B5']
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: ({ marker, data }) => {
+              let temp = []
+              if (data) {
+                temp = data.text.map(item => {
+                  return `${item.name} ${item.value}`
+                })
+                return [
+                  `${marker} ${data.name}`,
+                  ...temp
+                ].join('<br \>')
+              }
+              return ''
+            }
+          },
+          series: [
+            {
+              type: 'map',
+              map: 'china',
+              // 是否开启鼠标缩放和平移漫游。
+              roam: true,
+              zoom: 1.2,
+              itemStyle: {
+                areaColor: '#EBEDF0',
+                borderColor: '#fff'
+              },
+              data: this.dataValue
+            }
+          ]
+        }
       }
     },
-    getSeriesData () {
+    getSeriesOption () {
       const { data, fields } = this.chartData
       if (data && data.length > 0) {
+        // 最小值
+        let min = null
+        // 最大值
+        let max = null
         // 维度， 度量
         const { Dimension, Measure } = fields
         // 维度，只会有一条
@@ -69,21 +95,49 @@ export default {
         const measureFields = Measure.fields
         const firstMeasureField = Measure.fields[0].displayColumn
         const result = data.map(item => {
-          const attributes = measureFields.map(field => {
+          const text = measureFields.map(field => {
             return {
               name: field.displayColumn,
               value: item[field.displayColumn]
             }
           })
+
+          min = this.getMin(min, item[firstMeasureField])
+          max = this.getMax(max, item[firstMeasureField])
+
           return {
             name: item[dimensionField],
             value: item[firstMeasureField],
-            attributes
+            text
           }
         })
-        return deepClone(result)
+        return {
+          min,
+          max,
+          data: deepClone(result)
+        }
       }
-      return []
+      return null
+    },
+    getMin (originValue, value) {
+      let temp = originValue
+      if (!temp) {
+        temp = value
+      }
+      if (Number.parseFloat(temp) > Number.parseFloat(value)) {
+        temp = value
+      }
+      return temp
+    },
+    getMax (originValue, value) {
+      let temp = originValue
+      if (!temp) {
+        temp = value
+      }
+      if (Number.parseFloat(temp) < Number.parseFloat(value)) {
+        temp = value
+      }
+      return temp
     }
   }
 }
