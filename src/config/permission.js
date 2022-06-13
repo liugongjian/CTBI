@@ -77,7 +77,7 @@ router.beforeEach(async (to, from, next) => {
   } else {
     /* has no token*/
 
-    if (whiteList.indexOf(to.path) !== -1) {
+    if (whiteList.indexOf(to.path) !== -1 || to.path.includes('/dashboard/publish/')) {
       next()
     } else {
       next(`/login?redirect=${to.path}`)

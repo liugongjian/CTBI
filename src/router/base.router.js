@@ -59,6 +59,12 @@ export const constantRoutes = [
     meta: { title: '仪表盘', icon: 'dashboard', affix: true, keepAlive: true }
   },
   {
+    path: '/dashboard/publish/:id',
+    name: 'publish',
+    component: () => import('@/views/dashboard/share.vue'),
+    meta: { title: '仪表盘', icon: 'dashboard', affix: true, keepAlive: true }
+  },
+  {
     path: '/dashboard',
     redirect: '/dashboard/page',
     component: BlankLayout,
