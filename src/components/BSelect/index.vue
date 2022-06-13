@@ -138,7 +138,7 @@ export default {
           icon: this.typeTransform(data.value)
         }
         this.$emit('input', data.value)
-        this.$emit('change', data.value)
+        this.$emit('change', data.value, data)
       }
     }
   }
