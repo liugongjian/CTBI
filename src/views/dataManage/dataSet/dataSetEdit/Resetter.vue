@@ -537,9 +537,15 @@ export default {
     handleChangeDataType (value, item, row) {
       row.attributes[0].format = ''
       const { originValue, parentValue } = item
-      row.attributes[0].dataType = originValue
-      row.attributes[0].secondeDataType = parentValue
-      row.attributes[0][parentValue] = value
+      if (originValue) {
+        row.attributes[0].dataType = originValue
+      } else {
+        row.attributes[0].dataType = value
+      }
+      if (parentValue) {
+        row.attributes[0].secondeDataType = parentValue
+        row.attributes[0][parentValue] = value
+      }
     }
   }
 }

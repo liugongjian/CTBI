@@ -494,15 +494,11 @@ export default {
       this.dataTableLoading = true
       try {
         const currentDataSource = this.dataSourceOptions.find(item => item._id === val)
-        const type = currentDataSource?.type || ''
+        const type = currentDataSource?.type || 'file'
         this.editDataInfo.dataSourceId = val
         this.editDataInfo.sql.dataSourceId = val
         this.editDataInfo.dataSourceName = currentDataSource?.displayName
         this.editDataInfo.dataSourceType = type
-        // this.dataInfo.dataSourceId = val
-        // this.dataInfo.sql.dataSourceId = val
-        // this.dataInfo.dataSourceName = currentDataSource?.displayName
-        // this.dataInfo.dataSourceType = type
 
         if (type === 'file') {
           const result = await dataFiles()

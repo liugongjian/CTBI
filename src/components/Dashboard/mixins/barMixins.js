@@ -1,14 +1,13 @@
 // 柱图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
-import { deepClone, formatDataValue, getLayoutOptionById } from '@/utils/optionUtils'
+import { deepClone, formatDataValue } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 import store from '@/store'
 export default {
   mixins: [baseMixins, YAxis],
   data () {
     return {
-      storeOption: {},
       chartOption: {},
       dataValue: null,
       dataOption: [],
@@ -56,7 +55,6 @@ export default {
     }
   },
   mounted () {
-    this.storeOption = getLayoutOptionById(this.identify)
     this.dataOption = store.state.app.dataOption
   },
   methods: {

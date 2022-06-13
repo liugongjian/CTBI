@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import chinaJson from './china.json'
+import chinaJson from '../../mixins/china.json'
 import { getLayoutOptionById } from '@/utils/optionUtils'
-import scatterMapMixins from '@/components/Dashboard/mixins/scatterMapMixins'
+import mapMixins from '@/components/Dashboard/mixins/mapMixins'
 export default {
   name: 'ScatterMapChart',
-  mixins: [scatterMapMixins],
+  mixins: [mapMixins],
   props: {
     identify: {
       type: String,

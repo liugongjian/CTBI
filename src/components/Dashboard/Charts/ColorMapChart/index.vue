@@ -10,87 +10,21 @@
 </template>
 
 <script>
-import chinaJson from './china.json'
-import { getLayoutOptionById } from '@/utils/optionUtils'
-import colorMapMixins from '@/components/Dashboard/mixins/colorMapMixins'
+import mapMixins from '@/components/Dashboard/mixins/mapMixins'
+import { deepClone } from '@/utils/optionUtils'
 export default {
   name: 'ColorMapChart',
-  mixins: [colorMapMixins],
+  mixins: [mapMixins],
   data () {
     return {
-      storeOption: {},
       chartOption: {},
-      dataValue: [
-        {
-          name: '南海诸岛',
-          value: 10
-        },
-        {
-          name: '上海市',
-          value: 10
-        },
-        {
-          name: '重庆市',
-          value: 20
-        },
-        {
-          name: '河北省',
-          value: 30
-        },
-        {
-          name: '云南省',
-          value: 70
-        },
-        {
-          name: '辽宁省',
-          value: 20
-        },
-        {
-          name: '黑龙江省',
-          value: 40
-        },
-        {
-          name: '山东省',
-          value: 50
-        },
-        {
-          name: '新疆维吾尔自治区',
-          value: 60
-        },
-        {
-          name: '江西省',
-          value: 40
-        },
-        {
-          name: '湖北省',
-          value: 10
-        },
-        {
-          name: '广西壮族自治区',
-          value: 20
-        }
-      ]
+      dataValue: null
     }
-  },
-  watch: {
-    storeOption: {
-      handler (val) {
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
-          this.getOption()
-        }
-      },
-      deep: true
-    }
-  },
-  mounted () {
-    this.$echarts.registerMap('china', chinaJson)
-    this.storeOption = getLayoutOptionById(this.identify)
-    this.getOption()
   },
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
+      this.dataValue = this.getSeriesData()
       this.chartOption = {
         legend: componentOption.Legend,
         visualMap: {
@@ -102,6 +36,10 @@ export default {
           max: 100,
           realtime: false,
           calculable: true
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}<br/>{c}'
         },
         series: [
           {
@@ -118,6 +56,34 @@ export default {
           }
         ]
       }
+    },
+    getSeriesData () {
+      const { data, fields } = this.chartData
+      if (data && data.length > 0) {
+        // 维度， 度量
+        const { Dimension, Measure } = fields
+        // 维度，只会有一条
+        const dimensionField = Dimension.fields[0].displayColumn
+        // 度量，最多5条数据
+        // 仅截取第一个度量作为地图的展示值，其他值放在tooltip中展示
+        const measureFields = Measure.fields
+        const firstMeasureField = Measure.fields[0].displayColumn
+        const result = data.map(item => {
+          const attributes = measureFields.map(field => {
+            return {
+              name: field.displayColumn,
+              value: item[field.displayColumn]
+            }
+          })
+          return {
+            name: item[dimensionField],
+            value: item[firstMeasureField],
+            attributes
+          }
+        })
+        return deepClone(result)
+      }
+      return []
     }
   }
 }
