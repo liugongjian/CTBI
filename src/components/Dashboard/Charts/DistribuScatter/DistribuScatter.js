@@ -31,8 +31,9 @@ export default {
     },
     'ComponentOption': {
       'Color': { // 颜色设置
-        'title': '数据配色',
-        'color': colorTheme['defaultColor']
+        'title': '数据设置',
+        'color': colorTheme['官方'],
+        'theme': '官方'
       },
       'Legend': { // 图例
         'show': true,

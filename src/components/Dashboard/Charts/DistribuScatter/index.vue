@@ -66,7 +66,6 @@ export default {
   },
   mounted() {
     this.storeOption = getLayoutOptionById(this.identify)
-    // console.log(this.storeOption, "storrrrrrrrrrrrr");
     this.getOption()
   },
   methods: {
