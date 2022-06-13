@@ -65,3 +65,8 @@ export function getDashboardDetail (id) {
   return http.get(`/dashboard/${id}`)
 }
 
+// 获取分享的仪表板详情
+export function getShareDashboardDetail (body) {
+  return http.post(`/dashboard/shareDetail`)
+}
+
