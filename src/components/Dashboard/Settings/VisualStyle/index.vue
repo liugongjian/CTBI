@@ -56,6 +56,7 @@ export default {
     // 图标点击添加组件到画布
     changeHandler (val) {
       this.option.style = val
+      this.option.VisualStyle = val // 漏斗图切换视图转化
     }
   }
 
