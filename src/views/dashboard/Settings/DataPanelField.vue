@@ -20,6 +20,9 @@
             >
               <i class="el-icon-warning-outline" />
             </el-tooltip>
+            <div v-if="item.limit">
+              {{ item.value.length }}/{{ item.limit }}
+            </div>
           </div>
           <div>
             <div class="field-area-body">
@@ -30,16 +33,12 @@
                   class="field-box-wrapper"
                 >
                   <div
-                    :class="name==='Dimension'?'dimension-field-box':'measure-field-box'"
+                    :class="el.type==='Dimension'?'dimension-field-box':'measure-field-box'"
                     class="base-field-box"
                   >
                     <svg-icon
-                      v-if="name==='Dimension'"
-                      icon-class="dimension"
-                    />
-                    <svg-icon
-                      v-else
-                      icon-class="measure"
+                      style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 2px;"
+                      :icon-class="typeTransform(el.attributes)"
                     />
                     <span class="field-caption">{{ el.displayColumn }}</span>
                     <div class="right-hover-icons">
@@ -111,7 +110,7 @@
 </template>
 
 <script>
-import { deepClone } from '@/utils/optionUtils'
+import { deepClone, transformDataTypeIcon } from '@/utils/optionUtils'
 export default {
   name: 'DataPanelField',
   props: {
@@ -164,12 +163,20 @@ export default {
     this.interVal = null
   },
   methods: {
+    typeTransform (data) {
+      return transformDataTypeIcon(data)
+    },
     // 当拖拽在当前元素上时
     handleDragOver (e) {
       e.preventDefault()
       e.dataTransfer.dropEffect = 'copy'
     },
     // 拖拽结束
+    /**
+     * @param(String) name 当前元素
+     * @param(Object) item 组件配置项dataSource中的对象
+     * @param(String) itemName
+     */
     handleTargetDrop (e, name, item, itemName) {
       const data = JSON.parse(e.dataTransfer.getData('data'))
       // 判断拖拽元素是否在对应元素上 副值轴 name是Measure1 data.type是Measure
@@ -179,19 +186,32 @@ export default {
           return el._id === data._id
         })
         if (dataIndex !== -1) {
-          this.$message({
-            message: `已存在该对象 ${data.displayColumn}`,
-            type: 'warning'
-          })
+          this.$message.warning(`已存在该对象 ${data.displayColumn}`)
         } else {
+          // 限制数量
+          if (item.limit) {
+            if (item.value.length === item.limit) {
+              this.$message.warning(`已超过[${itemName}]最多可添加项数量（${item.limit}）`)
+              return
+            }
+          }
+
+          // 自定义校验
+          if (item.validate && typeof item.validate === 'function') {
+            const { success, msg } = item.validate(data)
+            if (!success) {
+              this.$message.warning(msg)
+              return
+            }
+          }
+
           item.value.push(data)
         }
       } else {
-        const dataName = data.type === 'Measure' ? '度量' : '维度'
-        this.$message({
-          message: `不支持添加${dataName}到[${itemName}]上`,
-          type: 'warning'
-        })
+        if (data.type !== 'DimensionOrMeasure') {
+          const dataName = data.type === 'Measure' ? '度量' : '维度'
+          this.$message.warning(`不支持添加${dataName}到[${itemName}]上`)
+        }
       }
     },
     // 删除字段

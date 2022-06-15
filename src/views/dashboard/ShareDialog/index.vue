@@ -287,8 +287,14 @@ export default {
   font-weight: 400;
   color: rgba(0, 0, 0, 0.45);
 }
-.dialog-footer {
+.dialog-footer-new {
   padding-top: 10px;
   margin-right: 20px;
+}
+::v-deep .el-dialog__footer {
+  padding: 0px;
+}
+.dialog-footer{
+  padding-top: 10px;
 }
 </style>

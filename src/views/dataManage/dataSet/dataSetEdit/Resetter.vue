@@ -54,7 +54,7 @@
                 <svg-icon
                   v-if="data.attributes"
                   style="width: 20px;height: 18px;margin-right: 6px;"
-                  :icon-class="typeTransform(data.attributes)"
+                  :icon-class="typeTransform(data)"
                 />
                 <b-tooltip
                   :content="data.displayColumn"
@@ -127,7 +127,7 @@
                         <div>
                           <svg-icon
                             style="width: 20px;"
-                            :icon-class="typeTransform(v.attributes)"
+                            :icon-class="typeTransform(v)"
                           />
                         </div>
                         <gear-btn
@@ -220,10 +220,11 @@
           >
             <template slot-scope="scope">
               <span v-if="scope.row._id !== 1 && scope.row._id !== 2">
+                <!-- value选中值， valueItem选中值对象 -->
                 <b-select
-                  v-model="scope.row.attributes[0].dataType"
+                  :value="resetDataType(scope.row)"
                   :options="dataTypeOptions"
-                  @change="scope.row.attributes[0].format = ''"
+                  @change="(value, valueItem) => {handleChangeDataType(value, valueItem, scope.row);}"
                 />
               </span>
             </template>
@@ -314,6 +315,46 @@ export default {
         {
           value: 'number',
           label: '数字'
+        },
+        {
+          value: 'granularity',
+          label: '地理',
+          children: [{
+            value: 'area',
+            parentValue: 'granularity',
+            originValue: 'text',
+            label: '区域'
+          },
+          {
+            value: 'province',
+            parentValue: 'granularity',
+            originValue: 'text',
+            label: '省/直辖市'
+          },
+          {
+            value: 'city',
+            parentValue: 'granularity',
+            originValue: 'text',
+            label: '市'
+          },
+          {
+            value: 'country',
+            parentValue: 'granularity',
+            originValue: 'text',
+            label: '区/县'
+          },
+          {
+            value: 'longitude',
+            parentValue: 'granularity',
+            originValue: 'text',
+            label: '经度'
+          },
+          {
+            value: 'dimensionality',
+            parentValue: 'granularity',
+            originValue: 'text',
+            label: '维度'
+          }]
         },
         {
           value: 'text',
@@ -463,12 +504,8 @@ export default {
       return res
     },
     typeTransform (data) {
-      if (typeof data === 'string') {
-        return transformDataTypeIcon(data)
-      } else {
-        const type = data ? data[0].dataType : ''
-        return transformDataTypeIcon(type)
-      }
+      const temp = this.resetDataType(data)
+      return transformDataTypeIcon(temp)
     },
     handlerBlur (newVal, oldVal, index) {
       if (regex.DATASET_NAME_REGEX.test(newVal)) {
@@ -482,6 +519,32 @@ export default {
       } else {
         this.$message.error('字段名称只能由中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号组成！')
         return false
+      }
+    },
+    // 转换字段类型
+    // 从attributes中获取，若存在二级、三级字段类型，获取第三级
+    resetDataType (row) {
+      const { attributes } = row
+      if (attributes) {
+        const { secondeDataType, dataType } = attributes[0]
+        if (secondeDataType) {
+          return attributes[0][secondeDataType]
+        }
+        return dataType
+      }
+      return ''
+    },
+    handleChangeDataType (value, item, row) {
+      row.attributes[0].format = ''
+      const { originValue, parentValue } = item
+      if (originValue) {
+        row.attributes[0].dataType = originValue
+      } else {
+        row.attributes[0].dataType = value
+      }
+      if (parentValue) {
+        row.attributes[0].secondeDataType = parentValue
+        row.attributes[0][parentValue] = value
       }
     }
   }

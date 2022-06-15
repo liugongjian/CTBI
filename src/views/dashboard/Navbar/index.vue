@@ -2,8 +2,9 @@
   <div class="bi-header-out">
     <div class="bi-header-container">
       <div class="nameWrap">
+        <div class="back" @click="back"><i class="el-icon-arrow-left" /></div>
         <img
-          style="width: 18px; height: 17px"
+          style="width: 18px; height: 17px; margin-left:16px;"
           :src="require('../../../assets/Image/dashboard/name.png')"
         >
         <el-input
@@ -152,7 +153,7 @@ export default {
     const validateName = (rule, value, callback) => {
       const name = value.trim()
       if (name === '') {
-        callback(new Error('请输入文件夹名称'))
+        callback(new Error('请输入仪表板名称'))
       } else {
         const reg = /^[\u4e00-\u9fa5\w|\[\]\(\)\/\\]{1,50}$/
         if (!reg.test(name)) {
@@ -202,11 +203,41 @@ export default {
     },
     save () {
       this.saveMode = 'save'
-      this.showDashboardAttribute()
+      if (this.dashboard._id) {
+        const tip = this.testNameValid()
+        if (tip) {
+          this.$message.warning(tip)
+        } else {
+          this.saveDashboard({ name: this.name })
+        }
+      } else {
+        this.showDashboardAttribute()
+      }
     },
     saveAndShare () {
       this.saveMode = 'saveAndShare'
-      this.showDashboardAttribute()
+      if (this.dashboard._id) {
+        const tip = this.testNameValid()
+        if (tip) {
+          this.$message.warning(tip)
+        } else {
+          this.saveDashboard({ name: this.name })
+        }
+      } else {
+        this.showDashboardAttribute()
+      }
+    },
+    testNameValid() {
+      const name = this.name.trim()
+      if (name === '') {
+        return '请输入仪表板名称'
+      } else {
+        const reg = /^[\u4e00-\u9fa5\w|\[\]\(\)\/\\]{1,50}$/
+        if (!reg.test(name)) {
+          return '仪表板名称错误，支持中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号, 长度不超过50'
+        }
+      }
+      return ''
     },
     async showDashboardAttribute () {
       await this.getFolders()
@@ -246,26 +277,32 @@ export default {
       })
     },
     // 新建数据集
-    async saveDashboard () {
+    async saveDashboard (obj) {
       const isCopy = this.saveMode === 'copy'
       const id = isCopy ? null : (this.dashboard._id || null)
       const finalId = isCopy ? null : id
+      const data = {
+        layout: store.state.app.layout,
+        layoutStyles: store.state.settings.layoutStyles
+      }
       const params = {
         id: finalId,
-        setting: JSON.stringify(store.state.app.layout),
-        ...this.dashboardAttr
+        setting: JSON.stringify(data),
+        ...(obj || this.dashboardAttr)
       }
       const result = await saveDashboard(params)
       this.$message.success(isCopy ? '另存为成功' : '保存成功')
       console.log(result)
-      this.hiddenDashboardAttribute()
+      if (!id) {
+        this.hiddenDashboardAttribute()
+      }
       if (!isCopy) {
         this.$emit('handleChange', {
           action: 'saveSuccess',
           data: result
         })
       }
-      if (this.saveMode === 'saveAndShare') {
+      if (this.saveMode === 'saveAndShare' && !this.dashboard.shareUrl) {
         this.$refs['shareDialog'].showShare(result)
       }
     },
@@ -294,6 +331,11 @@ export default {
         action: 'changeShare',
         data
       })
+    },
+    back() {
+      this.$emit('handleChange', {
+        action: 'back'
+      })
     }
   }
 }
@@ -306,6 +348,17 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  .back{
+    width: 48px;
+    height: 50px;
+    background: #020202;
+    margin-left: -20px;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .nameInput{
     width: 200px;
   }
@@ -314,6 +367,12 @@ export default {
     border: 0;
     color: #fff;
   }
+}
+::v-deep .el-dialog__footer {
+  padding: 0px;
+}
+.dialog-footer{
+  padding-top: 10px;
 }
 .device {
   width: 120px;
@@ -360,6 +419,7 @@ export default {
 .operation {
   display: flex;
   align-items: center;
+  height: 50px;
   .divider{
     width: 1px;
     height: 20px;

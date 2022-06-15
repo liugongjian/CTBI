@@ -72,8 +72,8 @@ export default {
       dataInfo: {},
       rules: {
         displayName: [
-          { required: true, message: '请输入数据集名称', trigger: 'change' },
-          { pattern: regex.DATASET_NAME_REGEX, message: '名称输入有误，请参考下方提示', trigger: 'change' },
+          { required: true, message: '请输入数据集名称', trigger: 'blur' },
+          { pattern: regex.DATASET_NAME_REGEX, message: '名称输入有误，请参考下方提示', trigger: 'blur' },
           { validator: this.existDataSet, trigger: 'blur' }
         ]
       },

@@ -71,5 +71,41 @@ export default {
     }
   },
   'advance': {}, // 高级
-  'dataSource': {}// 数据集
+  'dataSource': {
+    'Dimension': { // 维度
+      'name': '地理区域/维度',
+      // 是否必选
+      'require': true,
+      // 数量限制正整数，如果为null则不做限制
+      'limit': 1,
+      // 自定义字段规则校验
+      // 返回{success: true, msg: ''}
+      'validate': function (field) {
+        // const { attributes } = field
+        // 验证二级字段类型是不是[地理]
+        // if (attributes && attributes.length > 0) {
+        //   const attr = attributes[0]
+        //   const { secondeDataType } = attr
+        //   if (secondeDataType && secondeDataType === 'granularity') {
+        //     return { success: true, msg: '' }
+        //   }
+        // }
+        // return { success: false, msg: '不支持添加该类型字段到[地理区域/维度]，需要[地理]类型的字段' }
+        return { success: true, msg: '' }
+      },
+      'value': []
+    },
+    'Measure': { // 度量
+      'name': '色彩饱和度/度量',
+      // 是否必选
+      'require': true,
+      // 数量限制正整数，如果为null则不做限制
+      'limit': 5,
+      'value': []
+    }
+  }, // 数据集
+  'dataSet': { // 当前正在使用的数据集
+    'id': '', // 数据集ID
+    'name': '' // 数据集名称
+  }
 }

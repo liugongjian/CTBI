@@ -25,8 +25,14 @@
         :class="item1.name===storeOption.is?'active':''"
         @click.stop="changeHandler(item1.name)"
       >
-        <el-tooltip popper-class="content" placement="top-start">
-          <svg-icon :icon-class="item1.name" style="font-size:26px;" />
+        <el-tooltip
+          popper-class="content"
+          placement="top-start"
+        >
+          <svg-icon
+            :icon-class="item1.name"
+            style="font-size:26px;"
+          />
           <div slot="content">
             <ChartDescription :chart-name="item1.name" />
           </div>
@@ -58,28 +64,35 @@ export default {
       toolList: {},
       storeOption: {},
       types: [
-        { name: '指标',
+        {
+          name: '指标',
           type: 'indicator'
         },
-        { name: '表格',
+        {
+          name: '表格',
           type: 'table'
         },
-        { name: '趋势',
+        {
+          name: '趋势',
           type: 'trend'
         },
-        { name: '比较',
+        {
+          name: '比较',
           type: 'comparator'
         },
-        { name: '分布',
+        {
+          name: '分布',
           type: 'distribution'
         },
-        { name: '关系',
+        {
+          name: '关系',
           type: 'relation'
         },
         // { name: '时序',
         //   type: 'sequence'
         // },
-        { name: '空间',
+        {
+          name: '空间',
           type: 'space'
         }
       ]
@@ -100,7 +113,7 @@ export default {
     this.goAuchor('#' + this.type)
   },
   methods: {
-    filterTools(toolList, type) {
+    filterTools (toolList, type) {
       const list = []
       const res = JSON.parse(JSON.stringify(toolList))
       Object.keys(res).forEach(item => {
@@ -114,7 +127,7 @@ export default {
       list?.sort((prev, next) => prev.order - next.order)
       return list
     },
-    goAuchor(id) {
+    goAuchor (id) {
       this.type = id.split('#')[1]
       document.querySelector(id).scrollIntoView(true)
       var auchor = this.$el.querySelector(id)
@@ -135,15 +148,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .switcher {
-  background: #383B47;
+  background: #383b47;
   padding: 12px 2px 0px 16px;
   .types {
-    .title{
+    .title {
       font-size: 12px;
-      color: rgba(255,255,255,0.90);
+      color: rgba(255, 255, 255, 0.9);
       font-weight: 500;
       margin: 12px 0;
-
     }
     .sub-chart {
       display: inline-flex;
@@ -151,22 +163,22 @@ export default {
       margin-bottom: 8px;
       width: 36px;
       height: 36px;
-      border: 1px solid rgba(221,221,221,0.65);
+      border: 1px solid rgba(221, 221, 221, 0.65);
       border-radius: 2px;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      &:hover{
-        border: 1px solid rgba(255,255,255,1);
+      &:hover {
+        border: 1px solid rgba(255, 255, 255, 1);
       }
     }
-    .sub-chart.active{
-      border: 1px solid rgba(250,131,52,1);
+    .sub-chart.active {
+      border: 1px solid rgba(250, 131, 52, 1);
       border-radius: 2px;
     }
   }
   .chart-type {
-    border: 1px solid rgba(255,255,255,0.25);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 2px;
     height: 22px;
     line-height: 22px;
@@ -174,23 +186,23 @@ export default {
     display: inline-block;
     margin-right: 8px;
     margin-bottom: 12px;
-    span{
+    span {
       font-size: 12px;
-      color: #FFFFFF;
+      color: #ffffff;
       font-weight: 400;
       padding: 0 10px;
     }
-    &:hover{
-      border: 1px solid rgba(255,255,255,1);
+    &:hover {
+      border: 1px solid rgba(255, 255, 255, 1);
     }
   }
-  .chart-type.active{
-    border: 1px solid rgba(250,131,52,1);
+  .chart-type.active {
+    border: 1px solid rgba(250, 131, 52, 1);
     border-radius: 2px;
     position: relative;
-    &::after{
+    &::after {
       display: block;
-      content: " ";
+      content: ' ';
       position: absolute;
       bottom: -1px;
       right: -1px;
@@ -202,22 +214,22 @@ export default {
     }
   }
 }
-
 </style>
-<style lang="scss">
-.content.el-tooltip__popper[x-placement^="top"] .popper__arrow {
-  border-top-color: rgba(0,0,0,0.65);
+<style lang="scss" scoped>
+.content.el-tooltip__popper[x-placement^='top'] .popper__arrow {
+  border-top-color: rgba(0, 0, 0, 0.65);
 }
-.content.el-tooltip__popper[x-placement^="top"] .popper__arrow:after {
-  border-top-color: rgba(0,0,0,0.65);
+.content.el-tooltip__popper[x-placement^='top'] .popper__arrow:after {
+  border-top-color: rgba(0, 0, 0, 0.65);
 }
-.is-dark.content.el-tooltip__popper[x-placement^="bottom"] .popper__arrow {
-  border-bottom-color: rgba(0,0,0,0.65);
+.is-dark.content.el-tooltip__popper[x-placement^='bottom'] .popper__arrow {
+  border-bottom-color: rgba(0, 0, 0, 0.65);
 }
-.is-dark.content.el-tooltip__popper[x-placement^="bottom"] .popper__arrow:after {
-  border-bottom-color: rgba(0,0,0,0.65);
+.is-dark.content.el-tooltip__popper[x-placement^='bottom']
+  .popper__arrow:after {
+  border-bottom-color: rgba(0, 0, 0, 0.65);
 }
 .content {
-  background: rgba(0,0,0,0.65) !important;
+  background: rgba(0, 0, 0, 0.65) !important;
 }
 </style>

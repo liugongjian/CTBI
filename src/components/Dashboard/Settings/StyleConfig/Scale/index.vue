@@ -3,8 +3,8 @@
     <el-checkbox v-model="option.show">显示内部刻度线</el-checkbox>
     <div class="container">
       <el-radio-group v-model="option.type">
-        <el-radio label="original">显示百分比</el-radio>
-        <el-radio label="percentage">显示原值</el-radio>
+        <el-radio label="percentage">显示百分比</el-radio>
+        <el-radio label="original">显示原值</el-radio>
       </el-radio-group>
     </div>
   </div>

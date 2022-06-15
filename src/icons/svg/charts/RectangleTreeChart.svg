@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1186px" height="1024px" viewBox="0 0 1186 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>矩形树图</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="矩形树图" fill-rule="nonzero">
+            <polygon id="路径" fill="url(#linearGradient-1)" points="0 0 711.376853 0 711.376853 664.682331 0 664.682331"></polygon>
+            <polygon id="路径" fill="url(#linearGradient-2)" points="0 691.600571 711.376853 691.600571 711.376853 1023.94173 0 1023.94173"></polygon>
+            <polygon id="路径" fill="url(#linearGradient-3)" points="745.949486 5.41860598 1185.68421 5.41860598 1185.68421 497.75431 745.949486 497.75431"></polygon>
+            <polygon id="路径" fill="url(#linearGradient-4)" points="745.949486 522.400228 950.017827 522.400228 950.017827 1024 745.949486 1024"></polygon>
+            <polygon id="路径" fill="url(#linearGradient-5)" points="970.783857 522.400228 1185.68421 522.400228 1185.68421 760.119719 970.783857 760.119719"></polygon>
+            <polygon id="路径" fill="#C7C6CA" points="970.783857 783.19249 1185.68421 783.19249 1185.68421 1024 970.783857 1024"></polygon>
+        </g>
+    </g>
+</svg>

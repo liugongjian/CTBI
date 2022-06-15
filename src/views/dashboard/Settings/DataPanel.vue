@@ -68,6 +68,10 @@
                 style="width:100%;"
                 @dblclick="addItem(data)"
               >
+                <svg-icon
+                  style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 4px;"
+                  :icon-class="typeTransform(data.attributes)"
+                />
                 <span>{{ node.label }}</span>
               </span>
             </el-tree>
@@ -95,6 +99,10 @@
                 style="width:100%;"
                 @dblclick="addItem(data)"
               >
+                <svg-icon
+                  style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 3px;"
+                  :icon-class="typeTransform(data.attributes)"
+                />
                 <span>{{ node.label }}</span>
               </span>
             </el-tree>
@@ -109,6 +117,7 @@
 <script>
 import DataSetSelect from './components/DataSetSelect.vue'
 import { getDataSetData } from '@/api/dataSet'
+import { transformDataTypeIcon } from '@/utils/optionUtils'
 export default {
   name: 'DataPanel',
   components: { DataSetSelect },
@@ -142,6 +151,9 @@ export default {
     }
   },
   methods: {
+    typeTransform (data) {
+      return transformDataTypeIcon(data)
+    },
     // 更新数据
     async refreshValue (id) {
       if (id) {
@@ -172,7 +184,6 @@ export default {
     },
     // 过滤树形数据
     filterNode (value, data) {
-      console.log(value)
       if (!value) return true
       return data.displayColumn.indexOf(value) !== -1
     },

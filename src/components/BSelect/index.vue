@@ -29,13 +29,49 @@
         :key="data.value"
         :command="data"
       >
-        <span v-if="data.icon || typeTransform(data.value)">
-          <svg-icon
-            style="width: 22px;height: 12px;margin-right: 6px;"
-            :icon-class="data.icon || typeTransform(data.value)"
-          />
-        </span>
-        <span :class="{'field-active' : data.label === selected.label}">{{ data.label }}</span>
+        <template v-if="hasChildren(data)">
+          <el-dropdown
+            placement="right"
+            style="width: 100%;"
+            @command="handleCommand"
+          >
+            <div style="width: 100%;display: flex;">
+              <div style="width: 28px;">
+                <svg-icon
+                  style="width: 22px;height: 12px;margin-right: 6px;"
+                  :icon-class="data.icon || typeTransform(data.value)"
+                />
+              </div>
+              <div
+                :class="{'field-active' : data.label === selected.label}"
+                style="flex:1;"
+              >
+                {{ data.label }}
+              </div>
+              <div style="width: 22px;">
+                <i class="el-icon-arrow-right el-icon--right" />
+              </div>
+            </div>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                v-for="child in data.children"
+                :key="child.label + child.value"
+                :command="child"
+              >
+                {{ child.label }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </template>
+        <template v-else>
+          <span>
+            <svg-icon
+              style="width: 22px;height: 12px;margin-right: 6px;"
+              :icon-class="data.icon || typeTransform(data.value)"
+            />
+          </span>
+          <span :class="{'field-active' : data.label === selected.label}">{{ data.label }}</span>
+        </template>
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
@@ -50,18 +86,7 @@ export default {
   props: {
     options: {
       type: Array,
-      default: () => [{
-        value: 'number',
-        label: '数字'
-      },
-      {
-        value: 'text',
-        label: '文本'
-      },
-      {
-        value: 'time',
-        label: '时间'
-      }]
+      default: () => []
     },
     value: {
       type: String,
@@ -77,7 +102,7 @@ export default {
     }
   },
   mounted () {
-    const temp = this.options.find(item => item.value === this.value)
+    const temp = this.recursiveOption(this.options)
     if (temp) {
       this.handleCommand(temp)
     }
@@ -86,13 +111,35 @@ export default {
     typeTransform (type) {
       return transformDataTypeIcon(type)
     },
-    handleCommand (data) {
-      this.selected = {
-        label: data.label,
-        icon: this.typeTransform(data.value)
+    recursiveOption (data) {
+      if (data && data.length > 0) {
+        for (let i = 0; i < data.length; i++) {
+          const temp = data[i]
+          if (temp.value === this.value) {
+            return temp
+          } else if (temp.children) {
+            const childTemp = this.recursiveOption(temp.children)
+            if (childTemp) {
+              return childTemp
+            }
+          }
+        }
       }
-      this.$emit('input', data.value)
-      this.$emit('change', data.value)
+      return null
+    },
+    hasChildren (data) {
+      return data && data.children && data.children.length > 0
+    },
+    handleCommand (data) {
+      if (!this.hasChildren(data)) {
+        // 展示选中数据
+        this.selected = {
+          label: data.label,
+          icon: this.typeTransform(data.value)
+        }
+        this.$emit('input', data.value)
+        this.$emit('change', data.value, data)
+      }
     }
   }
 }
