@@ -114,6 +114,7 @@ import store from '@/store'
 import { getToolList, getBriefToolList } from './getToolList'
 import { nanoid } from 'nanoid'
 // import IconDropdown from './component/IconDropdown.vue'
+import { deepClone } from '@/utils/optionUtils'
 import ChartListPanel from './component/ChartListPanel.vue'
 export default {
   name: 'Tools',
@@ -169,7 +170,7 @@ export default {
       }
       const id = nanoid()
       // 防止指向问题
-      const option = JSON.parse(JSON.stringify(item))
+      const option = deepClone(item)
       this.addLayout({
         x: (this.layout.length * 2) % (this.colNum || 12),
         y: this.layout.length + (this.colNum || 12), // puts it at the bottom
@@ -183,7 +184,7 @@ export default {
       this.layoutIndex++
     },
     addLayout (obj) {
-      const temp = JSON.parse(JSON.stringify(obj))
+      const temp = deepClone(obj)
       // 更新当前id
       store.dispatch('app/updateLayoutId', temp.i)
       this.layout.push(temp)
@@ -207,7 +208,7 @@ export default {
         mouseInGrid = true
       }
       // 防止指向问题
-      const option = JSON.parse(JSON.stringify(item))
+      const option = deepClone(item)
 
       // 生成画布上的虚拟节点
       if (mouseInGrid === true && (this.layout.findIndex(item => item.i === 'drop')) === -1) {
@@ -263,7 +264,7 @@ export default {
         this.layout = this.layout.filter(obj => obj.i !== 'drop')
         const i = name + String(DragPos.i) + new Date().getTime()
         // 防止指向问题
-        const option = JSON.parse(JSON.stringify(item))
+        const option = deepClone(item)
         this.addLayout({
           x: DragPos.x,
           y: DragPos.y,

@@ -5,7 +5,9 @@ import { getLayoutOptionById, getDataValueById, deepClone } from '@/utils/option
 export default {
   data () {
     return {
-      // 图表组件数据
+      // Vuex中缓存的配置项
+      storeOption: {},
+      // 图表组件数据 - 由接口返回的数据集
       chartData: {}
     }
   },
@@ -16,6 +18,7 @@ export default {
     }
   },
   mounted () {
+    this.storeOption = getLayoutOptionById(this.identify)
     this.$bus.$on('interReload', this.interReload)
   },
   beforeDestroy () {

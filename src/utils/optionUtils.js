@@ -24,7 +24,18 @@ export const deepClone = function (origin) {
     return undefined
   }
 
-  return JSON.parse(JSON.stringify(origin))
+  return JSON.parse(JSON.stringify(origin, function (key, val) {
+    if (typeof val === 'function') {
+      return val + ''
+    }
+    return val
+  }), function (k, v) {
+    if (v && v.indexOf && v.indexOf('function') > -1) {
+      // eslint-disable-next-line no-eval
+      return eval('(function(){return ' + v + ' })()')
+    }
+    return v
+  })
 }
 
 /**
@@ -125,7 +136,6 @@ export const getDataValueById = function (identify) {
   }
   const dataOption = store.state.app.dataOption
   const obj = dataOption.find((item) => {
-    console.log(item.id, identify, item.id === identify)
     return item.id === identify
   })
   if (obj && JSON.stringify(obj) !== '{}') {
@@ -201,29 +211,31 @@ export const formatDataValue = function (chartData) {
  * @returns {String}
  */
 export const transformDataTypeIcon = function (data) {
-  let type = JSON.parse(JSON.stringify(data))
-  if (typeof type !== 'string') {
-    type = data[0].dataType || ''
-  }
-  if (type.indexOf('text') > -1 ||
-    type.indexOf('char') > -1 ||
-    type.indexOf('varChar') > -1 ||
-    type.indexOf('varchar') > -1) {
-    return 'data-type-option-text'
-  } else if (type.indexOf('date') > -1 || type.indexOf('time') > -1) {
-    return 'data-type-option-date'
-  } else if (type.indexOf('int') > -1 ||
-    type.indexOf('number') > -1 ||
-    type.indexOf('float') > -1) {
-    return 'data-type-option-number'
-  } else if (type.indexOf('granularity') > -1 ||
-    type.indexOf('area') > -1 ||
-    type.indexOf('province') > -1 ||
-    type.indexOf('city') > -1 ||
-    type.indexOf('country') > -1 ||
-    type.indexOf('longitude') > -1 ||
-    type.indexOf('dimensionality') > -1) {
-    return 'el-icon-location-information'
+  let type = data
+  if (type) {
+    if (typeof type !== 'string') {
+      type = data[0].dataType || ''
+    }
+    if (type.indexOf('text') > -1 ||
+      type.indexOf('char') > -1 ||
+      type.indexOf('varChar') > -1 ||
+      type.indexOf('varchar') > -1) {
+      return 'data-type-option-text'
+    } else if (type.indexOf('date') > -1 || type.indexOf('time') > -1) {
+      return 'data-type-option-date'
+    } else if (type.indexOf('int') > -1 ||
+      type.indexOf('number') > -1 ||
+      type.indexOf('float') > -1) {
+      return 'data-type-option-number'
+    } else if (type.indexOf('granularity') > -1 ||
+      type.indexOf('area') > -1 ||
+      type.indexOf('province') > -1 ||
+      type.indexOf('city') > -1 ||
+      type.indexOf('country') > -1 ||
+      type.indexOf('longitude') > -1 ||
+      type.indexOf('dimensionality') > -1) {
+      return 'el-icon-location-information'
+    }
   }
   return ''
 }

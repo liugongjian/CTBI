@@ -20,6 +20,9 @@
             >
               <i class="el-icon-warning-outline" />
             </el-tooltip>
+            <div v-if="item.limit">
+              {{ item.value.length }}/{{ item.limit }}
+            </div>
           </div>
           <div>
             <div class="field-area-body">
@@ -183,20 +186,31 @@ export default {
           return el._id === data._id
         })
         if (dataIndex !== -1) {
-          this.$message({
-            message: `已存在该对象 ${data.displayColumn}`,
-            type: 'warning'
-          })
+          this.$message.warning(`已存在该对象 ${data.displayColumn}`)
         } else {
+          // 限制数量
+          if (item.limit) {
+            if (item.value.length === item.limit) {
+              this.$message.warning(`已超过[${itemName}]最多可添加项数量（${item.limit}）`)
+              return
+            }
+          }
+
+          // 自定义校验
+          if (item.validate && typeof item.validate === 'function') {
+            const { success, msg } = item.validate(data)
+            if (!success) {
+              this.$message.warning(msg)
+              return
+            }
+          }
+
           item.value.push(data)
         }
       } else {
         if (data.type !== 'DimensionOrMeasure') {
           const dataName = data.type === 'Measure' ? '度量' : '维度'
-          this.$message({
-            message: `不支持添加${dataName}到[${itemName}]上`,
-            type: 'warning'
-          })
+          this.$message.warning(`不支持添加${dataName}到[${itemName}]上`)
         }
       }
     },
