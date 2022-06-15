@@ -15,25 +15,35 @@
       </el-container>
     </el-container>
     <el-dialog
-      title="未保存"
-      :visible.sync="unsavedVisible"
+      title="请输入分享密码"
+      :visible.sync="passwordVisible"
       width="480px"
     >
-      <div class="data-set-didlog-del">
-        <svg-icon
-          icon-class="warning"
-          style="margin-right: 16px"
-        />
-        <span>该仪表板内容还未保存，确定离开？</span>
-      </div>
+      <el-form
+        ref="attrForm"
+        style="padding: 0px"
+        :model="dashboardAttr"
+        :rules="attrRules"
+        label-width="60px"
+      >
+        <el-form-item
+          label="密码"
+          prop="password"
+        >
+          <el-input
+            v-model="dashboardAttr.password"
+            placeholder="请输入分享密码"
+          />
+        </el-form-item>
+      </el-form>
       <div
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="unsavedVisible = false">取消</el-button>
+        <el-button @click="passwordVisible = false">取消</el-button>
         <el-button
           type="primary"
-          @click="confirmBack"
+          @click="confirmGetData"
         >确定</el-button>
       </div>
     </el-dialog>
@@ -45,7 +55,8 @@ import Widget from './Widget/index.vue'
 import store from '@/store'
 // 导入样式
 import '@/views/dashboard/index.scss'
-import { getDashboardDetail } from '@/api/dashboard'
+import { getShareDashboardDetail } from '@/api/dashboard'
+import moment from 'moment'
 export default {
   components: {
     Widget
@@ -57,15 +68,17 @@ export default {
     this.saveName = 'dashboard-' + (dashboardId || 'new')
     this.saveTagName = this.saveName + '-tag'
     return {
-      dashboard: {
-        name: ''
-      },
-      mode: this.$route.query.mode === '1' ? 'preview' : 'edit',
-      dashboardId,
-      recoverVisible: false,
       loading: false,
-      useRecover: false,
-      unsavedVisible: false
+      passwordVisible: true,
+      dashboardAttr: {
+        password: ''
+      },
+      attrRules: {
+        password: [
+          { required: true, trigger: 'blur', message: '请输入密码' }
+        ]
+
+      }
     }
   },
   computed: {
@@ -90,7 +103,7 @@ export default {
     //   const layoutStyles = JSON.parse(localStorage.getItem('layoutStyles'))
     //   this.$store.state.settings.layoutStyles = layoutStyles
     // }
-    this.getDashboardData()
+    // this.getDashboardData()
     window.addEventListener('beforeunload', this.beforeunload)
   },
   destroyed() {
@@ -108,24 +121,30 @@ export default {
   },
   methods: {
     async getDashboardData() {
-      const id = this.dashboardId
-      if (id) {
-        try {
-          this.loading = true
-          const result = await getDashboardDetail(id)
-          console.log(result)
-          this.loading = false
-          this.dashboard = result
-          if (!this.recoverVisible && !this.useRecover) {
-            const settings = result.setting ? JSON.parse(result.setting) : null
-            if (settings) {
-              // store.dispatch('app/updateLayout', settings)
-              this.updateStoreData(settings)
-            }
-          }
-        } catch (e) {
-          this.loading = false
-        }
+      const params = {
+        url: 'http://43.142.102.49:888/ctbiweb/dashboard/publish/RGvgccuxEsP5RLj' || window.location.ref,
+        password: 'i04Y5cZ#xC' || this.dashboardAttr.password,
+        date: moment().format('YYYY-MM-DD')
+      }
+      try {
+        this.loading = true
+        const result = await getShareDashboardDetail(params)
+        console.log(result)
+        this.loading = false
+        this.dashboard = result
+        this.passwordVisible = false
+        this.updateStoreData(JSON.parse(result.setting))
+      } catch (e) {
+        this.loading = false
+      }
+    },
+    updateStoreData (data) {
+      const { layout, layoutStyles } = data
+      if (layout) {
+        store.dispatch('app/updateLayout', layout)
+      }
+      if (layoutStyles) {
+        store.dispatch('setting/changeSetting', { key: 'layoutStyles', value: layoutStyles })
       }
     },
     dragover (event) {
@@ -153,52 +172,18 @@ export default {
         y: domRec.y
       })
     },
-    handleNavbarChange({ action, data }) {
-      if (action === 'changeMode') {
-        this.mode = data
-      }
-      console.log(action, data)
-      if (action === 'saveSuccess') {
-        if (!this.dashboardId) {
-          localStorage.removeItem(this.saveName)
-          localStorage.removeItem(this.saveTagName)
-          this.saveName = 'dashboard-' + data._id
-          this.saveTagName = this.saveName + '-tag'
-          this.dashboardId = data._id
-        }
-        this.updateLocalStorage('saved')
-        this.dashboard = data
-      }
-      if (action === 'changeShare') {
-        this.dashboard = { ...this.dashboard, ...data }
-      }
-      if (action === 'back') {
-        this.handleBack()
-      }
-    },
     beforeunload() {
       this.destroyedData()
     },
-    updateStoreData (data) {
-      const { layout, layoutStyles } = data
-      if (layout) {
-        store.dispatch('app/updateLayout', layout)
-      }
-      if (layoutStyles) {
-        store.dispatch('setting/changeSetting', { key: 'layoutStyles', value: layoutStyles })
-      }
-    },
-    testNewEmpty () {
-      if (this.saveName === 'dashboard-new') {
-        const saveData = localStorage.getItem(this.saveName)
-        if (saveData) {
-          const { layout } = JSON.parse(saveData)
-          if (layout && layout.length === 0) {
-            return true
-          }
+    confirmGetData () {
+      this.$refs['attrForm'].validate((valid) => {
+        if (valid) {
+          this.getDashboardData()
+        } else {
+          console.log('error submit!!')
+          return false
         }
-      }
-      return false
+      })
     },
     destroyedData () {
       if (this.timer) {
@@ -218,5 +203,11 @@ export default {
 <style lang="scss" scoped>
 .tool-header{
     position: relative;
+}
+::v-deep .el-dialog__footer {
+  padding: 0px;
+}
+.dialog-footer{
+  padding-top: 10px;
 }
 </style>

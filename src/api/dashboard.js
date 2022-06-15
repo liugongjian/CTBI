@@ -67,6 +67,6 @@ export function getDashboardDetail (id) {
 
 // 获取分享的仪表板详情
 export function getShareDashboardDetail (body) {
-  return http.post(`/dashboard/shareDetail`)
+  return http.post(`/dashboard/shareDetail`, body)
 }
 
