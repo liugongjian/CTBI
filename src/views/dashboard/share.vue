@@ -121,9 +121,14 @@ export default {
   },
   methods: {
     async getDashboardData() {
+      // const params = {
+      //   url: 'http://43.142.102.49:888/ctbiweb/dashboard/publish/RGvgccuxEsP5RLj' || window.location.href,
+      //   password: this.dashboardAttr.password,
+      //   date: moment().format('YYYY-MM-DD')
+      // }
       const params = {
-        url: 'http://43.142.102.49:888/ctbiweb/dashboard/publish/RGvgccuxEsP5RLj' || window.location.ref,
-        password: 'i04Y5cZ#xC' || this.dashboardAttr.password,
+        url: window.location.href,
+        password: this.dashboardAttr.password,
         date: moment().format('YYYY-MM-DD')
       }
       try {
