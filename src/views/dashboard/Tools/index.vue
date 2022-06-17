@@ -24,19 +24,42 @@
         </el-dropdown>
       </div>
     </div>
+    <div class="divider" />
     <div class="tools-container">
-      <!-- <div class="tool-btn">
+      <div
+        v-for="item in controls"
+        :key="item.name"
+        class="droppable-element tool-btn chart-tool"
+        draggable="true"
+        unselectable="on"
+        @click.stop="addItem(name,item)"
+        @drag.stop="drag($event, name,item)"
+        @dragend="dragend($event, name,item)"
+      >
+        <el-tooltip
+          effect="dark"
+          :content="item.text"
+          placement="top"
+        > <img
+          style="width: 18px; height: 17px; margin-left:12px;"
+          :src="require(`../../../assets/Image/dashboard/${item.name}.png`)"
+        ></el-tooltip>
+      </div>
+    </div>
+    <div class="divider" />
+    <div class="tools-container">
+      <div class="tool-btn">
         <icon-dropdown :drop-downs="queryList" :main="'tools-query'" @resolve="resolveDropdown" />
-      </div> -->
-      <!-- <div class="tool-btn">
+      </div>
+      <div class="tool-btn">
         <svg-icon
           :icon-class="'tools-tab'"
           style="font-size: 18px;"
         />
-      </div> -->
-      <!-- <div class="tool-btn">
+      </div>
+      <div class="tool-btn">
         <icon-dropdown :drop-downs="richEditorList" :main="'tools-rich'" @resolve="resolveDropdown" />
-      </div> -->
+      </div>
     </div>
     <div class="tools-container">
       <div
@@ -123,6 +146,7 @@ export default {
     ChartListPanel
   },
   data () {
+    this.controls = [{ name: 'query', text: '查询控件' }, { name: 'tab', text: 'Tab控件' }, { name: 'text', text: '文本控件' }]
     return {
       layoutIndex: 100,
       toolList: {},
@@ -292,6 +316,13 @@ export default {
   width: 100%;
   align-items: center;
   cursor: pointer;
+  .divider{
+    width: 1px;
+    height: 20px;
+    background-color: rgba(113, 114, 118, 0.65);
+    margin-left: 14px;
+    margin-right: 4px;
+  }
   .tools-container {
     display: flex;
     align-items: center;
