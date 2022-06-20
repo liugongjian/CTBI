@@ -57,6 +57,7 @@ export default {
     changeHandler (val) {
       this.option.style = val
       this.option.VisualStyle = val // 漏斗图切换视图转化
+      this.$store.state.funnel.visiableStyle = val // 控制功能面板的功能显示隐藏，禁用启用
     }
   }
 

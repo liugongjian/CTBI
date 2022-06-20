@@ -24,7 +24,19 @@ export default {
   },
   data () {
     return {
-      // tmp数据用于存放临时数据，以方便切换漏斗显示和转化显示的重置操作
+      // 转化分析横向、纵向切换时，属性变化
+      transStyle: 'horizontal',
+      borderRadius: [0, 20, 20, 0],
+      transDataLabelVertical: {},
+      dataValueTransTmpVertical: {},
+      // transDataLabel
+      // funnelAlign: 'bottom',
+      // orient: 'horizontal',
+      // labelPosition: 'leftTop',
+      // dataValueTransTmp
+      // orientTrans: 'horizontal',
+      // funnelAlignTrans: 'bottom',
+      // // tmp数据用于存放临时数据，以方便切换漏斗显示和转化显示的重置操作
       rectangle: false, // 自定义属性，用于切换矩形
       storeOption: {},
       chartOption: {},
@@ -77,6 +89,7 @@ export default {
       const dataTrans = []
       const dataLabel = []
       const key = chartData.fields.Measure.fields[0].column
+      const that = this
       chartData.data.forEach(item => {
         data.push({
           'name': item.type,
@@ -88,39 +101,56 @@ export default {
         dataTrans.push({
           'name': item.type,
           'value': item[key],
+          'label': {
+            show: true,
+            backgroundColor: '#ffffff',
+            padding: [1, 15, 1, 15],
+            color: 'black',
+            borderRadius: that.borderRadius,
+            formatter: function(params) {
+              const index = params.dataIndex / 2
+              if (index === 0) return null
+              return (index).toString().indexOf('.') < 0 ? that.lastData[index].value : ''
+            }
+          },
+
+          'labelLine': {
+            length: -20
+          },
           'isTransCol': false,
           'tooltip': {
             show: true
           }
         })
+        if (index === 0) {
+          dataTrans[0].label = {
+            show: false
+          }
+        }
         if (index !== chartData.data.length - 1) {
           dataTrans.push({
             'name': item.type,
             'value': item[key],
             'isTransCol': true,
-            'label': {
-              show: false
-            },
             'tooltip': {
               show: false,
               trigger: 'none'
-            }
+            },
+            'emphasis': { itemStyle: { color: 'rgba(240, 241, 244, 1)' } }
           })
         } else {
           dataTrans.push({
             'name': item.type,
             'value': item[key],
             'isTransCol': true,
-            'label': {
-              show: false
-            },
             'itemStyle': {
               opacity: 0
             },
             'tooltip': {
               show: false,
               trigger: 'none'
-            }
+            },
+            'emphasis': { itemStyle: { color: 'rgba(240, 241, 244, 1)' } }
           })
         }
       })
@@ -160,6 +190,7 @@ export default {
       }
       this.transTmpData = data
       this.dataValueTrans = dataTrans
+      // 横向
       this.dataValueTransTmp = {
         name: '漏斗图-转化分析',
         type: 'funnel',
@@ -173,6 +204,57 @@ export default {
         orient: 'horizontal',
         funnelAlign: 'bottom',
         label: {
+          show: true,
+          backgroundColor: 'rgba(0,23,11,0.5)'
+        },
+        labelLine: {
+          show: false,
+          length: -20
+        },
+        labelLayout: function(params) {
+          return {
+            x: params.rect.x // 控制白色半圆数据框
+          }
+        },
+        itemStyle: {
+          color: function(params) {
+            if (params.data.isTransCol) {
+              // 置灰
+              return 'rgb(240, 241, 244)'
+            } else {
+              var col = 'rgb('
+              for (var i = 0; i < 3; i++) { col += parseInt(Math.random() * 256) + ',' }
+              col = col.substring(0, col.length - 1) + ')'
+              return col
+            }
+          }
+        },
+        data: this.dataValueTrans
+      }
+      // 纵向
+      this.dataValueTransTmpVertical = {
+        name: '漏斗图-转化分析',
+        type: 'funnel',
+        left: '20%',
+        minSize: this.minSize,
+        sort: 'none',
+        width: this.width,
+        height: this.height,
+        top: '10%',
+        zLevel: 2,
+        orient: 'vertical',
+        funnelAlign: 'left',
+        label: {
+          show: true,
+          position: 'left',
+          backgroundColor: 'rgba(0,23,11,0.5)'
+        },
+        labelLayout: function(p) {
+          return {
+            x: '30%'
+          }
+        },
+        labelLine: {
           show: false
         },
         itemStyle: {
@@ -209,7 +291,8 @@ export default {
             'isTransCol': true,
             'label': {
               show: false
-            }
+            },
+            'emphasis': { itemStyle: { color: 'rgba(240, 241, 244, 1)' } }
           })
         } else {
           dataLabel.push({
@@ -222,7 +305,8 @@ export default {
             },
             'itemStyle': {
               opacity: 0
-            }
+            },
+            'emphasis': { itemStyle: { color: 'rgba(240, 241, 244, 1)' } }
           })
         }
       })
@@ -251,7 +335,42 @@ export default {
         },
         labelLayout: function(params) {
           return {
+            x: params.rect.x,
             y: params.rect.height + 40
+          }
+        },
+        itemStyle: {
+          color: 'rgba(240, 241, 244, 1)'
+        },
+        data: this.labelData
+      }
+      // 纵向
+      this.transDataLabelVertical = {
+        type: 'funnel',
+        left: '20%',
+        minSize: this.minSize,
+        sort: 'none',
+        width: '0%',
+        height: this.height,
+        orient: 'vertical',
+        funnelAlign: 'left',
+        zLevel: 1,
+        top: '10%',
+        tooltip: {
+          show: false
+        },
+        label: {
+          show: true,
+          color: 'black',
+          position: 'left',
+          formatter: function(params) {
+            return params.name ? params.name + '\n' + params.data.visiableVal : '未命名' + '\n' + params.data.visiableVal
+          }
+        },
+        labelLayout: function(p) {
+          return {
+            x: '5%',
+            y: p.rect.y + p.rect.height / 2
           }
         },
         itemStyle: {
@@ -268,7 +387,12 @@ export default {
       if (this.storeOption.theme?.Basic?.VisualStyle.VisualStyle === 'funnel-horizontal') {
         // 直接去掉series里的数据
         this.isTrans = true
-        this.seriesData = [this.dataValueTransTmp, this.transDataLabel]
+        if (this.transStyle === 'horizontal') {
+          this.seriesData = [this.dataValueTransTmp, this.transDataLabel]
+        } else if (this.transStyle === 'vertical') {
+          this.seriesData = [this.dataValueTransTmpVertical, this.transDataLabelVertical]
+        }
+        // this.seriesData = [this.dataValueTransTmp]
       } else {
         this.isTrans = false
         this.seriesData = [this.dataValueTmp, this.calcDataTmp]
@@ -299,6 +423,13 @@ export default {
     },
     // 静态样式初始化
     displayStyleHandler (item) {
+      if (item.horizontal) {
+        this.transStyle = 'horizontal'
+        this.borderRadius = [0, 20, 20, 0]
+      } else if (item.vertical) {
+        this.transStyle = 'vertical'
+        this.borderRadius = [0, 0, 20, 20]
+      }
       // 默认情况下，无序、梯形
       this.rectangle = false // 重置，默认梯形
       if (item.default) {
@@ -311,6 +442,16 @@ export default {
       } else if (item.rectangle) {
         // 矩形，似乎需要修改源码
         this.rectangle = true
+      }
+      // 转化分析中，设置静态样式
+      if (item.horizontal) {
+        this.funnelAlign = 'bottom'
+        this.orient = 'horizontal'
+        this.labelPosition = 'leftTop'
+      } else if (item.vertical) {
+        this.funnelAlign = 'left'
+        this.orient = 'vertical'
+        this.labelPosition = 'left'
       }
       // 显示类别标签的位置
       if (item.labelPos) {
