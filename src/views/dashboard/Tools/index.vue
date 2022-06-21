@@ -32,9 +32,9 @@
         class="droppable-element tool-btn chart-tool"
         draggable="true"
         unselectable="on"
-        @click.stop="addItem(name,item)"
-        @drag.stop="drag($event, name,item)"
-        @dragend="dragend($event, name,item)"
+        @click.stop="addItem(item.name,item)"
+        @drag.stop="drag($event, item.name,item)"
+        @dragend="dragend($event, item.name,item)"
       >
         <el-tooltip
           effect="dark"
@@ -146,7 +146,7 @@ export default {
     ChartListPanel
   },
   data () {
-    this.controls = [{ name: 'query', text: '查询控件' }, { name: 'tab', text: 'Tab控件' }, { name: 'text', text: '文本控件' }]
+    this.controls = [{ name: 'query', text: '查询控件' }, { name: 'TabChart', text: 'Tab控件' }, { name: 'text', text: '文本控件' }]
     return {
       layoutIndex: 100,
       toolList: {},
@@ -208,6 +208,7 @@ export default {
       this.layoutIndex++
     },
     addLayout (obj) {
+      console.log(obj)
       const temp = deepClone(obj)
       // 更新当前id
       store.dispatch('app/updateLayoutId', temp.i)
