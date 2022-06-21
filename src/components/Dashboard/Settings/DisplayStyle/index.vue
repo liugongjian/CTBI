@@ -1,6 +1,6 @@
 <template>
   <div class="editor-object-container">
-    <div>
+    <div class="editor-item-title">
       展示样式
     </div>
     <div v-if="style === 'funnel-standard'" class="editor-item-container">
@@ -62,7 +62,7 @@
         </el-tooltip>
       </el-button>
     </div>
-    <div v-if="style === 'funnel-standard'">
+    <div v-if="style === 'funnel-standard'" class="editor-item-title">
       显示类别标签
     </div>
     <div v-if="style === 'funnel-standard'" class="editor-item-container">
@@ -71,7 +71,7 @@
         <el-radio label="right">位于图表右侧</el-radio>
       </el-radio-group>
     </div>
-    <div v-if="style === 'funnel-standard'">
+    <div v-if="style === 'funnel-standard'" class="editor-item-title">
       显示数据标签
     </div>
     <div v-if="style === 'funnel-standard'" class="editor-item-container">
@@ -81,7 +81,7 @@
         <el-radio label="coMe">转化率 + 度量值</el-radio>
       </el-radio-group>
     </div>
-    <div :class="{'ban-edit':style === 'funnel-horizontal'}">
+    <div class="editor-item-title" :class="{'ban-edit':style === 'funnel-horizontal'}">
       转化率计算方式
     </div>
     <div class="editor-item-container">
@@ -90,7 +90,7 @@
         <el-radio label="first">占第一层的百分比</el-radio>
       </el-radio-group>
     </div>
-    <div v-if="style === 'funnel-standard'">
+    <div v-if="style === 'funnel-standard'" class="editor-item-title">
       底部样式
     </div>
     <div v-if="style === 'funnel-standard'" class="editor-item-container">
@@ -184,4 +184,5 @@ export default {
   cursor:not-allowed;
   color: #5e636e;
 }
+
 </style>
