@@ -4,6 +4,7 @@
       v-if="dataValue"
       :option="chartOption"
       :update-options="{notMerge:true}"
+      digit="2"
       autoresize
     />
     <div v-else>数据为空</div>
@@ -29,13 +30,6 @@ export default {
       borderRadius: [0, 20, 20, 0],
       transDataLabelVertical: {},
       dataValueTransTmpVertical: {},
-      // transDataLabel
-      // funnelAlign: 'bottom',
-      // orient: 'horizontal',
-      // labelPosition: 'leftTop',
-      // dataValueTransTmp
-      // orientTrans: 'horizontal',
-      // funnelAlignTrans: 'bottom',
       // // tmp数据用于存放临时数据，以方便切换漏斗显示和转化显示的重置操作
       rectangle: false, // 自定义属性，用于切换矩形
       storeOption: {},
@@ -43,6 +37,7 @@ export default {
       sort: 'none',
       minSize: '10%',
       left: '10%',
+      insideLeft: '58%',
       width: '60%',
       height: '60%',
       labelHeight: '80%',
@@ -70,14 +65,14 @@ export default {
         // if (JSON.stringify(val.dataSource) !== '{}') {
         //   this.dataValue = val.dataSource
         // }
-        this.getOption()
+        this.reloadImpl()
       },
       deep: true
     }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
-    this.getOption()
+    // this.getOption()
   },
   methods: {
     reloadImpl () {
@@ -90,6 +85,7 @@ export default {
       const dataLabel = []
       const key = chartData.fields.Measure.fields[0].column
       const that = this
+      // 标准数据渲染
       chartData.data.forEach(item => {
         data.push({
           'name': item.type,
@@ -97,6 +93,7 @@ export default {
           'isTrans': false
         })
       })
+      // 转化分析数据渲染
       chartData.data.forEach((item, index) => {
         dataTrans.push({
           'name': item.type,
@@ -154,18 +151,18 @@ export default {
           })
         }
       })
-      this.dataValue = data
-      this.dataValueTmp = {
+      that.dataValue = data
+      that.dataValueTmp = {
         name: '漏斗图',
         type: 'funnel',
         gap: 2,
-        left: this.left,
-        minSize: this.minSize,
+        left: that.left,
+        minSize: that.minSize,
         orient: 'vertical',
-        height: this.height,
-        sort: this.sort,
-        width: this.width,
-        rectangle: this.rectangle, // 自定义属性用于切换 矩形
+        height: that.height,
+        sort: that.sort,
+        width: that.width,
+        rectangle: that.rectangle, // 自定义属性用于切换 矩形
         label: {
           show: true,
           position: 'outside',
@@ -174,7 +171,7 @@ export default {
           }
         },
         labelLayout: {
-          x: this.labelPos
+          x: that.labelPos
         },
         itemStyle: {
           show: true,
@@ -186,19 +183,19 @@ export default {
             fontSize: 20
           }
         },
-        data: this.dataValue
+        data: that.dataValue
       }
-      this.transTmpData = data
-      this.dataValueTrans = dataTrans
+      that.transTmpData = data
+      that.dataValueTrans = dataTrans
       // 横向
-      this.dataValueTransTmp = {
+      that.dataValueTransTmp = {
         name: '漏斗图-转化分析',
         type: 'funnel',
         left: '20%',
-        minSize: this.minSize,
+        minSize: that.minSize,
         sort: 'none',
-        width: this.width,
-        height: this.height,
+        width: that.width,
+        height: that.height,
         top: '',
         zLevel: 2,
         orient: 'horizontal',
@@ -229,17 +226,17 @@ export default {
             }
           }
         },
-        data: this.dataValueTrans
+        data: that.dataValueTrans
       }
       // 纵向
-      this.dataValueTransTmpVertical = {
+      that.dataValueTransTmpVertical = {
         name: '漏斗图-转化分析',
         type: 'funnel',
         left: '20%',
-        minSize: this.minSize,
+        minSize: that.minSize,
         sort: 'none',
-        width: this.width,
-        height: this.height,
+        width: that.width,
+        height: that.height,
         top: '10%',
         zLevel: 2,
         orient: 'vertical',
@@ -270,7 +267,7 @@ export default {
             }
           }
         },
-        data: this.dataValueTrans
+        data: that.dataValueTrans
       }
       chartData.data.forEach((item, index) => {
         dataLabel.push({
@@ -310,14 +307,14 @@ export default {
           })
         }
       })
-      this.labelData = dataLabel
+      that.labelData = dataLabel
       // 计算 transDataLabel
-      this.transDataLabel = {
+      that.transDataLabel = {
         type: 'funnel',
         left: '20%',
-        minSize: this.minSize,
+        minSize: that.minSize,
         sort: 'none',
-        width: this.width,
+        width: that.width,
         height: '0%',
         orient: 'horizontal',
         funnelAlign: 'bottom',
@@ -342,16 +339,16 @@ export default {
         itemStyle: {
           color: 'rgba(240, 241, 244, 1)'
         },
-        data: this.labelData
+        data: that.labelData
       }
       // 纵向
-      this.transDataLabelVertical = {
+      that.transDataLabelVertical = {
         type: 'funnel',
         left: '20%',
-        minSize: this.minSize,
+        minSize: that.minSize,
         sort: 'none',
         width: '0%',
-        height: this.height,
+        height: that.height,
         orient: 'vertical',
         funnelAlign: 'left',
         zLevel: 1,
@@ -376,14 +373,74 @@ export default {
         itemStyle: {
           color: 'rgba(240, 241, 244, 1)'
         },
-        data: this.labelData
+        data: that.labelData
       }
     },
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
       this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
       this.dataTransformer()
+      // 更新dataValueTmp
+      this.dataValueTmp = {
+        name: '漏斗图',
+        type: 'funnel',
+        gap: 2,
+        left: this.left,
+        minSize: this.minSize,
+        orient: 'vertical',
+        height: this.height,
+        sort: this.sort,
+        width: this.width,
+        rectangle: this.rectangle, // 自定义属性用于切换 矩形
+        label: {
+          show: true,
+          position: 'outside',
+          formatter: function(params) {
+            return params.name || '未命名'
+          }
+        },
+        labelLayout: {
+          x: this.labelPos
+        },
+        itemStyle: {
+          show: true,
+          borderColor: '#fff',
+          borderWidth: 1
+        },
+        emphasis: {
+          label: {
+            fontSize: 20
+          }
+        },
+        data: this.dataValue
+      }
+      // 更新 calcDataTmp
+      this.calcDataTmp = {
+        name: 'Actual',
+        type: 'funnel',
+        left: this.insideLeft,
+        height: this.height,
+        minSize: this.minSize,
+        orient: 'vertical',
+        sort: this.sort,
+        rectangle: this.rectangle, // 自定义属性用于切换 矩形
+        width: '5%',
+        label: {
+          position: 'inside',
+          formatter: this.labelFormatter,
+          color: '#fff'
+        },
+        itemStyle: {
+          show: true,
+          opacity: 1,
+          color: 'rgba(255,111, 255, 0)',
+          borderWidth: 0
+        },
+        data: this.calcData,
+        z: 100
+      }
       const that = this
+      this.seriesData = []
       if (this.storeOption.theme?.Basic?.VisualStyle.VisualStyle === 'funnel-horizontal') {
         // 直接去掉series里的数据
         this.isTrans = true
@@ -392,7 +449,6 @@ export default {
         } else if (this.transStyle === 'vertical') {
           this.seriesData = [this.dataValueTransTmpVertical, this.transDataLabelVertical]
         }
-        // this.seriesData = [this.dataValueTransTmp]
       } else {
         this.isTrans = false
         this.seriesData = [this.dataValueTmp, this.calcDataTmp]
@@ -457,12 +513,16 @@ export default {
       if (item.labelPos) {
         if (item.labelPos === 'left') {
           this.left = '30%'
+          this.insideLeft = '58%'
           this.labelPos = '6%'
         } else if (item.labelPos === 'right') {
-          this.left = '10%'
+          this.left = '5%'
+          this.insideLeft = '33%'
           this.labelPos = '90%'
         }
       }
+      // 底部梯形 or 三角形
+      this.minSize = item.triangle === 'true' ? '0' : '10%'
       // 转化率的计算方式
       if (item.calcMethod) {
         this.calcData = []
@@ -480,31 +540,6 @@ export default {
           })
         }
         this.calcData = tmp
-        this.calcDataTmp = {
-          name: 'Actual',
-          type: 'funnel',
-          left: '58%',
-          height: this.height,
-          // height: '30%',
-          minSize: this.minSize,
-          orient: 'vertical',
-          sort: this.sort,
-          rectangle: this.rectangle, // 自定义属性用于切换 矩形
-          width: '5%',
-          label: {
-            position: 'inside',
-            formatter: this.labelFormatter,
-            color: '#fff'
-          },
-          itemStyle: {
-            show: true,
-            opacity: 1,
-            color: 'rgba(255,111, 255, 0)',
-            borderWidth: 0
-          },
-          data: this.calcData,
-          z: 100
-        }
       }
       // 显示数据标签的形式
       if (item.dataLabel) {
@@ -526,8 +561,6 @@ export default {
           this.labelFormatter = '{c}'
         }
       }
-      // 底部梯形 or 三角形
-      this.minSize = item.triangle === 'true' ? '0' : '10%'
     },
     dataTransformer () {
       // 构建出 lastData\firstData 多个series叠加
