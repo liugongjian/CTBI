@@ -195,7 +195,9 @@ export default {
       const id = nanoid()
       // 防止指向问题
       const option = deepClone(item)
-      this.addLayout({
+      const currentLayoutId = store.state.app.currentLayoutId
+      const currentLayout = this.layout.find(item => item.i === currentLayoutId)
+      const newLayout = {
         x: (this.layout.length * 2) % (this.colNum || 12),
         y: this.layout.length + (this.colNum || 12), // puts it at the bottom
         w: 12,
@@ -204,13 +206,26 @@ export default {
         i: id,
         is: name,
         option
-      })
+      }
+      // 当前选中的是tab或者tab内的组件，则吧新增的放入tab内的画板中
+      if (currentLayout && currentLayout.is === 'TabChart') {
+        newLayout.containerId = currentLayout.activeTabId
+        // 添加tab id链，以用于深层删除
+        newLayout.tabIdChains = (currentLayout.tabIdChains || []).concat([currentLayoutId, currentLayout.activeTabId])
+      }
+      if (currentLayout && currentLayout.containerId) {
+        newLayout.containerId = currentLayout.containerId
+        newLayout.tabIdChains = [...(currentLayout.tabIdChains || [])]
+      }
+      this.addLayout(newLayout)
       this.layoutIndex++
     },
     addLayout (obj) {
       // tab组件类型添加一个含有一个tabpane的属性
       if (obj.is === 'TabChart') {
-        obj.tabPanels = [{ name: '1', title: 'tab1', paneId: `${obj.i}-1` }]
+        const paneId = `${obj.i}-1`
+        obj.tabPanels = [{ name: '1', title: 'tab1', paneId }]
+        obj.activeTabId = paneId
       }
       console.log(obj)
       const temp = deepClone(obj)

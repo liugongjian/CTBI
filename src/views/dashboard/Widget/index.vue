@@ -44,7 +44,8 @@ export default {
   },
   computed: {
     layout () {
-      return store.state.app.layout
+      // 去除属于tab组件的layout
+      return store.state.app.layout.filter(item => !item.containerId)
     },
     chartsStyles() {
       return this.$store.state.settings.chartsStyles

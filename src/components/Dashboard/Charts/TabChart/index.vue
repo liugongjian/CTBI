@@ -9,7 +9,7 @@
  */
 <template>
   <div style="width:100%;height:100%;">
-    <el-tabs v-model="editableTabsValue" type="card" addable closable @tab-remove="removeTab" @tab-add="addTab">
+    <el-tabs v-model="editableTabsValue" type="card" editable @tab-remove="removeTab" @tab-add="addTab" @tab-click="changeTab">
       <el-tab-pane
         v-for="itm in layout.tabPanels"
         :key="itm.name"
@@ -26,6 +26,7 @@
 // import barMixins from '@/components/Dashboard/mixins/barMixins'
 // import { GridLayout, GridItem } from 'vue-grid-layout'
 import { getLayoutById } from '@/utils/optionUtils'
+import store from '@/store'
 export default {
   name: 'TabChart',
   // mixins: [barMixins],
@@ -39,15 +40,6 @@ export default {
     return {
       type: 'TabChart', // 图表类型 1.柱图；2.堆积柱状图；3.百分比堆积柱状图
       editableTabsValue: '1',
-      editableTabs: [{
-        title: 'Tab 1',
-        name: '1',
-        content: 'Tab 1 content'
-      }, {
-        title: 'Tab 2',
-        name: '2',
-        content: 'Tab 2 content'
-      }],
       tabIndex: 2,
       layout1: [
         { 'x': 0, 'y': 0, 'w': 2, 'h': 1, 'i': '0', static: false },
@@ -62,17 +54,20 @@ export default {
   },
   mounted () {
     this.layout = getLayoutById(this.identify)
+    this.editableTabsValue = this.layout.tabPanels[0].name
   },
   methods: {
     removeTab(targetName) {
       const tabs = this.layout.tabPanels
       let activeName = this.editableTabsValue
+      let activeTabId = this.layout.activeTabId
       if (activeName === targetName) {
         tabs.forEach((tab, index) => {
           if (tab.name === targetName) {
             const nextTab = tabs[index + 1] || tabs[index - 1]
             if (nextTab) {
               activeName = nextTab.name
+              activeTabId = nextTab.paneId
             }
           }
         })
@@ -81,20 +76,31 @@ export default {
       this.editableTabsValue = activeName
       const newTabs = tabs.filter(tab => tab.name !== targetName)
       if (newTabs.length === 0) {
-        this.$store.dispatch('app/deleteLayoutById', this.layout.i)
+        store.dispatch('app/deleteLayoutById', this.layout.i)
       } else {
         this.layout.tabPanels = newTabs
+        this.layout.activeTabId = activeTabId
       }
+      const removeTab = tabs.find(tab => tab.name !== targetName)
+      const allLayout = [...store.state.app.layout].filter(item => !(item.tabIdChains || []).includes(removeTab.paneId))
+      store.dispatch('app/updateLayout', allLayout)
     },
     addTab() {
-      const newTabName = this.layout.tabPanels.length + 1 + ''
+      const newTabName = Date.now() + ''
+      const paneId = `${this.layout.i}-${newTabName}`
       this.layout.tabPanels.push({
         title: 'New Tab',
         name: newTabName,
-        paneId: `${this.layout.i}-${newTabName}`
+        paneId
       })
+      this.layout.activeTabId = paneId
       console.log(this.layout)
       this.editableTabsValue = newTabName
+    },
+    changeTab (e) {
+      console.log(e.name)
+      const chooseTab = this.layout.tabPanels.find(item => item.name === e.name)
+      this.layout.activeTabId = chooseTab.paneId
     },
     dragover (event) {
       event.preventDefault()
