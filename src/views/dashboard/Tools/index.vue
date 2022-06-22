@@ -208,6 +208,10 @@ export default {
       this.layoutIndex++
     },
     addLayout (obj) {
+      // tab组件类型添加一个含有一个tabpane的属性
+      if (obj.is === 'TabChart') {
+        obj.tabPanels = [{ name: '1', title: 'tab1', paneId: `${obj.i}-1` }]
+      }
       console.log(obj)
       const temp = deepClone(obj)
       // 更新当前id
