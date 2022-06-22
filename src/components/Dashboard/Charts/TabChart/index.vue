@@ -8,7 +8,7 @@
  * 渲染TabPane时，就是渲染GridLayout，GridLayout的layout的值就是store中所有containerId是该TabPane的tabId的layout的集合
  */
 <template>
-  <div style="width:100%;height:100%;">
+  <div :id="layout.i" style="width:100%;height:100%;" class="tab-chart-wrap">
     <el-tabs v-model="editableTabsValue" type="card" editable @tab-remove="removeTab" @tab-add="addTab" @tab-click="changeTab">
       <el-tab-pane
         v-for="itm in layout.tabPanels"

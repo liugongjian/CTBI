@@ -246,6 +246,9 @@ export default {
       })
       // ///////////////////////
 
+      // 判断拖拽点是否在tab组件内
+      const mouseInTab = this.testInTabsRect()
+
       // 判断拖拽点是否在画布内
       let mouseInGrid = false
       if (((mouseXY.x > parentRect.left) && (mouseXY.x < parentRect.right)) && ((mouseXY.y > parentRect.top) && (mouseXY.y < parentRect.bottom))) {
@@ -255,7 +258,7 @@ export default {
       const option = deepClone(item)
 
       // 生成画布上的虚拟节点
-      if (mouseInGrid === true && (this.layout.findIndex(item => item.i === 'drop')) === -1) {
+      if (mouseInGrid === true && (this.layout.findIndex(item => item.i === 'drop')) === -1 && !mouseInTab) {
         this.layout.push({
           x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 12) : 0,
           y: this.layout.length > 0 ? this.layout.length + (this.colNum || 12) : 0, // puts it at the bottom
@@ -287,6 +290,8 @@ export default {
     },
     // 拖拽结束后事件
     dragend (e, name, item) {
+      // 判断拖拽点是否在tab组件内
+      const mouseInTab = this.testInTabsRect(true)
       // 获取画布节点
       let parentGridLayout = null
       this.$emit('getGridLayout', val => {
@@ -309,7 +314,7 @@ export default {
         const i = name + String(DragPos.i) + new Date().getTime()
         // 防止指向问题
         const option = deepClone(item)
-        this.addLayout({
+        const newLayout = {
           x: DragPos.x,
           y: DragPos.y,
           w: 12,
@@ -317,7 +322,14 @@ export default {
           i,
           is: name,
           option
-        })
+        }
+        if (mouseInTab) {
+          const hitLayout = this.layout.find(obj => obj.i === mouseInTab)
+          newLayout.containerId = hitLayout.activeTabId
+          // 添加tab id链，以用于深层删除
+          newLayout.tabIdChains = (hitLayout.tabIdChains || []).concat([hitLayout.i, hitLayout.activeTabId])
+        }
+        this.addLayout(newLayout)
         parentGridLayout.dragEvent('dragend', i, DragPos.x, DragPos.y, 2, 12)
       }
     },
@@ -326,6 +338,31 @@ export default {
     },
     panelShow () {
       this.showPanel = !this.showPanel
+    },
+    testInTabsRect(isEnd) {
+      const tabs = document.getElementsByClassName('tab-chart-wrap')
+      console.log(tabs[0].id)
+      const rects = []
+      if (tabs.length > 0) {
+        Array.from(tabs).forEach(tab => {
+          rects.push(tab.getBoundingClientRect())
+        })
+        // 判断拖拽点是否在tab组件内
+        let mouseInTab = false
+        let hitIndex = 0
+        rects.forEach((rect, index) => {
+          if (((mouseXY.x > rect.left) && (mouseXY.x < rect.right)) && ((mouseXY.y > rect.top) && (mouseXY.y < rect.bottom))) {
+            mouseInTab = true
+            hitIndex = index
+          }
+        })
+        if (isEnd && mouseInTab) {
+          return tabs[hitIndex].id
+        }
+        return mouseInTab
+      } else {
+        return false
+      }
     }
   }
 }
