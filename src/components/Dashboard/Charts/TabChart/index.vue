@@ -16,7 +16,7 @@
         :label="itm.title"
         :name="itm.name"
       >
-        <div>{{ itm.name }}</div>
+        <div :style="{height: tabHeight + 'px'}" class="gridWrap"><tab-panel :id="itm.paneId" /></div>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -25,10 +25,14 @@
 <script>
 // import barMixins from '@/components/Dashboard/mixins/barMixins'
 // import { GridLayout, GridItem } from 'vue-grid-layout'
+import TabPanel from './TabPanel'
 import { getLayoutById } from '@/utils/optionUtils'
 import store from '@/store'
 export default {
   name: 'TabChart',
+  components: {
+    TabPanel
+  },
   // mixins: [barMixins],
   props: {
     identify: {
@@ -38,7 +42,7 @@ export default {
   },
   data () {
     return {
-      type: 'TabChart', // 图表类型 1.柱图；2.堆积柱状图；3.百分比堆积柱状图
+      type: 'TabChart',
       editableTabsValue: '1',
       tabIndex: 2,
       layout1: [
@@ -48,12 +52,19 @@ export default {
       ],
       draggable: true,
       resizable: true,
-      index: 0,
-      layout: {}
+      index: 0
+    }
+  },
+  computed: {
+    layout () {
+      // 去除属于tab组件的layout
+      return getLayoutById(this.identify)
+    },
+    tabHeight() {
+      return this.layout.h * 100 - 80
     }
   },
   mounted () {
-    this.layout = getLayoutById(this.identify)
     this.editableTabsValue = this.layout.tabPanels[0].name
   },
   methods: {
@@ -122,4 +133,8 @@ export default {
 </script>
 
 <style>
+.gridWrap{
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 </style>
