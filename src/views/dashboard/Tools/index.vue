@@ -212,8 +212,7 @@ export default {
         newLayout.containerId = currentLayout.activeTabId
         // 添加tab id链，以用于深层删除
         newLayout.tabIdChains = (currentLayout.tabIdChains || []).concat([currentLayoutId, currentLayout.activeTabId])
-      }
-      if (currentLayout && currentLayout.containerId) {
+      } else if (currentLayout && currentLayout.containerId) {
         newLayout.containerId = currentLayout.containerId
         newLayout.tabIdChains = [...(currentLayout.tabIdChains || [])]
       }
@@ -257,22 +256,48 @@ export default {
       // 防止指向问题
       const option = deepClone(item)
 
+      const dropLayout = this.layout.find(item => item.i === 'drop')
       // 生成画布上的虚拟节点
-      if (mouseInGrid === true && (this.layout.findIndex(item => item.i === 'drop')) === -1 && !mouseInTab) {
-        this.layout.push({
-          x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 12) : 0,
-          y: this.layout.length > 0 ? this.layout.length + (this.colNum || 12) : 0, // puts it at the bottom
-          w: 12,
-          h: 2,
-          is: name,
-          option,
-          i: 'drop'
-        })
+      if (mouseInGrid === true && !mouseInTab) {
+        if (!dropLayout || dropLayout.containerId) {
+          if (dropLayout && dropLayout.containerId) {
+            this.layout = this.layout.filter(obj => obj.i !== 'drop')
+          }
+          this.layout.push({
+            x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 12) : 0,
+            y: this.layout.length > 0 ? this.layout.length + (this.colNum || 12) : 0, // puts it at the bottom
+            w: 12,
+            h: 2,
+            is: name,
+            option,
+            i: 'drop'
+          })
+        }
       }
 
       // 当在tab组件内则清除画布上的虚拟节点
       if (mouseInTab) {
-        this.layout = this.layout.filter(obj => obj.i !== 'drop')
+        // this.layout = this.layout.filter(obj => obj.i !== 'drop')
+        const hitLayout = this.layout.find(obj => obj.i === mouseInTab)
+        const newContainerId = hitLayout.activeTabId
+        if (!dropLayout || !dropLayout.containerId || newContainerId !== dropLayout.containerId) {
+          if (dropLayout && (!dropLayout.containerId || newContainerId !== dropLayout.containerId)) {
+            this.layout = this.layout.filter(obj => obj.i !== 'drop')
+          }
+          const newLayout = {
+            x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 12) : 0,
+            y: this.layout.length > 0 ? this.layout.length + (this.colNum || 12) : 0, // puts it at the bottom
+            w: 12,
+            h: 2,
+            is: name,
+            option,
+            i: 'drop'
+          }
+          newLayout.containerId = newContainerId
+          // 添加tab id链，以用于深层删除
+          // newLayout.tabIdChains = (hitLayout.tabIdChains || []).concat([hitLayout.i, hitLayout.activeTabId])
+          this.layout.push(newLayout)
+        }
       }
 
       // 虚拟节点在画布上拖拽
@@ -346,7 +371,7 @@ export default {
     },
     testInTabsRect(isEnd) {
       const tabs = document.getElementsByClassName('tab-chart-wrap')
-      console.log(tabs[0].id)
+      console.log(tabs)
       const rects = []
       if (tabs.length > 0) {
         Array.from(tabs).forEach(tab => {
@@ -361,9 +386,12 @@ export default {
             hitIndex = index
           }
         })
-        if (isEnd && mouseInTab) {
+        if (mouseInTab) {
           return tabs[hitIndex].id
         }
+        // if (isEnd && mouseInTab) {
+        //   return tabs[hitIndex].id
+        // }
         return mouseInTab
       } else {
         return false
