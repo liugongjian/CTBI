@@ -270,6 +270,11 @@ export default {
         })
       }
 
+      // 当在tab组件内则清除画布上的虚拟节点
+      if (mouseInTab) {
+        this.layout = this.layout.filter(obj => obj.i !== 'drop')
+      }
+
       // 虚拟节点在画布上拖拽
       const index = this.layout.findIndex(item => item.i === 'drop')
       if (index !== -1) {

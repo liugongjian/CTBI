@@ -81,7 +81,7 @@ export default {
         this.layout.tabPanels = newTabs
         this.layout.activeTabId = activeTabId
       }
-      const removeTab = tabs.find(tab => tab.name !== targetName)
+      const removeTab = tabs.find(tab => tab.name === targetName)
       const allLayout = [...store.state.app.layout].filter(item => !(item.tabIdChains || []).includes(removeTab.paneId))
       store.dispatch('app/updateLayout', allLayout)
     },
