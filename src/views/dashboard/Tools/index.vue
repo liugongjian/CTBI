@@ -321,7 +321,7 @@ export default {
     // 拖拽结束后事件
     dragend (e, name, item) {
       // 判断拖拽点是否在tab组件内
-      const mouseInTab = this.testInTabsRect(true)
+      const mouseInTab = this.testInTabsRect()
       // 获取画布节点
       let parentGridLayout = null
       this.$emit('getGridLayout', val => {
@@ -369,9 +369,8 @@ export default {
     panelShow () {
       this.showPanel = !this.showPanel
     },
-    testInTabsRect(isEnd) {
+    testInTabsRect() {
       const tabs = document.getElementsByClassName('tab-chart-wrap')
-      console.log(tabs)
       const rects = []
       if (tabs.length > 0) {
         Array.from(tabs).forEach(tab => {
@@ -389,9 +388,6 @@ export default {
         if (mouseInTab) {
           return tabs[hitIndex].id
         }
-        // if (isEnd && mouseInTab) {
-        //   return tabs[hitIndex].id
-        // }
         return mouseInTab
       } else {
         return false
