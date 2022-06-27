@@ -9,18 +9,23 @@
  */
 <template>
   <div :id="layout.i" style="width:100%;height:100%;" class="tab-chart-wrap">
-    <el-tabs v-model="editableTabsValue" type="card" editable @tab-remove="removeTab" @tab-add="addTab" @tab-click="changeTab">
-      <el-tab-pane
-        v-for="itm in layout.tabPanels"
-        :key="itm.name"
-        :label="itm.title"
-        :name="itm.name"
+    <div class="tab-header">
+      <div
+        v-for="item in layout.tabPanels"
+        :key="item.name"
+        class="tab-header-btn"
+        :class="{'tab-header-active': item.name === editableTabsValue}"
+        @click="() => changeTab(item)"
       >
-        <div :style="{height: tabHeight + 'px'}" class="gridWrap"><tab-panel :id="itm.paneId" /></div>
-      </el-tab-pane>
-    </el-tabs>
-  </div>
-</template>
+        <p>{{ item.title }}</p>
+        <div class="close" @click="() => removeTab(item.name)"><i class="el-icon-close" /></div>
+      </div>
+      <div class="tab-header-add" @click="addTab"><i class="el-icon-plus" /></div>
+    </div>
+    <div class="tab-content">
+      <div :style="{height: tabHeight + 'px'}" class="gridWrap"><tab-panel :id="activeTab.paneId" /></div>
+    </div>
+  </div></template>
 
 <script>
 // import barMixins from '@/components/Dashboard/mixins/barMixins'
@@ -44,15 +49,7 @@ export default {
     return {
       type: 'TabChart',
       editableTabsValue: '1',
-      tabIndex: 2,
-      layout1: [
-        { 'x': 0, 'y': 0, 'w': 2, 'h': 1, 'i': '0', static: false },
-        { 'x': 2, 'y': 1, 'w': 2, 'h': 1, 'i': '1', static: false },
-        { 'x': 4, 'y': 2, 'w': 2, 'h': 1, 'i': '2', static: false }
-      ],
-      draggable: true,
-      resizable: true,
-      index: 0
+      isEdit: true
     }
   },
   computed: {
@@ -62,6 +59,9 @@ export default {
     },
     tabHeight() {
       return this.layout.h * 100 - 80
+    },
+    activeTab() {
+      return this.layout.tabPanels.find(tab => tab.name === this.editableTabsValue)
     }
   },
   mounted () {
@@ -110,6 +110,7 @@ export default {
     },
     changeTab (e) {
       console.log(e.name)
+      this.editableTabsValue = e.name
       const chooseTab = this.layout.tabPanels.find(item => item.name === e.name)
       this.layout.activeTabId = chooseTab.paneId
     },
@@ -132,7 +133,67 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.tab-chart-wrap{
+  background: #fff;
+}
+.tab-header{
+  background: #fff;
+  display: flex;
+  .tab-header-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    background: #F4F5F6;
+    border: 1px solid rgba(221,221,221,1);
+    border-right: 0px;
+    box-sizing: border-box;
+    font-size: 12px;
+    color: rgba(0,0,0,0.65);
+    font-weight: 400;
+    padding: 0px 20px;
+    cursor: pointer;
+    &:hover{
+      color: #FA8334;
+      background: rgba(255,255,255,0.6);;
+    }
+    .close{
+      width: 14px;
+      height: 14px;
+      border-radius: 7px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 6px;
+    }
+  }
+  .tab-header-active{
+    color: #FA8334;
+    background: #FFFFFF;
+  }
+  .tab-header-add{
+     display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    background: #F4F5F6;
+    border: 1px solid rgba(221,221,221,1);
+    font-size: 12px;
+    color: rgba(0,0,0,0.65);
+    font-weight: 700;
+    padding: 0px 20px;
+    cursor: pointer;
+    box-sizing: border-box;
+    &:hover{
+      color: #FA8334;
+      background: rgba(255,255,255,0.80);;
+    }
+  }
+}
+.tab-content{
+  background: #DDDDDD;
+}
 .gridWrap{
   overflow-x: hidden;
   overflow-y: auto;
