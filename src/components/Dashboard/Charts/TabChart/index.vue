@@ -8,7 +8,7 @@
  * 渲染TabPane时，就是渲染GridLayout，GridLayout的layout的值就是store中所有containerId是该TabPane的tabId的layout的集合
  */
 <template>
-  <div :id="layout.i" style="width:100%;height:100%;" class="tab-chart-wrap">
+  <div :id="layout.i" style="width:100%;height:100%;">
     <div class="tab-header">
       <div
         v-for="item in layout.tabPanels"
@@ -18,9 +18,10 @@
         @click="() => changeTab(item)"
       >
         <p>{{ item.title }}</p>
-        <div class="close" @click="() => removeTab(item.name)"><i class="el-icon-close" /></div>
+        <div v-if="isEdit" class="close" @click.stop="() => removeTab(item.name)"><i class="el-icon-close" /></div>
       </div>
-      <div class="tab-header-add" @click="addTab"><i class="el-icon-plus" /></div>
+      <div v-if="!isEdit" class="tab-header-border" />
+      <div v-if="isEdit" class="tab-header-add" @click="addTab"><i class="el-icon-plus" /></div>
     </div>
     <div class="tab-content">
       <div :style="{height: tabHeight + 'px'}" class="gridWrap"><tab-panel :id="activeTab.paneId" /></div>
@@ -154,23 +155,36 @@ export default {
     font-weight: 400;
     padding: 0px 20px;
     cursor: pointer;
-    &:hover{
-      color: #FA8334;
-      background: rgba(255,255,255,0.6);;
-    }
     .close{
-      width: 14px;
+      width: 0px;
       height: 14px;
       border-radius: 7px;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-left: 6px;
+      margin-left: 4px;
+      overflow: hidden;
+    }
+  }
+  .tab-header-btn:hover{
+    color: #FA8334;
+    background: rgba(255,255,255,0.6);
+    .close{
+      width: 14px;
+      &:hover{
+        background: rgba(0,0,0,0.25);
+        color: #fff;
+      }
     }
   }
   .tab-header-active{
     color: #FA8334;
     background: #FFFFFF;
+  }
+  .tab-header-border{
+    width: 1px;
+    height: 40px;
+    background: rgba(221,221,221,1);
   }
   .tab-header-add{
      display: flex;
