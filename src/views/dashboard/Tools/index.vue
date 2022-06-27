@@ -27,22 +27,22 @@
     <div class="divider" />
     <div class="tools-container">
       <div
-        v-for="item in controls"
-        :key="item.name"
+        v-for="(item,name, index) in controls"
+        :key="name + index"
         class="droppable-element tool-btn chart-tool"
         draggable="true"
         unselectable="on"
-        @click.stop="addItem(item.name,item)"
-        @drag.stop="drag($event, item.name,item)"
-        @dragend="dragend($event, item.name,item)"
+        @click.stop="addItem(name,item)"
+        @drag.stop="drag($event, name,item)"
+        @dragend="dragend($event, name,item)"
       >
         <el-tooltip
           effect="dark"
-          :content="item.text"
+          :content="item.theme.Basic.Title.text"
           placement="top"
         > <img
           style="width: 18px; height: 17px; margin-left:12px;"
-          :src="require(`../../../assets/Image/dashboard/${item.name}.png`)"
+          :src="require(`../../../assets/Image/dashboard/${name}.png`)"
         ></el-tooltip>
       </div>
     </div>
@@ -134,7 +134,7 @@
 const DragPos = { 'x': 1, 'y': 1, 'w': 1, 'h': 1, 'i': null }
 const mouseXY = { 'x': 1, 'y': 1 }
 import store from '@/store'
-import { getToolList, getBriefToolList } from './getToolList'
+import { getToolList, getBriefToolList, getControlsList } from './getToolList'
 import { nanoid } from 'nanoid'
 // import IconDropdown from './component/IconDropdown.vue'
 import { deepClone } from '@/utils/optionUtils'
@@ -146,7 +146,7 @@ export default {
     ChartListPanel
   },
   data () {
-    this.controls = [{ name: 'query', text: '查询控件' }, { name: 'TabChart', text: 'Tab控件' }, { name: 'text', text: '文本控件' }]
+    // this.controls = [{ name: 'query', text: '查询控件' }, { name: 'TabChart', text: 'Tab控件' }, { name: 'text', text: '文本控件' }]
     return {
       layoutIndex: 100,
       toolList: {},
@@ -158,7 +158,8 @@ export default {
       richEditorList: [
         { svg: 'tools-story-line', command: 'picture' },
         { svg: 'tools-story-line', command: 'iframe' }
-      ]
+      ],
+      controls: {}
     }
   },
   computed: {
@@ -182,6 +183,7 @@ export default {
     // 获取json文件中的配置项信息
     this.toolList = getToolList()
     this.briefTooList = getBriefToolList()
+    this.controls = getControlsList()
     console.log(this.briefTooList)
     store.dispatch('app/updateToolList', this.toolList)
   },

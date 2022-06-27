@@ -10,6 +10,11 @@ const brief = [
   'ColorMapChart'
 ]
 
+// 布局控件
+const control = [
+  'TabChart'
+]
+
 /**
  * 获取所有配置项的js文件
  * js文件名应该与组件一致
@@ -41,6 +46,19 @@ export function getBriefToolList () {
     briefTools[item] = tools[item]
   })
   return briefTools
+}
+
+/**
+ * 获取所有配置项的js文件
+ * js文件名应该与组件一致
+ */
+export function getControlsList () {
+  const tools = getToolList()
+  const controls = {}
+  control.forEach(item => {
+    controls[item] = tools[item]
+  })
+  return controls
 }
 
 export const chartCategory = [
