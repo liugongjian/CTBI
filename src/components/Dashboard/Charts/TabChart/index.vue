@@ -8,7 +8,7 @@
  * 渲染TabPane时，就是渲染GridLayout，GridLayout的layout的值就是store中所有containerId是该TabPane的tabId的layout的集合
  */
 <template>
-  <div :id="layout.i" style="width:100%;height:100%;">
+  <div :id="layout.i" style="width:100%;height:100%;" class="tab-chart-wrap">
     <div class="tab-header">
       <div
         v-for="item in layout.tabPanels"
@@ -24,7 +24,12 @@
       <div v-if="isEdit" class="tab-header-add" @click="addTab"><i class="el-icon-plus" /></div>
     </div>
     <div class="tab-content">
-      <div :style="{height: tabHeight + 'px'}" class="gridWrap"><tab-panel :id="activeTab.paneId" /></div>
+      <div
+        v-for="item in layout.tabPanels"
+        :key="item.name"
+      >
+        <div v-show="item.name === editableTabsValue" :style="{height: tabHeight + 'px'}" class="gridWrap"><tab-panel :id="item.paneId" /></div>
+      </div>
     </div>
   </div></template>
 

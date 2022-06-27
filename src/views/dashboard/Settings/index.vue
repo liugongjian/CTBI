@@ -77,6 +77,7 @@
 
       <!-- 数据集模块 -->
       <div
+        v-if="isCommonChart"
         class="data-panel"
         :class="showData?'data-panel-fold':'data-panel-unfold'"
       >
@@ -162,6 +163,12 @@ export default {
         return item.id === this.currentLayoutId
       })
       return temp.is
+    },
+    isCommonChart () {
+      const temp = store.state.app.layout.find(item => {
+        return item.id === this.currentLayoutId
+      })
+      return !['TabChart'].includes(temp.is)
     }
   },
 

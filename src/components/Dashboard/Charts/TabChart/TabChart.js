@@ -22,7 +22,7 @@
  * */
 import { colorTheme } from '@/constants/color.js'
 export default {
-  'type': 'comparator', // 组件类型, 用于管理组件类型集合，例如：指标、表格、趋势
+  'type': 'controller', // 组件类型, 用于管理组件类型集合，例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
   'order': 1, // 在tools中排序
   'version': '', // 版本号
@@ -30,7 +30,7 @@ export default {
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
-        'text': '柱图', // 标题名称
+        'text': 'Tab组件', // 标题名称
         'color': '#000', // 标题颜色
         'show': true // 是否显示标题
       },
@@ -102,82 +102,7 @@ export default {
         'selectedIndicator': [], // 选中的指标
         'indicatorOption': [] // 指标集合
       }
-    },
-    'Axis': { // 坐标轴配置
-      'XAxis': {
-        'cname': 'X轴',
-        'title': '',
-        'unit': '',
-        'show': true,
-        'showTitle': false,
-        'showTicks': false,
-        'lineWidth': 1,
-        'lineColor': '#000',
-        'lineType': 'solid',
-        'showAxisLabel': true,
-        'showSplit': false,
-        'splitWidth': 1,
-        'splitColor': '#000',
-        'splitType': 'solid'
-      },
-      'YAxis': {
-        'cname': '左Y轴',
-        'title': '',
-        'unit': '',
-        'show': true,
-        'showTitle': false,
-        'showTicks': false,
-        'lineWidth': 1,
-        'lineColor': '#000',
-        'lineType': 'solid',
-        'showAxisLabel': true,
-        'showSplit': false,
-        'splitWidth': 1,
-        'splitColor': '#000',
-        'splitType': 'solid',
-        'min': 0,
-        'max': 0,
-        'autoMin': true,
-        'autoMax': true,
-        'autoEnlarge': false,
-        'formatType': '1',
-        'lang': 'chinese-simplified',
-        'numberFormat': 'number',
-        'numberDigit': 0,
-        'kSeperator': false,
-        'formatRegx': ''
-      }
-    },
-    'SeriesSetting': { // 系列设置
-      'SeriesSelect': { // 选择系列
-        'label': '请选择系列',
-        'selectValue': '', // 默认选择的系列名字 第一个元素
-        'seriesOption': [], // 从数据中拿到系列的名字
-        'SeriesChartLabel': { // 某个系列显示图表标签
-          'check': false, // 默认未选中
-          'color': '#383B47' // 颜色
-        },
-        'SeriesMaximum': { // 最值
-          'check': false // 默认未选中
-        }
-      }
     }
   },
-  'advance': {}, // 高级
-  'dataSource': {
-    'Dimension': { // 维度
-      'name': '类别轴/维度',
-      'require': true,
-      'value': []
-    },
-    'Measure': { // 度量
-      'name': '值轴/度量',
-      'require': true,
-      'value': []
-    }
-  }, // 数据集
-  'dataSet': { // 当前正在使用的数据集
-    'id': '', // 数据集ID
-    'name': '' // 数据集名称
-  }
+  'advance': {} // 高级
 }
