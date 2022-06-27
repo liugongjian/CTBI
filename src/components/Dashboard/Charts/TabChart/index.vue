@@ -59,7 +59,7 @@ export default {
       return getLayoutById(this.identify)
     },
     tabHeight() {
-      return this.layout.h * 100 - 80
+      return this.layout.h * 100 - 65 + this.layout.h * 4
     },
     activeTab() {
       return this.layout.tabPanels.find(tab => tab.name === this.editableTabsValue)
@@ -141,6 +141,8 @@ export default {
 .tab-header{
   background: #fff;
   display: flex;
+  margin-top: -20px;
+  overflow: auto;
   .tab-header-btn{
     display: flex;
     justify-content: center;
@@ -206,7 +208,7 @@ export default {
   }
 }
 .tab-content{
-  background: #DDDDDD;
+  background: #EFF2F5;
 }
 .gridWrap{
   overflow-x: hidden;
