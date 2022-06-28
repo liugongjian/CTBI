@@ -40,16 +40,22 @@
           effect="dark"
           :content="item.theme.Basic.Title.text"
           placement="top"
-        > <img
-          style="width: 18px; height: 17px; margin-left:12px;"
-          :src="require(`../../../assets/Image/dashboard/${name}.png`)"
-        ></el-tooltip>
+        >
+          <img
+            style="width: 18px; height: 17px; margin-left:12px;"
+            :src="require(`../../../assets/Image/dashboard/${name}.png`)"
+          >
+        </el-tooltip>
       </div>
     </div>
     <div class="divider" />
     <div class="tools-container">
       <div class="tool-btn">
-        <icon-dropdown :drop-downs="queryList" :main="'tools-query'" @resolve="resolveDropdown" />
+        <icon-dropdown
+          :drop-downs="queryList"
+          :main="'tools-query'"
+          @resolve="resolveDropdown"
+        />
       </div>
       <div class="tool-btn">
         <svg-icon
@@ -58,7 +64,11 @@
         />
       </div>
       <div class="tool-btn">
-        <icon-dropdown :drop-downs="richEditorList" :main="'tools-rich'" @resolve="resolveDropdown" />
+        <icon-dropdown
+          :drop-downs="richEditorList"
+          :main="'tools-rich'"
+          @resolve="resolveDropdown"
+        />
       </div>
     </div>
     <div class="tools-container">
@@ -135,9 +145,9 @@ const DragPos = { 'x': 1, 'y': 1, 'w': 1, 'h': 1, 'i': null }
 const mouseXY = { 'x': 1, 'y': 1 }
 import store from '@/store'
 import { getToolList, getBriefToolList, getControlsList } from './getToolList'
-import { nanoid } from 'nanoid'
+
 // import IconDropdown from './component/IconDropdown.vue'
-import { deepClone } from '@/utils/optionUtils'
+import { deepClone, createNanoId } from '@/utils/optionUtils'
 import ChartListPanel from './component/ChartListPanel.vue'
 export default {
   name: 'Tools',
@@ -194,7 +204,7 @@ export default {
       if (submenu) {
         this.panelShow()
       }
-      const id = nanoid()
+      const nanoId = createNanoId()
       // 防止指向问题
       const option = deepClone(item)
       const currentLayoutId = store.state.app.currentLayoutId
@@ -204,8 +214,8 @@ export default {
         y: this.layout.length + (this.colNum || 12), // puts it at the bottom
         w: 12,
         h: 2,
-        id,
-        i: id,
+        id: nanoId,
+        i: nanoId,
         is: name,
         option
       }
@@ -228,7 +238,6 @@ export default {
         obj.tabPanels = [{ name: '1', title: 'tab1', paneId }]
         obj.activeTabId = paneId
       }
-      console.log(obj)
       const temp = deepClone(obj)
       // 更新当前id
       store.dispatch('app/updateLayoutId', temp.i)
@@ -343,7 +352,7 @@ export default {
       if (mouseInGrid === true) {
         parentGridLayout.dragEvent('dragend', 'drop', DragPos.x, DragPos.y, 2, 12)
         this.layout = this.layout.filter(obj => obj.i !== 'drop')
-        const i = name + String(DragPos.i) + new Date().getTime()
+        const nanoId = createNanoId()
         // 防止指向问题
         const option = deepClone(item)
         const newLayout = {
@@ -351,7 +360,8 @@ export default {
           y: DragPos.y,
           w: 12,
           h: 2,
-          i,
+          i: nanoId,
+          id: nanoId,
           is: name,
           option
         }
@@ -371,7 +381,7 @@ export default {
     panelShow () {
       this.showPanel = !this.showPanel
     },
-    testInTabsRect() {
+    testInTabsRect () {
       const tabs = document.getElementsByClassName('tab-chart-wrap')
       const rects = []
       if (tabs.length > 0) {
@@ -404,7 +414,7 @@ export default {
   width: 100%;
   align-items: center;
   cursor: pointer;
-  .divider{
+  .divider {
     width: 1px;
     height: 20px;
     background-color: rgba(113, 114, 118, 0.65);
