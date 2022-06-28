@@ -372,7 +372,7 @@ export default {
           newLayout.tabIdChains = (hitLayout.tabIdChains || []).concat([hitLayout.i, hitLayout.activeTabId])
         }
         this.addLayout(newLayout)
-        parentGridLayout.dragEvent('dragend', i, DragPos.x, DragPos.y, 2, 12)
+        parentGridLayout.dragEvent('dragend', nanoId, DragPos.x, DragPos.y, 2, 12)
       }
     },
     resolveDropdown (command) {
