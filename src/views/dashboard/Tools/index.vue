@@ -1,7 +1,6 @@
 <template>
   <div
     class="header-tool"
-    @click="panelShow"
   >
     <div class="tools-container">
       <!-- <div class="tool-btn">
@@ -83,7 +82,7 @@
           />
         </el-tooltip>
       </div>
-      <div class="tool-btn horizontal">
+      <div class="tool-btn horizontal chart-panel-controller" @click.stop="panelShow">
         <svg-icon
           :icon-class="'tools-more'"
           style="font-size: 22px;"
@@ -111,6 +110,7 @@
       @addItem="addItem"
       @drag="drag"
       @dragend="dragend"
+      @hidePanel="hideChartList"
     />
     <!-- <div
       v-for="(item,name, index) in toolList"
@@ -393,6 +393,11 @@ export default {
         return mouseInTab
       } else {
         return false
+      }
+    },
+    hideChartList () {
+      if (this.showPanel) {
+        this.showPanel = false
       }
     }
   }
