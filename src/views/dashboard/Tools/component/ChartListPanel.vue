@@ -42,6 +42,10 @@ export default {
     }
   },
   mounted () {
+    document.addEventListener('click', this.testHiddenPanel, true)
+  },
+  destroyed() {
+    document.removeEventListener('click', this.testHiddenPanel)
   },
   methods: {
     addItem(name, item) {
@@ -66,6 +70,11 @@ export default {
       })
       list?.sort((prev, next) => prev.order - next.order)
       return list
+    },
+    testHiddenPanel () {
+      setTimeout(() => {
+        this.$emit('hidePanel')
+      }, 0)
     }
   }
 }

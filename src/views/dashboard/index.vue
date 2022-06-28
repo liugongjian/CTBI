@@ -342,10 +342,9 @@ export default {
           idLimits.push({ id: item.i, limit: (item.option && item.option.limit || 100) + index })
         }
       })
-      console.log(idLimits)
-      idLimits.forEach(item => {
-        this.$bus.$emit('interReload', [item.id], item.limit, true)
-      })
+      if (idLimits.length > 0) {
+        this.$bus.$emit('interReload', idLimits.map(item => item.id), 1000, true)
+      }
     },
     testNewEmpty () {
       if (this.saveName === 'dashboard-new') {
