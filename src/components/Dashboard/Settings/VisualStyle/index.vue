@@ -43,19 +43,33 @@ export default {
       styleOptions: []
     }
   },
-  watch: {},
+  watch: {
+    'option': {
+      handler(val) {
+        this.init()
+      },
+      deep: true
+    }
+  },
   created () { },
   mounted () {
-    for (var item in this.option) {
-      if (typeof (this.option[item]) === 'object') {
-        this.styleOptions.push(this.option[item])
-      }
-    }
+    this.init()
   },
   methods: {
     // 图标点击添加组件到画布
     changeHandler (val) {
       this.option.style = val
+      this.option.VisualStyle = val // 漏斗图切换视图转化
+      this.$store.state.funnel.visiableStyle = val // 控制功能面板的功能显示隐藏，禁用启用
+    },
+    // 初始化渲染和切换组件时随组件变化更新
+    init() {
+      this.styleOptions = []
+      for (var item in this.option) {
+        if (typeof (this.option[item]) === 'object') {
+          this.styleOptions.push(this.option[item])
+        }
+      }
     }
   }
 
