@@ -6,8 +6,7 @@
       <el-button type="primary" icon="el-icon-plus" style="width:100%;" @click="addTab">新增Tab标签</el-button>
     </div>
     <div v-for="item in tabs" :key="item.name" class="inputWrap">
-      <el-input v-model="item.title" placeholder="请输入Tab名称" style="width:150px;" />
-      <div class="delete" @click="removeTab"><i class="el-icon-delete" /></div>
+      <el-input v-model="item.title" placeholder="请输入Tab名称" style="width:100%" @blur="() => testTitle(item)" />
     </div>
   </div>
 </template>
@@ -67,16 +66,24 @@ export default {
       }
 
       this.editableTabsValue = activeName
+      const index = tabs.findIndex(tab => tab.name === targetName)
       const newTabs = tabs.filter(tab => tab.name !== targetName)
       if (newTabs.length === 0) {
         store.dispatch('app/deleteLayoutById', this.layout.i)
       } else {
-        this.layout.tabPanels = newTabs
+        // this.layout.tabPanels = newTabs
+        this.layout.tabPanels.splice(index, 1)
         this.layout.activeTabId = activeTabId
       }
       const removeTab = tabs.find(tab => tab.name === targetName)
       const allLayout = [...store.state.app.layout].filter(item => !(item.tabIdChains || []).includes(removeTab.paneId))
       store.dispatch('app/updateLayout', allLayout)
+    },
+    testTitle (tab) {
+      console.log(tab)
+      if (!tab.title) {
+        tab.title = 'New Tab'
+      }
     }
   }
 }
