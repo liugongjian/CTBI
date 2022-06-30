@@ -93,26 +93,24 @@
                 <el-input
                   v-if="scope.row.fakeDataType && scope.row.fakeDataType[0] === 'text'"
                   v-model="scope.row.defaultValue"
-                  class="default-value"
-                  style="margin-left: 8px"
+                  style="margin-left: 8px; width: 140px;"
                   placeholder="请输入默认值"
                 />
                 <el-input-number
                   v-else-if="scope.row.fakeDataType && scope.row.fakeDataType[0] === 'number'"
                   v-model="scope.row.defaultValue"
-                  class="default-value"
                   controls-position="right"
-                  style="margin-left: 8px"
+                  :controls="false"
+                  style="margin-left: 8px;text-align: left; width: 140px;"
                   placeholder="请输入默认值"
                 />
                 <el-date-picker
                   v-else
                   v-model="scope.row.defaultValue"
-                  class="default-value"
                   :format="scope.row.format"
                   :value-format="scope.row.format"
                   :type="scope.row.formatType"
-                  style="margin-left: 8px"
+                  style="margin-left: 8px; width: 140px;"
                   placeholder="请输入默认值"
                 />
               </div>
@@ -387,9 +385,6 @@ export default {
     }
   }
 }
-::v-deep .default-value.el-input {
-  width: 140px;
-}
 
 .el-select-dropdown__item {
   padding: 0 12px;
@@ -437,5 +432,8 @@ export default {
 
 ::v-deep .no-border td {
   border-bottom-width: 0px !important;
+}
+::v-deep .el-input-number .el-input__inner {
+  text-align: left;
 }
 </style>
