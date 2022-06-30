@@ -2,7 +2,7 @@
   <el-drawer
     :before-close="handleCloseSettingParam"
     :wrapper-closable="false"
-    :size="630"
+    :size="830"
     :visible.sync="dialogVisible"
   >
     <template slot="title">
@@ -31,7 +31,7 @@
           <el-table-column
             prop="type"
             label="类型"
-            width="80"
+            min-width="80"
             align="center"
             show-overflow-tooltip
           >
@@ -42,12 +42,12 @@
           <el-table-column
             prop="name"
             label="变量名"
-            width="70"
+            min-width="70"
             show-overflow-tooltip
           />
           <el-table-column
             label="变量类型"
-            width="120"
+            min-width="120"
           >
             <template slot-scope="scope">
               <el-cascader
@@ -61,7 +61,7 @@
           </el-table-column>
           <el-table-column
             label="查询默认值"
-            width="260"
+            min-width="260"
           >
             <template #header>
               <span>查询默认值</span>
@@ -82,6 +82,7 @@
                 <el-select
                   v-model="scope.row.useInGlobal"
                   placeholder="请选择"
+                  style="width: 180px;"
                 >
                   <el-option
                     v-for="item in queryDefaultOptions"
@@ -93,7 +94,7 @@
                 <el-input
                   v-if="scope.row.fakeDataType && scope.row.fakeDataType[0] === 'text'"
                   v-model="scope.row.defaultValue"
-                  style="margin-left: 8px; width: 140px;"
+                  style="margin-left: 8px; width: 100%;"
                   placeholder="请输入默认值"
                 />
                 <el-input-number
@@ -101,7 +102,7 @@
                   v-model="scope.row.defaultValue"
                   controls-position="right"
                   :controls="false"
-                  style="margin-left: 8px;text-align: left; width: 140px;"
+                  style="margin-left: 8px;text-align: left; width: 100%;"
                   placeholder="请输入默认值"
                 />
                 <el-date-picker
@@ -110,7 +111,7 @@
                   :format="scope.row.format"
                   :value-format="scope.row.format"
                   :type="scope.row.formatType"
-                  style="margin-left: 8px; width: 140px;"
+                  style="margin-left: 8px; width: 100%;"
                   placeholder="请输入默认值"
                 />
               </div>
