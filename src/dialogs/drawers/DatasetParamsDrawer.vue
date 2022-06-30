@@ -20,7 +20,10 @@
     <div class="set-param-drawer">
       <div class="set-param-drawer-main">
         <el-table
+          v-loading="loading"
           :data="sqlVariablesTableData"
+          :span-method="arraySpanMethod"
+          row-class-name="no-border"
           header-row-class-name="m-table-header"
           :height="tableHeight"
           style="width: 100%"
@@ -29,6 +32,7 @@
             prop="type"
             label="类型"
             width="80"
+            align="center"
             show-overflow-tooltip
           >
             <template slot-scope="scope">
@@ -46,28 +50,13 @@
             width="120"
           >
             <template slot-scope="scope">
-              <el-select
-                v-model="scope.row.dataType"
+              <el-cascader
+                v-model="scope.row.fakeDataType"
+                :options="variableTypeOptions"
                 placeholder="请选择"
-              >
-                <template
-                  v-if="scope.row.dataType"
-                  #prefix
-                >
-                  <svg-icon :icon-class="`data-type-option-${scope.row.dataType}`" />
-                </template>
-                <el-option
-                  v-for="item in variableTypeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                  <span class="data-type-option">
-                    <svg-icon :icon-class="`data-type-option-${item.value}`" />
-                    <span class="label">{{ item.label }}</span>
-                  </span>
-                </el-option>
-              </el-select>
+                :show-all-levels="false"
+                @change="(value) => {handleCascaderChange(value, scope.row)}"
+              />
             </template>
           </el-table-column>
           <el-table-column
@@ -102,8 +91,27 @@
                   />
                 </el-select>
                 <el-input
+                  v-if="scope.row.fakeDataType && scope.row.fakeDataType[0] === 'text'"
                   v-model="scope.row.defaultValue"
                   class="default-value"
+                  style="margin-left: 8px"
+                  placeholder="请输入默认值"
+                />
+                <el-input-number
+                  v-else-if="scope.row.fakeDataType && scope.row.fakeDataType[0] === 'number'"
+                  v-model="scope.row.defaultValue"
+                  class="default-value"
+                  controls-position="right"
+                  style="margin-left: 8px"
+                  placeholder="请输入默认值"
+                />
+                <el-date-picker
+                  v-else
+                  v-model="scope.row.defaultValue"
+                  class="default-value"
+                  :format="scope.row.format"
+                  :value-format="scope.row.format"
+                  :type="scope.row.formatType"
                   style="margin-left: 8px"
                   placeholder="请输入默认值"
                 />
@@ -132,7 +140,7 @@
         </el-button>
         <el-button
           type="primary"
-          @click="close(sqlVariablesTableData)"
+          @click="handleClose"
         >确 定</el-button>
       </div>
     </div>
@@ -168,27 +176,86 @@ export default {
           label: '文本'
         },
         {
+          value: 'year',
+          label: '日期-年'
+        },
+        {
+          value: 'month',
+          label: '日期-年月',
+          children: [{
+            value: 'yyyy-MM',
+            label: 'yyyy-MM'
+          }, {
+            value: 'yyyyMM',
+            label: 'yyyyMM'
+          }, {
+            value: 'yyyy/MM',
+            label: 'yyyy/MM'
+          }]
+        },
+        {
+          value: 'week',
+          label: '日期-年周'
+        },
+        {
           value: 'date',
-          label: '日期'
+          label: '日期-年月日',
+          children: [{
+            value: 'yyyy-MM-dd',
+            label: 'yyyy-MM-dd'
+          }, {
+            value: 'yyyyMMdd',
+            label: 'yyyyMMdd'
+          }, {
+            value: 'yyyy/MM/dd',
+            label: 'yyyy/MM/dd'
+          }]
+        },
+        {
+          value: 'datetime',
+          label: '日期-年月日时分秒',
+          children: [{
+            value: 'yyyy-MM-dd HH:mm:ss',
+            label: 'yyyy-MM-dd HH:mm:ss'
+          }, {
+            value: 'yyyyMMdd HH:mm:ss',
+            label: 'yyyyMMdd HH:mm:ss'
+          }, {
+            value: 'yyyy/MM/dd HH:mm:ss',
+            label: 'yyyy/MM/dd HH:mm:ss'
+          }, {
+            value: 'yyyyMMddHH:mm:ss',
+            label: 'yyyyMMddHH:mm:ss'
+          }]
         }
       ],
       tableHeight: 'calc(100vh - 200px)',
       // 当前输入的sql脚本
       sql: '',
       // 回显表格数据，可由调用者传入
-      sqlVariablesTableData: []
+      sqlVariablesTableData: [],
+      loading: false
     }
   },
   mounted () {
     this.getVariables()
   },
   methods: {
+    arraySpanMethod ({ row, column, rowIndex, columnIndex }) {
+      if (row && row.separator) {
+        return [1, 5]
+      }
+    },
     handleCloseSettingParam (done) {
       this.$confirm('确认关闭？选择离开本次编辑将不会保存')
         .then(_ => {
           done()
         })
         .catch(_ => { })
+    },
+    handleClose () {
+      console.log(this.sqlVariablesTableData)
+      this.close(this.sqlVariablesTableData.filter(item => { return !item.separator }))
     },
     // 删除
     deleteSqlVariable (val) {
@@ -212,28 +279,82 @@ export default {
         this.sqlVariablesTableData = []
       }
       const body = { sql: this.sql }
+      this.loading = true
       try {
         const data = await getSqlVariables(body)
         this.transformVariables(data)
-        // this.sqlVariablesTableData = data.slice()
-        // console.log(this.sqlVariablesTableData)
       } catch (error) {
         console.log(error)
       }
+      this.loading = false
     },
     // 对数组对象的合并，有则复用回显数据
     transformVariables (data) {
-      console.log(data, this.sqlVariablesTableData)
-      if (data && data.length > 0 && this.sqlVariablesTableData.length > 0) {
+      let result = []
+      if (data && data.length > 0) {
+        // 如果当前字段的字段类型和查询默认值均为空，标识为新增参数
+        // 已存在参数配置
+        const originFields = []
+        // 新增参数
+        const newFields = []
         data.forEach(item => {
-          this.sqlVariablesTableData.forEach(origin => {
-            if (item.name === origin.name) {
-              Object.assign(item, origin)
-            }
+          const temp = this.sqlVariablesTableData.find(origin => {
+            return item.name === origin.name
           })
+          if (temp) {
+            // 回显值封装
+            if (!temp.fakeDataType) {
+              const { dataType, format } = temp
+              this.variableTypeOptions.forEach(option => {
+                // 如果format有值，递归获取到具体数值并对fakeDataType赋值
+                if (format) {
+                  if (option.children) {
+                    const opt = option.children.find(child => {
+                      return child.value === format
+                    })
+                    if (opt) {
+                      temp.fakeDataType = [option.value, format]
+                      temp.formatType = option.value
+                    }
+                  }
+                } else {
+                  temp.fakeDataType = [dataType]
+                }
+              })
+            }
+            Object.assign(item, temp)
+            originFields.push(item)
+          } else if (!item.dataType && !item.useInGlobal) {
+            item.dataType = 'text'
+            item.fakeDataType = ['text']
+            item.useInGlobal = false
+            newFields.push(item)
+          }
         })
+        // 分隔符
+        const separator = { separator: true, type: '———————— 以下为新增变量 ————————' }
+        if (originFields && originFields.length > 0) {
+          result = result.concat(originFields)
+        }
+        if (newFields && newFields.length > 0) {
+          result.push(separator)
+          result = result.concat(newFields)
+        }
       }
-      this.sqlVariablesTableData = data
+      this.sqlVariablesTableData = result
+    },
+    handleCascaderChange (newValue, item) {
+      if (newValue && newValue.length > 0) {
+        item.defaultValue = ''
+        const type = newValue[0]
+        if (type !== 'text' && type !== 'number') {
+          item.format = type === 'week' ? 'yyyy-WW' : newValue[1]
+          item.formatType = type
+          item.dataType = 'time'
+        } else {
+          item.dataType = type
+        }
+      }
     }
 
   }
@@ -312,5 +433,9 @@ export default {
   font-weight: 500;
   font-family: PingFangSC-Medium, PingFang SC;
   color: rgba(0, 0, 0, 0.9);
+}
+
+::v-deep .no-border td {
+  border-bottom-width: 0px !important;
 }
 </style>
