@@ -6,12 +6,12 @@
 </template>
 
 <script>
-import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
-import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
-import lineMixins from '@/components/Dashboard/mixins/lineMixins'
+import { getLayoutOptionById, deepClone, getDataValueById } from '@/utils/optionUtils'
+import distribuScatterMixins from '@/components/Dashboard/mixins/distribuScatterMixins'
+import store from '@/store'
 export default {
   name: 'DistribuScatter',
-  mixins: [YAxis, lineMixins],
+  mixins: [distribuScatterMixins],
   props: {
     identify: {
       type: String,
@@ -22,101 +22,43 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
-      dataValue: [
-        ['date', '价格', '数量', '温度'],
-        ['Mon', 820, 410, 36],
-        ['Tue', 932, 320, 36.3],
-        ['Wed', 901, 300, 36.6],
-        ['Thu', 934, 380, null],
-        ['Fri', 1290, 430, 39.6],
-        ['Sat', 1330, 480, 37.6],
-        ['Sun', 1320, 460, 38],
-        ['前两天', '后五天'],
-        ['Tue', 'Sun']
-      ]
-      //   series: []
+      dataValue: []
     }
   },
   watch: {
     storeOption: {
       handler(val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = deepClone(val.dataSource)
+        if (this.dataValue.length > 0) {
+          this.dataValue = this.formatData(deepClone(getDataValueById(this.identify)))
           this.getOption()
         }
       },
       deep: true
     },
-    'storeOption.dataSource': {
+    dataOption: {
       handler(val) {
-        if (JSON.stringify(val) !== '{}') {
-          this.dataValue = deepClone(val)
-          console.log(this.dataValue, 999988)
-          // 拿到数据中的系列名字
-          this.getSeriesOptions(this.dataValue)
-          // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
-          // 拿到数据中的指标
-          this.getIndicatorOptions(this.dataValue)
+        const isData = val.findIndex(item => {
+          return item.i === this.identify
+        })
+        if (isData !== -1) {
+          console.log(val, 'dataO')
+          this.dataValue = this.formatData(deepClone(getDataValueById(this.identify)))
           this.getOption()
         }
-      }
+      },
+      deep: true
     }
   },
   mounted() {
     this.storeOption = getLayoutOptionById(this.identify)
-    this.getOption()
+    this.dataOption = store.state.app.dataOption
   },
   methods: {
-    changeBaseData() {
-      const data = []
-      let max = 0
-      data.push(this.dataValue.pop())
-      data.push(this.dataValue.pop())
-      this.dataValue.forEach((item, index) => {
-        console.log(item)
-        if (index !== 0) {
-          if (item[1] > max) {
-            max = item[1]
-          }
-        }
-      })
-      data.push(max)
-      console.log(data)
-      return data
-    },
     getOption() {
       const { Legend } = this.storeOption.theme.ComponentOption
       const { XAxis, YAxis } = this.storeOption.theme.Axis
-      const data = this.changeBaseData()
-      const options = []
-      data[1].forEach((item, index) => {
-        // {
-        //           xAxis: "Tue",
-        //           label: {
-        //             position: "start",
-        //             padding: [30, 120, 0, 0],
-        //             formatter: "警戒线",
-        //           },
-        //         },
-        options.push({
-          xAxis: data[0][index],
-          lineStyle: {
-            color: '#fff',
-            type: 'solid',
-            shadowOffsetX: 20
-          },
-          label: {
-            color: '#000',
-            position: 'start',
-            padding: [-20, 50, 0, 0],
-            formatter: item,
-            distance: 0
-          }
-        })
-      })
-      console.log(XAxis, 99999, YAxis, Legend)
+      const { SeriesSelect } = this.storeOption.theme.SeriesSetting
+      // console.log(XAxis, 99999, YAxis, Legend)
       // 系列配置-图表标签相关
       this.setSeriesItem()
       // 获取颜色设置-使图例颜色与图形颜色对应
@@ -124,8 +66,8 @@ export default {
       this.storeOption.theme.ComponentOption.Color.color.forEach((item) => {
         colorOption.push(item.color)
       })
-      // const lastOptions = this.dataValue.pop();
       this.chartOption = {
+        legend: Legend,
         tooltip: {
           show: true,
           trigger: 'item',
@@ -135,107 +77,161 @@ export default {
           },
           formatter: '{b}<br />{a}: {c}'
         },
+        grid: this.getGrid(),
         color: colorOption,
-        legend: Legend,
-        // legend: {
-        //   data: [1, 2],
-        //   bottom: 10,
-        // },
-        xAxis: [
-          {
-            type: 'category',
-            zlevel: 999,
-            // 轴线显示与样式
-            axisLine: {
-              show: XAxis.show,
-              lineStyle: {
-                type: XAxis.lineType,
-                width: XAxis.lineWidth,
-                color: XAxis.lineColor
-              }
-            },
-            // 轴标签
-            axisLabel: {
-              show: XAxis.showAxisLabel,
-              width: XAxis.lineWidth
-            },
-            // 轴刻度线
-            axisTick: {
-              show: XAxis.showTicks
-            },
-            // 网格线
-            splitLine: {
-              show: XAxis.showSplit,
-              lineStyle: {
-                type: XAxis.splitType,
-                color: XAxis.splitColor,
-                width: XAxis.splitWidth
-              }
-            },
-            offset: -50,
-            // 轴标题和单位
-            name:
-              XAxis.showTitle &&
-              (XAxis.unit ? `${XAxis.title}(${XAxis.unit})` : XAxis.title)
+        xAxis: this.getXAxis(XAxis, SeriesSelect),
+        yAxis: this.getYAxis(YAxis),
+        series: this.getSeries()
+      }
+    },
+    formatData(dataValue) {
+      const obj = []
+      const MeasureSecond = []
+      let MeasureSecondKey = ''
+      const { data, fields } = dataValue
+      if (data && data.length > 0) {
+        for (const key in fields) {
+          // 获取Y轴/度量
+          if (key === 'MeasureSecond') {
+            MeasureSecondKey = fields[key]['fields'][0].column
+            data.forEach((item) => { MeasureSecond.push(item[MeasureSecondKey]) })
           }
-        ],
-        yAxis: [
-          {
-            axisLine: {
-              show: YAxis.show,
-              lineStyle: {
-                type: YAxis.lineType,
-                width: YAxis.lineWidth,
-                color: YAxis.lineColor
+          // 获取x轴
+          if (key === 'Measure') {
+            fields[key]['fields'].forEach((field, index) => {
+              obj[index] = {
+                x: field.column,
+                data: data.map(item => [item[field.column]])
               }
-            },
-            axisLabel: {
-              show: YAxis.showAxisLabel,
-              formatter: (value, index) => {
-                return this.formatYLabel(value, YAxis)
-              }
-            },
-            splitLine: {
-              show: YAxis.showSplit,
-              lineStyle: {
-                type: YAxis.splitType,
-                color: YAxis.splitColor,
-                width: YAxis.splitWidth
-              }
-            },
-            axisTick: {
-              show: YAxis.showTicks
-            },
-            min: YAxis.autoMin ? -80 : YAxis.min,
-            max: function (value) {
-              if (!YAxis.autoMax) {
-                return YAxis.max < value.max ? null : YAxis.max
-              }
-            },
-            // 轴标题和单位
-            name:
-              YAxis.showTitle &&
-              (YAxis.unit ? `${YAxis.title}(${YAxis.unit})` : YAxis.title)
+            })
           }
-        ],
-        dataset: [
-          {
-            source: this.dataValue
-          }
-        ],
-        series: [
-          {
-            type: 'scatter',
-
-            zlevel: 99,
-            markLine: {
-              symbol: 'none',
-
-              data: options
+        }
+        obj.forEach(item => {
+          item.y = MeasureSecondKey
+          item.data.forEach((items, index) => {
+            items[1] = MeasureSecond[index]
+          })
+        })
+      }
+      return obj
+    },
+    getXAxis(XAxis, SeriesSelect) {
+      const array = []
+      this.dataValue.forEach((item, index) => {
+        const name = SeriesSelect.selectValue === item.x ? (SeriesSelect.remark || item.x) : item.x
+        array.push({
+          gridIndex: index,
+          boundaryGap: true,
+          type: 'value',
+          scale: true,
+          name: XAxis.showTitle && (XAxis.unit !== '' ? `${name}(${XAxis.unit})` : name),
+          nameLocation: 'middle',
+          nameTextStyle: {
+            align: 'center',
+            verticalAlign: 'bottom',
+            lineHeight: -40,
+            fontSize: 16
+          },
+          axisLine: {
+            show: XAxis.show,
+            onZero: false,
+            lineStyle: {
+              type: XAxis.lineType,
+              width: XAxis.lineWidth,
+              color: XAxis.lineColor
+            }
+          },
+          // 轴标签
+          axisLabel: {
+            show: XAxis.showAxisLabel,
+            width: XAxis.lineWidth,
+            padding: [0, 12, 0, index * 10]
+          },
+          // 轴刻度线
+          axisTick: {
+            show: XAxis.showTicks
+          },
+          // 网格线
+          splitLine: {
+            show: XAxis.showSplit,
+            lineStyle: {
+              type: XAxis.splitType,
+              color: XAxis.splitColor,
+              width: XAxis.splitWidth
             }
           }
-        ]
-      }
+        })
+      })
+      return array
+    },
+    getYAxis(YAxis) {
+      const array = []
+      this.dataValue.forEach((item, index) => {
+        const name = YAxis.title ? YAxis.title : item.y
+        array.push({
+          gridIndex: index,
+          boundaryGap: false,
+          type: 'value',
+          name: index === 0 && YAxis.showTitle && (YAxis.unit !== '' ? `${name}(${YAxis.unit})` : name),
+          min: YAxis.autoMin ? Math.min(...(item.data.map(i => i[1]))) : YAxis.min,
+          max: YAxis.autoMax ? Math.max(...(item.data.map(i => i[1]))) : YAxis.max,
+          nameLocation: 'middle',
+          nameTextStyle: {
+            lineHeight: 40,
+            fontSize: 16
+          },
+          axisLine: {
+            show: true,
+            onZero: false,
+            lineStyle: {
+              type: YAxis.lineType,
+              width: YAxis.lineWidth,
+              color: YAxis.lineColor
+            }
+          },
+          axisLabel: {
+            show: index === 0 ? YAxis.showAxisLabel : false
+            // formatter: (value, index) => {
+            //   return this.formatYLabel(value, YAxis)
+            // }
+          },
+          splitLine: {
+            show: YAxis.showSplit,
+            lineStyle: {
+              type: YAxis.splitType,
+              color: YAxis.splitColor,
+              width: YAxis.splitWidth
+            }
+          },
+          axisTick: {
+            show: index === 0 ? YAxis.showTicks : false
+          }
+        })
+      })
+      return array
+    },
+    getSeries() {
+      const array = []
+      this.dataValue.forEach((item, index) => {
+        array.push({
+          name: item.x,
+          type: 'scatter',
+          symbolSize: 5,
+          xAxisIndex: index,
+          yAxisIndex: index,
+          data: item.data
+        })
+      })
+      return array
+    },
+    getGrid() {
+      const array = []
+      this.dataValue.forEach((item, index) => {
+        const width = (1 / this.dataValue.length * 90).toFixed(0)
+        const x = index === 0 ? 5 : index * width + 5
+        array.push({ x: x + '%', width: width + '%' })
+      })
+      return array
     }
   }
 }

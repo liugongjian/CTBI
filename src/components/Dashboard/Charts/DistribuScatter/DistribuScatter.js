@@ -98,5 +98,28 @@ export default {
     }
   },
   'advance': {}, // 高级
-  'dataSource': {}// 数据集
+  'dataSource': {
+    'MeasureSecond': {
+      'name': 'Y轴/度量',
+      'require': true,
+      'limit': 1,
+      'value': []
+    },
+    'Measure': {
+      'name': 'X轴/度量',
+      'require': true,
+      'limit': 10,
+      'value': []
+    }
+    // 'Dimension': {
+    //   'name': '颜色图例维度',
+    //   'require': false,
+    //   'limit': 1,
+    //   'value': []
+    // }
+  }, // 数据集
+  'dataSet': {
+    'id': '',
+    'name': ''
+  }
 }
