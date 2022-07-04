@@ -253,7 +253,6 @@ export default {
         .catch(_ => { })
     },
     handleClose () {
-      console.log(this.sqlVariablesTableData)
       this.close(this.sqlVariablesTableData.filter(item => { return !item.separator }))
     },
     // 删除
