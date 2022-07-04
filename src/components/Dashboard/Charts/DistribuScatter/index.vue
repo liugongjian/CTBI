@@ -58,7 +58,6 @@ export default {
       const { Legend } = this.storeOption.theme.ComponentOption
       const { XAxis, YAxis } = this.storeOption.theme.Axis
       const { SeriesSelect } = this.storeOption.theme.SeriesSetting
-      // console.log(XAxis, 99999, YAxis, Legend)
       // 系列配置-图表标签相关
       this.setSeriesItem()
       // 获取颜色设置-使图例颜色与图形颜色对应
@@ -191,9 +190,6 @@ export default {
           },
           axisLabel: {
             show: index === 0 ? YAxis.showAxisLabel : false
-            // formatter: (value, index) => {
-            //   return this.formatYLabel(value, YAxis)
-            // }
           },
           splitLine: {
             show: YAxis.showSplit,
