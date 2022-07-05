@@ -205,6 +205,7 @@
                   v-model="scope.row.displayColumn"
                   :max-length="50"
                   :blur-fun="(newVal, oldVal) => {return handlerBlur(newVal, oldVal, scope.row.index)}"
+                  @blur="(val) => { handleBlur(val, scope.row) }"
                 />
               </span>
             </template>
@@ -475,6 +476,10 @@ export default {
       let measureHiddenLength = 0
       fields.forEach((item, index) => {
         item.index = item.type + '_' + index
+        if (!item.displayColumn) {
+          item.displayColumn = item.column
+        }
+        item.attributes[0].displayColumn = item.displayColumn
         if (item.type === 'Dimension') {
           if (item.attributes[0].isHidden) {
             dimensionHiddenLength += 1
@@ -545,6 +550,9 @@ export default {
         row.attributes[0].secondeDataType = parentValue
         row.attributes[0][parentValue] = value
       }
+    },
+    handleBlur(val, item) {
+      item.attributes[0].displayColumn = val
     }
   }
 }
