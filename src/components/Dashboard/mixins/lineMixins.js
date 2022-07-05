@@ -278,6 +278,7 @@ export default {
         })
         data.unshift([this.dataValue[0][0], ...indicator])
         this.dataValue = data
+        console.log(data)
       }
     },
     // 获取堆积图
