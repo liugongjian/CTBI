@@ -91,11 +91,13 @@ export default {
       }
 
       this.editableTabsValue = activeName
+      const index = tabs.findIndex(tab => tab.name === targetName)
       const newTabs = tabs.filter(tab => tab.name !== targetName)
       if (newTabs.length === 0) {
         store.dispatch('app/deleteLayoutById', this.layout.i)
       } else {
-        this.layout.tabPanels = newTabs
+        // this.layout.tabPanels = newTabs
+        this.layout.tabPanels.splice(index, 1)
         this.layout.activeTabId = activeTabId
       }
       const removeTab = tabs.find(tab => tab.name === targetName)

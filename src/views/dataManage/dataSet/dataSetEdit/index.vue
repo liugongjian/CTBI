@@ -448,10 +448,10 @@ export default {
           type: 'success'
         })
         this.toggleContent = false
-        this.editLoading = false
       } catch (error) {
         console.error(error)
       }
+      this.editLoading = false
     },
     checkExit () {
       this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内容将不被保存，请问您是否确认返回？', title: '提示' }, () => {

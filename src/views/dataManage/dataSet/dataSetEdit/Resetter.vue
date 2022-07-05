@@ -444,7 +444,6 @@ export default {
     async refreshPreview () {
       const body = {
         sql: this.sql,
-        sqlVarData: this.sql.sqlVarData,
         fields: this.fields
       }
       try {
