@@ -119,7 +119,7 @@ export function getFileTableInfo (tableName) {
 }
 
 // 查询数据集详情
-export function getDataSetsData (id) {
+export function getDataSet (id) {
   return http.get(`/dataSets/${id}`)
 }
 
