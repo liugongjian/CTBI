@@ -45,6 +45,7 @@ export default {
       }
       if (flag) {
         this.$emit('input', this.modelValue)
+        this.$emit('blur', this.modelValue)
       } else {
         this.modelValue = this.value
       }

@@ -328,9 +328,22 @@ export default {
       const { layout, layoutStyles } = data
       if (layout) {
         store.dispatch('app/updateLayout', layout)
+        setTimeout(() => { this.getLayoutRenderData(layout) }, 500)
       }
       if (layoutStyles) {
         store.dispatch('setting/changeSetting', { key: 'layoutStyles', value: layoutStyles })
+      }
+    },
+    // 触发 interReload事件，获取每个图表的渲染数据
+    getLayoutRenderData(layout) {
+      const idLimits = []
+      layout.forEach((item, index) => {
+        if (item.is !== 'TabChart') {
+          idLimits.push({ id: item.i, limit: (item.option && item.option.limit || 100) + index })
+        }
+      })
+      if (idLimits.length > 0) {
+        this.$bus.$emit('interReload', idLimits.map(item => item.id), 1000, true)
       }
     },
     testNewEmpty () {

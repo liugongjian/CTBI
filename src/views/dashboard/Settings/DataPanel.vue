@@ -116,7 +116,7 @@
 
 <script>
 import DataSetSelect from './components/DataSetSelect.vue'
-import { getDataSetData } from '@/api/dataSet'
+import { getDataSet } from '@/api/dataSet'
 import { transformDataTypeIcon } from '@/utils/optionUtils'
 export default {
   name: 'DataPanel',
@@ -159,7 +159,7 @@ export default {
       if (id) {
         this.dataSetLoading = true
         try {
-          const res = await getDataSetData(id)
+          const res = await getDataSet(id)
           if (res) {
             const dataList = res.fields
             this.Dimension = []
@@ -172,11 +172,11 @@ export default {
                 this.Measure.push(item)
               }
             })
-            this.dataSetLoading = false
           }
         } catch (error) {
           console.log(error)
         }
+        this.dataSetLoading = false
       } else {
         this.Dimension = []
         this.Measure = []

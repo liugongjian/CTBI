@@ -42,10 +42,15 @@ export default {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem
   },
+  props: {
+    id: {
+      type: String,
+      default: ''
+    }
+  },
   computed: {
     layout () {
-      // 去除属于tab组件的layout
-      return store.state.app.layout.filter(item => !item.containerId)
+      return store.state.app.layout.filter(item => item.containerId === this.id)
     },
     chartsStyles() {
       return this.$store.state.settings.chartsStyles

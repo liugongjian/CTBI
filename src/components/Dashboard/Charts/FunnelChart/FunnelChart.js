@@ -71,10 +71,13 @@ export default {
         'type': 'scroll'
       },
       'DisplayStyle': {
-        // 展示样式
+        // 展示样式 标准图
         'default': true, // 默认样式
         'trapezoid': false, // 梯形
         'rectangle': false, // 矩形
+        // 展示样式 转化分析图
+        'horizontal': false, // 横向
+        'vertical': false, // 纵向
         // 显示类别标签
         'labelPos': 'left',
         // 显示数据标签

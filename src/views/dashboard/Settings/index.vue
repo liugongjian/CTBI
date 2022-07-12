@@ -11,13 +11,15 @@
         <div class="change-chart-type-menu">
           <!-- 图例切换 -->
           <ChartSwitchHeader
-            v-if="showWrapper"
+            v-if="showWrapper && isCommonChart"
             class="change-type"
             :chart-name="option.theme.Basic.Title.text"
             :icon-name="currentChart"
             :show-chart-types="showChartTypes"
             @click.native="changeChart"
           />
+          <!-- 非图表组件仅显示名称 -->
+          <span v-if="!isCommonChart">{{ option.theme.Basic.Title.text }}</span>
           <span
             class="panel-icon"
             @click="toggleWrapperFold"
@@ -28,6 +30,7 @@
         <el-container v-if="showWrapper && !showChartTypes">
           <el-tabs v-model="activeNames">
             <el-tab-pane
+              v-if="isCommonChart"
               label="字段"
               name="1"
             >
@@ -77,6 +80,7 @@
 
       <!-- 数据集模块 -->
       <div
+        v-if="isCommonChart"
         class="data-panel"
         :class="showData?'data-panel-fold':'data-panel-unfold'"
       >
@@ -162,6 +166,12 @@ export default {
         return item.id === this.currentLayoutId
       })
       return temp.is
+    },
+    isCommonChart () {
+      const temp = store.state.app.layout.find(item => {
+        return item.id === this.currentLayoutId
+      })
+      return !['TabChart'].includes(temp.is)
     }
   },
 

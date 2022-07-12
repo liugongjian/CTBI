@@ -131,6 +131,7 @@
 
 <script>
 import { getParameter } from '@/utils/optionUtils'
+import store from '@/store'
 export default {
   name: 'ComponentBlock',
   props: {
@@ -190,7 +191,12 @@ export default {
     handleCommand (command) {
       if (command === 'delete') {
         // 删除vuex的layout中对应的组件信息
-        this.$store.dispatch('app/deleteLayoutById', this.option.i)
+        // 当时tab组件时，删除所有属于该组件的组件
+        if (this.option.is === 'TabChart') {
+          const allLayout = [...store.state.app.layout].filter(item => !(item.tabIdChains || []).includes(this.option.i))
+          store.dispatch('app/updateLayout', allLayout)
+        }
+        store.dispatch('app/deleteLayoutById', this.option.i)
       }
     },
 

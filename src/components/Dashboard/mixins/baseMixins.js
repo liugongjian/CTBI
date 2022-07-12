@@ -20,6 +20,7 @@ export default {
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
     this.$bus.$on('interReload', this.interReload)
+    console.log(this.identify)
   },
   beforeDestroy () {
     this.$bus.$off('interReload', this.interReload)
@@ -32,6 +33,7 @@ export default {
      * @param {Boolean} isReload 是否重新发送请求获取
      */
     async interReload (ids, limit, isReload) {
+      console.log(this.identify + limit)
       if (ids && ids.indexOf(this.identify) > -1) {
         await this.getData(limit, isReload)
         this.reloadImpl()
@@ -39,12 +41,12 @@ export default {
     },
     // 获取详细数据
     async getData (limit = 1000, isReload = true) {
-      const storeDataValue = getDataValueById()
+      const storeDataValue = getDataValueById(this.identify)
       if (storeDataValue && !isReload) {
         this.chartData = deepClone(storeDataValue)
         return
       }
-      const option = getLayoutOptionById()
+      const option = getLayoutOptionById(this.identify)
       const { dataSource } = option
       let selectFields = []
       const transformFields = {}

@@ -138,6 +138,16 @@
           />
         </div>
       </el-collapse-item>
+      <el-collapse-item
+        v-if="option['TabConfig']"
+        title="Tab配置"
+        name="8"
+      >
+        <component
+          :is="'TabConfig'"
+          :option="option['TabConfig']"
+        />
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>

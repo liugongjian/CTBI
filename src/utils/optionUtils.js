@@ -1,4 +1,13 @@
 import store from '@/store'
+import { customAlphabet } from 'nanoid'
+
+// 生成nanoId
+export const createNanoId = function () {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789' // A-Za-z0-9
+  const length = 13
+  const nanoid = customAlphabet(characters, length)
+  return nanoid()
+}
 /**
  * 对象清空工具
  * @param {Object} obj

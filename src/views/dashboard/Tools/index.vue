@@ -1,7 +1,6 @@
 <template>
   <div
     class="header-tool"
-    @click="panelShow"
   >
     <div class="tools-container">
       <!-- <div class="tool-btn">
@@ -24,19 +23,52 @@
         </el-dropdown>
       </div>
     </div>
+    <div class="divider" />
     <div class="tools-container">
-      <!-- <div class="tool-btn">
-        <icon-dropdown :drop-downs="queryList" :main="'tools-query'" @resolve="resolveDropdown" />
-      </div> -->
-      <!-- <div class="tool-btn">
+      <div
+        v-for="(item,name, index) in controls"
+        :key="name + index"
+        class="droppable-element tool-btn chart-tool"
+        draggable="true"
+        unselectable="on"
+        @click.stop="addItem(name,item)"
+        @drag.stop="drag($event, name,item)"
+        @dragend="dragend($event, name,item)"
+      >
+        <el-tooltip
+          effect="dark"
+          :content="item.theme.Basic.Title.text"
+          placement="top"
+        >
+          <img
+            style="width: 18px; height: 17px; margin-left:12px;"
+            :src="require(`../../../assets/Image/dashboard/${name}.png`)"
+          >
+        </el-tooltip>
+      </div>
+    </div>
+    <div class="divider" />
+    <div class="tools-container">
+      <div class="tool-btn">
+        <icon-dropdown
+          :drop-downs="queryList"
+          :main="'tools-query'"
+          @resolve="resolveDropdown"
+        />
+      </div>
+      <div class="tool-btn">
         <svg-icon
           :icon-class="'tools-tab'"
           style="font-size: 18px;"
         />
-      </div> -->
-      <!-- <div class="tool-btn">
-        <icon-dropdown :drop-downs="richEditorList" :main="'tools-rich'" @resolve="resolveDropdown" />
-      </div> -->
+      </div>
+      <div class="tool-btn">
+        <icon-dropdown
+          :drop-downs="richEditorList"
+          :main="'tools-rich'"
+          @resolve="resolveDropdown"
+        />
+      </div>
     </div>
     <div class="tools-container">
       <div
@@ -60,7 +92,7 @@
           />
         </el-tooltip>
       </div>
-      <div class="tool-btn horizontal">
+      <div class="tool-btn horizontal chart-panel-controller" @click.stop="panelShow">
         <svg-icon
           :icon-class="'tools-more'"
           style="font-size: 22px;"
@@ -88,6 +120,7 @@
       @addItem="addItem"
       @drag="drag"
       @dragend="dragend"
+      @hidePanel="hideChartList"
     />
     <!-- <div
       v-for="(item,name, index) in toolList"
@@ -111,10 +144,10 @@
 const DragPos = { 'x': 1, 'y': 1, 'w': 1, 'h': 1, 'i': null }
 const mouseXY = { 'x': 1, 'y': 1 }
 import store from '@/store'
-import { getToolList, getBriefToolList } from './getToolList'
-import { nanoid } from 'nanoid'
+import { getToolList, getBriefToolList, getControlsList } from './getToolList'
+
 // import IconDropdown from './component/IconDropdown.vue'
-import { deepClone } from '@/utils/optionUtils'
+import { deepClone, createNanoId } from '@/utils/optionUtils'
 import ChartListPanel from './component/ChartListPanel.vue'
 export default {
   name: 'Tools',
@@ -123,6 +156,7 @@ export default {
     ChartListPanel
   },
   data () {
+    // this.controls = [{ name: 'query', text: '查询控件' }, { name: 'TabChart', text: 'Tab控件' }, { name: 'text', text: '文本控件' }]
     return {
       layoutIndex: 100,
       toolList: {},
@@ -134,7 +168,8 @@ export default {
       richEditorList: [
         { svg: 'tools-story-line', command: 'picture' },
         { svg: 'tools-story-line', command: 'iframe' }
-      ]
+      ],
+      controls: {}
     }
   },
   computed: {
@@ -158,6 +193,7 @@ export default {
     // 获取json文件中的配置项信息
     this.toolList = getToolList()
     this.briefTooList = getBriefToolList()
+    this.controls = getControlsList()
     console.log(this.briefTooList)
     store.dispatch('app/updateToolList', this.toolList)
   },
@@ -168,22 +204,40 @@ export default {
       if (submenu) {
         this.panelShow()
       }
-      const id = nanoid()
+      const nanoId = createNanoId()
       // 防止指向问题
       const option = deepClone(item)
-      this.addLayout({
+      const currentLayoutId = store.state.app.currentLayoutId
+      const currentLayout = this.layout.find(item => item.i === currentLayoutId)
+      const newLayout = {
         x: (this.layout.length * 2) % (this.colNum || 12),
         y: this.layout.length + (this.colNum || 12), // puts it at the bottom
         w: 12,
         h: 2,
-        id,
-        i: id,
+        id: nanoId,
+        i: nanoId,
         is: name,
         option
-      })
+      }
+      // 当前选中的是tab或者tab内的组件，则吧新增的放入tab内的画板中
+      if (currentLayout && currentLayout.is === 'TabChart') {
+        newLayout.containerId = currentLayout.activeTabId
+        // 添加tab id链，以用于深层删除
+        newLayout.tabIdChains = (currentLayout.tabIdChains || []).concat([currentLayoutId, currentLayout.activeTabId])
+      } else if (currentLayout && currentLayout.containerId) {
+        newLayout.containerId = currentLayout.containerId
+        newLayout.tabIdChains = [...(currentLayout.tabIdChains || [])]
+      }
+      this.addLayout(newLayout)
       this.layoutIndex++
     },
     addLayout (obj) {
+      // tab组件类型添加一个含有一个tabpane的属性
+      if (obj.is === 'TabChart') {
+        const paneId = `${obj.i}-1`
+        obj.tabPanels = [{ name: '1', title: 'tab1', paneId }]
+        obj.activeTabId = paneId
+      }
       const temp = deepClone(obj)
       // 更新当前id
       store.dispatch('app/updateLayoutId', temp.i)
@@ -202,6 +256,9 @@ export default {
       })
       // ///////////////////////
 
+      // 判断拖拽点是否在tab组件内
+      const mouseInTab = this.testInTabsRect()
+
       // 判断拖拽点是否在画布内
       let mouseInGrid = false
       if (((mouseXY.x > parentRect.left) && (mouseXY.x < parentRect.right)) && ((mouseXY.y > parentRect.top) && (mouseXY.y < parentRect.bottom))) {
@@ -210,17 +267,48 @@ export default {
       // 防止指向问题
       const option = deepClone(item)
 
+      const dropLayout = this.layout.find(item => item.i === 'drop')
       // 生成画布上的虚拟节点
-      if (mouseInGrid === true && (this.layout.findIndex(item => item.i === 'drop')) === -1) {
-        this.layout.push({
-          x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 12) : 0,
-          y: this.layout.length > 0 ? this.layout.length + (this.colNum || 12) : 0, // puts it at the bottom
-          w: 12,
-          h: 2,
-          is: name,
-          option,
-          i: 'drop'
-        })
+      if (mouseInGrid === true && !mouseInTab) {
+        if (!dropLayout || dropLayout.containerId) {
+          if (dropLayout && dropLayout.containerId) {
+            this.layout = this.layout.filter(obj => obj.i !== 'drop')
+          }
+          this.layout.push({
+            x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 12) : 0,
+            y: this.layout.length > 0 ? this.layout.length + (this.colNum || 12) : 0, // puts it at the bottom
+            w: 12,
+            h: 2,
+            is: name,
+            option,
+            i: 'drop'
+          })
+        }
+      }
+
+      // 当在tab组件内则清除画布上的虚拟节点
+      if (mouseInTab) {
+        // this.layout = this.layout.filter(obj => obj.i !== 'drop')
+        const hitLayout = this.layout.find(obj => obj.i === mouseInTab)
+        const newContainerId = hitLayout.activeTabId
+        if (!dropLayout || !dropLayout.containerId || newContainerId !== dropLayout.containerId) {
+          if (dropLayout && (!dropLayout.containerId || newContainerId !== dropLayout.containerId)) {
+            this.layout = this.layout.filter(obj => obj.i !== 'drop')
+          }
+          const newLayout = {
+            x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 12) : 0,
+            y: this.layout.length > 0 ? this.layout.length + (this.colNum || 12) : 0, // puts it at the bottom
+            w: 12,
+            h: 2,
+            is: name,
+            option,
+            i: 'drop'
+          }
+          newLayout.containerId = newContainerId
+          // 添加tab id链，以用于深层删除
+          // newLayout.tabIdChains = (hitLayout.tabIdChains || []).concat([hitLayout.i, hitLayout.activeTabId])
+          this.layout.push(newLayout)
+        }
       }
 
       // 虚拟节点在画布上拖拽
@@ -243,6 +331,8 @@ export default {
     },
     // 拖拽结束后事件
     dragend (e, name, item) {
+      // 判断拖拽点是否在tab组件内
+      const mouseInTab = this.testInTabsRect()
       // 获取画布节点
       let parentGridLayout = null
       this.$emit('getGridLayout', val => {
@@ -262,19 +352,27 @@ export default {
       if (mouseInGrid === true) {
         parentGridLayout.dragEvent('dragend', 'drop', DragPos.x, DragPos.y, 2, 12)
         this.layout = this.layout.filter(obj => obj.i !== 'drop')
-        const i = name + String(DragPos.i) + new Date().getTime()
+        const nanoId = createNanoId()
         // 防止指向问题
         const option = deepClone(item)
-        this.addLayout({
+        const newLayout = {
           x: DragPos.x,
           y: DragPos.y,
           w: 12,
           h: 2,
-          i,
+          i: nanoId,
+          id: nanoId,
           is: name,
           option
-        })
-        parentGridLayout.dragEvent('dragend', i, DragPos.x, DragPos.y, 2, 12)
+        }
+        if (mouseInTab) {
+          const hitLayout = this.layout.find(obj => obj.i === mouseInTab)
+          newLayout.containerId = hitLayout.activeTabId
+          // 添加tab id链，以用于深层删除
+          newLayout.tabIdChains = (hitLayout.tabIdChains || []).concat([hitLayout.i, hitLayout.activeTabId])
+        }
+        this.addLayout(newLayout)
+        parentGridLayout.dragEvent('dragend', nanoId, DragPos.x, DragPos.y, 2, 12)
       }
     },
     resolveDropdown (command) {
@@ -282,6 +380,35 @@ export default {
     },
     panelShow () {
       this.showPanel = !this.showPanel
+    },
+    testInTabsRect () {
+      const tabs = document.getElementsByClassName('tab-chart-wrap')
+      const rects = []
+      if (tabs.length > 0) {
+        Array.from(tabs).forEach(tab => {
+          rects.push(tab.getBoundingClientRect())
+        })
+        // 判断拖拽点是否在tab组件内
+        let mouseInTab = false
+        let hitIndex = 0
+        rects.forEach((rect, index) => {
+          if (((mouseXY.x > rect.left) && (mouseXY.x < rect.right)) && ((mouseXY.y > rect.top) && (mouseXY.y < rect.bottom))) {
+            mouseInTab = true
+            hitIndex = index
+          }
+        })
+        if (mouseInTab) {
+          return tabs[hitIndex].id
+        }
+        return mouseInTab
+      } else {
+        return false
+      }
+    },
+    hideChartList () {
+      if (this.showPanel) {
+        this.showPanel = false
+      }
     }
   }
 }
@@ -292,6 +419,13 @@ export default {
   width: 100%;
   align-items: center;
   cursor: pointer;
+  .divider {
+    width: 1px;
+    height: 20px;
+    background-color: rgba(113, 114, 118, 0.65);
+    margin-left: 14px;
+    margin-right: 4px;
+  }
   .tools-container {
     display: flex;
     align-items: center;
