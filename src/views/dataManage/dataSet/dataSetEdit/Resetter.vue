@@ -231,6 +231,19 @@
             </template>
           </el-table-column>
           <el-table-column
+            label="默认聚合"
+            min-width="180"
+          >
+            <template slot-scope="scope">
+              <div v-if="scope.row._id !== 1 && scope.row._id !== 2 && scope.row.type === 'Measure'">
+                <b-select
+                  v-model="scope.row.attributes[0].aggregator"
+                  :options="aggFunctions"
+                />
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
             label="数值展示格式"
             min-width="180"
           >
@@ -401,6 +414,8 @@ export default {
           }
         ]
       },
+      // sum, count, distinct-count, max, min, avg
+      aggFunctions: [{ label: '求和', value: 'sum' }, { label: '计数', value: 'count' }, { label: '技术(去重)', value: 'distinct-count' }, { label: '最大值', value: 'max' }, { label: '最小值', value: 'min' }, { label: '平均数', value: 'min' }],
       tableHeight: 320
     }
   },
@@ -540,6 +555,7 @@ export default {
     },
     handleChangeDataType (value, item, row) {
       row.attributes[0].format = ''
+      row.attributes[0].aggregator = 'sum'
       const { originValue, parentValue } = item
       if (originValue) {
         row.attributes[0].dataType = originValue
@@ -551,7 +567,7 @@ export default {
         row.attributes[0][parentValue] = value
       }
     },
-    handleBlur(val, item) {
+    handleBlur (val, item) {
       item.attributes[0].displayColumn = val
     }
   }
