@@ -205,6 +205,7 @@
                   v-model="scope.row.displayColumn"
                   :max-length="50"
                   :blur-fun="(newVal, oldVal) => {return handlerBlur(newVal, oldVal, scope.row.index)}"
+                  @blur="(val) => { handleBlur(val, scope.row) }"
                 />
               </span>
             </template>
@@ -227,6 +228,19 @@
                   @change="(value, valueItem) => {handleChangeDataType(value, valueItem, scope.row);}"
                 />
               </span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="默认聚合"
+            min-width="180"
+          >
+            <template slot-scope="scope">
+              <div v-if="scope.row._id !== 1 && scope.row._id !== 2 && scope.row.type === 'Measure'">
+                <b-select
+                  v-model="scope.row.attributes[0].aggregator"
+                  :options="aggFunctions"
+                />
+              </div>
             </template>
           </el-table-column>
           <el-table-column
@@ -400,6 +414,8 @@ export default {
           }
         ]
       },
+      // sum, count, distinct-count, max, min, avg
+      aggFunctions: [{ label: '求和', value: 'sum' }, { label: '计数', value: 'count' }, { label: '技术(去重)', value: 'distinct-count' }, { label: '最大值', value: 'max' }, { label: '最小值', value: 'min' }, { label: '平均数', value: 'min' }],
       tableHeight: 320
     }
   },
@@ -444,7 +460,6 @@ export default {
     async refreshPreview () {
       const body = {
         sql: this.sql,
-        sqlVarData: this.sql.sqlVarData,
         fields: this.fields
       }
       try {
@@ -476,6 +491,10 @@ export default {
       let measureHiddenLength = 0
       fields.forEach((item, index) => {
         item.index = item.type + '_' + index
+        if (!item.displayColumn) {
+          item.displayColumn = item.column
+        }
+        item.attributes[0].displayColumn = item.displayColumn
         if (item.type === 'Dimension') {
           if (item.attributes[0].isHidden) {
             dimensionHiddenLength += 1
@@ -536,6 +555,7 @@ export default {
     },
     handleChangeDataType (value, item, row) {
       row.attributes[0].format = ''
+      row.attributes[0].aggregator = 'sum'
       const { originValue, parentValue } = item
       if (originValue) {
         row.attributes[0].dataType = originValue
@@ -546,6 +566,9 @@ export default {
         row.attributes[0].secondeDataType = parentValue
         row.attributes[0][parentValue] = value
       }
+    },
+    handleBlur (val, item) {
+      item.attributes[0].displayColumn = val
     }
   }
 }

@@ -10,6 +10,6 @@ export const extractTypeFilter = (type) => {
     case 'param':
       return '参数'
     default:
-      return '--'
+      return type
   }
 }
