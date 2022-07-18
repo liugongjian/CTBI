@@ -159,6 +159,13 @@ export default {
           }, {
             label: '百分比'
           }
+        ],
+        'SankeyChart': [
+          {
+            label: '维度字段名+度量值'
+          }, {
+            label: '仅维度字段名'
+          }
         ]
       },
       precisionOptions: [

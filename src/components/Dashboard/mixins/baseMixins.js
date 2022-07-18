@@ -58,6 +58,7 @@ export default {
           'fields': source.value
         }
       }
+      console.log('transformFields', transformFields)
 
       try {
         const body = { limit, selectFields }

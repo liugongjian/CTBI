@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1326px" height="1024px" viewBox="0 0 1326 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>桑基图</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="桑基图" fill-rule="nonzero">
+            <path d="M0,361.227431 C537.742936,361.227431 754.170766,787.834746 1316.96141,804.571426 C1336.9213,632.397271 1313.83045,657.324247 1316.96141,516.486856 C799.178366,516.486856 732.645394,73.1428571 0,73.1428571 C1.56548097,197.955765 2.3482222,200.092364 0,361.227431 Z" id="路径" fill="url(#linearGradient-1)"></path>
+            <path d="M0,657.586741 C541.053771,657.586741 758.81413,162.761579 1325.06982,146.285714 C1325.85738,298.412872 1321.91958,296.21609 1325.06982,439.55612 C804.098837,439.55612 737.156229,950.857144 0,950.857144 C1.57511949,823.992979 2.36268,822.528461 0,657.586741 L0,657.586741 Z" id="路径" fill="url(#linearGradient-2)"></path>
+            <path d="M0,514.069845 C532.19372,505.092202 593.623406,975.720231 1325.06982,1024 C1325.85738,852.42726 1321.91958,1110.58439 1325.06982,948.787296 C633.001412,884.347768 575.706413,438.857143 0,438.857143 C1.57511949,582.698944 2.36268,328.531878 0,514.069845 Z" id="路径" fill="#C7C6CA"></path>
+            <path d="M-1.77635684e-15,950.857144 L57.812871,950.857144 L57.812871,0 L-1.77635684e-15,0 L-1.77635684e-15,950.857144 Z M1267.3636,950.857144 L1325.17647,950.857144 L1325.17647,0 L1267.3636,0 L1267.3636,950.857144 Z" id="形状" fill="url(#linearGradient-3)"></path>
+        </g>
+    </g>
+</svg>
