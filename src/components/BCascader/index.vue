@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div @click="showClick"><slot /></div>
+    <div id="bi-cascader" @click="showClick"><slot /></div>
   </div>
 </template>
 
@@ -11,7 +11,6 @@ import Vue from 'vue'
 
 export default {
   name: 'BCascader',
-  // 定义实现v-modal的属性与事件
   props: {
     options: {
       type: Array,
@@ -20,6 +19,10 @@ export default {
     value: {
       type: String,
       default: ''
+    },
+    onChoose: {
+      type: Function,
+      default: () => {}
     }
   },
   data () {
@@ -34,9 +37,12 @@ export default {
     showClick (e) {
       this.show = !this.show
       console.log(e)
-      setTimeout(() => { this.insert() }, 100)
+      const tabs = document.getElementById('bi-cascader')
+      const position = tabs.getBoundingClientRect()
+      console.log(position)
+      setTimeout(() => { this.insert(position) }, 100)
     },
-    insert() {
+    insert(position) {
       if (this.menuCom) {
         this.menuCom.hidden('12324356')
         return
@@ -45,7 +51,7 @@ export default {
       const instance = this.menuCom = new MenuConstructor({ propsData: { show: this.show } }).$mount()
       console.log(instance)
       document.body.appendChild(instance.$el)
-      this.menuCom.showElement('12324')
+      this.menuCom.showElement({ position, options: this.options })
       this.menuCom.registerParent(this)
       // instance.$mount('#container')
     },
@@ -53,6 +59,11 @@ export default {
       this.menuCom.$el.remove()
       this.menuCom.$destroy()
       this.menuCom = null
+    },
+    hadChoose(data) {
+      this.$emit('onChoose', data)
+      this.destroyMenu()
+      console.log(data)
     }
   }
 }
