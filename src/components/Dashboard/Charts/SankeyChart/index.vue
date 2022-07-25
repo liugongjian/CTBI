@@ -11,14 +11,14 @@
 </template>
 
 <script>
-// import { deepClone, getDataValueById, getLayoutOptionById } from '@/utils/optionUtils'
-import { deepClone, getLayoutOptionById } from '@/utils/optionUtils'
-// import baseMixins from '@/components/Dashboard/mixins/baseMixins'
-// import store from '@/store'
+import { deepClone, getDataValueById, getLayoutOptionById } from '@/utils/optionUtils'
+// import { deepClone, getLayoutOptionById } from '@/utils/optionUtils'
+import baseMixins from '@/components/Dashboard/mixins/baseMixins'
+import store from '@/store'
 
 export default {
   name: 'SankeyChart',
-  //   mixins: [baseMixins],
+  mixins: [baseMixins],
   props: {
     identify: {
       type: String,
@@ -34,167 +34,168 @@ export default {
       chartData: {}
     }
   },
-  //   watch: {
-  //     storeOption: {
-  //       handler (val) {
-  //         if (this.dataValue) {
-  //           this.dataValue = this.formatDataValue(deepClone(getDataValueById(this.identify)))
-  //         }
-  //         this.getOption()
-  //       },
-  //       deep: true
-  //     },
-  //     dataOption: {
-  //       handler (val) {
-  //         const isData = val.findIndex(item => {
-  //           return item.i === this.identify
-  //         })
-  //         if (isData !== -1) {
-  //           this.dataValue = this.formatDataValue(deepClone(getDataValueById(this.identify)))
-  //           this.getOption()
-  //         }
-  //       },
-  //       deep: true
-  //     }
-  //   },
+  watch: {
+    storeOption: {
+      handler (val) {
+        if (this.dataValue) {
+          this.dataValue = this.formatDataValue(deepClone(getDataValueById(this.identify)))
+        }
+        this.getOption()
+      },
+      deep: true
+    },
+    dataOption: {
+      handler (val) {
+        const isData = val.findIndex(item => {
+          return item.i === this.identify
+        })
+        if (isData !== -1) {
+          this.dataValue = this.formatDataValue(deepClone(getDataValueById(this.identify)))
+          this.getOption()
+        }
+      },
+      deep: true
+    }
+  },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
-    // this.dataOption = store.state.app.dataOption
-    this.reloadImpl1()
+    this.dataOption = store.state.app.dataOption
+    // this.reloadImpl1()
   },
   methods: {
-    reloadImpl1 () {
-      this.chartData = {
-        data: [
-          {
-            'name': '胡一苗',
-            'remark': '这是胡一苗remark',
-            'rule': '这是胡一苗rule',
-            'id_count': '1.00'
-          },
-          {
-            'name': '胡二苗',
-            'remark': '这是胡二苗remark',
-            'rule': '这是胡二苗rule',
-            'id_count': '2.00'
-          },
-          {
-            'name': '胡三苗',
-            'remark': '这是胡三苗remark',
-            'rule': '这是胡三苗rule',
-            'id_count': '3.00'
-          },
-          {
-            'name': '胡四苗',
-            'remark': '这是胡四苗remark',
-            'rule': '这是胡四苗rule',
-            'id_count': '4.00'
-          },
-          {
-            'name': '胡五苗',
-            'remark': '这是胡五苗remark',
-            'rule': '这是胡五苗rule',
-            'id_count': '5.00'
-          },
-          {
-            'name': '胡六苗',
-            'remark': '这是胡六苗remark',
-            'rule': '这是胡六苗rule',
-            'id_count': '6.00'
-          }
-        ],
-        columns: [
-          {
-            'name': 'name'
-          },
-          {
-            'name': 'remark'
-          },
-          {
-            'name': 'rule'
-          },
-          {
-            'name': 'id_count'
-          }
-        ],
-        fields: {
-          'Dimension': {
-            'name': '类别轴/维度',
-            'fields': [
-              {
-                'type': 'Dimension',
-                'column': 'name',
-                'attributes': [
-                  {
-                    'isHidden': false,
-                    'displayColumn': 'name',
-                    'comment': 'name',
-                    'dataType': 'text',
-                    '_id': '1r7dCsNpjrFys'
-                  }
-                ],
-                'displayColumn': 'name',
-                '_id': 'NKImPkOubUoXe',
-                'dataSetID': 'KZLeXW6yJs72e'
-              },
-              {
-                'type': 'Dimension',
-                'column': 'remark',
-                'attributes': [
-                  {
-                    'isHidden': false,
-                    'displayColumn': 'remark',
-                    'comment': 'remark',
-                    'dataType': 'text',
-                    '_id': '1r7dCsNpjrFys'
-                  }
-                ],
-                'displayColumn': 'remark',
-                '_id': 'NKImPkOubUoXe',
-                'dataSetID': 'KZLeXW6yJs72e'
-              },
-              {
-                'type': 'Dimension',
-                'column': 'rule',
-                'attributes': [
-                  {
-                    'isHidden': false,
-                    'displayColumn': 'rule',
-                    'comment': 'rule',
-                    'dataType': 'text',
-                    '_id': '1r7dCsNpjrFys'
-                  }
-                ],
-                'displayColumn': 'rule',
-                '_id': 'NKImPkOubUoXe',
-                'dataSetID': 'KZLeXW6yJs72e'
-              }
-            ]
-          },
-          'Measure': {
-            'name': '值轴/度量',
-            'fields': [
-              {
-                'type': 'Measure',
-                'column': 'id_count',
-                'attributes': [
-                  {
-                    'isHidden': false,
-                    'displayColumn': 'id_count',
-                    'comment': 'id_count',
-                    'dataType': 'number',
-                    '_id': 'EDLBMblf43lcB'
-                  }
-                ],
-                'displayColumn': 'id_count',
-                '_id': 'VdNUjAgSNl65A',
-                'dataSetID': 'KZLeXW6yJs72e'
-              }
-            ]
-          }
-        }
+    reloadImpl () {
+      console.log('dakdakdka', this.chartData)
+      // this.chartData = {
+      //   data: [
+      //     {
+      //       'name': '胡一苗',
+      //       'remark': '这是胡一苗remark',
+      //       'rule': '这是胡一苗rule',
+      //       'id_count': '1.00'
+      //     },
+      //     {
+      //       'name': '胡二苗',
+      //       'remark': '这是胡二苗remark',
+      //       'rule': '这是胡二苗rule',
+      //       'id_count': '2.00'
+      //     },
+      //     {
+      //       'name': '胡三苗',
+      //       'remark': '这是胡三苗remark',
+      //       'rule': '这是胡三苗rule',
+      //       'id_count': '3.00'
+      //     },
+      //     {
+      //       'name': '胡四苗',
+      //       'remark': '这是胡四苗remark',
+      //       'rule': '这是胡四苗rule',
+      //       'id_count': '4.00'
+      //     },
+      //     {
+      //       'name': '胡五苗',
+      //       'remark': '这是胡五苗remark',
+      //       'rule': '这是胡五苗rule',
+      //       'id_count': '5.00'
+      //     },
+      //     {
+      //       'name': '胡六苗',
+      //       'remark': '这是胡六苗remark',
+      //       'rule': '这是胡六苗rule',
+      //       'id_count': '6.00'
+      //     }
+      //   ],
+      //   columns: [
+      //     {
+      //       'name': 'name'
+      //     },
+      //     {
+      //       'name': 'remark'
+      //     },
+      //     {
+      //       'name': 'rule'
+      //     },
+      //     {
+      //       'name': 'id_count'
+      //     }
+      //   ],
+      //   fields: {
+      //     'Dimension': {
+      //       'name': '类别轴/维度',
+      //       'fields': [
+      //         {
+      //           'type': 'Dimension',
+      //           'column': 'name',
+      //           'attributes': [
+      //             {
+      //               'isHidden': false,
+      //               'displayColumn': 'name',
+      //               'comment': 'name',
+      //               'dataType': 'text',
+      //               '_id': '1r7dCsNpjrFys'
+      //             }
+      //           ],
+      //           'displayColumn': 'name',
+      //           '_id': 'NKImPkOubUoXe',
+      //           'dataSetID': 'KZLeXW6yJs72e'
+      //         },
+      //         {
+      //           'type': 'Dimension',
+      //           'column': 'remark',
+      //           'attributes': [
+      //             {
+      //               'isHidden': false,
+      //               'displayColumn': 'remark',
+      //               'comment': 'remark',
+      //               'dataType': 'text',
+      //               '_id': '1r7dCsNpjrFys'
+      //             }
+      //           ],
+      //           'displayColumn': 'remark',
+      //           '_id': 'NKImPkOubUoXe',
+      //           'dataSetID': 'KZLeXW6yJs72e'
+      //         },
+      //         {
+      //           'type': 'Dimension',
+      //           'column': 'rule',
+      //           'attributes': [
+      //             {
+      //               'isHidden': false,
+      //               'displayColumn': 'rule',
+      //               'comment': 'rule',
+      //               'dataType': 'text',
+      //               '_id': '1r7dCsNpjrFys'
+      //             }
+      //           ],
+      //           'displayColumn': 'rule',
+      //           '_id': 'NKImPkOubUoXe',
+      //           'dataSetID': 'KZLeXW6yJs72e'
+      //         }
+      //       ]
+      //     },
+      //     'Measure': {
+      //       'name': '值轴/度量',
+      //       'fields': [
+      //         {
+      //           'type': 'Measure',
+      //           'column': 'id_count',
+      //           'attributes': [
+      //             {
+      //               'isHidden': false,
+      //               'displayColumn': 'id_count',
+      //               'comment': 'id_count',
+      //               'dataType': 'number',
+      //               '_id': 'EDLBMblf43lcB'
+      //             }
+      //           ],
+      //           'displayColumn': 'id_count',
+      //           '_id': 'VdNUjAgSNl65A',
+      //           'dataSetID': 'KZLeXW6yJs72e'
+      //         }
+      //       ]
+      //     }
+      //   }
 
-      }
+      // }
       this.dataValue = this.formatDataValue(deepClone(this.chartData))
       this.getOption()
     },
@@ -266,8 +267,8 @@ export default {
           emphasis: {
             focus: 'adjacency'
           },
-          data: this.dataValue.tempData,
-          links: this.dataValue.tempLinks,
+          data: this.dataValue && this.dataValue.tempData,
+          links: this.dataValue && this.dataValue.tempLinks,
           lineStyle: {
             color: color === 2 ? 'source' : '',
             opacity,
