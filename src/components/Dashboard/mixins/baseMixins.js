@@ -84,8 +84,7 @@ export default {
         const res = await getDataSetData(dataSetId, body)
         this.chartData = {
           fields: transformFields,
-          // data: res.result.data
-          data: res.data
+          data: res.result.data
         }
 
         const storeDataOption = store.state.app.dataOption.find(item => {
