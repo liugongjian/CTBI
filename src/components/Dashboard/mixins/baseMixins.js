@@ -33,7 +33,6 @@ export default {
      * @param {Boolean} isReload 是否重新发送请求获取
      */
     async interReload (ids, limit, isReload) {
-      console.log(this.identify + limit)
       if (ids && ids.indexOf(this.identify) > -1) {
         await this.getData(limit, isReload)
         this.reloadImpl()
@@ -48,24 +47,45 @@ export default {
       }
       const option = getLayoutOptionById(this.identify)
       const { dataSource } = option
-      let selectFields = []
+      // 维表字段
+      const dimension = { selections: [] }
+      // 度量字段字段
+      const measure = { selections: [] }
+      // 字段统计，用于做回显
       const transformFields = {}
       for (const key in dataSource) {
         const source = dataSource[key]
-        selectFields = selectFields.concat(source.value)
+        // TODO：需要定义组件配置type类型来替换用名称做判断
+        if (key.toLocaleLowerCase().indexOf('dimension') > -1) {
+          dimension.selections = dimension.selections.concat(source.value.map(so => { return { ...so, fieldId: so._id, attributeId: so.attributes[0]._id } }))
+        }
+        if (key.toLocaleLowerCase().indexOf('measure') > -1) {
+          measure.selections = measure.selections.concat(source.value.map(so => { return { ...so, fieldId: so._id, attributeId: so.attributes[0]._id } }))
+        }
         transformFields[key] = {
           'name': source.name,
           'fields': source.value
         }
       }
-      console.log('transformFields', transformFields)
+      // 过滤
+      const filter = { selections: [] }
+      // 排序
+      const order = []
+      // 查询数据的偏移量默认0
+      const offset = 0
+      // sql-参数配置中的
+      const placeholder = { configs: [] }
+      // sql-参数配置中的
+      const param = { configs: [] }
 
       try {
-        const body = { limit, selectFields }
+        const body = { query: { limit, dimension, measure, filter, order, offset, placeholder, param } }
         const dataSetId = option.dataSet.id
         const res = await getDataSetData(dataSetId, body)
-        res.fields = transformFields
-        this.chartData = res
+        this.chartData = {
+          fields: transformFields,
+          data: res.result.data
+        }
 
         const storeDataOption = store.state.app.dataOption.find(item => {
           return item.id === this.identify
