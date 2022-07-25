@@ -93,7 +93,6 @@ export default {
         legend: {
           ...ComponentOption.Legend,
           formatter: function (name) {
-            console.log('da22222', name)
             if (SeriesSetting) {
               let nameTemp = ''
               SeriesSetting.SeriesSelect.seriesOption.forEach(item => {

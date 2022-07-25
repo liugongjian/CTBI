@@ -40,7 +40,8 @@ export default {
         if (this.dataValue) {
           this.dataValue = this.formatDataValue(deepClone(getDataValueById(this.identify)))
         }
-        this.getOption()
+        // this.getOption()
+        setTimeout(this.getOption(), 500)
       },
       deep: true
     },
@@ -51,7 +52,8 @@ export default {
         })
         if (isData !== -1) {
           this.dataValue = this.formatDataValue(deepClone(getDataValueById(this.identify)))
-          this.getOption()
+          // this.getOption()
+          setTimeout(this.getOption(), 500)
         }
       },
       deep: true
@@ -197,7 +199,8 @@ export default {
 
       // }
       this.dataValue = this.formatDataValue(deepClone(this.chartData))
-      this.getOption()
+      setTimeout(this.getOption(), 500)
+      // this.getOption()
     },
     formatDataValue(chartData) {
       const dataValue = []
