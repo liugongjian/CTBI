@@ -1,4 +1,11 @@
 /*
+ * @Author: 黄璐璐
+ * @Date: 2022-07-25 15:36:37
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-07-28 16:50:42
+ * @Description:
+ */
+/*
 * 桑基图
 * */
 export default {
@@ -51,6 +58,7 @@ export default {
     'Dimension': {
       'name': '节点类别/维度',
       'require': false,
+      'tooltip': '可添加2到20个维度',
       'limit': 20,
       'value': []
     },

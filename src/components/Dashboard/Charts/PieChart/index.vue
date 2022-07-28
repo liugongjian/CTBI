@@ -165,8 +165,7 @@ export default {
               hideOverlap: labelShow === 1
             },
             encode: {
-              itemName: 'product',
-              // value: that.dataValue[0][2]
+              itemName: 0,
               value: indicatorIdx // 除维度以外的第2列
             }
           }

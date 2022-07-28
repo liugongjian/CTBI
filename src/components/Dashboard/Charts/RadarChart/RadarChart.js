@@ -1,3 +1,10 @@
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-06-08 10:55:37
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-07-28 16:45:02
+ * @Description:
+ */
 // 折线图配置项信息
 /**
  * type: {
@@ -75,11 +82,13 @@ export default {
     'Dimension': { // 维度
       'name': '分支标签/维度',
       'require': true,
+      'limit': 1,
       'value': []
     },
     'Measure': { // 度量
       'name': '分支长度/度量',
       'require': true,
+      'limit': 10,
       'value': []
     }
   }, // 数据集

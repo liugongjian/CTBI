@@ -90,12 +90,10 @@ export default {
   'advance': {}, // 高级
   // 'dataSource': {}// 数据集
   'dataSource': {
-    // 'Dimension': { // 维度
-    //   'name': '类别轴/维度',
-    //   'value': []
-    // },
     'Measure': { // 度量
       'name': '进度指示/度量',
+      'require': true,
+      'limit': 5,
       'value': []
     }
   }, // 数据集

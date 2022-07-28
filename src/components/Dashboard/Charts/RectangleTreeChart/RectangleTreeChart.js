@@ -1,3 +1,10 @@
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-07-05 09:22:46
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-07-28 16:45:19
+ * @Description:
+ */
 // 玫瑰图配置项信息
 /**
  * type: {
@@ -69,11 +76,13 @@ export default {
     'Dimension': { // 维度
       'name': '色块标签/维度',
       'require': true,
+      'limit': 1,
       'value': []
     },
     'Measure': { // 度量
       'name': '色块大小/度量',
       'require': true,
+      'limit': 1,
       'value': []
     }
   }, // 数据集

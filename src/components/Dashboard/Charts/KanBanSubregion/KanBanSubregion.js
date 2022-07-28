@@ -102,12 +102,14 @@ export default {
   'dataSource': {
     'Dimension': { // 维度
       'name': '看板标签/维度',
-      'require': true,
+      'require': false,
+      'limit': 1,
       'value': []
     },
     'Measure': { // 度量
       'name': '看板指标/度量',
       'require': true,
+      'limit': 20,
       'value': []
     }
   }, // 数据集

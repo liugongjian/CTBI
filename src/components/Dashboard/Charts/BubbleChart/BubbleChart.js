@@ -88,10 +88,14 @@ export default {
   'dataSource': {
     'Dimension': { // 维度
       'name': 'X轴/维度或度量',
+      'require': true,
+      'limit': 1,
       'value': []
     },
     'Measure': { // 度量
       'name': 'Y轴/度量',
+      'require': true,
+      'limit': 1,
       'value': []
     }
   }, // 数据集
