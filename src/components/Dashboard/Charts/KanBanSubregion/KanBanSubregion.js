@@ -15,32 +15,27 @@
  * */
 import { colorTheme } from '@/constants/color.js'
 export default {
-  type: 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
-  isShow: true, // 是否展示该组件, 用于控制该组件是否在tools中显示
-  order: 1,
-  version: '', // 版本号
-  field: {}, // 字段
-  theme: {
+  'type': 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
+  'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
+  'order': 1,
+  'version': '', // 版本号
+  'field': {}, // 字段
+  'theme': {
     // 样式组件、配置合集
-    Basic: {
+    'Basic': {
       // 基础属性
-      Title: {
+      'Title': {
         // 标题组件
-        text: '指标看板', // 标题名称
-        color: '#333', // 标题颜色
-        show: true, // 是否显示标题
-        testShow: false // 测试显示
+        'text': '指标看板', // 标题名称
+        'color': '#333', // 标题颜色
+        'show': true, // 是否显示标题
+        'testShow': false // 测试显示
       },
-      Mark: {
+      'Mark': {
         // 备注
-        show: false, // 是否显示备注
-        position: 'onChart', // 备注出现位置
-        text: '' // 备注信息
-      },
-      Footer: {
-        // 尾注
-        show: false, // 是否显示尾注
-        text: '' // 尾注信息
+        'show': false, // 是否显示备注
+        'position': 'onChart', // 备注出现位置
+        'text': '' // 备注信息
       },
       'TitleLink': { // 链接跳转组件
         'text': '', // 文案
@@ -56,49 +51,72 @@ export default {
         'imgSize': 'containRight' // 背景图片尺寸位置
       }
     },
-    ComponentOption: {
-      // 图表样式
-      Legend: {
-        // 图例
-        show: true,
-        top: 'auto',
-        left: 'center',
-        orient: 'horizontal',
-        type: 'scroll'
-      }
-    },
-    StyleConfig: {
-      IndexQuickly: { // 指标快样式配置
-        relation: 'parataxis', // parataxis deputy
-        moreRelation: 'lineBreak', // line lineBreak
-        lineNum: 2,
-        dimension: true,
-        indicators: true,
-        fontStyle: {
-          show: true,
-          data: [
-            { name: '维度名称', color: '#393f4d', fontSize: 16, show: true },
-            { name: '主指标名称', color: '#393f4d', fontSize: 16, show: false },
-            { name: '主指标数值', color: '#393f4d', fontSize: 16, show: false }
+    'StyleConfig': {
+      // 'IndicatorDisplay': { // 指标展示形式
+      //   'moreRelation': 'lineBreak', // line 左右滑动 lineBreak 换行平铺
+      //   'lineNum': 4, // 每行最多个数
+      //   'dimensionShow': true, // 是否展示 显示维度名称 选项
+      //   'dimension': true, // 默认选中
+      //   'indicatorsShow': true, // 是否展示 显示主指标名称 选项
+      //   'indicators': true // 默认选中
+      // },
+      // 'FontStyle': { // 字体样式
+      //   'show': true, // 是否显示字体样式组件
+      //   'checked': true, // 默认选中
+      //   'label': '设置字体样式', // 复选框的label
+      //   'data': [
+      //     { 'name': '维度', 'color': '#393f4d', 'fontSize': 16 }
+      //   ],
+      //   'mainIndicatorShow': true, // 主指标的字体设置
+      //   'target': { 'valColor': '#393f4d', 'nameColor': '#393f4d', 'valfontSize': 16, 'namefontSize': 16 }
+      // },
+      // 'IndicatorPosition': { // 指标块内位置
+      //   'title': '主/副指标组合指标块内位置',
+      //   'position': 'center', // center left 位置
+      //   'align': 'center' // center left 对齐方式
+      // },
+      // 'IndicatorPic': { // 主指标修饰图
+      //   'check': false,
+      //   'Color': { // 颜色设置
+      //     'title': '配色设置',
+      //     'color': colorTheme['官方'],
+      //     'theme': '官方'
+      //   },
+      //   'pic': true, // 是否有图片的设置
+      //   'type': 'static', // img static
+      //   'setSvg': []
+      // }
+      'IndexQuickly': { // 指标块内位置
+        'relation': 'parataxis', // parataxis 并列 deputy 主副
+        'moreRelation': 'lineBreak', // line lineBreak
+        'lineNum': 2,
+        'dimension': true, // 默认选中
+        'indicators': true, // 默认选中
+        'fontStyle': {
+          'show': true,
+          'data': [
+            { 'name': '维度名称', 'color': '#393f4d', 'fontSize': 16, 'show': true },
+            { 'name': '主指标名称', 'color': '#393f4d', 'fontSize': 16, 'show': false },
+            { 'name': '主指标数值', 'color': '#393f4d', 'fontSize': 16, 'show': false }
           ],
-          target: { valColor: '#393f4d', nameColor: '#393f4d', fontSize: 16 }
+          'target': { 'valColor': '#393f4d', 'nameColor': '#393f4d', 'fontSize': 16 }
         },
-        position: 'center', // center left 位置
-        align: 'center', // center left 对齐方式
-        modified: true,
-        color: colorTheme['defaultColor'],
-        type: 'static', // img static
-        setSvg: []
+        'position': 'center', // center left 位置
+        'align': 'center', // center left 对齐方式
+        'modified': true,
+        'color': colorTheme['defaultColor'],
+        'type': 'static', // img static
+        'setSvg': []
       }
     },
-    SeriesSetting: {
-      kanBanSeries: {
-        dataSeries: [],
-        series: '' // 所选系列
+    'SeriesSetting': {
+      'IndicatorSeries': { // 指标里面的系列选择组件
+        'dataSeries': [],
+        'series': '' // 所选系列
       }
     }
   },
-  advance: {}, // 高级
+  'advance': {}, // 高级
   'dataSource': {
     'Dimension': { // 维度
       'name': '看板标签/维度',

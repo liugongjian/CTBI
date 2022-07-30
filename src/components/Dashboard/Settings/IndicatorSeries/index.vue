@@ -1,8 +1,15 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-05-06 22:42:01
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-07-29 11:16:02
+ * @Description:
+-->
 <template>
   <div class="editor-object-container">
-    <div class="editor-item-container">
-      请选择系列
-      <el-select v-model="option.series" placeholder="请选择">
+    <div>
+      <div class="editor-item-title">请选择系列</div>
+      <el-select v-model="option.series" placeholder="请选择" class="m-t-12">
         <el-option
           v-for="(item,index) in option.dataSeries"
           :key="index"
@@ -11,8 +18,8 @@
         />
       </el-select>
     </div>
-    <div class="editor-item-container">
-      指标数据值前后缀
+    <div class="m-t-12">
+      <div class="editor-item-title">指标数据值前后缀</div>
       <div class="box">
         前缀
         <el-input v-model="prefix" placeholder="请输入内容" />
@@ -27,7 +34,7 @@
 
 <script>
 export default {
-  name: 'KanBanSeries',
+  name: 'IndicatorSeries',
   props: {
     option: {
       type: Object,
@@ -59,13 +66,17 @@ export default {
 
 <style lang="scss" scoped>
 .box {
+  margin-top: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 5px;
+  margin-left: 24px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
   .el-input {
     flex: 1;
-    margin-left: 5px;
+    margin-left: 8px;
   }
 }
 </style>

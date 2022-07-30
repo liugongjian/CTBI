@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-06-08 10:55:37
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-07-29 16:58:52
+ * @Description:
+-->
 <template>
   <div style="width: 100%; height: 100%">
     <div v-if="dataValue.length>0" class="kbs-wrap">
@@ -30,31 +37,6 @@ export default {
       chartOption: {},
       dataOption: [],
       dataValue: [
-        // {
-        //   'name': '东北',
-        //   data: [
-        //     { title: '单价', value: '4.45万' },
-        //     { title: '利润金额', value: '4.45万' }
-        //   ]
-        // }, {
-        //   'name': '华东',
-        //   data: [
-        //     { title: '单价', value: '4.45万' },
-        //     { title: '利润金额', value: '4.45万' }
-        //   ]
-        // }, {
-        //   'name': '华北',
-        //   data: [
-        //     { title: '单价', value: '4.45万' },
-        //     { title: '利润金额', value: '4.45万' }
-        //   ]
-        // }, {
-        //   'name': '华南',
-        //   data: [
-        //     { title: '单价', value: '4.45万' },
-        //     { title: '利润金额', value: '4.45万' }
-        //   ]
-        // }
       ]
     }
   },
@@ -63,7 +45,7 @@ export default {
       return this.storeOption.theme?.StyleConfig?.IndexQuickly || {}
     },
     getKanBanSeries() {
-      return this.storeOption.theme?.SeriesSetting?.kanBanSeries || {}
+      return this.storeOption.theme?.SeriesSetting?.IndicatorSeries || {}
     }
   },
   watch: {

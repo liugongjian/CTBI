@@ -83,7 +83,7 @@ export default {
       }
     },
     'StyleConfig': { // 样式配置
-      'trendStyleConfig': {
+      'TrendStyleConfig': {
         'line': 4,
         'style': false,
         'fontSizeStyle': [

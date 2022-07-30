@@ -75,7 +75,7 @@ export default {
       val[0].data.forEach(item => {
         data.push({ title: item.title, prefix: '', suffix: '' })
       })
-      this.storeOption.theme.SeriesSetting.kanBanSeries.dataSeries = data
+      this.storeOption.theme.SeriesSetting.IndicatorSeries.dataSeries = data
     }
 
   }

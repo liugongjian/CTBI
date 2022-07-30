@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-06-08 10:54:25
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-07-29 18:30:45
+ * @Description:
+-->
 <template>
   <div
     v-if="typeof option.show === 'undefined' ? true : option.show"
@@ -46,7 +53,7 @@ export default {
     getColor () {
       store.state.app.layout.forEach(item => {
         if (item.id === store.state.app.currentLayoutId) {
-          const option = item.option.theme.ComponentOption || item.option.theme.DisplayConfig
+          const option = item.option.theme.ComponentOption || item.option.theme.DisplayConfig || item.option.theme.StyleConfig.IndicatorPic
           this.color = option.Color.color
         }
       })
