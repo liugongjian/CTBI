@@ -1,4 +1,4 @@
-// 折线图的混入
+// 混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
 import { getLayoutOptionById, getDataValueById, deepClone, formatDataValue } from '@/utils/optionUtils'
@@ -85,7 +85,7 @@ export default {
         }
       })
       this.storeOption.theme.ComponentOption.Color.color = color
-      this.storeOption.theme.TrendChartConfig.TrendChartConfig.titleList = titleList
+      this.storeOption.theme.trendChartConfig.trendChartConfig.titleList = titleList
       this.selectedItem = ''
       // const len = val[0].length
       // var titleList = []

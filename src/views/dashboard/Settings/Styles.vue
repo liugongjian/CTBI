@@ -19,17 +19,17 @@
       </el-collapse-item>
       <!-- 指标趋势图 -->
       <el-collapse-item
-        v-if="option['TrendChartConfig']"
+        v-if="option['trendChartConfig']"
         title="趋势图配置"
         name="8"
       >
         <div
-          v-for="(item,name,key) in option['TrendChartConfig']"
+          v-for="(item,name,key) in option['trendChartConfig']"
           :key="key"
         >
           <component
             :is="name"
-            :option="option['TrendChartConfig'][name]"
+            :option="option['trendChartConfig'][name]"
           />
         </div>
       </el-collapse-item>

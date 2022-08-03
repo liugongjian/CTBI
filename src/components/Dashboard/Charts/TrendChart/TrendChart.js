@@ -23,10 +23,10 @@ export default {
   'field': {}, // 字段
   'theme': { // 样式组件、配置合集
     // 趋势图配置
-    'TrendChartConfig': {
-      'TrendChartConfig': {
+    'trendChartConfig': {
+      'trendChartConfig': {
         'open': true, // 开启日期趋势展示
-        'type': 'disperse', // disperse // integration
+        'type': 'disperse', // disperse // integration 展示方式，趋势图/小趋势图
         'chart': 'line', // 类型切换
         'dateRange': '', // 日期区间设定
         'color': [
@@ -36,7 +36,7 @@ export default {
           }
         ],
         'preview': 'radio', // 指标预览交互方式 radio multi
-        'indicators': 'line', // 多指标展示形式
+        'indicators': 'line', // 多指标展示形式 line linefeed
         'twoY': {
           'show': 'left'
         },

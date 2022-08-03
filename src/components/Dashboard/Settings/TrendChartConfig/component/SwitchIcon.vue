@@ -41,9 +41,9 @@ export default {
   },
   methods: {
     changeHandler(val) {
-      console.log(val)
       if (!this.disabled) {
         this.$emit('update:type', val)
+        this.$emit('checekType', val)
       }
     }
   }

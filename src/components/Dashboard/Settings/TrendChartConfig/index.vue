@@ -1,8 +1,8 @@
 <template>
   <div class="editor-object-container">
-    <el-checkbox v-model="option.open">开启日期趋势展示{{ option.type }}</el-checkbox>
+    <el-checkbox v-model="option.open">开启日期趋势展示</el-checkbox>
     <div class="editor-item-container">
-      <SwitchIcon :icon-options="typeOption" :type.sync="option.type" :disabled="!option.open" />
+      <SwitchIcon :icon-options="typeOption" :type.sync="option.type" :disabled="!option.open" @checekType="checekType" />
     </div>
     <template v-if="option.open">
       <div class="editor-item-container">
@@ -26,7 +26,7 @@
         <el-input-number v-model="option.dateRange" class="number number-box pl10" controls-position="right" :min="1" :max="9999" />
         天
       </div> -->
-      <div v-if="option.type == 'radio'" class="editor-item-container pl0">
+      <div v-if="option.type == 'disperse'" class="editor-item-container pl0">
         <span class="inline">指标预览交互方式 </span>
         <el-radio-group v-model="option.preview" class="pl5">
           <el-radio label="radio">单选</el-radio>
@@ -51,13 +51,14 @@
         <el-checkbox v-model="option.showChart">显示图标标签</el-checkbox>
         <br>
       </div>
-      <div class="editor-item-container pl0">
+      <!-- <div class="editor-item-container pl0">
         <span>数据标签展示方式</span>
-        <el-radio-group v-model="option.dataLabel">
-          <el-radio label="capacity">智能显示</el-radio>
-          <el-radio label="full">全量显示</el-radio>
+        <el-radio-group v-model="option.labelShow">
+          <el-radio label="0">智能显示</el-radio>
+          <el-radio label="1">全量显示</el-radio>
         </el-radio-group>
-      </div></template>
+      </div> -->
+    </template>
 
   </div>
 </template>
@@ -100,6 +101,12 @@ export default {
     console.log('option', this.option)
   },
   methods: {
+    // 检查多选状态
+    checekType(val) {
+      if (val === 'integration') {
+        this.option.preview = 'radio'
+      }
+    },
     // 设置颜色
     getColor(val) {
       console.log(val)
