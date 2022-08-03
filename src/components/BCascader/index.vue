@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <div id="bi-cascader" @click="showClick"><slot /></div>
-  </div>
+  <span id="bi-cascader" class="bi-cas" @click="showClick"><slot /></span>
 </template>
 
 <script>
@@ -69,6 +67,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.bi-cas{
+  display: inline-block;
+  background: blue;
+}
 
 .menu-show-enter-active {
   transition: all .5s ease;
