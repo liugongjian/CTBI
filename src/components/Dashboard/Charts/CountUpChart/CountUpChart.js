@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-07-29 10:27:13
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-07-29 18:28:40
+ * @LastEditTime: 2022-08-01 16:27:38
  * @Description:
  */
 import { colorTheme } from '@/constants/color.js'
@@ -57,7 +57,7 @@ export default {
       'IndicatorPosition': { // 指标块内位置
         'title': '指标块内位置',
         'position': 'center', // center left 位置
-        'align': 'center' // center left 对齐方式
+        'align': 'left' // center left 对齐方式
       },
       'IndicatorPic': { // 主指标修饰图
         'check': false,

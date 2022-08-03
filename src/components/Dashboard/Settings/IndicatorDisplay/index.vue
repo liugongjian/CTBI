@@ -2,17 +2,28 @@
  * @Author: 黄璐璐
  * @Date: 2022-07-29 14:14:40
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-07-29 17:48:47
+ * @LastEditTime: 2022-08-02 16:39:15
  * @Description:
 -->
 <template>
   <div class="editor-object-container">
-    <div class="editor-item-title">多指标展示形式</div>
-    <div class="editor-item-container">
-      <el-radio-group v-model="option.moreRelation">
-        <el-radio label="line">左右滑动</el-radio>
-        <el-radio label="lineBreak">换行平铺</el-radio>
+    <div v-if="getRelationShow" class="editor-item-title">指标关系</div>
+    <div v-if="getRelationShow" class="editor-item-container">
+      <el-radio-group
+        v-model="option.relation"
+      >
+        <el-radio label="parataxis">并列</el-radio>
+        <el-radio label="deputy">主副</el-radio>
       </el-radio-group>
+    </div>
+    <div class="m-t-12">
+      <div class="editor-item-title">多指标展示形式</div>
+      <div class="editor-item-container">
+        <el-radio-group v-model="option.moreRelation">
+          <el-radio label="line">左右滑动</el-radio>
+          <el-radio label="lineBreak">换行平铺</el-radio>
+        </el-radio-group>
+      </div>
     </div>
     <div class="lineNum">
       <div class="editor-item-title">每行最多</div>
@@ -23,16 +34,17 @@
         :max="99"
       />
     </div>
-    <div v-if="option.dimensionShow" class="m-t-12">
+    <div v-if="getDimensionShow" class="m-t-12">
       <el-checkbox v-model="option.dimension">显示维度名称</el-checkbox>
     </div>
-    <div v-if="option.indicatorsShow" class="m-t-12">
-      <el-checkbox v-model="option.indicators">显示主指标名称</el-checkbox>
+    <div class="m-t-12">
+      <el-checkbox v-model="option.indicators">{{ option.relation==='parataxis'?'显示指标名称':'显示主指标名称' }}</el-checkbox>
     </div>
   </div>
 </template>
 
 <script>
+import store from '@/store'
 export default {
   name: 'IndicatorDisplay',
   props: {
@@ -43,6 +55,14 @@ export default {
   },
   data () {
     return {
+    }
+  },
+  computed: {
+    getRelationShow () {
+      return store.state.app.layout.find(item => item.id === store.state.app.currentLayoutId)?.option.dataSource.Measure.value.length > 1 || false
+    },
+    getDimensionShow () {
+      return store.state.app.layout.find(item => item.id === store.state.app.currentLayoutId)?.option.dataSource.Dimension.value.length > 0 || false
     }
   },
   methods: {

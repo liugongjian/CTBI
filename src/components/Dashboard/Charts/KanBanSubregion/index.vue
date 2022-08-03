@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-06-08 10:55:37
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-07-29 16:58:52
+ * @LastEditTime: 2022-08-03 11:02:10
  * @Description:
 -->
 <template>
@@ -34,7 +34,6 @@ export default {
   data () {
     return {
       storeOption: {},
-      chartOption: {},
       dataOption: [],
       dataValue: [
       ]
@@ -42,35 +41,11 @@ export default {
   },
   computed: {
     getOption() {
-      return this.storeOption.theme?.StyleConfig?.IndexQuickly || {}
+      return this.storeOption.theme?.StyleConfig || {}
     },
     getKanBanSeries() {
       return this.storeOption.theme?.SeriesSetting?.IndicatorSeries || {}
     }
-  },
-  watch: {
-    storeOption: {
-      handler (val) {
-        // val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        // if (JSON.stringify(val.dataSource) !== '{}') {
-        //   this.dataValue = val.dataSource
-        // }
-      },
-      deep: true
-    }
-    // 'storeOption.dataSource': {
-    //   handler (val) {
-    //     if (JSON.stringify(val) !== '{}') {
-    //       this.dataValue = deepClone(val)
-    //       // 拿到数据的系列名字 并设置颜色
-    //       this.getColor(this.dataValue)
-    //       // 拿到名字 并设置svg
-    //       this.getNameSvg(this.dataValue)
-    //       // 拿到系列和值
-    //       this.getDataSeries(this.dataValue)
-    //     }
-    //   }
-    // }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)

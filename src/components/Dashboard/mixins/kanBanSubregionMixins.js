@@ -31,9 +31,14 @@ export default {
       const { data, fields } = dataValue
       if (data && data.length > 0) {
         for (const key in fields) {
+          // 这个地方是不是写的有问题? 要是没有维度呢 维度并不是必填的
           if (key === 'Dimension') {
-            const column = fields[key]['fields'][0].column
-            obj = data.map(item => { return { name: item[column], data: [] } })
+            if (fields[key]['fields'].length > 0) {
+              const column = fields[key]['fields'][0].column
+              obj = data.map(item => { return { name: item[column], data: [] } })
+            } else {
+              obj = data.map(item => { return { name: '', data: [] } })
+            }
           } else if (key === 'Measure') {
             fields[key]['fields'].forEach((field, index) => {
               const column = field.column
@@ -44,17 +49,25 @@ export default {
           }
         }
       }
+      console.log('封装好的数据', obj)
       return obj
     },
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
       const color = []
-      val.forEach((item, index) => {
-        const idx = (index) % colorTheme['官方'].length
-        color.push({ name: item.name, color: colorTheme['官方'][idx].value, remark: item.name })
-      })
-
-      this.storeOption.theme.StyleConfig.IndexQuickly.color = color
+      // 有维度的话
+      if (this.storeOption.dataSource.Dimension.value.length > 0) {
+        val.forEach((item, index) => {
+          const idx = (index) % colorTheme['官方'].length
+          color.push({ name: item.name, color: colorTheme['官方'][idx].value, remark: item.name })
+        })
+      } else {
+        val[0].data.forEach((item, index) => {
+          const idx = (index) % colorTheme['官方'].length
+          color.push({ name: item.title, color: colorTheme['官方'][idx].value, remark: item.title })
+        })
+      }
+      this.storeOption.theme.StyleConfig.IndicatorPic.Color.color = color
     },
     getNameSvg(val) {
       const svg = []
@@ -65,10 +78,17 @@ export default {
         'collection',
         'eyes'
       ]
-      val.forEach((item, index) => {
-        svg.push({ name: item.name, svg: data[index] || 'eyes' })
-      })
-      this.storeOption.theme.StyleConfig.IndexQuickly.setSvg = svg
+      // 有维度的话
+      if (this.storeOption.dataSource.Dimension.value.length > 0) {
+        val.forEach((item, index) => {
+          svg.push({ name: item.name, svg: data[index] || 'eyes' })
+        })
+      } else {
+        val[0].data.forEach((item, index) => {
+          svg.push({ name: item.title, svg: data[index] || 'eyes' })
+        })
+      }
+      this.storeOption.theme.StyleConfig.IndicatorPic.setSvg = svg
     },
     getDataSeries(val) {
       const data = []
@@ -76,6 +96,7 @@ export default {
         data.push({ title: item.title, prefix: '', suffix: '' })
       })
       this.storeOption.theme.SeriesSetting.IndicatorSeries.dataSeries = data
+      this.storeOption.theme.SeriesSetting.IndicatorSeries.series = data[0].title
     }
 
   }

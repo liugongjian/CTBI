@@ -2,14 +2,14 @@
  * @Author: 黄璐璐
  * @Date: 2022-05-06 22:42:01
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-07-29 11:16:02
+ * @LastEditTime: 2022-08-02 09:24:58
  * @Description:
 -->
 <template>
   <div class="editor-object-container">
     <div>
       <div class="editor-item-title">请选择系列</div>
-      <el-select v-model="option.series" placeholder="请选择" class="m-t-12">
+      <el-select v-model="option.series" placeholder="请选择" class="m-t-12" popper-class="setting-select">
         <el-option
           v-for="(item,index) in option.dataSeries"
           :key="index"
@@ -22,11 +22,11 @@
       <div class="editor-item-title">指标数据值前后缀</div>
       <div class="box">
         前缀
-        <el-input v-model="prefix" placeholder="请输入内容" />
+        <el-input v-model="prefix" placeholder="请填写(如¥)" />
       </div>
       <div class="box">
         后缀
-        <el-input v-model="suffix" placeholder="请输入内容" />
+        <el-input v-model="suffix" placeholder="请填写(如元)" />
       </div>
     </div>
   </div>
