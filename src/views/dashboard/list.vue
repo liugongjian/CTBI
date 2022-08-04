@@ -12,6 +12,7 @@
               @click="createDashboard"
             >新建仪表板</el-button>
             <el-button @click="createFolder">新建文件夹</el-button>
+            <b-cascader>1234</b-cascader>
           </div>
           <div class="data-set-header-r">
             <el-input
