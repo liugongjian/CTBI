@@ -97,10 +97,14 @@ export default {
   'dataSource': {
     'Dimension': { // 维度
       'name': '漏斗分层/维度',
+      'require': false,
+      'limit': 1,
       'value': []
     },
     'Measure': { // 度量
       'name': '漏斗层宽/度量',
+      'require': false,
+      'limit': 20,
       'value': []
     }
   }, // 数据集

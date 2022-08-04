@@ -62,14 +62,12 @@ export default {
     storeOption: {
       handler (val) {
         if (val.theme.DisplayConfig.TableTheme.show) {
-          debugger
           this.stripe = val.theme.DisplayConfig.TableTheme.active === 'stripe'
           this.border = val.theme.DisplayConfig.TableTheme.active === 'border'
           const colorType = val.theme.DisplayConfig.TableTheme.colorType
           const color = colorType === 'gray' ? colorType : (colorType === 'themeColor' ? 'blue' : val.theme.DisplayConfig.Color.color[0].color)
           this.rowStyle = val.theme.DisplayConfig.TableTheme.active === 'simple' ? { 'border-bottom': `3px ${color} solid` } : {}
         } else {
-          debugger
           if (val.theme.DisplayConfig.TableThemeSimple.show) {
             switch (val.theme.DisplayConfig.TableThemeSimple.type) {
               case 'simple-no-head':

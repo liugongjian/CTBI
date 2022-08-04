@@ -1,7 +1,7 @@
 <template>
   <div class="editor-object-container">
-    <div class="editor-item-container">
-      指标关系
+    <div class="">
+      <div class="editor-item-title">指标关系</div>
       <el-radio-group
         v-model="option.relation"
         @change="changeRelation"
@@ -10,15 +10,17 @@
         <el-radio label="deputy">主副</el-radio>
       </el-radio-group>
     </div>
-    <div class="editor-item-container">
-      多指标展示形式
-      <el-radio-group v-model="option.moreRelation">
-        <el-radio label="line">左右滑动</el-radio>
-        <el-radio label="lineBreak">换行平铺</el-radio>
-      </el-radio-group>
+    <div class="m-t-12">
+      <div class="editor-item-title">多指标展示形式</div>
+      <div class="editor-item-container">
+        <el-radio-group v-model="option.moreRelation">
+          <el-radio label="line">左右滑动</el-radio>
+          <el-radio label="lineBreak">换行平铺</el-radio>
+        </el-radio-group>
+      </div>
     </div>
-    <div class="editor-item-container lineNum">
-      每行最多
+    <div class="lineNum">
+      <div class="editor-item-title">每行最多</div>
       <el-input-number
         v-model="option.lineNum"
         controls-position="right"
@@ -26,24 +28,21 @@
         :max="99"
       />
     </div>
-    <div class="editor-item-container">
+    <div class="m-t-12">
       <el-checkbox v-model="option.dimension">显示维度名称</el-checkbox>
     </div>
-    <div
-      v-if="option.relation === 'deputy'"
-      class="editor-item-container"
-    >
+    <div v-if="option.relation === 'deputy'" class="m-t-12">
       <el-checkbox v-model="option.indicators">显示主指标名称</el-checkbox>
     </div>
-    <div class="editor-item-container">
+    <div class="m-t-12">
       <el-checkbox v-model="option.fontStyle.show">设置字体样式</el-checkbox>
       <div
         v-for="(item,index) in option.fontStyle.data"
         v-show="item.show"
         :key="index"
-        class="dimension"
+        class="editor-item-container dimension"
       >
-        {{ item.name }}
+        <div class="editor-item-title">{{ item.name }}</div>
         <el-color-picker
           v-model="item.color"
           :disabled="getDisabled(item.name)"
@@ -53,6 +52,7 @@
           :disabled="getDisabled(item.name)"
           class="w-select"
           placeholder="请选择"
+          popper-class="setting-select"
         >
           <el-option
             v-for="data in fontSizeOptions"
@@ -62,75 +62,70 @@
           />
         </el-select>
       </div>
-      <div>
-        <div>指标</div>
-        <div class="dimension">
-          <div>
-            数值
-            <div>
-              <el-color-picker
-                v-model="option.fontStyle.target.valColor"
-                :disabled="!option.fontStyle.show"
-              />
-            </div>
-          </div>
-          <div>
-            名称
-            <div>
-              <el-color-picker
-                v-model="option.fontStyle.target.nameColor"
-                :disabled="!option.fontStyle.show"
-              />
-            </div>
-          </div>
-          <div>
-            大小
-            <div>
-              <el-select
-                v-model="option.fontStyle.target.fontSize"
-                :disabled="!option.fontStyle.show"
-                class="w-select"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="data in fontSizeOptions"
-                  :key="data"
-                  :label="data"
-                  :value="data"
-                />
-              </el-select>
-            </div>
-          </div>
+      <div class="editor-item-container">
+        <div class="editor-item-title">指标</div>
+        <div class="editor-item-container dimension">
+          <div class="editor-item-title">大小</div>
+          <el-select
+            v-model="option.fontStyle.target.fontSize"
+            :disabled="!option.fontStyle.show"
+            class="w-select"
+            placeholder="请选择"
+            popper-class="setting-select"
+          >
+            <el-option
+              v-for="data in fontSizeOptions"
+              :key="data"
+              :label="data"
+              :value="data"
+            />
+          </el-select>
         </div>
-
+        <div class="editor-item-container dimension">
+          <div class="editor-item-title">数值</div>
+          <el-color-picker
+            v-model="option.fontStyle.target.valColor"
+            :disabled="!option.fontStyle.show"
+          />
+          <div class="editor-item-title">名称</div>
+          <el-color-picker
+            v-model="option.fontStyle.target.nameColor"
+            :disabled="!option.fontStyle.show"
+          />
+        </div>
       </div>
     </div>
-    <div class="editor-item-container">
-      指标组合指标快内位置
-      <el-radio-group v-model="option.position">
-        <el-radio label="left">横向居左</el-radio>
-        <el-radio label="center">横向居中</el-radio>
-      </el-radio-group>
-      <template v-if="option.position === 'center'">
-        与指标对齐方式
-        <el-radio-group v-model="option.align">
-          <el-radio label="left">左对齐</el-radio>
-          <el-radio label="center">居中对齐</el-radio>
+    <div class="m-t-12">
+      <div class="editor-item-title">指标组合指标快内位置</div>
+      <div class="editor-item-container">
+        <el-radio-group v-model="option.position">
+          <el-radio label="left">横向居左</el-radio>
+          <el-radio label="center">横向居中</el-radio>
         </el-radio-group>
-      </template>
+        <template v-if="option.position === 'center'">
+          <div class="m-t-12">与指标对齐方式</div>
+          <div class="editor-item-container">
+            <el-radio-group v-model="option.align">
+              <el-radio label="left">左对齐</el-radio>
+              <el-radio label="center">居中对齐</el-radio>
+            </el-radio-group>
+          </div>
+        </template>
+      </div>
     </div>
     <div
-      class="editor-item-container"
-      style="height:500px"
+      class="m-t-12"
     >
       <el-checkbox v-model="option.modified">显示指标修饰图</el-checkbox>
       <template v-if="option.modified">
-        <ColorConfig
-          :color-data.sync="colorData"
-          @showColor="getColor"
-        />
-        <div>
-          图片类型
+        <div class="editor-item-container">
+          <ColorConfig
+            :color-data.sync="colorData"
+            @showColor="getColor"
+          />
+        </div>
+        <div class="editor-item-container">
+          <div class="editor-item-title">图片类型</div>
           <el-radio-group v-model="option.type">
             <el-radio label="img">图片字段</el-radio>
             <el-radio label="static">静态</el-radio>
@@ -138,13 +133,14 @@
         </div>
         <div
           v-if="option.type === 'img'"
-          class="dimension"
+          class="editor-item-container dimension"
         >
-          图片字段
+          <div class="editor-item-title">图片字段</div>
           <el-select
             v-model="value"
             class="w-select"
             placeholder="请选择"
+            popper-class="setting-select"
           >
             <el-option
               v-for="item in options"
@@ -156,12 +152,13 @@
         </div>
         <div
           v-else
-          class="dimension"
+          class="editor-item-container dimension"
         >
           <el-select
             v-model="svgValue"
             class="w-select"
             placeholder="请选择"
+            popper-class="setting-select"
           >
             <el-option
               v-for="(item,index) in option.setSvg"
@@ -287,6 +284,7 @@ export default {
 .lineNum {
   display: flex;
   align-items: center;
+  margin-top: 12px;
   .el-input-number {
     flex: 1;
   }
@@ -310,8 +308,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 40px;
-  width: 40px;
+  width: 38px;
+  height: 24px;
+  margin-left: 5px;
   background-color: #686e6e;
 }
 </style>

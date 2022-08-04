@@ -149,6 +149,20 @@ export default {
         'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
       }
     },
+    'StyleConfig': { // 样式配置
+    'TrendStyleConfig': {
+      'line': 4,
+      'style': false,
+      'fontSizeStyle': [
+        { 'name': '名称', 'color': '#000024', 'fontSize': 12 },
+        { 'name': '数值', 'color': '#000024', 'fontSize': 12 }
+      ],
+      'position': 'center', // center left 位置
+      'align': 'center', // center left 对齐方式
+      'icon': false,
+      'dataIcon': []
+    }
+  },
     'Axis': { // 轴设置
       'XAxis': { // X轴设置
         'cname': 'X轴',
@@ -234,8 +248,6 @@ export default {
           'show': true, // 副轴才是true
           'lineType': 'solid' // 默认实线
         }
-      }
-    }
   },
   'advance': {}, // 高级
   'dataSource': {

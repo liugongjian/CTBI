@@ -17,7 +17,7 @@ import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'distribution', // 组件类型, 用于管理组件类型集合,例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
-  order: 2, // 在tools中排序
+  'order': 2, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
   'theme': { // 样式组件、配置合集
@@ -97,11 +97,13 @@ export default {
     'Dimension': { // 维度
       'name': '扇区标签/维度',
       'require': true,
+      'limit': 1,
       'value': []
     },
     'Measure': { // 度量
       'name': '扇区角度/度量',
       'require': true,
+      'limit': 10,
       'value': []
     }
   }, // 数据集
