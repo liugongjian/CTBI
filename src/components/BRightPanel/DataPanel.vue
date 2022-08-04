@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import DataSetSelect from './components/DataSetSelect.vue'
+import DataSetSelect from './DataSetSelect.vue'
 import { getDataSet } from '@/api/dataSet'
 import { transformDataTypeIcon } from '@/utils/optionUtils'
 export default {
