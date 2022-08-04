@@ -99,7 +99,7 @@
           min-width="100"
         >
           <template slot-scope="scope">
-            <span style="color: #4393F4;">根目录/{{ scope.row.folderName }}</span>
+            <span style="color: #4393F4;">{{ getFolderPath(scope.row.folderName) }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -268,6 +268,12 @@ export default {
       this.$dialog.show('SaveDatesetFolderDialog', { form: { ...data }, title }, () => {
         this.query()
       })
+    },
+    getFolderPath (path) {
+      if (path.indexOf('根目录/') > -1) {
+        return path
+      }
+      return '根目录/' + path
     },
     // 删除数据集
     deleteDataSet (row) {

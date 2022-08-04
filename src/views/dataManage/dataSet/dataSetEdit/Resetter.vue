@@ -294,9 +294,10 @@
 <script>
 import { getPreviewData } from '@/api/dataSet'
 import regex from '@/constants/regex'
-import { transformDataTypeIcon } from '@/utils/optionUtils'
+import { transformDataTypeIcon, getFieldsTable, getFieldsTree } from '@/utils/optionUtils'
 import GearBtn from '@/views/dataManage/dataSet/dataSetEdit/GearBtn'
 import ReInput from '@/views/dataManage/dataSet/dataSetEdit/ReInput'
+import { DataTypeOptions, FormatMap, AggFunctionOptions } from '@/constants/constants'
 
 export default {
   components: { GearBtn, ReInput },
@@ -325,97 +326,12 @@ export default {
       dimensionMeasure: [],
       // 维度&度量 表格数据
       dimensionMeasureTableData: [],
-      dataTypeOptions: [
-        {
-          value: 'number',
-          label: '数字'
-        },
-        {
-          value: 'granularity',
-          label: '地理',
-          children: [{
-            value: 'area',
-            parentValue: 'granularity',
-            originValue: 'text',
-            label: '区域'
-          },
-          {
-            value: 'province',
-            parentValue: 'granularity',
-            originValue: 'text',
-            label: '省/直辖市'
-          },
-          {
-            value: 'city',
-            parentValue: 'granularity',
-            originValue: 'text',
-            label: '市'
-          },
-          {
-            value: 'country',
-            parentValue: 'granularity',
-            originValue: 'text',
-            label: '区/县'
-          },
-          {
-            value: 'longitude',
-            parentValue: 'granularity',
-            originValue: 'text',
-            label: '经度'
-          },
-          {
-            value: 'dimensionality',
-            parentValue: 'granularity',
-            originValue: 'text',
-            label: '维度'
-          }]
-        },
-        {
-          value: 'text',
-          label: '文本'
-        },
-        {
-          value: 'time',
-          label: '时间'
-        }
-      ],
-      formatMap: {
-        text: [],
-        number: [
-          {
-            label: '整数',
-            value: '#,##0'
-          },
-          {
-            label: '保留1位小数',
-            value: '#,##0.0'
-          },
-          {
-            label: '保留2位小数',
-            value: '#,##0.00'
-          },
-          {
-            label: '百分比',
-            value: '#,##0%'
-          },
-          {
-            label: '百分比1位小数',
-            value: '#,##0.0%'
-          },
-          {
-            label: '百分比2位小数',
-            value: '#,##0.00%'
-          }
-        ],
-        time: [
-          {
-            label: '年-月-日 时-分秒',
-            value: 'YYYY-MM-DD HH:mm:ss'
-          }
-        ]
-      },
-      // sum, count, distinct-count, max, min, avg
-      aggFunctions: [{ label: '求和', value: 'sum' }, { label: '计数', value: 'count' }, { label: '技术(去重)', value: 'distinct-count' }, { label: '最大值', value: 'max' }, { label: '最小值', value: 'min' }, { label: '平均数', value: 'min' }],
+      fieldsTable: [],
+      fieldsTree: [],
+
+      dataTypeOptions: DataTypeOptions,
+      formatMap: FormatMap,
+      aggFunctions: AggFunctionOptions,
       tableHeight: 320
     }
   },
@@ -473,54 +389,9 @@ export default {
       }
     },
     getDimensionMeasureData (fields) {
-      if (!fields) return []
-      const res = [{
-        _id: 1,
-        displayColumn: '维度',
-        icon: 'dimension-icon',
-        index: 'dimension_p_1',
-        children: []
-      }, {
-        _id: 2,
-        index: 'measure_p_1',
-        icon: 'measure-icon',
-        displayColumn: '度量',
-        children: []
-      }]
-      let dimensionHiddenLength = 0
-      let measureHiddenLength = 0
-      fields.forEach((item, index) => {
-        item.index = item.type + '_' + index
-        if (!item.displayColumn) {
-          item.displayColumn = item.column
-        }
-        item.attributes[0].displayColumn = item.displayColumn
-        if (item.type === 'Dimension') {
-          if (item.attributes[0].isHidden) {
-            dimensionHiddenLength += 1
-          } else if (typeof item.attributes[0].isHidden === 'undefined') {
-            // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
-            item.attributes[0].isHidden = false
-          }
-          res[0].children.push(item)
-        } else if (item.type === 'Measure') {
-          if (item.attributes[0].isHidden) {
-            measureHiddenLength += 1
-          } else if (typeof item.attributes[0].isHidden === 'undefined') {
-            // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
-            item.attributes[0].isHidden = false
-          }
-          res[1].children.push(item)
-        }
-      })
-      if (res[1].children.length === 0 || res[1].children.length === measureHiddenLength) {
-        res[1].isHidden = true
-      }
-      if (res[0].children.length === 0 || res[0].children.length === dimensionHiddenLength) {
-        res[0].isHidden = true
-      }
-      this.dimensionMeasure = res
-      return res
+      this.dimensionMeasure = getFieldsTable(fields)
+      this.fieldsTable = getFieldsTable(fields)
+      this.fieldsTree = getFieldsTree(fields)
     },
     typeTransform (data) {
       const temp = this.resetDataType(data)

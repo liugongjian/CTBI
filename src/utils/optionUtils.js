@@ -248,3 +248,82 @@ export const transformDataTypeIcon = function (data) {
   }
   return ''
 }
+
+/**
+ * 将字段数据转换为需要的格式
+ * @param {*} fields
+ * @returns
+ */
+export const getFieldsTree = (fields) => {
+  if (!fields) return []
+  const res = [{
+    _id: 1,
+    displayColumn: '维度',
+    icon: 'dimension-icon',
+    index: 'dimension_p_1',
+    children: []
+  }, {
+    _id: 2,
+    index: 'measure_p_1',
+    icon: 'measure-icon',
+    displayColumn: '度量',
+    children: []
+  }]
+
+  return res
+}
+
+/**
+ * 将字段数据转换为需要的格式
+ * @param {*} fields
+ * @returns
+ */
+export const getFieldsTable = (fields) => {
+  if (!fields) return []
+  const res = [{
+    _id: 1,
+    displayColumn: '维度',
+    icon: 'dimension-icon',
+    index: 'dimension_p_1',
+    children: []
+  }, {
+    _id: 2,
+    index: 'measure_p_1',
+    icon: 'measure-icon',
+    displayColumn: '度量',
+    children: []
+  }]
+  let dimensionHiddenLength = 0
+  let measureHiddenLength = 0
+  fields.forEach((item, index) => {
+    item.index = item.type + '_' + index
+    if (!item.displayColumn) {
+      item.displayColumn = item.column
+    }
+    item.attributes[0].displayColumn = item.displayColumn
+    if (item.type === 'Dimension') {
+      if (item.attributes[0].isHidden) {
+        dimensionHiddenLength += 1
+      } else if (typeof item.attributes[0].isHidden === 'undefined') {
+        // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
+        item.attributes[0].isHidden = false
+      }
+      res[0].children.push(item)
+    } else if (item.type === 'Measure') {
+      if (item.attributes[0].isHidden) {
+        measureHiddenLength += 1
+      } else if (typeof item.attributes[0].isHidden === 'undefined') {
+        // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
+        item.attributes[0].isHidden = false
+      }
+      res[1].children.push(item)
+    }
+  })
+  if (res[1].children.length === 0 || res[1].children.length === measureHiddenLength) {
+    res[1].isHidden = true
+  }
+  if (res[0].children.length === 0 || res[0].children.length === dimensionHiddenLength) {
+    res[0].isHidden = true
+  }
+  return res
+}
