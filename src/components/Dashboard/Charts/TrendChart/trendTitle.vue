@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-08-09 11:49:01
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-09 12:05:28
+ * @Description:
+-->
 <template>
   <div
     class="titleCont"
@@ -37,7 +44,7 @@
 </template>
 
 <script>
-import { boolean } from 'yargs'
+// import { boolean } from 'yargs'
 
 export default {
   name: 'TrendTitle',
@@ -55,7 +62,7 @@ export default {
       default: () => { }
     },
     isSelect: {
-      type: boolean,
+      type: Boolean,
       default: () => true
     }
   }
