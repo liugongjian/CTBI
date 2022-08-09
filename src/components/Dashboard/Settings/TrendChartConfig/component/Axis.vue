@@ -19,7 +19,7 @@ export default {
   name: 'Axis',
   props: {
     data: {
-      type: Array,
+      type: Object,
       default: () => ([])
     }
   },
@@ -31,42 +31,49 @@ export default {
   computed: {
     axisMaxVal: {
       get() {
-        return this.axisData[0]?.max
+        return this.axisData.max
       },
       set(val) {
-        this.axisData[0].max = val
+        this.axisData.max = val
       }
     },
     axisMaxAuto: {
       get() {
-        return this.axisData[0]?.auto
+        return this.axisData.maxAuto
       },
       set(val) {
-        this.axisData[0].auto = val
+        this.axisData.maxAuto = val
+        if (val) {
+          this.axisData.max = ''
+        }
       }
     },
     axisMinVal: {
       get() {
-        return this.axisData[1]?.min
+        return this.axisData.min
       },
       set(val) {
-        this.axisData[1].min = val
+        this.axisData.min = val
       }
     },
     axisMinAuto: {
       get() {
-        return this.axisData[1]?.auto
+        return this.axisData.minAuto
       },
       set(val) {
-        this.axisData[1].auto = val
+        this.axisData.minAuto = val
+        if (val) {
+          this.axisData.min = ''
+        }
       }
     }
   },
   watch: {
     data: {
       handler() {
-        if (JSON.stringify(this.data) !== JSON.stringify(this.axisData) && this.data.length > 0) {
+        if (JSON.stringify(this.data) !== JSON.stringify(this.axisData)) {
           this.axisData = deepClone(this.data)
+          console.log(this.axisData)
         }
       },
       deep: true,

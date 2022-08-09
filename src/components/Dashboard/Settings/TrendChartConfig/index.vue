@@ -33,7 +33,7 @@
           <el-radio label="multi">多选</el-radio>
         </el-radio-group>
       </div>
-      <div class="editor-item-container pl0">
+      <!-- <div class="editor-item-container pl0">
         <span>多指标展示形式</span>
         <el-radio-group v-model="option.indicators">
           <el-radio label="line">左右滑动</el-radio>
@@ -41,16 +41,19 @@
         </el-radio-group>
       </div>
       <div class="editor-item-container pl0">
-        <el-checkbox v-model="option.twoY.show">显示双Y轴</el-checkbox>
-        <el-tabs v-if="option.twoY.show" v-model="activeName">
-          <el-tab-pane label="垂直左轴" name="left" />
-          <el-tab-pane label="垂直右轴" name="right">配置管理</el-tab-pane>
-        </el-tabs>
+        <p>22{{ option.twoY[activeName] }}</p>
+        <div v-if="option.preview == 'multi'">
+          <el-checkbox v-model="option.twoY.show">显示双Y轴</el-checkbox>
+          <el-tabs v-if="option.twoY.show" v-model="activeName" class="ytabs">
+            <el-tab-pane label="垂直左轴" name="left" />
+            <el-tab-pane label="垂直右轴" name="right">配置管理</el-tab-pane>
+          </el-tabs>
+        </div>
         <Axis :data.sync="option.twoY[activeName]" />
         <AxisFormat :data.sync="option.axisLabel" />
         <el-checkbox v-model="option.showChart">显示图标标签</el-checkbox>
         <br>
-      </div>
+      </div> -->
       <!-- <div class="editor-item-container pl0">
         <span>数据标签展示方式</span>
         <el-radio-group v-model="option.labelShow">
@@ -59,22 +62,21 @@
         </el-radio-group>
       </div> -->
     </template>
-
   </div>
 </template>
 
 <script>
 import SwitchIcon from './component/SwitchIcon'
 // import ColorConfig from '@/components/Dashboard/Common/ColorConfig'
-import Axis from './component/Axis'
-import AxisFormat from './component/AxisFormat'
+// import Axis from './component/Axis'
+// import AxisFormat from './component/AxisFormat'
 export default {
   name: 'TrendChartConfig',
   components: {
-    SwitchIcon,
+    SwitchIcon
     // ColorConfig,
-    AxisFormat,
-    Axis
+    // AxisFormat,
+    // Axis
   },
   props: {
     option: {
@@ -95,6 +97,14 @@ export default {
       ],
       color: [],
       activeName: 'left'
+    }
+  },
+  watch: {
+    option: {
+      handler() {
+        console.log('2222', this.option)
+        this.activeName = 'left'
+      }
     }
   },
   mounted() {
@@ -127,4 +137,5 @@ export default {
     flex:1;
   }
 }
+::v-deep .ytabs  .el-tabs__header{ padding:0 !important}
 </style>

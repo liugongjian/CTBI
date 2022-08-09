@@ -174,39 +174,78 @@ export default {
           name: XAxis.showTitle ? (XAxis.unit ? `${XAxis.title}(${XAxis.unit})` : XAxis.title) : ''
         }
       ]
-      this.yAxis = [
-        {
+      var itemLeft = {}
+      var itemRight = {}
+      this.yAxis = []
+
+      itemLeft = {
+        axisLine: {
+          show: YAxis.show,
+          lineStyle: {
+            type: YAxis.lineType,
+            width: YAxis.lineWidth,
+            color: YAxis.lineColor
+          }
+        },
+        min: YAxis.autoMin ? null : YAxis.min,
+        max: YAxis.autoMax ? null : YAxis.max,
+        axisLabel: {
+          show: YAxis.showAxisLabel,
+          formatter: (value, index) => {
+            return this.formatYLabel(value, YAxis)
+          }
+        },
+        splitLine: {
+          show: YAxis.showSplit,
+          lineStyle: {
+            type: YAxis.splitType,
+            color: YAxis.splitColor,
+            width: YAxis.splitWidth
+          }
+        },
+        axisTick: {
+          show: YAxis.showTicks
+        },
+        // 轴标题和单位
+        name: YAxis.showTitle ? (YAxis.unit ? `${YAxis.title}(${YAxis.unit})` : YAxis.title) : ''
+      }
+      this.yAxis.push(itemLeft)
+      // 如果设置双Y轴 并且不能是单独图表
+      if (this.storeOption.theme.ComponentOption.TwisYAxis.check && this.trendChartConfig.type === 'disperse') {
+        const { Y1Axis } = this.storeOption.theme.Axis
+        itemRight = {
           axisLine: {
-            show: YAxis.show,
+            show: Y1Axis.show,
             lineStyle: {
-              type: YAxis.lineType,
-              width: YAxis.lineWidth,
-              color: YAxis.lineColor
+              type: Y1Axis.lineType,
+              width: Y1Axis.lineWidth,
+              color: Y1Axis.lineColor
             }
           },
-          min: YAxis.autoMin ? null : YAxis.min,
-          max: YAxis.autoMax ? null : YAxis.max,
+          min: Y1Axis.autoMin ? null : Y1Axis.min,
+          max: Y1Axis.autoMax ? null : Y1Axis.max,
           axisLabel: {
-            show: YAxis.showAxisLabel,
+            show: Y1Axis.showAxisLabel,
             formatter: (value, index) => {
-              return this.formatYLabel(value, YAxis)
+              return this.formatYLabel(value, Y1Axis)
             }
           },
           splitLine: {
-            show: YAxis.showSplit,
+            show: Y1Axis.showSplit,
             lineStyle: {
-              type: YAxis.splitType,
-              color: YAxis.splitColor,
-              width: YAxis.splitWidth
+              type: Y1Axis.splitType,
+              color: Y1Axis.splitColor,
+              width: Y1Axis.splitWidth
             }
           },
           axisTick: {
-            show: YAxis.showTicks
+            show: Y1Axis.showTicks
           },
           // 轴标题和单位
-          name: YAxis.showTitle ? (YAxis.unit ? `${YAxis.title}(${YAxis.unit})` : YAxis.title) : ''
+          name: Y1Axis.showTitle ? (Y1Axis.unit ? `${Y1Axis.title}(${Y1Axis.unit})` : Y1Axis.title) : ''
         }
-      ]
+        this.yAxis.push(itemRight)
+      }
     },
     // 系列设置
     setSeriesItem () {
@@ -310,8 +349,6 @@ export default {
         return
       }
       this.setAxis()
-      // 双Y轴设置
-      this.twisYAxisConfig(ComponentOption)
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'line',
@@ -347,8 +384,6 @@ export default {
         return
       }
       this.setAxis()
-      // 双Y轴设置
-      this.twisYAxisConfig(ComponentOption)
       this.valueToPercent()
       const that = this
       if (!ComponentOption.TwisYAxis.check) {
@@ -382,54 +417,7 @@ export default {
         }
       }
     },
-    // 双y轴设置
-    twisYAxisConfig (componentOption) {
-      // 双y轴设置与坐标轴设置相关联，其中关于y轴模块暂时固定，后续需切换成坐标轴设置的值
-      if (componentOption.TwisYAxis.check) {
-        const formatter = this.type === 'PercentStackedBarChart' ? '{value}%' : '{value}'
 
-        // 最大值和最小值暂时固定，后续需要修改 TODO
-        const minData1 = componentOption.TwisYAxis.twisType === 'syncAll' ? minData2 : -10
-        const minData2 = 0
-        const maxData2 = 100
-        const maxData1 = componentOption.TwisYAxis.twisType === 'syncAll' ? maxData2 : 100
-        const intervalNum1 = componentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData1 - minData1) / 5 : null
-        const intervalNum2 = componentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null
-        this.yAxis = [
-          {
-            type: 'value',
-            min: minData1,
-            max: maxData1,
-            axisLine: {
-              show: true
-            },
-            interval: intervalNum1,
-            splitLine: {
-              show: false
-            },
-            axisLabel: {
-              formatter: formatter
-            }
-          },
-          {
-            type: 'value',
-            interval: intervalNum2,
-            splitLine: {
-              show: false
-            },
-            axisLine: {
-              show: true
-            },
-            axisLabel: {
-              formatter: formatter
-            }
-          }
-        ]
-        this.xAxis.unshift({ type: 'category' })
-      } else {
-        this.setAxis()
-      }
-    },
     // 多选模式获取数据
     formatDataValueMulti (chartData, keyList) {
       console.log(11121, keyList)

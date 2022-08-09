@@ -26,7 +26,6 @@
           <trendTitle :is-select="titleItem.isSelect" :trend-chart-config="trendChartConfig" :trend-style-config="trendStyleConfig" :title-item="titleItem" :index="index" />
         </div>
       </div>
-      <div v-else>数据为空</div>
       <div
         v-if="trendChartConfig.open && trendChartConfig.type == 'disperse' && trendChartConfig.preview == 'radio'"
         class="trendChartBox"
@@ -89,6 +88,7 @@
         />
       </div>
     </div>
+    <div v-else>数据为空</div>
   </div>
 </template>
 
@@ -115,6 +115,7 @@ export default {
       chartList: [],
       titleList: [], // 标题
       titleListTemp: [],
+      Axis: {},
       type: 'TrendChart', // 图表类型 1.线图；2.面积图; 3.堆叠面积图；4.百分比堆叠图
       // 趋势图配置
       trendChartConfig: {}
@@ -158,10 +159,14 @@ export default {
     // },
 
     getOption () {
-      const { ComponentOption, FunctionalOption, trendChartConfig, trendStyleConfig } = this.storeOption.theme
+      const { ComponentOption, FunctionalOption, trendChartConfig, trendStyleConfig, Axis } = this.storeOption.theme
+      this.Axis = Axis
+      //
       this.titleList = trendChartConfig.trendChartConfig.titleList
       this.trendStyleConfig = trendStyleConfig.trendStyleConfig
       this.trendChartConfig = trendChartConfig.trendChartConfig
+      // // 双Y轴配置放在了别的地方，这里赋值一下
+      // ComponentOption.TwisYAxis = trendChartConfig.trendChartConfig.twoY
       var series = null
       this.transformData(FunctionalOption.ChartFilter.selectedIndicator)
       // 趋势图配置
@@ -331,7 +336,7 @@ export default {
       }
       this.setAxis()
       // 双Y轴设置
-      this.twisYAxisConfig(ComponentOption)
+      // this.twisYAxisConfig(ComponentOption)
       // for (let i = 0; i < seriesLength; i++) {
       var i = 0
       var chartType = this.trendChartConfig.chart
@@ -385,7 +390,7 @@ export default {
       }
       this.setAxis()
       // 双Y轴设置
-      this.twisYAxisConfig(ComponentOption)
+      // this.twisYAxisConfig(ComponentOption)
       for (let s = 0; s < seriesLength; s++) {
         var i = 0
         if (this.titleList[s].isSelect) {
@@ -452,7 +457,7 @@ export default {
 }
   .titleLine{
     .trendTitle{
-       display: block; width: auto; white-space:nowrap; overflow-x:auto ; overflow-y: hidden;  height:90px;
+       display: block; width: auto; white-space:nowrap; overflow-x:auto ; overflow-y: hidden;
       .titleCont{ display: inline-block;
       }
 
