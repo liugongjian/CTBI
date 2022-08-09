@@ -52,6 +52,9 @@ a {
     color: rgba(255,255,255,0.75);
     font-weight: 500;
   }
+  .inline {
+    display: inline-block;
+  }
   .editor-item-container {
     padding-left: 24px;
     margin-top: 12px;
@@ -59,6 +62,10 @@ a {
     color: rgba(255,255,255,0.75);
     font-weight: 500;
   }
+  .pl5{ padding-left: 5px;}
+  .pl10{ padding-left: 10px;}
+  .pl0{ padding-left: 0px;}
+  .number-box{ width: 90px;}
   // 输入框样式
   .el-input--small{
     height: 24px;

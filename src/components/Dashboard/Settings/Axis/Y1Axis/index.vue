@@ -7,6 +7,7 @@
         <el-checkbox
           v-model="option.autoMax"
           label="自动"
+          :disabled="option.autoEnlarge"
           :class="option.autoEnlarge ? 'box-disabled' : ''"
         />
       </div>
@@ -16,6 +17,7 @@
         <el-checkbox
           v-model="option.autoMin"
           label="自动"
+          :disabled="option.autoEnlarge"
           :class="option.autoEnlarge ? 'box-disabled' : ''"
         />
       </div>

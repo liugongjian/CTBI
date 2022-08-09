@@ -1,5 +1,10 @@
 <template>
-  <div>22</div>
+  <div><v-chart
+    v-if="dataValue"
+    :option="chartOption"
+    autoresize
+    :update-options="{notMerge:true}"
+  /></div>
 </template>
 
 <script>
