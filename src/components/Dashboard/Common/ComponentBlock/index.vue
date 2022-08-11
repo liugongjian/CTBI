@@ -58,6 +58,9 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="delete">删除</el-dropdown-item>
+            <el-dropdown-item command="copy">复制</el-dropdown-item>
+            <el-dropdown-item command="sql">查看SQL</el-dropdown-item>
+            <el-dropdown-item command="data">查看数据</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <!-- 菜单模块END -->
@@ -130,7 +133,7 @@
 </template>
 
 <script>
-import { getParameter } from '@/utils/optionUtils'
+import { getParameter, getCurrentLayout, createNanoId, deepClone, isEmpty } from '@/utils/optionUtils'
 import store from '@/store'
 export default {
   name: 'ComponentBlock',
@@ -189,15 +192,45 @@ export default {
     getParameter,
     // 下拉菜单方法
     handleCommand (command) {
-      if (command === 'delete') {
-        // 删除vuex的layout中对应的组件信息
-        // 当时tab组件时，删除所有属于该组件的组件
-        if (this.option.is === 'TabChart') {
-          const allLayout = [...store.state.app.layout].filter(item => !(item.tabIdChains || []).includes(this.option.i))
-          store.dispatch('app/updateLayout', allLayout)
-        }
-        store.dispatch('app/deleteLayoutById', this.option.i)
+      const method = this[command]
+      if (method && typeof method === 'function') {
+        method.call()
       }
+    },
+
+    delete() {
+      // 删除vuex的layout中对应的组件信息
+      // 当时tab组件时，删除所有属于该组件的组件
+      if (this.option.is === 'TabChart') {
+        const allLayout = [...store.state.app.layout].filter(item => !(item.tabIdChains || []).includes(this.option.i))
+        store.dispatch('app/updateLayout', allLayout)
+      }
+      store.dispatch('app/deleteLayoutById', this.option.i)
+    },
+
+    // 复制组件
+    copy() {
+      const currentLayout = getCurrentLayout()
+      const newLayout = deepClone(currentLayout)
+      if (isEmpty(newLayout)) {
+        console.error('获取当前组件失败, Line: ComponentBlock: 214')
+        return
+      }
+      const nanoId = createNanoId()
+      newLayout.i = nanoId
+      newLayout.id = nanoId
+      const layoutLength = store.state.app.layout.length
+      newLayout.x = layoutLength > 0 ? (layoutLength * 2) % 12 : 0
+      newLayout.y = layoutLength > 0 ? layoutLength + 12 : 0
+      store.dispatch('app/addLayout', newLayout)
+    },
+
+    sql() {
+      this.$dialog.show('ShowSqlDialog')
+    },
+
+    data() {
+      this.$dialog.show('ShowDataDialog')
     },
 
     // 展示链接跳转弹窗

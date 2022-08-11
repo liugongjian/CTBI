@@ -19,6 +19,10 @@ export const clearObj = function (obj) {
   }
 }
 
+export const isEmpty = function (obj) {
+  return JSON.stringify(obj) === '{}'
+}
+
 export const generateId = function () {
   return Math.floor(Math.random() * 100000 + Math.random() * 20000 + Math.random() * 5000)
 }
@@ -119,6 +123,19 @@ export const getLayoutById = function (identify) {
  * @param {string} identify
  * @returns {Object}
  */
+export const getCurrentLayout = function () {
+  const identify = store.state.app.currentLayoutId
+  if (!identify) {
+    return {}
+  }
+  return getLayoutById(identify)
+}
+
+/**
+ * 通过id获取vuex中的layout数据
+ * @param {string} identify
+ * @returns {Object}
+ */
 export const getLayoutOptionById = function (identify) {
   if (!identify) {
     identify = store.state.app.currentLayoutId
@@ -132,6 +149,13 @@ export const getLayoutOptionById = function (identify) {
   }
   console.warn(`获取 ${identify} 组件配置信息为空`)
   return {}
+}
+export const getCurrentLayoutOption = function () {
+  const identify = store.state.app.currentLayoutId
+  if (!identify) {
+    return {}
+  }
+  return getLayoutOptionById(identify)
 }
 
 /**
@@ -326,4 +350,46 @@ export const getFieldsTable = (fields) => {
     res[0].isHidden = true
   }
   return res
+}
+
+// 获取数据集查询数据接口的参数
+export const getQueryParams = (limit, identify) => {
+  let option = {}
+  if (identify) {
+    option = getLayoutOptionById(identify)
+  } else {
+    option = getCurrentLayoutOption()
+  }
+  const { dataSource } = option
+  // 维表字段
+  const dimension = { selections: [] }
+  // 度量字段字段
+  const measure = { selections: [] }
+  // 字段统计，用于做回显
+  const transformFields = {}
+  for (const key in dataSource) {
+    const source = dataSource[key]
+    // TODO：需要定义组件配置type类型来替换用名称做判断
+    if (key.toLocaleLowerCase().indexOf('dimension') > -1) {
+      dimension.selections = dimension.selections.concat(source.value.map(so => { return { ...so, fieldId: so._id, attributeId: so.attributes[0]._id } }))
+    }
+    if (key.toLocaleLowerCase().indexOf('measure') > -1) {
+      measure.selections = measure.selections.concat(source.value.map(so => { return { ...so, fieldId: so._id, attributeId: so.attributes[0]._id } }))
+    }
+    transformFields[key] = {
+      'name': source.name,
+      'fields': source.value
+    }
+  }
+  // 过滤
+  const filter = { selections: [] }
+  // 排序
+  const order = []
+  // 查询数据的偏移量默认0
+  const offset = 0
+  // sql-参数配置中的
+  const placeholder = { configs: [] }
+  // sql-参数配置中的
+  const param = { configs: [] }
+  return { query: { limit, dimension, measure, filter, order, offset, placeholder, param }, dataSetId: option.dataSet?.id, transformFields }
 }

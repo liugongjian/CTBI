@@ -145,8 +145,6 @@ const DragPos = { 'x': 1, 'y': 1, 'w': 1, 'h': 1, 'i': null }
 const mouseXY = { 'x': 1, 'y': 1 }
 import store from '@/store'
 import { getToolList, getBriefToolList, getControlsList } from './getToolList'
-
-// import IconDropdown from './component/IconDropdown.vue'
 import { deepClone, createNanoId } from '@/utils/optionUtils'
 import ChartListPanel from './component/ChartListPanel.vue'
 export default {
