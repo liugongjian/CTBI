@@ -2,7 +2,7 @@
   <div style="width:100%;height:100%;">
     <div class="box">
       <div v-for="(item,index) in dataValue" :key="index" class="item" :style="{width: showNumStyle}">
-        <component :is="isComponent" :data="item" :option="progressStyle" :progress-config="progressConfig" />
+        <component :is="isComponent" :data="item" :option="ProgressStyle" :progress-config="ProgressConfig" />
       </div>
     </div>
   </div>
@@ -33,14 +33,14 @@ export default {
   },
   computed: {
     showNumStyle () {
-      const showNum = this.storeOption.theme?.ComponentOption?.progressStyle.showNum || 1
+      const showNum = this.storeOption.theme?.ComponentOption?.ProgressStyle.showNum || 1
       return `${1 / showNum * 100}%`
     },
-    progressStyle () {
-      return this.storeOption.theme?.ComponentOption?.progressStyle || {}
+    ProgressStyle () {
+      return this.storeOption.theme?.ComponentOption?.ProgressStyle || {}
     },
-    progressConfig () {
-      return this.storeOption.theme?.FunctionalOption.progressConfig || {}
+    ProgressConfig () {
+      return this.storeOption.theme?.FunctionalOption.ProgressConfig || {}
     },
     isComponent () {
       return this.storeOption.theme?.Basic?.VisualStyle.style || 'barType'

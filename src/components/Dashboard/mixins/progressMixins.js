@@ -11,7 +11,7 @@ export default {
       val.forEach((item, index) => {
         color.push({ name: item.name, color: colorTheme['defaultColor'][index].value })
       })
-      this.storeOption.theme.ComponentOption.progressStyle.color = color
+      this.storeOption.theme.ComponentOption.ProgressStyle.color = color
     },
     // 获取设置目标值
     getCfgTargetOption (val) {
@@ -19,7 +19,7 @@ export default {
       val.forEach(item => {
         cfgTargetOption.push({ name: item.name, value: item.value, fixedVal: item.value, dynamicVal: '', type: 1, aggregation: 1 })
       })
-      this.storeOption.theme.FunctionalOption.progressConfig.cfgTargetOption = cfgTargetOption
+      this.storeOption.theme.FunctionalOption.ProgressConfig.cfgTargetOption = cfgTargetOption
     }
   }
 }

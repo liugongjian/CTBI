@@ -28,7 +28,7 @@ export default {
       this.show = true
       const { position, options } = data
       this.menuData = [options]
-      this.menuPositions = [{ top: position.y + 'px', left: (position.x + 10) + 'px' }]
+      this.menuPositions = [{ top: (position.y - 10) + 'px', left: (position.x + position.width - 10) + 'px' }]
     },
     hidden() {
       this.show = false
@@ -42,10 +42,10 @@ export default {
     },
     handleSelect(e) {
       console.log(e)
-      const { data, place, position } = e
+      const { data, place, position, index } = e
       if (data.children && data.children.length) {
         this.menuData = [...this.menuData.slice(0, place + 1), data.children]
-        this.menuPositions = [...this.menuPositions.slice(0, place + 1), { top: position.y + 'px', left: (position.x + position.width) + 'px' }]
+        this.menuPositions = [...this.menuPositions.slice(0, place + 1), { top: (position.y + index * 30) + 'px', left: (position.x + position.width - 5) + 'px' }]
       } else {
         this.parent.hadChoose(data)
       }

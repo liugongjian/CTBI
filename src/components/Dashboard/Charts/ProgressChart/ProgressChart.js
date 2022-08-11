@@ -64,7 +64,7 @@ export default {
         'orient': 'horizontal',
         'type': 'scroll'
       },
-      'progressStyle': { // 样式设置
+      'ProgressStyle': { // 样式设置
         'showNum': 1,
         'indicators': [
           { 'name': '名称', 'color': '#393f4d', 'fontSize': 16 },
@@ -80,7 +80,7 @@ export default {
       }
     },
     'FunctionalOption': { // 功能配置
-      'progressConfig': {
+      'ProgressConfig': {
         'cfgTarget': [], // 目标值
         'cfgTargetOption': [], // 目标值数据集
         'proportion': { type: 1, decimal: 0 }
@@ -90,12 +90,10 @@ export default {
   'advance': {}, // 高级
   // 'dataSource': {}// 数据集
   'dataSource': {
-    // 'Dimension': { // 维度
-    //   'name': '类别轴/维度',
-    //   'value': []
-    // },
     'Measure': { // 度量
       'name': '进度指示/度量',
+      'require': true,
+      'limit': 5,
       'value': []
     }
   }, // 数据集

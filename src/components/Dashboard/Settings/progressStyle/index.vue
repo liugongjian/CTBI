@@ -91,7 +91,7 @@ export default {
   methods: {
     getRadarColor () {
       const item = store.state.app.layout.find(item => store.state.app.currentLayoutId === item.i) || {}
-      this.radarColor = item.option.theme.ComponentOption.progressStyle.color
+      this.radarColor = item.option.theme.ComponentOption.ProgressStyle.color
     }
   }
 }

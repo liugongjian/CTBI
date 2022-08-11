@@ -48,7 +48,7 @@ export default {
     return {
       showWrapper: true,
       showData: true,
-      activeNames: '2',
+      activeNames: '1',
       showChartTypes: false
     }
   },

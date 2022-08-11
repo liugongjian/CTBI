@@ -244,6 +244,7 @@ export default {
     },
     // 点击树节点
     clickTreeNode (node) {
+      console.log(111, node)
       // 判断是否点击的不是文件夹
       if (!node.isFolder) {
         this.dataSet.id = node._id

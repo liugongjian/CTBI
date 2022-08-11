@@ -66,8 +66,9 @@
       >数据标签展示方式</div>
       <div style="flex: 1">
         <el-radio-group v-model="option.labelShow">
-          <el-radio :label="1">智能显示</el-radio>
-          <el-radio :label="2">全量显示</el-radio>
+          <p style="margin:5px 0"><el-radio :label="1">智能显示</el-radio></p>
+          <p style="margin:5px 0"><el-radio :label="2">全量显示</el-radio></p>
+
         </el-radio-group>
       </div>
     </div>
@@ -158,6 +159,13 @@ export default {
             label: '度量'
           }, {
             label: '百分比'
+          }
+        ],
+        'SankeyChart': [
+          {
+            label: '维度字段名+度量值'
+          }, {
+            label: '仅维度字段名'
           }
         ]
       },

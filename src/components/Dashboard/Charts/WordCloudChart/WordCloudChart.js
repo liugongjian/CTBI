@@ -1,10 +1,10 @@
-/**
-{
-  "author": "huanglulu",
-  "time": "2022/04/07",
-  "description": "词云组件"
-}
- * */
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-06-08 10:54:25
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-07-28 16:45:47
+ * @Description:
+ */
 // 仪表盘配置项信息
 /**
  * type: {
@@ -70,12 +70,14 @@ export default {
     'Dimension': { // 维度
       'name': '词标签/维度',
       'require': true,
+      'limit': 1,
       'value': []
     },
     'Measure': { // 度量
       'name': '词大小/度量',
       'require': false,
       'tooltip': '无度量时维度出现频次决定词大小',
+      'limit': 1,
       'value': []
     }
   }, // 数据集
