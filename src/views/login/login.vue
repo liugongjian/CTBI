@@ -80,7 +80,6 @@
       <svg-icon icon-class="warn" />
       <span class="warn-text">您长时间未登录，账号已被冻结。<br><span class="warn-freeze">请联系系统管理员进行解冻!</span></span>
     </span>
-    <b-cascader :options="options" @onChoose="testChoose"><div style="width: 100px;background-color: red;height: 30px; line-height: 30px;">需要菜单的内容</div></b-cascader>
   </div>
 
 </template>
