@@ -2,15 +2,10 @@
  * @Author: qinruibin
  * @Date: 2022-08-04 14:13:56
  * @LastEditors: qinruibin
- * @LastEditTime: 2022-08-12 16:57:59
+ * @LastEditTime: 2022-08-12 17:00:10
  * @Description:
  */
 /**
-{
-  "author": "qinruibin",
-  "time": "2022/08/04",
-  "description": "环形柱图组件"
-}
  * */
 // 环形柱图配置项信息
 /**
@@ -30,13 +25,13 @@
 export default {
   'type': 'comparator', // 组件类型, 用于管理组件类型集合，例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
-  'order': 7, // 在tools中排序
+  'order': 8, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
-        'text': '环形柱状图', // 标题名称
+        'text': '排行榜', // 标题名称
         'color': '#000', // 标题颜色
         'show': true // 是否显示标题
       },
@@ -63,13 +58,15 @@ export default {
         'imgSize': 'containRight' // 背景图片尺寸位置
       }
     },
-    'ComponentOption': { // 图表样式
-      'Legend': { // 图例
+    'StyleConfig': { // 样式配置
+      'Rank': { // 区间设置 // 2022/04/18暂时先不做
         'show': true,
-        'top': 'auto',
-        'left': 'center',
-        'orient': 'horizontal',
-        'type': 'scroll'
+        'title': '排序',
+        'format': 'all',
+        'position': 'right',
+        'rank': true,
+        'color': '#1B7CFF',
+        'type': 'original' // original percentage
       }
     }
   },
