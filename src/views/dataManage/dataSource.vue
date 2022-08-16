@@ -14,7 +14,7 @@
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="mysql">MySQL</el-dropdown-item>
-              <el-dropdown-item command="mongoDB">MongoDB</el-dropdown-item>
+              <!-- <el-dropdown-item command="mongoDB">MongoDB</el-dropdown-item> -->
               <el-dropdown-item command="localFile">本地文件</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
