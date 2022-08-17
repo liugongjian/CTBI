@@ -63,7 +63,7 @@
               </div>
               <div
                 v-if="node.isLeaf"
-                class="p-r-10 gear-btn"
+                class="p-r-20 gear-btn"
               >
                 <gear-btn
                   :active-tag-name="activeTagName"
@@ -263,7 +263,7 @@
             <template slot-scope="scope">
               <div v-if="scope.row._id !== 1 && scope.row._id !== 2">
                 <el-input
-                  v-model="scope.row.comment"
+                  v-model="scope.row.attributes[0].comment"
                   placeholder="请输入内容"
                 />
               </div>
@@ -381,7 +381,7 @@ export default {
       try {
         this.previewLoading = true
         const data = await getPreviewData(body)
-        this.dimensionMeasureTableData = data.data.slice()
+        this.dimensionMeasureTableData = data.result?.data.slice()
       } catch (error) {
         console.log(error)
       } finally {

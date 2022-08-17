@@ -72,10 +72,10 @@
                   style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 4px;"
                   :icon-class="typeTransform(data.attributes)"
                 />
-                <span v-if="data.comment">
+                <span v-if="data.attributes[0].comment">
                   <el-tooltip
-                    :placement="data.comment"
-                    effect="light"
+                    :content="data.attributes[0].comment"
+                    placement="top"
                   >
                     <span>{{ data.displayColumn }}</span>
                   </el-tooltip>
@@ -112,7 +112,16 @@
                   style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 3px;"
                   :icon-class="typeTransform(data.attributes)"
                 />
-                <span>{{ node.label }}</span>
+                <span v-if="data.attributes[0].comment">
+                  <el-tooltip
+                    :content="data.attributes[0].comment"
+                    placement="top"
+                  >
+                    <span>{{ data.displayColumn }}</span>
+                  </el-tooltip>
+
+                </span>
+                <span v-else>{{ data.displayColumn }}</span>
               </span>
             </el-tree>
           </div>
