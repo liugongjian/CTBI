@@ -105,6 +105,7 @@
           style="height:calc(100vh - 98px)"
           :option="dataSourceOptions"
           :data-set="dataSetOptions"
+          @changeActiveName="showItem"
         />
       </div>
     </div>

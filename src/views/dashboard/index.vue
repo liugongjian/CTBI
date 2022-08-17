@@ -331,7 +331,7 @@ export default {
         setTimeout(() => { this.getLayoutRenderData(layout) }, 500)
       }
       if (layoutStyles) {
-        store.dispatch('setting/changeSetting', { key: 'layoutStyles', value: layoutStyles })
+        store.dispatch('settings/changeSetting', { key: 'layoutStyles', value: layoutStyles })
       }
     },
     // 触发 interReload事件，获取每个图表的渲染数据

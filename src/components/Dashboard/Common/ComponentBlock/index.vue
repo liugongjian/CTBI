@@ -1,5 +1,6 @@
 <template>
   <div
+    v-loading="loading"
     :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId},'com-block']"
     :style="styleObject"
   >
@@ -145,6 +146,7 @@ export default {
   },
   data () {
     return {
+      loading: false,
       onLoad: false,
       imgSizeOption: { // 图片尺寸及位置，格式："尺寸名":['图片尺寸','图片位置']
         'containLeft': ['contain', ' left center'],
@@ -186,6 +188,25 @@ export default {
     // 防止宽高计算未完成就开始渲染组件
     this.$nextTick(() => {
       this.onLoad = true
+
+      this.$bus.$on('showLoading', (id) => {
+        if (id === this.option.id) {
+          this.loading = true
+        }
+      })
+      this.$bus.$on('closeLoading', (id) => {
+        if (id === this.option.id) {
+          this.loading = false
+        }
+      })
+    })
+  },
+  beforeDestroy() {
+    this.$bus.$off('showLoading', (id) => {
+      this.loading = true
+    })
+    this.$bus.$off('closeLoading', () => {
+      this.loading = false
     })
   },
   methods: {
@@ -226,11 +247,36 @@ export default {
     },
 
     sql() {
-      this.$dialog.show('ShowSqlDialog')
+      if (this.isExistDataSet()) {
+        this.$dialog.show('ShowSqlDialog')
+      } else {
+        this.$message.warning('未选择数据集或字段')
+      }
     },
 
     data() {
-      this.$dialog.show('ShowDataDialog')
+      if (this.isExistDataSet()) {
+        this.$dialog.show('ShowDataDialog')
+      } else {
+        this.$message.warning('未选择数据集或字段')
+      }
+    },
+
+    // 判断是否存在数据集和字段
+    // 存在 true 不存在 false
+    isExistDataSet() {
+      const { option: { dataSource, dataSet } } = this.option
+      const result = false
+      if (!dataSet?.id) {
+        return false
+      }
+      for (const key in dataSource) {
+        const source = dataSource[key]
+        if (source.value.length > 0) {
+          return true
+        }
+      }
+      return result
     },
 
     // 展示链接跳转弹窗

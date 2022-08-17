@@ -46,9 +46,14 @@ export default {
         return
       }
 
-      const params = getQueryParams(limit)
+      const params = getQueryParams(limit, this.identify)
+      const { dataSetId, query: { dimension, measure } } = params
+      if (!dataSetId || (dimension.selections.length === 0 && measure.selections.length === 0)) {
+        return
+      }
 
       try {
+        this.$bus.$emit('showLoading', this.identify)
         const body = { query: params.query }
         const dataSetId = params.dataSetId
         const res = await getDataSetData(dataSetId, body)
@@ -73,6 +78,7 @@ export default {
       } catch (error) {
         console.log(error)
       }
+      this.$bus.$emit('closeLoading', this.identify)
     },
     // 设置图例与图表距离
     setGrid (legend) {

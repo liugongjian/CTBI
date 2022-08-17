@@ -60,7 +60,7 @@ export const constantRoutes = [
   },
   {
     path: '/dashboard/publish/:id',
-    name: 'publish',
+    name: 'dashboard/publish',
     component: () => import('@/views/dashboard/share.vue'),
     meta: { title: '仪表盘', icon: 'dashboard', affix: true, keepAlive: true }
   },
@@ -71,7 +71,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'page',
-        name: 'dashboard',
+        name: 'dashboard/page',
         hidden: true,
         component: () => import('@/views/dashboard/index.vue'),
         meta: { title: '仪表盘', icon: 'dashboard', affix: true, keepAlive: true }

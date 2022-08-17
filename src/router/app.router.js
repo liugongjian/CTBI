@@ -7,16 +7,10 @@ const apps = [
   },
   {
     path: '/dashboardList/',
-    name: 'dashboard',
+    name: 'dashboardList',
     component: () => import('@/views/dashboard/list.vue'),
     meta: { title: '仪表盘', icon: 'dashboard', affix: true }
   },
-  // {
-  //   path: '/dashboardList1/',
-  //   name: 'dashboard1',
-  //   component: () => import('@/views/dashboard/index.vue'),
-  //   meta: { title: '仪表盘1', icon: 'dashboard', affix: true }
-  // },
   {
     path: '/dataManage',
     name: 'dataManage',
