@@ -301,7 +301,7 @@ export default {
   height: 100%;
   display: flex;
   padding: 18px;
-  border: 1px solid black;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   flex-direction: column;
   box-sizing: border-box;
   touch-action: none;
