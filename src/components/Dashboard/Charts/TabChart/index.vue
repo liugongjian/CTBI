@@ -54,7 +54,6 @@ export default {
   data () {
     return {
       type: 'TabChart',
-      editableTabsValue: '1',
       isEdit: true
     }
   },
@@ -66,12 +65,15 @@ export default {
     tabHeight() {
       return this.layout.h * 100 - 65 + this.layout.h * 4
     },
+    editableTabsValue() {
+      if (this.layout.tabPanels && this.layout.tabPanels.length > 0) {
+        return this.layout.tabPanels[0].name
+      }
+      return '1'
+    },
     activeTab() {
       return this.layout.tabPanels.find(tab => tab.name === this.editableTabsValue)
     }
-  },
-  mounted () {
-    this.editableTabsValue = this.layout.tabPanels[0].name
   },
   methods: {
     removeTab(targetName) {
