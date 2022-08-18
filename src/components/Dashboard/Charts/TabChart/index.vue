@@ -54,7 +54,6 @@ export default {
   data () {
     return {
       type: 'TabChart',
-      isEdit: true,
       userChooseTab: null
     }
   },
@@ -77,6 +76,9 @@ export default {
     },
     activeTab() {
       return this.layout.tabPanels.find(tab => tab.name === this.editableTabsValue)
+    },
+    isEdit() {
+      return store.state.app.dashboardMode === 'edit'
     }
   },
   methods: {

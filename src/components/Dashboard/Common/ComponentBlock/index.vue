@@ -1,7 +1,7 @@
 <template>
   <div
     v-loading="loading"
-    :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId},'com-block']"
+    :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId && $store.state.app.dashboardMode === 'edit'},'com-block']"
     :style="styleObject"
   >
 
@@ -46,24 +46,26 @@
         </el-select>
 
         <!-- 菜单模块 -->
-        <el-dropdown
-          trigger="click"
-          size="small"
-          @command="handleCommand"
-        >
-          <span class="el-dropdown-link">
-            <svg-icon
-              icon-class="menu"
-              style="font-size: 15px;"
-            />
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="delete">删除</el-dropdown-item>
-            <el-dropdown-item command="copy">复制</el-dropdown-item>
-            <el-dropdown-item command="sql">查看SQL</el-dropdown-item>
-            <el-dropdown-item command="data">查看数据</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <div v-if="showCommandMenu">
+          <el-dropdown
+            trigger="click"
+            size="small"
+            @command="handleCommand"
+          >
+            <span class="el-dropdown-link">
+              <svg-icon
+                icon-class="menu"
+                style="font-size: 15px;"
+              />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="delete">删除</el-dropdown-item>
+              <el-dropdown-item command="copy">复制</el-dropdown-item>
+              <el-dropdown-item command="sql">查看SQL</el-dropdown-item>
+              <el-dropdown-item command="data">查看数据</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
         <!-- 菜单模块END -->
 
         <!-- 链接跳转模块 -->
@@ -182,6 +184,9 @@ export default {
       },
       set () {
       }
+    },
+    showCommandMenu() {
+      return store.state.app.dashboardMode === 'edit'
     }
   },
   mounted () {

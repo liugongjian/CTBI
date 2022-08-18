@@ -105,6 +105,7 @@ export default {
     // }
     // this.getDashboardData()
     window.addEventListener('beforeunload', this.beforeunload)
+    store.dispatch('app/updateDashboardMode', 'preview')
   },
   destroyed() {
     // if (this.timer) {
@@ -214,6 +215,7 @@ export default {
       localStorage.removeItem(this.saveTagName)
       this.updateStoreData({ layout: [], layoutStyles: [] })
       this.mode = 'edit'
+      store.dispatch('app/updateDashboardMode', 'edit')
       window.removeEventListener('beforeunload', this.beforeunload)
     }
   }
