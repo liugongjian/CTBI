@@ -48,18 +48,12 @@
       </div>
     </div>
     <div class="divider" />
-    <div class="tools-container">
+    <!-- <div class="tools-container">
       <div class="tool-btn">
         <icon-dropdown
           :drop-downs="queryList"
           :main="'tools-query'"
           @resolve="resolveDropdown"
-        />
-      </div>
-      <div class="tool-btn">
-        <svg-icon
-          :icon-class="'tools-tab'"
-          style="font-size: 18px;"
         />
       </div>
       <div class="tool-btn">
@@ -69,7 +63,7 @@
           @resolve="resolveDropdown"
         />
       </div>
-    </div>
+    </div> -->
     <div class="tools-container">
       <div
         v-for="(item,name, index) in briefTooList"
