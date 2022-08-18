@@ -101,33 +101,6 @@
         />
       </div>
     </div>
-    <!-- <div v-if="option.SeriesLine&&option.SeriesLine.show" class="editor-object-container">
-      <div style="display: flex" class="color-row">
-        <span class="editor-item-title" style="width: 56px">线条样式</span>
-        <el-select
-          v-model="option.SeriesLine.lineType"
-          popper-class="setting-select"
-          placeholder="请输入内容"
-          @change="(e)=>{setSeriesOption(e,'lineType')}"
-        >
-          <svg-icon
-            slot="prefix"
-            :icon-class="`${option.SeriesLine.lineType}-line`"
-          />
-          <el-option
-            v-for="(item,index) in lineTypes"
-            :key="index"
-            :label="item.label"
-            :value="item.value"
-          >
-            <svg-icon
-              :icon-class="`${item.value}-line`"
-            />
-          </el-option>
-        </el-select>
-      </div>
-
-    </div> -->
     <div
       v-if="option.SeriesLine&&option.SeriesLine.show"
       class="editor-object-container"
