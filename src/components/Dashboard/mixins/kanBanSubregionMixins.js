@@ -34,14 +34,14 @@ export default {
           // 这个地方是不是写的有问题? 要是没有维度呢 维度并不是必填的
           if (key === 'Dimension') {
             if (fields[key]['fields'].length > 0) {
-              const column = fields[key]['fields'][0].column
+              const column = fields[key]['fields'][0].displayColumn
               obj = data.map(item => { return { name: item[column], data: [] } })
             } else {
               obj = data.map(item => { return { name: '', data: [] } })
             }
           } else if (key === 'Measure') {
             fields[key]['fields'].forEach((field, index) => {
-              const column = field.column
+              const column = field.displayColumn
               obj.forEach((item, i) => {
                 item.data.push({ title: column, value: data[i][column] })
               })
