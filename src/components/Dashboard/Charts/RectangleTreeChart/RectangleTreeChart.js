@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-07-05 09:22:46
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-07-28 16:45:19
+ * @LastEditTime: 2022-08-18 14:32:04
  * @Description:
  */
 // 玫瑰图配置项信息
@@ -24,9 +24,10 @@ import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'distribution', // 组件类型, 用于管理组件类型集合,例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
-  order: 4, // 在tools中排序
+  'order': 4, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
+  'name': '矩形树图', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件

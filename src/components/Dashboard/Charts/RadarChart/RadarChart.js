@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-06-08 10:55:37
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-07-28 16:45:02
+ * @LastEditTime: 2022-08-18 14:31:34
  * @Description:
  */
 // 折线图配置项信息
@@ -23,9 +23,10 @@
 export default {
   'type': 'distribution', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
-  order: 3, // 在tools中排序
+  'order': 3, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
+  'name': '雷达图', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件

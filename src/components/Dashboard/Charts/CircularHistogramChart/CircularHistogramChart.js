@@ -1,8 +1,8 @@
 /*
  * @Author: qinruibin
  * @Date: 2022-08-04 14:13:56
- * @LastEditors: qinruibin
- * @LastEditTime: 2022-08-12 16:57:59
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-18 14:23:19
  * @Description:
  */
 /**
@@ -33,6 +33,7 @@ export default {
   'order': 7, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
+  'name': '环形柱状图', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
