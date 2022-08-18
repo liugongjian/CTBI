@@ -88,6 +88,7 @@ import _ from 'lodash'
 // 导入样式
 import '@/views/dashboard/index.scss'
 import { getDashboardDetail } from '@/api/dashboard'
+import { getTemplateList } from '@/api/template'
 export default {
   name: 'DashBoard',
   components: {
@@ -188,11 +189,16 @@ export default {
     },
     async getDashboardData() {
       const id = this.dashboardId
+      const from = this.$route.query.from
       if (id) {
         try {
           this.loading = true
-          const result = await getDashboardDetail(id)
-          console.log(result)
+          let result = null
+          if (from) {
+            result = await getTemplateList(id)
+          } else {
+            result = await getDashboardDetail(id)
+          }
           this.loading = false
           this.dashboard = result
           if (!this.recoverVisible && !this.useRecover) {

@@ -238,7 +238,7 @@ export default {
       try {
         // 获取缩略图base64
         const dashboardCom = findComponentUpward(this, 'DashBoard')
-        this.thumbnail = await this.convertToImage(dashboardCom.mainLayout.$el)
+        this.thumbnail = await this.convertToImage(dashboardCom.$refs.mainLayout.$el)
         const data = {
           layout: store.state.app.layout,
           layoutStyles: store.state.settings.layoutStyles
