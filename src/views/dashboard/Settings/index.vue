@@ -7,6 +7,7 @@
       :data-source-options="option.dataSource"
       :data-set-options="option.dataSet"
       :current-layout-id="currentLayoutId"
+      :option-type="option.type"
     >
 
       <template #field-panel>

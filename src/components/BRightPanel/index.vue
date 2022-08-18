@@ -29,7 +29,7 @@
           v-if="showChartTypes&&showWrapper"
           class="chart-type-switch"
         >
-          <ChartSwitcher :type="option.type" />
+          <ChartSwitcher :type="optionType" />
         </el-container>
         <el-container v-if="showWrapper && !showChartTypes">
           <el-tabs v-model="activeNames">
@@ -134,6 +134,7 @@ export default {
       type: String,
       default: ''
     },
+    optionType: { type: String, default: '' },
     dataSourceOptions: {
       type: Object,
       default: () => {}
