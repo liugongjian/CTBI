@@ -54,7 +54,8 @@ export default {
   data () {
     return {
       type: 'TabChart',
-      isEdit: true
+      isEdit: true,
+      userChooseTab: null
     }
   },
   computed: {
@@ -66,6 +67,9 @@ export default {
       return this.layout.h * 100 - 65 + this.layout.h * 4
     },
     editableTabsValue() {
+      if (this.userChooseTab) {
+        return this.userChooseTab
+      }
       if (this.layout.tabPanels && this.layout.tabPanels.length > 0) {
         return this.layout.tabPanels[0].name
       }
@@ -77,7 +81,7 @@ export default {
   },
   methods: {
     removeTab(targetName) {
-      const tabs = this.layout.tabPanels
+      const tabs = [...this.layout.tabPanels]
       let activeName = this.editableTabsValue
       let activeTabId = this.layout.activeTabId
       if (activeName === targetName) {
@@ -85,6 +89,7 @@ export default {
           if (tab.name === targetName) {
             const nextTab = tabs[index + 1] || tabs[index - 1]
             if (nextTab) {
+              console.log(nextTab)
               activeName = nextTab.name
               activeTabId = nextTab.paneId
             }
@@ -92,7 +97,7 @@ export default {
         })
       }
 
-      this.editableTabsValue = activeName
+      this.userChooseTab = activeName
       const index = tabs.findIndex(tab => tab.name === targetName)
       const newTabs = tabs.filter(tab => tab.name !== targetName)
       if (newTabs.length === 0) {
@@ -116,12 +121,12 @@ export default {
       })
       this.layout.activeTabId = paneId
       console.log(this.layout)
-      this.editableTabsValue = newTabName
+      this.userChooseTab = newTabName
     },
     changeTab (e) {
-      console.log(e.name)
-      this.editableTabsValue = e.name
+      this.userChooseTab = e.name
       const chooseTab = this.layout.tabPanels.find(item => item.name === e.name)
+      console.log(chooseTab.paneId)
       this.layout.activeTabId = chooseTab.paneId
     },
     dragover (event) {

@@ -161,13 +161,13 @@ export default {
       const temp = store.state.app.layout.find(item => {
         return item.id === this.currentLayoutId
       })
-      return temp.is
+      return temp ? temp.is : ''
     },
     isCommonChart () {
       const temp = store.state.app.layout.find(item => {
         return item.id === this.currentLayoutId
       })
-      return !['TabChart'].includes(temp.is)
+      return temp ? !['TabChart'].includes(temp.is) : true
     }
   },
 

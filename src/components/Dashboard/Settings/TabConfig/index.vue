@@ -20,24 +20,16 @@ export default {
       default: () => { }
     }
   },
-  data () {
-    return {
-      tabs: []
-    }
-  },
   computed: {
     layout () {
       // 去除属于tab组件的layout
       return store.state.app.layout.find(item => item.id === store.state.app.currentLayoutId)
+    },
+    tabs() {
+      return this.layout.tabPanels
     }
   },
-  mounted () {
-    this.getTabs()
-  },
   methods: {
-    getTabs () {
-      this.tabs = this.layout.tabPanels
-    },
     addTab() {
       const newTabName = Date.now() + ''
       const paneId = `${this.layout.i}-${newTabName}`
