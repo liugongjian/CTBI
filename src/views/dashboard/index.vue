@@ -14,7 +14,7 @@
           />
         </el-header>
         <!-- 画布主体 -->
-        <el-main class="main-layout" :style="layoutStyles">
+        <el-main ref="mainLayout" class="main-layout" :style="layoutStyles">
           <div
             id="content"
             @dragover="dragover"
@@ -89,6 +89,7 @@ import _ from 'lodash'
 import '@/views/dashboard/index.scss'
 import { getDashboardDetail } from '@/api/dashboard'
 export default {
+  name: 'DashBoard',
   components: {
     Widget, Settings, Tools, Navbar
   },

@@ -55,7 +55,8 @@
             :src="require('../../../assets/Image/dashboard/more.png')"
           ></span>
           <el-dropdown-menu slot="dropdown" class="more-dropdown">
-            <el-dropdown-item icon="el-icon-document-copy" @click.native="copy()">另存为</el-dropdown-item>
+            <el-dropdown-item v-if="role === 'superUser'" icon="el-icon-document-copy" @click.native="copy()">另存为仪表盘</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-document-copy" @click.native="saveAsTemplate()">另存为模板</el-dropdown-item>
             <el-dropdown-item
               v-if="dashboard.publishStatus === 1"
               icon="el-icon-bottom-right"
@@ -128,18 +129,24 @@
         </div>
       </el-dialog>
     </div>
+    <SaveAsDialog ref="saveAsDialog" :template-visible.sync="templateVisible" @handleSubmit="handleSubmit" />
     <ShareDialog ref="shareDialog" from="edit" :data="dashboard" @handleAction="handleShareChange" />
   </div>
 </template>
 
 <script>
 import { getFolderTree, saveDashboard, cancelShareDashboard } from '@/api/dashboard'
+import { addTemplate } from '@/api/template'
 import ShareDialog from '../ShareDialog'
+import SaveAsDialog from './SavaAsDialog'
+import html2canvas from 'html2canvas'
+import { findComponentUpward } from '@/utils/findComponentUpward'
 import store from '@/store'
 export default {
   name: 'Dashboard',
   components: {
-    ShareDialog
+    ShareDialog,
+    SaveAsDialog
   },
   props: {
     // eslint-disable-next-line vue/require-default-prop
@@ -178,7 +185,14 @@ export default {
       },
       folderTree: [],
       originFolder: [],
-      saveMode: 'save'
+      saveMode: 'save',
+      templateVisible: false,
+      thumbnail: ''
+    }
+  },
+  computed: {
+    role() {
+      return this.$store.state.user.userData.role
     }
   },
   watch: {
@@ -190,6 +204,58 @@ export default {
     }
   },
   methods: {
+    saveAsTemplate() {
+      this.templateVisible = true
+    },
+    // 生成快照
+    convertToImage (container, options = {}) {
+      // 设置放大倍数
+      const scale = window.devicePixelRatio
+
+      // 传入节点原始宽高
+      const _width = container.offsetWidth
+      const _height = container.offsetHeight
+
+      let { width, height } = options
+      width = width || _width
+      height = height || _height
+
+      // html2canvas配置项
+      const ops = {
+        scale,
+        width,
+        height,
+        useCORS: true,
+        allowTaint: false,
+        ...options
+      }
+      return html2canvas(container, ops).then(canvas => {
+        // 返回图片的二进制数据
+        return canvas.toDataURL('image/png')
+      })
+    },
+    async handleSubmit(form, cb) {
+      try {
+        // 获取缩略图base64
+        const dashboardCom = findComponentUpward(this, 'DashBoard')
+        this.thumbnail = await this.convertToImage(dashboardCom.mainLayout.$el)
+        const data = {
+          layout: store.state.app.layout,
+          layoutStyles: store.state.settings.layoutStyles
+        }
+        const params = {
+          ...form,
+          thumbnail: this.thumbnail,
+          setting: JSON.stringify(data)
+        }
+        await addTemplate(params)
+        this.$message.success('另存为模板成功')
+      } catch (error) {
+        console.log(error)
+      } finally {
+        cb()
+      }
+    },
     // 切换模式
     changeDevice (device) {
       this.device = device
