@@ -20,6 +20,7 @@ export default {
   'order': 1,
   'version': '', // 版本号
   'field': {}, // 字段
+  'name': '指标看板', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': {
     // 样式组件、配置合集
     'Basic': {

@@ -3,7 +3,7 @@
     <BRightPanel
       v-if="currentLayoutId"
       :show-switch-header="true"
-      :chart-name="option.theme.Basic.Title.text"
+      :chart-name="option.name"
       :data-source-options="option.dataSource"
       :data-set-options="option.dataSet"
       :current-layout-id="currentLayoutId"
