@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-06-08 10:54:25
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-18 14:34:48
+ * @LastEditTime: 2022-08-18 21:49:09
  * @Description:
  */
 // 仪表盘配置项信息
@@ -26,7 +26,7 @@ export default {
   'order': 5, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
-  'name': '词云图', // 图标的名字 不会改变 用于顶部的图标切换
+  'title': '词云图', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件

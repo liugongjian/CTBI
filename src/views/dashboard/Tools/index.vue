@@ -77,7 +77,7 @@
       >
         <el-tooltip
           effect="dark"
-          :content="item.theme.Basic.Title.text"
+          :content="item.title"
           placement="top"
         >
           <svg-icon
