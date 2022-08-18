@@ -14,7 +14,7 @@
           />
         </el-header>
         <!-- 画布主体 -->
-        <el-main class="main-layout" :style="layoutStyles">
+        <el-main :class="{'main-layout-edit': mode === 'edit', 'main-layout-preview': mode !== 'edit',}" :style="layoutStyles">
           <div
             id="content"
             @dragover="dragover"
@@ -382,5 +382,13 @@ export default {
 <style lang="scss" scoped>
 .tool-header{
     position: relative;
+}
+.main-layout-edit {
+  padding: 0px;
+  height: calc(100vh - 190px);
+}
+.main-layout-preview {
+  padding: 0px;
+  height: calc(100vh - 60px);
 }
 </style>

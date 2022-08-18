@@ -3,7 +3,7 @@
     <el-container>
       <el-container>
         <!-- 画布主体 -->
-        <el-main class="main-layout" :style="layoutStyles">
+        <el-main class="main-layout-preview" :style="layoutStyles">
           <div
             id="content"
             @dragover="dragover"
@@ -230,5 +230,9 @@ export default {
 }
 .dialog-footer{
   padding-top: 10px;
+}
+.main-layout-preview {
+  padding: 0px;
+  height: 100vh;
 }
 </style>
