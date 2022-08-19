@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-04 12:46:01
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-18 14:28:00
+ * @LastEditTime: 2022-08-18 21:47:14
  * @Description:
  */
 // 看板汇总配置项信息
@@ -25,7 +25,7 @@ export default {
   isShow: false, // 是否展示该组件, 用于控制该组件是否在tools中显示
   version: '', // 版本号
   field: {}, // 字段
-  'name': '看板_汇总', // 图标的名字 不会改变 用于顶部的图标切换
+  'title': '看板_汇总', // 图标的名字 不会改变 用于顶部的图标切换
   theme: {
     // 样式组件、配置合集
     Basic: {

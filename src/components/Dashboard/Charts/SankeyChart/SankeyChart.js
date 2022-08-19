@@ -14,7 +14,7 @@ export default {
   'order': 7, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
-  'name': '桑基图', // 图标的名字 不会改变 用于顶部的图标切换
+  'title': '桑基图', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': {
     'Basic': {
       'Title': { // 标题组件

@@ -19,7 +19,7 @@ export default {
   'order': 6, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
-  'name': '水波图', // 图标的名字 不会改变 用于顶部的图标切换
+  'title': '水波图', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
@@ -93,7 +93,7 @@ export default {
     'Measure': { // 度量
       'name': '进度指示/度量',
       'require': true,
-      'limit': 5,
+      'limit': 10,
       'value': []
     }
   }, // 数据集

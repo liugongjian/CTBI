@@ -8,7 +8,7 @@ export default {
   'order': 5,
   'version': '', // 版本号
   'field': {}, // 字段
-  'name': '分面散点图', // 图标的名字 不会改变 用于顶部的图标切换
+  'title': '分面散点图', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': {
     'Basic': {
       'Title': { // 标题组件
