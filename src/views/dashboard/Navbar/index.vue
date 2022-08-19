@@ -276,7 +276,7 @@ export default {
         }
       })
     },
-    // 新建数据集
+    // 保存仪表板
     async saveDashboard (obj) {
       const isCopy = this.saveMode === 'copy'
       const id = isCopy ? null : (this.dashboard._id || null)
@@ -288,6 +288,7 @@ export default {
       const params = {
         id: finalId,
         setting: JSON.stringify(data),
+        isPublish: this.saveMode === 'saveAndShare',
         ...(obj || this.dashboardAttr)
       }
       const result = await saveDashboard(params)
