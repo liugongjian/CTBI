@@ -33,8 +33,7 @@ export default {
       'Title': { // 标题组件
         'text': '矩形树图', // 标题名称
         'color': '#333', // 标题颜色
-        'show': true, // 是否显示标题
-        'testShow': false // 测试显示
+        'show': true // 是否显示标题
       },
       'Mark': { // 备注
         'show': false, // 是否显示备注

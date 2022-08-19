@@ -34,12 +34,7 @@ export default {
         // 标题组件
         text: '看板_汇总', // 标题名称
         color: '#333', // 标题颜色
-        show: true, // 是否显示标题
-        testShow: false // 测试显示
-      },
-      TestTitle: {
-        // 测试组件间交互组件
-        testShow: false
+        show: true // 是否显示标题
       },
       Mark: {
         // 备注

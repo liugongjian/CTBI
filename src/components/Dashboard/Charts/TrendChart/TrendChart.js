@@ -95,8 +95,7 @@ export default {
       'Title': { // 标题组件
         'text': '指标趋势图', // 标题名称
         'color': '#333', // 标题颜色
-        'show': true, // 是否显示标题
-        'testShow': false // 测试显示
+        'show': true // 是否显示标题
       },
       'TitleLink': { // 链接跳转组件
         'text': '', // 文案

@@ -29,8 +29,7 @@ export default {
         // 标题组件
         'text': '指标看板', // 标题名称
         'color': '#333', // 标题颜色
-        'show': true, // 是否显示标题
-        'testShow': false // 测试显示
+        'show': true // 是否显示标题
       },
       'Mark': {
         // 备注

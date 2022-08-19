@@ -174,8 +174,6 @@ export default {
       }
     }
   },
-  watch: {},
-  created () { },
   mounted () {
     document.addEventListener('dragover', function (e) {
       mouseXY.x = e.clientX
@@ -186,7 +184,6 @@ export default {
     this.toolList = getToolList()
     this.briefTooList = getBriefToolList()
     this.controls = getControlsList()
-    console.log(this.briefTooList)
     store.dispatch('app/updateToolList', this.toolList)
   },
   methods: {

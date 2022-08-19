@@ -90,14 +90,6 @@ export default {
         this.header = val.theme.DisplayConfig.ListHeader.head
         this.sequence = val.theme.DisplayConfig.Sequence.show
         this.sequenceName = val.theme.DisplayConfig.Sequence.name
-        // this.isShowPagination = val.theme.DisplayConfig.
-        // if (JSON.stringify(val.dataSource) !== '{}') {
-        //   this.dataValue = deepClone(val.dataSource)
-        //   this.columns = this.dataValue.columns.map((item) => {
-        //     item.fixed = false
-        //     return item
-        //   })
-        // }
       },
       deep: true
     },
