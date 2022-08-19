@@ -94,7 +94,7 @@ export default {
     'Measure': { // 度量
       'name': '进度指示/度量',
       'require': true,
-      'limit': 5,
+      'limit': 10,
       'value': []
     }
   }, // 数据集
