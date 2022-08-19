@@ -207,9 +207,7 @@ export default {
           const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
           // 取除维度以外的第1列为vlaue
           for (let i = 1; i < this.dataValue.length; i++) {
-            const value = this.dataValue[i][indicatorIdx]
-            // 提取数字
-            data[i - 1].push(value.replace(/[^0-9]/ig, ''))
+            data[i - 1].push(this.dataValue[i][indicatorIdx])
           }
         })
         data.unshift([this.dataValue[0][0], ...indicator])

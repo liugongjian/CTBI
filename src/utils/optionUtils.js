@@ -230,7 +230,7 @@ export const formatDataValue = function (chartData) {
         dimensionData.push(item[dim])
       })
       MeasureKey.forEach(mea => {
-        measureData.push(item[mea])
+        measureData.push(item[mea].replace(/[^0-9]/ig, ''))
       })
       dataValue.push([dimensionData.join('-'), ...measureData])
     })
