@@ -14,7 +14,7 @@
           />
         </el-header>
         <!-- 画布主体 -->
-        <el-main :class="{'main-layout-edit': mode === 'edit', 'main-layout-preview': mode !== 'edit',}" :style="layoutStyles">
+        <el-main ref="mainLayout" :class="{'main-layout-edit': mode === 'edit', 'main-layout-preview': mode !== 'edit',}" :style="layoutStyles">
           <div
             id="content"
             @dragover="dragover"
@@ -88,7 +88,7 @@ import _ from 'lodash'
 // 导入样式
 import '@/views/dashboard/index.scss'
 import { getDashboardDetail } from '@/api/dashboard'
-import { getTemplateList } from '@/api/template'
+import { getTemplateDetail } from '@/api/template'
 export default {
   name: 'DashBoard',
   components: {
@@ -196,7 +196,7 @@ export default {
           this.loading = true
           let result = null
           if (from) {
-            result = await getTemplateList(id)
+            result = await getTemplateDetail(id)
           } else {
             result = await getDashboardDetail(id)
           }

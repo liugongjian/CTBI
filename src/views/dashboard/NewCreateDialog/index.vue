@@ -1,13 +1,12 @@
 <template>
   <el-dialog
-    v-loading="loading"
     title="从模板新建"
     :visible.sync="visible"
     width="1000px"
     @open="handleOpen"
     @close="handleClose"
   >
-    <div class="dialog-content">
+    <div v-loading="loading" class="dialog-content">
       <el-card v-for="item in templateList" :key="item._id" class="box-card">
         <img class="card-img" :src="item.thumbnail">
         <div class="card-name">{{ item.name }}</div>
@@ -140,7 +139,7 @@ export default {
 <style scoped lang="scss">
 .dialog-content {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   align-content: space-between;
   flex-wrap: wrap;
@@ -150,6 +149,7 @@ export default {
   .box-card {
     width: 306px;
     flex: 0 0 306px;
+    margin: 0px 5px;
     .card-img {
       width: 290px;
       height: 110px;

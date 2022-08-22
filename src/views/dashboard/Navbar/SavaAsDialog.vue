@@ -5,7 +5,7 @@
     width="480px"
     @close="handleClose"
   >
-    <div class="data-set-didlog-main">
+    <div class="data-set-dialog-main">
       <el-form
         ref="attrForm"
         style="padding: 0px"

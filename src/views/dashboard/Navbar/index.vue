@@ -139,7 +139,7 @@ import { getFolderTree, saveDashboard, cancelShareDashboard } from '@/api/dashbo
 import { addTemplate } from '@/api/template'
 import ShareDialog from '../ShareDialog'
 import SaveAsDialog from './SavaAsDialog'
-import html2canvas from 'html2canvas'
+import domToImage from 'dom-to-image-more'
 import { findComponentUpward } from '@/utils/findComponentUpward'
 import store from '@/store'
 export default {
@@ -207,38 +207,11 @@ export default {
     saveAsTemplate() {
       this.templateVisible = true
     },
-    // 生成快照
-    convertToImage (container, options = {}) {
-      // 设置放大倍数
-      const scale = window.devicePixelRatio
-
-      // 传入节点原始宽高
-      const _width = container.offsetWidth
-      const _height = container.offsetHeight
-
-      let { width, height } = options
-      width = width || _width
-      height = height || _height
-
-      // html2canvas配置项
-      const ops = {
-        scale,
-        width,
-        height,
-        useCORS: true,
-        allowTaint: false,
-        ...options
-      }
-      return html2canvas(container, ops).then(canvas => {
-        // 返回图片的二进制数据
-        return canvas.toDataURL('image/png')
-      })
-    },
     async handleSubmit(form, cb) {
       try {
         // 获取缩略图base64
         const dashboardCom = findComponentUpward(this, 'DashBoard')
-        this.thumbnail = await this.convertToImage(dashboardCom.$refs.mainLayout.$el)
+        this.thumbnail = await domToImage.toPng(dashboardCom.$refs.mainLayout.$el)
         const data = {
           layout: store.state.app.layout,
           layoutStyles: store.state.settings.layoutStyles

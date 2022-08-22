@@ -11,7 +11,7 @@
       @refresh="refresh"
     >
       <template #operation="{scope}">
-        <el-button type="text" @click.stop="handleDelete(scope.row.id)">删除</el-button>
+        <el-button type="text" @click.stop="handleDelete(scope.row._id)">删除</el-button>
       </template>
     </common-table>
   </div>
@@ -67,19 +67,6 @@ export default {
         const data = await getTemplateList(params)
         this.tableData = data.result
         this.total = data.pageInfo.totalItems
-        // this.tableData = [
-        //   {
-        //     id: 1,
-        //     name: 'template1',
-        //     description: 'hello'
-        //   },
-        //   {
-        //     id: 2,
-        //     name: 'template2',
-        //     description: 'world'
-        //   }
-        // ]
-        // this.total = 2
       } catch (error) {
         console.log(error)
         this.tableData = []

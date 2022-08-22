@@ -17,6 +17,6 @@ export function deleteTemplate (id) {
 
 // 获取模板详情
 export function getTemplateDetail (id) {
-  return http.git(`/template/${id}`)
+  return http.get(`/template/${id}`)
 }
 
