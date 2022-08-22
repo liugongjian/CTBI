@@ -60,8 +60,9 @@ export default {
       try {
         this.tableLoading = true
         const params = {
+          isPaging: '1',
           page: this.pageNum,
-          pageSize: this.pageSize
+          limit: this.pageSize
         }
         const data = await getTemplateList(params)
         this.tableData = data.result
