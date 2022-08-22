@@ -50,10 +50,10 @@ export default {
         'show': false,
         'active': 'stripe' // stripe 斑马 border 线框 simple 简版 verySimple 极简
       },
-      // 'TableThemeSimple': {
-      //   'show': true,
-      //   'type': 'default'
-      // },
+      'TableThemeSimple': {
+        'show': true,
+        'type': 'default'
+      },
       'ListHeader': {
         'head': false
       },
