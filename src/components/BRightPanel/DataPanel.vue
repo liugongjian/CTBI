@@ -72,7 +72,16 @@
                   style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 4px;"
                   :icon-class="typeTransform(data.attributes)"
                 />
-                <span>{{ node.label }}</span>
+                <span v-if="data.attributes[0].comment">
+                  <el-tooltip
+                    :content="data.attributes[0].comment"
+                    placement="top"
+                  >
+                    <span>{{ data.displayColumn }}</span>
+                  </el-tooltip>
+
+                </span>
+                <span v-else>{{ data.displayColumn }}</span>
               </span>
             </el-tree>
           </div>
@@ -103,7 +112,16 @@
                   style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 3px;"
                   :icon-class="typeTransform(data.attributes)"
                 />
-                <span>{{ node.label }}</span>
+                <span v-if="data.attributes[0].comment">
+                  <el-tooltip
+                    :content="data.attributes[0].comment"
+                    placement="top"
+                  >
+                    <span>{{ data.displayColumn }}</span>
+                  </el-tooltip>
+
+                </span>
+                <span v-else>{{ data.displayColumn }}</span>
               </span>
             </el-tree>
           </div>
@@ -199,6 +217,7 @@ export default {
       return true
     },
     handleDragStart (node, ev) {
+      this.$emit('changeActiveName', '1')
       const dt = ev.dataTransfer
       ev.dataTransfer.effectAllowed = 'copy'
       dt.setData('data', JSON.stringify(node.data))
@@ -233,6 +252,7 @@ export default {
           addData()
         }
       }
+      this.$emit('changeActiveName', '1')
     },
 
     // 跳转到编辑数据集页面

@@ -22,28 +22,28 @@ export default {
   },
   mixins: [progressMixins],
   props: {
-    storeOption: {
+    option: {
       type: Object,
-      default: () => ({})
+      default: () => {}
     },
     dataValue: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   computed: {
     showNumStyle () {
-      const showNum = this.storeOption.theme?.ComponentOption?.ProgressStyle.showNum || 1
+      const showNum = this.option.theme?.ComponentOption?.ProgressStyle.showNum || 1
       return `${1 / showNum * 100}%`
     },
     ProgressStyle () {
-      return this.storeOption.theme?.ComponentOption?.ProgressStyle || {}
+      return this.option.theme?.ComponentOption?.ProgressStyle || {}
     },
     ProgressConfig () {
-      return this.storeOption.theme?.FunctionalOption.ProgressConfig || {}
+      return this.option.theme?.FunctionalOption.ProgressConfig || {}
     },
     isComponent () {
-      return this.storeOption.theme?.Basic?.VisualStyle.style || 'barType'
+      return this.option.theme?.Basic?.VisualStyle.style || 'barType'
     }
   }
 }

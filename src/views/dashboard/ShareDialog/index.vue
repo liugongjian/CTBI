@@ -36,8 +36,13 @@
           @input="shareChange"
         />
       </el-form-item>
+      <el-form-item v-if="currentData.shareUrl">
+        <div class="d-f">
+          <p class="shareCopyUrl">{{ currentData.shareUrl }}</p>
+          <el-button class="random" type="text" @click="copyUrl">复制地址</el-button>
+        </div>
+      </el-form-item>
     </el-form>
-    <p v-if="currentData.shareUrl" class="shareCopyUrl">{{ currentData.shareUrl }}</p>
     <div
       slot="footer"
       class="dialog-footer"
@@ -199,6 +204,24 @@ export default {
         document.body.removeChild(textarea)
       }
     },
+    copyUrl () {
+      const shareContent = this.currentData.shareUrl
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareContent)
+        this.$message.success('地址复制成功')
+      } else {
+        const textarea = document.createElement('textarea')
+        document.body.appendChild(textarea)
+        textarea.style.position = 'fixed'
+        textarea.style.clip = 'rect(0 0 0 0)'
+        textarea.style.top = '10px'
+        textarea.value = shareContent
+        textarea.select()
+        document.execCommand('copy', true)
+        this.$message.success('地址复制成功')
+        document.body.removeChild(textarea)
+      }
+    },
     shareDateChange (e) {
       this.currentShareInfo.shareEndTime = moment(e).format('YYYY-MM-DD')
       this.testInfo()
@@ -262,8 +285,6 @@ export default {
   margin-left: 14px;
 }
 .shareCopyUrl {
-  margin-top: 24px;
-  margin-left: 70px;
   width: 360px;
   height: 54px;
   padding: 0px 10px;

@@ -97,7 +97,7 @@ export const FormatMap = {
 export const AggFunctionOptions = [
   { label: '求和', value: 'sum' },
   { label: '计数', value: 'count' },
-  { label: '技术(去重)', value: 'distinct-count' },
+  { label: '计数(去重)', value: 'distinct-count' },
   { label: '最大值', value: 'max' },
   { label: '最小值', value: 'min' },
   { label: '平均数', value: 'min' }

@@ -1,6 +1,7 @@
 <template>
   <div
-    :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId},'com-block']"
+    v-loading="loading"
+    :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId && $store.state.app.dashboardMode === 'edit'},'com-block']"
     :style="styleObject"
   >
 
@@ -45,24 +46,26 @@
         </el-select>
 
         <!-- 菜单模块 -->
-        <el-dropdown
-          trigger="click"
-          size="small"
-          @command="handleCommand"
-        >
-          <span class="el-dropdown-link">
-            <svg-icon
-              icon-class="menu"
-              style="font-size: 15px;"
-            />
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="delete">删除</el-dropdown-item>
-            <el-dropdown-item command="copy">复制</el-dropdown-item>
-            <el-dropdown-item command="sql">查看SQL</el-dropdown-item>
-            <el-dropdown-item command="data">查看数据</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <div v-if="showCommandMenu">
+          <el-dropdown
+            trigger="click"
+            size="small"
+            @command="handleCommand"
+          >
+            <span class="el-dropdown-link">
+              <svg-icon
+                icon-class="menu"
+                style="font-size: 15px;"
+              />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="delete">删除</el-dropdown-item>
+              <el-dropdown-item command="copy">复制</el-dropdown-item>
+              <el-dropdown-item command="sql">查看SQL</el-dropdown-item>
+              <el-dropdown-item command="data">查看数据</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
         <!-- 菜单模块END -->
 
         <!-- 链接跳转模块 -->
@@ -145,6 +148,7 @@ export default {
   },
   data () {
     return {
+      loading: false,
       onLoad: false,
       imgSizeOption: { // 图片尺寸及位置，格式："尺寸名":['图片尺寸','图片位置']
         'containLeft': ['contain', ' left center'],
@@ -180,12 +184,34 @@ export default {
       },
       set () {
       }
+    },
+    showCommandMenu() {
+      return store.state.app.dashboardMode === 'edit'
     }
   },
   mounted () {
     // 防止宽高计算未完成就开始渲染组件
     this.$nextTick(() => {
       this.onLoad = true
+
+      this.$bus.$on('showLoading', (id) => {
+        if (id === this.option.id) {
+          this.loading = true
+        }
+      })
+      this.$bus.$on('closeLoading', (id) => {
+        if (id === this.option.id) {
+          this.loading = false
+        }
+      })
+    })
+  },
+  beforeDestroy() {
+    this.$bus.$off('showLoading', (id) => {
+      this.loading = true
+    })
+    this.$bus.$off('closeLoading', () => {
+      this.loading = false
     })
   },
   methods: {
@@ -226,11 +252,36 @@ export default {
     },
 
     sql() {
-      this.$dialog.show('ShowSqlDialog')
+      if (this.isExistDataSet()) {
+        this.$dialog.show('ShowSqlDialog')
+      } else {
+        this.$message.warning('未选择数据集或字段')
+      }
     },
 
     data() {
-      this.$dialog.show('ShowDataDialog')
+      if (this.isExistDataSet()) {
+        this.$dialog.show('ShowDataDialog')
+      } else {
+        this.$message.warning('未选择数据集或字段')
+      }
+    },
+
+    // 判断是否存在数据集和字段
+    // 存在 true 不存在 false
+    isExistDataSet() {
+      const { option: { dataSource, dataSet } } = this.option
+      const result = false
+      if (!dataSet?.id) {
+        return false
+      }
+      for (const key in dataSource) {
+        const source = dataSource[key]
+        if (source.value.length > 0) {
+          return true
+        }
+      }
+      return result
     },
 
     // 展示链接跳转弹窗
@@ -255,7 +306,7 @@ export default {
   height: 100%;
   display: flex;
   padding: 18px;
-  border: 1px solid black;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   flex-direction: column;
   box-sizing: border-box;
   touch-action: none;

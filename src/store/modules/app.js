@@ -4,7 +4,8 @@ const state = {
   layout: [],
   currentLayoutId: '',
   toolList: {},
-  dataOption: []
+  dataOption: [],
+  dashboardMode: 'edit'
 }
 
 const mutations = {
@@ -34,6 +35,9 @@ const mutations = {
   },
   UPDATETOOLLIST: (state, toolList) => {
     state.toolList = toolList
+  },
+  UPDATEDASHBOARDMODE: (state, mode) => {
+    state.dashboardMode = mode
   }
 }
 const actions = {
@@ -54,6 +58,9 @@ const actions = {
   },
   updateToolList ({ commit }, toolList) {
     commit('UPDATETOOLLIST', toolList)
+  },
+  updateDashboardMode ({ commit }, mode) {
+    commit('UPDATEDASHBOARDMODE', mode)
   }
 }
 

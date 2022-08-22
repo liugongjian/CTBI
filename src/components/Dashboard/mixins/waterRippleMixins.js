@@ -82,8 +82,14 @@ export default {
     // 获取设置目标值
     getCfgTargetOption (val) {
       const cfgTargetOption = []
+      const reCfg = deepClone(this.storeOption.theme.FunctionalOption.ProgressConfig.cfgTargetOption)
       val.forEach(item => {
-        cfgTargetOption.push({ name: item.name, value: item.value, fixedVal: item.value, dynamicVal: '', type: 1, aggregation: 1 })
+        const temp = reCfg.find(cfg => { return cfg.name === item.name })
+        if (!temp) {
+          cfgTargetOption.push({ name: item.name, value: item.value, fixedVal: item.value, dynamicVal: '', type: 1, aggregation: 1 })
+        } else {
+          cfgTargetOption.push(temp)
+        }
       })
       this.storeOption.theme.FunctionalOption.ProgressConfig.cfgTargetOption = cfgTargetOption
     }

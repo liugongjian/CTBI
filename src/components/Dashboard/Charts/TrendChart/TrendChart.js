@@ -21,6 +21,7 @@ export default {
   'order': 1, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
+  'title': '指标趋势图', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': { // 样式组件、配置合集
     // 趋势图配置
     'trendChartConfig': {
@@ -94,8 +95,7 @@ export default {
       'Title': { // 标题组件
         'text': '指标趋势图', // 标题名称
         'color': '#333', // 标题颜色
-        'show': true, // 是否显示标题
-        'testShow': false // 测试显示
+        'show': true // 是否显示标题
       },
       'TitleLink': { // 链接跳转组件
         'text': '', // 文案

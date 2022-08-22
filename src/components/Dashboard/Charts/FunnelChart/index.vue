@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
 import baseMixins from '../../mixins/baseMixins'
 export default {
   name: 'FunnelChart',
@@ -62,22 +61,17 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        // if (JSON.stringify(val.dataSource) !== '{}') {
-        //   this.dataValue = val.dataSource
-        // }
         this.reloadImpl()
       },
       deep: true
     }
   },
-  mounted () {
-    this.storeOption = getLayoutOptionById(this.identify)
-    // this.getOption()
-  },
   methods: {
     reloadImpl () {
-      this.formatDataValue(this.chartData)
-      this.getOption()
+      if (this.chartData && this.chartData.length > 0) {
+        this.formatDataValue(this.chartData)
+        this.getOption()
+      }
     },
     formatDataValue (chartData) {
       const data = []

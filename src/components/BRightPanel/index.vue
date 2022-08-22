@@ -29,7 +29,7 @@
           v-if="showChartTypes&&showWrapper"
           class="chart-type-switch"
         >
-          <ChartSwitcher :type="option.type" />
+          <ChartSwitcher :type="optionType" />
         </el-container>
         <el-container v-if="showWrapper && !showChartTypes">
           <el-tabs v-model="activeNames">
@@ -105,6 +105,7 @@
           style="height:calc(100vh - 98px)"
           :option="dataSourceOptions"
           :data-set="dataSetOptions"
+          @changeActiveName="showItem"
         />
       </div>
     </div>
@@ -133,6 +134,7 @@ export default {
       type: String,
       default: ''
     },
+    optionType: { type: String, default: '' },
     dataSourceOptions: {
       type: Object,
       default: () => {}
@@ -159,13 +161,13 @@ export default {
       const temp = store.state.app.layout.find(item => {
         return item.id === this.currentLayoutId
       })
-      return temp.is
+      return temp ? temp.is : ''
     },
     isCommonChart () {
       const temp = store.state.app.layout.find(item => {
         return item.id === this.currentLayoutId
       })
-      return !['TabChart'].includes(temp.is)
+      return temp ? !['TabChart'].includes(temp.is) : true
     }
   },
 

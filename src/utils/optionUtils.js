@@ -230,7 +230,7 @@ export const formatDataValue = function (chartData) {
         dimensionData.push(item[dim])
       })
       MeasureKey.forEach(mea => {
-        measureData.push(item[mea])
+        measureData.push(item[mea].match(/\d+(?:\.\d+)?/g, ''))
       })
       dataValue.push([dimensionData.join('-'), ...measureData])
     })
@@ -325,6 +325,10 @@ export const getFieldsTable = (fields) => {
       item.displayColumn = item.column
     }
     item.attributes[0].displayColumn = item.displayColumn
+    // 赋值描述字段
+    if (!item.attributes[0].comment) {
+      item.attributes[0].comment = ''
+    }
     if (item.type === 'Dimension') {
       if (item.attributes[0].isHidden) {
         dimensionHiddenLength += 1

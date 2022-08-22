@@ -34,8 +34,12 @@ export default {
      */
     async interReload (ids, limit, isReload) {
       if (ids && ids.indexOf(this.identify) > -1) {
-        await this.getData(limit, isReload)
-        this.reloadImpl()
+        try {
+          await this.getData(limit, isReload)
+          this.reloadImpl()
+        } catch (e) {
+          // do nothing
+        }
       }
     },
     // 获取详细数据
@@ -43,12 +47,17 @@ export default {
       const storeDataValue = getDataValueById(this.identify)
       if (storeDataValue && !isReload) {
         this.chartData = deepClone(storeDataValue)
-        return
+        throw new Error('未获取到数据，不做图表加载')
       }
 
-      const params = getQueryParams(limit)
+      const params = getQueryParams(limit, this.identify)
+      const { dataSetId, query: { dimension, measure } } = params
+      if (!dataSetId || (dimension.selections.length === 0 && measure.selections.length === 0)) {
+        throw new Error('未获取到数据，不做图表加载')
+      }
 
       try {
+        this.$bus.$emit('showLoading', this.identify)
         const body = { query: params.query }
         const dataSetId = params.dataSetId
         const res = await getDataSetData(dataSetId, body)
@@ -73,6 +82,7 @@ export default {
       } catch (error) {
         console.log(error)
       }
+      this.$bus.$emit('closeLoading', this.identify)
     },
     // 设置图例与图表距离
     setGrid (legend) {

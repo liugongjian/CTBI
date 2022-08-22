@@ -3,7 +3,7 @@
     <el-container>
       <el-container>
         <!-- 画布主体 -->
-        <el-main class="main-layout" :style="layoutStyles">
+        <el-main class="main-layout-preview" :style="layoutStyles">
           <div
             id="content"
             @dragover="dragover"
@@ -105,6 +105,7 @@ export default {
     // }
     // this.getDashboardData()
     window.addEventListener('beforeunload', this.beforeunload)
+    store.dispatch('app/updateDashboardMode', 'preview')
   },
   destroyed() {
     // if (this.timer) {
@@ -150,7 +151,7 @@ export default {
         setTimeout(() => { this.getLayoutRenderData(layout) }, 500)
       }
       if (layoutStyles) {
-        store.dispatch('setting/changeSetting', { key: 'layoutStyles', value: layoutStyles })
+        store.dispatch('settings/changeSetting', { key: 'layoutStyles', value: layoutStyles })
       }
     },
     // 触发 interReload事件，获取每个图表的渲染数据
@@ -214,6 +215,7 @@ export default {
       localStorage.removeItem(this.saveTagName)
       this.updateStoreData({ layout: [], layoutStyles: [] })
       this.mode = 'edit'
+      store.dispatch('app/updateDashboardMode', 'edit')
       window.removeEventListener('beforeunload', this.beforeunload)
     }
   }
@@ -228,5 +230,9 @@ export default {
 }
 .dialog-footer{
   padding-top: 10px;
+}
+.main-layout-preview {
+  padding: 0px;
+  height: 100vh;
 }
 </style>

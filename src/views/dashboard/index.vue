@@ -14,7 +14,7 @@
           />
         </el-header>
         <!-- 画布主体 -->
-        <el-main ref="mainLayout" class="main-layout" :style="layoutStyles">
+        <el-main :class="{'main-layout-edit': mode === 'edit', 'main-layout-preview': mode !== 'edit',}" :style="layoutStyles">
           <div
             id="content"
             @dragover="dragover"
@@ -136,6 +136,7 @@ export default {
     this.getDashboardData()
     this.saveDashboardToLocal()
     this.recoverDashboard()
+    this.setStoreMode(this.$route.query.mode === '1' ? 'preview' : 'edit')
     window.addEventListener('beforeunload', this.beforeunload)
   },
   destroyed() {
@@ -241,6 +242,7 @@ export default {
     handleNavbarChange({ action, data }) {
       if (action === 'changeMode') {
         this.mode = data
+        this.setStoreMode(data)
       }
       console.log(action, data)
       if (action === 'saveSuccess') {
@@ -338,7 +340,7 @@ export default {
         setTimeout(() => { this.getLayoutRenderData(layout) }, 500)
       }
       if (layoutStyles) {
-        store.dispatch('setting/changeSetting', { key: 'layoutStyles', value: layoutStyles })
+        store.dispatch('settings/changeSetting', { key: 'layoutStyles', value: layoutStyles })
       }
     },
     // 触发 interReload事件，获取每个图表的渲染数据
@@ -375,7 +377,11 @@ export default {
       localStorage.removeItem(this.saveTagName)
       this.updateStoreData({ layout: [], layoutStyles: [] })
       this.mode = 'edit'
+      this.setStoreMode('edit')
       window.removeEventListener('beforeunload', this.beforeunload)
+    },
+    setStoreMode(mode) {
+      store.dispatch('app/updateDashboardMode', mode)
     }
   }
 }
@@ -383,5 +389,13 @@ export default {
 <style lang="scss" scoped>
 .tool-header{
     position: relative;
+}
+.main-layout-edit {
+  padding: 0px;
+  height: calc(100vh - 190px);
+}
+.main-layout-preview {
+  padding: 0px;
+  height: calc(100vh - 60px);
 }
 </style>

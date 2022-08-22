@@ -4,10 +4,6 @@
       v-model="option.show"
       label="显示主标题"
     />
-    <el-checkbox
-      v-if="option.testShow"
-      label="测试显示"
-    />
     <div
       class="editor-item-container"
       :class="{'box-disabled':!option.show}"

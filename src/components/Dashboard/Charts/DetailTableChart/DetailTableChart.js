@@ -20,13 +20,13 @@ export default {
   'order': 1, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
+  'title': '明细表', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
         'text': '明细表', // 标题名称
         'color': '#333', // 标题颜色
-        'show': true, // 是否显示标题
-        'testShow': false // 测试显示
+        'show': true // 是否显示标题
       },
       'Mark': { // 备注
         'show': false, // 是否显示备注
@@ -50,10 +50,10 @@ export default {
         'show': false,
         'active': 'stripe' // stripe 斑马 border 线框 simple 简版 verySimple 极简
       },
-      // 'TableThemeSimple': {
-      //   'show': true,
-      //   'type': 'default'
-      // },
+      'TableThemeSimple': {
+        'show': true,
+        'type': 'default'
+      },
       'ListHeader': {
         'head': false
       },
