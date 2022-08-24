@@ -67,7 +67,6 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        console.log(val, 'vavav')
         this.sequenceName = val.theme.StyleConfig.Rank.title
         this.header = val.theme.StyleConfig.Rank.show
         this.colorOption = val.theme.StyleConfig.Rank.color
@@ -88,7 +87,6 @@ export default {
     reloadImpl () {
       this.dataValue = this.formatDataValue()
       // this.dataValue = this.formatData(deepClone(getDataValueById(this.identify)))
-      console.log(this.dataValue)
     },
     // formatData (dataValue) {
     //   console.log(dataValue, '接收的数据')
