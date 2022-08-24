@@ -31,6 +31,13 @@ import '@/components/autoRegister'
 import directive from '@/utils/directive'
 directive(Vue)
 
+// 大数据量表格
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/styles/index.scss'
+
+Vue.use(VXETable)
+
 Vue.use(ElementUI, { size: 'small' })
 Vue.prototype.$echarts = echarts
 Vue.prototype.$bus = new Vue()
