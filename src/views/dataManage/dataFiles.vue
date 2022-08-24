@@ -5,15 +5,16 @@
     :table-data="tableData"
     :page-num.sync="page"
     :page-size.sync="limit"
+    :page-sizes="[2, 5, 10]"
     :total="total"
     :loading="tableLoading"
     :is-show-default-option="false"
     @sort-change="handleSortChange"
-    @pagination="getDataFiles"
+    @refresh="refresh"
   >
     <template #toolbar-option>
       <div class="search-bar">
-        <el-input v-model="searchKey" class="search-input" prefix-icon="el-icon-search" size="small" placeholder="请输入文件名称" @keyup.enter.native="handleSearch" />
+        <el-input v-model="searchKey" class="search-input" prefix-icon="el-icon-search" size="small" :placeholder="`共${total}个文件`" @keyup.enter.native="handleSearch" />
         <el-button size="small" class="btn" @click="createDataSet">SQL创建数据集</el-button>
       </div>
     </template>
@@ -44,7 +45,7 @@ export default {
     return {
       tableData: [],
       page: 1,
-      limit: 10,
+      limit: 2,
       total: 0,
       tableLoading: false,
       searchKey: '',
@@ -76,6 +77,9 @@ export default {
     this.getDataFiles()
   },
   methods: {
+    refresh() {
+      this.getDataFiles()
+    },
     async getDataFiles(params) {
       try {
         this.tableLoading = true
@@ -86,11 +90,10 @@ export default {
           sortOrder: this.sortOrder,
           isPaging: 1
         }
-        const { list, page, total, limit } = await getDataFiles(params)
+        const { list, page, total } = await getDataFiles(params)
         this.tableData = list
         this.page = page
         this.total = total
-        this.limit = limit
         this.tableLoading = false
       } catch (error) {
         console.log(error)

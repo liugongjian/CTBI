@@ -1,9 +1,7 @@
 <template>
   <div class="data-source">
-    <!-- <div class="data-source__title">
-      <span>数据源</span>
-    </div> -->
     <div class="data-source__content">
+      <!-- header -->
       <div class="data-source__header">
         <div class="head-title">数据源</div>
         <div class="head-select">
@@ -20,9 +18,11 @@
           </el-dropdown>
         </div>
       </div>
+      <!-- 添加数据源弹窗 -->
       <el-dialog
         :title="status+fileType[form.type]"
         :visible.sync="dialogVisible"
+        :close-on-click-modal="false"
         width="560px"
         class="dialog-new"
       >
@@ -121,7 +121,7 @@
           <div class="research-file">
             <el-input
               v-model="searchFile"
-              placeholder="请输入文件名称"
+              :placeholder="`共${total}个文件`"
               prefix-icon="el-icon-search"
               class="input-file"
               @keyup.enter.native="searchFiles"
@@ -157,6 +157,7 @@
               </div>
             </template>
           </common-table>
+          <!-- 弹窗表详情 -->
           <el-dialog
             title="表详情"
             :visible.sync="detailVisible"
@@ -247,12 +248,31 @@ export default {
         password: ''
       },
       rules: {
-        displayName: [{ required: true, message: '请输入数据源配置列表显示名称', trigger: 'blur' }],
-        host: [{ required: true, message: '请输入IP地址', trigger: 'blur' }],
-        port: [{ required: true, message: '请输入端口', trigger: 'blur' }],
-        db: [{ required: true, message: '请输入数据库名称', trigger: 'blur' }],
-        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+        displayName: [
+          { required: true, message: '请输入数据源配置列表显示名称', trigger: 'blur' },
+          { pattern: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, message: '仅支持数字、字母、下划线以及中文', trigger: 'blur' },
+          { min: 1, max: 50, message: '字符长度不超过50', trigger: 'blur' }
+        ],
+        host: [
+          { required: true, message: '请输入IP地址', trigger: 'blur' },
+          { max: 200, message: '字符长度不超过50', trigger: 'blur' }
+        ],
+        port: [
+          { required: true, message: '请输入端口', trigger: 'blur' },
+          { max: 200, message: '字符长度不超过50', trigger: 'blur' }
+        ],
+        db: [
+          { required: true, message: '请输入数据库名称', trigger: 'blur' },
+          { max: 200, message: '字符长度不超过50', trigger: 'blur' }
+        ],
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { max: 200, message: '字符长度不超过50', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { max: 200, message: '字符长度不超过50', trigger: 'blur' }
+        ]
       },
       comments: [
         {
@@ -396,9 +416,9 @@ export default {
         this.currentRow = val
         if (val.type === 'file') {
           this.isShowDataFiles = true
-          this.$nextTick(() => {
-            this.$refs.dataFiles.getDataFiles()
-          })
+          // this.$nextTick(() => {
+          //   this.$refs.dataFiles.getDataFiles()
+          // })
         } else {
           this.isShowDataFiles = false
           const ids = val._id
