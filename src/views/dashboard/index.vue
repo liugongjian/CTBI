@@ -202,6 +202,9 @@ export default {
           }
           this.loading = false
           this.dashboard = result
+          if (from) {
+            this.dashboard._id = null
+          }
           if (!this.recoverVisible && !this.useRecover) {
             const settings = result.setting ? JSON.parse(result.setting) : null
             if (settings) {
