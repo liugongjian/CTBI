@@ -191,6 +191,7 @@ import { encryptAes } from '@/utils/encrypt'
 import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataSourceList, editSources, detailSource } from '@/api/dataSource'
 import CommonTable from '@/components/CommonTable/index.vue'
 import dataFiles from './dataFiles.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'DataSource',
@@ -302,7 +303,10 @@ export default {
       return this.dataSourceList?.list?.filter(item => {
         return this.search ? item.displayName.indexOf(this.search) >= 0 : true
       }) || []
-    }
+    },
+    ...mapGetters([
+      'role'
+    ])
   },
   mounted() {
     this.init()
