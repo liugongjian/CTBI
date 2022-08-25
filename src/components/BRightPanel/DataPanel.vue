@@ -8,9 +8,9 @@
             :option="option"
             @refreshValue="refreshValue"
           />
-        </div>
+        </div>{{ dataSet }}
         <div
-          v-show="Dimension.length>0||Measure.length>0"
+          v-show="(Dimension.length>0||Measure.length>0)&&(!(dataSet.mold===2&&role==='simpleUser'))"
           title="编辑数据集"
           class="edit-cube"
           @click="editDataSet"
@@ -136,6 +136,7 @@
 import DataSetSelect from './DataSetSelect.vue'
 import { getDataSet } from '@/api/dataSet'
 import { transformDataTypeIcon } from '@/utils/optionUtils'
+import { mapGetters } from 'vuex'
 export default {
   name: 'DataPanel',
   components: { DataSetSelect },
@@ -161,6 +162,11 @@ export default {
       value: '', // 树形过滤关键字
       dataSetLoading: false
     }
+  },
+  computed: {
+    ...mapGetters([
+      'role'
+    ])
   },
   watch: {
     filterText (val) {

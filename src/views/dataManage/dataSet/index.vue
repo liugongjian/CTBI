@@ -34,6 +34,7 @@
       >
         <span>已选 {{ selectedRows.length }} 项</span>
         <el-button
+          v-show="multiEvent"
           class="info"
           type="text"
           @click="moveTo()"
@@ -77,7 +78,7 @@
               style="margin-right: 8px"
             />
             <el-tooltip
-              v-if="!scope.row.isFolder"
+              v-if="!scope.row.isFolder&&!(scope.row.mold===2&&role==='simpleUser')"
               placement="top"
               effect="light"
             >
@@ -121,13 +122,22 @@
           show-overflow-tooltip
         />
         <el-table-column
+          prop="mold"
+          label="类型"
+          show-overflow-tooltip
+        >
+          <template slot-scope="scope">
+            {{ !scope.row.isFolder? scope.row.mold===1?'私有': '公有': '' }}
+          </template>
+        </el-table-column>
+        <el-table-column
           label="操作"
           min-width="100"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
             <div
-              v-if="!scope.row.isFolder"
+              v-if="!scope.row.isFolder&&!(scope.row.mold===2&&role==='simpleUser')"
               class="data-set-main-table-options"
               :class="{'no-allowed': selectedRows}"
             >
@@ -144,13 +154,13 @@
               <el-dropdown trigger="click">
                 <el-button type="text">更多</el-button>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item @click.native="moveTo(scope.row)">移动到</el-dropdown-item>
+                  <el-dropdown-item v-if="scope.row.mold===1" @click.native="moveTo(scope.row)">移动到</el-dropdown-item>
                   <el-dropdown-item @click.native="deleteDataSet(scope.row)">删除</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
             <div
-              v-else
+              v-if="scope.row.isFolder"
               class="data-set-main-table-options"
               :class="{'no-allowed': selectedRows}"
             >
@@ -185,6 +195,7 @@
 <script>
 import listPageMixin from '@/mixins/listPageMixin'
 import { getDataSetsFolders, delFolders, delDataSet } from '@/api/dataSet'
+import { mapGetters } from 'vuex'
 export default {
   mixins: [listPageMixin],
   data () {
@@ -195,6 +206,20 @@ export default {
       showFolderColumn: false,
       // 定义一个变量，来识别全选框是否被选中，默认为未被选中
       checkedKey: false
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'role'
+    ]),
+    multiEvent() {
+      let flag = true
+      this.selectedRows && this.selectedRows.forEach((item) => {
+        if (item.mold === 2) {
+          flag = false
+        }
+      })
+      return this.selectedRows && this.selectedRows.length > 0 && flag
     }
   },
   mounted () {
@@ -350,6 +375,7 @@ export default {
     },
     select (selection, row) {
       this.selectedRows = selection
+      console.log('daaaaa', this.selectedRows)
     }
   }
 }

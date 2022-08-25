@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-04 12:45:56
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-24 09:18:59
+ * @LastEditTime: 2022-08-24 10:34:38
  * @Description:
  */
 import { logout, getInfo } from '@/api/user'
@@ -60,8 +60,9 @@ const actions = {
           return reject('认证失败, 请重新登录.')
         }
 
-        const { userName } = info
+        const { userName, role } = info
         commit('SET_USER', info)
+        commit('SET_ROLE', role)
         commit('SET_NAME', userName)
         resolve(data)
       }).catch(error => {

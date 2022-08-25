@@ -249,6 +249,7 @@ export default {
       if (!node.isFolder) {
         this.dataSet.id = node._id
         this.dataSet.name = node.name
+        this.dataSet.mold = node.mold
         this.showOption = false
         // 清空dataSource的数据
         const option = this.option
