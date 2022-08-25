@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-08-04 12:46:01
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-25 13:49:31
+ * @Description:
+-->
 <template>
   <div class="container">
     <div class="title" :style="styleTitle">{{ data.name }}</div>
@@ -8,9 +15,9 @@
       <span :style="stylePercent">{{ setProgress }}%</span>
     </div>
     <div v-if="getValueShow" class="desc" :style="styleDesc">
-      <span>{{ option.value.current }} {{ data.value }}</span>
+      <span>{{ option.value.current }} {{ Number(data.value) }}</span>
       <span class="symbol">|</span>
-      <span>{{ option.value.target }} {{ target }}</span>
+      <span>{{ option.value.target }} {{ Number(target) }}</span>
     </div>
   </div>
 </template>
