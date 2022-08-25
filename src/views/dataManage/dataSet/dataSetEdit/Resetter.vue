@@ -79,23 +79,22 @@
         <!-- right -->
         <!-- gutter-th 由于表头与表体不对齐，el-table会默认追加gutter，这边选择隐藏 -->
         <div class="data-preview-right">
-          <el-table
-            v-loading="previewLoading"
-            element-loading-text="拼命加载中"
+          <vxe-table
+            border
+            show-overflow
+            highlight-hover-row
             :data="dimensionMeasureTableData"
             class="gutter-th"
             :height="tableHeight"
-            empty-text=" "
-            stripe
           >
             <template v-for="(parent, i) in dimensionMeasure">
-              <el-table-column
+              <vxe-table-colgroup
                 v-if="!parent.isHidden"
                 :key="`column-p-${i}`"
-                :label="parent.displayColumn"
-                :class-name="`m-column-${parent._id}`"
+                :title="parent.displayColumn"
+                :header-class-name="`m-column-${parent._id}`"
               >
-                <template #header="{ column }">
+                <template #header>
                   <div class="d-f">
                     <div>
                       <svg-icon
@@ -104,23 +103,23 @@
                       />
                     </div>
                     <div>
-                      {{ column.label }}
+                      {{ parent.displayColumn }}
                     </div>
                   </div>
                 </template>
                 <template v-for="(v) in parent.children">
-                  <el-table-column
+                  <vxe-table-column
                     v-if="(v.attributes && !v.attributes[0].isHidden)"
                     :key="`column-child-${v.index}-${v.$treeNodeId}`"
-                    :prop="v.displayColumn"
+                    :field="v.displayColumn"
                     width="95"
-                    class-name="column-child"
-                    :label="v.displayColumn"
+                    header-class-name="column-child"
+                    :title="v.displayColumn"
                     show-overflow-tooltip
                   >
-                    <template #header="{ column }">
+                    <template #header>
                       <b-tooltip
-                        :content="column.label"
+                        :content="v.displayColumn"
                         width="80px"
                       />
                       <div class="d-f f-b-c">
@@ -141,11 +140,11 @@
                     <template slot-scope="{ row, column }">
                       {{ row[column.property] | strEmptyFilter }}
                     </template>
-                  </el-table-column>
+                  </vxe-table-column>
                 </template>
-              </el-table-column>
+              </vxe-table-colgroup>
             </template>
-          </el-table>
+          </vxe-table>
         </div>
         <div
           v-if="dimensionMeasureTableData.length === 0"
@@ -577,5 +576,9 @@ export default {
 ::v-deep .display-none {
   height: 0px;
   display: none !important;
+}
+
+::v-deep .vxe-table--render-default.border--full .vxe-table--header-wrapper {
+  background-color: #fff;
 }
 </style>

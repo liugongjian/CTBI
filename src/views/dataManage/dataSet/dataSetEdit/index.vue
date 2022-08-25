@@ -499,6 +499,7 @@ export default {
         this.editDataInfo.sql.dataSourceId = val
         this.editDataInfo.dataSourceName = currentDataSource?.displayName
         this.editDataInfo.dataSourceType = type
+        this.editDataInfo.dataSourceMold = currentDataSource.mold
 
         if (type === 'file') {
           const result = await dataFiles()

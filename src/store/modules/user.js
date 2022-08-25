@@ -1,3 +1,10 @@
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-08-04 12:45:56
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-24 10:34:38
+ * @Description:
+ */
 import { logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
@@ -7,7 +14,8 @@ const getDefaultState = () => {
     name: '',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     userData: {},
-    routes: []
+    routes: [],
+    role: ''
   }
 }
 
@@ -19,6 +27,9 @@ const mutations = {
   },
   SET_NAME: (state, name) => {
     state.name = name
+  },
+  SET_ROLE: (state, role) => {
+    state.role = role
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
@@ -35,6 +46,7 @@ const actions = {
   // user login
   login ({ commit }, { token, user }) {
     commit('SET_USER', user)
+    commit('SET_ROLE', user.role)
     commit('SET_NAME', user.username)
     setToken(token)
   },
@@ -48,8 +60,9 @@ const actions = {
           return reject('认证失败, 请重新登录.')
         }
 
-        const { userName } = info
+        const { userName, role } = info
         commit('SET_USER', info)
+        commit('SET_ROLE', role)
         commit('SET_NAME', userName)
         resolve(data)
       }).catch(error => {
