@@ -8,7 +8,7 @@
             :option="option"
             @refreshValue="refreshValue"
           />
-        </div>{{ dataSet }}
+        </div>
         <div
           v-show="(Dimension.length>0||Measure.length>0)&&(!(dataSet.mold===2&&role==='simpleUser'))"
           title="编辑数据集"
