@@ -55,8 +55,8 @@
             :src="require('../../../assets/Image/dashboard/more.png')"
           ></span>
           <el-dropdown-menu slot="dropdown" class="more-dropdown">
-            <el-dropdown-item v-if="role === 'superUser'" icon="el-icon-document-copy" @click.native="copy()">另存为仪表盘</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-document-copy" @click.native="saveAsTemplate()">另存为模板</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-document-copy" @click.native="copy()">另存为仪表盘</el-dropdown-item>
+            <el-dropdown-item v-if="role === 'superUser'" icon="el-icon-document-copy" @click.native="saveAsTemplate()">另存为模板</el-dropdown-item>
             <el-dropdown-item
               v-if="dashboard.publishStatus === 1"
               icon="el-icon-bottom-right"
@@ -212,8 +212,26 @@ export default {
         // 获取缩略图base64
         const dashboardCom = findComponentUpward(this, 'DashBoard')
         this.thumbnail = await domToImage.toPng(dashboardCom.$refs.mainLayout.$el)
+        // 判断报表使用的是否全为公有数据集
+        const layout = store.state.app.layout
+        const flag = layout.every(item => {
+          const curDataSet = item.option.dataSet
+          if (curDataSet) {
+            if (curDataSet.id !== '' && curDataSet.mold === 2) {
+              return true
+            } else {
+              return false
+            }
+          } else {
+            return true
+          }
+        })
+        if (!flag) {
+          this.$message.warning('模板中所有图表均需绑定数据集，并且不能是私有数据集')
+          return
+        }
         const data = {
-          layout: store.state.app.layout,
+          layout,
           layoutStyles: store.state.settings.layoutStyles
         }
         const params = {
