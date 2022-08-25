@@ -106,7 +106,7 @@
                   :content="data.name"
                   width="100px"
                 />
-                <span style="font-size: 12px;flex:1;text-align:right;margin-right:10px">{{ data.mold===1?'类型: 私有':'类型: 公开' }}</span>
+                <span v-if="data.mold" style="font-size: 12px;flex:1;text-align:right;margin-right:10px">{{ data.mold===1?'类型: 私有':'类型: 公开' }}</span>
               </div>
             </div>
           </el-tree>
