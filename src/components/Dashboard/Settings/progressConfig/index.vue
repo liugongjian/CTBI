@@ -1,6 +1,5 @@
 <template>
   <div class="editor-object-container">
-    <span class="editor-item-title">设置目标值</span>
     <div v-for="(data,index) in option.cfgTargetOption" :key="index" class="item">
       <div>{{ data.name }}</div>
       <div class="box">
@@ -38,27 +37,29 @@
         </el-select>
       </div>
     </div>
-    <span class="editor-item-title">
-      完成占比计算方式
+    <div class="flex-align-center">
+      <div class="editor-item-title">完成占比计算方式</div>
       <el-tooltip effect="dark" content="仅当目标值为负数时，选择的计算方式才生效" placement="top">
         <svg-icon
           icon-class="tooltip"
           style="font-size: 16px;"
         />
       </el-tooltip>
-    </span>
-    <el-select v-model="option.proportion.type" popper-class="setting-select" placeholder="请选择">
-      <el-option
-        v-for="item in proportionOptions"
-        :key="item.value"
-        :label="item.name"
-        :value="item.value"
-      />
-    </el-select>
-    <div class="decimal">
-      <span class="editor-item-title">
+    </div>
+    <div class="m-t-12">
+      <el-select v-model="option.proportion.type" popper-class="setting-select" placeholder="请选择">
+        <el-option
+          v-for="item in proportionOptions"
+          :key="item.value"
+          :label="item.name"
+          :value="item.value"
+        />
+      </el-select>
+    </div>
+    <div class="flex-align-center m-t-12">
+      <div class="editor-item-title">
         设置完成占比小数位数
-      </span>
+      </div>
       <el-select v-model="option.proportion.decimal" popper-class="setting-select" class="decimal-select" placeholder="请选择">
         <el-option
           v-for="item in decimalOptions"

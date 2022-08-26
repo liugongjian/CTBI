@@ -27,7 +27,12 @@
       <div style="padding-left: 90px;margin-top:8px;font-size: 12px;color: rgba(0, 0, 0, 0.45);">
         <span>名称只能由中英文、数字及下划线(_)、斜线(/)、反斜线(\)、竖线(|)、 小括号(())、中括号([])组成，不超过50个字符。</span>
       </div>
-
+      <el-form-item v-if="store.state.user.userData.role==='superUser'&&dataInfo.dataSourceType!=='file'&&dataInfo.dataSourceMold===2" label="类型" prop="mold">
+        <el-radio-group v-model="dataInfo.mold" @change="handleMold">
+          <el-radio :label="1">私有</el-radio>
+          <el-radio :label="2">公有</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item
         label="位置"
         class="m-t-8"
@@ -39,6 +44,7 @@
           :indent="0"
           :data="folderList"
           :default-expand-all="true"
+          :disabled="dataInfo.mold===2"
         />
       </el-form-item>
     </el-form>
@@ -63,19 +69,24 @@
 import dialogMixin from '@/mixins/dialogMixin'
 import regex from '@/constants/regex'
 import { createDataSets, existsDataSet, getFolderLists } from '@/api/dataSet'
+import store from '@/store'
 
 export default {
   name: 'SaveDataSetDialog',
   mixins: [dialogMixin],
   data () {
     return {
-      dataInfo: {},
+      store,
+      dataInfo: {
+        mold: 1
+      },
       rules: {
         displayName: [
           { required: true, message: '请输入数据集名称', trigger: 'blur' },
           { pattern: regex.DATASET_NAME_REGEX, message: '名称输入有误，请参考下方提示', trigger: 'blur' },
           { validator: this.existDataSet, trigger: 'blur' }
-        ]
+        ],
+        mold: [{ required: true, message: '请选择类型', trigger: 'blur' }]
       },
       // 文件列表
       folderList: []
@@ -105,7 +116,8 @@ export default {
           sql: this.dataInfo.sql,
           fields: this.dataInfo.fields,
           comment: this.dataInfo.comment,
-          folderId: this.dataInfo.folderId
+          folderId: this.dataInfo.folderId,
+          mold: this.dataInfo.mold
         }
         await createDataSets(body)
         this.$message({
@@ -129,7 +141,16 @@ export default {
         callback(new Error('文件夹名称已存在！'))
       }
       callback()
+    },
+    // 私有公有 radio事件
+    handleMold(val) {
+      if (val === 2) {
+        // 公有 只能是根目录 且不可修改位置
+        this.getFolder()
+        this.dataInfo.folderId = ''
+      }
     }
+
   }
 }
 </script>

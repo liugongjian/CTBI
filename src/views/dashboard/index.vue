@@ -7,14 +7,14 @@
     <el-container>
       <el-container>
         <!-- 工具栏 -->
-        <el-header v-if="mode === 'edit'" class="tool-header">
+        <el-header v-show="mode === 'edit'" class="tool-header">
           <Tools
             @getGridLayout="getGridLayout"
             @getParentRect="getParentRect"
           />
         </el-header>
         <!-- 画布主体 -->
-        <el-main :class="{'main-layout-edit': mode === 'edit', 'main-layout-preview': mode !== 'edit',}" :style="layoutStyles">
+        <el-main ref="mainLayout" :class="{'main-layout-edit': mode === 'edit', 'main-layout-preview': mode !== 'edit',}" :style="layoutStyles">
           <div
             id="content"
             @dragover="dragover"
@@ -88,7 +88,9 @@ import _ from 'lodash'
 // 导入样式
 import '@/views/dashboard/index.scss'
 import { getDashboardDetail } from '@/api/dashboard'
+import { getTemplateDetail } from '@/api/template'
 export default {
+  name: 'DashBoard',
   components: {
     Widget, Settings, Tools, Navbar
   },
@@ -188,13 +190,21 @@ export default {
     },
     async getDashboardData() {
       const id = this.dashboardId
+      const from = this.$route.query.from
       if (id) {
         try {
           this.loading = true
-          const result = await getDashboardDetail(id)
-          console.log(result)
+          let result = null
+          if (from) {
+            result = await getTemplateDetail(id)
+          } else {
+            result = await getDashboardDetail(id)
+          }
           this.loading = false
           this.dashboard = result
+          if (from) {
+            this.dashboard._id = null
+          }
           if (!this.recoverVisible && !this.useRecover) {
             const settings = result.setting ? JSON.parse(result.setting) : null
             if (settings) {
