@@ -32,30 +32,19 @@
             </div>
           </template>
           <!-- 查询出数据时展示效果 -->
-          <el-table
+          <vxe-table
             v-else
-            ref="refsTable"
-            fit
             :height="tableHeight"
             header-row-class-name="m-table-header"
             row-class-name="m-table-row"
+            show-overflow
             :data="resultData.data"
           >
-            <el-table-column
-              label="序号"
-              type="index"
-              fixed
-              min-width="50"
-            />
-            <el-table-column
-              v-for="k in resultData.columns"
-              :key="`table-column-${k.name}`"
-              min-width="100"
-              show-overflow-tooltip
-              :prop="k.name"
-              :label="k.name"
-            />
-          </el-table>
+            <vxe-column type="seq" width="50" title="序号" />
+            <template v-for="k in resultData.columns">
+              <vxe-column :key="`table-column-${k.name}`" min-width="100" :field="k.name" :title="k.name" />
+            </template>
+          </vxe-table>
         </template>
         <!-- 失败 -->
         <template v-else>
