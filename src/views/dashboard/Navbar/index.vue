@@ -214,20 +214,28 @@ export default {
         this.thumbnail = await domToImage.toPng(dashboardCom.$refs.mainLayout.$el)
         // 判断报表使用的是否全为公有数据集
         const layout = store.state.app.layout
-        const flag = layout.every(item => {
-          const curDataSet = item.option.dataSet
-          if (curDataSet) {
-            if (curDataSet.id !== '' && curDataSet.mold === 2) {
-              return true
+        let flag = null
+        if (layout.length > 0) {
+          flag = layout.every(item => {
+            const curDataSet = item.option.dataSet
+            if (curDataSet) {
+              const mold = curDataSet.mold ?? 2
+              if (mold === 2) {
+                return true
+              } else {
+                return false
+              }
             } else {
-              return false
+              return true
             }
-          } else {
-            return true
-          }
-        })
+          })
+        } else {
+          this.$message.warning('模板不能为空')
+          return
+        }
+
         if (!flag) {
-          this.$message.warning('模板中所有图表均需绑定数据集，并且不能是私有数据集')
+          this.$message.warning('模板中不能存在私有数据集')
           return
         }
         const data = {
@@ -241,10 +249,11 @@ export default {
         }
         await addTemplate(params)
         this.$message.success('另存为模板成功')
+        cb()
       } catch (error) {
         console.log(error)
       } finally {
-        cb()
+        this.$refs.saveAsDialog.loading = false
       }
     },
     // 切换模式
