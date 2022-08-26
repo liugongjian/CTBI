@@ -1,52 +1,56 @@
 <template>
   <div class="editor-object-container">
-    <div class="coordinates" @click="changeCoordinates">功能设置
+    <!-- <div class="coordinates" @click="changeCoordinates">功能设置
       <svg-icon
         :icon-class="coordinatesIcon"
         style="font-size: 20px;"
       />
-    </div>
-    <div
-      v-show="coordinatesIcon === 'packup'"
-      class="editor-item-container"
-    >
-      <div class="color">设置起点值</div>
+    </div> -->
+
+    <div class="editor-item-title">设置起点值</div>
+    <div class="editor-item-container">
       <el-radio-group v-model="option.startType">
         <el-radio label="fixed">固定值</el-radio>
         <el-radio label="dynamic">动态值</el-radio>
       </el-radio-group>
-      <div style="display: flex; align-items: center">
-        <el-input-number
-          v-if="option.startType === 'fixed'"
-          v-model="option.start"
-          controls-position="right"
-          style="width: 100px"
-        />
-        <template v-else>
-          <el-select v-model="value" popper-class="setting-select" placeholder="请选择">
-            <el-option
-              v-for="item in fieldOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-          <el-select v-model="option.dynamicStart.type" popper-class="setting-select" placeholder="请选择">
-            <el-option
-              v-for="item in aggregationOptions"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
-            />
-          </el-select>
-        </template>
+    </div>
+    <div class="editor-item-container">
+      <el-input-number
+        v-if="option.startType === 'fixed'"
+        v-model="option.start"
+        controls-position="right"
+        style="width: 100px"
+      />
+      <template v-else>
+        <el-select v-model="value" popper-class="setting-select" placeholder="请选择">
+          <el-option
+            v-for="item in fieldOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+        <el-select v-model="option.dynamicStart.type" popper-class="setting-select" placeholder="请选择" class="m-t-12">
+          <el-option
+            v-for="item in aggregationOptions"
+            :key="item.value"
+            :label="item.name"
+            :value="item.value"
+          />
+        </el-select>
+      </template>
+    </div>
+    <div
+      class="editor-object-container m-t-12"
+    >
+      <div class="editor-item-title">设置终点值</div>
+      <div class="editor-item-container">
+        <el-radio-group v-model="option.endType">
+          <el-radio label="fixed">固定值</el-radio>
+          <el-radio label="dynamic">动态值</el-radio>
+        </el-radio-group>
       </div>
-      <div class="color">设置终点值</div>
-      <el-radio-group v-model="option.endType">
-        <el-radio label="fixed">固定值</el-radio>
-        <el-radio label="dynamic">动态值</el-radio>
-      </el-radio-group>
-      <div style="display: flex; align-items: center">
+      <div class="editor-item-container">
         <el-input-number
           v-if="option.endType === 'fixed'"
           v-model="option.end"
@@ -62,7 +66,7 @@
               :value="item.value"
             />
           </el-select>
-          <el-select v-model="option.dynamicEnd.type" popper-class="setting-select" placeholder="请选择">
+          <el-select v-model="option.dynamicEnd.type" popper-class="setting-select" placeholder="请选择" class="m-t-12">
             <el-option
               v-for="item in aggregationOptions"
               :key="item.value"

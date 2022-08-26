@@ -49,7 +49,6 @@ export default {
           }
         }
       }
-      console.log('封装好的数据', obj)
       return obj
     },
     // 拿到数据的系列名字 并设置颜色
