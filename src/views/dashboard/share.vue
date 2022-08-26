@@ -225,6 +225,7 @@ export default {
       localStorage.removeItem(this.saveTagName)
       this.updateStoreData({ layout: [], layoutStyles: [] })
       this.mode = 'edit'
+      store.dispatch('app/updateShareDashboardInfo', {})
       store.dispatch('app/updateDashboardMode', 'edit')
       window.removeEventListener('beforeunload', this.beforeunload)
     }
