@@ -5,6 +5,7 @@
       v-model="visible"
       :placement="placement"
       trigger="click"
+      :disabled="disabled"
     >
       <el-input
         v-model="filterText"
@@ -114,6 +115,10 @@ export default {
       default: ''
     },
     closeOnClick: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
       type: Boolean,
       default: false
     }

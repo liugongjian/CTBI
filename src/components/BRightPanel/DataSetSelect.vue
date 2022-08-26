@@ -93,8 +93,8 @@
             :expand-on-click-node="false"
             @node-click="clickTreeNode"
           >
-            <div slot-scope="{ node, data }">
-              <div class="d-f">
+            <div slot-scope="{ node, data }" class="w-100p">
+              <div class="d-f w-100p">
                 <div>
                   <svg-icon
                     v-if="data.isFolder"
@@ -106,6 +106,7 @@
                   :content="data.name"
                   width="100px"
                 />
+                <span v-if="data.mold" style="font-size: 12px;flex:1;text-align:right;margin-right:10px">{{ data.mold===1?'类型: 私有':'类型: 公开' }}</span>
               </div>
             </div>
           </el-tree>
@@ -249,6 +250,7 @@ export default {
       if (!node.isFolder) {
         this.dataSet.id = node._id
         this.dataSet.name = node.name
+        this.dataSet.mold = node.mold
         this.showOption = false
         // 清空dataSource的数据
         const option = this.option
@@ -285,6 +287,7 @@ export default {
     callback (val) {
       this.dataSet.id = val.id
       this.dataSet.name = val.name
+      this.dataSet.mold = val.mold
     }
   }
 }

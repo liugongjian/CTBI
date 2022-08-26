@@ -6,12 +6,17 @@
         <!-- header -->
         <div class="data-set-header">
           <div class="data-set-header-l">
-            <el-button
-              type="primary"
-              icon="el-icon-plus"
-              @click="createDashboard"
-            >新建仪表板</el-button>
-            <el-button @click="createFolder">新建文件夹</el-button>
+            <el-dropdown trigger="click">
+              <el-button
+                type="primary"
+                icon="el-icon-plus"
+              >新建仪表板</el-button>
+              <el-dropdown-menu slot="dropdown" class="new-create-dropdown">
+                <el-dropdown-item @click.native="createDashboard">自定义</el-dropdown-item>
+                <el-dropdown-item @click.native="handleNewCreate">从模板新建</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <el-button style="margin-left: 10px" @click="createFolder">新建文件夹</el-button>
           </div>
           <div class="data-set-header-r">
             <el-input
@@ -318,6 +323,7 @@
         @handleAction="handleMoveDashboard"
       />
       <ShareDialog ref="shareDialog" from="list" :data="cureentData" @handleAction="handleShareChange" />
+      <NewCreateDialog :new-create-visible.sync="newCreateVisible" />
     </div>
   </page-view>
 </template>
@@ -333,6 +339,7 @@ import {
 import FolderEdit from './FolderEdit'
 import FolderTree from './FolderTree'
 import ShareDialog from './ShareDialog'
+import NewCreateDialog from './NewCreateDialog'
 import Pagination from '@/components/Pagination/index.vue'
 import moment from 'moment'
 export default {
@@ -341,7 +348,8 @@ export default {
     FolderEdit,
     FolderTree,
     Pagination,
-    ShareDialog
+    ShareDialog,
+    NewCreateDialog
   },
   data () {
     const validateName = (rule, value, callback) => {
@@ -397,6 +405,7 @@ export default {
       treeVisible: false,
       moveDashboardIds: [],
       onSearched: false,
+      newCreateVisible: false,
       pageInfo: {
         total: 0,
         pageNum: 1,
@@ -413,6 +422,10 @@ export default {
     this.init()
   },
   methods: {
+    // 从模板新建
+    handleNewCreate() {
+      this.newCreateVisible = true
+    },
     init () {
       // element lazy数据会被缓存，需要清理
       this.$set(this.$refs.multipleTable.store.states, 'lazyTreeNodeMap', {})
@@ -820,4 +833,16 @@ export default {
     align-items: center;
     margin: 0;
   }
+</style>
+<style lang="scss">
+.new-create-dropdown {
+  top: 119px !important;
+  left: 251px !important;
+  li {
+    width: 80px;
+  }
+  .popper__arrow {
+    display: none !important;
+  }
+}
 </style>
