@@ -142,3 +142,8 @@ export function existsFolder (params) {
 export function existsDataSet (params) {
   return http.get(`/dataSets/exists`, params)
 }
+
+// 查询分享仪表板的数据
+export function getDataSetShareData (id, body) {
+  return http.post(`/dataSets/${id}/ShareData`, body)
+}

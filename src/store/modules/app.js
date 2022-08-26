@@ -5,7 +5,8 @@ const state = {
   currentLayoutId: '',
   toolList: {},
   dataOption: [],
-  dashboardMode: 'edit'
+  dashboardMode: 'edit',
+  shareDashboardInfo: {}
 }
 
 const mutations = {
@@ -38,6 +39,9 @@ const mutations = {
   },
   UPDATEDASHBOARDMODE: (state, mode) => {
     state.dashboardMode = mode
+  },
+  UPDATESHAREDASHBOARDINFO: (state, info) => {
+    state.shareDashboardInfo = info
   }
 }
 const actions = {
@@ -61,6 +65,9 @@ const actions = {
   },
   updateDashboardMode ({ commit }, mode) {
     commit('UPDATEDASHBOARDMODE', mode)
+  },
+  updateShareDashboardInfo ({ commit }, info) {
+    commit('UPDATESHAREDASHBOARDINFO', info)
   }
 }
 

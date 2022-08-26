@@ -148,6 +148,7 @@ export default {
         this.loading = false
         this.dashboard = result
         this.passwordVisible = false
+        store.dispatch('app/updateShareDashboardInfo', { ...params })
         this.updateStoreData(JSON.parse(result.setting))
       } catch (e) {
         this.loading = false
