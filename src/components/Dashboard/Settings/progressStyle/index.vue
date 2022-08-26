@@ -1,8 +1,8 @@
 <template>
   <div class="editor-object-container">
-    <div class="item-num">
-      <span>每行展示个数设置(最多)</span>
-      <el-select v-model="option.showNum" popper-class="setting-select" class="w-select" placeholder="请选择">
+    <div class="flex-align-center">
+      <div class="editor-item-title">每行展示个数设置(最多)</div>
+      <el-select v-model="option.showNum" popper-class="setting-select" placeholder="请选择">
         <el-option
           v-for="item in showNumOptions"
           :key="item"
@@ -11,12 +11,12 @@
         />
       </el-select>
     </div>
-    <div class="editor-item-title">
-      主指标
-      <div v-for="(item, index) in option.indicators" :key="index" class="indicators">
-        {{ item.name }}
-        <el-color-picker v-model="item.color" />
-        <el-select v-model="item.fontSize" popper-class="setting-select" class="w-select" placeholder="请选择">
+    <div class="m-t-12">
+      <div class="editor-item-title">主指标</div>
+      <div v-for="(item, index) in option.indicators" :key="index" class="editor-item-container flex-align-center">
+        <div class="editor-item-title">{{ item.name }}</div>
+        <el-color-picker v-model="item.color" class="m-r-8" />
+        <el-select v-model="item.fontSize" popper-class="setting-select" placeholder="请选择">
           <el-option
             v-for="data in fontSizeOptions"
             :key="data"
@@ -26,20 +26,20 @@
         </el-select>
       </div>
     </div>
-    <div class="editor-item-title">
+    <div class="m-t-12">
       <el-checkbox v-model="option.value.show">显示当前值/目标值</el-checkbox>
-      <div class="box">
-        <span>当前值-展示名称</span>
+      <div class="editor-item-container flex-align-center">
+        <div class="editor-item-title">当前值-展示名称</div>
         <el-input v-model="option.value.current" placeholder="请输入内容" />
       </div>
-      <div class="box">
-        <span>目标值-展示名称</span>
+      <div class="editor-item-container flex-align-center">
+        <div class="editor-item-title">目标值-展示名称</div>
         <el-input v-model="option.value.target" placeholder="请输入内容" />
       </div>
-      <div class="box">
-        <span>样式</span>
-        <el-color-picker v-model="option.value.style.color" />
-        <el-select v-model="option.value.style.fontSize" popper-class="setting-select" class="w-select" placeholder="请选择">
+      <div class="editor-item-container flex-align-center">
+        <div class="editor-item-title">样式</div>
+        <el-color-picker v-model="option.value.style.color" class="m-r-8" />
+        <el-select v-model="option.value.style.fontSize" popper-class="setting-select" placeholder="请选择">
           <el-option
             v-for="data in fontSizeOptions"
             :key="data"
@@ -98,36 +98,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.item-num {
-  display: flex;
-  align-items: center;
-  color: #d0d0d3;
-  .w-select {
-    margin-left: 5px;
-    flex: 1;
-  }
-}
-.indicators {
-  display: flex;
-  align-items: center;
-  padding: 5px 15px;
-  .el-select {
-    flex: 1;
-  }
-}
-.el-color-picker {
-  margin: 0 5px;
-}
-.box {
-  display: flex;
-  align-items: center;
-  margin: 5px 15px;
-  .el-input {
-    margin-left: 5px;
-    flex: 1
-  }
-  .el-select {
-    flex: 1;
-  }
-}
 </style>

@@ -1,3 +1,10 @@
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-08-22 09:15:11
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-25 15:38:04
+ * @Description:
+ */
 // 折线图配置项信息
 /**
  * type: {
@@ -50,13 +57,6 @@ export default {
       }
     },
     'ComponentOption': { // 图表样式
-      'Legend': { // 图例
-        'show': true,
-        'top': 'auto',
-        'left': 'center',
-        'orient': 'horizontal',
-        'type': 'scroll'
-      },
       'ConfigSize': { // 设置起点值 终点值
         'startType': 'fixed',
         'endType': 'fixed',

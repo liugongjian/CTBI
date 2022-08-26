@@ -7,7 +7,7 @@
     <el-container>
       <el-container>
         <!-- 工具栏 -->
-        <el-header v-if="mode === 'edit'" class="tool-header">
+        <el-header v-show="mode === 'edit'" class="tool-header">
           <Tools
             @getGridLayout="getGridLayout"
             @getParentRect="getParentRect"

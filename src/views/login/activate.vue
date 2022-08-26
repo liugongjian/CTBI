@@ -82,6 +82,8 @@ export default {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('Please input the password'))
+      } else if (value === this.validForm.oldPassword) {
+        callback(new Error('新密码应不能与旧密码相同'))
       } else {
         if (this.validForm.checkPassword !== '') {
           this.$refs.validForm.validateField('checkPassword')
@@ -145,8 +147,9 @@ export default {
       try {
         await activate(data)
         this.$message({
-          message: '提交成功!',
-          iconClass: 'activate'
+          type: 'success',
+          message: '激活成功!',
+          center: true
         })
         this.$router.push({ path: '/login' })
       } catch (error) {
