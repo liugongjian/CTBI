@@ -101,8 +101,8 @@ export function confirmEditSql (body) {
 }
 
 // 获取指定数据源的 数据表
-export function getDataTable (id) {
-  return http.get(`/dataSources/${id}/tables`)
+export function getDataTable (id, params) {
+  return http.get(`/dataSources/${id}/tables`, params)
 }
 
 // 获取指定数据源的 数据表

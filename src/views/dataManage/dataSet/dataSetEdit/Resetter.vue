@@ -521,13 +521,8 @@ export default {
 }
 
 // 由于表头与表体不对齐，el-table会默认追加gutter，这边选择隐藏
-::v-deep .gutter-th {
-  .is-group.has-gutter {
-    tr th.gutter {
-      display: none !important;
-      width: 0px !important;
-    }
-  }
+::v-deep .vxe-header--gutter {
+  display: none !important;
 }
 
 .left-divider {
