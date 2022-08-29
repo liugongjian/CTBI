@@ -241,22 +241,20 @@ export default {
       // 清空已选
       this.selectedRows = []
       this.checkedKeys = false
-      let params = Object.assign({}, this.queryForm)
+      const params = Object.assign({}, this.queryForm)
       // 带参数查询，需要展示文件路径
       if (this.queryForm.searchkey.length > 0) {
         this.showFolderColumn = true
       } else {
         this.showFolderColumn = false
         // 接口要求不能传参
-        params = {}
+        delete params.searchkey
       }
       try {
         const data = await getDataSetsFolders(params)
         // element lazy数据会被缓存，需要清理
-        if (this.dataList.length > 0) {
-          this.$set(this.$refs.multipleTable.store.states, 'lazyTreeNodeMap', {})
-          this.$set(this.$refs.multipleTable.store.states, 'treeData', {})
-        }
+        this.$set(this.$refs.multipleTable.store.states, 'lazyTreeNodeMap', {})
+        this.$set(this.$refs.multipleTable.store.states, 'treeData', {})
         this.setResult(data.result, data.pageInfo.totalItems)
       } catch (error) {
         console.log(error)
@@ -295,6 +293,9 @@ export default {
       })
     },
     getFolderPath (path) {
+      if (!path) {
+        return ''
+      }
       if (path.indexOf('根目录/') > -1) {
         return path
       }
@@ -324,7 +325,7 @@ export default {
         existDataset = true
       } else {
         const childrenData = await getDataSetsFolders({ folderId: row._id })
-        existDataset = childrenData.length >= 1
+        existDataset = childrenData.result.length >= 1
       }
       if (existDataset) {
         this.$dialog.show('TipDialog', { content: '该文件夹下已存在数据集，请移除后再删除！' })

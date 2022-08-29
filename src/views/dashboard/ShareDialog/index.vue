@@ -2,6 +2,7 @@
   <el-dialog
     title="发布"
     :visible.sync="shareDashboardVisible"
+    :close-on-click-modal="false"
     width="560px"
     @close="close"
   >

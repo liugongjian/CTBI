@@ -42,7 +42,7 @@
         >
           <el-tree
             style="width: 200px"
-            :data="dimensionMeasure"
+            :data="fieldsTable"
             :props="defaultProps"
             default-expand-all
           >
@@ -80,6 +80,7 @@
         <!-- gutter-th 由于表头与表体不对齐，el-table会默认追加gutter，这边选择隐藏 -->
         <div class="data-preview-right">
           <vxe-table
+            ref="vxeTable"
             border
             show-overflow
             highlight-hover-row
@@ -87,10 +88,10 @@
             class="gutter-th"
             :height="tableHeight"
           >
-            <template v-for="(parent, i) in dimensionMeasure">
+            <template v-for="(parent, i) in fieldsTable">
               <vxe-table-colgroup
                 v-if="!parent.isHidden"
-                :key="`column-p-${i}`"
+                :key="`column-p-${i}` + getDate()"
                 :title="parent.displayColumn"
                 :header-class-name="`m-column-${parent._id}`"
               >
@@ -174,7 +175,7 @@
       </div>
       <div v-show="activeTagName === 2">
         <el-table
-          :data="dimensionMeasure"
+          :data="fieldsTable"
           :height="tableHeight"
           row-key="index"
           default-expand-all
@@ -202,7 +203,7 @@
               >
                 <re-input
                   v-model="scope.row.displayColumn"
-                  :max-length="50"
+                  :maxlength="50"
                   :blur-fun="(newVal, oldVal) => {return handlerBlur(newVal, oldVal, scope.row.index)}"
                   @blur="(val) => { handleBlur(val, scope.row) }"
                 />
@@ -321,8 +322,6 @@ export default {
         label: 'displayColumn'
       },
       previewLoading: false,
-      // 维度&度量 表头
-      dimensionMeasure: [],
       // 维度&度量 表格数据
       dimensionMeasureTableData: [],
       fieldsTable: [],
@@ -388,9 +387,11 @@ export default {
       }
     },
     getDimensionMeasureData (fields) {
-      this.dimensionMeasure = getFieldsTable(fields)
       this.fieldsTable = getFieldsTable(fields)
       this.fieldsTree = getFieldsTree(fields)
+      this.$nextTick(() => {
+        this.$refs.vxeTable.refreshColumn()
+      })
     },
     typeTransform (data) {
       const temp = this.resetDataType(data)
@@ -439,6 +440,9 @@ export default {
     },
     handleBlur (val, item) {
       item.attributes[0].displayColumn = val
+    },
+    getDate() {
+      return new Date()
     }
   }
 }
@@ -565,6 +569,7 @@ export default {
 ::v-deep .column-child {
   font-size: 12px;
   font-weight: 400;
+  width: 90px;
   line-height: 20px;
   background-color: #fff !important;
 }

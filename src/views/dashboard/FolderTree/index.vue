@@ -3,6 +3,7 @@
     title="资源移动到"
     :visible.sync="visible"
     :before-close="close"
+    :close-on-click-modal="false"
   >
     <div class="move-to-drawer">
       <div class="move-to-drawer-main">

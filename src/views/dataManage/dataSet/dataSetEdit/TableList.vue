@@ -1,5 +1,5 @@
 <template>
-  <di>
+  <div>
     <div
       v-if="tableList.length > 0"
       v-infinite-scroll="load"
@@ -83,7 +83,7 @@
       v-else
       description="无数据"
     />
-  </di>
+  </div>
 </template>
 
 <script>

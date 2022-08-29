@@ -23,6 +23,7 @@
               v-model="searchName"
               placeholder="请输入名称"
               style="margin-right: 12px"
+              @keyup.enter.native="query"
             />
             <el-button
               type="primary"
@@ -213,6 +214,7 @@
         <el-dialog
           title="删除提示"
           :visible.sync="deleteDataVisible"
+          :close-on-click-modal="false"
           width="480px"
         >
           <div class="data-set-didlog-del">
@@ -240,6 +242,7 @@
         <el-dialog
           title="下线提示"
           :visible.sync="cancelPublishVisible"
+          :close-on-click-modal="false"
           width="480px"
         >
           <div class="data-set-didlog-del">
@@ -265,6 +268,7 @@
           title="属性"
           :visible.sync="dashboardAttributeVisible"
           width="480px"
+          :close-on-click-modal="false"
           @close="hiddenDashboardAttribute"
         >
           <div class="data-set-didlog-main">

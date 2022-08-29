@@ -68,12 +68,14 @@
             label="自动刷新"
             @change="handleRefresh"
           />
-          <input
+          <el-input-number
             v-if="autoRefresh"
             v-model="time"
-            type="number"
+            :min="1"
+            :max="60"
+            :controls="false"
             class="limit-input"
-          >
+          />
           <el-select
             v-if="autoRefresh"
             v-model="unit"

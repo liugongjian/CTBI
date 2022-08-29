@@ -38,7 +38,7 @@
               v-model="editDataInfo.displayName"
               style="width: 300px;"
               :class="{'error-input': isErrorName}"
-              max-length="50"
+              maxlength="50"
               placeholder="未命名SQL"
               @input="checkDisplayName"
             />
@@ -530,8 +530,8 @@ export default {
         const type = currentDataSource?.type || 'file'
         this.editDataInfo.dataSourceName = currentDataSource?.displayName
         this.editDataInfo.dataSourceType = type
-this.editDataInfo.dataSourceMold = currentDataSource.mold
-const params = Object.assign({ searchkey: this.searchKey }, this.paging)
+        this.editDataInfo.dataSourceMold = currentDataSource.mold
+        const params = Object.assign({ searchkey: this.searchKey }, this.paging)
 
         let resultList = []
 

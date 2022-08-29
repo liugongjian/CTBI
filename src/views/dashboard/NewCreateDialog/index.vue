@@ -3,6 +3,7 @@
     title="从模板新建"
     :visible.sync="visible"
     width="1000px"
+    :close-on-click-modal="false"
     @open="handleOpen"
     @close="handleClose"
   >

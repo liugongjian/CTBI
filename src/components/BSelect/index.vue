@@ -25,8 +25,8 @@
       style="width: 200px;"
     >
       <el-dropdown-item
-        v-for="data in options"
-        :key="data.value"
+        v-for="(data, index) in options"
+        :key="'b-select-'+data.value+ index"
         :command="data"
       >
         <template v-if="hasChildren(data)">
