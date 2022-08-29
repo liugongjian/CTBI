@@ -202,7 +202,7 @@ export default {
           }
           this.loading = false
           this.dashboard = result
-          if (from) {
+          if (from && this.$route.query.operation !== 'editTemplate') {
             this.dashboard._id = null
           }
           if (!this.recoverVisible && !this.useRecover) {

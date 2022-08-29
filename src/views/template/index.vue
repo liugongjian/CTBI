@@ -12,6 +12,7 @@
     >
       <template #operation="{scope}">
         <el-button type="text" @click.stop="handleDelete(scope.row._id)">删除</el-button>
+        <el-button type="text" @click.stop="handleEdit(scope.row._id)">编辑</el-button>
       </template>
     </common-table>
   </div>
@@ -98,6 +99,17 @@ export default {
           this.getTemplateList()
         } catch (error) {
           console.log(error)
+        }
+      })
+    },
+    handleEdit(id) {
+      console.log(id)
+      this.$router.push({
+        path: '/dashboard',
+        query: {
+          id,
+          from: 'template',
+          operation: 'editTemplate'
         }
       })
     },
