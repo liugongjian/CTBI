@@ -1,5 +1,5 @@
 import store from '@/store'
-import { getDataSetData } from '@/api/dataSet'
+import { getDataSetData, getDataSetShareData } from '@/api/dataSet'
 import { getLayoutOptionById, getDataValueById, deepClone, getQueryParams } from '@/utils/optionUtils'
 // 图表组件的公共混入
 export default {
@@ -58,9 +58,14 @@ export default {
 
       try {
         this.$bus.$emit('showLoading', this.identify)
-        const body = { query: params.query }
+        const shareParams = store.state.app.shareDashboardInfo
+        const isShareHref = location.pathname.includes('/dashboard/publish/')
+        const isInSharePage = isShareHref && shareParams.url // 检测是否来自分享页面
+        const body = isInSharePage ? { query: params.query, ...shareParams } : { query: params.query }
         const dataSetId = params.dataSetId
-        const res = await getDataSetData(dataSetId, body)
+        // 来自分享仪表板页面的数据请求走不同的接口
+        const executeMethod = isInSharePage ? getDataSetShareData : getDataSetData
+        const res = await executeMethod(dataSetId, body)
         this.chartData = {
           fields: params.transformFields,
           data: res.result.data
