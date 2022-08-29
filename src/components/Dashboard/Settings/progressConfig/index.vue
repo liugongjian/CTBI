@@ -1,9 +1,9 @@
 <template>
   <div class="editor-object-container">
     <div v-for="(data,index) in option.cfgTargetOption" :key="index" class="item">
-      <div>{{ data.name }}</div>
-      <div class="box">
-        <span>目标类型</span>
+      <div class="editor-item-title">{{ data.name }}</div>
+      <div class="flex-align-center m-t-12">
+        <div class="editor-item-title">目标类型</div>
         <el-select v-model="data.type" popper-class="setting-select" class="w-select" placeholder="请选择">
           <el-option
             v-for="item in typeOptions"
@@ -13,8 +13,8 @@
           />
         </el-select>
       </div>
-      <div class="box">
-        <span>目标值</span>
+      <div class="flex-align-center m-t-12">
+        <div class="editor-item-title">目标值</div>
         <el-input v-if="data.type === 1" v-model="data.fixedVal" class="w-input" placeholder="请输入内容" />
         <el-select v-else v-model="data.dynamicVal" popper-class="setting-select" class="w-select" placeholder="请选择">
           <el-option
@@ -25,9 +25,9 @@
           />
         </el-select>
       </div>
-      <div v-if="data.type === 2" class="box">
-        <span>聚合方式</span>
-        <el-select v-model="data.aggregation" class="w-select" placeholder="请选择">
+      <div v-if="data.type === 2" class="flex-align-center">
+        <div class="editor-item-title">聚合方式</div>
+        <el-select v-model="data.aggregation" popper-class="setting-select" class="w-select" placeholder="请选择">
           <el-option
             v-for="(item, i) in aggregationOptions"
             :key="i"
@@ -106,8 +106,8 @@ export default {
 
 <style lang="scss" scoped>
 .item {
-  padding: 5px 0;
-  margin-bottom: 5px;
+  padding: 5px 0 8px 0;
+  margin-bottom: 8px;
   background-color: #434a59;
   color: rgba(255, 255, 255, 0.75);
   .box {

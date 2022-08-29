@@ -27,44 +27,6 @@
         </div>
       </el-popover>
     </div>
-    <!-- <div class="color" @click="handleShowColor">
-      <span class="label">{{ title }}</span>
-      <div class="color-select">
-        <span>自定义</span>
-        <svg-icon
-          :icon-class="colorIcon"
-          style="font-size: 20px"
-        />
-      </div>
-    </div>
-    <div v-show="showColorConfig" class="color-config">
-      <div class="field">
-        <label>字段项</label>
-        <div>
-          <div v-for="(item,index) in colorData" :key="index" class="item" :class="{active: active === index}" @click="changeActive(index)">
-            <span v-if="item.remark" class="box" :style="{backgroundColor: item.color}" />
-            {{ item.remark }}
-          </div>
-        </div>
-      </div>
-      <div class="color-container">
-        <div>
-          <label>色系</label>
-        </div>
-        <div class="color-box">
-          <div v-for="(item,index) in defaultColor" :key="index" class="box" style="cursor:pointer;" :style="{backgroundColor: item}" @click="handleColor(item)">
-            <svg-icon
-              v-show="showSelected(item)"
-              icon-class="selected"
-              style="font-size: 16px; z-index:1"
-            />
-          </div>
-        </div>
-        <div class="setting">
-          自定义 <el-color-picker v-model="colorValue" size="mini" @change="changeColorValue" />
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 

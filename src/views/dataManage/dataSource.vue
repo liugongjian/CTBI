@@ -376,7 +376,6 @@ export default {
     },
     async editSource(row) {
       try {
-        console.log('row', row)
         this.notEdit = false
         this.status = '编辑'
         this.form.type = row.type
