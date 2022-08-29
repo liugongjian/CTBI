@@ -69,7 +69,7 @@
         title="坐标轴"
         name="3"
       >
-        <el-tabs v-model="activeName" class="axis-tab">
+        <el-tabs v-if="!option['Axis']['RadarAxis']" v-model="activeName" class="axis-tab">
           <el-tab-pane
             v-for="(item,name,key) in option['Axis']"
             :key="key"
@@ -82,6 +82,16 @@
             />
           </el-tab-pane>
         </el-tabs>
+        <div
+          v-for="(item,name,key) in option['Axis']"
+          v-else
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['Axis'][name]"
+          />
+        </div>
       </el-collapse-item>
       <el-collapse-item
         v-if="option['DisplayConfig']"

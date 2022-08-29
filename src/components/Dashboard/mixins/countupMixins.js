@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-01 14:25:01
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-01 16:14:21
+ * @LastEditTime: 2022-08-29 16:29:49
  * @Description: 翻牌器的混入
  */
 import baseMixins from './baseMixins'
@@ -49,9 +49,10 @@ export default {
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
       const color = []
+      const colorValue = colorTheme[this.storeOption.theme.StyleConfig.IndicatorPic.Color.theme]
       val.forEach((item, index) => {
-        const idx = (index) % colorTheme['官方'].length
-        color.push({ name: item.title, color: colorTheme['官方'][idx].value, remark: item.title })
+        const idx = (index) % colorValue.length
+        color.push({ name: item.title, color: colorValue[idx].value, remark: item.title })
       })
 
       this.storeOption.theme.StyleConfig.IndicatorPic.Color.color = color

@@ -13,6 +13,7 @@
  *    other: 其他
  *  }
  * */
+import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -57,13 +58,6 @@ export default {
       }
     },
     'ComponentOption': { // 图表样式
-      'Legend': { // 图例
-        'show': true,
-        'top': 'auto',
-        'left': 'center',
-        'orient': 'horizontal',
-        'type': 'scroll'
-      },
       'ProgressStyle': { // 样式设置
         'showNum': 1,
         'indicators': [
@@ -75,8 +69,12 @@ export default {
           'current': '实际',
           'target': '目标',
           'style': { 'color': '#393f4d', 'fontSize': 16 }
-        },
-        'color': []
+        }
+      },
+      'Color': { // 颜色设置
+        'title': '配色设置',
+        'color': colorTheme['官方'],
+        'theme': '官方'
       }
     },
     'FunctionalOption': { // 功能配置

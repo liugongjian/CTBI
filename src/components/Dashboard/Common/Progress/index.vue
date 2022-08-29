@@ -1,8 +1,15 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-08-19 11:32:45
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-29 14:35:51
+ * @Description:
+-->
 <template>
   <div style="width:100%;height:100%;">
     <div class="box">
       <div v-for="(item,index) in dataValue" :key="index" class="item" :style="{width: showNumStyle}">
-        <component :is="isComponent" :data="item" :option="ProgressStyle" :progress-config="ProgressConfig" />
+        <component :is="isComponent" :data="item" :option="ProgressStyle" :color="Color" :progress-config="ProgressConfig" />
       </div>
     </div>
   </div>
@@ -38,6 +45,9 @@ export default {
     },
     ProgressStyle () {
       return this.option.theme?.ComponentOption?.ProgressStyle || {}
+    },
+    Color() {
+      return this.option.theme?.ComponentOption?.Color || {}
     },
     ProgressConfig () {
       return this.option.theme?.FunctionalOption.ProgressConfig || {}

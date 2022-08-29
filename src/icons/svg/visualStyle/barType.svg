@@ -1,2 +1,22 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1650420567114" class="icon" viewBox="0 0 1331 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4312" xmlns:xlink="http://www.w3.org/1999/xlink" width="41.59375" height="32"><defs><style type="text/css">@font-face { font-family: feedback-iconfont; src: url("//at.alicdn.com/t/font_1031158_u69w8yhxdu.woff2?t=1630033759944") format("woff2"), url("//at.alicdn.com/t/font_1031158_u69w8yhxdu.woff?t=1630033759944") format("woff"), url("//at.alicdn.com/t/font_1031158_u69w8yhxdu.ttf?t=1630033759944") format("truetype"); }
-</style></defs><path d="M256 435.2h819.2v153.6H256z" fill="#40ffa7" p-id="4313"></path><path d="M844.8 435.2h230.4v153.6h-230.4z" fill="#40ffa7" p-id="4314"></path><path d="M844.8 409.6h35.84v215.04H844.8z" fill="#40ffa7" p-id="4315"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#E4E3E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-41">
+            <rect id="矩形备份-39" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="编组-132备份-3" transform="translate(42.666667, 384.000000)" fill-rule="nonzero">
+                <polygon id="路径备份-35" fill="url(#linearGradient-1)" points="0 0 830.358974 0 830.358974 256 0 256"></polygon>
+                <polygon id="路径备份-36" fill="url(#linearGradient-2)" points="541.538462 0 938.666667 0 938.666667 256 541.538462 256"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

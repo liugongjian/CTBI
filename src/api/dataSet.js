@@ -1,3 +1,4 @@
+
 import { http } from '@/config/request'
 
 // 创建文件夹
@@ -141,4 +142,9 @@ export function existsFolder (params) {
 // 新建数据集判重
 export function existsDataSet (params) {
   return http.get(`/dataSets/exists`, params)
+}
+
+// 查询分享仪表板的数据
+export function getDataSetShareData (id, body) {
+  return http.post(`/dataSets/${id}/ShareData`, body)
 }

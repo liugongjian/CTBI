@@ -47,7 +47,13 @@ export default {
       return this.$store.state.settings.sidebarLogo
     },
     routes () {
-      return [...appRouter, ...this.$store.state.user.routes]
+      let result = [...appRouter, ...this.$store.state.user.routes]
+      const role = this.$store.state.user.userData.role
+      // 非superUser 和 admin 用户 无权看 模板列表页
+      if (role !== 'superUser' && role !== 'admin') {
+        result = result.filter(item => item.name !== 'template')
+      }
+      return result
     },
     activeMenu () {
       const route = this.$route

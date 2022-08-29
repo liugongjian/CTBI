@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-06-08 10:55:37
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-18 14:31:34
+ * @LastEditTime: 2022-08-29 16:27:04
  * @Description:
  */
 // 折线图配置项信息
@@ -20,6 +20,7 @@
  *    other: 其他
  *  }
  * */
+import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'distribution', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -51,24 +52,28 @@ export default {
       }
     },
     'ComponentOption': { // 图表样式
+      'RadarChartShape': { // 雷达形状
+        'shape': 'polygon' // 多边形 圆形
+      },
+      'RadarLabel': {
+        'labelShow': '0', // 0不显示 1 智能显示 2 全部显示
+        'areaStyle': false
+      },
+      'Color': { // 颜色设置
+        'title': '配色设置',
+        'color': colorTheme['官方'],
+        'theme': '官方'
+      },
       'Legend': { // 图例
         'show': true,
         'top': 'auto',
         'left': 'center',
         'orient': 'horizontal',
         'type': 'scroll'
-      },
-      'RadarChartShape': { // 雷达形状
-        'shape': 'polygon' // 多边形 圆形
-      },
-      'RadarLabel': {
-        'labelShow': '0' // 0不显示 1 智能显示 2 全部显示
-      },
-      'RadarColor': {
-        'color': [],
-        'areaStyle': false
-      },
-      'RadarCoordinates': {
+      }
+    },
+    'Axis': {
+      'RadarAxis': {
         'maxValue': 0, // 默认0
         'minValue': 0,
         'autoMaxValue': true,

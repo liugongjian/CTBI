@@ -56,7 +56,7 @@ import store from '@/store'
 // 导入样式
 import '@/views/dashboard/index.scss'
 import { getShareDashboardDetail } from '@/api/dashboard'
-import moment from 'moment'
+import { encryptAes } from '@/utils/encrypt'
 export default {
   components: {
     Widget
@@ -69,7 +69,7 @@ export default {
     this.saveTagName = this.saveName + '-tag'
     return {
       loading: false,
-      passwordVisible: true,
+      passwordVisible: false,
       dashboardAttr: {
         password: ''
       },
@@ -87,6 +87,15 @@ export default {
     },
     layoutStyles() {
       return this.$store.state.settings.layoutStyles
+    }
+  },
+  created () {
+    const paths = location.pathname.split('/')
+    const needPwd = paths[paths.length - 1].length === 18
+    if (needPwd) {
+      this.passwordVisible = true
+    } else {
+      this.getDashboardData()
     }
   },
   mounted () {
@@ -129,8 +138,8 @@ export default {
       // }
       const params = {
         url: window.location.href,
-        password: this.dashboardAttr.password,
-        date: moment().format('YYYY-MM-DD')
+        password: this.dashboardAttr.password ? encryptAes(this.dashboardAttr.password) : ''
+        // date: moment().format('YYYY-MM-DD')
       }
       try {
         this.loading = true
@@ -139,6 +148,7 @@ export default {
         this.loading = false
         this.dashboard = result
         this.passwordVisible = false
+        store.dispatch('app/updateShareDashboardInfo', { ...params })
         this.updateStoreData(JSON.parse(result.setting))
       } catch (e) {
         this.loading = false
@@ -215,6 +225,7 @@ export default {
       localStorage.removeItem(this.saveTagName)
       this.updateStoreData({ layout: [], layoutStyles: [] })
       this.mode = 'edit'
+      store.dispatch('app/updateShareDashboardInfo', {})
       store.dispatch('app/updateDashboardMode', 'edit')
       window.removeEventListener('beforeunload', this.beforeunload)
     }

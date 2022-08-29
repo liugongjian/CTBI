@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-05-06 22:42:01
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-29 16:03:12
+ * @Description:
+-->
 <template>
   <div class="editor-object-container">
     <div>
@@ -6,10 +13,23 @@
     <div
       class="editor-item-container"
     >
-      <el-radio-group v-model="radioLabel" class="label" :disabled="!checked" @change="changeRadioLabel">
+      标签展示形式
+    </div>
+    <div
+      class="editor-item-container"
+    >
+      <el-radio-group v-model="radioLabel" :disabled="!checked" @change="changeRadioLabel">
         <el-radio :label="1">智能显示</el-radio>
         <el-radio :label="2">全量显示</el-radio>
       </el-radio-group>
+    </div>
+    <div
+      class="m-t-12"
+    >
+      <el-checkbox
+        v-model="checked"
+        @change="changeChecked"
+      >节点之间面积填充</el-checkbox>
     </div>
   </div>
 </template>
@@ -46,7 +66,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.label {
-  margin-top: 20px ;
-}
 </style>
