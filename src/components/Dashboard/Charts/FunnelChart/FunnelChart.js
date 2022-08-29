@@ -63,13 +63,6 @@ export default {
       }
     },
     'ComponentOption': { // 图表样式
-      'Legend': { // 图例
-        'show': true,
-        'top': 'auto',
-        'left': 'center',
-        'orient': 'horizontal',
-        'type': 'scroll'
-      },
       'DisplayStyle': {
         // 展示样式 标准图
         'default': true, // 默认样式
@@ -86,6 +79,13 @@ export default {
         'calcMethod': 'last',
         // 底部样式
         'triangle': false
+      },
+      'Legend': { // 图例
+        'show': true,
+        'top': 'auto',
+        'left': 'center',
+        'orient': 'horizontal',
+        'type': 'scroll'
       }
     },
     'LabelOption': {

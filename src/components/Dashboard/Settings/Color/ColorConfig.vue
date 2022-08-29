@@ -47,12 +47,6 @@ export default {
     return {
       colorTheme,
       arrowDown: true
-    //   colorIcon: 'down',
-    //   showColorConfig: false,
-    //   colorValue: null,
-    //   active: 0,
-    //   // 默认颜色
-    //   defaultColor: ['#1a7dff', '#ff751a', '#16cad6', '#ffae0f', '#34ad8d', '#f593ad', '#8c90b8', '#96b1fa', '#ccb18f']
     }
   },
   methods: {
