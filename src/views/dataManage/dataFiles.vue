@@ -5,7 +5,6 @@
     :table-data="tableData"
     :page-num.sync="page"
     :page-size.sync="limit"
-    :page-sizes="[2, 5, 10]"
     :total="total"
     :loading="tableLoading"
     :is-show-default-option="false"

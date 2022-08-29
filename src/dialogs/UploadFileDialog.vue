@@ -3,6 +3,7 @@
     class="upload-file-dialog"
     title="上传文件"
     :visible.sync="dialogVisible"
+    :close-on-click-modal="false"
   >
     <div slot="footer">
       <el-button

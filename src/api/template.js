@@ -20,3 +20,11 @@ export function getTemplateDetail (id) {
   return http.get(`/template/${id}`)
 }
 
+// 获取模板详情
+export function updateTemplateContent (data) {
+  return http.post(`/template/updateTemplate`, data)
+}
+// 修改模板属性
+export function updateTemplateAttribute (data) {
+  return http.post(`/template/update`, data)
+}

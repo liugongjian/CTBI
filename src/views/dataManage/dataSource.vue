@@ -264,27 +264,27 @@ export default {
         displayName: [
           { required: true, message: '请输入数据源配置列表显示名称', trigger: 'blur' },
           { pattern: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, message: '仅支持数字、字母、下划线以及中文', trigger: 'blur' },
-          { min: 1, max: 50, message: '字符长度不超过50', trigger: 'blur' }
+          { min: 1, max: 50, message: '字符长度不超过200', trigger: 'blur' }
         ],
         host: [
           { required: true, message: '请输入IP地址', trigger: 'blur' },
-          { max: 200, message: '字符长度不超过50', trigger: 'blur' }
+          { max: 200, message: '字符长度不超过200', trigger: 'blur' }
         ],
         port: [
           { required: true, message: '请输入端口', trigger: 'blur' },
-          { max: 200, message: '字符长度不超过50', trigger: 'blur' }
+          { max: 200, message: '字符长度不超过200', trigger: 'blur' }
         ],
         db: [
           { required: true, message: '请输入数据库名称', trigger: 'blur' },
-          { max: 200, message: '字符长度不超过50', trigger: 'blur' }
+          { max: 200, message: '字符长度不超过200', trigger: 'blur' }
         ],
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { max: 200, message: '字符长度不超过50', trigger: 'blur' }
+          { max: 200, message: '字符长度不超过200', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { max: 200, message: '字符长度不超过50', trigger: 'blur' }
+          { max: 200, message: '字符长度不超过200', trigger: 'blur' }
         ]
       },
       comments: [
