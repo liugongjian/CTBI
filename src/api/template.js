@@ -20,3 +20,7 @@ export function getTemplateDetail (id) {
   return http.get(`/template/${id}`)
 }
 
+// 修改模板属性
+export function updateTemplateAttribute (data) {
+  return http.post(`/template/update`, data)
+}
