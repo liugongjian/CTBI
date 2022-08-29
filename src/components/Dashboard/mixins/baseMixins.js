@@ -60,7 +60,7 @@ export default {
         this.$bus.$emit('showLoading', this.identify)
         const shareParams = store.state.app.shareDashboardInfo
         const isShareHref = location.pathname.includes('/dashboard/publish/')
-        const isInSharePage = isShareHref && shareParams.url
+        const isInSharePage = isShareHref && shareParams.url // 检测是否来自分享页面
         const body = isInSharePage ? { query: params.query, ...shareParams } : { query: params.query }
         const dataSetId = params.dataSetId
         // 来自分享仪表板页面的数据请求走不同的接口
