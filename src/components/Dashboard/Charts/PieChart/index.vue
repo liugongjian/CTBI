@@ -136,13 +136,14 @@ export default {
             },
             label: {
               show: check,
+              alignTo: 'labelLine',
               formatter: function (data) {
                 let formatter = ''
                 if (checkList.includes('维度')) {
                   if (SeriesSetting) {
                     let nameTemp = ''
                     SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
-                      if (item.value === data.data[0]) {
+                      if (item.value.trim() === data.data[0].trim()) {
                         nameTemp = item.remark
                       }
                     })
