@@ -280,7 +280,7 @@ export default {
       paging: {
         isPaging: 1,
         page: 0,
-        limit: 2
+        limit: 20
       },
       // 左侧表格loading
       dataTableLoading: false,
