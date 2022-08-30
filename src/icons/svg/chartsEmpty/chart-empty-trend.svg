@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="920px" height="275px" viewBox="0 0 920 275" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>指标趋势图</title>
+    <defs>
+        <linearGradient x1="49.2020221%" y1="7.24507459%" x2="49.2020221%" y2="94.7836383%" id="linearGradient-1">
+            <stop stop-color="#D0D0D0" offset="0%"></stop>
+            <stop stop-color="#FBFBFB" offset="100%"></stop>
+            <stop stop-color="#FBFBFB" offset="100%"></stop>
+            <stop stop-color="#FBFBFB" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-87" transform="translate(0.000000, -0.000000)">
+            <g id="折线图" transform="translate(0.000000, 128.000000)">
+                <line x1="37" y1="122.285418" x2="907.5" y2="124.5" id="路径-11" stroke="#E7E6E6" stroke-width="0.5"></line>
+                <text id="1204" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="41" y="143">1204</tspan>
+                </text>
+                <text id="0" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                    <tspan x="19" y="129">0</tspan>
+                </text>
+                <text id="250" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                    <tspan x="5" y="106">250</tspan>
+                </text>
+                <text id="500" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                    <tspan x="5" y="82">500</tspan>
+                </text>
+                <text id="750" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                    <tspan x="5.124" y="56.576">750</tspan>
+                </text>
+                <text id="1000" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                    <tspan x="0" y="34">1000</tspan>
+                </text>
+                <text id="Revenue-amount" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                    <tspan x="16.024" y="11.576">Revenue amount</tspan>
+                </text>
+                <rect id="矩形" fill="#C2C2C2" x="0" y="2" width="8" height="8"></rect>
+                <text id="1205" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="119.909091" y="143">1205</tspan>
+                </text>
+                <text id="1206" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="198.818182" y="143">1206</tspan>
+                </text>
+                <text id="1207" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="277.727273" y="143">1207</tspan>
+                </text>
+                <text id="1208" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="355.636364" y="143">1208</tspan>
+                </text>
+                <text id="1209" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="434.545455" y="143">1209</tspan>
+                </text>
+                <text id="1210" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="513.454545" y="143">1210</tspan>
+                </text>
+                <text id="1211" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="590.363636" y="143">1211</tspan>
+                </text>
+                <text id="1212" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="664.272727" y="143">1212</tspan>
+                </text>
+                <text id="1213" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="741.181818" y="143">1213</tspan>
+                </text>
+                <text id="1214" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="818.090909" y="143">1214</tspan>
+                </text>
+                <text id="1215" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="895" y="143">1215</tspan>
+                </text>
+                <polygon id="路径-29" fill="url(#linearGradient-1)" opacity="0.596470424" points="62.5 115.174414 138.509356 50.6187799 215.327321 87.5632691 292.145287 41.2854352 368.963253 39.0045479 445.781219 27.2854183 522.599184 59.5632352 599.41715 71.4243606 676.235116 27.2854183 753.053082 68.8965798 829.871047 52.7576713 907.5 82.158629 907.5 122.285418 62.5 122.285418"></polygon>
+                <polyline id="路径-29" stroke="#C9C9C9" stroke-width="1.5" points="62.5 115.174414 138.509356 50.6187799 215.327321 87.5632691 292.145287 41.2854352 368.963253 39.0045479 445.781219 27.2854183 522.599184 59.5632352 599.41715 71.4243606 676.235116 27.2854183 753.053082 68.8965798 829.871047 52.7576713 907.5 82.158629"></polyline>
+                <circle id="椭圆形" stroke="#C9C9C9" fill="#FFFFFF" cx="61" cy="116" r="2.5"></circle>
+                <circle id="椭圆形备份" stroke="#C9C9C9" fill="#FFFFFF" cx="139" cy="51" r="2.5"></circle>
+                <circle id="椭圆形备份-2" stroke="#C9C9C9" fill="#FFFFFF" cx="215" cy="87" r="2.5"></circle>
+                <circle id="椭圆形备份-3" stroke="#C9C9C9" fill="#FFFFFF" cx="292" cy="41" r="2.5"></circle>
+                <circle id="椭圆形备份-4" stroke="#C9C9C9" fill="#FFFFFF" cx="445" cy="27" r="2.5"></circle>
+                <circle id="椭圆形备份-5" stroke="#C9C9C9" fill="#FFFFFF" cx="523" cy="60" r="2.5"></circle>
+                <circle id="椭圆形备份-6" stroke="#C9C9C9" fill="#FFFFFF" cx="598" cy="71" r="2.5"></circle>
+                <circle id="椭圆形备份-7" stroke="#C9C9C9" fill="#FFFFFF" cx="676" cy="27" r="2.5"></circle>
+                <circle id="椭圆形备份-8" stroke="#C9C9C9" fill="#FFFFFF" cx="753" cy="68" r="2.5"></circle>
+                <circle id="椭圆形备份-9" stroke="#C9C9C9" fill="#FFFFFF" cx="829" cy="53" r="2.5"></circle>
+                <circle id="椭圆形备份-10" stroke="#C9C9C9" fill="#FFFFFF" cx="907" cy="82" r="2.5"></circle>
+            </g>
+            <g id="1">
+                <rect id="矩形" stroke="#DCDCDC" stroke-width="2" fill="#FFFFFF" x="1" y="1" width="291" height="106"></rect>
+                <text id="Revenue-amount" font-family="PingFangSC-Medium, PingFang SC" font-size="14" font-weight="400" fill="#DCDCDC">
+                    <tspan x="22" y="31">Revenue amount</tspan>
+                </text>
+                <text id="¥333,234,567" font-family="PingFangSC-Medium, PingFang SC" font-size="14" font-weight="400" fill="#C2C2C2">
+                    <tspan x="20" y="60">¥</tspan>
+                    <tspan x="28.4" y="60" font-size="22">333,234,567</tspan>
+                </text>
+                <text id="Compared-with-yester" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="22" y="88">Compared with yesterday  12.3%</tspan>
+                </text>
+                <g id="上线" transform="translate(215.000000, 78.000000)" fill-rule="nonzero">
+                    <rect id="矩形" fill="#000000" opacity="0" x="0" y="0" width="12" height="12"></rect>
+                    <polygon id="路径" fill="#C2C2C2" points="10.6971433 6.09357255 7.77781864 6.09357255 7.77781864 10.7643098 4.27464579 10.7643098 4.27464579 6.09357255 1.3553211 6.09357255 6.0262622 1.42283531 10.6972033 6.09357255"></polygon>
+                </g>
+            </g>
+            <g id="2" transform="translate(313.000000, 0.000000)">
+                <rect id="矩形" stroke="#EAEAEA" fill="#FFFFFF" x="0.5" y="0.5" width="292" height="107"></rect>
+                <text id="Numbet-of-visitors" font-family="PingFangSC-Medium, PingFang SC" font-size="14" font-weight="400" fill="#DCDCDC">
+                    <tspan x="22" y="31">Numbet of visitors</tspan>
+                </text>
+                <text id="123,234,567" font-family="PingFangSC-Medium, PingFang SC" font-size="22" font-weight="400" fill="#C2C2C2">
+                    <tspan x="20" y="68">123,234,567</tspan>
+                </text>
+                <text id="Compared-with-yester" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="22" y="88">Compared with yesterday  12.3%</tspan>
+                </text>
+                <g id="上线" transform="translate(215.000000, 78.000000)" fill-rule="nonzero">
+                    <rect id="矩形" fill="#000000" opacity="0" x="0" y="0" width="12" height="12"></rect>
+                    <polygon id="路径" fill="#C2C2C2" points="10.6971433 6.09357255 7.77781864 6.09357255 7.77781864 10.7643098 4.27464579 10.7643098 4.27464579 6.09357255 1.3553211 6.09357255 6.0262622 1.42283531 10.6972033 6.09357255"></polygon>
+                </g>
+            </g>
+            <g id="3" transform="translate(626.000000, 0.000000)">
+                <rect id="矩形" stroke="#EAEAEA" fill="#FFFFFF" x="0.5" y="0.5" width="292" height="107"></rect>
+                <text id="Visitor-growth-rate" font-family="PingFangSC-Medium, PingFang SC" font-size="14" font-weight="400" fill="#DCDCDC">
+                    <tspan x="22" y="31">Visitor growth rate</tspan>
+                </text>
+                <text id="98.45%" font-family="PingFangSC-Medium, PingFang SC" font-size="22" font-weight="400" fill="#C2C2C2">
+                    <tspan x="20" y="68">98.45%</tspan>
+                </text>
+                <text id="Compared-with-yester" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="22" y="88">Compared with yesterday  12.3%</tspan>
+                </text>
+                <g id="上线" transform="translate(215.000000, 78.000000)" fill-rule="nonzero">
+                    <rect id="矩形" fill="#000000" opacity="0" x="0" y="0" width="12" height="12"></rect>
+                    <polygon id="路径" fill="#C2C2C2" points="10.6971433 6.09357255 7.77781864 6.09357255 7.77781864 10.7643098 4.27464579 10.7643098 4.27464579 6.09357255 1.3553211 6.09357255 6.0262622 1.42283531 10.6972033 6.09357255"></polygon>
+                </g>
+            </g>
+            <g id="角标" transform="translate(273.000000, 2.000000)" fill="#DCDCDC" fill-rule="nonzero">
+                <path d="M18,0 L18,18 L0,0 L18,0 Z M15.8320145,1.61995258 C15.574259,1.3901912 15.1956217,1.43326073 14.9859994,1.71501442 L14.9859994,1.71501442 L11.4937567,6.41336865 L9.32431422,4.37245615 C9.07267331,4.1358311 8.69293856,4.1670608 8.47626085,4.44280877 C8.25989671,4.71838516 8.28858847,5.13398042 8.54054295,5.37094865 L8.54054295,5.37094865 L11.0683973,7.74903898 C11.1815966,7.85559747 11.3212925,7.90793296 11.4600478,7.90793296 C11.4887396,7.90793296 11.5171178,7.90261362 11.545496,7.89815223 C11.5792049,7.90450113 11.6132273,7.90776137 11.6472498,7.90776137 C11.8220658,7.90776137 11.9953139,7.82471095 12.1141574,7.66495902 L12.1141574,7.66495902 L15.9190306,2.54586177 C16.1286529,2.2635933 16.0897701,1.84937077 15.8320145,1.61995258 Z" id="形状"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="440px" height="218px" viewBox="0 0 440 218" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>组合图</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-110">
+            <g id="编组-106">
+                <g id="折线图">
+                    <line x1="53.5" y1="173.714582" x2="369.5" y2="173.714582" id="路径-11" stroke="#E7E6E6"></line>
+                    <text id="East" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                        <tspan x="47" y="194">East</tspan>
+                    </text>
+                    <text id="2W" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="27" y="180">2W</tspan>
+                    </text>
+                    <g id="编组-10" transform="translate(380.000000, 24.000000)" fill="#E0E0E0" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12">
+                        <text id="0.2KW">
+                            <tspan x="0" y="156">0.2KW</tspan>
+                        </text>
+                        <text id="0.4KW">
+                            <tspan x="0" y="133">0.4KW</tspan>
+                        </text>
+                        <text id="0.6KW">
+                            <tspan x="0" y="109">0.6KW</tspan>
+                        </text>
+                        <text id="0.8KW">
+                            <tspan x="0" y="85">0.8KW</tspan>
+                        </text>
+                        <text id="1.2KW">
+                            <tspan x="2" y="37">1.2KW</tspan>
+                        </text>
+                        <text id="1.0KW">
+                            <tspan x="2" y="61">1.0KW</tspan>
+                        </text>
+                        <text id="1.4KW">
+                            <tspan x="2" y="13">1.4KW</tspan>
+                        </text>
+                        <text id="The-order-number备份" transform="translate(54.000000, 78.000000) rotate(-90.000000) translate(-54.000000, -78.000000) ">
+                            <tspan x="3" y="85">The order number</tspan>
+                        </text>
+                    </g>
+                    <text id="4W" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="27" y="157">4W</tspan>
+                    </text>
+                    <text id="6W" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="27" y="133">6W</tspan>
+                    </text>
+                    <text id="8W" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="27" y="109">8W</tspan>
+                    </text>
+                    <text id="12W" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="22" y="61">12W</tspan>
+                    </text>
+                    <text id="10W" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="22" y="85">10W</tspan>
+                    </text>
+                    <text id="14W" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="22" y="37">14W</tspan>
+                    </text>
+                    <text id="The-order-number" transform="translate(6.000000, 102.000000) rotate(-90.000000) translate(-6.000000, -102.000000) " font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="-45" y="109">The order number</tspan>
+                    </text>
+                    <text id="Central" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                        <tspan x="91.0909091" y="194">Central</tspan>
+                    </text>
+                    <text id="North" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                        <tspan x="151.181818" y="194">North</tspan>
+                    </text>
+                    <text id="South" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                        <tspan x="201.272727" y="194">South</tspan>
+                    </text>
+                    <text id="West" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                        <tspan x="253.363636" y="194">West</tspan>
+                    </text>
+                    <text id="Southwest" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                        <tspan x="300.454545" y="194">Southwest</tspan>
+                    </text>
+                    <rect id="矩形" fill="#E0E0E0" x="56" y="144" width="17" height="29"></rect>
+                    <rect id="矩形备份-6" fill="#E0E0E0" x="105" y="88" width="17" height="85"></rect>
+                    <rect id="矩形备份-9" fill="#E0E0E0" x="158" y="108" width="17" height="65"></rect>
+                    <rect id="矩形备份-10" fill="#E0E0E0" x="208" y="88" width="17" height="85"></rect>
+                    <rect id="矩形备份-11" fill="#E0E0E0" x="259" y="88" width="17" height="85"></rect>
+                    <rect id="矩形备份-12" fill="#E0E0E0" x="318" y="98" width="17" height="75"></rect>
+                    <polyline id="路径-29" stroke="#C9C9C9" stroke-width="2" points="68.5 163.386107 113.765378 103.287155 166.5 126 216.5 95 267.863636 93.3856325 326.603036 110"></polyline>
+                    <circle id="椭圆形" stroke="#C9C9C9" fill="#FFFFFF" cx="68" cy="164" r="2.5"></circle>
+                    <circle id="椭圆形备份" stroke="#C9C9C9" fill="#FFFFFF" cx="113" cy="103" r="2.5"></circle>
+                    <circle id="椭圆形备份-3" stroke="#C9C9C9" fill="#FFFFFF" cx="167" cy="125" r="2.5"></circle>
+                    <circle id="椭圆形备份-4" stroke="#C9C9C9" fill="#FFFFFF" cx="268" cy="93" r="2.5"></circle>
+                    <circle id="椭圆形备份-5" stroke="#C9C9C9" fill="#FFFFFF" cx="217" cy="95" r="2.5"></circle>
+                    <circle id="椭圆形备份-6" stroke="#C9C9C9" fill="#FFFFFF" cx="326" cy="110" r="2.5"></circle>
+                    <g id="编组-6" transform="translate(124.000000, 0.000000)">
+                        <g id="编组-5" fill="#E0E0E0" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12">
+                            <text id="Order-quantity1">
+                                <tspan x="0" y="13">Order quantity1</tspan>
+                            </text>
+                        </g>
+                        <g id="编组-5备份" transform="translate(103.000000, 0.000000)">
+                            <text id="Order-quantity2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                                <tspan x="12" y="13">Order quantity2</tspan>
+                            </text>
+                            <rect id="矩形" fill="#C2C2C2" x="0" y="5" width="6" height="2"></rect>
+                        </g>
+                    </g>
+                </g>
+                <text id="Area备份-2" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#DCDCDC">
+                    <tspan x="199" y="215">Area</tspan>
+                </text>
+            </g>
+            <polygon id="路径备份-58" fill-opacity="0.85" fill="#ECECEC" fill-rule="nonzero" points="112 3 117.688111 3 117.688111 8.94690265 112 8.94690265"></polygon>
+        </g>
+    </g>
+</svg>

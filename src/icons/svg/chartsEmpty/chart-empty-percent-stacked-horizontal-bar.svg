@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="425px" height="221px" viewBox="0 0 425 221" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>百分比堆积条形图</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-95">
+            <g id="编组-36">
+                <polygon id="路径" fill-opacity="0" fill="#FFFFFF" fill-rule="nonzero" points="27 0 425 0 425 211.273841 27 211.273841"></polygon>
+                <g id="编组" transform="translate(24.952501, 37.352849)" fill="#E0E0E0" fill-rule="nonzero" font-family="Helvetica" font-weight="normal">
+                    <text id="0" font-size="12">
+                        <tspan x="54" y="158">0</tspan>
+                    </text>
+                    <text id="Northeast备份" font-size="10">
+                        <tspan x="3" y="10">Northeast</tspan>
+                    </text>
+                    <text id="4W" font-size="12">
+                        <tspan x="132.142857" y="158">4W</tspan>
+                    </text>
+                    <text id="2W" font-size="12">
+                        <tspan x="88.5714286" y="158">2W</tspan>
+                    </text>
+                    <text id="East备份" font-size="10">
+                        <tspan x="26" y="31">East</tspan>
+                    </text>
+                    <text id="6W" font-size="12">
+                        <tspan x="175.714286" y="158">6W</tspan>
+                    </text>
+                    <text id="Central备份" font-size="10">
+                        <tspan x="14" y="52">Central</tspan>
+                    </text>
+                    <text id="8W" font-size="12">
+                        <tspan x="219.285714" y="158">8W</tspan>
+                    </text>
+                    <text id="10W" font-size="12">
+                        <tspan x="262.857143" y="158">10W</tspan>
+                    </text>
+                    <text id="South备份" font-size="10">
+                        <tspan x="20" y="94">South</tspan>
+                    </text>
+                    <text id="North" font-size="10">
+                        <tspan x="20" y="73">North</tspan>
+                    </text>
+                    <text id="12W" font-size="12">
+                        <tspan x="312.428571" y="158">12W</tspan>
+                    </text>
+                    <text id="14W" font-size="12">
+                        <tspan x="362" y="158">14W</tspan>
+                    </text>
+                    <text id="Southwest备份" font-size="10">
+                        <tspan x="0" y="136">Southwest</tspan>
+                    </text>
+                    <text id="Northwest" font-size="10">
+                        <tspan x="1" y="115">Northwest</tspan>
+                    </text>
+                </g>
+                <text id="Area备份" fill-rule="nonzero" transform="translate(7.000000, 106.000000) scale(-1, -1) rotate(90.000000) translate(-7.000000, -106.000000) " font-family="Helvetica" font-size="12" font-weight="normal" fill="#DCDCDC">
+                    <tspan x="-6" y="110">Area</tspan>
+                </text>
+                <g id="编组-34" transform="translate(67.000000, 7.000000)" fill-rule="nonzero">
+                    <g id="编组-35">
+                        <g id="编组-32" transform="translate(124.000000, 0.000000)">
+                            <polygon id="路径" fill="#E4E4E4" points="0 4 5.68811115 4 5.68811115 9.94690265 0 9.94690265"></polygon>
+                            <text id="order-number2" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                                <tspan x="11" y="11">order number2</tspan>
+                            </text>
+                        </g>
+                        <g id="编组-32备份-2">
+                            <polygon id="路径" fill-opacity="0.85" fill="#ECECEC" points="0 4 5.68811115 4 5.68811115 9.94690265 0 9.94690265"></polygon>
+                            <text id="order-number1" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                                <tspan x="11" y="11">order number1</tspan>
+                            </text>
+                        </g>
+                        <g id="编组-26" transform="translate(248.000000, 0.000000)">
+                            <polygon id="路径" fill-opacity="0.85" fill="#C2C2C2" points="0 4 5.68811115 4 5.68811115 9.94690265 0 9.94690265"></polygon>
+                            <text id="order-number3" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                                <tspan x="11" y="11">order number3</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+                <text id="The-order-quantity" fill-rule="nonzero" transform="translate(244.000000, 214.000000) scale(-1, -1) rotate(180.000000) translate(-244.000000, -214.000000) " font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="195" y="218">The order quantity</tspan>
+                </text>
+                <path d="M79.5,177 L79.5,162.6 L79.5,133.8 L79.5,105 L79.5,76.2 L79.5,47.4 L79.5,33" id="路径" stroke="#ECECEC" stroke-dasharray="0,0"></path>
+            </g>
+            <polygon id="路径" fill-opacity="0" fill="#FFFFFF" fill-rule="nonzero" points="70 29 397 29 397 176 70 176"></polygon>
+            <g id="编组" transform="translate(80.000000, 36.000000)" fill-rule="nonzero">
+                <g id="路径">
+                    <polygon fill-opacity="0.85" fill="#C2C2C2" points="0 139 34 139 34 126.363636 0 126.363636"></polygon>
+                    <polygon fill-opacity="0.85" fill="#C2C2C2" points="0 117.939394 54 117.939394 54 105.30303 0 105.30303"></polygon>
+                    <polygon fill-opacity="0.85" fill="#C2C2C2" points="0 96.8787879 67 96.8787879 67 84.2424242 0 84.2424242"></polygon>
+                    <polygon fill-opacity="0.85" fill="#C2C2C2" points="0 75.8181818 107 75.8181818 107 63.1818182 0 63.1818182"></polygon>
+                    <polygon fill-opacity="0.85" fill="#C2C2C2" points="0 54.7575758 103 54.7575758 103 42.1212121 0 42.1212121"></polygon>
+                    <polygon fill-opacity="0.85" fill="#C2C2C2" points="0 33.6969697 139.071577 33.6969697 139.071577 21.0606061 0 21.0606061"></polygon>
+                    <polygon fill-opacity="0.85" fill="#C2C2C2" points="0 12.6363636 150 12.6363636 150 0 0 0"></polygon>
+                    <polygon fill="#E4E4E4" points="33.3226496 139 109.32265 139 109.32265 126.363636 33.3226496 126.363636"></polygon>
+                    <polygon fill="#E4E4E4" points="53.9766497 117.939394 129.97665 117.939394 129.97665 105.30303 53.9766497 105.30303"></polygon>
+                    <polygon fill="#E4E4E4" points="66.6185984 96.8787879 142.618598 96.8787879 142.618598 84.2424242 66.6185984 84.2424242"></polygon>
+                    <polygon fill="#E4E4E4" points="106.636076 75.8181818 155.636076 75.8181818 155.636076 63.1818182 106.636076 63.1818182"></polygon>
+                    <polygon fill="#E4E4E4" points="102.853197 54.7575758 173.853197 54.7575758 173.853197 42.1212121 102.853197 42.1212121"></polygon>
+                    <polygon fill="#E4E4E4" points="139.071577 33.6969697 179.293259 33.6969697 179.293259 21.0606061 139.071577 21.0606061"></polygon>
+                    <polygon fill="#E4E4E4" points="147.545879 12.6363636 240.545879 12.6363636 240.545879 0 147.545879 0"></polygon>
+                    <polygon fill-opacity="0.85" fill="#F5F5F5" points="107 139 327 139 327 126.363636 107 126.363636"></polygon>
+                    <polygon fill-opacity="0.85" fill="#F5F5F5" points="130 117.939394 327 117.939394 327 105.30303 130 105.30303"></polygon>
+                    <polygon fill-opacity="0.85" fill="#F5F5F5" points="143 96.8787879 327 96.8787879 327 84.2424242 143 84.2424242"></polygon>
+                    <polygon fill-opacity="0.85" fill="#F5F5F5" points="156 75.8181818 327 75.8181818 327 63.1818182 156 63.1818182"></polygon>
+                    <polygon fill-opacity="0.85" fill="#F5F5F5" points="174 54.7575758 327 54.7575758 327 42.1212121 174 42.1212121"></polygon>
+                    <polygon fill-opacity="0.85" fill="#F5F5F5" points="179.293259 33.6969697 327 33.6969697 327 21.0606061 179.293259 21.0606061"></polygon>
+                    <polygon fill-opacity="0.85" fill="#F5F5F5" points="240.545879 12.6363636 327 12.6363636 327 0 240.545879 0"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

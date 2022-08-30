@@ -144,7 +144,7 @@
               :type="editDataInfo.dataSourceType"
               :data-source-id="editDataInfo.dataSourceId"
               :toggle-content="toggleContent"
-              @reloadTableList="handleChangeDataSource(editDataInfo.dataSourceId)"
+              @reloadTableList="reloadTableList"
             />
           </div>
         </div>
@@ -280,7 +280,7 @@ export default {
       paging: {
         isPaging: 1,
         page: 0,
-        limit: 2
+        limit: 20
       },
       // 左侧表格loading
       dataTableLoading: false,
@@ -511,9 +511,15 @@ export default {
       this.editDataInfo.dataSourceId = val
       this.editDataInfo.sql.dataSourceId = val
       this.dataTableLoading = true
+      this.paging.page = 1
+      this.paging.isPaging = 1
+      this.getDataTableList(true)
+    },
+    reloadTableList() {
+      this.dataTableLoading = true
       this.paging.page++
       this.paging.isPaging = 1
-      this.getDataTableList()
+      this.getDataTableList(false)
     },
     searchTableList () {
       if (this.searchKey) {
@@ -523,7 +529,7 @@ export default {
         this.dataTableList = this.orgTableList.concat()
       }
     },
-    async getDataTableList (isSearch = false) {
+    async getDataTableList (cover = false) {
       try {
         const dataSourceId = this.editDataInfo.dataSourceId
         const currentDataSource = this.dataSourceOptions.find(item => item._id === dataSourceId)
@@ -553,7 +559,7 @@ export default {
         this.hintOptions = temp
 
         // 如果不是搜索的，贴上去
-        if (isSearch) {
+        if (cover) {
           this.dataTableList = resultList
         } else {
           this.orgTableList = this.orgTableList.concat(resultList)

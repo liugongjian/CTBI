@@ -203,7 +203,7 @@
               >
                 <re-input
                   v-model="scope.row.displayColumn"
-                  :maxlength="50"
+                  maxlength="50"
                   :blur-fun="(newVal, oldVal) => {return handlerBlur(newVal, oldVal, scope.row.index)}"
                   @blur="(val) => { handleBlur(val, scope.row) }"
                 />
@@ -222,11 +222,25 @@
             <template slot-scope="scope">
               <span v-if="scope.row._id !== 1 && scope.row._id !== 2">
                 <!-- value选中值， valueItem选中值对象 -->
-                <b-select
+                <!-- <b-select
                   :value="resetDataType(scope.row)"
                   :options="dataTypeOptions"
                   @change="(value, valueItem) => {handleChangeDataType(value, valueItem, scope.row);}"
-                />
+                /> -->
+                <el-cascader
+                  :value="resetDataType(scope.row)"
+                  :show-all-levels="false"
+                  :options="dataTypeOptions"
+                  :props="{emitPath: false}"
+                  @change="(value, valueItem) => {handleChangeDataType(value, valueItem, scope.row);}"
+                >
+                  <template slot-scope="{ node, data }">
+                    <span v-if="data.icon">
+                      <svg-icon :icon-class="data.icon" style="width: 20px;margin-right: 8px;" />
+                    </span>
+                    <span>{{ data.label }}</span>
+                  </template>
+                </el-cascader>
               </span>
             </template>
           </el-table-column>
@@ -416,9 +430,9 @@ export default {
     resetDataType (row) {
       const { attributes } = row
       if (attributes) {
-        const { secondeDataType, dataType } = attributes[0]
-        if (secondeDataType) {
-          return attributes[0][secondeDataType]
+        const { granularity, dataType } = attributes[0]
+        if (granularity) {
+          return granularity
         }
         return dataType
       }
@@ -427,6 +441,9 @@ export default {
     handleChangeDataType (value, item, row) {
       row.attributes[0].format = ''
       row.attributes[0].aggregator = 'sum'
+      if (!item) {
+        item = this.getValueItem(value)
+      }
       const { originValue, parentValue } = item
       if (originValue) {
         row.attributes[0].dataType = originValue
@@ -443,6 +460,26 @@ export default {
     },
     getDate() {
       return new Date()
+    },
+    getValueItem(value) {
+      let result = null
+      this.dataTypeOptions.forEach(item => {
+        if (item.value === value) {
+          result = item
+          return result
+        } else if (item.children) {
+          item.children.forEach(child => {
+            if (child.value === value) {
+              result = child
+              return result
+            }
+          })
+        }
+        if (result) {
+          return result
+        }
+      })
+      return result
     }
   }
 }

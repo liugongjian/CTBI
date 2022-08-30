@@ -72,9 +72,11 @@
             v-if="autoRefresh"
             v-model="time"
             :min="1"
-            :max="60"
+            :precision="0"
+            :max="refreshMax"
             :controls="false"
             class="limit-input"
+            @input="handleRefresh"
           />
           <el-select
             v-if="autoRefresh"
@@ -139,6 +141,14 @@ export default {
       time: 10,
       unit: 'minute',
       interVal: null
+    }
+  },
+  computed: {
+    refreshMax() {
+      if (this.unit === 'minute') {
+        return 1440
+      }
+      return 60
     }
   },
   watch: {
@@ -225,27 +235,40 @@ export default {
     },
     // 自动刷新
     handleRefresh (val) {
+      if (this.interVal) {
+        clearInterval(this.interVal)
+        this.interVal = null
+      }
+
       if (val) {
         // 开启自动刷新的定时器
         const time = 1000 * this.time * (this.unit === 'minute' ? 60 : 1)
         this.interVal = setInterval(() => {
           this.refreshStore()
         }, time)
-      } else {
-        clearInterval(this.interVal)
-        this.interVal = null
       }
     },
     selectUnit (val) {
+      // 切换单位时判断当前是否超出单位上限值
+      let max = 60
+      if (val === 'minute') {
+        max = 1440
+      }
+      if (this.time > max) {
+        this.time = max
+      }
+
+      if (this.interVal) {
+        clearInterval(this.interVal)
+        this.interVal = null
+      }
+
       if (this.autoRefresh) {
         // 开启自动刷新的定时器
         const time = 1000 * this.time * (val === 'minute' ? 60 : 1)
         this.interVal = setInterval(() => {
           this.refreshStore()
         }, time)
-      } else {
-        clearInterval(this.interVal)
-        this.interVal = null
       }
     },
     // 更新
