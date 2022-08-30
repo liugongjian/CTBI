@@ -56,7 +56,7 @@ import store from '@/store'
 // 导入样式
 import '@/views/dashboard/index.scss'
 import { getShareDashboardDetail } from '@/api/dashboard'
-import { encryptAes } from '@/utils/encrypt'
+import { encryptAesForShare } from '@/utils/encrypt'
 export default {
   components: {
     Widget
@@ -138,7 +138,7 @@ export default {
       // }
       const params = {
         url: window.location.href,
-        password: this.dashboardAttr.password ? encryptAes(this.dashboardAttr.password) : ''
+        password: this.dashboardAttr.password ? encryptAesForShare(this.dashboardAttr.password) : ''
         // date: moment().format('YYYY-MM-DD')
       }
       try {
