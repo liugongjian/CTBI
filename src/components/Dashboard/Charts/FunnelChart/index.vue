@@ -1,13 +1,13 @@
 <template>
   <div style="width:100%;height:100%;">
     <v-chart
-      v-if="dataValue"
+      v-if="dataValue && dataValue.length > 0"
       :option="chartOption"
       :update-options="{notMerge:true}"
       digit="2"
       autoresize
     />
-    <div v-else>数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-funnel" style="width:100%;height:100%;" />
   </div>
 </template>
 

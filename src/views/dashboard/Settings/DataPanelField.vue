@@ -72,7 +72,8 @@
             v-if="autoRefresh"
             v-model="time"
             :min="1"
-            :max="60"
+            :precision="0"
+            :max="refreshMax"
             :controls="false"
             class="limit-input"
           />
@@ -139,6 +140,14 @@ export default {
       time: 10,
       unit: 'minute',
       interVal: null
+    }
+  },
+  computed: {
+    refreshMax() {
+      if (this.unit === 'minute') {
+        return 1440
+      }
+      return 60
     }
   },
   watch: {
@@ -237,6 +246,15 @@ export default {
       }
     },
     selectUnit (val) {
+      // 切换单位时判断当前是否超出单位上限值
+      let max = 60
+      if (val === 'minute') {
+        max = 1440
+      }
+      if (this.time > max) {
+        this.time = max
+      }
+
       if (this.autoRefresh) {
         // 开启自动刷新的定时器
         const time = 1000 * this.time * (val === 'minute' ? 60 : 1)

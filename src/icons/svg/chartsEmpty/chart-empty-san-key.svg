@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="928px" height="200px" viewBox="0 0 928 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>桑基图</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-105">
+            <g id="编组-69">
+                <text id="Source" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                    <tspan x="9.99339827" y="12.996039">Source</tspan>
+                </text>
+                <text id="Node-index" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                    <tspan x="97.9353031" y="12.996039">Node index</tspan>
+                </text>
+                <text id="Proportion" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                    <tspan x="205.864004" y="12.996039">Proportion</tspan>
+                </text>
+                <g id="编组-67" transform="translate(251.694704, 39.136189)" opacity="0.3" stroke="#E0E0E0" stroke-width="11">
+                    <g id="编组-68">
+                        <path d="M7.37116515,136.938865 C66.5614851,136.938865 69.6588704,89.3720561 122.978587,84.3937849 C125.922839,84.1188907 129.020224,83.9738539 132.288644,83.9738539" id="路径" transform="translate(69.829904, 110.456359) rotate(-9.000000) translate(-69.829904, -110.456359) "></path>
+                        <path d="M11.5676956,116.732845 C66.02279,116.732845 68.8723845,69.1660369 117.926524,64.1877657 C120.635236,63.9128714 123.48483,63.7678347 126.491776,63.7678347" id="路径备份-59" transform="translate(69.029736, 90.250340) rotate(7.000000) translate(-69.029736, -90.250340) "></path>
+                        <path d="M3.37380584,62.4096667 C62.5641258,62.4096667 65.6615111,14.8428581 118.981228,9.86458688 C121.92548,9.58969265 125.022865,9.44465587 128.291284,9.44465587" id="路径" transform="translate(65.832545, 35.927161) scale(1, -1) rotate(-9.000000) translate(-65.832545, -35.927161) "></path>
+                        <path d="M7.57049736,82.6156761 C62.0254301,82.6156761 64.8750246,35.0488675 113.929164,30.0705963 C116.637876,29.795702 119.48747,29.6506652 122.494416,29.6506652" id="路径备份-59" transform="translate(65.032457, 56.133171) scale(1, -1) rotate(7.000000) translate(-65.032457, -56.133171) "></path>
+                        <line x1="11.6313403" y1="73.2895412" x2="124.556741" y2="73.2895412" id="直线-2" stroke-linecap="square"></line>
+                    </g>
+                </g>
+                <g id="编组-67备份" transform="translate(317.527249, 83.846765) scale(1, -1) translate(-317.527249, -83.846765) translate(251.694704, 39.136189)"></g>
+                <g id="编组-65" transform="translate(0.000000, 24.983496)">
+                    <rect id="矩形" fill="#EBEBEB" x="0" y="0" width="265.824394" height="28.980855"></rect>
+                    <g id="编组-64" transform="translate(9.993398, 5.996039)" fill="#C2C2C2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400">
+                        <text id="567,273.090">
+                            <tspan x="86.942565" y="13">567,273.090</tspan>
+                        </text>
+                        <text id="source1">
+                            <tspan x="0" y="13">source1</tspan>
+                        </text>
+                        <text id="17.33%">
+                            <tspan x="197.869286" y="13">17.33%</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="编组-65备份" transform="translate(0.000000, 61.459399)">
+                    <rect id="矩形" fill="#EBEBEB" x="0" y="0" width="265.824394" height="28.980855"></rect>
+                    <g id="编组-64" transform="translate(9.993398, 5.996039)" fill="#C2C2C2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400">
+                        <text id="567,273.090">
+                            <tspan x="86.942565" y="13">567,273.090</tspan>
+                        </text>
+                        <text id="source2">
+                            <tspan x="0" y="13">source2</tspan>
+                        </text>
+                        <text id="17.33%">
+                            <tspan x="197.869286" y="13">17.33%</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="编组-65备份-2" transform="translate(0.000000, 97.935303)">
+                    <rect id="矩形" fill="#EBEBEB" x="0" y="0" width="265.824394" height="28.980855"></rect>
+                    <g id="编组-64" transform="translate(9.993398, 5.996039)" fill="#C2C2C2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400">
+                        <text id="567,273.090">
+                            <tspan x="86.942565" y="13">567,273.090</tspan>
+                        </text>
+                        <text id="source3">
+                            <tspan x="0" y="13">source3</tspan>
+                        </text>
+                        <text id="17.33%">
+                            <tspan x="197.869286" y="13">17.33%</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="编组-65备份-3" transform="translate(0.000000, 134.411207)">
+                    <rect id="矩形" fill="#EBEBEB" x="0" y="0" width="265.824394" height="28.980855"></rect>
+                    <g id="编组-64" transform="translate(9.993398, 5.996039)" fill="#C2C2C2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400">
+                        <text id="567,273.090">
+                            <tspan x="86.942565" y="13">567,273.090</tspan>
+                        </text>
+                        <text id="source4">
+                            <tspan x="0" y="13">source4</tspan>
+                        </text>
+                        <text id="17.33%">
+                            <tspan x="197.869286" y="13">17.33%</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="编组-65备份-4" transform="translate(0.000000, 170.887110)">
+                    <rect id="矩形" fill="#EBEBEB" x="0" y="0" width="265.824394" height="28.980855"></rect>
+                    <g id="编组-64" transform="translate(9.993398, 5.996039)" fill="#C2C2C2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400">
+                        <text id="567,273.090">
+                            <tspan x="86.942565" y="13">567,273.090</tspan>
+                        </text>
+                        <text id="source5">
+                            <tspan x="0" y="13">source5</tspan>
+                        </text>
+                        <text id="17.33%">
+                            <tspan x="197.869286" y="13">17.33%</tspan>
+                        </text>
+                    </g>
+                </g>
+            </g>
+            <g id="编组-69备份" transform="translate(734.321423, 99.933983) scale(-1, 1) translate(-734.321423, -99.933983) translate(540.642846, 0.000000)">
+                <text id="Proportion" transform="translate(40.972933, 5.996039) scale(-1, 1) translate(-40.972933, -5.996039) " font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                    <tspan x="10.9927381" y="12.996039">Proportion</tspan>
+                </text>
+                <text id="Node-index" transform="translate(125.417148, 5.996039) scale(-1, 1) translate(-125.417148, -5.996039) " font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                    <tspan x="92.9386039" y="12.996039">Node index</tspan>
+                </text>
+                <text id="Whereabouts" transform="translate(218.355752, 5.996039) scale(-1, 1) translate(-218.355752, -5.996039) " font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                    <tspan x="180.880509" y="12.996039">Whereabouts</tspan>
+                </text>
+                <g id="编组-67" transform="translate(251.694704, 39.136189)" opacity="0.3" stroke="#E0E0E0" stroke-width="11">
+                    <g id="编组-68">
+                        <path d="M7.37116515,136.938865 C66.5614851,136.938865 69.6588704,89.3720561 122.978587,84.3937849 C125.922839,84.1188907 129.020224,83.9738539 132.288644,83.9738539" id="路径" transform="translate(69.829904, 110.456359) rotate(-9.000000) translate(-69.829904, -110.456359) "></path>
+                        <path d="M11.5676956,116.732845 C66.02279,116.732845 68.8723845,69.1660369 117.926524,64.1877657 C120.635236,63.9128714 123.48483,63.7678347 126.491776,63.7678347" id="路径备份-59" transform="translate(69.029736, 90.250340) rotate(7.000000) translate(-69.029736, -90.250340) "></path>
+                        <path d="M3.37380584,62.4096667 C62.5641258,62.4096667 65.6615111,14.8428581 118.981228,9.86458688 C121.92548,9.58969265 125.022865,9.44465587 128.291284,9.44465587" id="路径" transform="translate(65.832545, 35.927161) scale(1, -1) rotate(-9.000000) translate(-65.832545, -35.927161) "></path>
+                        <path d="M7.57049736,82.6156761 C62.0254301,82.6156761 64.8750246,35.0488675 113.929164,30.0705963 C116.637876,29.795702 119.48747,29.6506652 122.494416,29.6506652" id="路径备份-59" transform="translate(65.032457, 56.133171) scale(1, -1) rotate(7.000000) translate(-65.032457, -56.133171) "></path>
+                        <line x1="11.6313403" y1="73.2895412" x2="124.556741" y2="73.2895412" id="直线-2" stroke-linecap="square"></line>
+                    </g>
+                </g>
+                <g id="编组-67备份" transform="translate(317.527249, 83.846765) scale(1, -1) translate(-317.527249, -83.846765) translate(251.694704, 39.136189)"></g>
+                <g id="编组-65" transform="translate(132.912197, 39.473923) scale(-1, 1) translate(-132.912197, -39.473923) translate(0.000000, 24.983496)">
+                    <rect id="矩形" fill="#EBEBEB" x="0" y="0" width="265.824394" height="28.980855"></rect>
+                    <g id="编组-64" transform="translate(9.993398, 5.996039)" fill="#C2C2C2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400">
+                        <text id="567,273.090">
+                            <tspan x="86.942565" y="13">567,273.090</tspan>
+                        </text>
+                        <text id="Goal1">
+                            <tspan x="0" y="13">Goal1</tspan>
+                        </text>
+                        <text id="17.33%">
+                            <tspan x="197.869286" y="13">17.33%</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="编组-65备份" transform="translate(132.912197, 75.949827) scale(-1, 1) translate(-132.912197, -75.949827) translate(0.000000, 61.459399)">
+                    <rect id="矩形" fill="#EBEBEB" x="0" y="0" width="265.824394" height="28.980855"></rect>
+                    <g id="编组-64" transform="translate(9.993398, 5.996039)" fill="#C2C2C2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400">
+                        <text id="567,273.090">
+                            <tspan x="86.942565" y="13">567,273.090</tspan>
+                        </text>
+                        <text id="Goal2">
+                            <tspan x="0" y="13">Goal2</tspan>
+                        </text>
+                        <text id="17.33%">
+                            <tspan x="197.869286" y="13">17.33%</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="编组-65备份-2" transform="translate(132.912197, 112.425731) scale(-1, 1) translate(-132.912197, -112.425731) translate(0.000000, 97.935303)">
+                    <rect id="矩形" fill="#EBEBEB" x="0" y="0" width="265.824394" height="28.980855"></rect>
+                    <g id="编组-64" transform="translate(9.993398, 5.996039)" fill="#C2C2C2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400">
+                        <text id="567,273.090">
+                            <tspan x="86.942565" y="13">567,273.090</tspan>
+                        </text>
+                        <text id="Goal3">
+                            <tspan x="0" y="13">Goal3</tspan>
+                        </text>
+                        <text id="17.33%">
+                            <tspan x="197.869286" y="13">17.33%</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="编组-65备份-3" transform="translate(132.912197, 148.901634) scale(-1, 1) translate(-132.912197, -148.901634) translate(0.000000, 134.411207)">
+                    <rect id="矩形" fill="#EBEBEB" x="0" y="0" width="265.824394" height="28.980855"></rect>
+                    <g id="编组-64" transform="translate(9.993398, 5.996039)" fill="#C2C2C2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400">
+                        <text id="567,273.090">
+                            <tspan x="86.942565" y="13">567,273.090</tspan>
+                        </text>
+                        <text id="Goal4">
+                            <tspan x="0" y="13">Goal4</tspan>
+                        </text>
+                        <text id="17.33%">
+                            <tspan x="197.869286" y="13">17.33%</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="编组-65备份-4" transform="translate(132.912197, 185.377538) scale(-1, 1) translate(-132.912197, -185.377538) translate(0.000000, 170.887110)">
+                    <rect id="矩形" fill="#EBEBEB" x="0" y="0" width="265.824394" height="28.980855"></rect>
+                    <g id="编组-64" transform="translate(9.993398, 5.996039)" fill="#C2C2C2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400">
+                        <text id="567,273.090">
+                            <tspan x="86.942565" y="13">567,273.090</tspan>
+                        </text>
+                        <text id="Goal5">
+                            <tspan x="0" y="13">Goal5</tspan>
+                        </text>
+                        <text id="17.33%">
+                            <tspan x="197.869286" y="13">17.33%</tspan>
+                        </text>
+                    </g>
+                </g>
+            </g>
+            <g id="编组-66" transform="translate(373.753095, 103.931342)">
+                <path d="M8.99405844,0 L18.9874567,0 L18.9874567,0 L18.9874567,17.9881169 L8.99405844,17.9881169 C4.02677713,17.9881169 6.08316517e-16,13.9613398 0,8.99405844 C-6.08316517e-16,4.02677713 4.02677713,9.12474775e-16 8.99405844,0 Z" id="矩形" fill="#F0F0F0"></path>
+                <polygon id="Clip-1642" fill="#BEBEBE" points="9.79758392 4.99669914 13.6774712 8.97420401 9.79758392 12.9914178 8.99405844 12.1881405 12.0949073 8.97834035 8.99405844 5.79997643"></polygon>
+            </g>
+            <g id="编组-66备份" transform="translate(546.139215, 112.925400) scale(-1, 1) translate(-546.139215, -112.925400) translate(536.645487, 103.931342)">
+                <path d="M8.99405844,0 L18.9874567,0 L18.9874567,0 L18.9874567,17.9881169 L8.99405844,17.9881169 C4.02677713,17.9881169 6.08316517e-16,13.9613398 0,8.99405844 C-6.08316517e-16,4.02677713 4.02677713,9.12474775e-16 8.99405844,0 Z" id="矩形" fill="#F0F0F0"></path>
+                <polygon id="Clip-1642" fill="#BEBEBE" points="9.79758392 4.99669914 13.6774712 8.97420401 9.79758392 12.9914178 8.99405844 12.1881405 12.0949073 8.97834035 8.99405844 5.79997643"></polygon>
+            </g>
+            <rect id="矩形" fill="#F5F5F5" x="390.741872" y="84.9438853" width="147.902294" height="55.9630303"></rect>
+            <text id="Node-index:22" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#C2C2C2">
+                <tspan x="423.720087" y="126.919129">Node index:22</tspan>
+            </text>
+            <text id="page" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#C2C2C2">
+                <tspan x="450.702262" y="107.931672">page</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

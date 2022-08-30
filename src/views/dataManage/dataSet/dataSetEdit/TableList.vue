@@ -173,10 +173,10 @@ export default {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100vh - 315px);
+  height: calc(100vh - 360px);
 
   &.full-height {
-    height: calc(100vh - 250px);
+    height: calc(100vh - 280px);
   }
 
   .main-list {
