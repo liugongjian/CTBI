@@ -97,13 +97,13 @@ export default {
   align-items: center;
   align-content: space-between;
   flex-wrap: wrap;
-  max-height: 446px;
-  min-height: 446px;
+  max-height: 456px;
+  min-height: 456px;
   overflow-y: auto;
   .box-card {
-    width: 306px;
-    flex: 0 0 306px;
-    margin: 0px 5px;
+    width: 300px;
+    flex: 0 0 300px;
+    margin: 5px 5px;
     .card-img {
       width: 290px;
       height: 110px;
