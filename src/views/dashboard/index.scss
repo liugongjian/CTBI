@@ -216,7 +216,7 @@
 }
 
 // select选择框的 下拉样式 、dropdown的下拉样式
-.setting-select {
+.setting-select.el-select-dropdown {
   border-radius: 2px;
   border: 0px;
   background: #323541;
@@ -484,23 +484,27 @@
         padding-bottom: 20px;
         border-top: 1px solid rgba(239, 242, 245, 0.10);
         position: relative;
+
         .field-area-header {
           display: flex;
           margin-bottom: 12px;
           align-items: center;
+
           span {
             margin-right: 7px;
             font-size: 12px;
             color: #F23B3C;
             font-weight: 500;
           }
+
           .area-name {
             font-size: 12px;
             color: rgba(255, 255, 255, 0.90);
             font-weight: 500;
             margin-right: 8px;
           }
-          i{
+
+          i {
             cursor: pointer;
           }
         }
@@ -605,6 +609,10 @@
         text-overflow: ellipsis;
         border: 1px solid rgba(255, 255, 255, 0.25);
         border-radius: 2px;
+
+        .el-input>.el-input__inner {
+          border-width: 0px !important;
+        }
       }
 
       .result-display {
@@ -689,7 +697,7 @@
           width: 52px;
           height: 24px !important;
           background-color: transparent !important;
-          border: 1px solid rgba(221, 221, 221, 0.25) !important;
+          border: 1px solid rgba(221, 221, 221, 0.25);
           border-radius: 2px;
           font-size: 12px;
           color: rgba(255, 255, 255, 0.75);

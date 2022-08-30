@@ -4,7 +4,9 @@ const state = {
   layout: [],
   currentLayoutId: '',
   toolList: {},
-  dataOption: []
+  dataOption: [],
+  dashboardMode: 'edit',
+  shareDashboardInfo: {}
 }
 
 const mutations = {
@@ -17,6 +19,9 @@ const mutations = {
   },
   UPDATELAYOUTID: (state, id) => {
     state.currentLayoutId = id
+  },
+  ADDLAYOUT: (state, layout) => {
+    state.layout.push(layout)
   },
   DELETELAYOUTBYID: (state, id) => {
     if (id && id.length) {
@@ -31,6 +36,12 @@ const mutations = {
   },
   UPDATETOOLLIST: (state, toolList) => {
     state.toolList = toolList
+  },
+  UPDATEDASHBOARDMODE: (state, mode) => {
+    state.dashboardMode = mode
+  },
+  UPDATESHAREDASHBOARDINFO: (state, info) => {
+    state.shareDashboardInfo = info
   }
 }
 const actions = {
@@ -46,8 +57,17 @@ const actions = {
   deleteLayoutById ({ commit }, id) {
     commit('DELETELAYOUTBYID', id)
   },
+  addLayout ({ commit }, layout) {
+    commit('ADDLAYOUT', layout)
+  },
   updateToolList ({ commit }, toolList) {
     commit('UPDATETOOLLIST', toolList)
+  },
+  updateDashboardMode ({ commit }, mode) {
+    commit('UPDATEDASHBOARDMODE', mode)
+  },
+  updateShareDashboardInfo ({ commit }, info) {
+    commit('UPDATESHAREDASHBOARDINFO', info)
   }
 }
 

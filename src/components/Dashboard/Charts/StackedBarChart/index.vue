@@ -51,6 +51,10 @@ export default {
       this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
         legendData.push({ name: item.value })
       })
+
+      // 获取y轴配置信息，用于提取单位信息
+      const { Axis: { YAxis } } = this.storeOption.theme
+
       this.chartOption = {
         'grid': this.grid,
         'color': colorOption,
@@ -62,7 +66,26 @@ export default {
         'tooltip': {
           'show': true,
           'trigger': 'axis',
-          'formatter': this.tooltipFormatter
+          'formatter': (params) => {
+            let result = ''
+            let Total = 0
+            params.forEach((item, index) => {
+              const { data, seriesName, marker, color } = item
+              if (seriesName !== '总计') {
+                if (index === 0) {
+                  result += '<div>' + data[0] + '</div>'
+                }
+
+                result += `<div style="line-height: 25px;">${marker}</span>
+                  <span style="color: ${color};">${seriesName}</span>
+                  <span style="float: right;margin-left: 20px;">${data[index + 1]}${(YAxis.unit || '')}</span>
+                </div>`
+                Total += Number.parseInt(data[index + 1])
+              }
+            })
+            result += `<div style="line-height: 25px;font-weight: 700;">总计<span style="float: right;font-weight: 700;">${Total}${(YAxis.unit || '')}</span></div>`
+            return result
+          }
         },
         'yAxis': this.yAxis,
         'dataset': {
@@ -78,27 +101,8 @@ export default {
         },
         'series': this.series
       }
-    },
-    tooltipFormatter (params) {
-      let result = ''
-      let Total = 0
-      params.forEach((item, index) => {
-        const { data, seriesName, marker, color } = item
-        if (seriesName !== '总计') {
-          if (index === 0) {
-            result += '<div>' + data[0] + '</div>'
-          }
-
-          result += `<div style="line-height: 25px;">${marker}</span>
-            <span style="color: ${color};">${seriesName}</span>
-            <span style="float: right;margin-left: 20px;">${data[index + 1]}</span>
-          </div>`
-          Total += Number.parseInt(data[index + 1])
-        }
-      })
-      result += `<div style="line-height: 25px;font-weight: 700;">总计<span style="float: right;font-weight: 700;">${Total}</span></div>`
-      return result
     }
+
   }
 }
 </script>

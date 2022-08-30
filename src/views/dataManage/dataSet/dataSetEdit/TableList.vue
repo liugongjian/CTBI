@@ -1,61 +1,88 @@
 <template>
-  <div :class="[{'full-height': !toggleContent}, 'list-wrapper']">
+  <div>
     <div
-      v-for="(table, i) in tableList"
-      :key="`table-list-${i}`"
-      style="display: flex;justify-content: space-between;align-items: center;"
-      class="main-list"
+      v-if="tableList.length > 0"
+      v-infinite-scroll="load"
+      :class="[{'full-height': !toggleContent}, 'list-wrapper']"
     >
-      <svg-icon
-        icon-class="table"
-        style="margin-right: 8px; height: 32px; width: 20px;"
-      />
-      <b-tooltip
-        :title="`${table.name}<br><span style='line-height: 20px; color: rgba(0, 0, 0, 0.3);'>${table.comment}</span>`"
-        :content="`${table.name}<span style='margin-left: 8px; color: rgba(0, 0, 0, 0.3);'>${table.comment}</span>`"
-        class="h-c-p table-name"
-      />
-      <span class="table-btn">
-        <el-tooltip
-          content="复制"
-          placement="top"
-          effect="light"
-          class="m-r-6"
-        >
-          <svg-icon
-            :id="`copy-icon-${i}`"
-            icon-class="copy"
-            style="cursor: pointer;"
-            @click="handleCopy(table.name, $event)"
-          />
-        </el-tooltip>
-        <el-popover
-          placement="right"
-          width="360"
-          trigger="click"
-        >
-          <div class="prop-title">
-            <div>
-              {{ table.name }}({{ currentTableInfo.columns? currentTableInfo.columns.length : 0 }})
-            </div>
-          </div>
-          <el-divider />
-          <div
-            v-loading="tableInfoLoading"
-            element-loading-text="加载字段中"
-            style="min-height: 150px;"
+      <div
+        v-for="(table, i) in tableList"
+        :key="`table-list-${i}`"
+        style="display: flex;justify-content: space-between;align-items: center;"
+        class="main-list"
+      >
+        <svg-icon
+          icon-class="table"
+          style="margin-right: 8px; height: 32px; width: 20px;"
+        />
+        <b-tooltip
+          :title="`${table.name}<br><span style='line-height: 20px; color: rgba(0, 0, 0, 0.3);'>${table.comment || ''}</span>`"
+          :content="`${table.name}<span style='margin-left: 8px; color: rgba(0, 0, 0, 0.3);'>${table.comment || ''}</span>`"
+          class="h-c-p table-name"
+        />
+        <span class="table-btn">
+          <el-tooltip
+            content="复制"
+            placement="top"
+            effect="light"
+            class="m-r-6"
           >
-            <ColumnsList :columns="currentTableInfo.columns" />
-          </div>
-          <svg-icon
-            slot="reference"
-            icon-class="point"
-            class="h-c-p"
-            @click="handleTableInfo(table.name)"
-          />
-        </el-popover>
-      </span>
+            <svg-icon
+              :id="`copy-icon-${i}`"
+              icon-class="copy"
+              style="cursor: pointer;"
+              @click="handleCopy(table.name, $event)"
+            />
+          </el-tooltip>
+          <el-popover
+            placement="right"
+            width="360"
+            trigger="click"
+          >
+            <div class="prop-title">
+              <div>
+                {{ table.name }}({{ currentTableInfo.columns? currentTableInfo.columns.length : 0 }})
+              </div>
+            </div>
+            <el-divider />
+            <div
+              v-loading="tableInfoLoading"
+              element-loading-text="加载字段中"
+              style="min-height: 150px;"
+            >
+              <ColumnsList :columns="currentTableInfo.columns" />
+            </div>
+            <svg-icon
+              slot="reference"
+              icon-class="point"
+              class="h-c-p"
+              @click="handleTableInfo(table.name)"
+            />
+          </el-popover>
+        </span>
+      </div>
+      <div
+        class="w-100"
+        style="text-align: center;"
+      >
+        <transition>
+          <span
+            v-show="loading"
+            class="table-list-tips"
+          >加载中...</span>
+        </transition>
+        <transition>
+          <span
+            v-show="end"
+            class="table-list-tips"
+          >没有更多数据</span>
+        </transition>
+      </div>
     </div>
+    <el-empty
+      v-else
+      description="无数据"
+    />
   </div>
 </template>
 
@@ -68,6 +95,18 @@ export default {
   name: 'TableList',
   components: { ColumnsList },
   props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    stopScroller: {
+      type: Boolean,
+      default: false
+    },
+    end: {
+      type: Boolean,
+      default: false
+    },
     tableList: {
       type: Array,
       default: () => []
@@ -102,6 +141,11 @@ export default {
           duration: 1500
         })
       })
+    },
+    load () {
+      if (!this.stopScroller) {
+        this.$emit('reloadTableList')
+      }
     },
     async handleTableInfo (tableName) {
       const id = this.dataSourceId
@@ -158,6 +202,11 @@ export default {
       .table-btn {
         display: block;
       }
+    }
+
+    .table-list-tips {
+      margin-left: 8px;
+      opacity: 0.85;
     }
   }
 }

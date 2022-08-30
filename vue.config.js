@@ -2,7 +2,7 @@
 const path = require('path')
 const defaultSettings = require('./src/config/settings.js')
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
@@ -44,6 +44,7 @@ module.exports = {
         // target: 'http://139.196.10.0:888/ctbibackend/',
         target: 'http://43.142.102.49:888/ctbibackend/',
         // target: 'http://127.0.0.1:7040/',
+        // target: 'http://172.24.12.104:7040/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/'
@@ -63,7 +64,7 @@ module.exports = {
     }
   },
 
-  chainWebpack (config) {
+  chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload
     config.plugin('preload').tap(() => [
       {

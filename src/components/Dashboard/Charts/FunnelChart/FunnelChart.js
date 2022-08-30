@@ -26,13 +26,13 @@ export default {
   'order': 1, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
+  'title': '漏斗图', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
         'text': '漏斗图', // 标题名称
         'color': '#333', // 标题颜色
-        'show': true, // 是否显示标题
-        'testShow': false // 测试显示
+        'show': true // 是否显示标题
       },
       'Mark': { // 备注
         'show': false, // 是否显示备注
@@ -63,13 +63,6 @@ export default {
       }
     },
     'ComponentOption': { // 图表样式
-      'Legend': { // 图例
-        'show': true,
-        'top': 'auto',
-        'left': 'center',
-        'orient': 'horizontal',
-        'type': 'scroll'
-      },
       'DisplayStyle': {
         // 展示样式 标准图
         'default': true, // 默认样式
@@ -86,11 +79,18 @@ export default {
         'calcMethod': 'last',
         // 底部样式
         'triangle': false
+      },
+      'Legend': { // 图例
+        'show': true,
+        'top': 'auto',
+        'left': 'center',
+        'orient': 'horizontal',
+        'type': 'scroll'
       }
     },
     'LabelOption': {
       // 系列设置
-      'aliasName': String
+      'aliasName': ''
     }
   },
   'advance': {}, // 高级

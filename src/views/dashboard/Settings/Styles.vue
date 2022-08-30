@@ -17,6 +17,38 @@
           />
         </div>
       </el-collapse-item>
+      <!-- 指标趋势图 -->
+      <el-collapse-item
+        v-if="option['trendChartConfig']"
+        title="趋势图配置"
+        name="8"
+      >
+        <div
+          v-for="(item,name,key) in option['trendChartConfig']"
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['trendChartConfig'][name]"
+          />
+        </div>
+      </el-collapse-item>
+      <!-- 指标趋势图 指标块样式配置 -->
+      <el-collapse-item
+        v-if="option['trendStyleConfig']"
+        title="指标块样式配置"
+        name="9"
+      >
+        <div
+          v-for="(item,name,key) in option['trendStyleConfig']"
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['trendStyleConfig'][name]"
+          />
+        </div>
+      </el-collapse-item>
       <el-collapse-item
         v-if="option['ComponentOption']"
         title="图表样式"
@@ -37,7 +69,7 @@
         title="坐标轴"
         name="3"
       >
-        <el-tabs v-model="activeName" class="axis-tab">
+        <el-tabs v-if="!option['Axis']['RadarAxis']" v-model="activeName" class="axis-tab">
           <el-tab-pane
             v-for="(item,name,key) in option['Axis']"
             :key="key"
@@ -50,6 +82,16 @@
             />
           </el-tab-pane>
         </el-tabs>
+        <div
+          v-for="(item,name,key) in option['Axis']"
+          v-else
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['Axis'][name]"
+          />
+        </div>
       </el-collapse-item>
       <el-collapse-item
         v-if="option['DisplayConfig']"
@@ -131,7 +173,7 @@ export default {
   },
   data () {
     return {
-      activeNames: '1',
+      activeNames: '8',
       activeName: '0'
     }
   },

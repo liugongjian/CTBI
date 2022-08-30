@@ -9,7 +9,7 @@
         >
         <el-input
           v-model="name"
-          placeholder="请输入仪表板名称"
+          :placeholder="operation === 'editTemplate' ? '请输入模板名称' : '请输入仪表板名称'"
           class="nameInput"
         />
       </div>
@@ -34,13 +34,20 @@
           @click="changeMode"
         >{{ mode === 'edit' ?'预览' : '编辑' }}</button>
         <button
+          v-if="operation !== 'editTemplate'"
           class="bi-header-btn default"
           @click="save"
         >保存</button>
         <button
+          v-if="operation !== 'editTemplate'"
           class="bi-header-btn default primary"
           @click="saveAndShare"
         >保存并发布</button>
+        <button
+          v-if="operation === 'editTemplate'"
+          class="bi-header-btn default"
+          @click="saveTemplate"
+        >保存模板</button>
         <div v-if="false" class="more">
           <img
             style="width: 4px; height: 14px"
@@ -48,6 +55,7 @@
           >
         </div>
         <el-dropdown
+          v-if="operation !== 'editTemplate'"
           class="data-more"
         >
           <span><img
@@ -55,7 +63,8 @@
             :src="require('../../../assets/Image/dashboard/more.png')"
           ></span>
           <el-dropdown-menu slot="dropdown" class="more-dropdown">
-            <el-dropdown-item icon="el-icon-document-copy" @click.native="copy()">另存为</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-document-copy" @click.native="copy()">另存为仪表盘</el-dropdown-item>
+            <el-dropdown-item v-if="role === 'superUser'|| role === 'admin'" icon="el-icon-document-copy" @click.native="saveAsTemplate()">另存为模板</el-dropdown-item>
             <el-dropdown-item
               v-if="dashboard.publishStatus === 1"
               icon="el-icon-bottom-right"
@@ -128,18 +137,24 @@
         </div>
       </el-dialog>
     </div>
+    <SaveAsDialog ref="saveAsDialog" :template-visible.sync="templateVisible" @handleSubmit="handleSubmit" />
     <ShareDialog ref="shareDialog" from="edit" :data="dashboard" @handleAction="handleShareChange" />
   </div>
 </template>
 
 <script>
 import { getFolderTree, saveDashboard, cancelShareDashboard } from '@/api/dashboard'
+import { addTemplate, updateTemplateContent } from '@/api/template'
 import ShareDialog from '../ShareDialog'
+import SaveAsDialog from './SavaAsDialog'
+import domToImage from 'dom-to-image-more'
+import { findComponentUpward } from '@/utils/findComponentUpward'
 import store from '@/store'
 export default {
   name: 'Dashboard',
   components: {
-    ShareDialog
+    ShareDialog,
+    SaveAsDialog
   },
   props: {
     // eslint-disable-next-line vue/require-default-prop
@@ -178,7 +193,15 @@ export default {
       },
       folderTree: [],
       originFolder: [],
-      saveMode: 'save'
+      saveMode: 'save',
+      templateVisible: false,
+      thumbnail: '',
+      operation: this.$route.query.operation || 'normal'
+    }
+  },
+  computed: {
+    role() {
+      return this.$store.state.user.userData.role
     }
   },
   watch: {
@@ -190,6 +213,58 @@ export default {
     }
   },
   methods: {
+    saveAsTemplate() {
+      this.templateVisible = true
+    },
+    async handleSubmit(form, cb) {
+      try {
+        // 获取缩略图base64
+        const dashboardCom = findComponentUpward(this, 'DashBoard')
+        this.thumbnail = await domToImage.toPng(dashboardCom.$refs.mainLayout.$el)
+        // 判断报表使用的是否全为公有数据集
+        const layout = store.state.app.layout
+        let flag = null
+        if (layout.length > 0) {
+          flag = layout.every(item => {
+            const curDataSet = item.option.dataSet
+            if (curDataSet) {
+              const mold = curDataSet.mold ?? 2
+              if (mold === 2) {
+                return true
+              } else {
+                return false
+              }
+            } else {
+              return true
+            }
+          })
+        } else {
+          this.$message.warning('模板不能为空')
+          return
+        }
+
+        if (!flag) {
+          this.$message.warning('模板中不能存在私有数据集')
+          return
+        }
+        const data = {
+          layout,
+          layoutStyles: store.state.settings.layoutStyles
+        }
+        const params = {
+          ...form,
+          thumbnail: this.thumbnail,
+          setting: JSON.stringify(data)
+        }
+        await addTemplate(params)
+        this.$message.success('另存为模板成功')
+        cb()
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.$refs.saveAsDialog.loading = false
+      }
+    },
     // 切换模式
     changeDevice (device) {
       this.device = device
@@ -230,11 +305,12 @@ export default {
     testNameValid() {
       const name = this.name.trim()
       if (name === '') {
-        return '请输入仪表板名称'
+        return this.operation === 'editTemplate' ? '请输入模板名称' : '请输入仪表板名称'
       } else {
         const reg = /^[\u4e00-\u9fa5\w|\[\]\(\)\/\\]{1,50}$/
         if (!reg.test(name)) {
-          return '仪表板名称错误，支持中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号, 长度不超过50'
+          const dName = this.operation === 'editTemplate' ? '模板' : '仪表板'
+          return dName + '名称错误，支持中英文、数字及下划线、斜线、反斜线、竖线、小括号、中括号, 长度不超过50'
         }
       }
       return ''
@@ -276,7 +352,7 @@ export default {
         }
       })
     },
-    // 新建数据集
+    // 保存仪表板
     async saveDashboard (obj) {
       const isCopy = this.saveMode === 'copy'
       const id = isCopy ? null : (this.dashboard._id || null)
@@ -288,6 +364,7 @@ export default {
       const params = {
         id: finalId,
         setting: JSON.stringify(data),
+        isPublish: this.saveMode === 'saveAndShare',
         ...(obj || this.dashboardAttr)
       }
       const result = await saveDashboard(params)
@@ -336,6 +413,63 @@ export default {
       this.$emit('handleChange', {
         action: 'back'
       })
+    },
+    async saveTemplate() {
+      console.log(this.dashboard)
+      const tip = this.testNameValid()
+      if (tip) {
+        this.$message.warning(tip)
+      } else {
+        try {
+        // 获取缩略图base64
+          const dashboardCom = findComponentUpward(this, 'DashBoard')
+          this.thumbnail = await domToImage.toPng(dashboardCom.$refs.mainLayout.$el)
+          // 判断报表使用的是否全为公有数据集
+          const layout = store.state.app.layout
+          let flag = null
+          if (layout.length > 0) {
+            flag = layout.every(item => {
+              const curDataSet = item.option.dataSet
+              if (curDataSet) {
+                const mold = curDataSet.mold ?? 2
+                if (mold === 2) {
+                  return true
+                } else {
+                  return false
+                }
+              } else {
+                return true
+              }
+            })
+          } else {
+            this.$message.warning('模板不能为空')
+            return
+          }
+
+          if (!flag) {
+            this.$message.warning('模板中不能存在私有数据集')
+            return
+          }
+          const data = {
+            layout,
+            layoutStyles: store.state.settings.layoutStyles
+          }
+          const params = {
+            id: this.dashboard._id,
+            name: this.name.trim(),
+            thumbnail: this.thumbnail,
+            setting: JSON.stringify(data)
+          }
+          await updateTemplateContent(params)
+          this.$message.success('保存模板成功')
+          this.$emit('handleChange', {
+            action: 'saveSuccess',
+            data: this.dashboard
+          })
+        } catch (error) {
+          console.log(error)
+        }
+      }
     }
   }
 }

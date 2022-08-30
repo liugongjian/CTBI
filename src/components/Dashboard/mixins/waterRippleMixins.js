@@ -1,3 +1,10 @@
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-08-19 11:32:45
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-29 15:05:18
+ * @Description:
+ */
 // 水波纹的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
@@ -59,7 +66,7 @@ export default {
           }
         } else {
           for (let i = 0; i < item.length; i++) {
-            array[i].value += item[i]
+            array[i].value += Number(item[i])
           }
         }
       })
@@ -71,19 +78,27 @@ export default {
       return array
     },
     // 拿到数据的系列名字 并设置颜色
-    // 最多五条进度条 不考虑默认颜色是否够用
     getColor (val) {
       const color = []
+      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
       val.forEach((item, index) => {
-        color.push({ name: item.name, color: colorTheme['官方'][index].value })
+        const idx = (index) % colorValue.length
+        color.push({ name: item.name, color: colorValue[idx].value, remark: item.name })
       })
-      this.storeOption.theme.ComponentOption.ProgressStyle.color = color
+
+      this.storeOption.theme.ComponentOption.Color.color = color
     },
     // 获取设置目标值
     getCfgTargetOption (val) {
       const cfgTargetOption = []
+      const reCfg = deepClone(this.storeOption.theme.FunctionalOption.ProgressConfig.cfgTargetOption)
       val.forEach(item => {
-        cfgTargetOption.push({ name: item.name, value: item.value, fixedVal: item.value, dynamicVal: '', type: 1, aggregation: 1 })
+        const temp = reCfg.find(cfg => { return cfg.name === item.name })
+        if (!temp) {
+          cfgTargetOption.push({ name: item.name, value: Number(item.value), fixedVal: Number(item.value), dynamicVal: '', type: 1, aggregation: 1 })
+        } else {
+          cfgTargetOption.push(temp)
+        }
       })
       this.storeOption.theme.FunctionalOption.ProgressConfig.cfgTargetOption = cfgTargetOption
     }

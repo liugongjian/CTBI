@@ -2,6 +2,7 @@
   <el-dialog
     title="链接跳转"
     :visible.sync="dialogVisible"
+    :close-on-click-modal="false"
     width="70%"
   >
     <iframe

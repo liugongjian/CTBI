@@ -1,8 +1,15 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-08-19 11:32:45
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-29 15:06:35
+ * @Description:
+-->
 <template>
   <div style="width: 100%; height: 100%">
     <div v-if="dataValue" class="box">
       <Progress
-        :store-option="storeOption"
+        :option="storeOption"
         :data-value="dataValue"
       />
     </div>
@@ -36,25 +43,6 @@ export default {
     }
   },
   watch: {
-    // storeOption: {
-    //   handler (val) {
-    //     if (JSON.stringify(val.dataSource) !== '{}') {
-    //       this.dataValue = deepClone(val.dataSource)
-    //     }
-    //   },
-    //   deep: true
-    // },
-    // 'storeOption.dataSource': {
-    //   handler (val) {
-    //     if (JSON.stringify(val) !== '{}') {
-    //       this.dataValue = deepClone(val)
-    //       // 拿到数据的系列名字 并设置颜色
-    //       this.getColor(this.dataValue)
-    //       // 获取目标值
-    //       this.getCfgTargetOption(this.dataValue)
-    //     }
-    //   }
-    // }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)

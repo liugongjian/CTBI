@@ -34,14 +34,14 @@ export default {
           // 这个地方是不是写的有问题? 要是没有维度呢 维度并不是必填的
           if (key === 'Dimension') {
             if (fields[key]['fields'].length > 0) {
-              const column = fields[key]['fields'][0].column
+              const column = fields[key]['fields'][0].displayColumn
               obj = data.map(item => { return { name: item[column], data: [] } })
             } else {
               obj = data.map(item => { return { name: '', data: [] } })
             }
           } else if (key === 'Measure') {
             fields[key]['fields'].forEach((field, index) => {
-              const column = field.column
+              const column = field.displayColumn
               obj.forEach((item, i) => {
                 item.data.push({ title: column, value: data[i][column] })
               })
@@ -49,22 +49,22 @@ export default {
           }
         }
       }
-      console.log('封装好的数据', obj)
       return obj
     },
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
       const color = []
+      const colorValue = colorTheme[this.storeOption.theme.StyleConfig.IndicatorPic.Color.theme]
       // 有维度的话
       if (this.storeOption.dataSource.Dimension.value.length > 0) {
         val.forEach((item, index) => {
-          const idx = (index) % colorTheme['官方'].length
-          color.push({ name: item.name, color: colorTheme['官方'][idx].value, remark: item.name })
+          const idx = (index) % colorValue.length
+          color.push({ name: item.name, color: colorValue[idx].value, remark: item.name })
         })
       } else {
         val[0].data.forEach((item, index) => {
-          const idx = (index) % colorTheme['官方'].length
-          color.push({ name: item.title, color: colorTheme['官方'][idx].value, remark: item.title })
+          const idx = (index) % colorValue.length
+          color.push({ name: item.title, color: colorValue[idx].value, remark: item.title })
         })
       }
       this.storeOption.theme.StyleConfig.IndicatorPic.Color.color = color

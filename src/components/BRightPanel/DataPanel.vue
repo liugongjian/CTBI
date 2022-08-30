@@ -10,7 +10,7 @@
           />
         </div>
         <div
-          v-show="Dimension.length>0||Measure.length>0"
+          v-show="(Dimension.length>0||Measure.length>0)&&(!(dataSet.mold===2&&role==='simpleUser'))"
           title="编辑数据集"
           class="edit-cube"
           @click="editDataSet"
@@ -72,7 +72,16 @@
                   style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 4px;"
                   :icon-class="typeTransform(data.attributes)"
                 />
-                <span>{{ node.label }}</span>
+                <span v-if="data.attributes[0].comment">
+                  <el-tooltip
+                    :content="data.attributes[0].comment"
+                    placement="top"
+                  >
+                    <span>{{ data.displayColumn }}</span>
+                  </el-tooltip>
+
+                </span>
+                <span v-else>{{ data.displayColumn }}</span>
               </span>
             </el-tree>
           </div>
@@ -103,7 +112,16 @@
                   style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 3px;"
                   :icon-class="typeTransform(data.attributes)"
                 />
-                <span>{{ node.label }}</span>
+                <span v-if="data.attributes[0].comment">
+                  <el-tooltip
+                    :content="data.attributes[0].comment"
+                    placement="top"
+                  >
+                    <span>{{ data.displayColumn }}</span>
+                  </el-tooltip>
+
+                </span>
+                <span v-else>{{ data.displayColumn }}</span>
               </span>
             </el-tree>
           </div>
@@ -115,9 +133,10 @@
 </template>
 
 <script>
-import DataSetSelect from './components/DataSetSelect.vue'
+import DataSetSelect from './DataSetSelect.vue'
 import { getDataSet } from '@/api/dataSet'
 import { transformDataTypeIcon } from '@/utils/optionUtils'
+import { mapGetters } from 'vuex'
 export default {
   name: 'DataPanel',
   components: { DataSetSelect },
@@ -143,6 +162,11 @@ export default {
       value: '', // 树形过滤关键字
       dataSetLoading: false
     }
+  },
+  computed: {
+    ...mapGetters([
+      'role'
+    ])
   },
   watch: {
     filterText (val) {
@@ -199,6 +223,7 @@ export default {
       return true
     },
     handleDragStart (node, ev) {
+      this.$emit('changeActiveName', '1')
       const dt = ev.dataTransfer
       ev.dataTransfer.effectAllowed = 'copy'
       dt.setData('data', JSON.stringify(node.data))
@@ -233,6 +258,7 @@ export default {
           addData()
         }
       }
+      this.$emit('changeActiveName', '1')
     },
 
     // 跳转到编辑数据集页面

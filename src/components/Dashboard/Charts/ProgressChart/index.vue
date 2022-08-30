@@ -2,7 +2,7 @@
   <div style="width: 100%; height: 100%">
     <div v-if="dataValue" class="box">
       <Progress
-        :store-option="storeOption"
+        :option="storeOption"
         :data-value="dataValue"
       />
     </div>

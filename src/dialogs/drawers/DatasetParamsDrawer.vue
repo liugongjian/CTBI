@@ -2,6 +2,7 @@
   <el-drawer
     :before-close="handleCloseSettingParam"
     :wrapper-closable="false"
+    :close-on-click-modal="false"
     :size="830"
     :visible.sync="dialogVisible"
   >

@@ -70,3 +70,13 @@ export function getShareDashboardDetail (body) {
   return http.post(`/dashboard/shareDetail`, body)
 }
 
+// 上传图片
+export function uploadImg(data) {
+  return http.post('/dataFiles/img', data)
+}
+
+// 获取图片
+export function downloadImg(path) {
+  return http.get(`/dataFiles/img?path=${path}`)
+}
+

@@ -2,6 +2,7 @@
   <el-dialog
     title="发布"
     :visible.sync="shareDashboardVisible"
+    :close-on-click-modal="false"
     width="560px"
     @close="close"
   >
@@ -32,12 +33,17 @@
           class="input"
           type="textarea"
           :rows="2"
-          placeholder="多个地址以英文逗号分隔"
+          placeholder="多个IP地址以英文逗号分隔"
           @input="shareChange"
         />
       </el-form-item>
+      <el-form-item v-if="currentData.shareUrl">
+        <div class="d-f">
+          <p class="shareCopyUrl">{{ currentData.shareUrl }}</p>
+          <el-button class="random" type="text" @click="copyUrl">复制地址</el-button>
+        </div>
+      </el-form-item>
     </el-form>
-    <p v-if="currentData.shareUrl" class="shareCopyUrl">{{ currentData.shareUrl }}</p>
     <div
       slot="footer"
       class="dialog-footer"
@@ -67,6 +73,7 @@ import {
   shareDashboard,
   cancelShareDashboard
 } from '@/api/dashboard'
+import { encryptAes, decryptAes } from '@/utils/encrypt'
 import moment from 'moment'
 function randomPassword(size = 10) {
   const lower = 'abcdefghijkmlnopqrstwvxyz'
@@ -85,6 +92,12 @@ function randomPassword(size = 10) {
     }
   }
   return result.join('')
+}
+
+function reassembleData(data) {
+  const result = data ? { ...data } : {}
+  result.sharePassword = result.sharePassword ? decryptAes(result.sharePassword) : ''
+  return result
 }
 
 export default {
@@ -106,14 +119,11 @@ export default {
       },
       oldShareInfo: {},
       needShareAgain: false,
-      currentData: this.data || {},
+      currentData: reassembleData(this.data),
       shareDashboardVisible: false,
       shareRules: {
         shareEndTime: [
           { required: true, message: '请输入日期', trigger: 'blur' }
-        ],
-        sharePassword: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
         ]
       },
       pickerOptions: {
@@ -128,7 +138,7 @@ export default {
     data: {
       handler (newVal) {
         console.log(newVal)
-        this.currentData = newVal
+        this.currentData = reassembleData(newVal)
       }
     }
   },
@@ -140,9 +150,10 @@ export default {
     showShare (data) {
       console.log(data)
       this.shareDashboardVisible = true
-      this.currentData = { ...data }
+      data = reassembleData(data)
+      this.currentData = data
       this.currentShareInfo = {
-        shareEndTime: data.shareEndTime ? data.shareEndTime : moment().add(1, 'days').format('YYYY-MM-DD'),
+        shareEndTime: data.shareEndTime ? data.shareEndTime : moment().add(7, 'days').format('YYYY-MM-DD'),
         sharePassword: data.sharePassword || '',
         whiteList: data.whiteList ? data.whiteList.join(',') : ''
       }
@@ -162,11 +173,23 @@ export default {
     async executeSubmit () {
       try {
         const { shareEndTime, sharePassword, whiteList } = this.currentShareInfo
+        const ipPattern = /((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/g
+        // IP校验
+        const ips = whiteList ? whiteList.split(',') : []
+        let finalIps = ips
+        if (ips.length > 0) {
+          finalIps = ips.map(item => item.trim()).filter(item => !!item)
+          if (finalIps.length > 0 && finalIps.some(ip => !ipPattern.test(ip))) {
+            this.$message.error('白名单IP地址格式有错误，请更改')
+            return
+          }
+        }
+        const password = sharePassword && sharePassword.trim() ? encryptAes(sharePassword.trim()) : ''
         const params = {
           _id: this.currentData._id,
           shareEndTime,
-          sharePassword,
-          whiteList: whiteList ? whiteList.split(',') : []
+          sharePassword: password,
+          whiteList: finalIps
         }
         const info = await shareDashboard(params)
         this.$message.success('发布成功')
@@ -182,7 +205,7 @@ export default {
       }
     },
     copyShareUrl () {
-      const shareContent = '分享链接：' + this.currentData.shareUrl + '\t\n' + '密码：' + this.currentShareInfo.sharePassword + '\t\n' + '有效期至：' + this.currentShareInfo.shareEndTime
+      const shareContent = this.currentShareInfo.sharePassword ? '分享链接：' + this.currentData.shareUrl + '\t\n' + '密码：' + this.currentShareInfo.sharePassword + '\t\n' + '有效期至：' + this.currentShareInfo.shareEndTime : '分享链接：' + this.currentData.shareUrl + '\t\n' + '有效期至：' + this.currentShareInfo.shareEndTime
       if (navigator.clipboard) {
         navigator.clipboard.writeText(shareContent)
         this.$message.success('复制成功')
@@ -196,6 +219,24 @@ export default {
         textarea.select()
         document.execCommand('copy', true)
         this.$message.success('复制成功')
+        document.body.removeChild(textarea)
+      }
+    },
+    copyUrl () {
+      const shareContent = this.currentData.shareUrl
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareContent)
+        this.$message.success('地址复制成功')
+      } else {
+        const textarea = document.createElement('textarea')
+        document.body.appendChild(textarea)
+        textarea.style.position = 'fixed'
+        textarea.style.clip = 'rect(0 0 0 0)'
+        textarea.style.top = '10px'
+        textarea.value = shareContent
+        textarea.select()
+        document.execCommand('copy', true)
+        this.$message.success('地址复制成功')
         document.body.removeChild(textarea)
       }
     },
@@ -262,8 +303,6 @@ export default {
   margin-left: 14px;
 }
 .shareCopyUrl {
-  margin-top: 24px;
-  margin-left: 70px;
   width: 360px;
   height: 54px;
   padding: 0px 10px;

@@ -5,6 +5,10 @@ export default {
   mixins: [loadingMixin],
   data: function () {
     return {
+      // 是否开启滑动加载
+      lazy: false,
+      // 防抖控制
+      queryTimes: null,
       dataList: [], // 列表数据
       selectedRows: [], // 列表选中行
       pageSizes: [20, 30, 40, 50, 100],
@@ -16,7 +20,48 @@ export default {
       }
     }
   },
+  mounted () {
+    this.$nextTick(() => {
+      this.bindLazyLoadEvent()
+    })
+  },
+  computed: {
+    tableRef () {
+      // 此处需要定义表格组件的refs 为 multipleTable
+      // 该值可自行定义
+      return this.$refs.multipleTable?.$el.querySelector('.el-table__body-wrapper')
+    }
+  },
+  beforeDestroy () {
+    if (this.lazy && this.tableRef) {
+      this.tableRef.removeEventListener('scroll', this.handleScroll)
+    }
+  },
   methods: {
+    bindLazyLoadEvent () {
+      if (this.lazy && this.tableRef) {
+        this.tableRef.addEventListener('scroll', this.handleScroll)
+      }
+    },
+    handleScroll (e) {
+      // 获取dom滚动距离 添加1px的偏移量
+      const scrollTop = e.target.scrollTop + 1
+      // 获取可视区的高度
+      const offsetHeight = this.tableRef.offsetHeight
+      // 获取滚动条总高度
+      const scrollHeight = this.tableRef.scrollHeight
+
+      if (scrollTop + offsetHeight >= scrollHeight) {
+        // 把距离顶部的距离加上可视区域的高度 等于或者大于滚动条的总高度就是到达底部
+        if (this.queryTimes) {
+          clearTimeout(this.queryTimes)
+        }
+        this.queryTimes = setTimeout(() => {
+          this.queryForm.current++
+          this.query()
+        }, 500)
+      }
+    },
     //
     handleSizeChange (e) {
       this.queryForm.limit = e
@@ -39,21 +84,12 @@ export default {
     },
     /* 设定列表数据 */
     setResult (list, total) {
-      this.dataList = list
-      this.dataList.forEach((item) => {
-        if (!item.dataSourceName) {
-          item.dataSourceName = '-'
-        }
-      })
-      this.queryForm.total = total
-      if (
-        total > 0 &&
-        (list === null || list.length === 0) &&
-        this.queryForm.current > 1
-      ) {
-        this.queryForm.current--
-        this.query()
+      if (this.lazy) {
+        this.dataList = this.dataList.concat(list)
+      } else {
+        this.dataList = list
       }
+      this.queryForm.total = total
     },
 
     /** 列表自定义单选事件 */

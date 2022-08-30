@@ -1,3 +1,10 @@
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-08-04 12:46:01
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-29 16:32:36
+ * @Description:
+ */
 // 雷达图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
@@ -28,12 +35,13 @@ export default {
     },
     getColor (val) {
       const data = val.fields.Measure.fields
+      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
       const color = []
       data.forEach((item, index) => {
-        const idx = (index) % colorTheme['官方'].length
-        color.push({ name: item.column, color: colorTheme['官方'][idx].value, remark: item.column })
+        const idx = (index) % colorValue.length
+        color.push({ name: item.column, color: colorValue[idx].value, remark: item.column })
       })
-      this.storeOption.theme.ComponentOption.RadarColor.color = color
+      this.storeOption.theme.ComponentOption.Color.color = color
     }
   }
 }

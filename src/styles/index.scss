@@ -39,9 +39,11 @@ a {
   display: flex;
   align-items: center;
 }
+
 // 仪表盘中 element的一些组件样式
 .editor-object-container {
   padding-bottom: 12px;
+
   .editor-item-title {
     word-break: keep-all;
     margin: 0px 8px;
@@ -49,28 +51,51 @@ a {
     line-height: 20px;
     display: inline-block;
     font-size: 12px;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255, 255, 255, 0.75);
     font-weight: 500;
   }
+
+  .inline {
+    display: inline-block;
+  }
+
   .editor-item-container {
     padding-left: 24px;
     margin-top: 12px;
     font-size: 12px;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255, 255, 255, 0.75);
     font-weight: 500;
   }
+
+  .pl5 {
+    padding-left: 5px;
+  }
+
+  .pl10 {
+    padding-left: 10px;
+  }
+
+  .pl0 {
+    padding-left: 0px;
+  }
+
+  .number-box {
+    width: 90px;
+  }
+
   // 输入框样式
-  .el-input--small{
+  .el-input--small {
     height: 24px;
     padding-right: 8px;
   }
-  .el-input--small .el-input__inner{
+
+  .el-input--small .el-input__inner {
     height: 24px !important;
     background-color: transparent !important;
-    border: 1px solid rgba(221,221,221,0.25) !important;
+    border: 1px solid rgba(221, 221, 221, 0.25) !important;
     border-radius: 2px;
     font-size: 12px;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255, 255, 255, 0.75);
     font-weight: 400;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -78,92 +103,110 @@ a {
 
     &::placeholder {
       font-size: 12px;
-      color: rgba(255,255,255,0.25);
+      color: rgba(255, 255, 255, 0.25);
       font-weight: 400;
     }
   }
+
   // 计数器的样式
-  .el-input-number--small{
+  .el-input-number--small {
     line-height: 22px;
-    .el-input-number__decrease,.el-input-number__increase{
+
+    .el-input-number__decrease,
+    .el-input-number__increase {
       line-height: 11px !important;
       height: 11px !important;
       background: transparent;
       font-size: 12px;
-      color: rgba(255,255,255,0.75);
+      color: rgba(255, 255, 255, 0.75);
       font-weight: 400;
-      border-color: rgba(221,221,221,0.25) !important;
+      border-color: rgba(221, 221, 221, 0.25) !important;
     }
   }
+
   // 颜色选择器样式
-  .el-color-picker--small{
+  .el-color-picker--small {
     height: 24px;
   }
-  .el-color-picker--small .el-color-picker__trigger{
+
+  .el-color-picker--small .el-color-picker__trigger {
     height: 24px;
     width: 24px;
-    border: 1px solid rgba(221,221,221,0.25);
+    border: 1px solid rgba(221, 221, 221, 0.25);
     border-radius: 2px;
   }
-  .el-color-picker--small .el-color-picker__mask{
+
+  .el-color-picker--small .el-color-picker__mask {
     width: 100%;
     height: 100%;
     background-color: transparent;
   }
+
   // radio 样式
-  .el-radio-group{
+  .el-radio-group {
     margin-top: -3px;
-    .el-radio{
+
+    .el-radio {
       margin-right: 8px;
-      .el-radio__input{
+
+      .el-radio__input {
         height: 12px;
         width: 12px;
         margin-right: 8px;
-        .el-radio__inner{
+
+        .el-radio__inner {
           height: 100%;
           width: 100%;
-          border: 1px solid rgba(104,106,114,1);
+          border: 1px solid rgba(104, 106, 114, 1);
           background-color: transparent;
         }
       }
+
       // 选中
-      .el-radio__input.is-checked .el-radio__inner{
+      .el-radio__input.is-checked .el-radio__inner {
         border-color: #FA8334;
       }
-      .el-radio__input.is-checked .el-radio__inner::after{
+
+      .el-radio__input.is-checked .el-radio__inner::after {
         background-color: #FA8334;
       }
-      .el-radio__label{
+
+      .el-radio__label {
         font-size: 12px;
-        color: rgba(255,255,255,0.75);
+        color: rgba(255, 255, 255, 0.75);
         font-weight: 500;
         padding-left: 0;
       }
     }
-    .el-radio:last-child{
+
+    .el-radio:last-child {
       margin-right: 0px;
     }
   }
-  .el-radio-button--small .el-radio-button__inner{
+
+  .el-radio-button--small .el-radio-button__inner {
     height: 24px;
     padding: 5px 15px;
     background-color: transparent;
     font-size: 12px;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255, 255, 255, 0.75);
     font-weight: 500;
     border: 1px solid rgba(221, 221, 221, 0.25) !important;
   }
+
   // 下拉选择框
-  .el-select .el-input .el-select__caret{
+  .el-select .el-input .el-select__caret {
     line-height: 24px;
     font-size: 12px;
   }
-  .el-select .el-tag{
+
+  .el-select .el-tag {
     background-color: transparent;
     border: 1px solid rgba(221, 221, 221, 0.25) !important;
     font-size: 12px;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255, 255, 255, 0.75);
   }
+
   // 置灰样式
   .box-disabled {
     cursor: not-allowed;
@@ -173,35 +216,42 @@ a {
       pointer-events: none;
     }
   }
+
   // 复选框样式
-  .el-checkbox{
+  .el-checkbox {
     margin-right: 15px;
   }
-  .el-checkbox__inner{
+
+  .el-checkbox__inner {
     height: 12px;
     width: 12px;
     background-color: transparent;
-    border: 1px solid rgba(104,106,114,1);
-    &::after{
+    border: 1px solid rgba(104, 106, 114, 1);
+
+    &::after {
       height: 6px;
       left: 3px;
       top: 0px;
     }
   }
-  .el-checkbox__label{
+
+  .el-checkbox__label {
     padding-left: 8px;
     font-size: 12px;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255, 255, 255, 0.75);
     font-weight: 500;
   }
-  .el-checkbox__input.is-checked+.el-checkbox__label{
-    color: rgba(255,255,255,0.75);
+
+  .el-checkbox__input.is-checked+.el-checkbox__label {
+    color: rgba(255, 255, 255, 0.75);
   }
-  .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner{
+
+  .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner {
     background-color: transparent;
     border-color: transparent;
   }
-  .el-checkbox__input.is-disabled .el-checkbox__inner{
+
+  .el-checkbox__input.is-disabled .el-checkbox__inner {
     background-color: transparent;
     border-color: transparent;
   }
@@ -255,4 +305,8 @@ a {
 .el-input__inner {
   border-radius: 2px !important;
   border: 1px solid #DDDDDD;
+}
+
+.vue-grid-item.vue-grid-placeholder {
+  background: rgba(200, 201, 204, 0.5) !important;
 }

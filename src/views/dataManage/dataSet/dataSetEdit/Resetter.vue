@@ -42,7 +42,7 @@
         >
           <el-tree
             style="width: 200px"
-            :data="dimensionMeasure"
+            :data="fieldsTable"
             :props="defaultProps"
             default-expand-all
           >
@@ -63,7 +63,7 @@
               </div>
               <div
                 v-if="node.isLeaf"
-                class="p-r-10 gear-btn"
+                class="p-r-20 gear-btn"
               >
                 <gear-btn
                   :active-tag-name="activeTagName"
@@ -79,23 +79,23 @@
         <!-- right -->
         <!-- gutter-th 由于表头与表体不对齐，el-table会默认追加gutter，这边选择隐藏 -->
         <div class="data-preview-right">
-          <el-table
-            v-loading="previewLoading"
-            element-loading-text="拼命加载中"
+          <vxe-table
+            ref="vxeTable"
+            border
+            show-overflow
+            highlight-hover-row
             :data="dimensionMeasureTableData"
             class="gutter-th"
             :height="tableHeight"
-            empty-text=" "
-            stripe
           >
-            <template v-for="(parent, i) in dimensionMeasure">
-              <el-table-column
+            <template v-for="(parent, i) in fieldsTable">
+              <vxe-table-colgroup
                 v-if="!parent.isHidden"
-                :key="`column-p-${i}`"
-                :label="parent.displayColumn"
-                :class-name="`m-column-${parent._id}`"
+                :key="`column-p-${i}` + getDate()"
+                :title="parent.displayColumn"
+                :header-class-name="`m-column-${parent._id}`"
               >
-                <template #header="{ column }">
+                <template #header>
                   <div class="d-f">
                     <div>
                       <svg-icon
@@ -104,23 +104,23 @@
                       />
                     </div>
                     <div>
-                      {{ column.label }}
+                      {{ parent.displayColumn }}
                     </div>
                   </div>
                 </template>
                 <template v-for="(v) in parent.children">
-                  <el-table-column
+                  <vxe-table-column
                     v-if="(v.attributes && !v.attributes[0].isHidden)"
                     :key="`column-child-${v.index}-${v.$treeNodeId}`"
-                    :prop="v.displayColumn"
+                    :field="v.displayColumn"
                     width="95"
-                    class-name="column-child"
-                    :label="v.displayColumn"
+                    header-class-name="column-child"
+                    :title="v.displayColumn"
                     show-overflow-tooltip
                   >
-                    <template #header="{ column }">
+                    <template #header>
                       <b-tooltip
-                        :content="column.label"
+                        :content="v.displayColumn"
                         width="80px"
                       />
                       <div class="d-f f-b-c">
@@ -141,11 +141,11 @@
                     <template slot-scope="{ row, column }">
                       {{ row[column.property] | strEmptyFilter }}
                     </template>
-                  </el-table-column>
+                  </vxe-table-column>
                 </template>
-              </el-table-column>
+              </vxe-table-colgroup>
             </template>
-          </el-table>
+          </vxe-table>
         </div>
         <div
           v-if="dimensionMeasureTableData.length === 0"
@@ -175,7 +175,7 @@
       </div>
       <div v-show="activeTagName === 2">
         <el-table
-          :data="dimensionMeasure"
+          :data="fieldsTable"
           :height="tableHeight"
           row-key="index"
           default-expand-all
@@ -203,7 +203,7 @@
               >
                 <re-input
                   v-model="scope.row.displayColumn"
-                  :max-length="50"
+                  :maxlength="50"
                   :blur-fun="(newVal, oldVal) => {return handlerBlur(newVal, oldVal, scope.row.index)}"
                   @blur="(val) => { handleBlur(val, scope.row) }"
                 />
@@ -263,7 +263,7 @@
             <template slot-scope="scope">
               <div v-if="scope.row._id !== 1 && scope.row._id !== 2">
                 <el-input
-                  v-model="scope.row.comment"
+                  v-model="scope.row.attributes[0].comment"
                   placeholder="请输入内容"
                 />
               </div>
@@ -294,9 +294,10 @@
 <script>
 import { getPreviewData } from '@/api/dataSet'
 import regex from '@/constants/regex'
-import { transformDataTypeIcon } from '@/utils/optionUtils'
+import { transformDataTypeIcon, getFieldsTable, getFieldsTree } from '@/utils/optionUtils'
 import GearBtn from '@/views/dataManage/dataSet/dataSetEdit/GearBtn'
 import ReInput from '@/views/dataManage/dataSet/dataSetEdit/ReInput'
+import { DataTypeOptions, FormatMap, AggFunctionOptions } from '@/constants/constants'
 
 export default {
   components: { GearBtn, ReInput },
@@ -321,101 +322,14 @@ export default {
         label: 'displayColumn'
       },
       previewLoading: false,
-      // 维度&度量 表头
-      dimensionMeasure: [],
       // 维度&度量 表格数据
       dimensionMeasureTableData: [],
-      dataTypeOptions: [
-        {
-          value: 'number',
-          label: '数字'
-        },
-        {
-          value: 'granularity',
-          label: '地理',
-          children: [{
-            value: 'area',
-            parentValue: 'granularity',
-            originValue: 'text',
-            label: '区域'
-          },
-          {
-            value: 'province',
-            parentValue: 'granularity',
-            originValue: 'text',
-            label: '省/直辖市'
-          },
-          {
-            value: 'city',
-            parentValue: 'granularity',
-            originValue: 'text',
-            label: '市'
-          },
-          {
-            value: 'country',
-            parentValue: 'granularity',
-            originValue: 'text',
-            label: '区/县'
-          },
-          {
-            value: 'longitude',
-            parentValue: 'granularity',
-            originValue: 'text',
-            label: '经度'
-          },
-          {
-            value: 'dimensionality',
-            parentValue: 'granularity',
-            originValue: 'text',
-            label: '维度'
-          }]
-        },
-        {
-          value: 'text',
-          label: '文本'
-        },
-        {
-          value: 'time',
-          label: '时间'
-        }
-      ],
-      formatMap: {
-        text: [],
-        number: [
-          {
-            label: '整数',
-            value: '#,##0'
-          },
-          {
-            label: '保留1位小数',
-            value: '#,##0.0'
-          },
-          {
-            label: '保留2位小数',
-            value: '#,##0.00'
-          },
-          {
-            label: '百分比',
-            value: '#,##0%'
-          },
-          {
-            label: '百分比1位小数',
-            value: '#,##0.0%'
-          },
-          {
-            label: '百分比2位小数',
-            value: '#,##0.00%'
-          }
-        ],
-        time: [
-          {
-            label: '年-月-日 时-分秒',
-            value: 'YYYY-MM-DD HH:mm:ss'
-          }
-        ]
-      },
-      // sum, count, distinct-count, max, min, avg
-      aggFunctions: [{ label: '求和', value: 'sum' }, { label: '计数', value: 'count' }, { label: '技术(去重)', value: 'distinct-count' }, { label: '最大值', value: 'max' }, { label: '最小值', value: 'min' }, { label: '平均数', value: 'min' }],
+      fieldsTable: [],
+      fieldsTree: [],
+
+      dataTypeOptions: DataTypeOptions,
+      formatMap: FormatMap,
+      aggFunctions: AggFunctionOptions,
       tableHeight: 320
     }
   },
@@ -465,7 +379,7 @@ export default {
       try {
         this.previewLoading = true
         const data = await getPreviewData(body)
-        this.dimensionMeasureTableData = data.data.slice()
+        this.dimensionMeasureTableData = data.result?.data.slice()
       } catch (error) {
         console.log(error)
       } finally {
@@ -473,54 +387,11 @@ export default {
       }
     },
     getDimensionMeasureData (fields) {
-      if (!fields) return []
-      const res = [{
-        _id: 1,
-        displayColumn: '维度',
-        icon: 'dimension-icon',
-        index: 'dimension_p_1',
-        children: []
-      }, {
-        _id: 2,
-        index: 'measure_p_1',
-        icon: 'measure-icon',
-        displayColumn: '度量',
-        children: []
-      }]
-      let dimensionHiddenLength = 0
-      let measureHiddenLength = 0
-      fields.forEach((item, index) => {
-        item.index = item.type + '_' + index
-        if (!item.displayColumn) {
-          item.displayColumn = item.column
-        }
-        item.attributes[0].displayColumn = item.displayColumn
-        if (item.type === 'Dimension') {
-          if (item.attributes[0].isHidden) {
-            dimensionHiddenLength += 1
-          } else if (typeof item.attributes[0].isHidden === 'undefined') {
-            // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
-            item.attributes[0].isHidden = false
-          }
-          res[0].children.push(item)
-        } else if (item.type === 'Measure') {
-          if (item.attributes[0].isHidden) {
-            measureHiddenLength += 1
-          } else if (typeof item.attributes[0].isHidden === 'undefined') {
-            // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
-            item.attributes[0].isHidden = false
-          }
-          res[1].children.push(item)
-        }
+      this.fieldsTable = getFieldsTable(fields)
+      this.fieldsTree = getFieldsTree(fields)
+      this.$nextTick(() => {
+        this.$refs.vxeTable.refreshColumn()
       })
-      if (res[1].children.length === 0 || res[1].children.length === measureHiddenLength) {
-        res[1].isHidden = true
-      }
-      if (res[0].children.length === 0 || res[0].children.length === dimensionHiddenLength) {
-        res[0].isHidden = true
-      }
-      this.dimensionMeasure = res
-      return res
     },
     typeTransform (data) {
       const temp = this.resetDataType(data)
@@ -569,6 +440,9 @@ export default {
     },
     handleBlur (val, item) {
       item.attributes[0].displayColumn = val
+    },
+    getDate() {
+      return new Date()
     }
   }
 }
@@ -651,13 +525,8 @@ export default {
 }
 
 // 由于表头与表体不对齐，el-table会默认追加gutter，这边选择隐藏
-::v-deep .gutter-th {
-  .is-group.has-gutter {
-    tr th.gutter {
-      display: none !important;
-      width: 0px !important;
-    }
-  }
+::v-deep .vxe-header--gutter {
+  display: none !important;
 }
 
 .left-divider {
@@ -700,11 +569,16 @@ export default {
 ::v-deep .column-child {
   font-size: 12px;
   font-weight: 400;
+  width: 90px;
   line-height: 20px;
   background-color: #fff !important;
 }
 ::v-deep .display-none {
   height: 0px;
   display: none !important;
+}
+
+::v-deep .vxe-table--render-default.border--full .vxe-table--header-wrapper {
+  background-color: #fff;
 }
 </style>

@@ -1,6 +1,6 @@
 import store from '@/store'
-import { getDataSetData } from '@/api/dataSet'
-import { getLayoutOptionById, getDataValueById, deepClone } from '@/utils/optionUtils'
+import { getDataSetData, getDataSetShareData } from '@/api/dataSet'
+import { getLayoutOptionById, getDataValueById, deepClone, getQueryParams } from '@/utils/optionUtils'
 // 图表组件的公共混入
 export default {
   data () {
@@ -34,8 +34,12 @@ export default {
      */
     async interReload (ids, limit, isReload) {
       if (ids && ids.indexOf(this.identify) > -1) {
-        await this.getData(limit, isReload)
-        this.reloadImpl()
+        try {
+          await this.getData(limit, isReload)
+          this.reloadImpl()
+        } catch (e) {
+          // do nothing
+        }
       }
     },
     // 获取详细数据
@@ -43,47 +47,27 @@ export default {
       const storeDataValue = getDataValueById(this.identify)
       if (storeDataValue && !isReload) {
         this.chartData = deepClone(storeDataValue)
-        return
+        throw new Error('未获取到数据，不做图表加载')
       }
-      const option = getLayoutOptionById(this.identify)
-      const { dataSource } = option
-      // 维表字段
-      const dimension = { selections: [] }
-      // 度量字段字段
-      const measure = { selections: [] }
-      // 字段统计，用于做回显
-      const transformFields = {}
-      for (const key in dataSource) {
-        const source = dataSource[key]
-        // TODO：需要定义组件配置type类型来替换用名称做判断
-        if (key.toLocaleLowerCase().indexOf('dimension') > -1) {
-          dimension.selections = dimension.selections.concat(source.value.map(so => { return { ...so, fieldId: so._id, attributeId: so.attributes[0]._id } }))
-        }
-        if (key.toLocaleLowerCase().indexOf('measure') > -1) {
-          measure.selections = measure.selections.concat(source.value.map(so => { return { ...so, fieldId: so._id, attributeId: so.attributes[0]._id } }))
-        }
-        transformFields[key] = {
-          'name': source.name,
-          'fields': source.value
-        }
+
+      const params = getQueryParams(limit, this.identify)
+      const { dataSetId, query: { dimension, measure } } = params
+      if (!dataSetId || (dimension.selections.length === 0 && measure.selections.length === 0)) {
+        throw new Error('未获取到数据，不做图表加载')
       }
-      // 过滤
-      const filter = { selections: [] }
-      // 排序
-      const order = []
-      // 查询数据的偏移量默认0
-      const offset = 0
-      // sql-参数配置中的
-      const placeholder = { configs: [] }
-      // sql-参数配置中的
-      const param = { configs: [] }
 
       try {
-        const body = { query: { limit, dimension, measure, filter, order, offset, placeholder, param } }
-        const dataSetId = option.dataSet.id
-        const res = await getDataSetData(dataSetId, body)
+        this.$bus.$emit('showLoading', this.identify)
+        const shareParams = store.state.app.shareDashboardInfo
+        const isShareHref = location.pathname.includes('/dashboard/publish/')
+        const isInSharePage = isShareHref && shareParams.url // 检测是否来自分享页面
+        const body = isInSharePage ? { query: params.query, ...shareParams } : { query: params.query }
+        const dataSetId = params.dataSetId
+        // 来自分享仪表板页面的数据请求走不同的接口
+        const executeMethod = isInSharePage ? getDataSetShareData : getDataSetData
+        const res = await executeMethod(dataSetId, body)
         this.chartData = {
-          fields: transformFields,
+          fields: params.transformFields,
           data: res.result.data
         }
 
@@ -103,6 +87,7 @@ export default {
       } catch (error) {
         console.log(error)
       }
+      this.$bus.$emit('closeLoading', this.identify)
     },
     // 设置图例与图表距离
     setGrid (legend) {
