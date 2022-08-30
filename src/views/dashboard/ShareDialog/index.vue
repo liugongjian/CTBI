@@ -189,7 +189,8 @@ export default {
           _id: this.currentData._id,
           shareEndTime,
           sharePassword: password,
-          whiteList: finalIps
+          whiteList: finalIps,
+          currentUrl: location.origin + location.pathname.split('/dashboard')[0] + '/dashboard/publish'
         }
         const info = await shareDashboard(params)
         this.$message.success('发布成功')
