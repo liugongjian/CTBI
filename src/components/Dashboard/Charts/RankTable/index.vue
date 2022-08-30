@@ -49,7 +49,7 @@
       <el-table-column width="auto" :fixed="position">
         <template slot-scope="scope">
           <span v-for="(itm, ind) in tableData" :key="ind">
-            <SingleColumn v-if="ind === scope.$index" :color="colorOption" :data-value="itm.value" :max="maxNumber" />
+            <SingleColumn v-if="ind === scope.$index" :color="colorOption" :data-value="`${Object.values(itm)[1]}`" :max="maxNumber" />
           </span>
         </template>
       </el-table-column>
