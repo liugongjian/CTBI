@@ -136,16 +136,21 @@
                 @keyup.enter.native="searchTableList(editDataInfo.dataSourceId)"
               />
             </div>
-            <table-list
-              v-loading="searchLoading"
-              :stop-scroller="searchKey !== ''"
-              :loading="dataTableLoading"
-              :table-list="dataTableList"
-              :type="editDataInfo.dataSourceType"
-              :data-source-id="editDataInfo.dataSourceId"
-              :toggle-content="toggleContent"
-              @reloadTableList="reloadTableList"
-            />
+            <div
+              ref="tableList"
+              class="list-wrapper"
+            >
+              <table-list
+                v-loading="searchLoading"
+                :stop-scroller="searchKey !== ''"
+                :loading="dataTableLoading"
+                :table-list="dataTableList"
+                :end="paging.isPaging && dataTableList.length >= dataTableTotal"
+                :type="editDataInfo.dataSourceType"
+                :data-source-id="editDataInfo.dataSourceId"
+                @reloadTableList="reloadTableList"
+              />
+            </div>
           </div>
         </div>
 
@@ -273,6 +278,7 @@ export default {
       dataSourceOptions: [],
       // 表格数据组 用于最终展示
       dataTableList: [],
+      dataTableTotal: 0,
       // 记录搜索前的表格数据，当 searchKey为空时赋值给 dataTableList不再进行一次接口调用
       orgTableList: [],
       // 列表中查询的名称值
@@ -513,23 +519,24 @@ export default {
       this.dataTableLoading = true
       this.paging.page = 1
       this.paging.isPaging = 1
-      this.getDataTableList()
+      this.orgTableList = []
+      this.getDataTableList(true)
     },
-    reloadTableList() {
+    reloadTableList () {
       this.dataTableLoading = true
       this.paging.page++
       this.paging.isPaging = 1
-      this.getDataTableList()
+      this.getDataTableList(false)
     },
     searchTableList () {
       if (this.searchKey) {
         delete this.paging.isPaging
-        this.getDataTableList()
+        this.getDataTableList(true)
       } else {
         this.dataTableList = this.orgTableList.concat()
       }
     },
-    async getDataTableList () {
+    async getDataTableList (cover = false) {
       try {
         const dataSourceId = this.editDataInfo.dataSourceId
         const currentDataSource = this.dataSourceOptions.find(item => item._id === dataSourceId)
@@ -544,19 +551,39 @@ export default {
         if (type === 'file') {
           const result = await dataFiles(params)
           resultList = result.list
+          this.dataTableTotal = result.total
         } else {
           const result = await getDataTable(dataSourceId, params)
           resultList = result.list
+          this.dataTableTotal = result.total
         }
 
         // 如果不是搜索的，贴上去
-        if (!this.paging.isPaging) {
+        if (cover) {
           this.dataTableList = resultList
         } else {
+          if (this.orgTableList.length === 0) {
+            this.orgTableList = this.orgTableList.concat(this.dataTableList)
+          }
           this.orgTableList = this.orgTableList.concat(resultList)
           this.dataTableList = this.orgTableList.concat()
         }
+        // 给sql编辑器传参
         this.setInit()
+
+        // 重置tableList高度，启动滚动加载
+        this.$nextTick(() => {
+          this.$refs.tableList.style.height = '10px'
+          const scrollTop = this.$refs.tableList.scrollTop
+          const scrollHeight = deepClone(this.$refs.tableList.scrollHeight)
+          this.$refs.tableList.scrollTop = scrollHeight
+          this.$refs.tableList.scrollTop = scrollTop
+          if (this.toggleContent) {
+            this.$refs.tableList.style.height = 'calc(100vh - 360px)'
+          } else {
+            this.$refs.tableList.style.height = 'calc(100vh - 280px)'
+          }
+        })
       } catch (error) {
         console.log(error)
       }
@@ -564,7 +591,7 @@ export default {
       this.searchLoading = false
     },
 
-    setInit() {
+    setInit () {
       // 给sql编辑器传参
       const temp = {}
       this.dataTableList.forEach(item => {
@@ -805,5 +832,11 @@ export default {
 }
 ::v-deep .CodeMirror-scroll {
   background-color: #f2f2f2;
+}
+.list-wrapper {
+  padding: 20px 12px;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>
