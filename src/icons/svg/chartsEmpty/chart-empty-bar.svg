@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="411px" height="221px" viewBox="0 0 411 221" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>柱图</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-111">
+            <polygon id="路径" fill-opacity="0" fill="#FFFFFF" fill-rule="nonzero" points="12.5 0 410.5 0 410.5 211.273841 12.5 211.273841"></polygon>
+            <g id="编组" transform="translate(48.000000, 178.000000)">
+                <line x1="1.45428691" y1="0.355082086" x2="342.76927" y2="0.355082086" id="路径" stroke="#ECECEC"></line>
+                <g transform="translate(0.000000, 6.456724)" fill="#E0E0E0" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal">
+                    <text id="Northeast">
+                        <tspan x="0" y="11">Northeast</tspan>
+                    </text>
+                    <text id="East">
+                        <tspan x="63.7092833" y="11">East</tspan>
+                    </text>
+                    <text id="Central">
+                        <tspan x="104.493567" y="11">Central</tspan>
+                    </text>
+                    <text id="North">
+                        <tspan x="156.451064" y="11">North</tspan>
+                    </text>
+                    <text id="South">
+                        <tspan x="203.499633" y="11">South</tspan>
+                    </text>
+                    <text id="West">
+                        <tspan x="253.680345" y="11">West</tspan>
+                    </text>
+                    <text id="Southwest">
+                        <tspan x="298.134271" y="11">Southwest</tspan>
+                    </text>
+                </g>
+            </g>
+            <text id="0" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#DCDCDC">
+                <tspan x="40.1618025" y="185">0</tspan>
+            </text>
+            <text id="4W" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#DCDCDC">
+                <tspan x="29.1618025" y="111">4W</tspan>
+            </text>
+            <text id="Area" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#DCDCDC">
+                <tspan x="213" y="218">Area</tspan>
+            </text>
+            <text id="2W备份" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#DCDCDC">
+                <tspan x="29.1618025" y="148">2W</tspan>
+            </text>
+            <text id="6W" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#DCDCDC">
+                <tspan x="29.1618025" y="74">6W</tspan>
+            </text>
+            <text id="8W" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#DCDCDC">
+                <tspan x="29.1618025" y="36.9209923">8W</tspan>
+            </text>
+            <g id="编组" transform="translate(49.500000, 31.000000)" fill-rule="nonzero">
+                <polygon id="路径" fill-opacity="0" fill="#FFFFFF" points="0 0 341 0 341 148 0 148"></polygon>
+                <g transform="translate(10.993848, 8.715556)" fill-opacity="0.85" id="路径">
+                    <g>
+                        <polygon fill="#ECECEC" points="0 139.284444 0 121.853333 10.650876 121.853333 10.650876 139.284444"></polygon>
+                        <polygon fill="#ECECEC" points="48.7142857 139.284444 48.7142857 91.4311111 59.3651617 91.4311111 59.3651617 139.284444"></polygon>
+                        <polygon fill="#ECECEC" points="97.4285714 139.284444 97.4285714 84.8719987 108.079447 84.8719987 108.079447 139.284444"></polygon>
+                        <polygon fill="#ECECEC" points="146.142857 139.284444 146.142857 13.1555556 156.793733 13.1555556 156.793733 139.284444"></polygon>
+                        <polygon fill="#ECECEC" points="194.857143 139.284444 194.857143 78.6044444 205.508019 78.6044444 205.508019 139.284444"></polygon>
+                        <polygon fill="#ECECEC" points="243.571429 139.284444 243.571429 103.106667 254.222305 103.106667 254.222305 139.284444"></polygon>
+                        <polygon fill="#ECECEC" points="292.285714 139.284444 292.285714 123.497778 302.93659 123.497778 302.93659 139.284444"></polygon>
+                        <polygon fill="#C2C2C2" points="16.0757143 139.284444 16.0757143 110.013333 26.7265903 110.013333 26.7265903 139.284444"></polygon>
+                        <polygon fill="#C2C2C2" points="64.79 139.284444 64.79 95.2133333 75.440876 95.2133333 75.440876 139.284444"></polygon>
+                        <polygon fill="#C2C2C2" points="113.504286 139.284444 113.504286 56.2844444 124.155162 56.2844444 124.155162 139.284444"></polygon>
+                        <polygon fill="#C2C2C2" points="162.218571 139.284444 162.218571 0 172.869447 0 172.869447 139.284444"></polygon>
+                        <polygon fill="#C2C2C2" points="210.932857 139.284444 210.932857 46.2088889 221.583733 46.2088889 221.583733 139.284444"></polygon>
+                        <polygon fill="#C2C2C2" points="259.647143 139.284444 259.647143 90.7733333 270.298019 90.7733333 270.298019 139.284444"></polygon>
+                        <polygon fill="#C2C2C2" points="308.361429 139.284444 308.361429 113.631111 319.012305 113.631111 319.012305 139.284444"></polygon>
+                    </g>
+                </g>
+            </g>
+            <polygon id="路径" fill-opacity="0.85" fill="#ECECEC" fill-rule="nonzero" points="86.5 11 92.1881112 11 92.1881112 16.9469027 86.5 16.9469027"></polygon>
+            <text id="Furniture-products" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                <tspan x="97.5" y="18">Furniture products</tspan>
+            </text>
+            <text id="The-order-number" fill-rule="nonzero" transform="translate(7.000000, 96.000000) scale(-1, -1) rotate(90.000000) translate(-7.000000, -96.000000) " font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                <tspan x="-41.5" y="100">The order number</tspan>
+            </text>
+            <g id="编组-26" transform="translate(230.500000, 7.000000)" fill-rule="nonzero">
+                <polygon id="路径" fill-opacity="0.85" fill="#C2C2C2" points="0 4 5.68811115 4 5.68811115 9.94690265 0 9.94690265"></polygon>
+                <text id="Technology-products" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="11" y="11">Technology products</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

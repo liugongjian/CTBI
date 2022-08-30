@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="327px" height="194px" viewBox="0 0 327 194" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>对比漏斗图</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-117">
+            <g id="编组-37备份" transform="translate(0.000000, -0.000000)">
+                <g id="编组-56" transform="translate(77.000000, 0.000000)">
+                    <g id="编组" fill="#C2C2C2" fill-rule="nonzero">
+                        <polygon id="路径" points="0 0 250 0 212.5 37.6113527 37.5 37.6113527"></polygon>
+                    </g>
+                    <g id="编组" transform="translate(37.500000, 38.921353)">
+                        <polygon id="路径" fill="#D6D6D6" fill-rule="nonzero" points="0 0 175 0 162.5 37.6113527 12.5 37.6113527"></polygon>
+                        <g transform="translate(45.000000, 14.000000)"></g>
+                    </g>
+                    <g id="编组" transform="translate(50.000000, 77.842705)" fill="#E0E0E0" fill-rule="nonzero">
+                        <polygon id="路径" points="0 0 150 0 125 37.6113527 25 37.6113527"></polygon>
+                    </g>
+                    <g id="编组" transform="translate(75.219501, 117.000000)" fill="#EBEBEB" fill-rule="nonzero">
+                        <polygon id="路径" points="0 0 100 0 75 37.6113527 25 37.6113527"></polygon>
+                    </g>
+                    <g id="编组" transform="translate(81.780499, 155.685411)" fill="#F5F5F5" fill-rule="nonzero">
+                        <polygon id="路径" points="17.2195007 0 67.2195007 0 42.2195007 37.6113527"></polygon>
+                    </g>
+                </g>
+                <text id="East" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="0" y="25">East</tspan>
+                </text>
+                <text id="Central" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="0" y="64">Central</tspan>
+                </text>
+                <text id="North" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="0" y="103">North</tspan>
+                </text>
+                <text id="South" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="0" y="142">South</tspan>
+                </text>
+                <text id="West" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="0" y="172">West</tspan>
+                </text>
+                <line x1="45.5" y1="168.5" x2="144.5" y2="168.5" id="路径" stroke="#ECECEC"></line>
+                <line x1="46.5" y1="137.5" x2="144.5" y2="137.5" id="路径备份-12" stroke="#ECECEC"></line>
+                <line x1="46.5" y1="98.5" x2="128.5875" y2="98.7512071" id="路径备份-13" stroke="#ECECEC"></line>
+                <line x1="45" y1="60.5" x2="107.0875" y2="60.0012071" id="路径备份-14" stroke="#ECECEC"></line>
+                <line x1="36" y1="21.5" x2="89.0875" y2="21.2512071" id="路径备份-15" stroke="#ECECEC"></line>
+            </g>
+            <rect id="矩形" fill="#FFFFFF" x="198.780499" y="0" width="4" height="193"></rect>
+            <g id="编组-61" transform="translate(217.000000, 15.000000)" fill-rule="nonzero" font-family="Helvetica" font-size="10" font-weight="normal">
+                <g id="编组备份-9" transform="translate(0.219501, 0.000000)" fill="#FFFFFF">
+                    <text id="100%">
+                        <tspan x="0" y="10">100%</tspan>
+                    </text>
+                </g>
+                <text id="65.52%" opacity="0.75" fill="#ACACAC">
+                    <tspan x="0.719500729" y="47.9213527">65.52%</tspan>
+                </text>
+                <g id="编组备份-10" transform="translate(0.219501, 75.842705)" fill="#C2C2C2">
+                    <text id="90.21%">
+                        <tspan x="0" y="10">90.21%</tspan>
+                    </text>
+                </g>
+                <g id="编组备份-11" opacity="0.4" transform="translate(0.219501, 114.000000)" fill="#999999">
+                    <text id="82.40%">
+                        <tspan x="0" y="10">82.40%</tspan>
+                    </text>
+                </g>
+                <g id="编组备份-12" transform="translate(0.000000, 146.685411)" fill="#999999" opacity="0.5">
+                    <text id="17.46%">
+                        <tspan x="0" y="10">17.46%</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="编组-62" transform="translate(150.780499, 15.000000)" fill-rule="nonzero" font-family="Helvetica" font-size="10" font-weight="normal">
+                <g id="编组-63">
+                    <g id="编组" transform="translate(8.000000, 0.000000)" fill="#FFFFFF">
+                        <text id="100%">
+                            <tspan x="0" y="10">100%</tspan>
+                        </text>
+                    </g>
+                    <text id="65.52%" opacity="0.75" fill="#ACACAC">
+                        <tspan x="0" y="48">65.52%</tspan>
+                    </text>
+                    <g id="编组" transform="translate(0.000000, 76.000000)" fill="#C2C2C2">
+                        <text id="90.21%">
+                            <tspan x="0" y="10">90.21%</tspan>
+                        </text>
+                    </g>
+                    <g id="编组" transform="translate(0.000000, 114.000000)" fill="#999999" opacity="0.4">
+                        <text id="82.40%">
+                            <tspan x="0" y="10">82.40%</tspan>
+                        </text>
+                    </g>
+                    <g id="编组" opacity="0.5" transform="translate(0.000000, 147.000000)" fill="#ACACAC">
+                        <text id="17.46%">
+                            <tspan x="0" y="10">17.46%</tspan>
+                        </text>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

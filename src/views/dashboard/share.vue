@@ -91,7 +91,7 @@ export default {
   },
   created () {
     const paths = location.pathname.split('/')
-    const needPwd = paths[paths.length - 1].length === 18
+    const needPwd = paths[paths.length - 1].length === 15
     if (needPwd) {
       this.passwordVisible = true
     } else {

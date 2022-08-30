@@ -136,27 +136,30 @@ export default {
     },
 
     async setUp () {
-      this.loading = true
-      const oldPassword = encryptAes(this.validForm.oldPassword)
-      const newPassword = encryptAes(this.validForm.newPassword)
-      const data = {
-        _id: this.$route.query.userName,
-        oldPassword: oldPassword,
-        newPassword: newPassword
-      }
-      try {
-        await activate(data)
-        this.$message({
-          type: 'success',
-          message: '激活成功!',
-          center: true
-        })
-        this.$router.push({ path: '/login' })
-      } catch (error) {
-        console.log(error)
-      }
+      this.$refs['validForm'].validate(async (valid) => {
+        if (valid) {
+          this.loading = true
+          const oldPassword = encryptAes(this.validForm.oldPassword)
+          const newPassword = encryptAes(this.validForm.newPassword)
+          const data = {
+            _id: this.$route.query.userName,
+            oldPassword: oldPassword,
+            newPassword: newPassword
+          }
+          try {
+            await activate(data)
+            this.$message({
+              type: 'success',
+              message: '激活成功!',
+              center: true
+            })
+            this.$router.push({ path: '/login' })
+          } catch (error) {
+            console.log(error)
+          }
+        }
+      })
     }
-
   }
 }
 </script>

@@ -203,7 +203,7 @@
               >
                 <re-input
                   v-model="scope.row.displayColumn"
-                  :maxlength="50"
+                  maxlength="50"
                   :blur-fun="(newVal, oldVal) => {return handlerBlur(newVal, oldVal, scope.row.index)}"
                   @blur="(val) => { handleBlur(val, scope.row) }"
                 />

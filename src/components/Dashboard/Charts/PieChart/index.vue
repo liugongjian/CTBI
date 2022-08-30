@@ -7,7 +7,7 @@
       autoresize
       :change-delay="500"
     />
-    <div v-else>数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-pie" style="width:100%;height:100%;" />
   </div>
 
 </template>
