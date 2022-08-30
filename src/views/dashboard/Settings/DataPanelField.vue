@@ -76,6 +76,7 @@
             :max="refreshMax"
             :controls="false"
             class="limit-input"
+            @input="handleRefresh"
           />
           <el-select
             v-if="autoRefresh"
@@ -234,15 +235,17 @@ export default {
     },
     // 自动刷新
     handleRefresh (val) {
+      if (this.interVal) {
+        clearInterval(this.interVal)
+        this.interVal = null
+      }
+
       if (val) {
         // 开启自动刷新的定时器
         const time = 1000 * this.time * (this.unit === 'minute' ? 60 : 1)
         this.interVal = setInterval(() => {
           this.refreshStore()
         }, time)
-      } else {
-        clearInterval(this.interVal)
-        this.interVal = null
       }
     },
     selectUnit (val) {
@@ -255,15 +258,17 @@ export default {
         this.time = max
       }
 
+      if (this.interVal) {
+        clearInterval(this.interVal)
+        this.interVal = null
+      }
+
       if (this.autoRefresh) {
         // 开启自动刷新的定时器
         const time = 1000 * this.time * (val === 'minute' ? 60 : 1)
         this.interVal = setInterval(() => {
           this.refreshStore()
         }, time)
-      } else {
-        clearInterval(this.interVal)
-        this.interVal = null
       }
     },
     // 更新
