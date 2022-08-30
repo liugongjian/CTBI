@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     reloadImpl () {
-      if (this.chartData && this.chartData.length > 0) {
+      if (this.chartData) {
         this.formatDataValue(this.chartData)
         this.getOption()
       }

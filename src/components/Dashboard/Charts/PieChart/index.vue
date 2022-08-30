@@ -65,7 +65,7 @@ export default {
         // 获取数据
         let sum = 0
         for (let i = 1; i < that.dataValue.length; i++) {
-          sum += that.dataValue[i][indicatorIdx]
+          sum += Number(that.dataValue[i][indicatorIdx])
         }
         ComponentOption.TotalShow.value = sum
       }
@@ -136,13 +136,14 @@ export default {
             },
             label: {
               show: check,
+              alignTo: 'labelLine',
               formatter: function (data) {
                 let formatter = ''
                 if (checkList.includes('维度')) {
                   if (SeriesSetting) {
                     let nameTemp = ''
                     SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
-                      if (item.value === data.data[0]) {
+                      if (item.value.trim() === data.data[0].trim()) {
                         nameTemp = item.remark
                       }
                     })
