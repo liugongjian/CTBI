@@ -103,8 +103,8 @@ export default {
     },
     'Measure': { // 度量
       'name': '漏斗层宽/度量',
-      'require': false,
-      'limit': 20,
+      'require': true,
+      'limit': 1,
       'value': []
     }
   }, // 数据集
