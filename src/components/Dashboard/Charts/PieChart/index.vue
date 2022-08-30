@@ -65,7 +65,7 @@ export default {
         // 获取数据
         let sum = 0
         for (let i = 1; i < that.dataValue.length; i++) {
-          sum += that.dataValue[i][indicatorIdx]
+          sum += Number(that.dataValue[i][indicatorIdx])
         }
         ComponentOption.TotalShow.value = sum
       }
