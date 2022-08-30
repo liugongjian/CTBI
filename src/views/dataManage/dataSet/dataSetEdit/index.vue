@@ -303,7 +303,7 @@ export default {
     const queryDataSourceId = this.$route.query.dataSourceId
     if (queryDataSourceId) {
       this.dataInfo.dataSourceId = queryDataSourceId
-      this.handleChangeDataSource(queryDataSourceId)
+      // this.handleChangeDataSource(queryDataSourceId)
     }
     const data = this.$route.query
     // 存在id，获取数据集详情
@@ -513,23 +513,23 @@ export default {
       this.dataTableLoading = true
       this.paging.page = 1
       this.paging.isPaging = 1
-      this.getDataTableList(true)
+      this.getDataTableList()
     },
     reloadTableList() {
       this.dataTableLoading = true
       this.paging.page++
       this.paging.isPaging = 1
-      this.getDataTableList(false)
+      this.getDataTableList()
     },
     searchTableList () {
       if (this.searchKey) {
         delete this.paging.isPaging
-        this.getDataTableList(true)
+        this.getDataTableList()
       } else {
         this.dataTableList = this.orgTableList.concat()
       }
     },
-    async getDataTableList (cover = false) {
+    async getDataTableList () {
       try {
         const dataSourceId = this.editDataInfo.dataSourceId
         const currentDataSource = this.dataSourceOptions.find(item => item._id === dataSourceId)
@@ -549,27 +549,30 @@ export default {
           resultList = result.list
         }
 
-        // 给sql编辑器传参
-        const temp = {}
-        resultList.forEach(item => {
-          // 目前只返回表名称，未返回字段数据
-          // 这里需要循环赋值交给sql编辑器做提示
-          temp[item.name] = []
-        })
-        this.hintOptions = temp
-
         // 如果不是搜索的，贴上去
-        if (cover) {
+        if (!this.paging.isPaging) {
           this.dataTableList = resultList
         } else {
           this.orgTableList = this.orgTableList.concat(resultList)
           this.dataTableList = this.orgTableList.concat()
         }
+        this.setInit()
       } catch (error) {
         console.log(error)
       }
       this.dataTableLoading = false
       this.searchLoading = false
+    },
+
+    setInit() {
+      // 给sql编辑器传参
+      const temp = {}
+      this.dataTableList.forEach(item => {
+        // 目前只返回表名称，未返回字段数据
+        // 这里需要循环赋值交给sql编辑器做提示
+        temp[item.name] = []
+      })
+      this.hintOptions = temp
     },
 
     resizeContainer () {
