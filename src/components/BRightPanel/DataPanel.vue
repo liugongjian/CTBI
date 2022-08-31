@@ -264,10 +264,11 @@ export default {
     // 跳转到编辑数据集页面
     editDataSet () {
       const query = { _id: this.dataSet.id }
-      this.$router.push({
+      const newUrl = this.$router.resolve({
         path: '/dataManage/dataSet/edit',
         query
       })
+      window.open(newUrl.href, '_blank')
     }
   }
 }

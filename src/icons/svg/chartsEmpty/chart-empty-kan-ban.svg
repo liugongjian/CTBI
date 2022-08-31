@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="444px" height="214px" viewBox="0 0 444 214" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>指标看板</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-85" transform="translate(0.000000, -0.000000)">
+            <g id="编组" transform="translate(29.999849, 0.000000)">
+                <text id="Northeast" font-family="PingFangSC-Medium, PingFang SC" font-size="14" font-weight="400" fill="#DCDCDC">
+                    <tspan x="1.9999899" y="19.9999243">Northeast</tspan>
+                </text>
+                <text id="East" font-family="PingFangSC-Medium, PingFang SC" font-size="14" font-weight="400" fill="#DCDCDC">
+                    <tspan x="152.999227" y="19.9999243">East</tspan>
+                </text>
+                <text id="Central" font-family="PingFangSC-Medium, PingFang SC" font-size="14" font-weight="400" fill="#DCDCDC">
+                    <tspan x="301.998475" y="19.9999243">Central</tspan>
+                </text>
+                <text id="6.412W" font-family="PingFangSC-Medium, PingFang SC" font-size="22" font-weight="400" fill="#C2C2C2">
+                    <tspan x="0" y="68.999692">6.412W</tspan>
+                </text>
+                <text id="7.78W" font-family="PingFangSC-Medium, PingFang SC" font-size="22" font-weight="400" fill="#C2C2C2">
+                    <tspan x="150.660674" y="68.8629213">7.78W</tspan>
+                </text>
+                <text id="3.684W" font-family="PingFangSC-Medium, PingFang SC" font-size="22" font-weight="400" fill="#C2C2C2">
+                    <tspan x="299.325843" y="68.8629213">3.684W</tspan>
+                </text>
+                <text id="Order-quantity" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="1.99550562" y="40.9179775">Order quantity</tspan>
+                </text>
+                <text id="Order-quantity" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="152.65618" y="40.9179775">Order quantity</tspan>
+                </text>
+                <text id="Order-quantity备份-2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="301.321348" y="40.9179775">Order quantity</tspan>
+                </text>
+                <rect id="矩形" fill="#F6F6F6" x="106.759551" y="0" width="1.99550562" height="91.7932584"></rect>
+                <rect id="矩形备份" fill="#F6F6F6" x="257.420225" y="0" width="1.99550562" height="91.7932584"></rect>
+            </g>
+            <g id="编组备份-3" transform="translate(29.932584, 121.725843)">
+                <text id="South" font-family="PingFangSC-Medium, PingFang SC" font-size="14" font-weight="400" fill="#DCDCDC">
+                    <tspan x="1.99550562" y="19.9662921">South</tspan>
+                </text>
+                <text id="Northeast" font-family="PingFangSC-Medium, PingFang SC" font-size="14" font-weight="400" fill="#DCDCDC">
+                    <tspan x="152.65618" y="19.9662921">Northeast</tspan>
+                </text>
+                <text id="Southwest" font-family="PingFangSC-Medium, PingFang SC" font-size="14" font-weight="400" fill="#DCDCDC">
+                    <tspan x="301.321348" y="19.9662921">Southwest</tspan>
+                </text>
+                <text id="12.85W" font-family="PingFangSC-Medium, PingFang SC" font-size="22" font-weight="400" fill="#C2C2C2">
+                    <tspan x="0" y="68.8629213">12.85W</tspan>
+                </text>
+                <text id="3.336W" font-family="PingFangSC-Medium, PingFang SC" font-size="22" font-weight="400" fill="#C2C2C2">
+                    <tspan x="150.660674" y="68.8629213">3.336W</tspan>
+                </text>
+                <text id="1.286W" font-family="PingFangSC-Medium, PingFang SC" font-size="22" font-weight="400" fill="#C2C2C2">
+                    <tspan x="299.325843" y="68.8629213">1.286W</tspan>
+                </text>
+                <text id="Order-quantity" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="1.99550562" y="40.9179775">Order quantity</tspan>
+                </text>
+                <text id="Order-quantity备份" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="152.65618" y="40.9179775">Order quantity</tspan>
+                </text>
+                <text id="Order-quantity备份-2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                    <tspan x="301.321348" y="40.9179775">Order quantity</tspan>
+                </text>
+                <rect id="矩形" fill="#F6F6F6" x="106.759551" y="0" width="1.99550562" height="91.7932584"></rect>
+                <rect id="矩形备份" fill="#F6F6F6" x="257.420225" y="0" width="1.99550562" height="91.7932584"></rect>
+            </g>
+            <rect id="矩形" fill="#F6F6F6" x="0" y="105.761798" width="444" height="1.99550562"></rect>
+        </g>
+    </g>
+</svg>

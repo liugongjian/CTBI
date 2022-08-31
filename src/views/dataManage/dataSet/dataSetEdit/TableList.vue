@@ -3,7 +3,7 @@
     <div
       v-if="tableList.length > 0"
       v-infinite-scroll="load"
-      :class="[{'full-height': !toggleContent}, 'list-wrapper']"
+      infinite-scroll-disabled="end"
     >
       <div
         v-for="(table, i) in tableList"
@@ -67,7 +67,7 @@
       >
         <transition>
           <span
-            v-show="loading"
+            v-show="loading && !end"
             class="table-list-tips"
           >加载中...</span>
         </transition>
@@ -110,10 +110,6 @@ export default {
     tableList: {
       type: Array,
       default: () => []
-    },
-    toggleContent: {
-      type: Boolean,
-      default: true
     },
     dataSourceId: {
       type: String,
@@ -168,46 +164,34 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.list-wrapper {
-  padding: 20px 12px;
-  position: relative;
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: calc(100vh - 315px);
+.main-list {
+  padding: 0px 8px 0px 0px;
+  .table-btn {
+    display: none;
+  }
+  .table-name {
+    flex: 1;
 
-  &.full-height {
-    height: calc(100vh - 250px);
+    .table-comment {
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.3);
+      line-height: 20px;
+    }
   }
 
-  .main-list {
-    padding: 0px 8px 0px 0px;
-    .table-btn {
-      display: none;
-    }
+  &:hover {
+    background-color: #fef5ee;
     .table-name {
-      flex: 1;
-
-      .table-comment {
-        font-weight: 400;
-        color: rgba(0, 0, 0, 0.3);
-        line-height: 20px;
-      }
+      width: 150px;
     }
-
-    &:hover {
-      background-color: #fef5ee;
-      .table-name {
-        width: 150px;
-      }
-      .table-btn {
-        display: block;
-      }
+    .table-btn {
+      display: block;
     }
+  }
 
-    .table-list-tips {
-      margin-left: 8px;
-      opacity: 0.85;
-    }
+  .table-list-tips {
+    margin-left: 8px;
+    opacity: 0.85;
   }
 }
 </style>

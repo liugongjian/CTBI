@@ -10,7 +10,7 @@
     <div v-if="dataValue.length>0" class="kbs-wrap">
       <subregion :data="dataValue" :option="getOption" :series="getKanBanSeries" />
     </div>
-    <div v-else class="empty">数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-kan-ban" style="width:100%;height:100%;" />
   </div>
 </template>
 

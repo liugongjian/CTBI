@@ -44,7 +44,7 @@ export default {
     return {
       tableData: [],
       page: 1,
-      limit: 2,
+      limit: 10,
       total: 0,
       tableLoading: false,
       searchKey: '',
@@ -52,7 +52,7 @@ export default {
       sortBy: 'desc',
       columns: Object.freeze([
         {
-          prop: 'name',
+          prop: 'displayName',
           label: '名称',
           sortable: true
         },
@@ -89,9 +89,8 @@ export default {
           sortOrder: this.sortOrder,
           isPaging: 1
         }
-        const { list, page, total } = await getDataFiles(params)
+        const { list, total } = await getDataFiles(params)
         this.tableData = list
-        this.page = page
         this.total = total
         this.tableLoading = false
       } catch (error) {
