@@ -17,6 +17,7 @@
           v-model="loginForm.userName"
           name="userName"
           type="text"
+          :maxlength="50"
           placeholder="请输入用户名"
           auto-complete="on"
         />
@@ -25,22 +26,18 @@
         <span class="title-size">密&emsp;码</span>
         <el-input
           v-model="loginForm.password"
-          :type="passwordType"
+          show-password
+          :maxlength="30"
           placeholder="请输入密码"
           @keyup.enter.native="validateLogin"
         />
-        <span
-          class="show-pwd"
-          @click="showPwd"
-        >
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
       </el-form-item>
       <el-form-item prop="verifyCode">
         <span class="title-size">验证码</span>
         <el-input
           v-model="loginForm.verifyCode"
           type="text"
+          :maxlength="10"
           placeholder="请输入验证码"
           @keyup.enter.native="validateLogin"
         />
@@ -105,7 +102,6 @@ export default {
       loading: false,
       redirect: undefined,
       verifyImg: undefined,
-      passwordType: 'password',
       activate: false,
       logout: false,
       freeze: false,
@@ -312,16 +308,6 @@ export default {
     this.verifyGet()
   },
   methods: {
-    showPwd () {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
-      }
-      // this.$nextTick(() => {
-      //   this.$refs.password.focus()
-      // })
-    },
     async verifyGet () {
       const data = await verify()
       if (data) {
