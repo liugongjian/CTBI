@@ -146,5 +146,5 @@ export function existsDataSet (params) {
 
 // 查询分享仪表板的数据
 export function getDataSetShareData (id, body) {
-  return http.post(`/dataSets/${id}/ShareData`, body)
+  return http.post(`/dataSets/${id}/shareData`, body)
 }

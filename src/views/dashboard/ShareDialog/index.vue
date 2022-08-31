@@ -74,7 +74,7 @@ import {
   shareDashboard,
   cancelShareDashboard
 } from '@/api/dashboard'
-import { encryptAes, decryptAes } from '@/utils/encrypt'
+import { encryptAesForShare, decryptAesForShare } from '@/utils/encrypt'
 import moment from 'moment'
 function randomPassword(size = 10) {
   const lower = 'abcdefghijkmlnopqrstwvxyz'
@@ -97,7 +97,7 @@ function randomPassword(size = 10) {
 
 function reassembleData(data) {
   const result = data ? { ...data } : {}
-  result.sharePassword = result.sharePassword ? decryptAes(result.sharePassword) : ''
+  result.sharePassword = result.sharePassword ? decryptAesForShare(result.sharePassword) : ''
   return result
 }
 
@@ -185,12 +185,13 @@ export default {
             return
           }
         }
-        const password = sharePassword && sharePassword.trim() ? encryptAes(sharePassword.trim()) : ''
+        const password = sharePassword && sharePassword.trim() ? encryptAesForShare(sharePassword.trim()) : ''
         const params = {
           _id: this.currentData._id,
           shareEndTime,
           sharePassword: password,
-          whiteList: finalIps
+          whiteList: finalIps,
+          currentUrl: location.origin + location.pathname.split('/dashboard')[0] + '/dashboard/publish'
         }
         const info = await shareDashboard(params)
         this.$message.success('发布成功')

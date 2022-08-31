@@ -6,55 +6,66 @@ export const DatasetType = {
 export const DataTypeOptions = [
   {
     value: 'number',
+    icon: 'data-type-option-number',
     label: '数字'
   },
   {
     value: 'granularity',
     label: '地理',
+    icon: 'el-icon-location-information',
     children: [{
       value: 'area',
       parentValue: 'granularity',
       originValue: 'text',
-      label: '区域'
+      label: '区域',
+      icon: 'el-icon-location-information'
     },
     {
       value: 'province',
       parentValue: 'granularity',
       originValue: 'text',
-      label: '省/直辖市'
+      label: '省/直辖市',
+      icon: 'el-icon-location-information'
     },
     {
       value: 'city',
       parentValue: 'granularity',
       originValue: 'text',
-      label: '市'
+      label: '市',
+      icon: 'el-icon-location-information'
     },
     {
       value: 'country',
       parentValue: 'granularity',
       originValue: 'text',
-      label: '区/县'
+      label: '区/县',
+      icon: 'el-icon-location-information'
     },
     {
       value: 'longitude',
       parentValue: 'granularity',
       originValue: 'text',
-      label: '经度'
+      label: '经度',
+      icon: 'el-icon-location-information'
     },
     {
       value: 'dimensionality',
       parentValue: 'granularity',
       originValue: 'text',
-      label: '维度'
+      label: '维度',
+      icon: 'el-icon-location-information'
     }]
   },
   {
     value: 'text',
-    label: '文本'
+    label: '文本',
+    icon: 'data-type-option-text'
   },
   {
     value: 'time',
-    label: '时间'
+    label: '时间',
+    icon: 'data-type-option-date'
+
   }
 ]
 

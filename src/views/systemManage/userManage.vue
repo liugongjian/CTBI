@@ -15,7 +15,7 @@
         <el-button size="small" type="primary" icon="el-icon-plus" style="background-color:#FA8334; border-color: #FA8334" @click="createUser">新建账号</el-button>
       </template>
       <template #toolbar-option>
-        <el-input v-model="filterText" placeholder="请输入账号名" size="small">
+        <el-input v-model="searchkey" placeholder="请输入账号名" size="small" @keyup.enter.native="handleEnter">
           <i slot="suffix" class="el-input__icon el-icon-search" />
         </el-input>
       </template>
@@ -189,7 +189,8 @@ export default {
       detailId: '',
       sortBy: 'lastLoginTime',
       sortOrder: 'desc',
-      filterText: ''
+      filterText: '',
+      searchkey: ''
     }
   },
   computed: {
@@ -200,15 +201,6 @@ export default {
       return this.simpleUserColumns
     }
   },
-  watch: {
-    filterText (val) {
-      if (val) {
-        this.tableData = this.tableDataCache.filter((item) => item.userName.toLowerCase().includes(val.toLowerCase().trim()))
-      } else {
-        this.tableData = this.tableDataCache
-      }
-    }
-  },
   mounted () {
     this.getList()
   },
@@ -217,6 +209,7 @@ export default {
       try {
         this.tableLoading = true
         const params = {
+          searchkey: this.searchkey,
           page: this.pageNum,
           limit: this.pageSize,
           sortBy: this.sortBy,
@@ -231,14 +224,15 @@ export default {
         this.pageNum = data.page
         this.total = data.total
         this.pageSize = data.limit
-        this.tableDataCache = this.tableData
         this.tableLoading = false
       } catch (error) {
         console.log(error)
         this.tableLoading = false
         this.tableData = []
-        this.tableDataCache = this.tableData
       }
+    },
+    handleEnter() {
+      this.getList()
     },
     logoutDisabled (row) {
       return row.status === -1 || row.userName === this.$store.state.user.userData.userName

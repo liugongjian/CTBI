@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="447px" height="205px" viewBox="0 0 447 205" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>堆叠面积图</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="8" height="16"></rect>
+        <filter x="-87.5%" y="-31.2%" width="275.0%" height="187.5%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.814113451   0 0 0 0 0.814113451   0 0 0 0 0.814113451  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <rect id="path-3" x="0" y="0" width="8" height="16"></rect>
+        <filter x="-87.5%" y="-31.2%" width="275.0%" height="187.5%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.814113451   0 0 0 0 0.814113451   0 0 0 0 0.814113451  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <linearGradient x1="49.2020221%" y1="7.24507459%" x2="49.2020221%" y2="94.7836383%" id="linearGradient-5">
+            <stop stop-color="#D0D0D0" offset="0%"></stop>
+            <stop stop-color="#D0D0D0" offset="100%"></stop>
+            <stop stop-color="#FBFBFB" offset="100%"></stop>
+            <stop stop-color="#FBFBFB" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-57">
+            <g id="编组-92">
+                <g id="折线图">
+                    <line x1="54.5" y1="122.5" x2="444.5" y2="122.5" id="路径-11" stroke="#E7E6E6"></line>
+                    <text id="0118" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                        <tspan x="48" y="143">0118</tspan>
+                    </text>
+                    <text id="0" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="39" y="129">0</tspan>
+                    </text>
+                    <text id="25" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="32" y="106">25</tspan>
+                    </text>
+                    <text id="300" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="25" y="82">300</tspan>
+                    </text>
+                    <text id="400" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="25" y="58">400</tspan>
+                    </text>
+                    <text id="500" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="25" y="34">500</tspan>
+                    </text>
+                    <g id="编组-7" transform="translate(115.000000, 0.000000)">
+                        <g id="编组-5" fill="#E0E0E0">
+                            <text id="Order-quantity1" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12">
+                                <tspan x="12" y="13">Order quantity1</tspan>
+                            </text>
+                            <rect id="矩形" x="0" y="5" width="6" height="2"></rect>
+                        </g>
+                        <g id="编组-5备份-2" transform="translate(115.000000, 0.000000)">
+                            <text id="Order-quantity2" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                                <tspan x="12" y="13">Order quantity2</tspan>
+                            </text>
+                            <rect id="矩形" fill="#C2C2C2" x="0" y="5" width="6" height="2"></rect>
+                        </g>
+                    </g>
+                    <text id="Transport-date（day）" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="179" y="168">Transport date（day）</tspan>
+                    </text>
+                    <text id="order-quantity" transform="translate(6.000000, 67.000000) rotate(-90.000000) translate(-6.000000, -67.000000) " font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" line-spacing="12" fill="#E0E0E0">
+                        <tspan x="-34" y="74">order quantity</tspan>
+                    </text>
+                    <text id="0124" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                        <tspan x="109.742424" y="143">0124</tspan>
+                    </text>
+                    <text id="0130" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                        <tspan x="171.484848" y="143">0130</tspan>
+                    </text>
+                    <text id="0205" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                        <tspan x="233.227273" y="143">0205</tspan>
+                    </text>
+                    <text id="0211" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                        <tspan x="293.969697" y="143">0211</tspan>
+                    </text>
+                    <text id="0217" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                        <tspan x="355.712121" y="143">0217</tspan>
+                    </text>
+                    <text id="0222" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#E0E0E0">
+                        <tspan x="417.454545" y="143">0222</tspan>
+                    </text>
+                    <g id="编组-4" transform="translate(69.000000, 98.000000)" fill="#F5F5F5">
+                        <rect id="矩形备份-5" x="0" y="0" width="368" height="24"></rect>
+                    </g>
+                </g>
+                <g id="滑块" transform="translate(51.000000, 176.000000)">
+                    <rect id="矩形" fill="#F9F9F9" x="3" y="0" width="382" height="28"></rect>
+                    <rect id="矩形" fill="#F4F4F4" x="3" y="0" width="164" height="28"></rect>
+                    <path d="M4.00270246,19.6753845 C4.00270246,19.6753845 31.4357592,21.631727 42.6121897,20.3746679 C53.7886203,19.1176088 62.9329725,15.9230756 80.2056379,16.7178764 C97.4783033,17.5126773 105.606616,18.7626606 118.815125,17.0728246 C132.023634,15.3829885 134.102504,11.9644016 155.923949,11.9644016 C172.6652,11.9644017 180.793513,18.0527644 194.002021,18.0527644 C207.21053,18.0527644 215.88697,14.5669619 230.853494,14.5669615 C245.820018,14.5669612 252.932292,12.7285427 269.188918,12.7285426 C294.589896,12.7285427 291.541779,9.53400914 307.798405,9.17906109 C324.055031,8.82411304 334.215423,12.3735942 345.391853,12.3735943 C356.568284,12.3735944 359.616401,6.69442417 382.985301,8.82411299 C382.985304,20.3746685 382.985301,28.3462604 382.985301,28.3462604 L4.00134048,28.3462604 L4.00270246,19.6753845 Z" id="Shape" fill="#EFEFEF"></path>
+                    <path d="M4.00270246,19.6753845 C4.00270246,19.6753845 31.4357592,21.631727 42.6121897,20.3746679 C53.7886203,19.1176088 62.9329725,15.9230756 80.2056379,16.7178764 C97.4783033,17.5126773 105.606616,18.7626606 118.815125,17.0728246 C132.023634,15.3829885 134.102504,11.9644016 155.923949,11.9644016 C172.6652,11.9644017 180.793513,18.0527644 194.002021,18.0527644 C207.21053,18.0527644 215.88697,14.5669619 230.853494,14.5669615 C245.820018,14.5669612 252.932292,12.7285427 269.188918,12.7285426 C294.589896,12.7285427 291.541779,9.53400914 307.798405,9.17906109 C324.055031,8.82411304 334.215423,12.3735942 345.391853,12.3735943 C356.568284,12.3735944 360.63244,6.69442417 384.00134,8.82411299" id="Shape" stroke="#C9C9C9"></path>
+                    <rect id="矩形" fill="#ECEBEB" x="3" y="0" width="2" height="28"></rect>
+                    <rect id="矩形备份-4" fill="#ECEBEB" x="166" y="0" width="2" height="28"></rect>
+                    <g id="块" transform="translate(0.000000, 6.000000)">
+                        <g id="矩形">
+                            <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                        </g>
+                        <rect id="矩形" fill="#EAEAEA" x="2" y="5" width="1" height="6"></rect>
+                        <rect id="矩形备份-3" fill="#EAEAEA" x="5" y="5" width="1" height="6"></rect>
+                    </g>
+                    <g id="块备份" transform="translate(163.000000, 6.000000)">
+                        <g id="矩形">
+                            <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-3"></use>
+                        </g>
+                        <rect id="矩形" fill="#EAEAEA" x="2" y="5" width="1" height="6"></rect>
+                        <rect id="矩形备份-3" fill="#EAEAEA" x="5" y="5" width="1" height="6"></rect>
+                    </g>
+                    <rect id="矩形备份-2" fill="#ECEBEB" x="383" y="0" width="2" height="28"></rect>
+                </g>
+            </g>
+            <g id="编组-55" transform="translate(68.000000, 9.000000)">
+                <polygon id="路径-29" fill="#EBEBEB" opacity="0.596470424" points="1.5 74 68.5 86 123.403339 65.61443 186 26 245 46 307.225835 25.0061936 369.5 3 368.5 89.0061936 1.5 89.0061936"></polygon>
+                <polyline id="路径-29" stroke="#E0E0E0" stroke-width="2" points="1.5 74 11.1206116 75.7695664 68.5 86 123.5 65.5 123.403339 65.61443 186 26.5 245 46 307 26.5 365.50686 4.24438286 369 3"></polyline>
+                <circle id="椭圆形" stroke="#C9C9C9" fill="#FFFFFF" cx="3" cy="74" r="2.5"></circle>
+                <circle id="椭圆形备份" stroke="#C9C9C9" fill="#FFFFFF" cx="70" cy="86" r="2.5"></circle>
+                <circle id="椭圆形备份-2" stroke="#C9C9C9" fill="#FFFFFF" cx="123" cy="65" r="2.5"></circle>
+                <circle id="椭圆形备份-3" stroke="#C9C9C9" fill="#FFFFFF" cx="187" cy="26" r="2.5"></circle>
+                <circle id="椭圆形备份-4" stroke="#C9C9C9" fill="#FFFFFF" cx="307" cy="26" r="2.5"></circle>
+                <circle id="椭圆形备份-5" stroke="#C9C9C9" fill="#FFFFFF" cx="245" cy="45" r="2.5"></circle>
+                <circle id="椭圆形备份-6" stroke="#C9C9C9" fill="#FFFFFF" cx="368" cy="3" r="2.5"></circle>
+            </g>
+            <g id="编组-4" transform="translate(67.000000, 58.000000)">
+                <polygon id="路径-29" fill="url(#linearGradient-5)" opacity="0.596470424" points="3.5 62.2156221 64.129174 18.7255109 125.403339 43.61443 186.677504 12.437784 249 32.5 309.225835 3.00619363 370.5 24.7512492 370.5 67.0061936 3.5 67.0061936"></polygon>
+                <polyline id="路径-29" stroke="#C9C9C9" stroke-width="2" points="3.5 62.2156221 64.129174 18.7255109 125.403339 43.61443 186.677504 12.437784 248 32.5 309.225835 3.00619363 370.5 24.7512492"></polyline>
+                <circle id="椭圆形" stroke="#C9C9C9" fill="#FFFFFF" cx="3" cy="61" r="2.5"></circle>
+                <circle id="椭圆形备份" stroke="#C9C9C9" fill="#FFFFFF" cx="64" cy="19" r="2.5"></circle>
+                <circle id="椭圆形备份-2" stroke="#C9C9C9" fill="#FFFFFF" cx="125" cy="43" r="2.5"></circle>
+                <circle id="椭圆形备份-3" stroke="#C9C9C9" fill="#FFFFFF" cx="187" cy="12" r="2.5"></circle>
+                <circle id="椭圆形备份-4" stroke="#C9C9C9" fill="#FFFFFF" cx="309" cy="3" r="2.5"></circle>
+                <circle id="椭圆形备份-5" stroke="#C9C9C9" fill="#FFFFFF" cx="248" cy="32" r="2.5"></circle>
+                <circle id="椭圆形备份-6" stroke="#C9C9C9" fill="#FFFFFF" cx="369" cy="24" r="2.5"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

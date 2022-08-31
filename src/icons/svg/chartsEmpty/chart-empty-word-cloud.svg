@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="401px" height="209px" viewBox="0 0 401 209" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>词云图</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" font-family="PingFangSC-Medium, PingFang SC" font-weight="400">
+        <g id="编组-128" fill-rule="nonzero">
+            <g id="编组-53备份-2" transform="translate(0.000000, 0.962594)">
+                <text id="Shanghai备份" font-size="56" fill="#C2C2C2">
+                    <tspan x="79.601495" y="120.539275">Shanghai</tspan>
+                </text>
+                <text id="Zhejiang" font-size="22" fill="#EBEBEB">
+                    <tspan x="239.401496" y="42.9501247">Zhejiang</tspan>
+                </text>
+                <text id="Jiansu" font-size="22" fill="#D6D6D6">
+                    <tspan x="209.476309" y="23">Jiansu</tspan>
+                </text>
+                <text id="Hubei" font-size="16" fill="#E0E0E0">
+                    <tspan x="2.9925187" y="173.620948">Hubei</tspan>
+                </text>
+                <text id="shandong" font-size="16" fill="#D6D6D6">
+                    <tspan x="43.8902743" y="151.67581">shandong</tspan>
+                </text>
+                <text id="Xiamen" font-size="16" fill="#D6D6D6">
+                    <tspan x="108.72818" y="26.9875312">Xiamen</tspan>
+                </text>
+                <text id="Wuhan" font-size="16" fill="#D6D6D6">
+                    <tspan x="140.648379" y="195.566085">Wuhan</tspan>
+                </text>
+                <text id="Dongbei" font-size="20" fill="#D6D6D6">
+                    <tspan x="16.957606" y="26.9900249">Dongbei</tspan>
+                </text>
+                <text id="Chengdu" transform="translate(30.922693, 122.733167) rotate(90.000000) translate(-30.922693, -122.733167) " font-size="16" fill="#E0E0E0">
+                    <tspan x="-2.9925187" y="128.733167">Chengdu</tspan>
+                </text>
+                <text id="Hebei" transform="translate(154.613466, 60.887781) rotate(90.000000) translate(-154.613466, -60.887781) " font-size="16" fill="#E0E0E0">
+                    <tspan x="132.668329" y="66.8877805">Hebei</tspan>
+                </text>
+                <text id="Jilin" transform="translate(221.446384, 60.389027) rotate(90.000000) translate(-221.446384, -60.389027) " font-size="20" fill="#E0E0E0">
+                    <tspan x="201.995012" y="67.3890274">Jilin</tspan>
+                </text>
+                <text id="Qingdao" transform="translate(128.678304, 162.633416) rotate(90.000000) translate(-128.678304, -162.633416) " font-size="16" fill="#D6D6D6">
+                    <tspan x="96.7581047" y="168.633416">Qingdao</tspan>
+                </text>
+                <text id="chongqing" transform="translate(209.468828, 167.638404) rotate(90.000000) translate(-209.468828, -167.638404) " font-size="14" fill="#D6D6D6">
+                    <tspan x="169.568579" y="172.638404">chongqing</tspan>
+                </text>
+                <text id="Henan" transform="translate(172.568579, 152.159601) rotate(90.000000) translate(-172.568579, -152.159601) " font-size="16" fill="#C2C2C2">
+                    <tspan x="148.129676" y="158.159601">Henan</tspan>
+                </text>
+                <text id="Beijing" transform="translate(193.018703, 47.537406) rotate(90.000000) translate(-193.018703, -47.537406) " font-size="26" fill="#E0E0E0">
+                    <tspan x="150.518703" y="57.0374065">Beijing</tspan>
+                </text>
+                <text id="Shangyu" transform="translate(380.049875, 123.730673) rotate(90.000000) translate(-380.049875, -123.730673) " font-size="28" fill="#D6D6D6">
+                    <tspan x="323.19202" y="133.730673">Shangyu</tspan>
+                </text>
+                <text id="Shanxi" transform="translate(153.619701, 153.203242) rotate(90.000000) translate(-153.619701, -153.203242) " font-size="12" fill="#E0E0E0">
+                    <tspan x="134.619701" y="157.703242">Shanxi</tspan>
+                </text>
+                <text id="Guizhou备份-45" transform="translate(56.359102, 109.266833) rotate(90.000000) translate(-56.359102, -109.266833) " font-size="12" fill="#E0E0E0">
+                    <tspan x="32.9177057" y="113.766833">Guizhou</tspan>
+                </text>
+                <text id="Shenzhen" transform="translate(360.099751, 38.932668) rotate(90.000000) translate(-360.099751, -38.932668) " font-size="16" fill="#E0E0E0">
+                    <tspan x="323.19202" y="44.9326683">Shenzhen</tspan>
+                </text>
+                <text id="Dali" transform="translate(74.812968, 128.219451) scale(-1, -1) rotate(180.000000) translate(-74.812968, -128.219451) " font-size="12" fill="#E0E0E0">
+                    <tspan x="63.840399" y="132.719451">Dali</tspan>
+                </text>
+                <text id="Guangzhou" transform="translate(84.867830, 168.119701) scale(-1, -1) rotate(180.000000) translate(-84.867830, -168.119701) " font-size="12" fill="#C2C2C2">
+                    <tspan x="52.8678304" y="172.619701">Guangzhou</tspan>
+                </text>
+                <text id="Guizhou备份-49" transform="translate(111.221945, 73.356608) scale(-1, -1) rotate(180.000000) translate(-111.221945, -73.356608) " font-size="12" fill="#E0E0E0">
+                    <tspan x="87.7805486" y="77.8566085">Guizhou</tspan>
+                </text>
+                <text id="liaoning" font-size="14" fill="#E0E0E0">
+                    <tspan x="292.269327" y="78.8578554">liaoning</tspan>
+                </text>
+                <text id="Guilin" font-size="16" fill="#E0E0E0">
+                    <tspan x="309.226933" y="133.720698">Guilin</tspan>
+                </text>
+                <text id="Guiyang" font-size="16" fill="#E0E0E0">
+                    <tspan x="0" y="80.8453865">Guiyang</tspan>
+                </text>
+                <text id="Heilongjiang" font-size="16" fill="#D6D6D6">
+                    <tspan x="0" y="190.578554">Heilongjiang</tspan>
+                </text>
+                <text id="Anhui" font-size="22" fill="#D6D6D6">
+                    <tspan x="245.386534" y="63.8977556">Anhui</tspan>
+                </text>
+                <text id="Ningxia" font-size="36" fill="#D6D6D6">
+                    <tspan x="0" y="58.925187">Ningxia</tspan>
+                </text>
+                <text id="yunnan" font-size="30" fill="#D6D6D6">
+                    <tspan x="250.374065" y="195.578554">yunnan</tspan>
+                </text>
+                <text id="Nanjing" font-size="36" fill="#E0E0E0">
+                    <tspan x="219.451372" y="161.668329">Nanjing</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

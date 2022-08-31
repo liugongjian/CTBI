@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="326px" height="194px" viewBox="0 0 326 194" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>漏斗图</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-37">
+            <g id="编组-56" transform="translate(76.000000, 0.000000)" fill-rule="nonzero">
+                <g id="编组">
+                    <polygon id="路径" fill="#C2C2C2" points="0 0 250 0 212.5 37.6113527 37.5 37.6113527"></polygon>
+                    <g transform="translate(113.139617, 14.767862)" fill="#FFFFFF" font-family="Helvetica" font-size="10" font-weight="normal" id="100%">
+                        <text>
+                            <tspan x="0" y="10">100%</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="编组" transform="translate(37.500000, 38.921353)">
+                    <polygon id="路径" fill="#D6D6D6" points="0 0 175 0 162.5 37.6113527 12.5 37.6113527"></polygon>
+                    <g transform="translate(78.206144, 13.767862)" fill="#C2C2C2" font-family="Helvetica" font-size="10" font-weight="normal" id="70%">
+                        <text>
+                            <tspan x="0" y="10">70%</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="编组" transform="translate(50.000000, 77.842705)">
+                    <polygon id="路径" fill="#E0E0E0" points="0 0 150 0 125 37.6113527 25 37.6113527"></polygon>
+                    <g opacity="0.8" transform="translate(65.780499, 12.770827)" fill="#C2C2C2" font-family="Helvetica" font-size="10" font-weight="normal" id="60%">
+                        <text>
+                            <tspan x="0" y="10">60%</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="编组" transform="translate(75.000000, 116.764058)">
+                    <polygon id="路径" fill="#EBEBEB" points="0 0 100 0 75 37.6113527 25 37.6113527"></polygon>
+                    <g opacity="0.45" transform="translate(40.780499, 11.773793)" fill="#ACACAC" font-family="Helvetica" font-size="10" font-weight="normal" id="40%">
+                        <text>
+                            <tspan x="0" y="10">40%</tspan>
+                        </text>
+                    </g>
+                </g>
+                <g id="编组" transform="translate(100.000000, 155.685411)">
+                    <polygon id="路径" fill="#F5F5F5" points="0 0 50 0 25 37.6113527"></polygon>
+                    <g opacity="0.35" transform="translate(15.780499, 5.776758)" fill="#999999" font-family="Helvetica" font-size="10" font-weight="normal" id="20%">
+                        <text>
+                            <tspan x="0" y="10">20%</tspan>
+                        </text>
+                    </g>
+                </g>
+            </g>
+            <text id="East" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                <tspan x="0" y="25">East</tspan>
+            </text>
+            <text id="Central" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                <tspan x="0" y="64">Central</tspan>
+            </text>
+            <text id="North" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                <tspan x="0" y="103">North</tspan>
+            </text>
+            <text id="South" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                <tspan x="0" y="142">South</tspan>
+            </text>
+            <text id="West" fill-rule="nonzero" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                <tspan x="0" y="180">West</tspan>
+            </text>
+            <line x1="44.5" y1="176.5" x2="177.5875" y2="176.251207" id="路径" stroke="#ECECEC"></line>
+            <line x1="45.5" y1="137.5" x2="154.5875" y2="137.501207" id="路径备份-12" stroke="#ECECEC"></line>
+            <line x1="45.5" y1="98.5" x2="127.5875" y2="98.7512071" id="路径备份-13" stroke="#ECECEC"></line>
+            <line x1="52.5" y1="60.5" x2="106.0875" y2="60.0012071" id="路径备份-14" stroke="#ECECEC"></line>
+            <line x1="35" y1="21.5" x2="88.0875" y2="21.2512071" id="路径备份-15" stroke="#ECECEC"></line>
+        </g>
+    </g>
+</svg>
