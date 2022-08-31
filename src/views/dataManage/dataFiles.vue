@@ -52,7 +52,7 @@ export default {
       sortBy: 'desc',
       columns: Object.freeze([
         {
-          prop: 'name',
+          prop: 'displayName',
           label: '名称',
           sortable: true
         },
