@@ -22,7 +22,7 @@
         :h="item.h"
         :i="item.i"
       >
-        <ComponentBlock :option="item">
+        <ComponentBlock :option="item" :style="chartsStyles">
           <component
             :is="item.is"
             :identify="item.i"
@@ -44,7 +44,11 @@ export default {
   },
   computed: {
     layout () {
-      return store.state.app.layout
+      // 去除属于tab组件的layout
+      return store.state.app.layout.filter(item => !item.containerId)
+    },
+    chartsStyles() {
+      return this.$store.state.settings.chartsStyles
     }
   },
   mounted () {
@@ -64,9 +68,8 @@ export default {
   methods: {
     clickHandler (id) {
       // 更新当前id
+      console.log(id)
       this.$store.dispatch('app/updateLayoutId', id)
-      // 通知右侧重新渲染
-      this.$bus.$emit('reloadOption', id)
     }
   }
 }

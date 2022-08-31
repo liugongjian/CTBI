@@ -4,16 +4,13 @@
       v-model="option.show"
       label="显示主标题"
     />
-    <el-checkbox
-      v-if="option.testShow"
-      label="测试显示"
-    />
     <div
       class="editor-item-container"
       :class="{'box-disabled':!option.show}"
+      style="display: flex"
     >
       <el-input v-model="option.text" />
-      <el-input v-model="option.color" />
+      <el-color-picker v-model="option.color" />
     </div>
   </div>
 </template>

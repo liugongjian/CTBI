@@ -8,14 +8,15 @@
       class="editor-item-container"
       :class="{'box-disabled':!option.show}"
     >
-      <div><span>备注内容：</span>
+      <div><span style="margin-right: 8px">备注内容</span>
         <span
           class="el-icon-edit-outline"
           style="cursor:pointer"
           @click="showDialog"
         />
       </div>
-      <div><span>位置</span>
+      <div style="display: flex;align-items: center;margin-top: 12px">
+        <span style="margin-right: 8px">位置</span>
         <el-radio-group v-model="option.position">
           <el-radio label="afterTitle">紧跟标题</el-radio>
           <el-radio label="onChart">图表上方</el-radio>

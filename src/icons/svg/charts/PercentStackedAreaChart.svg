@@ -1,1 +1,31 @@
-<svg t="1649663659652" class="icon" viewBox="0 0 1233 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="14016" width="128" height="128"><path d="M131.010348 208.075259H1078.908749v651.198495H131.010348V208.075259z" fill="#3AA0FF" p-id="14017"></path><path d="M131.010348 859.273754V614.592662C207.111947 487.43556 317.892756 427.710254 452.75635 427.710254c203.258702 0 389.177799 211.928504 626.152399 152.203198v279.360302H131.010348z" fill="#4ECB73" p-id="14018"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-3">
+            <stop stop-color="#C7C6CA" offset="0%"></stop>
+            <stop stop-color="#E5E5E7" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-51">
+            <rect id="矩形备份-62" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="编组-136备份-5" transform="translate(42.666667, 85.333333)" fill-rule="nonzero">
+                <g id="编组-11">
+                    <polygon id="路径备份-45" fill="url(#linearGradient-1)" transform="translate(469.333333, 811.799410) rotate(90.000000) translate(-469.333333, -811.799410) " points="427.79941 342.466077 510.867257 342.466077 510.867257 1281.13274 427.79941 1281.13274"></polygon>
+                    <g id="fsux_图表_百分比堆积图备份-2" transform="translate(0.000000, 265.183619)" fill="url(#linearGradient-2)">
+                        <path d="M0,434.995734 L0,187.644679 C75.4304506,59.7075202 184.380168,0 318.476371,0 C519.618987,0 704.000281,213.233944 938.666667,153.527569 L938.666667,434.995734 L0,434.995734 L0,434.995734 Z" id="路径"></path>
+                    </g>
+                    <path d="M938.666667,375.289359 C704.000281,434.995735 519.618987,221.76179 318.476371,221.76179 C184.380168,221.76179 75.4304506,281.46931 0,409.406469 L0,409.406469 L0,0 L938.666667,0 Z" id="形状结合" fill="url(#linearGradient-3)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

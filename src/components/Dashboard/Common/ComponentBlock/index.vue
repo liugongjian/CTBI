@@ -1,6 +1,7 @@
 <template>
   <div
-    :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId},'com-block']"
+    v-loading="loading"
+    :class="[{'com-block-selected': option.i === $store.state.app.currentLayoutId && $store.state.app.dashboardMode === 'edit'},'com-block']"
     :style="styleObject"
   >
 
@@ -22,12 +23,18 @@
           <i class="el-icon-warning-outline m-l-10" />
         </el-tooltip>
       </div>
+      <!-- 隐藏模块，用于解决标题不显示出现的布局问题 -->
+      <div
+        class="card-header-hidden"
+        style="width:0"
+      />
       <div class="card-header-tail">
         <!-- 指标筛选模块 -->
         <el-select
           v-if="getParameter(option, 'theme.FunctionalOption.ChartFilter.showFilter')"
-          v-model="filteredSery"
+          v-model="selectedIndicator"
           :disabled="!getParameter(option, 'theme.FunctionalOption.ChartFilter.showFilter')"
+          :multiple="getParameter(option, 'theme.FunctionalOption.ChartFilter.isMultiple')"
           @change="handleIndicator"
         >
           <el-option
@@ -39,21 +46,26 @@
         </el-select>
 
         <!-- 菜单模块 -->
-        <el-dropdown
-          trigger="click"
-          size="small"
-          @command="handleCommand"
-        >
-          <span class="el-dropdown-link">
-            <svg-icon
-              icon-class="menu"
-              style="font-size: 15px;"
-            />
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="delete">删除</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <div v-if="showCommandMenu">
+          <el-dropdown
+            trigger="click"
+            size="small"
+            @command="handleCommand"
+          >
+            <span class="el-dropdown-link">
+              <svg-icon
+                icon-class="menu"
+                style="font-size: 15px;"
+              />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="delete">删除</el-dropdown-item>
+              <el-dropdown-item command="copy">复制</el-dropdown-item>
+              <el-dropdown-item command="sql">查看SQL</el-dropdown-item>
+              <el-dropdown-item command="data">查看数据</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
         <!-- 菜单模块END -->
 
         <!-- 链接跳转模块 -->
@@ -83,9 +95,7 @@
     </div>
 
     <!-- 是否展示总计 -->
-    <div
-      style="max-height:100px"
-    >
+    <div style="max-height:100px">
       <div
         v-if="getParameter(option, 'theme.ComponentOption.TotalShow.show')"
         class="rich-text-content"
@@ -126,7 +136,8 @@
 </template>
 
 <script>
-import { getParameter } from '@/utils/optionUtils'
+import { getParameter, getCurrentLayout, createNanoId, deepClone, isEmpty } from '@/utils/optionUtils'
+import store from '@/store'
 export default {
   name: 'ComponentBlock',
   props: {
@@ -137,6 +148,7 @@ export default {
   },
   data () {
     return {
+      loading: false,
       onLoad: false,
       imgSizeOption: { // 图片尺寸及位置，格式："尺寸名":['图片尺寸','图片位置']
         'containLeft': ['contain', ' left center'],
@@ -166,28 +178,110 @@ export default {
       }
       return styleObject
     },
-    filteredSery: {
+    selectedIndicator: {
       get () {
-        return this.getParameter(this.option, 'theme.FunctionalOption.ChartFilter.filteredSery')
+        return this.getParameter(this.option, 'theme.FunctionalOption.ChartFilter.selectedIndicator')
       },
       set () {
       }
+    },
+    showCommandMenu() {
+      return store.state.app.dashboardMode === 'edit'
     }
   },
   mounted () {
     // 防止宽高计算未完成就开始渲染组件
     this.$nextTick(() => {
       this.onLoad = true
+
+      this.$bus.$on('showLoading', (id) => {
+        if (id === this.option.id) {
+          this.loading = true
+        }
+      })
+      this.$bus.$on('closeLoading', (id) => {
+        if (id === this.option.id) {
+          this.loading = false
+        }
+      })
+    })
+  },
+  beforeDestroy() {
+    this.$bus.$off('showLoading', (id) => {
+      this.loading = true
+    })
+    this.$bus.$off('closeLoading', () => {
+      this.loading = false
     })
   },
   methods: {
     getParameter,
     // 下拉菜单方法
     handleCommand (command) {
-      if (command === 'delete') {
-        // 删除vuex的layout中对应的组件信息
-        this.$store.dispatch('app/deleteLayoutById', this.option.i)
+      const method = this[command]
+      if (method && typeof method === 'function') {
+        method.call()
       }
+    },
+
+    delete() {
+      // 删除vuex的layout中对应的组件信息
+      // 当时tab组件时，删除所有属于该组件的组件
+      if (this.option.is === 'TabChart') {
+        const allLayout = [...store.state.app.layout].filter(item => !(item.tabIdChains || []).includes(this.option.i))
+        store.dispatch('app/updateLayout', allLayout)
+      }
+      store.dispatch('app/deleteLayoutById', this.option.i)
+    },
+
+    // 复制组件
+    copy() {
+      const currentLayout = getCurrentLayout()
+      const newLayout = deepClone(currentLayout)
+      if (isEmpty(newLayout)) {
+        console.error('获取当前组件失败, Line: ComponentBlock: 214')
+        return
+      }
+      const nanoId = createNanoId()
+      newLayout.i = nanoId
+      newLayout.id = nanoId
+      const layoutLength = store.state.app.layout.length
+      newLayout.x = layoutLength > 0 ? (layoutLength * 2) % 12 : 0
+      newLayout.y = layoutLength > 0 ? layoutLength + 12 : 0
+      store.dispatch('app/addLayout', newLayout)
+    },
+
+    sql() {
+      if (this.isExistDataSet()) {
+        this.$dialog.show('ShowSqlDialog')
+      } else {
+        this.$message.warning('未选择数据集或字段')
+      }
+    },
+
+    data() {
+      if (this.isExistDataSet()) {
+        this.$dialog.show('ShowDataDialog')
+      } else {
+        this.$message.warning('未选择数据集或字段')
+      }
+    },
+
+    // 判断是否存在数据集和字段
+    // 存在 true 不存在 false
+    isExistDataSet() {
+      const { option: { dataSource, dataSet } } = this.option
+      const result = false
+      if (!dataSet?.id) {
+        return false
+      }
+      for (const key in dataSource) {
+        const source = dataSource[key]
+        if (source.value.length > 0) {
+          return true
+        }
+      }
+      return result
     },
 
     // 展示链接跳转弹窗
@@ -198,7 +292,7 @@ export default {
 
     // 筛选指标方法
     handleIndicator (val) {
-      this.option.option.theme.FunctionalOption.ChartFilter.filteredSery = val
+      this.option.option.theme.FunctionalOption.ChartFilter.selectedIndicator = val
     }
 
   }
@@ -212,7 +306,7 @@ export default {
   height: 100%;
   display: flex;
   padding: 18px;
-  border: 1px solid black;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   flex-direction: column;
   box-sizing: border-box;
   touch-action: none;

@@ -11,7 +11,8 @@ import '@/config/permission'
 // global css
 import '@/styles/index.scss'
 // 引入全局过滤器
-import '@/filters/index'
+import initFilters from '@/filters/index'
+initFilters(Vue)
 // 引入弹窗指令化
 import initDialogs from '@/config/dialog'
 initDialogs(Vue)
@@ -20,6 +21,7 @@ import * as echarts from 'echarts'
 // v-echarts
 import VECharts from 'vue-echarts'
 Vue.component('v-chart', VECharts)
+
 // 以阻止 vue 在启动时生成生产提示
 Vue.config.productionTip = false
 
@@ -29,11 +31,18 @@ import '@/components/autoRegister'
 import directive from '@/utils/directive'
 directive(Vue)
 
-Vue.use(ElementUI)
+// 大数据量表格
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/styles/index.scss'
+
+Vue.use(VXETable)
+
+Vue.use(ElementUI, { size: 'small' })
 Vue.prototype.$echarts = echarts
 Vue.prototype.$bus = new Vue()
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App)
 }).$mount('#app')

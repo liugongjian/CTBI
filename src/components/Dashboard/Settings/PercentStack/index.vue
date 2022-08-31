@@ -17,7 +17,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'PercentStack',
   props: {
@@ -25,7 +24,15 @@ export default {
       type: Object,
       default: () => { }
     }
+  },
+  data () {
+    return {
+
+    }
+  },
+  methods: {
   }
+
 }
 </script>
 

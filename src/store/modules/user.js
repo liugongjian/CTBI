@@ -1,3 +1,10 @@
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-08-04 12:45:56
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-24 10:34:38
+ * @Description:
+ */
 import { logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
@@ -5,8 +12,10 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: '',
-    routes: []
+    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+    userData: {},
+    routes: [],
+    role: ''
   }
 }
 
@@ -16,41 +25,45 @@ const mutations = {
   RESET_STATE: (state) => {
     Object.assign(state, getDefaultState())
   },
-  SET_TOKEN: (state, token) => {
-    state.token = token
-  },
   SET_NAME: (state, name) => {
     state.name = name
+  },
+  SET_ROLE: (state, role) => {
+    state.role = role
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
   SET_ROUTES: (state, routes) => {
     state.routes = routes
+  },
+  SET_USER: (state, userData) => {
+    state.userData = userData
   }
 }
 
 const actions = {
   // user login
-  login ({ commit }, token) {
-    commit('SET_TOKEN', token)
+  login ({ commit }, { token, user }) {
+    commit('SET_USER', user)
+    commit('SET_ROLE', user.role)
+    commit('SET_NAME', user.username)
     setToken(token)
   },
 
   // get user info
   getInfo ({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
-
-        if (!data) {
-          return reject('Verification failed, please Login again.')
+      getInfo(state.token).then(data => {
+        const { result, info } = data
+        if (!data || !result) {
+          return reject('认证失败, 请重新登录.')
         }
 
-        const { name, avatar, routes } = data
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit('SET_ROUTES', routes)
+        const { userName, role } = info
+        commit('SET_USER', info)
+        commit('SET_ROLE', role)
+        commit('SET_NAME', userName)
         resolve(data)
       }).catch(error => {
         reject(error)

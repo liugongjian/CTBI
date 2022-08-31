@@ -1,5 +1,7 @@
 <template>
-  <div class="tab-pane-content">
+  <div
+    class="tab-pane-content"
+  >
     <el-collapse v-model="activeNames">
       <el-collapse-item
         title="基础信息"
@@ -12,6 +14,38 @@
           <component
             :is="name"
             :option="option['Basic'][name]"
+          />
+        </div>
+      </el-collapse-item>
+      <!-- 指标趋势图 -->
+      <el-collapse-item
+        v-if="option['trendChartConfig']"
+        title="趋势图配置"
+        name="8"
+      >
+        <div
+          v-for="(item,name,key) in option['trendChartConfig']"
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['trendChartConfig'][name]"
+          />
+        </div>
+      </el-collapse-item>
+      <!-- 指标趋势图 指标块样式配置 -->
+      <el-collapse-item
+        v-if="option['trendStyleConfig']"
+        title="指标块样式配置"
+        name="9"
+      >
+        <div
+          v-for="(item,name,key) in option['trendStyleConfig']"
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['trendStyleConfig'][name]"
           />
         </div>
       </el-collapse-item>
@@ -35,14 +69,29 @@
         title="坐标轴"
         name="3"
       >
-        <el-tabs v-model="activeName">
-          <el-tab-pane v-for="(item,name,key) in option['Axis']" :key="key" :label="item.cname" :name="key.toString()">
+        <el-tabs v-if="!option['Axis']['RadarAxis']" v-model="activeName" class="axis-tab">
+          <el-tab-pane
+            v-for="(item,name,key) in option['Axis']"
+            :key="key"
+            :label="item.cname"
+            :name="key.toString()"
+          >
             <component
               :is="name"
               :option="option['Axis'][name]"
             />
           </el-tab-pane>
         </el-tabs>
+        <div
+          v-for="(item,name,key) in option['Axis']"
+          v-else
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['Axis'][name]"
+          />
+        </div>
       </el-collapse-item>
       <el-collapse-item
         v-if="option['DisplayConfig']"
@@ -99,6 +148,16 @@
           />
         </div>
       </el-collapse-item>
+      <el-collapse-item
+        v-if="option['TabConfig']"
+        title="Tab配置"
+        name="8"
+      >
+        <component
+          :is="'TabConfig'"
+          :option="option['TabConfig']"
+        />
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
@@ -114,15 +173,32 @@ export default {
   },
   data () {
     return {
-      activeNames: '1',
+      activeNames: '8',
       activeName: '0'
+    }
+  },
+  watch: {
+    'option.ComponentOption.TwisYAxis': {
+      handler (val) {
+        if (val) {
+          if (val.check) {
+            const Y1Axis = JSON.parse(JSON.stringify(this.option.Axis.YAxis))
+            Y1Axis.cname = '右Y轴'
+            this.$set(this.option.Axis, 'Y1Axis', Y1Axis)
+          } else {
+            if (!val.check && this.option.Axis?.Y1Axis) {
+              this.$delete(this.option.Axis, 'Y1Axis')
+            }
+          }
+        }
+      },
+      deep: true
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-::v-deep .el-tabs__nav-scroll{
-    display: flex;
-    justify-content: center;
+::v-deep .el-tabs__nav-scroll {
+  justify-content: center;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div class="editor-object-container">
-    <div><span class="edition">版本切换</span>
+    <span class="editor-item-title">版本切换</span>
+    <div class="editor-item-container">
       <el-radio-group v-model="option.edition">
         <el-radio label="newEdition" @change="dialogVisible = true">新版明细表</el-radio>
         <el-radio label="oldEdition">旧版</el-radio>
@@ -21,8 +22,8 @@
         <p>以上差异，导致切换后需要重新配置相关内容，建议切换前手动另存为副本</p>
       </span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">确定</el-button>
-        <el-button type="primary" @click="dialogVisible = false">取消</el-button>
+        <el-button @click="visibleOp(true)">确定</el-button>
+        <el-button type="primary" @click="visibleOp()">取消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -42,13 +43,20 @@ export default {
       dialogVisible: false
     }
   },
+  watch: {
+    'option.edition': {
+      handler(val) {
+        val === 'oldEdition' && this.visibleOp()
+      }
+    }
+  },
   methods: {
+    visibleOp(val = false) {
+      this.dialogVisible = false
+    }
   }
 }
 </script>
 
 <style>
-.edition {
-    margin: 20px
-}
 </style>

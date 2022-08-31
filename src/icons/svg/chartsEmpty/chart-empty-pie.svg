@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="403px" height="201px" viewBox="0 0 403 201" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>饼图</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-50">
+            <polygon id="路径" fill-opacity="0" fill="#FFFFFF" fill-rule="nonzero" points="46 11 403 11 403 201 46 201"></polygon>
+            <g id="编组-40" transform="translate(119.000000, 21.000000)" fill-rule="nonzero" stroke="#FFFFFF">
+                <path d="M80.5,80.5 L159.211111,63.8138861 C151.332648,26.6116023 118.50862,0 80.5,0 L80.5,80.5 Z" id="路径" fill="#C2C2C2"></path>
+                <path d="M80.5,80.1248258 L131.427577,142.216667 C154.758729,123.232369 165.493982,92.8609517 159.249253,63.5055556 L80.5,80.1248258 Z" id="路径" fill="#D1D1D1"></path>
+                <path d="M80.7619248,80.5 L23.2555556,136.589879 C52.2491914,166.559205 99.2583658,169.274439 131.483333,142.841079 L80.7619248,80.5 Z" id="路径" fill="#D6D6D6"></path>
+                <path d="M80.5,80.5 L0,81.5582043 C0.269325988,102.232983 8.41145208,122.01891 22.7531809,136.85 L80.5,80.5 Z" id="路径" fill="#E0E0E0"></path>
+                <path d="M80.5,80.3307869 L6.89886777,47.4055556 C2.20615347,58.1023548 -0.144706876,69.696002 0.00689239493,81.3944444 L80.5,80.3307869 Z" id="路径" fill="#E5E5E5"></path>
+                <path d="M80.5,80.5 L51.7619357,5.36666667 C31.8468791,13.0326312 15.7953537,28.3398735 7.15555556,47.9047216 L80.5,80.5 Z" id="路径" fill="#EAEAEA"></path>
+                <path d="M80.5,80.5 L80.5,0 C70.7150313,0 61.0132984,1.81103493 51.8777778,5.34294696 L80.5,80.5 Z" id="路径" fill="#F1F1F1"></path>
+            </g>
+            <polyline id="路径-2" stroke="#EBEBEB" stroke-linecap="round" stroke-linejoin="round" points="187 20 192.193548 9 201 9"></polyline>
+            <g id="编组-48" transform="translate(266.000000, 29.999681)">
+                <polyline id="路径-2备份-2" stroke="#EBEBEB" stroke-linecap="round" stroke-linejoin="round" points="0 20.0003185 5.31387586 9.07099146 14.324361 9.07099146"></polyline>
+                <text id="（Centralt）35.50%" fill-rule="nonzero" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="23.2058357" y="13">（</tspan>
+                    <tspan x="35.2058357" y="13" font-family="Helvetica">Centralt</tspan>
+                    <tspan x="77.2234139" y="13">）</tspan>
+                    <tspan x="89.2234139" y="13" font-family="Helvetica">35.50%</tspan>
+                </text>
+            </g>
+            <g id="编组-47" transform="translate(271.000000, 142.000000)">
+                <polyline id="路径-2备份-7" stroke="#EBEBEB" stroke-linecap="round" stroke-linejoin="round" transform="translate(7.199534, 5.643230) scale(1, -1) translate(-7.199534, -5.643230) " points="0 11.2864597 5.34158966 1.95788866e-16 14.3990678 0"></polyline>
+                <text id="（Northwast）10%" fill-rule="nonzero" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="23.3060012" y="15.7552549">（</tspan>
+                    <tspan x="35.3060012" y="15.7552549" font-family="Helvetica">Northwast</tspan>
+                    <tspan x="89.3235793" y="15.7552549">）</tspan>
+                    <tspan x="101.323579" y="15.7552549" font-family="Helvetica">10%</tspan>
+                </text>
+            </g>
+            <g id="编组-44" transform="translate(35.000000, 16.950967)">
+                <polyline id="路径-2备份" stroke="#EBEBEB" stroke-linecap="round" stroke-linejoin="round" transform="translate(104.193522, 13.619866) scale(-1, 1) translate(-104.193522, -13.619866) " points="97 19.0490332 102.33713 8.19069821 111.387045 8.19069821"></polyline>
+                <text id="（East）10.00%" fill-rule="nonzero" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="0" y="13">（</tspan>
+                    <tspan x="12" y="13" font-family="Helvetica">East</tspan>
+                    <tspan x="36.0117188" y="13">）</tspan>
+                    <tspan x="48.0117188" y="13" font-family="Helvetica">10.00%</tspan>
+                </text>
+            </g>
+            <g id="编组-45" transform="translate(0.000000, 61.999681)">
+                <polyline id="路径-2备份-3" stroke="#EBEBEB" stroke-linecap="round" stroke-linejoin="round" transform="translate(109.153251, 14.535655) scale(-1, 1) translate(-109.153251, -14.535655) " points="102 20.0003185 107.307251 9.07099146 116.306502 9.07099146"></polyline>
+                <text id="（North）11.20%" fill-rule="nonzero" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="0" y="13">（</tspan>
+                    <tspan x="12" y="13" font-family="Helvetica">North</tspan>
+                    <tspan x="41.34375" y="13">）</tspan>
+                    <tspan x="53.34375" y="13" font-family="Helvetica">11.20%</tspan>
+                </text>
+            </g>
+            <g id="编组-46" transform="translate(9.000000, 141.000000)">
+                <polyline id="路径-2备份-4" stroke="#EBEBEB" stroke-linecap="round" stroke-linejoin="round" transform="translate(112.167299, 5.584849) scale(-1, -1) translate(-112.167299, -5.584849) " points="105 11.1696989 110.317674 1.93763389e-16 119.334599 0"></polyline>
+                <text id="（South）12.00%" fill-rule="nonzero" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="0" y="13.8353759">（</tspan>
+                    <tspan x="12" y="13.8353759" font-family="Helvetica">South</tspan>
+                    <tspan x="43.359375" y="13.8353759">）</tspan>
+                    <tspan x="55.359375" y="13.8353759" font-family="Helvetica">12.00%</tspan>
+                </text>
+            </g>
+            <polyline id="路径-2备份-5" stroke="#EBEBEB" stroke-linecap="round" stroke-linejoin="round" transform="translate(167.000000, 185.500000) scale(-1, -1) translate(-167.000000, -185.500000) " points="160 191 165.193548 180 174 180"></polyline>
+            <text id="（Northeast）13.00%" fill-rule="nonzero" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" fill="#E0E0E0">
+                <tspan x="35" y="196">（</tspan>
+                <tspan x="47" y="196" font-family="Helvetica">Northeast</tspan>
+                <tspan x="99.0253906" y="196">）</tspan>
+                <tspan x="111.025391" y="196" font-family="Helvetica">13.00%</tspan>
+            </text>
+            <text id="（Northeast）6.80%" fill-rule="nonzero" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" fill="#E0E0E0">
+                <tspan x="209" y="13">（</tspan>
+                <tspan x="221" y="13" font-family="Helvetica">Northeast</tspan>
+                <tspan x="273.025391" y="13">）</tspan>
+                <tspan x="285.025391" y="13" font-family="Helvetica">6.80%</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

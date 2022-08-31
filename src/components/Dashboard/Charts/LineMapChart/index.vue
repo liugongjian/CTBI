@@ -10,21 +10,13 @@
 </template>
 
 <script>
-import chinaJson from './china.json'
-import { getLayoutOptionById } from '@/utils/optionUtils'
-import lineMapMixins from '@/components/Dashboard/mixins/scatterMapMixins'
+import chinaJson from '../../mixins/china.json'
+import mapMixins from '@/components/Dashboard/mixins/mapMixins'
 export default {
   name: 'LineMapChart',
-  mixins: [lineMapMixins],
-  props: {
-    identify: {
-      type: String,
-      default: ''
-    }
-  },
+  mixins: [mapMixins],
   data () {
     return {
-      storeOption: {},
       chartOption: {},
       dataValue: [9, 3, 4, 14, 27, 18, 19]
     }
@@ -32,7 +24,6 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (JSON.stringify(val.dataSource) !== '{}') {
           this.dataValue = val.dataSource
           this.getOption()
@@ -42,8 +33,6 @@ export default {
     }
   },
   mounted () {
-    this.$echarts.registerMap('china', chinaJson)
-    this.storeOption = getLayoutOptionById(this.identify)
     this.getOption()
   },
   methods: {

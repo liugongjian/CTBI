@@ -1,17 +1,18 @@
 <template>
   <div style="width:100%;height:100%;">
     <v-chart
-      v-if="dataValue"
+      v-if="dataValue && dataValue.length > 0"
       :option="chartOption"
       autoresize
     />
-    <div v-else>数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-dashboard" style="width:100%;height:100%;" />
   </div>
 </template>
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
 import dashboardMixins from '@/components/Dashboard/mixins/dashboardMixins'
+import store from '@/store'
 export default {
   name: 'DashboardChart',
   mixins: [dashboardMixins],
@@ -25,7 +26,8 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
-      dataValue: 50,
+      dataOption: [],
+      dataValue: {},
       title: {
         x: 'center',
         y: '75%',
@@ -76,8 +78,10 @@ export default {
           },
           axisLabel: {
             show: true,
-            distance: 25
-            // formatter: '' // 控制百分比 原始值
+            distance: 25,
+            formatter: (params) => {
+              return params
+            } // 控制百分比 原始值
           },
           title: {
             show: true,
@@ -94,31 +98,19 @@ export default {
             }
           },
           data: [
-            {
-              'value': 50,
-              'name': '速度'
-            }
+            // {
+            //   'value': 50,
+            //   'name': '速度'
+            // }
           ]
         }
 
       ]
     }
   },
-  watch: {
-    storeOption: {
-      handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
-        }
-        this.getOption()
-      },
-      deep: true
-    }
-  },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
-    this.getOption()
+    this.dataOption = store.state.app.dataOption
   },
   methods: {
     setStyle (style) {
@@ -151,19 +143,32 @@ export default {
       data.detail.color = label.value.color
       data.detail.textStyle.fontSize = label.value.fontSize
       // 百分比 数值切换
-      data.detail.formatter = label.format ? this.dataValue : `${(this.dataValue / data.max * 100).toFixed(label.decimal)}%`
+      data.detail.formatter = label.format ? this.dataValue.value : `${(this.dataValue.value / data.max * 100).toFixed(label.decimal)}%`
       // 副标签控制
       this.title.textStyle.color = label.deputy.color
       this.title.textStyle.fontSize = label.deputy.fontSize
-      this.title.text = label.format ? `占比: ${(this.dataValue / data.max * 100).toFixed(label.deputy.decimal)}%` : `实际: ${this.dataValue}`
+      this.title.text = label.format ? `占比: ${(this.dataValue.value / data.max * 100).toFixed(label.deputy.decimal)}%` : `实际: ${this.dataValue.value}`
+    },
+    setScale(scale) {
+      this.series[0].splitLine.show = scale.show
+      this.series[0].axisLabel.show = scale.show
+      this.series[0].axisLabel.formatter = (params) => {
+        if (scale.type === 'original') {
+          return params
+        } else {
+          return (params / this.series[0].max * 100).toFixed(0) + '%'
+        }
+      }
     },
     getOption () {
       const { Basic: { VisualStyle: { style } }, ComponentOption, StyleConfig } = this.storeOption.theme
       const { ConfigSize } = ComponentOption
-      const { Label } = StyleConfig
+      const { Label, Scale } = StyleConfig
       this.setStyle(style)
       this.setConfigSize(ConfigSize)
       this.setConfigLabel(Label)
+      this.setScale(Scale)
+      this.series[0].data[0] = this.dataValue
       this.chartOption = {
         tooltip: {
           formatter: '{a} <br/>{b} : {c}%'

@@ -6,12 +6,11 @@
       autoresize
       :update-options="{notMerge:true}"
     />
-    <div v-else>数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-percent-stacked-area" style="width:100%;height:100%;" />
   </div>
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
 import lineMixins from '@/components/Dashboard/mixins/lineMixins'
 export default {
   name: 'PercentStackedAreaChart',
@@ -24,63 +23,65 @@ export default {
   },
   data () {
     return {
-      storeOption: {},
-      chartOption: {},
-      type: 'PercentStackedAreaChart', // 1 线图 2 面积图 3 堆积面积图 4 百分比堆叠面积图
-      //   dataValue: null
-      dataValue: [
-        ['date', '价格', '数量'],
-        ['Mon', 820, 410],
-        ['Tue', 932, 320],
-        ['Wed', 901, 300],
-        ['Thu', 934, 380],
-        ['Fri', 1290, 430],
-        ['Sat', 1330, 480],
-        ['Sun', 1320, 460]
-      ],
-      textMap: {
-        'LineChart': '线图',
-        'AreaChart': '面积图',
-        'StackedAreaChart': '堆叠面积图',
-        'PercentStackedAreaChart': '百分比堆叠面积图'
-      }
+      type: 'PercentStackedAreaChart'// 图表类型 1.线图；2.面积图; 3.堆叠面积图；4.百分比堆叠图
     }
   },
   watch: {
-    storeOption: {
+    'storeOption.theme.ComponentOption.PercentStack': {
       handler (val) {
-        this.type = val.theme.Basic.ChartType.type
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
-          this.getOption()
+        this.storeOption.theme.ComponentOption.ChartLabel.type = this.type
+        if (val.isStack && !val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'StackedAreaChart'
+        }
+        if (val.isPercent) {
+          this.storeOption.theme.ComponentOption.ChartLabel.type = 'PercentStackedAreaChart'
         }
       },
       deep: true
-    },
-    type: {
-      handler (val) {
-        this.getOption()
-      }
     }
-  },
-  mounted () {
-    this.storeOption = getLayoutOptionById(this.identify)
-    this.getOption()
   },
   methods: {
     getOption () {
-      const componentOption = this.storeOption.theme.ComponentOption
-      this.getSeries()
+      const { ComponentOption, FunctionalOption } = this.storeOption.theme
+      this.transformData(FunctionalOption.ChartFilter.selectedIndicator)
+      this.getPercentStackSeries(ComponentOption, FunctionalOption)
+
+      // 系列配置-图表标签相关
+      this.setSeriesItem()
+      // 获取颜色设置-使图例颜色与图形颜色对应
+      const colorOption = []
+      ComponentOption.Color.color.forEach(item => {
+        colorOption.push(item.color)
+      })
+      // 设置图例与图表距离
+      this.setGrid(ComponentOption.Legend)
+
       this.chartOption = {
-        legend: componentOption.Legend,
-        tooltip: this.tooltip,
-        xAxis: {
-          type: 'category'
+        grid: this.grid,
+        color: colorOption,
+        legend: ComponentOption.Legend,
+        xAxis: this.xAxis,
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
         },
         yAxis: this.yAxis,
+        markPoint: this.markPoint,
         dataset: {
           source: this.dataValue
+        },
+        dataZoom: {
+          type: 'slider',
+          show: FunctionalOption.DataZoom.showDataZoom !== 'hide',
+          realtime: true,
+          start: 0,
+          end: 100,
+          xAxisIndex: [0, 1]
         },
         series: this.series
       }

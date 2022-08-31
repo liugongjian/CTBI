@@ -1,16 +1,25 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-06-08 10:54:25
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-07-29 18:30:45
+ * @Description:
+-->
 <template>
-  <div class="editor-object-container">
+  <div
+    v-if="typeof option.show === 'undefined' ? true : option.show"
+    class="editor-object-container"
+  >
     <div>
       <ColorConfig
-        :color-data.sync="color"
-        :title="option.title"
+        :option="option"
         @showColor="getColor"
       />
     </div>
   </div>
 </template>
 <script>
-import ColorConfig from '@/components/Dashboard/Common/ColorConfig'
+import ColorConfig from './ColorConfig.vue'
 import store from '@/store'
 export default {
   name: 'Color',
@@ -37,11 +46,15 @@ export default {
       deep: true
     }
   },
+  mounted () {
+    this.getColor()
+  },
   methods: {
     getColor () {
       store.state.app.layout.forEach(item => {
-        if (item.i === store.state.app.currentLayoutId) {
-          this.color = item.option.theme.ComponentOption.Color.color
+        if (item.id === store.state.app.currentLayoutId) {
+          const option = item.option.theme.ComponentOption || item.option.theme.DisplayConfig || item.option.theme.StyleConfig.IndicatorPic
+          this.color = option.Color.color
         }
       })
     }

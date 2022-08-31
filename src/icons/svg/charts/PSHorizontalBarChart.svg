@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-3">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-4">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-5">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-6">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-7">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-8">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-58">
+            <rect id="矩形备份-178" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_百分比堆积条形图备份-7" transform="translate(128.000000, 85.333333)" fill-rule="nonzero">
+                <g id="编组-23">
+                    <polygon id="路径" fill="url(#linearGradient-1)" points="0 0 444.049931 0 444.049931 164.570429 0 164.570429"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-2)" points="47.1345354 230.846032 768 230.846032 768 395.416462 47.1345354 395.416462"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="0 460.713311 584.920943 460.713311 584.920943 625.28374 0 625.28374"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-4)" points="444.98197 0 768 0 768 164.570429 444.98197 164.570429"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-5)" points="0 230.846032 418.485437 230.846032 418.485437 395.416462 0 395.416462"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-6)" points="547.63939 460.433667 768 460.433667 768 625.004097 547.63939 625.004097"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-7)" points="0 688.762903 517.281553 688.762903 517.281553 853.333333 0 853.333333"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-8)" points="383.866852 688.762903 768 688.762903 768 853.333333 383.866852 853.333333"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

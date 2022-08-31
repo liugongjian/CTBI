@@ -5,17 +5,17 @@
       :option="chartOption"
       autoresize
     />
-    <div v-else>数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-scatter-map" style="width:100%;height:100%;" />
   </div>
 </template>
 
 <script>
-import chinaJson from './china.json'
+import chinaJson from '../../mixins/china.json'
 import { getLayoutOptionById } from '@/utils/optionUtils'
-import scatterMapMixins from '@/components/Dashboard/mixins/scatterMapMixins'
+import mapMixins from '@/components/Dashboard/mixins/mapMixins'
 export default {
   name: 'ScatterMapChart',
-  mixins: [scatterMapMixins],
+  mixins: [mapMixins],
   props: {
     identify: {
       type: String,
@@ -64,7 +64,6 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
         if (JSON.stringify(val.dataSource) !== '{}') {
           this.dataValue = val.dataSource
           this.getOption()

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1073px" height="1024px" viewBox="0 0 1073 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>漏斗图</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="漏斗图" fill-rule="nonzero">
+            <polygon id="路径" fill="url(#linearGradient-1)" points="123.78022 384 189.106215 640.000001 842.390708 640.000001 907.721611 384"></polygon>
+            <polygon id="路径" fill="url(#linearGradient-2)" points="448.700778 1024 582.796015 1024 783.941393 767.999999 247.56044 767.999999"></polygon>
+            <polygon id="路径" fill="url(#linearGradient-3)" points="1072.7619 0 1005.71185 256 67.045022 256 0 0"></polygon>
+        </g>
+    </g>
+</svg>

@@ -17,18 +17,16 @@ import { colorTheme } from '@/constants/color.js'
 export default {
   'type': 'trend', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
+  'order': 5, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
+  'title': '组合图', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
         'text': '组合图', // 标题名称
         'color': '#333', // 标题颜色
-        'show': true, // 是否显示标题
-        'testShow': false // 测试显示
-      },
-      'TestTitle': { // 测试组件间交互组件
-        'testShow': false
+        'show': true // 是否显示标题
       },
       'Mark': { // 备注
         'show': false, // 是否显示备注
@@ -51,6 +49,9 @@ export default {
         'showImg': false, // 是否使用背景图片
         'imgUrl': '', // 背景图片地址
         'imgSize': 'containRight' // 背景图片尺寸位置
+      },
+      'ChartType': { // 图表类型 必须有 用于组件切换
+        'type': 'CombineChart' // 线图 面积图 堆积面积图 百分比堆叠面积图
       }
     },
     'ComponentOption': { // 图表样式
@@ -75,12 +76,14 @@ export default {
         'type': 2 // 1曲线 2直线
       },
       'TwisYAxis': { // 双Y轴
-        'show': false, // 是否显示双Y轴
+        'show': false, // 是否显示双y轴复选框
+        'check': true, // 是否显示双Y轴
         'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
       },
       'Color': { // 颜色设置
         'title': '配色设置',
-        'color': colorTheme['defaultColor']
+        'color': colorTheme['官方'],
+        'theme': '官方'
       },
       'Legend': { // 图例
         'show': true,
@@ -90,33 +93,137 @@ export default {
         'type': 'scroll'
       }
     },
+    'Axis': { // 轴设置
+      'XAxis': { // X轴设置
+        'cname': 'X轴',
+        'title': '',
+        'unit': '',
+        'show': true,
+        'showTitle': true,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'lineType': 'solid',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000',
+        'splitType': 'solid'
+      },
+      'YAxis': { // y轴设置
+        'cname': '左Y轴',
+        'title': '',
+        'unit': '',
+        'show': true,
+        'showTitle': true,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'lineType': 'solid',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000',
+        'splitType': 'solid',
+        'min': 0,
+        'max': 0,
+        'autoMin': true,
+        'autoMax': true,
+        'autoEnlarge': false,
+        'formatType': '1',
+        'lang': 'chinese-simplified',
+        'numberFormat': 'number',
+        'numberDigit': 0,
+        'kSeperator': false,
+        'formatRegx': ''
+      },
+      'Y1Axis': { // y轴设置
+        'cname': '右Y轴',
+        'title': '',
+        'unit': '',
+        'show': true,
+        'showTitle': true,
+        'showTicks': false,
+        'lineWidth': 1,
+        'lineColor': '#000',
+        'lineType': 'solid',
+        'showAxisLabel': true,
+        'showSplit': false,
+        'splitWidth': 1,
+        'splitColor': '#000',
+        'splitType': 'solid',
+        'min': 0,
+        'max': 0,
+        'autoMin': true,
+        'autoMax': true,
+        'autoEnlarge': false,
+        'formatType': '1',
+        'lang': 'chinese-simplified',
+        'numberFormat': 'number',
+        'numberDigit': 0,
+        'kSeperator': false,
+        'formatRegx': ''
+      }
+    },
+    'FunctionalOption': {
+      'DataZoom': {
+        'showDataZoom': 'hide'
+      },
+      'LabelShowType': {
+        'axisShowType': 'auto'
+      },
+      'NullProcess': {
+        'emptyResolve': 'skip'
+      }
+    },
     'SeriesSetting': { // 系列设置
       'SeriesSelect': { // 选择系列
         'label': '请选择系列',
         'selectValue': '', // 默认选择的系列名字 第一个元素
         'remarkShow': false, // 是否显示别名
         'remark': '', // 别名默认是选择的系列名字 第一个元素
-        'seriesOption': [{ label: '价格', value: '价格-0' }, { label: '数量', value: '数量-0' }, { label: '温度', value: '温度-1' }] // 从数据中拿到系列的名字
-      },
-      'SeriesChartLabel': { // 某个系列显示图表标签
-        'check': false, // 默认未选中
-        'color': '' // 颜色
-      },
-      'SeriesMark': { // 标记点
-        'show': false, // 副轴才是true
-        'check': false, // 默认未选中
-        'markType': 'circle'
-      },
-      'SeriesMaximum': { // 最值
-        'check': false // 默认未选中
-      },
-      'SeriesLine': { // 线条样式
-        'show': false, // 副轴才是true
-        'lineType': 'solid' // 默认实线
+        'seriesOption': [],
+        'SeriesChartLabel': { // 某个系列显示图表标签
+          'check': false, // 默认未选中
+          'color': '' // 颜色
+        },
+        'SeriesMark': { // 标记点
+          'show': false, // 副轴才是true
+          'check': false, // 默认未选中
+          'markType': 'circle'
+        },
+        'SeriesMaximum': { // 最值
+          'check': false // 默认未选中
+        },
+        'SeriesLine': { // 线条样式
+          'show': false, // 副轴才是true
+          'lineType': 'solid' // 默认实线
+        }
       }
     }
   },
   'advance': {}, // 高级
-  'dataSource': {}// 数据集
+  'dataSource': {
+    'Dimension': { // 维度
+      'name': '类别轴/维度',
+      'require': true,
+      'value': []
+    },
+    'Measure': { // 度量 或主轴
+      'name': '主值轴/度量',
+      'require': false,
+      'value': []
+    },
+    'MeasureSecond': { // 副轴
+      'name': '副值轴/度量',
+      'require': false,
+      'value': []
+    }
+  },
+  // 数据集
+  'dataSet': { // 当前正在使用的数据集
+    'id': '', // 数据集ID
+    'name': '' // 数据集名称
+  }
 }
 

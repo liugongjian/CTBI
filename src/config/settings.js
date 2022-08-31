@@ -1,5 +1,4 @@
 module.exports = {
-
   title: 'BI报表工具',
 
   /**
@@ -15,8 +14,15 @@ module.exports = {
   tagsView: false,
 
   /**
-     * @type {boolean} true | false
-     * @description Whether show the logo in sidebar
-     */
-  sidebarLogo: true
+   * @type {boolean} true | false
+   * @description Whether show the logo in sidebar
+   */
+  sidebarLogo: true,
+
+  /**
+   * @type {Object}
+   * @description Style of the main layout
+   */
+  layoutStyles: {},
+  chartsStyles: {}
 }

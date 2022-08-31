@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-3">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-4">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-56" transform="translate(-0.000000, 0.000000)">
+            <rect id="矩形备份-164" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_条形图备份-7" transform="translate(128.000000, 85.333333)" fill-rule="nonzero">
+                <g id="编组-21">
+                    <polygon id="路径" fill="url(#linearGradient-1)" points="367.304348 0 367.304348 164.102564 0 164.102564 0 0"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-2)" points="768 229.743589 768 393.846154 0 393.846154 0 229.743589"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="500.869566 459.487179 500.869566 623.589744 0 623.589744 0 459.487179"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-4)" points="267.130434 689.23077 267.130434 853.333333 0 853.333333 0 689.23077"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,1 +1,24 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1646998870996" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2184" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><defs><style type="text/css"></style></defs><path d="M864 518H506V160c0-4.4-3.6-8-8-8h-26c-54 0-106.4 10.6-155.7 31.4-47.6 20.1-90.4 49-127.1 85.7-36.7 36.7-65.6 79.5-85.7 127.1C82.6 445.6 72 498 72 552c0 54 10.6 106.4 31.4 155.7 20.1 47.6 49 90.4 85.7 127.1 36.7 36.7 79.5 65.6 127.1 85.7C365.6 941.4 418 952 472 952c54 0 106.4-10.6 155.7-31.4 47.6-20.1 90.4-49 127.1-85.7 36.7-36.7 65.6-79.5 85.7-127.1C861.4 658.4 872 606 872 552v-26c0-4.4-3.6-8-8-8zM705.7 787.8c-62.6 62.1-147.1 96.6-235.3 96.2-88.1-0.4-170.9-34.9-233.2-97.2C174.5 724.1 140 640.7 140 552c0-88.7 34.5-172.1 97.2-234.8 54.6-54.6 124.9-87.9 200.8-95.5V586h364.3c-7.7 76.3-41.3 147-96.6 201.8z" p-id="2185"></path><path d="M952 462.4l-2.6-28.2c-8.5-92.1-49.4-179-115.2-244.6-65.8-65.7-152.8-106.5-245.2-115L560.7 72c-4.7-0.4-8.7 3.2-8.7 7.9V464c0 4.4 3.6 8 8 8l384-1c4.7 0 8.4-4 8-8.6z m-332.2-58.2V147.6c62.6 13.1 120.7 44.2 166.4 89.8 45.7 45.6 77 103.6 90 166.1l-256.4 0.7z" p-id="2186"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-62">
+            <rect id="矩形备份-155" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_饼图备份-8" transform="translate(42.666667, 42.666667)" fill-rule="nonzero">
+                <g id="编组-27">
+                    <path d="M418.736634,519.930033 L418.736634,34.8953329 C184.942197,52.342386 0,247.751343 0,485.035926 C0,736.277416 202.38925,938.666667 453.63074,938.666667 C690.914097,938.666667 886.324281,753.724469 903.771334,519.930033 L418.736634,519.930033 Z" id="路径" fill="url(#linearGradient-1)"></path>
+                    <path d="M488.524846,0 L488.524846,450.14182 L938.666667,450.14182 C924.708534,209.368317 729.297123,13.9581332 488.524846,0 Z" id="路径" fill="url(#linearGradient-2)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

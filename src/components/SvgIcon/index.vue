@@ -5,6 +5,10 @@
     class="svg-external-icon svg-icon"
     v-on="$listeners"
   />
+  <i
+    v-else-if="/^(el-icon)/.test(iconClass)"
+    :class="iconClass"
+  />
   <svg
     v-else
     :class="svgClass"

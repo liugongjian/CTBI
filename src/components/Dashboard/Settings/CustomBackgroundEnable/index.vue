@@ -12,7 +12,7 @@
     >
       <div class="editor-item-title">卡片颜色</div>
       <div class="flex-align-center">
-        <el-input v-model="option.color" />
+        <el-color-picker v-model="option.color" />
       </div>
     </div>
 
@@ -27,7 +27,6 @@
       />
       <el-popover
         placement="top-end"
-        width="365"
         trigger="click"
         :class="{'box-disabled':!option.showImg}"
       >
@@ -37,6 +36,7 @@
           class="upload-img-wrapper"
         >
           <img
+            v-if="option.imgUrl"
             :src="option.imgUrl"
             style="width:12px;height:12px"
           >
@@ -69,7 +69,7 @@ export default {
   height: 24px;
   border: 1px solid hsla(0, 0%, 100%, 0.2);
   border-radius: 2px;
-  background-color: #272a35;
+  margin-left: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;

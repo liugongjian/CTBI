@@ -1,3 +1,10 @@
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-08-22 09:15:11
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-25 15:38:04
+ * @Description:
+ */
 // 折线图配置项信息
 /**
  * type: {
@@ -16,18 +23,16 @@
 export default {
   'type': 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
+  'order': 4, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
+  'title': '仪表盘', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件
         'text': '仪表盘', // 标题名称
         'color': '#333', // 标题颜色
-        'show': true, // 是否显示标题
-        'testShow': false // 测试显示
-      },
-      'TestTitle': { // 测试组件间交互组件
-        'testShow': false
+        'show': true // 是否显示标题
       },
       'Mark': { // 备注
         'show': false, // 是否显示备注
@@ -52,16 +57,17 @@ export default {
       }
     },
     'ComponentOption': { // 图表样式
-      'Legend': { // 图例
-        'show': true,
-        'top': 'auto',
-        'left': 'center',
-        'orient': 'horizontal',
-        'type': 'scroll'
-      },
       'ConfigSize': { // 设置起点值 终点值
+        'startType': 'fixed',
+        'endType': 'fixed',
         'start': 0,
-        'end': 100
+        'end': 100,
+        'dynamicStart': {
+          'field': 1, 'type': 1
+        },
+        'dynamicEnd': {
+          'field': 1, 'type': 1
+        }
       }
     },
     'StyleConfig': { // 样式配置
@@ -83,5 +89,17 @@ export default {
     }
   },
   'advance': {}, // 高级
-  'dataSource': {}// 数据集
+  // 'dataSource': {}// 数据集
+  'dataSource': {
+    'Measure': { // 度量
+      'name': '指针角度/度量',
+      'require': true,
+      'limit': 1,
+      'value': []
+    }
+  }, // 数据集
+  'dataSet': { // 当前正在使用的数据集
+    'id': '', // 数据集ID
+    'name': '' // 数据集名称
+  }
 }

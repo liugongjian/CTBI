@@ -2,6 +2,7 @@
   <el-dialog
     title="链接跳转"
     :visible.sync="dialogVisible"
+    :close-on-click-modal="false"
     width="70%"
   >
     <iframe
@@ -12,10 +13,10 @@
 </template>
 
 <script>
-import dialogMinix from '@/dialogs/dialogMixin'
+import dialogMixin from '@/mixins/dialogMixin'
 
 export default {
   name: 'RCDialog',
-  mixins: [dialogMinix]
+  mixins: [dialogMixin]
 }
 </script>

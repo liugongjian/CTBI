@@ -1,29 +1,26 @@
 <template>
   <div class="editor-object-container">
-    <div>
+    <div class="editor-item-title">
       显示图例
     </div>
-    <div class="editor-item-container">
-      <el-button
-        type="text"
-        @click="changeHandler('none')"
-      >无</el-button>
-      <el-button
-        type="text"
-        @click="changeHandler('top')"
-      >上</el-button>
-      <el-button
-        type="text"
-        @click="changeHandler('bottom')"
-      >下</el-button>
-      <el-button
-        type="text"
-        @click="changeHandler('left')"
-      >左</el-button>
-      <el-button
-        type="text"
-        @click="changeHandler('right')"
-      >右</el-button>
+    <div class="editor-item-container flex-align-center">
+      <el-tooltip
+        v-for="(item, index) in typeOptions"
+        :key="index"
+        effect="dark"
+        :content="item.name"
+        placement="top"
+      >
+        <span
+          class="svg-container"
+          :class="{'active': type===item.value}"
+        >
+          <svg-icon
+            :icon-class="item.value"
+            @click="changeHandler(item.value, index)"
+          />
+        </span>
+      </el-tooltip>
     </div>
   </div>
 </template>
@@ -40,9 +37,43 @@ export default {
   },
   data () {
     return {
+      typeOptions: [
+        {
+          name: '无',
+          value: 'none'
+        }, {
+          name: '上',
+          value: 'top'
+        }, {
+          name: '下',
+          value: 'bottom'
+        }, {
+          name: '左',
+          value: 'left'
+        }, {
+          name: '右',
+          value: 'right'
+        }
+      ]
     }
   },
-  computed: {},
+  computed: {
+    type () {
+      let type = 'none'
+      if (!this.option.show) {
+        type = 'none'
+      } else if (this.option.show && this.option.top === 'auto' && this.option.left === 'center' && this.option.orient === 'horizontal') {
+        type = 'top'
+      } else if (this.option.show && this.option.top === 'bottom' && this.option.left === 'center' && this.option.orient === 'horizontal') {
+        type = 'bottom'
+      } else if (this.option.show && this.option.top === 'center' && this.option.left === 'auto' && this.option.orient === 'vertical') {
+        type = 'left'
+      } else if (this.option.show && this.option.top === 'center' && this.option.left === 'right' && this.option.orient === 'vertical') {
+        type = 'right'
+      }
+      return type
+    }
+  },
   watch: {},
   created () { },
   mounted () {
@@ -76,3 +107,17 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.svg-container {
+  cursor: pointer;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  margin-right: 8px;
+  line-height: 32px;
+  text-align: center;
+}
+.svg-container.active{
+  border: 1px solid rgba(250,131,52,1);
+}
+</style>

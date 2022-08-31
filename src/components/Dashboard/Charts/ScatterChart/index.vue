@@ -5,17 +5,19 @@
       :option="chartOption"
       autoresize
     />
-    <div v-else>数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-scatter" style="width:100%;height:100%;" />
   </div>
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
+import { deepClone, formatDataValue, getDataValueById, getLayoutOptionById } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
+import baseMixins from '@/components/Dashboard/mixins/baseMixins'
+import store from '@/store'
 
 export default {
   name: 'ScatterChart',
-  mixins: [YAxis],
+  mixins: [YAxis, baseMixins],
   props: {
     identify: {
       type: String,
@@ -26,57 +28,67 @@ export default {
     return {
       storeOption: {},
       chartOption: {},
-      dataValue: [
-        [10.0, 804],
-        [8.07, 600],
-        [13.0, 738],
-        [9.05, 881],
-        [11.0, 833],
-        [14.0, 766],
-        [13.4, 681],
-        [10.0, 633],
-        [14.0, 896],
-        [12.5, 682],
-        [9.15, 720],
-        [11.5, 720],
-        [3.03, 423],
-        [12.2, 733],
-        [2.02, 447],
-        [1.05, 333],
-        [4.05, 496],
-        [6.03, 724],
-        [12.0, 626],
-        [12.0, 884],
-        [7.08, 582],
-        [5.02, 568]
-      ]
+      dataValue: null,
+      dataOption: [],
+      series: [],
+      xAxis: { type: 'category' },
+      yAxis: {},
+      grid: {}
     }
   },
   watch: {
     storeOption: {
       handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
+        if (this.dataValue) {
+          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
         }
         this.getOption()
+      },
+      deep: true
+    },
+    dataOption: {
+      handler (val) {
+        const isData = val.findIndex(item => {
+          return item.i === this.identify
+        })
+        if (isData !== -1) {
+          this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
+          this.getOption()
+        }
       },
       deep: true
     }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
-    this.getOption()
+    this.dataOption = store.state.app.dataOption
   },
   methods: {
+    reloadImpl () {
+      this.dataValue = formatDataValue(deepClone(this.chartData))
+      this.getOption()
+    },
     getOption () {
       const { Legend, Slider } = this.storeOption.theme.ComponentOption
       const { XAxis, YAxis } = this.storeOption.theme.Axis
+      let measureLen = 1
+      if (this.chartData?.fields?.Measure) {
+        measureLen = this.chartData.fields.Measure?.fields?.length
+      }
       this.chartOption = {
-        // 'tooltip': option.Tooltip,
+        tooltip: {
+          show: true,
+          trigger: 'item',
+          axisPointer: {
+            type: 'cross',
+            show: true
+          },
+          formatter: '{b}<br />{a}: {c}'
+        },
         'legend': Legend,
         xAxis: [
           {
+            type: 'category',
             // 轴线显示与样式
             'axisLine': {
               'show': XAxis.show,
@@ -134,17 +146,23 @@ export default {
             'axisTick': {
               'show': YAxis.showTicks
             },
+            min: YAxis.autoMin ? 0 : YAxis.min,
+            max: function (value) {
+              if (!YAxis.autoMax) {
+                return YAxis.max < value.max ? null : YAxis.max
+              }
+            },
             // 轴标题和单位
             name: YAxis.showTitle && (YAxis.unit ? `${YAxis.title}(${YAxis.unit})` : YAxis.title)
           }
         ],
-        'series': [
-          {
-            'symbolSize': Slider.symbolSize,
-            'type': 'scatter',
-            'data': this.dataValue
-          }
-        ]
+        dataset: {
+          source: this.dataValue
+        },
+        'series': Array(measureLen).fill({
+          'symbolSize': Slider.symbolSize,
+          'type': 'scatter'
+        })
       }
     }
   }

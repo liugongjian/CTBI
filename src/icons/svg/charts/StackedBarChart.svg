@@ -1,1 +1,42 @@
-<svg t="1649814052428" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2700" width="200" height="200"><path d="M129.292929 527.601778h147.105616v323.635717H129.292929z" fill="#29C287" p-id="2701"></path><path d="M335.614707 129.750626h147.106909v676.692041H335.614707z" fill="#706EE7" p-id="2702"></path><path d="M541.191758 409.914182h147.105616v441.323313H541.191758z" fill="#29C287" p-id="2703"></path><path d="M129.292929 291.338343h147.104324v235.373899H129.292929z" fill="#706EE7" p-id="2704"></path><path d="M335.616 409.424162h147.105616V850.747475H335.616z" fill="#29C287" p-id="2705"></path><path d="M540.902141 341.359192H688.006465v235.373899H540.902141z" fill="#706EE7" p-id="2706"></path><path d="M745.015596 411.177374H892.121212v441.323313H745.015596z" fill="#29C287" p-id="2707"></path><path d="M745.015596 331.015758h147.104323v235.373899H745.015596z" fill="#706EE7" p-id="2708"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-54">
+            <rect id="矩形备份-156" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="fsux_图表_堆积柱状图备份-9" transform="translate(42.666667, 85.333333)" fill-rule="nonzero">
+                <g id="编组-18">
+                    <polygon id="路径" fill="url(#linearGradient-1)" points="0 469.733132 181.014707 469.733132 181.014707 851.841913 0 851.841913"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-2)" points="253.880696 0 434.896994 0 434.896994 798.953755 253.880696 798.953755"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="506.845 330.782263 687.859707 330.782263 687.859707 851.841913 506.845 851.841913"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-4)" points="0 190.782668 181.013117 190.782668 181.013117 468.682878 0 468.682878"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="253.882287 330.203709 434.896994 330.203709 434.896994 851.263359 253.882287 851.263359"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-4)" points="506.488623 249.841062 687.501741 249.841062 687.501741 527.741272 506.488623 527.741272"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-3)" points="757.65196 332.273683 938.666667 332.273683 938.666667 853.333333 757.65196 853.333333"></polygon>
+                    <polygon id="路径" fill="url(#linearGradient-5)" points="757.65196 237.628823 938.665076 237.628823 938.665076 515.529033 757.65196 515.529033"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

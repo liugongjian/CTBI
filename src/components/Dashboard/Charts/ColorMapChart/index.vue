@@ -5,132 +5,139 @@
       :option="chartOption"
       autoresize
     />
-    <div v-else>数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-color-map" style="width:100%;height:100%;" />
   </div>
 </template>
 
 <script>
-import chinaJson from './china.json'
-import { getLayoutOptionById } from '@/utils/optionUtils'
-import colorMapMixins from '@/components/Dashboard/mixins/colorMapMixins'
+import mapMixins from '@/components/Dashboard/mixins/mapMixins'
+import { deepClone } from '@/utils/optionUtils'
 export default {
   name: 'ColorMapChart',
-  mixins: [colorMapMixins],
-  props: {
-    identify: {
-      type: String,
-      default: ''
-    }
-  },
+  mixins: [mapMixins],
   data () {
     return {
-      storeOption: {},
       chartOption: {},
-      dataValue: [
-        {
-          name: '南海诸岛',
-          value: 10,
-          eventTotal: 100,
-          specialImportant: 10,
-          import: 10,
-          compare: 10,
-          common: 40,
-          specail: 20
-        },
-        {
-          name: '上海市',
-          value: 10
-        },
-        {
-          name: '重庆市',
-          value: 20
-        },
-        {
-          name: '河北省',
-          value: 30
-        },
-        {
-          name: '云南省',
-          value: 70
-        },
-        {
-          name: '辽宁省',
-          value: 20
-        },
-        {
-          name: '黑龙江省',
-          value: 40
-        },
-        {
-          name: '山东省',
-          value: 50
-        },
-        {
-          name: '新疆维吾尔自治区',
-          value: 60
-        },
-        {
-          name: '江西省',
-          value: 40
-        },
-        {
-          name: '湖北省',
-          value: 10
-        },
-        {
-          name: '广西壮族自治区',
-          value: 20
-        }
-      ]
+      dataValue: null
     }
-  },
-  watch: {
-    storeOption: {
-      handler (val) {
-        val.theme.Basic.Title.testShow = val.theme.Basic.TestTitle.testShow
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
-          this.getOption()
-        }
-      },
-      deep: true
-    }
-  },
-  mounted () {
-    this.$echarts.registerMap('china', chinaJson)
-    this.storeOption = getLayoutOptionById(this.identify)
-    this.getOption()
   },
   methods: {
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.chartOption = {
-        legend: componentOption.Legend,
-        visualMap: {
-          show: true,
-          type: 'piecewise',
-          orient: 'horizontal',
-          text: ['100', '0'],
-          min: 0,
-          max: 100,
-          realtime: false,
-          calculable: true
-        },
-        series: [
-          {
-            type: 'map',
-            map: 'china',
-            roam: true,
-            label: {
-              show: true
-            },
-            labelLayout: {
-              hideOverlap: true
-            },
-            data: this.dataValue
-          }
-        ]
+      const seriesOption = this.getSeriesOption()
+      if (seriesOption) {
+        this.dataValue = seriesOption.data
+        const min = Number.parseFloat(seriesOption.min)
+        const max = Number.parseFloat(seriesOption.max)
+
+        this.chartOption = {
+          legend: componentOption.Legend,
+          visualMap: {
+            show: true,
+            orient: 'horizontal',
+            type: 'continuous',
+            // visualMapContinuous 组件两端文本
+            text: [seriesOption.max, seriesOption.min],
+            // 指定 visualMapContinuous 组件的允许的最小值。'min' 必须用户指定。
+            min,
+            // 指定 visualMapContinuous 组件的允许的最大值。'max' 必须用户指定
+            max,
+            realtime: true,
+            calculable: true,
+            color: ['#FFAC2E', '#FFE4B5']
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: ({ marker, data }) => {
+              let temp = []
+              if (data) {
+                temp = data.text.map(item => {
+                  return `${item.name} ${item.value}`
+                })
+                return [
+                  `${marker} ${data.name}`,
+                  ...temp
+                ].join('<br \>')
+              }
+              return ''
+            }
+          },
+          series: [
+            {
+              type: 'map',
+              map: 'china',
+              // 是否开启鼠标缩放和平移漫游。
+              roam: true,
+              zoom: 1.2,
+              itemStyle: {
+                areaColor: '#EBEDF0',
+                borderColor: '#fff'
+              },
+              data: this.dataValue
+            }
+          ]
+        }
       }
+    },
+    getSeriesOption () {
+      const { data, fields } = this.chartData
+      if (data && data.length > 0) {
+        // 最小值
+        let min = null
+        // 最大值
+        let max = null
+        // 维度， 度量
+        const { Dimension, Measure } = fields
+        // 维度，只会有一条
+        const dimensionField = Dimension.fields[0].displayColumn
+        // 度量，最多5条数据
+        // 仅截取第一个度量作为地图的展示值，其他值放在tooltip中展示
+        const measureFields = Measure.fields
+        const firstMeasureField = Measure.fields[0].displayColumn
+        const result = data.map(item => {
+          const text = measureFields.map(field => {
+            return {
+              name: field.displayColumn,
+              value: item[field.displayColumn]
+            }
+          })
+
+          min = this.getMin(min, item[firstMeasureField])
+          max = this.getMax(max, item[firstMeasureField])
+
+          return {
+            name: item[dimensionField],
+            value: item[firstMeasureField],
+            text
+          }
+        })
+        return {
+          min,
+          max,
+          data: deepClone(result)
+        }
+      }
+      return null
+    },
+    getMin (originValue, value) {
+      let temp = originValue
+      if (!temp) {
+        temp = value
+      }
+      if (Number.parseFloat(temp) > Number.parseFloat(value)) {
+        temp = value
+      }
+      return temp
+    },
+    getMax (originValue, value) {
+      let temp = originValue
+      if (!temp) {
+        temp = value
+      }
+      if (Number.parseFloat(temp) < Number.parseFloat(value)) {
+        temp = value
+      }
+      return temp
     }
   }
 }

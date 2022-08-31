@@ -6,28 +6,37 @@ const apps = [
     meta: { title: '首页', icon: 'dashboard', affix: true }
   },
   {
-    path: '/editor',
-    name: 'Editor',
-    component: () => import('@/components/Editor/index.vue'),
-    meta: { title: 'SQl', icon: 'dashboard', affix: true }
+    path: '/template',
+    name: 'template',
+    component: () => import('@/views/template/index.vue'),
+    meta: { title: '模板列表', icon: 'dashboard', affix: true }
   },
   {
-    path: '/dashboard/',
-    name: 'dashboard',
-    component: () => import('@/views/dashboard/index.vue'),
+    path: '/dashboardList/',
+    name: 'dashboardList',
+    component: () => import('@/views/dashboard/list.vue'),
     meta: { title: '仪表盘', icon: 'dashboard', affix: true }
   },
   {
-    path: '/dataSource',
-    name: 'dataSource',
-    component: () => import('@/views/dataManage/dataSource.vue'),
-    meta: { title: '数据源', icon: 'dashboard', affix: true }
-  },
-  {
-    path: '/dataSet',
-    name: 'dataSet',
-    component: () => import('@/views/dataManage/dataSet.vue'),
-    meta: { title: '数据集', icon: 'dashboard', affix: true }
+    path: '/dataManage',
+    name: 'dataManage',
+    redirect: '/dataManage/dataSource',
+    meta: { title: '数据管理', icon: 'dashboard', affix: true },
+    component: () => import('@/views/dataManage/index.vue'),
+    children: [
+      {
+        path: 'dataSource',
+        name: 'dataSource',
+        component: () => import('@/views/dataManage/dataSource.vue'),
+        meta: { title: '数据源', icon: 'dashboard', affix: true }
+      },
+      {
+        path: 'dataSet',
+        name: 'dataSet',
+        component: () => import('@/views/dataManage/dataSet/index.vue'),
+        meta: { title: '数据集', icon: 'dashboard', affix: true }
+      }
+    ]
   },
   {
     path: '/userManage',

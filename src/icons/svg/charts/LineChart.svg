@@ -1,1 +1,31 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1646998879872" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2320" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><defs><style type="text/css"></style></defs><path d="M888 792H200V168c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v688c0 4.4 3.6 8 8 8h752c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8z" p-id="2321"></path><path d="M305.8 637.7c3.1 3.1 8.1 3.1 11.3 0l138.3-137.6L583 628.5c3.1 3.1 8.2 3.1 11.3 0l275.4-275.3c3.1-3.1 3.1-8.2 0-11.3l-39.6-39.6c-3.1-3.1-8.2-3.1-11.3 0l-230 229.9L461.4 404c-3.1-3.1-8.2-3.1-11.3 0L266.3 586.7c-3.1 3.1-3.1 8.2 0 11.3l39.5 39.7z" p-id="2322"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#C7C6CA" offset="0%"></stop>
+            <stop stop-color="#E5E5E7" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FFB676" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-48">
+            <rect id="矩形备份-59" x="0" y="0" width="1024" height="1024"></rect>
+            <g id="编组-3备份-7" transform="translate(42.666667, 128.000000)" fill-rule="nonzero">
+                <g id="编组-8">
+                    <polygon id="路径备份-46" fill="url(#linearGradient-1)" transform="translate(469.333333, 729.247706) rotate(90.000000) translate(-469.333333, -729.247706) " points="430.58104 259.914373 508.085627 259.914373 508.085627 1198.58104 430.58104 1198.58104"></polygon>
+                    <g id="fsux_图表_折线图备份-4" transform="translate(1.855072, 0.000000)">
+                        <polygon id="路径" fill="url(#linearGradient-2)" points="432.779872 616.413534 213.160744 466.143504 61.3637341 582.679379 0 509.07749 206.701224 349.607628 439.239392 506.011239 846.181186 276.005738 897.855072 355.741208"></polygon>
+                        <polygon id="路径" fill="url(#linearGradient-3)" points="432.779872 340.407796 213.160744 190.137765 61.3637341 306.673641 0 233.071752 206.701224 73.6018895 439.239392 230.005501 846.181186 0 897.855072 79.7354702"></polygon>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

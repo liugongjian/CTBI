@@ -1,5 +1,6 @@
 import store from '@/store'
 import Layout from '@/layout/index.vue'
+import BlankLayout from '@/layout/BlankLayout.vue'
 import apps from '@/router/app.router'
 /**
 * Note: sub-menu only appear when route children.length >= 1
@@ -39,9 +40,59 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/dataManage/dataSet/edit',
+    redirect: '/dataManage/dataSet/edit/page',
+    component: BlankLayout,
+    children: [
+      {
+        path: 'page',
+        name: 'dataSetEdit',
+        hidden: true,
+        component: () => import('@/views/dataManage/dataSet/dataSetEdit/index.vue')
+      }
+    ]
+  },
+  {
+    path: '/dashboard/',
+    name: 'dashboard',
+    component: () => import('@/views/dashboard/index.vue'),
+    meta: { title: '仪表盘', icon: 'dashboard', affix: true, keepAlive: true }
+  },
+  {
+    path: '/dashboard/publish/:id',
+    name: 'dashboard/publish',
+    component: () => import('@/views/dashboard/share.vue'),
+    meta: { title: '仪表盘', icon: 'dashboard', affix: true, keepAlive: true }
+  },
+  {
+    path: '/dashboard',
+    redirect: '/dashboard/page',
+    component: BlankLayout,
+    children: [
+      {
+        path: 'page',
+        name: 'dashboard/page',
+        hidden: true,
+        component: () => import('@/views/dashboard/index.vue'),
+        meta: { title: '仪表盘', icon: 'dashboard', affix: true, keepAlive: true }
+      }
+    ]
+  },
+  {
     path: '/login',
-    name: 'login',
-    component: () => import('@/views/login/index')
+    component: () => import('@/views/login/index'),
+    children: [
+      {
+        path: '/login/activate',
+        component: () => import('@/views/login/activate'),
+        name: 'activate'
+      },
+      {
+        path: '/',
+        component: () => import('@/views/login/login'),
+        name: 'login'
+      }
+    ]
   }
 ]
 
