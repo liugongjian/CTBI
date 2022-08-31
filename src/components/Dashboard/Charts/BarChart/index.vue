@@ -67,7 +67,7 @@ export default {
             type: 'shadow'
           },
           formatter: (params) => {
-            return params.name + '</br>' + params.marker + ' ' + params.seriesName + '：' + params.value[1] + (YAxis.unit || '')
+            return params.name + '</br>' + params.marker + ' ' + params.seriesName + '：' + params.value[params.seriesIndex + 1] + (YAxis.unit || '')
           }
         },
         'yAxis': this.yAxis,
