@@ -70,7 +70,6 @@ export default {
           fields: params.transformFields,
           data: res.result.data
         }
-        console.log('daa22', this.chartData)
 
         const storeDataOption = store.state.app.dataOption.find(item => {
           return item.id === this.identify
