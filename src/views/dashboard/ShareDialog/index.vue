@@ -13,7 +13,10 @@
       :rules="shareRules"
       label-width="70px"
     >
-      <el-form-item label="有效期" prop="shareEndTime">
+      <el-form-item
+        label="有效期"
+        prop="shareEndTime"
+      >
         <el-date-picker
           v-model="currentShareInfo.shareEndTime"
           type="date"
@@ -23,11 +26,26 @@
           @change="shareDateChange"
         />
       </el-form-item>
-      <el-form-item label="密码" prop="sharePassword">
-        <el-input v-model="currentShareInfo.sharePassword" class="input" placeholder="请输入分享密码" @input="shareChange" />
-        <el-button class="random" type="text" @click="randomPwd">随机生成</el-button>
+      <el-form-item
+        label="密码"
+        prop="sharePassword"
+      >
+        <el-input
+          v-model="currentShareInfo.sharePassword"
+          class="input"
+          placeholder="请输入分享密码"
+          @input="shareChange"
+        />
+        <el-button
+          class="random"
+          type="text"
+          @click="randomPwd"
+        >随机生成</el-button>
       </el-form-item>
-      <el-form-item label="白名单" prop="whiteList">
+      <el-form-item
+        label="白名单"
+        prop="whiteList"
+      >
         <el-input
           v-model="currentShareInfo.whiteList"
           class="input"
@@ -40,7 +58,11 @@
       <el-form-item v-if="currentData.shareUrl">
         <div class="d-f">
           <p class="shareCopyUrl">{{ currentData.shareUrl }}</p>
-          <el-button class="random" type="text" @click="copyUrl">复制地址</el-button>
+          <el-button
+            class="random"
+            type="text"
+            @click="copyUrl"
+          >复制地址</el-button>
         </div>
       </el-form-item>
     </el-form>
@@ -76,7 +98,7 @@ import {
 } from '@/api/dashboard'
 import { encryptAesForShare, decryptAesForShare } from '@/utils/encrypt'
 import moment from 'moment'
-function randomPassword(size = 10) {
+function randomPassword (size = 10) {
   const lower = 'abcdefghijkmlnopqrstwvxyz'
   const upper = lower.toUpperCase()
   const str = upper + lower
@@ -95,7 +117,7 @@ function randomPassword(size = 10) {
   return result.join('')
 }
 
-function reassembleData(data) {
+function reassembleData (data) {
   const result = data ? { ...data } : {}
   result.sharePassword = result.sharePassword ? decryptAesForShare(result.sharePassword) : ''
   return result
@@ -128,7 +150,7 @@ export default {
         ]
       },
       pickerOptions: {
-        disabledDate(time) {
+        disabledDate (time) {
           return time.getTime() < Date.now()
         }
       }
@@ -174,13 +196,13 @@ export default {
     async executeSubmit () {
       try {
         const { shareEndTime, sharePassword, whiteList } = this.currentShareInfo
-        const ipPattern = /((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/g
+        const ipPattern = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
         // IP校验
-        const ips = whiteList ? whiteList.split(',') : []
+        const ips = whiteList ? whiteList.trim().split(',') : []
         let finalIps = ips
         if (ips.length > 0) {
           finalIps = ips.map(item => item.trim()).filter(item => !!item)
-          if (finalIps.length > 0 && finalIps.some(ip => !ipPattern.test(ip))) {
+          if (finalIps.length > 0 && !finalIps.every(ip => ipPattern.test(ip))) {
             this.$message.error('白名单IP地址格式有错误，请更改')
             return
           }
@@ -199,9 +221,11 @@ export default {
         this.currentData = { ...this.currentData, ...info }
         this.needShareAgain = false
         this.oldShareInfo = { ...this.currentShareInfo }
-        this.$emit('handleAction', { id: this.currentData._id, publishStatus: 1, ...info, shareEndTime,
+        this.$emit('handleAction', {
+          id: this.currentData._id, publishStatus: 1, ...info, shareEndTime,
           sharePassword,
-          whiteList: whiteList ? whiteList.split(',') : [] })
+          whiteList: whiteList ? whiteList.split(',') : []
+        })
       } catch (error) {
         console.log(error)
       }
@@ -258,24 +282,24 @@ export default {
         console.log(error)
       }
     },
-    randomPwd() {
+    randomPwd () {
       this.currentShareInfo = {
         ...this.currentShareInfo,
         sharePassword: randomPassword()
       }
       this.testInfo()
     },
-    close() {
+    close () {
       this.resetForm()
       this.shareDashboardVisible = false
     },
-    resetForm() {
+    resetForm () {
       this.$refs['shareForm'].resetFields()
     },
-    shareChange() {
+    shareChange () {
       this.testInfo()
     },
-    testInfo() {
+    testInfo () {
       if (!this.currentData.shareUrl) {
         return
       }
@@ -298,10 +322,10 @@ export default {
     margin-top: 24px;
   }
 }
-.input{
+.input {
   width: 360px;
 }
-.random{
+.random {
   margin-left: 14px;
 }
 .shareCopyUrl {
@@ -313,7 +337,7 @@ export default {
   border: 1px solid rgba(223, 225, 229, 1);
   font-family: PingFangSC-Regular;
   font-size: 12px;
-  color: rgba(0,0,0,0.65);
+  color: rgba(0, 0, 0, 0.65);
   line-height: 20px;
   font-weight: 400;
   border-radius: 2.5px;
@@ -335,7 +359,7 @@ export default {
 ::v-deep .el-dialog__footer {
   padding: 0px;
 }
-.dialog-footer{
+.dialog-footer {
   padding-top: 10px;
 }
 </style>

@@ -2,19 +2,30 @@
   <el-container v-loading="loading && !recoverVisible">
     <el-header class="bi-header">
       <!-- 设置栏 -->
-      <Navbar :dashboard="dashboard" :mode="mode" @handleChange="handleNavbarChange" />
+      <Navbar
+        :dashboard="dashboard"
+        :mode="mode"
+        @handleChange="handleNavbarChange"
+      />
     </el-header>
     <el-container>
       <el-container>
         <!-- 工具栏 -->
-        <el-header v-show="mode === 'edit'" class="tool-header">
+        <el-header
+          v-show="mode === 'edit'"
+          class="tool-header"
+        >
           <Tools
             @getGridLayout="getGridLayout"
             @getParentRect="getParentRect"
           />
         </el-header>
         <!-- 画布主体 -->
-        <el-main ref="mainLayout" :class="{'main-layout-edit': mode === 'edit', 'main-layout-preview': mode !== 'edit',}" :style="layoutStyles">
+        <el-main
+          ref="mainLayout"
+          :class="{'main-layout-edit': mode === 'edit', 'main-layout-preview': mode !== 'edit',}"
+          :style="layoutStyles"
+        >
           <div
             id="content"
             :style="scaleStyles"
@@ -95,7 +106,7 @@ export default {
   components: {
     Widget, Settings, Tools, Navbar
   },
-  data() {
+  data () {
     const dashboardId = this.$route.query.id || ''
     this.timer = null
     this.saveName = 'dashboard-' + (dashboardId || 'new')
@@ -116,7 +127,7 @@ export default {
     layout () {
       return store.state.app.layout
     },
-    layoutStyles() {
+    layoutStyles () {
       return this.$store.state.settings.layoutStyles
     },
     scaleStyles() {
@@ -161,7 +172,7 @@ export default {
     this.destroyedData()
   },
   methods: {
-    recoverDashboard() {
+    recoverDashboard () {
       const saveName = this.saveName
       const saveData = localStorage.getItem(saveName)
       const saveTag = localStorage.getItem(this.saveTagName)
@@ -172,7 +183,7 @@ export default {
         this.recoverVisible = true
       }
     },
-    confirmRecover() {
+    confirmRecover () {
       const saveName = this.saveName
       const saveData = localStorage.getItem(saveName)
       this.useRecover = true
@@ -181,7 +192,7 @@ export default {
       // store.dispatch('app/updateLayout', JSON.parse(saveData))
       this.resetRecover()
     },
-    cancelRecover() {
+    cancelRecover () {
       this.useRecover = false
       const result = this.dashboard
       const settings = result.setting ? JSON.parse(result.setting) : null
@@ -191,12 +202,12 @@ export default {
       }
       this.resetRecover()
     },
-    resetRecover() {
+    resetRecover () {
       this.recoverVisible = false
       localStorage.removeItem(this.saveName)
       localStorage.removeItem(this.saveTagName)
     },
-    async getDashboardData() {
+    async getDashboardData () {
       const id = this.dashboardId
       const from = this.$route.query.from
       if (id) {
@@ -250,7 +261,7 @@ export default {
         y: domRec.y
       })
     },
-    handleNavbarChange({ action, data }) {
+    handleNavbarChange ({ action, data }) {
       if (action === 'changeMode') {
         this.mode = data
         this.setStoreMode(data)
@@ -274,7 +285,7 @@ export default {
         this.handleBack()
       }
     },
-    handleBack() {
+    handleBack () {
       const saveTag = localStorage.getItem(this.saveTagName)
       const saveData = localStorage.getItem(this.saveName)
       if (saveTag !== 'saved' && saveData) {
@@ -287,11 +298,11 @@ export default {
         this.$router.go(-1)
       }
     },
-    confirmBack() {
+    confirmBack () {
       this.unsavedVisible = false
       this.$router.go(-1)
     },
-    saveDashboardToLocal() {
+    saveDashboardToLocal () {
       console.log('saveDashboardToLocal')
       const saveName = this.saveName
       this.timer = setTimeout(() => {
@@ -323,7 +334,7 @@ export default {
         this.saveDashboardToLocal()
       }, 10 * 1000)
     },
-    beforeunload(e) {
+    beforeunload (e) {
       const saveTag = localStorage.getItem(this.saveTagName)
       const saveData = localStorage.getItem(this.saveName)
       if (saveTag !== 'saved' && saveData) {
@@ -355,7 +366,7 @@ export default {
       }
     },
     // 触发 interReload事件，获取每个图表的渲染数据
-    getLayoutRenderData(layout) {
+    getLayoutRenderData (layout) {
       const idLimits = []
       layout.forEach((item, index) => {
         if (item.is !== 'TabChart') {
@@ -391,15 +402,15 @@ export default {
       this.setStoreMode('edit')
       window.removeEventListener('beforeunload', this.beforeunload)
     },
-    setStoreMode(mode) {
+    setStoreMode (mode) {
       store.dispatch('app/updateDashboardMode', mode)
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-.tool-header{
-    position: relative;
+.tool-header {
+  position: relative;
 }
 .main-layout-edit {
   padding: 0px;
