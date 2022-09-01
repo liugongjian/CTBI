@@ -28,10 +28,11 @@
         >
           <div
             id="content"
+            :style="scaleStyles"
             @dragover="dragover"
             @click="clearCurrentLayoutId"
           >
-            <widget ref="gridLayout" />
+            <widget ref="gridLayout" :class="{ gridLayoutExtra: mode === 'edit'}" />
           </div>
         </el-main>
       </el-container>
@@ -128,6 +129,9 @@ export default {
     },
     layoutStyles () {
       return this.$store.state.settings.layoutStyles
+    },
+    scaleStyles() {
+      return this.$store.state.settings.scaleStyles
     }
   },
   mounted () {
@@ -150,7 +154,11 @@ export default {
     this.setStoreMode(this.$route.query.mode === '1' ? 'preview' : 'edit')
     window.addEventListener('beforeunload', this.beforeunload)
   },
-  destroyed () {
+  beforeDestroy() {
+    // 百分比重置 默认为100%
+    store.dispatch('settings/changeSetting', { key: 'scaleStyles', value: { transform: 'scale(1)', transformOrigin: 'center top' } })
+  },
+  destroyed() {
     // if (this.timer) {
     //   console.log('destroyed')
     //   clearTimeout(this.timer)
@@ -411,5 +419,8 @@ export default {
 .main-layout-preview {
   padding: 0px;
   height: calc(100vh - 60px);
+}
+.gridLayoutExtra {
+  padding-bottom: 300px
 }
 </style>
