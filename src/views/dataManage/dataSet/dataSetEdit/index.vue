@@ -309,7 +309,7 @@ export default {
     const queryDataSourceId = this.$route.query.dataSourceId
     if (queryDataSourceId) {
       this.dataInfo.dataSourceId = queryDataSourceId
-      // this.handleChangeDataSource(queryDataSourceId)
+      this.handleChangeDataSource(queryDataSourceId)
     }
     const data = this.$route.query
     // 存在id，获取数据集详情
