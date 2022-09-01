@@ -469,7 +469,7 @@ export default {
         const data = await confirmEditSql(body)
         Object.assign(this.dataInfo, this.editDataInfo)
         Object.assign(this.dataInfo.sql, data.sql)
-        this.dataInfo.fields = data.fields
+        this.$set(this.dataInfo, 'fields', data.fields)
         this.$message({
           message: '恭喜你，确认编辑成功',
           type: 'success'

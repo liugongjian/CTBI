@@ -69,7 +69,7 @@
                   :active-tag-name="activeTagName"
                   :data="data"
                   :fields="fields"
-                  @reset="getDimensionMeasureData(fields);refreshPreview();"
+                  @reset="getDimensionMeasureData(fields);"
                 />
               </div>
             </div>
@@ -111,7 +111,7 @@
                 <template v-for="(v) in parent.children">
                   <vxe-table-column
                     v-if="(v.attributes && !v.attributes[0].isHidden)"
-                    :key="`column-child-${v.index}-${v.$treeNodeId}`"
+                    :key="`column-child-${v.index}-` + getDate()"
                     :field="v.displayColumn"
                     width="95"
                     header-class-name="column-child"
@@ -134,7 +134,7 @@
                           :active-tag-name="activeTagName"
                           :data="v"
                           :fields="fields"
-                          @reset="getDimensionMeasureData(fields);refreshPreview();"
+                          @reset="getDimensionMeasureData(fields);"
                         />
                       </div>
                     </template>
@@ -203,7 +203,7 @@
               >
                 <re-input
                   v-model="scope.row.displayColumn"
-                  maxlength="50"
+                  :max-length="50"
                   :blur-fun="(newVal, oldVal) => {return handlerBlur(newVal, oldVal, scope.row.index)}"
                   @blur="(val) => { handleBlur(val, scope.row) }"
                 />
@@ -236,7 +236,10 @@
                 >
                   <template slot-scope="{ node, data }">
                     <span v-if="data.icon">
-                      <svg-icon :icon-class="data.icon" style="width: 20px;margin-right: 8px;" />
+                      <svg-icon
+                        :icon-class="data.icon"
+                        style="width: 20px;margin-right: 8px;"
+                      />
                     </span>
                     <span>{{ data.label }}</span>
                   </template>
@@ -294,7 +297,7 @@
                   :active-tag-name="activeTagName"
                   :data="scope.row"
                   :fields="fields"
-                  @reset="getDimensionMeasureData(fields);refreshPreview();"
+                  @reset="getDimensionMeasureData(fields);"
                 />
               </div>
             </template>
@@ -350,6 +353,7 @@ export default {
   watch: {
     fields: {
       handler (n, o) {
+        console.log('触发fieldswatch事件')
         this.getDimensionMeasureData(n)
       },
       deep: true
@@ -405,6 +409,8 @@ export default {
       this.fieldsTree = getFieldsTree(fields)
       this.$nextTick(() => {
         this.$refs.vxeTable.refreshColumn()
+        console.log('刷新了表格字段')
+        this.$refs.vxeTable.reloadData(this.dimensionMeasureTableData)
       })
     },
     typeTransform (data) {
@@ -458,10 +464,10 @@ export default {
     handleBlur (val, item) {
       item.attributes[0].displayColumn = val
     },
-    getDate() {
+    getDate () {
       return new Date()
     },
-    getValueItem(value) {
+    getValueItem (value) {
       let result = null
       this.dataTypeOptions.forEach(item => {
         if (item.value === value) {

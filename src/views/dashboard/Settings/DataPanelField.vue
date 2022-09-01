@@ -69,7 +69,7 @@
             @change="handleRefresh"
           />
           <el-input-number
-            v-if="autoRefresh"
+            v-show="autoRefresh"
             v-model="time"
             :min="1"
             :precision="0"
@@ -79,7 +79,7 @@
             @input="handleRefresh"
           />
           <el-select
-            v-if="autoRefresh"
+            v-show="autoRefresh"
             v-model="unit"
             popper-class="setting-select"
             placeholder="请选择"
@@ -139,36 +139,17 @@ export default {
         label: '秒'
       }],
       time: 10,
-      unit: 'minute',
+      unit: 'second',
       interVal: null
     }
   },
   computed: {
-    refreshMax() {
+    refreshMax () {
       if (this.unit === 'minute') {
         return 1440
       }
       return 60
     }
-  },
-  watch: {
-    time: {
-      handler (val) {
-        if (this.autoRefresh) {
-          // 开启自动刷新的定时器
-          const time = 1000 * val * (this.unit === 'minute' ? 60 : 1)
-          this.interVal = setInterval(() => {
-            this.refreshStore()
-          }, time)
-        } else {
-          clearInterval(this.interVal)
-          this.interVal = null
-        }
-      },
-      deep: true
-    }
-  },
-  mounted () {
   },
   beforeDestroy () {
     clearInterval(this.interVal)
@@ -235,17 +216,19 @@ export default {
     },
     // 自动刷新
     handleRefresh (val) {
-      if (this.interVal) {
-        clearInterval(this.interVal)
-        this.interVal = null
-      }
+      if (this.autoRefresh) {
+        if (this.interVal) {
+          clearInterval(this.interVal)
+          this.interVal = null
+        }
 
-      if (val) {
-        // 开启自动刷新的定时器
-        const time = 1000 * this.time * (this.unit === 'minute' ? 60 : 1)
-        this.interVal = setInterval(() => {
-          this.refreshStore()
-        }, time)
+        if (val) {
+          // 开启自动刷新的定时器
+          const time = 1000 * this.time * (this.unit === 'minute' ? 60 : 1)
+          this.interVal = setInterval(() => {
+            this.refreshStore()
+          }, time)
+        }
       }
     },
     selectUnit (val) {
