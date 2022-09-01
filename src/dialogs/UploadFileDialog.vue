@@ -28,6 +28,7 @@
       class="form"
       :model="form"
       label-width="110px"
+      @submit.native.prevent
     >
       <el-form-item
         prop="file"
