@@ -87,7 +87,6 @@ export default {
           dataValue.push([dimensionData.join('-'), ...measureData])
         })
       }
-      console.log('adz', dataValue)
       return dataValue
     },
     // 拿到数据中的系列名字

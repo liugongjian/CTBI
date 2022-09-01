@@ -19,6 +19,7 @@ export default {
   'order': 9, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
+  'title': '瀑布图',
   'theme': { // 样式组件、配置合集
     'Basic': { // 基础属性
       'Title': { // 标题组件

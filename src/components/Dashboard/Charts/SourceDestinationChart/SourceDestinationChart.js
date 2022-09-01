@@ -1,3 +1,10 @@
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-09-01 14:07:39
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-01 14:25:00
+ * @Description:
+ */
 /**
  * type: {
  *    indicator: 指标,
@@ -18,6 +25,7 @@ export default {
   'order': 6,
   'version': '', // 版本号
   'field': {}, // 字段
+  'title': '来源去向图',
   'theme': {
     'Basic': {
       'Title': { // 标题组件

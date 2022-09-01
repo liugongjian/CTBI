@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-05 16:06:54
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-08 11:16:07
+ * @LastEditTime: 2022-09-01 17:29:07
  * @Description:
 -->
 <template>
@@ -25,13 +25,11 @@
       </div>
       <div class="flex-align-center m-t-12">
         <div class="editor-item-title">起始值取值</div>
-        <div>
-          <input
-            v-model="option.startValue"
-            type="number"
-            class="number-input"
-          >
-        </div>
+        <input
+          v-model="option.startValue"
+          type="number"
+          class="number-input"
+        >
       </div>
     </div>
     <el-checkbox
@@ -72,8 +70,8 @@ export default {
   box-sizing: border-box;
   background: transparent;
   color: #fff;
+  flex:1;
   padding: 0 8px;
-  width: 50px;
   height: 24px;
   line-height: 24px;
   overflow: hidden;

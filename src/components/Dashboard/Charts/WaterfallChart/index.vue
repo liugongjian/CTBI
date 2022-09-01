@@ -22,7 +22,10 @@ export default {
       storeOption: {},
       chartOption: {},
       dataValue: null,
-      dataOption: []
+      dataOption: [],
+      xAxis: { type: 'category' },
+      yAxis: { type: 'value' }
+
     }
   },
   watch: {
@@ -54,10 +57,10 @@ export default {
     reloadImpl () {
       this.dataValue = this.formatDataValue(deepClone(this.chartData))
       console.log('dddddd', this.dataValue)
+      this.xAxis.data = this.dataValue.dimensionData
       this.getOption()
     },
     formatDataValue(chartData) {
-      console.log('oooo', chartData)
       const DimensionKey = []
       const MeasureKey = []
       const { data, fields } = chartData
@@ -85,7 +88,7 @@ export default {
             dimensionDataTemp.push(item[dim])
           })
           MeasureKey.forEach(mea => {
-            measureData.push(item[mea])
+            measureData.push(Number(item[mea]))
           })
           dimensionData.push(dimensionDataTemp.join('-'))
         })
@@ -93,86 +96,124 @@ export default {
       }
     },
     getOption () {
-      const { StartOrCumulative } = this.storeOption.theme.NumberSetting.StartOrCumulative
+      const { StartOrCumulative } = this.storeOption.theme.NumberSetting
+      const { ComponentOption } = this.storeOption.theme
       const { startValueCheck, startValueRemark, startValue, cumulativeValueCheck, cumulativeValueRemark } = StartOrCumulative
-      if (startValueCheck) {
-        this.dataValue.dimensionData.unshift(startValueRemark)
-        this.dataValue.measureData.unshift(startValue)
-      }
-      if (cumulativeValueCheck) {
-        this.dataValue.dimensionData.push(cumulativeValueRemark)
-      }
+      if (this.dataValue) {
+        if (startValueCheck) {
+          if (this.dataValue.dimensionData.indexOf(startValueRemark) >= 0) {
+            this.dataValue.dimensionData.splice(0, 1)
+            this.dataValue.measureData.splice(0, 1)
+          }
+          this.dataValue.dimensionData.unshift(startValueRemark)
+          this.dataValue.measureData.unshift(Number(startValue))
+        }
+        if (cumulativeValueCheck) {
+          if (this.dataValue.dimensionData.indexOf(cumulativeValueRemark) >= 0) {
+            this.dataValue.dimensionData.pop(1)
+            this.dataValue.measureData.pop(1)
+          }
+          this.dataValue.dimensionData.push(cumulativeValueRemark)
+          let sum = 0
+          this.dataValue.measureData.forEach((item) => {
+            sum += item
+          })
+          this.dataValue.measureData.push(sum)
+        }
 
-      // this.getSeries(componentOption) // 获取Series
+        const incomeData = this.dataValue.measureData.map((item) => {
+          if (item >= 0) {
+            return item
+          } else {
+            return '-'
+          }
+        })
+
+        const expressData = this.dataValue.measureData.map((item) => {
+          if (item < 0) {
+            return -(-item)
+          } else {
+            return '-'
+          }
+        })
+
+        const placeholderData = [0]
+        this.dataValue.measureData.forEach((item, index) => {
+          if (index >= 2) {
+            let sum = 0
+            for (let i = 0; i < index; i++) {
+              sum += this.dataValue.measureData[i]
+            }
+            placeholderData.push(sum)
+          } else if (index === 1) {
+            placeholderData.push(this.dataValue.measureData[0])
+          } else {
+            return
+          }
+        })
+        console.log('dada', placeholderData)
+        // 获取Series
+        this.getSeries(incomeData, expressData, placeholderData)
+      }
+      console.log('111')
 
       // // 系列配置-图表标签相关
       // this.setSeriesItem()
-      // // 获取颜色设置-使图例颜色与图形颜色对应
-      // const colorOption = []
-      // componentOption.Color.color.forEach(item => {
-      //   colorOption.push(item.color)
-      // })
-      // // 设置图例与图表距离
-      // this.setGrid(componentOption.Legend)
+      // 设置图例与图表距离
+      this.setGrid(ComponentOption.Legend)
 
-      // // 获取指标筛选中的图例数据
-      // const legendData = []
-      // this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
-      //   legendData.push({ name: item.value })
-      // })
-      // this.chartOption = {
-      //   'grid': this.grid,
-      //   'color': colorOption,
-      //   'legend': {
-      //     ...componentOption.Legend,
-      //     data: legendData
-      //   },
-      //   'xAxis': this.xAxis,
-      //   'tooltip': {
-      //     trigger: 'axis'
-      //   },
-      //   'yAxis': this.yAxis,
-      //   'markPoint': this.markPoint,
-      //   'dataset': {
-      //     'source': this.dataValue
-      //   },
-      //   'dataZoom': {
-      //     'type': 'slider',
-      //     'show': this.storeOption.theme.FunctionalOption.DataZoom.showDataZoom !== 'hide',
-      //     'realtime': true,
-      //     'start': 0,
-      //     'end': 100,
-      //     'xAxisIndex': [0, 1]
-      //   },
-      //   'series': this.series
-      // }
+      this.chartOption = {
+        'grid': this.grid,
+        'legend': {
+          ...ComponentOption.Legend
+        },
+        'xAxis': this.xAxis,
+        'tooltip': {
+          trigger: 'axis'
+        },
+        'yAxis': this.yAxis,
+        'series': this.series
+      }
     },
-    getSeries (componentOption) {
-      this.series = []
-      let seriesLength = 0
-      if (this.dataValue && this.dataValue.length > 0) {
-        this.dataValue.forEach(item => {
-          seriesLength = item.length - 1
-        })
-      } else {
-        return
-      }
-      this.setAxis()
-
-      for (let i = 0; i < seriesLength; i++) {
-        this.series.push({
+    getSeries (incomeData, expressData, placeholderData) {
+      this.series = [
+        {
+          name: 'Placeholder',
           type: 'bar',
-          name: this.dataValue[0][i + 1],
+          stack: 'Total',
+          itemStyle: {
+            borderColor: 'transparent',
+            color: 'transparent'
+          },
+          emphasis: {
+            itemStyle: {
+              borderColor: 'transparent',
+              color: 'transparent'
+            }
+          },
+          data: placeholderData
+        },
+        {
+          name: '增加值',
+          type: 'bar',
+          stack: 'Total',
           label: {
-            show: componentOption.ChartLabel.check, // 标签显示
-            position: 'top' // 标签位置
+            show: true,
+            position: 'top'
           },
-          labelLayout: {
-            hideOverlap: componentOption.ChartLabel.labelShow === 1 // 1.智能显示，2.全量显示 标签
+          data: incomeData
+        },
+        {
+          name: '减少值',
+          type: 'bar',
+          stack: 'Total',
+          label: {
+            show: true,
+            position: 'bottom'
           },
-          itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
-        })
-      }
+          data: expressData
+        }
+      ]
     }
   }
 }
