@@ -2,6 +2,7 @@
   <el-dialog
     :title=" !data ? '新建文件夹' : '编辑文件夹'"
     :visible.sync="visible"
+    :close-on-click-modal="false"
     width="30%"
     @close="close"
   >

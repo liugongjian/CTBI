@@ -6,7 +6,7 @@
       autoresize
       :update-options="{notMerge:true}"
     />
-    <div v-else>数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-area" style="width:100%;height:100%;" />
   </div>
 </template>
 
@@ -70,6 +70,9 @@ export default {
         legendData.push({ name: item.value })
       })
 
+      // 获取y轴配置信息，用于提取单位信息
+      const { Axis: { YAxis } } = this.storeOption.theme
+
       this.chartOption = {
         grid: this.grid,
         color: colorOption,
@@ -85,6 +88,17 @@ export default {
             label: {
               backgroundColor: '#6a7985'
             }
+          },
+          formatter: (params) => {
+            let result = ''
+            params.forEach((item, index) => {
+              const { data, seriesName, marker, color, name } = item
+              result += `<div>${name}</div><div style="line-height: 25px;">${marker}</span>
+                  <span style="color: ${color};">${seriesName}</span>
+                  <span style="float: right;margin-left: 20px;">${data[index + 1]}${(YAxis.unit || '')}</span>
+                </div>`
+            })
+            return result
           }
         },
         yAxis: this.yAxis,

@@ -2,6 +2,7 @@
   <el-dialog
     :title="title"
     :visible.sync="dialogVisible"
+    :close-on-click-modal="false"
     width="50%"
     @closed="destroyEditor"
   >

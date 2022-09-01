@@ -5,14 +5,13 @@
       :option="chartOption"
       autoresize
     />
-    <div v-else>数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-radar" style="width:100%;height:100%;" />
   </div>
 </template>
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
 import radarMixins from '@/components/Dashboard/mixins/radarMixins'
-import { colorTheme } from '@/constants/color.js'
 import store from '@/store'
 export default {
   name: 'RadarChart',
@@ -31,58 +30,6 @@ export default {
       indicator: [],
       dataValue: {},
       series: [
-        // {
-        //   value: [4200, 3000, 20000, 35000, 50000, 18000],
-        //   name: '分配预算',
-        //   itemStyle: {
-        //     normal: {
-        //       color: '#FFE434',
-        //       lineStyle: {
-        //         color: '#FFE434'
-        //       }
-        //     }
-        //   },
-        //   areaStyle: {
-        //     normal: {
-        //       width: 1,
-        //       opacity: 0
-        //     }
-        //   },
-        //   label: {
-        //     normal: {
-        //       show: false,
-        //       formatter: (params) => {
-        //         return params.value
-        //       }
-        //     }
-        //   }
-        // },
-        // {
-        //   value: [5000, 14000, 28000, 26000, 42000, 21000],
-        //   name: '实际支出',
-        //   itemStyle: {
-        //     normal: {
-        //       color: '#56A3F1',
-        //       lineStyle: {
-        //         color: '#56A3F1'
-        //       }
-        //     }
-        //   },
-        //   areaStyle: {
-        //     normal: {
-        //       width: 1,
-        //       opacity: 0.5
-        //     }
-        //   },
-        //   label: {
-        //     normal: {
-        //       show: false,
-        //       formatter: (params) => {
-        //         return params.value
-        //       }
-        //     }
-        //   }
-        // }
       ]
     }
   },
@@ -104,6 +51,8 @@ export default {
   methods: {
     setData () {
       const { data = [], fields } = this.dataValue
+      const { Color } =
+        this.storeOption.theme.ComponentOption
       if (data && data.length > 0) {
         for (const key in fields) {
           if (key === 'Dimension') {
@@ -124,9 +73,9 @@ export default {
                 },
                 itemStyle: {
                   normal: {
-                    color: colorTheme['官方'][index].value,
+                    color: Color['theme'][index].value,
                     lineStyle: {
-                      color: colorTheme['官方'][index].value
+                      color: Color['theme'][index].value
                     }
                   }
                 },
@@ -167,39 +116,20 @@ export default {
         }
       })
     },
-    // setIndicator(RadarCoordinates) {
-    //   const { maxValue, minValue, autoMaxValue, autoMinValue, showCoordinates } = RadarCoordinates
-    //   if (this.indicator && this.indicator.length > 0) {
-    //     this.indicator[0].max = autoMaxValue
-    //     this.indicator[0].min = autoMinValue
-    //     this.indicator[0].axisLabel = { show: showCoordinates }
-    //   }
-    //   console.log(this.dataValue)
-    // },
     getOption () {
-      const { Legend, RadarChartShape, RadarLabel: { labelShow }, RadarColor: { areaStyle, color } } =
+      const { Legend, RadarChartShape, RadarLabel: { labelShow, areaStyle }, Color: { color } } =
         this.storeOption.theme.ComponentOption
-      // const { maxValue, minValue, autoMaxValue, autoMinValue, showCoordinates } = RadarCoordinates
       this.setRadarConfig(areaStyle, labelShow)
       this.setColor(color)
       this.setData()
-      // this.setIndicator(RadarCoordinates)
       const shape = RadarChartShape.shape
       this.chartOption = {
         legend: Legend,
         radar: {
           indicator: [
-            // { name: '销售', max: autoMaxValue ? 6500 : (maxValue || 6500), min: autoMinValue ? 0 : minValue, axisLabel: { show: showCoordinates } },
-            // { name: '管理', max: 16000 },
-            // { name: '信息技术', max: 30000 },
-            // { name: '客服', max: 38000 },
-            // { name: '研发', max: 52000 },
-            // { name: '市场', max: 25000 }
             ...this.indicator
           ],
           axisLabel: {
-            // show: axisLabel,
-            // show: RadarCoordinates.showCoordinates,
             color: '#333',
             showMinLabel: true
           },

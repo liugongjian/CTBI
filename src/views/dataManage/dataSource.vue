@@ -1,9 +1,7 @@
 <template>
   <div class="data-source">
-    <!-- <div class="data-source__title">
-      <span>数据源</span>
-    </div> -->
     <div class="data-source__content">
+      <!-- header -->
       <div class="data-source__header">
         <div class="head-title">数据源</div>
         <div class="head-select">
@@ -14,15 +12,17 @@
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="mysql">MySQL</el-dropdown-item>
-              <el-dropdown-item command="mongoDB">MongoDB</el-dropdown-item>
+              <!-- <el-dropdown-item command="mongoDB">MongoDB</el-dropdown-item> -->
               <el-dropdown-item command="localFile">本地文件</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
       </div>
+      <!-- 添加数据源弹窗 -->
       <el-dialog
         :title="status+fileType[form.type]"
         :visible.sync="dialogVisible"
+        :close-on-click-modal="false"
         width="560px"
         class="dialog-new"
       >
@@ -61,6 +61,12 @@
               placeholder="请输入密码"
               show-password
             />
+          </el-form-item>
+          <el-form-item v-if="role==='superUser'&&status === '添加'" label="类型" prop="mold">
+            <el-radio-group v-model="form.mold">
+              <el-radio :label="1">私有</el-radio>
+              <el-radio :label="2">公有</el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-form>
         <span slot="footer">
@@ -101,9 +107,14 @@
                   </div>
                   <div class="table-row__text">
                     <div class="table-row__text-part1" :title="scope.row.displayName">{{ scope.row.displayName }}</div>
-                    <div class="table-row__text-part2" :title="scope.row.creator && scope.row.creator.userName || '-'">所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}</div>
+                    <div class="table-row__text-part2">
+                      <span :title="scope.row.creator && scope.row.creator.userName || '-'">所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}
+                      </span>
+                      <span v-if="scope.row.type!=='file'" style="margin-left: 10px">类型：{{ scope.row.mold===1 ?'私有': '公有' }}
+                      </span>
+                    </div>
                   </div>
-                  <div class="table-row__tools">
+                  <div v-if="!(role==='simpleUser'&&scope.row.mold===2)" class="table-row__tools">
                     <span v-if="scope.row.type!=='file'" @click.stop="editSource(scope.row)">
                       <svg-icon icon-class="pencil" />
                     </span>
@@ -121,7 +132,7 @@
           <div class="research-file">
             <el-input
               v-model="searchFile"
-              placeholder="请输入文件名称"
+              :placeholder="`共${total}个文件`"
               prefix-icon="el-icon-search"
               class="input-file"
               @keyup.enter.native="searchFiles"
@@ -157,6 +168,7 @@
               </div>
             </template>
           </common-table>
+          <!-- 弹窗表详情 -->
           <el-dialog
             title="表详情"
             :visible.sync="detailVisible"
@@ -191,6 +203,7 @@ import { encryptAes } from '@/utils/encrypt'
 import { getDataSourceList, getSourceFile, deleteSources, connectTest, postDataSourceList, editSources, detailSource } from '@/api/dataSource'
 import CommonTable from '@/components/CommonTable/index.vue'
 import dataFiles from './dataFiles.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'DataSource',
@@ -244,15 +257,35 @@ export default {
         port: '',
         db: '',
         username: '',
-        password: ''
+        password: '',
+        mold: 1
       },
       rules: {
-        displayName: [{ required: true, message: '请输入数据源配置列表显示名称', trigger: 'blur' }],
-        host: [{ required: true, message: '请输入IP地址', trigger: 'blur' }],
-        port: [{ required: true, message: '请输入端口', trigger: 'blur' }],
-        db: [{ required: true, message: '请输入数据库名称', trigger: 'blur' }],
-        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+        displayName: [
+          { required: true, message: '请输入数据源配置列表显示名称', trigger: 'blur' },
+          { pattern: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, message: '仅支持数字、字母、下划线以及中文', trigger: 'blur' },
+          { min: 1, max: 50, message: '字符长度不超过50', trigger: 'blur' }
+        ],
+        host: [
+          { required: true, message: '请输入IP地址', trigger: 'blur' },
+          { max: 200, message: '字符长度不超过200', trigger: 'blur' }
+        ],
+        port: [
+          { required: true, message: '请输入端口', trigger: 'blur' },
+          { max: 200, message: '字符长度不超过200', trigger: 'blur' }
+        ],
+        db: [
+          { required: true, message: '请输入数据库名称', trigger: 'blur' },
+          { max: 200, message: '字符长度不超过200', trigger: 'blur' }
+        ],
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { max: 200, message: '字符长度不超过200', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { max: 200, message: '字符长度不超过200', trigger: 'blur' }
+        ]
       },
       comments: [
         {
@@ -298,6 +331,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'role'
+    ]),
     filterdDatasources() {
       return this.dataSourceList?.list?.filter(item => {
         return this.search ? item.displayName.indexOf(this.search) >= 0 : true
@@ -349,6 +385,7 @@ export default {
         this.form.db = row.db
         this.form.username = row.username
         this.form.password = ''
+        this.form.mold = row.mold
         this.currentId = row._id
         this.dialogVisible = true
       } catch (error) {
@@ -396,9 +433,9 @@ export default {
         this.currentRow = val
         if (val.type === 'file') {
           this.isShowDataFiles = true
-          this.$nextTick(() => {
-            this.$refs.dataFiles.getDataFiles()
-          })
+          // this.$nextTick(() => {
+          //   this.$refs.dataFiles.getDataFiles()
+          // })
         } else {
           this.isShowDataFiles = false
           const ids = val._id
@@ -428,7 +465,8 @@ export default {
           port: '',
           db: '',
           username: '',
-          password: ''
+          password: '',
+          mold: 1
         }
         await this.getDatasource()
         const [firstRow] = this.dataSourceList.list
@@ -471,7 +509,8 @@ export default {
         port: '',
         db: '',
         username: '',
-        password: ''
+        password: '',
+        mold: 1
       }
       if (command === 'mysql') {
         // this.form.type = 'mysql'
@@ -519,7 +558,8 @@ export default {
           host: form.host,
           password: encryptAes(form.password),
           port: form.port,
-          type: form.type
+          type: form.type,
+          mold: form.mold
         }
         const result = await connectTest(testForm)
         if (!result) {
@@ -543,7 +583,8 @@ export default {
           host: form.host,
           password: encryptAes(form.password),
           port: form.port,
-          type: form.type
+          type: form.type,
+          mold: form.mold
         }
         const result = await this.connect(form)
         if (result === true) {

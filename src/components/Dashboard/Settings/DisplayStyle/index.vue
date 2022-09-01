@@ -68,36 +68,45 @@
     <div v-if="style === 'funnel-standard'" class="editor-item-container">
       <el-radio-group v-model="labelPos" @change="labelPosHandler">
         <el-radio label="left">位于图表左侧</el-radio>
-        <el-radio label="right">位于图表右侧</el-radio>
+        <el-radio label="right" class="m-t-12">位于图表右侧</el-radio>
       </el-radio-group>
     </div>
-    <div v-if="style === 'funnel-standard'" class="editor-item-title">
-      显示数据标签
+    <div class="m-t-12">
+      <div v-if="style === 'funnel-standard'" class="editor-item-title">
+        显示数据标签
+      </div>
+      <div v-if="style === 'funnel-standard'" class="editor-item-container">
+        <el-radio-group v-model="dataLabel" @change="dataLabelHandler">
+          <el-radio label="conversion">转化率</el-radio>
+          <el-radio label="metric">度量值</el-radio>
+          <el-radio label="coMe" class="m-t-12">转化率 + 度量值</el-radio>
+        </el-radio-group>
+      </div>
     </div>
-    <div v-if="style === 'funnel-standard'" class="editor-item-container">
-      <el-radio-group v-model="dataLabel" @change="dataLabelHandler">
-        <el-radio label="conversion">转化率</el-radio>
-        <el-radio label="metric">度量值</el-radio>
-        <el-radio label="coMe">转化率 + 度量值</el-radio>
-      </el-radio-group>
+    <div class="m-t-12">
+      <div class="editor-item-title" :class="{'ban-edit':style === 'funnel-horizontal'}">
+        转化率计算方式
+      </div>
+      <div class="editor-item-container">
+        <el-radio-group v-model="calcMethod" :disabled="style === 'funnel-horizontal'" @change="labelCalcHandler">
+          <el-radio label="last">占上一层的百分比</el-radio>
+          <el-radio label="first" class="m-t-12">占第一层的百分比</el-radio>
+        </el-radio-group>
+      </div>
     </div>
-    <div class="editor-item-title" :class="{'ban-edit':style === 'funnel-horizontal'}">
-      转化率计算方式
-    </div>
-    <div class="editor-item-container">
-      <el-radio-group v-model="calcMethod" :disabled="style === 'funnel-horizontal'" @change="labelCalcHandler">
-        <el-radio label="last">占上一层的百分比</el-radio>
-        <el-radio label="first">占第一层的百分比</el-radio>
-      </el-radio-group>
-    </div>
-    <div v-if="style === 'funnel-standard'" class="editor-item-title">
-      底部样式
-    </div>
-    <div v-if="style === 'funnel-standard'" class="editor-item-container">
-      <el-radio-group v-model="triangle" @change="triangleHandler">
-        <el-radio label="false">梯形</el-radio>
-        <el-radio label="true">三角形</el-radio>
-      </el-radio-group>
+    <div class="m-t-12">
+      <div
+        v-if="style === 'funnel-standard'"
+        class="editor-item-title"
+      >
+        底部样式
+      </div>
+      <div v-if="style === 'funnel-standard'" class="editor-item-container">
+        <el-radio-group v-model="triangle" @change="triangleHandler">
+          <el-radio label="false">梯形</el-radio>
+          <el-radio label="true">三角形</el-radio>
+        </el-radio-group>
+      </div>
     </div>
   </div>
 </template>

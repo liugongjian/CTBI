@@ -1,4 +1,4 @@
-<template>
+`<template>
   <div class="edit-wrap bg-c-fff">
     <!-- header -->
     <div class="edit-wrap-header">
@@ -38,7 +38,7 @@
               v-model="editDataInfo.displayName"
               style="width: 300px;"
               :class="{'error-input': isErrorName}"
-              max-length="50"
+              maxlength="50"
               placeholder="未命名SQL"
               @input="checkDisplayName"
             />
@@ -128,13 +128,29 @@
             <div class="side-content-title">
               <span>数据表</span>
             </div>
-            <table-list
-              v-loading="dataTableLoading"
-              :table-list="dataTableList"
-              :type="editDataInfo.dataSourceType"
-              :data-source-id="editDataInfo.dataSourceId"
-              :toggle-content="toggleContent"
-            />
+            <div class="side-content-search-input">
+              <el-input
+                v-model="searchKey"
+                placeholder="输入后按回车搜索"
+                suffix-icon="el-icon-search"
+                @keyup.enter.native="searchTableList(editDataInfo.dataSourceId)"
+              />
+            </div>
+            <div
+              ref="tableList"
+              class="list-wrapper"
+            >
+              <table-list
+                v-loading="searchLoading"
+                :stop-scroller="searchKey !== ''"
+                :loading="dataTableLoading"
+                :table-list="dataTableList"
+                :end="paging.isPaging && dataTableList.length >= dataTableTotal"
+                :type="editDataInfo.dataSourceType"
+                :data-source-id="editDataInfo.dataSourceId"
+                @reloadTableList="reloadTableList"
+              />
+            </div>
           </div>
         </div>
 
@@ -260,10 +276,21 @@ export default {
       toggleContent: true,
       // 数据源下拉框选值
       dataSourceOptions: [],
-      // 表格数据组
+      // 表格数据组 用于最终展示
       dataTableList: [],
-      // 左侧表格查询loading
+      dataTableTotal: 0,
+      // 记录搜索前的表格数据，当 searchKey为空时赋值给 dataTableList不再进行一次接口调用
+      orgTableList: [],
+      // 列表中查询的名称值
+      searchKey: '',
+      paging: {
+        isPaging: 1,
+        page: 0,
+        limit: 20
+      },
+      // 左侧表格loading
       dataTableLoading: false,
+      searchLoading: false,
       // 收缩
       isShrink: false,
       // 左侧栏收缩
@@ -474,10 +501,6 @@ export default {
         })
       } else {
         this.toggleContent = !this.toggleContent
-        // 这里是编码上的坑，如果把编辑页与详情页分开就不需要刷新数据源列表
-        if (this.dataInfo.dataSourceId !== this.editDataInfo.dataSourceId) {
-          this.handleChangeDataSource(this.dataInfo.dataSourceId)
-        }
       }
     },
     // 获取数据源列表
@@ -490,36 +513,95 @@ export default {
       }
     },
     // 获取数据源中的表
-    async handleChangeDataSource (val) {
+    handleChangeDataSource (val) {
+      this.editDataInfo.dataSourceId = val
+      this.editDataInfo.sql.dataSourceId = val
       this.dataTableLoading = true
+      this.paging.page = 1
+      this.paging.isPaging = 1
+      this.orgTableList = []
+      this.getDataTableList(true)
+    },
+    reloadTableList () {
+      this.dataTableLoading = true
+      this.paging.page++
+      this.paging.isPaging = 1
+      this.getDataTableList(false)
+    },
+    searchTableList () {
+      if (this.searchKey) {
+        delete this.paging.isPaging
+        this.getDataTableList(true)
+      } else {
+        this.dataTableList = this.orgTableList.concat()
+      }
+    },
+    async getDataTableList (cover = false) {
       try {
-        const currentDataSource = this.dataSourceOptions.find(item => item._id === val)
+        const dataSourceId = this.editDataInfo.dataSourceId
+        const currentDataSource = this.dataSourceOptions.find(item => item._id === dataSourceId)
         const type = currentDataSource?.type || 'file'
-        this.editDataInfo.dataSourceId = val
-        this.editDataInfo.sql.dataSourceId = val
         this.editDataInfo.dataSourceName = currentDataSource?.displayName
         this.editDataInfo.dataSourceType = type
+        this.editDataInfo.dataSourceMold = currentDataSource.mold
+        const params = Object.assign({ searchkey: this.searchKey }, this.paging)
+
+        let resultList = []
 
         if (type === 'file') {
-          const result = await dataFiles()
-          this.dataTableList = result.list
+          const result = await dataFiles(params)
+          resultList = result.list
+          this.dataTableTotal = result.total
         } else {
-          const result = await getDataTable(val)
-          this.dataTableList = result.list
+          const result = await getDataTable(dataSourceId, params)
+          resultList = result.list
+          this.dataTableTotal = result.total
         }
 
+        // 如果不是搜索的，贴上去
+        if (cover) {
+          this.dataTableList = resultList
+        } else {
+          if (this.orgTableList.length === 0) {
+            this.orgTableList = this.orgTableList.concat(this.dataTableList)
+          }
+          this.orgTableList = this.orgTableList.concat(resultList)
+          this.dataTableList = this.orgTableList.concat()
+        }
         // 给sql编辑器传参
-        const temp = {}
-        this.dataTableList.forEach(item => {
-          // 目前只返回表名称，未返回字段数据
-          temp[item.name] = []
+        this.setInit()
+
+        // 重置tableList高度，启动滚动加载
+        this.$nextTick(() => {
+          this.$refs.tableList.style.height = '10px'
+          const scrollTop = this.$refs.tableList.scrollTop
+          const scrollHeight = deepClone(this.$refs.tableList.scrollHeight)
+          this.$refs.tableList.scrollTop = scrollHeight
+          this.$refs.tableList.scrollTop = scrollTop
+          if (this.toggleContent) {
+            this.$refs.tableList.style.height = 'calc(100vh - 360px)'
+          } else {
+            this.$refs.tableList.style.height = 'calc(100vh - 280px)'
+          }
         })
-        this.hintOptions = temp
       } catch (error) {
         console.log(error)
       }
       this.dataTableLoading = false
+      this.searchLoading = false
     },
+
+    setInit () {
+      // 给sql编辑器传参
+      const temp = {}
+      this.dataTableList.forEach(item => {
+        // 目前只返回表名称，未返回字段数据
+        // 这里需要循环赋值交给sql编辑器做提示
+        temp[item.name] = []
+      })
+      this.hintOptions = temp
+    },
+
     resizeContainer () {
       this.isShrink = !this.isShrink
       const height = window.innerHeight - 200
@@ -584,22 +666,6 @@ export default {
   }
 }
 
-// @keyframes turn-out {
-//   from {
-//     width: 200px;
-//   }
-//   to {
-//     width: 0px;
-//   }
-// }
-// @keyframes turn-in {
-//   from {
-//     width: 0px;
-//   }
-//   to {
-//     width: 200px;
-//   }
-// }
 .side-bar {
   display: inline-block;
   background-color: #fff;
@@ -671,6 +737,10 @@ export default {
         width: 35px;
         border-bottom: 2px solid #fa8334;
       }
+    }
+
+    .side-content-search-input {
+      padding: 8px 8px 0px 8px;
     }
   }
 }
@@ -762,5 +832,11 @@ export default {
 }
 ::v-deep .CodeMirror-scroll {
   background-color: #f2f2f2;
+}
+.list-wrapper {
+  padding: 20px 12px;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>

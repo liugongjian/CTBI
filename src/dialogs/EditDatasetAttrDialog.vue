@@ -86,13 +86,13 @@ export default {
     async handleDataSetAttribute () {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
+          this.loading = true
           const id = this.dataSetAttr._id
           const params = {
-            displayName: this.dataSetAttr.name,
+            displayName: this.dataSetAttr.displayName,
             comment: this.dataSetAttr.comment
           }
           try {
-            this.loading = true
             await updateDataSet(id, params)
             this.close()
           } catch (error) {

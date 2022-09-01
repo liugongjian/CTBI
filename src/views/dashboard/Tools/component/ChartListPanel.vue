@@ -13,7 +13,7 @@
           @drag.stop="drag($event, item.name,item)"
           @dragend="dragend($event, item.name,item)"
         >
-          <el-tooltip effect="dark" :content="item.theme.Basic.Title.text" placement="top">
+          <el-tooltip effect="dark" :content="item.title" placement="top">
             <svg-icon
               :icon-class="item.name"
               style="font-size: 22px;"

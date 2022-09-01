@@ -1,3 +1,10 @@
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-08-04 12:46:01
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-18 21:47:14
+ * @Description:
+ */
 // 看板汇总配置项信息
 /**
  * type: {
@@ -18,6 +25,7 @@ export default {
   isShow: false, // 是否展示该组件, 用于控制该组件是否在tools中显示
   version: '', // 版本号
   field: {}, // 字段
+  'title': '看板_汇总', // 图标的名字 不会改变 用于顶部的图标切换
   theme: {
     // 样式组件、配置合集
     Basic: {
@@ -26,12 +34,7 @@ export default {
         // 标题组件
         text: '看板_汇总', // 标题名称
         color: '#333', // 标题颜色
-        show: true, // 是否显示标题
-        testShow: false // 测试显示
-      },
-      TestTitle: {
-        // 测试组件间交互组件
-        testShow: false
+        show: true // 是否显示标题
       },
       Mark: {
         // 备注

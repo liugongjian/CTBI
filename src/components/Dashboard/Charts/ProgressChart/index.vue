@@ -1,12 +1,12 @@
 <template>
   <div style="width: 100%; height: 100%">
-    <div v-if="dataValue" class="box">
+    <div v-if="dataValue && dataValue.length > 0" class="box">
       <Progress
-        :store-option="storeOption"
+        :option="storeOption"
         :data-value="dataValue"
       />
     </div>
-    <div v-else>数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-progress" style="width:100%;height:100%;" />
   </div>
 </template>
 

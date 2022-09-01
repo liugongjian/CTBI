@@ -19,6 +19,10 @@ export const clearObj = function (obj) {
   }
 }
 
+export const isEmpty = function (obj) {
+  return JSON.stringify(obj) === '{}'
+}
+
 export const generateId = function () {
   return Math.floor(Math.random() * 100000 + Math.random() * 20000 + Math.random() * 5000)
 }
@@ -119,6 +123,19 @@ export const getLayoutById = function (identify) {
  * @param {string} identify
  * @returns {Object}
  */
+export const getCurrentLayout = function () {
+  const identify = store.state.app.currentLayoutId
+  if (!identify) {
+    return {}
+  }
+  return getLayoutById(identify)
+}
+
+/**
+ * 通过id获取vuex中的layout数据
+ * @param {string} identify
+ * @returns {Object}
+ */
 export const getLayoutOptionById = function (identify) {
   if (!identify) {
     identify = store.state.app.currentLayoutId
@@ -132,6 +149,13 @@ export const getLayoutOptionById = function (identify) {
   }
   console.warn(`获取 ${identify} 组件配置信息为空`)
   return {}
+}
+export const getCurrentLayoutOption = function () {
+  const identify = store.state.app.currentLayoutId
+  if (!identify) {
+    return {}
+  }
+  return getLayoutOptionById(identify)
 }
 
 /**
@@ -206,7 +230,7 @@ export const formatDataValue = function (chartData) {
         dimensionData.push(item[dim])
       })
       MeasureKey.forEach(mea => {
-        measureData.push(item[mea])
+        measureData.push(item[mea].match(/\d+(?:\.\d+)?/g, ''))
       })
       dataValue.push([dimensionData.join('-'), ...measureData])
     })
@@ -247,4 +271,129 @@ export const transformDataTypeIcon = function (data) {
     }
   }
   return ''
+}
+
+/**
+ * 将字段数据转换为需要的格式
+ * @param {*} fields
+ * @returns
+ */
+export const getFieldsTree = (fields) => {
+  if (!fields) return []
+  const res = [{
+    _id: 1,
+    displayColumn: '维度',
+    icon: 'dimension-icon',
+    index: 'dimension_p_1',
+    children: []
+  }, {
+    _id: 2,
+    index: 'measure_p_1',
+    icon: 'measure-icon',
+    displayColumn: '度量',
+    children: []
+  }]
+
+  return res
+}
+
+/**
+ * 将字段数据转换为需要的格式
+ * @param {*} fields
+ * @returns
+ */
+export const getFieldsTable = (fields) => {
+  if (!fields) return []
+  const res = [{
+    _id: 1,
+    displayColumn: '维度',
+    icon: 'dimension-icon',
+    index: 'dimension_p_1',
+    children: []
+  }, {
+    _id: 2,
+    index: 'measure_p_1',
+    icon: 'measure-icon',
+    displayColumn: '度量',
+    children: []
+  }]
+  let dimensionHiddenLength = 0
+  let measureHiddenLength = 0
+  fields.forEach((item, index) => {
+    item.index = item.type + '_' + index
+    if (!item.displayColumn) {
+      item.displayColumn = item.column
+    }
+    item.attributes[0].displayColumn = item.displayColumn
+    // 赋值描述字段
+    if (!item.attributes[0].comment) {
+      item.attributes[0].comment = ''
+    }
+    if (item.type === 'Dimension') {
+      if (item.attributes[0].isHidden) {
+        dimensionHiddenLength += 1
+      } else if (typeof item.attributes[0].isHidden === 'undefined') {
+        // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
+        item.attributes[0].isHidden = false
+      }
+      res[0].children.push(item)
+    } else if (item.type === 'Measure') {
+      if (item.attributes[0].isHidden) {
+        measureHiddenLength += 1
+      } else if (typeof item.attributes[0].isHidden === 'undefined') {
+        // 接口没有返回值时需要自行添加，不然放到按钮上无法绑定数据，导致问题
+        item.attributes[0].isHidden = false
+      }
+      res[1].children.push(item)
+    }
+  })
+  if (res[1].children.length === 0 || res[1].children.length === measureHiddenLength) {
+    res[1].isHidden = true
+  }
+  if (res[0].children.length === 0 || res[0].children.length === dimensionHiddenLength) {
+    res[0].isHidden = true
+  }
+  return res
+}
+
+// 获取数据集查询数据接口的参数
+export const getQueryParams = (limit, identify) => {
+  let option = {}
+  if (identify) {
+    option = getLayoutOptionById(identify)
+  } else {
+    option = getCurrentLayoutOption()
+  }
+  const { dataSource } = option
+  // 维表字段
+  const dimension = { selections: [] }
+  // 度量字段字段
+  const measure = { selections: [] }
+  // 字段统计，用于做回显
+  const transformFields = {}
+  for (const key in dataSource) {
+    const source = dataSource[key]
+    // TODO：需要定义组件配置type类型来替换用名称做判断
+    if (key.toLocaleLowerCase().indexOf('dimension') > -1) {
+      dimension.selections = dimension.selections.concat(source.value.map(so => { return { ...so, fieldId: so._id, attributeId: so.attributes[0]._id } }))
+    }
+    if (key.toLocaleLowerCase().indexOf('measure') > -1) {
+      measure.selections = measure.selections.concat(source.value.map(so => { return { ...so, fieldId: so._id, attributeId: so.attributes[0]._id } }))
+    }
+    transformFields[key] = {
+      'name': source.name,
+      'fields': source.value
+    }
+  }
+  // 过滤
+  const filter = { selections: [] }
+  // 排序
+  const order = []
+  // 查询数据的偏移量默认0
+  const offset = 0
+  // sql-参数配置中的
+  const placeholder = { configs: [] }
+  // sql-参数配置中的
+  const param = { configs: [] }
+  return { query: { limit, dimension, measure, filter, order, offset, placeholder, param }, dataSetId: option.dataSet?.id, transformFields }
 }

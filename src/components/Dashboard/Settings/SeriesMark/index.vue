@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-08-04 12:46:01
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-18 14:12:21
+ * @Description:
+-->
 <template>
   <div>
     <div class="editor-object-container">
@@ -17,6 +24,7 @@
           popper-class="setting-select"
           :disabled="!option.check"
           :class="{'box-disabled':!option.check}"
+          @change="handleSeriesMarkVal"
         >
           <svg-icon
             slot="prefix"
@@ -81,10 +89,23 @@ export default {
       store.state.app.layout.forEach(item => {
         if (item.id === store.state.app.currentLayoutId) {
           if (item.option.theme.SeriesSetting.SeriesSelect.SeriesMark) {
-            item.option.theme.SeriesSetting.SeriesSelect.seriesOption.map((item) => {
-              item.showMark = val
+            item.option.theme.SeriesSetting.SeriesSelect.seriesOption.map((j) => {
+              j.showMark = val
             })
             item.option.theme.SeriesSetting.SeriesSelect.SeriesMark.check = val
+          }
+        }
+      })
+    },
+    // 联动改变 系列选择中的显示标记点 select选择框值
+    handleSeriesMarkVal (val) {
+      store.state.app.layout.forEach(item => {
+        if (item.id === store.state.app.currentLayoutId) {
+          if (item.option.theme.SeriesSetting.SeriesSelect.SeriesMark) {
+            item.option.theme.SeriesSetting.SeriesSelect.seriesOption.map((j) => {
+              j.markType = this.option.markType
+            })
+            item.option.theme.SeriesSetting.SeriesSelect.SeriesMark.markType = val
           }
         }
       })

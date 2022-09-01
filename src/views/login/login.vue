@@ -17,6 +17,7 @@
           v-model="loginForm.userName"
           name="userName"
           type="text"
+          :maxlength="50"
           placeholder="请输入用户名"
           auto-complete="on"
         />
@@ -25,22 +26,18 @@
         <span class="title-size">密&emsp;码</span>
         <el-input
           v-model="loginForm.password"
-          :type="passwordType"
+          show-password
+          :maxlength="30"
           placeholder="请输入密码"
           @keyup.enter.native="validateLogin"
         />
-        <span
-          class="show-pwd"
-          @click="showPwd"
-        >
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
       </el-form-item>
       <el-form-item prop="verifyCode">
         <span class="title-size">验证码</span>
         <el-input
           v-model="loginForm.verifyCode"
           type="text"
+          :maxlength="10"
           placeholder="请输入验证码"
           @keyup.enter.native="validateLogin"
         />
@@ -80,7 +77,6 @@
       <svg-icon icon-class="warn" />
       <span class="warn-text">您长时间未登录，账号已被冻结。<br><span class="warn-freeze">请联系系统管理员进行解冻!</span></span>
     </span>
-    <b-cascader :options="options" @onChoose="testChoose"><div style="width: 100px;background-color: red;height: 30px; line-height: 30px;">需要菜单的内容</div></b-cascader>
   </div>
 
 </template>
@@ -106,7 +102,6 @@ export default {
       loading: false,
       redirect: undefined,
       verifyImg: undefined,
-      passwordType: 'password',
       activate: false,
       logout: false,
       freeze: false,
@@ -313,16 +308,6 @@ export default {
     this.verifyGet()
   },
   methods: {
-    showPwd () {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
-      }
-      // this.$nextTick(() => {
-      //   this.$refs.password.focus()
-      // })
-    },
     async verifyGet () {
       const data = await verify()
       if (data) {

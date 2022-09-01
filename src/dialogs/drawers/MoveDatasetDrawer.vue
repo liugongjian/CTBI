@@ -3,6 +3,7 @@
     <el-drawer
       :visible.sync="dialogVisible"
       :wrapper-closable="false"
+      :close-on-click-modal="false"
     >
       <span slot="title" class="title">
         资源移动到

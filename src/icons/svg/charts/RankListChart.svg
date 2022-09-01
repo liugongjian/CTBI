@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1073px" height="1024px" viewBox="0 0 1073 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>排行榜 2</title>
+    <defs>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-3">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-4">
+            <stop stop-color="#FA8334" offset="0%"></stop>
+            <stop stop-color="#FEC08B" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#D3D2D5" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="排行榜-2" fill-rule="nonzero">
+            <g id="排行榜">
+                <polygon id="路径" fill="url(#linearGradient-1)" points="137.257952 0 584.677293 0 584.677293 251.398222 137.257952 251.398222"></polygon>
+                <polygon id="路径" fill="url(#linearGradient-2)" points="137.257952 375.907671 1072.7619 375.907671 1072.7619 627.30589 137.257952 627.30589"></polygon>
+                <polygon id="路径" fill="url(#linearGradient-3)" points="139.793192 772.601777 749.898957 772.601777 749.898957 1024 139.793192 1024"></polygon>
+                <path d="M24.3809524,91.8861344 C37.8461806,91.8861344 48.7619048,80.681658 48.7619048,66.8602361 C48.7619048,53.0388143 37.8461806,41.8343383 24.3809524,41.8343383 C10.9157242,41.8343383 0,53.0388143 0,66.8602361 C0,80.681658 10.9157242,91.8861344 24.3809524,91.8861344 Z" id="路径" fill="url(#linearGradient-4)"></path>
+                <path d="M24.3809524,457.009666 C37.8461806,457.009666 48.7619048,445.971717 48.7619048,432.355717 C48.7619048,418.739716 37.8461806,407.701767 24.3809524,407.701767 C10.9157242,407.701767 0,418.739716 0,432.355717 C0,445.971717 10.9157242,457.009666 24.3809524,457.009666 Z" id="路径" fill="url(#linearGradient-5)"></path>
+                <path d="M24.3809524,899.419583 C37.8461806,899.419583 48.7619048,888.215105 48.7619048,874.393684 C48.7619048,860.572264 37.8461806,849.367786 24.3809524,849.367786 C10.9157242,849.367786 0,860.572264 0,874.393684 C0,888.215105 10.9157242,899.419583 24.3809524,899.419583 Z" id="路径" fill="url(#linearGradient-4)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

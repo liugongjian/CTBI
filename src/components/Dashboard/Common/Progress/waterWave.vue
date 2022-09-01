@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-08-04 12:46:01
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-08-29 15:38:03
+ * @Description:
+-->
 <template>
   <div>
     <div class="container">
@@ -23,7 +30,7 @@ import progressMixins from './progressMixins'
 import 'echarts-liquidfill'
 import * as echarts from 'echarts'
 export default {
-  name: 'AnnularType',
+  name: 'WaterWave',
   mixins: [progressMixins],
   computed: {
     // 0-1 占比
@@ -34,6 +41,9 @@ export default {
   },
   watch: {
     setProgressData () {
+      this.getInit()
+    },
+    getColor () {
       this.getInit()
     }
   },

@@ -22,7 +22,10 @@
         :h="item.h"
         :i="item.i"
       >
-        <ComponentBlock :option="item" :style="chartsStyles">
+        <ComponentBlock
+          :option="item"
+          :style="chartsStyles"
+        >
           <component
             :is="item.is"
             :identify="item.i"
@@ -52,27 +55,14 @@ export default {
     layout () {
       return store.state.app.layout.filter(item => item.containerId === this.id)
     },
-    chartsStyles() {
+    chartsStyles () {
       return this.$store.state.settings.chartsStyles
-    }
-  },
-  mounted () {
-    const that = this
-    document.onkeydown = function (e) {
-      const obj = e.target
-      const t = obj.type || obj.getAttribute('type')// 获取事件源类型
-      if (e.code === 'Backspace' && t !== 'password' && t !== 'text' && t !== 'textarea' && t !== 'number') {
-        const id = store.state.app.currentLayoutId
-        if (id) {
-          // 删除vuex的layout中对应的组件信息
-          that.$store.dispatch('app/deleteLayoutById', id)
-        }
-      }
     }
   },
   methods: {
     clickHandler (id) {
       // 更新当前id
+      console.log(id)
       this.$store.dispatch('app/updateLayoutId', id)
     }
   }

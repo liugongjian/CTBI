@@ -1,18 +1,17 @@
 <template>
   <div style="width:100%;height:100%;">
     <v-chart
-      v-if="dataValue"
+      v-if="dataValue && dataValue.length > 0"
       :option="chartOption"
       :update-options="{notMerge:true}"
       digit="2"
       autoresize
     />
-    <div v-else>数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-funnel" style="width:100%;height:100%;" />
   </div>
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
 import baseMixins from '../../mixins/baseMixins'
 export default {
   name: 'FunnelChart',
@@ -62,22 +61,17 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        // if (JSON.stringify(val.dataSource) !== '{}') {
-        //   this.dataValue = val.dataSource
-        // }
         this.reloadImpl()
       },
       deep: true
     }
   },
-  mounted () {
-    this.storeOption = getLayoutOptionById(this.identify)
-    // this.getOption()
-  },
   methods: {
     reloadImpl () {
-      this.formatDataValue(this.chartData)
-      this.getOption()
+      if (this.chartData) {
+        this.formatDataValue(this.chartData)
+        this.getOption()
+      }
     },
     formatDataValue (chartData) {
       const data = []

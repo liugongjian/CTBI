@@ -18,43 +18,28 @@
           ref="oldPassword"
           v-model="validForm.oldPassword"
           name="oldPassword"
-          :type="passwordType"
+          show-password
+          :maxlength="30"
           placeholder="请输入旧密码"
         />
-        <span
-          class="show-pwd"
-          @click="showPwd"
-        >
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
       </el-form-item>
       <el-form-item prop="newPassword">
         <span class="title-size">新密码</span>
         <el-input
           v-model="validForm.newPassword"
-          :type="passwordType"
+          :maxlength="30"
+          show-password
           placeholder="请输入新密码"
         />
-        <span
-          class="show-pwd"
-          @click="showPwd"
-        >
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
       </el-form-item>
       <el-form-item prop="checkPassword">
         <span class="title-size">新密码</span>
         <el-input
           v-model="validForm.checkPassword"
-          :type="passwordType"
+          :maxlength="30"
+          show-password
           placeholder="请再次输入新密码"
         />
-        <span
-          class="show-pwd"
-          @click="showPwd"
-        >
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
       </el-form-item>
     </el-form>
     <div class="button-style">
@@ -82,6 +67,8 @@ export default {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('Please input the password'))
+      } else if (value === this.validForm.oldPassword) {
+        callback(new Error('新密码应不能与旧密码相同'))
       } else {
         if (this.validForm.checkPassword !== '') {
           this.$refs.validForm.validateField('checkPassword')
@@ -112,48 +99,41 @@ export default {
       loading: false,
       redirect: undefined,
       verifyImg: undefined,
-      isValid: false,
-      passwordType: 'password'
+      isValid: false
     }
   },
   mounted () {
   },
   methods: {
-    showPwd () {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
-      }
-      // this.$nextTick(() => {
-      //   this.$refs.password.focus()
-      // })
-    },
     back () {
       this.$router.push('/login')
     },
 
     async setUp () {
-      this.loading = true
-      const oldPassword = encryptAes(this.validForm.oldPassword)
-      const newPassword = encryptAes(this.validForm.newPassword)
-      const data = {
-        _id: this.$route.query.userName,
-        oldPassword: oldPassword,
-        newPassword: newPassword
-      }
-      try {
-        await activate(data)
-        this.$message({
-          message: '提交成功!',
-          iconClass: 'activate'
-        })
-        this.$router.push({ path: '/login' })
-      } catch (error) {
-        console.log(error)
-      }
+      this.$refs['validForm'].validate(async (valid) => {
+        if (valid) {
+          this.loading = true
+          const oldPassword = encryptAes(this.validForm.oldPassword)
+          const newPassword = encryptAes(this.validForm.newPassword)
+          const data = {
+            _id: this.$route.query.userName,
+            oldPassword: oldPassword,
+            newPassword: newPassword
+          }
+          try {
+            await activate(data)
+            this.$message({
+              type: 'success',
+              message: '激活成功!',
+              center: true
+            })
+            this.$router.push({ path: '/login' })
+          } catch (error) {
+            console.log(error)
+          }
+        }
+      })
     }
-
   }
 }
 </script>

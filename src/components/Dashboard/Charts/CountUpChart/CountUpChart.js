@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-07-29 10:27:13
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-01 16:27:38
+ * @LastEditTime: 2022-08-18 21:46:25
  * @Description:
  */
 import { colorTheme } from '@/constants/color.js'
@@ -12,6 +12,7 @@ export default {
   'order': 3,
   'version': '', // 版本号
   'field': {}, // 字段
+  'title': '翻牌器', // 图标的名字 不会改变 用于顶部的图标切换
   'theme': {
     // 样式组件、配置合集
     'Basic': {
@@ -20,8 +21,7 @@ export default {
         // 标题组件
         'text': '翻牌器', // 标题名称
         'color': '#333', // 标题颜色
-        'show': true, // 是否显示标题
-        'testShow': false // 测试显示
+        'show': true // 是否显示标题
       },
       'Mark': {
         // 备注

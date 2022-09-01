@@ -6,7 +6,7 @@
       :update-options="{notMerge:true}"
       autoresize
     />
-    <div v-else>数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-bar" style="width:100%;height:100%;" />
   </div>
 </template>
 
@@ -50,6 +50,10 @@ export default {
       this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
         legendData.push({ name: item.value })
       })
+
+      // 获取y轴配置信息，用于提取单位信息
+      const { Axis: { YAxis } } = this.storeOption.theme
+
       this.chartOption = {
         'grid': this.grid,
         'color': colorOption,
@@ -58,8 +62,13 @@ export default {
           data: legendData
         },
         'xAxis': this.xAxis,
-        'tooltip': {
-          trigger: 'axis'
+        tooltip: {
+          axisPointer: {
+            type: 'shadow'
+          },
+          formatter: (params) => {
+            return params.name + '</br>' + params.marker + ' ' + params.seriesName + '：' + params.value[params.seriesIndex + 1] + (YAxis.unit || '')
+          }
         },
         'yAxis': this.yAxis,
         'markPoint': this.markPoint,

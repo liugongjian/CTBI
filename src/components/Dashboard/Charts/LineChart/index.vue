@@ -6,7 +6,7 @@
       autoresize
       :update-options="{notMerge:true}"
     />
-    <div v-else>数据为空</div>
+    <svg-icon v-else icon-class="chart-empty-line" style="width:100%;height:100%;" />
   </div>
 </template>
 
@@ -47,6 +47,10 @@ export default {
       })
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
+
+      // 获取y轴配置信息，用于提取单位信息
+      const { Axis: { YAxis } } = this.storeOption.theme
+
       this.chartOption = {
         grid: this.grid,
         color: colorOption,
@@ -57,12 +61,11 @@ export default {
         },
         xAxis: this.xAxis,
         tooltip: {
-          trigger: 'axis',
           axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#6a7985'
-            }
+            type: 'shadow'
+          },
+          formatter: (params) => {
+            return params.name + '</br>' + params.marker + ' ' + params.seriesName + '：' + params.value[1] + (YAxis.unit || '')
           }
         },
         yAxis: this.yAxis,
