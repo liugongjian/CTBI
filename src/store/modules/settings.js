@@ -1,7 +1,7 @@
 import defaultSettings from '@/config/settings'
 import color from '@/styles/settings.scss'
 
-const { showSettings, tagsView, sidebarLogo, layoutStyles, chartsStyles } = defaultSettings
+const { showSettings, tagsView, sidebarLogo, layoutStyles, chartsStyles, scaleStyles } = defaultSettings
 
 // localStorage存储字符串信息，需要做转换
 const state = {
@@ -10,7 +10,8 @@ const state = {
   tagsView: localStorage.getItem('tagsView') ? localStorage.getItem('tagsView') === 'true' : tagsView,
   sidebarLogo: localStorage.getItem('sidebarLogo') ? localStorage.getItem('sidebarLogo') === 'true' : sidebarLogo,
   layoutStyles: localStorage.getItem('styles') ? localStorage.getItem('styles') : layoutStyles,
-  chartsStyles: localStorage.getItem('chartsStyles') ? localStorage.getItem('chartsStyles') : chartsStyles
+  chartsStyles: localStorage.getItem('chartsStyles') ? localStorage.getItem('chartsStyles') : chartsStyles,
+  scaleStyles: scaleStyles
 }
 
 const mutations = {
