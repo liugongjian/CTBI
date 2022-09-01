@@ -196,13 +196,13 @@ export default {
     async executeSubmit () {
       try {
         const { shareEndTime, sharePassword, whiteList } = this.currentShareInfo
-        const ipPattern = /((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/g
+        const ipPattern = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
         // IP校验
-        const ips = whiteList ? whiteList.split(',') : []
+        const ips = whiteList ? whiteList.trim().split(',') : []
         let finalIps = ips
         if (ips.length > 0) {
           finalIps = ips.map(item => item.trim()).filter(item => !!item)
-          if (finalIps.length > 0 && finalIps.some(ip => !ipPattern.test(ip))) {
+          if (finalIps.length > 0 && !finalIps.every(ip => ipPattern.test(ip))) {
             this.$message.error('白名单IP地址格式有错误，请更改')
             return
           }
