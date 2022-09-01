@@ -23,6 +23,7 @@
               v-model="searchName"
               placeholder="请输入名称"
               style="margin-right: 12px"
+              :maxlength="200"
               @keyup.enter.native="query"
             />
             <el-button

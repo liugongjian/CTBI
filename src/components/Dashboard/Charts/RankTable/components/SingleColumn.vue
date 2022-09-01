@@ -15,7 +15,7 @@ export default {
   name: 'SingleColumn',
   props: {
     dataValue: {
-      type: Number,
+      type: String || Number,
       required: true
     },
     max: {

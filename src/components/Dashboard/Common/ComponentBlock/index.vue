@@ -108,7 +108,7 @@
     <!-- 当备注位置选择为图表上方时 -->
     <div
       class="rich-text-editor"
-      style="max-height:100px"
+      style="max-height:100px;min-height: 18px;"
     >
       <div
         v-show="getParameter(option, 'theme.Basic.Mark.show') && getParameter(option, 'theme.Basic.Mark.position') === 'onChart'"
@@ -121,7 +121,7 @@
     <div class="rich-text-footer">
       <div
         class="rich-text-editor"
-        style="max-height:100px"
+        style="max-height:100px;min-height: 18px;"
       >
 
         <div
@@ -185,7 +185,7 @@ export default {
       set () {
       }
     },
-    showCommandMenu() {
+    showCommandMenu () {
       return store.state.app.dashboardMode === 'edit'
     }
   },
@@ -206,7 +206,7 @@ export default {
       })
     })
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.$bus.$off('showLoading', (id) => {
       this.loading = true
     })
@@ -224,7 +224,7 @@ export default {
       }
     },
 
-    delete() {
+    delete () {
       // 删除vuex的layout中对应的组件信息
       // 当时tab组件时，删除所有属于该组件的组件
       if (this.option.is === 'TabChart') {
@@ -235,7 +235,7 @@ export default {
     },
 
     // 复制组件
-    copy() {
+    copy () {
       const currentLayout = getCurrentLayout()
       const newLayout = deepClone(currentLayout)
       if (isEmpty(newLayout)) {
@@ -251,7 +251,7 @@ export default {
       store.dispatch('app/addLayout', newLayout)
     },
 
-    sql() {
+    sql () {
       if (this.isExistDataSet()) {
         this.$dialog.show('ShowSqlDialog')
       } else {
@@ -259,7 +259,7 @@ export default {
       }
     },
 
-    data() {
+    data () {
       if (this.isExistDataSet()) {
         this.$dialog.show('ShowDataDialog')
       } else {
@@ -269,7 +269,7 @@ export default {
 
     // 判断是否存在数据集和字段
     // 存在 true 不存在 false
-    isExistDataSet() {
+    isExistDataSet () {
       const { option: { dataSource, dataSet } } = this.option
       const result = false
       if (!dataSet?.id) {

@@ -197,7 +197,6 @@ export default {
     display: flex;
     justify-content:space-between;
     flex-wrap: wrap;
-    background-color: #fff;
   }
 }
 .round {

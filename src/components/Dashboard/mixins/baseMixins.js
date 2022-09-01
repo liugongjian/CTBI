@@ -43,7 +43,7 @@ export default {
       }
     },
     // 获取详细数据
-    async getData (limit = 1000, isReload = true) {
+    async getData(limit = 1000, isReload = true) {
       const storeDataValue = getDataValueById(this.identify)
       if (storeDataValue && !isReload) {
         this.chartData = deepClone(storeDataValue)
@@ -52,6 +52,14 @@ export default {
 
       const params = getQueryParams(limit, this.identify)
       const { dataSetId, query: { dimension, measure } } = params
+      // 纬度度量一个格子 拆分维度度量两个list去传参
+      const DselectionsTemp = params.query.dimension.selections.filter((item) =>
+        item.type === 'Dimension')
+      params.query.dimension.selections = DselectionsTemp
+      const MselectionsTemp = params.query.measure.selections.filter((item) =>
+        item.type === 'Measure'
+      )
+      params.query.measure.selections = MselectionsTemp
       if (!dataSetId || (dimension.selections.length === 0 && measure.selections.length === 0)) {
         throw new Error('未获取到数据，不做图表加载')
       }
