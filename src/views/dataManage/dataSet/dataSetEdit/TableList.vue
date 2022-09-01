@@ -7,7 +7,7 @@
     >
       <div
         v-for="(table, i) in tableList"
-        :key="`table-list-${i}`"
+        :key="`table-list-${i}`+ getDate()"
         style="display: flex;justify-content: space-between;align-items: center;"
         class="main-list"
       >
@@ -128,6 +128,9 @@ export default {
     }
   },
   methods: {
+    getDate () {
+      return new Date().getTime()
+    },
     // 复制数据源列表
     handleCopy (val, event) {
       Clipboard(val, event, () => {

@@ -8,7 +8,7 @@
         <div class="d-f">
           <div
             :class="[{'active': activeTagName === 1}, 'tab-block']"
-            @click="activeTagName = 1;refreshPreview();"
+            @click="activeTagName = 1;"
           >数据预览</div>
           <div
             :class="[{'active': activeTagName === 2}, 'tab-block']"
@@ -86,6 +86,7 @@
             highlight-hover-row
             :data="dimensionMeasureTableData"
             class="gutter-th"
+            empty-text=" "
             :height="tableHeight"
           >
             <template v-for="(parent, i) in fieldsTable">
@@ -222,15 +223,10 @@
             <template slot-scope="scope">
               <span v-if="scope.row._id !== 1 && scope.row._id !== 2">
                 <!-- value选中值， valueItem选中值对象 -->
-                <!-- <b-select
-                  :value="resetDataType(scope.row)"
-                  :options="dataTypeOptions"
-                  @change="(value, valueItem) => {handleChangeDataType(value, valueItem, scope.row);}"
-                /> -->
                 <el-cascader
                   :value="resetDataType(scope.row)"
                   :show-all-levels="false"
-                  :options="dataTypeOptions"
+                  :options="getDataTypeOptions(scope.row.type)"
                   :props="{emitPath: false}"
                   @change="(value, valueItem) => {handleChangeDataType(value, valueItem, scope.row);}"
                 >
@@ -255,7 +251,7 @@
               <div v-if="scope.row._id !== 1 && scope.row._id !== 2 && scope.row.type === 'Measure'">
                 <b-select
                   v-model="scope.row.attributes[0].aggregator"
-                  :options="aggFunctions"
+                  :options="getAggFunctions(scope.row)"
                 />
               </div>
             </template>
@@ -269,6 +265,7 @@
                 <b-select
                   v-model="scope.row.attributes[0].format"
                   :options="formatMap[scope.row.attributes[0].dataType]"
+                  :disabled="scope.row.attributes[0].dataType === 'text'"
                 />
               </div>
             </template>
@@ -353,7 +350,6 @@ export default {
   watch: {
     fields: {
       handler (n, o) {
-        console.log('触发fieldswatch事件')
         this.getDimensionMeasureData(n)
       },
       deep: true
@@ -445,8 +441,10 @@ export default {
       return ''
     },
     handleChangeDataType (value, item, row) {
+      // 默认展示格式
       row.attributes[0].format = ''
-      row.attributes[0].aggregator = 'sum'
+      // 默认聚合方式
+      row.attributes[0].aggregator = ''
       if (!item) {
         item = this.getValueItem(value)
       }
@@ -486,6 +484,32 @@ export default {
         }
       })
       return result
+    },
+    getDataTypeOptions (type) {
+      if (type === 'Measure') {
+        return [{
+          value: 'number',
+          icon: 'data-type-option-number',
+          label: '数字'
+        },
+        {
+          value: 'text',
+          label: '文本',
+          icon: 'data-type-option-text'
+        }]
+      } else {
+        return this.dataTypeOptions
+      }
+    },
+    getAggFunctions (row) {
+      if (row.attributes[0].dataType === 'text') {
+        return [
+          { label: '无', value: '' },
+          { label: '计数', value: 'count' },
+          { label: '计数(去重)', value: 'distinct-count' }
+        ]
+      }
+      return this.aggFunctions
     }
   }
 }
