@@ -24,5 +24,9 @@ module.exports = {
    * @description Style of the main layout
    */
   layoutStyles: {},
-  chartsStyles: {}
+  chartsStyles: {},
+  scaleStyles: {
+    transform: 'scale(1)',
+    transformOrigin: 'center top'
+  }
 }

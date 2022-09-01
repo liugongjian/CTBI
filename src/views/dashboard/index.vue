@@ -17,6 +17,7 @@
         <el-main ref="mainLayout" :class="{'main-layout-edit': mode === 'edit', 'main-layout-preview': mode !== 'edit',}" :style="layoutStyles">
           <div
             id="content"
+            :style="scaleStyles"
             @dragover="dragover"
             @click="clearCurrentLayoutId"
           >
@@ -117,6 +118,9 @@ export default {
     },
     layoutStyles() {
       return this.$store.state.settings.layoutStyles
+    },
+    scaleStyles() {
+      return this.$store.state.settings.scaleStyles
     }
   },
   mounted () {
@@ -138,6 +142,10 @@ export default {
     this.recoverDashboard()
     this.setStoreMode(this.$route.query.mode === '1' ? 'preview' : 'edit')
     window.addEventListener('beforeunload', this.beforeunload)
+  },
+  beforeDestroy() {
+    // 百分比重置 默认为100%
+    store.dispatch('settings/changeSetting', { key: 'scaleStyles', value: { transform: 'scale(1)', transformOrigin: 'center top' } })
   },
   destroyed() {
     // if (this.timer) {
