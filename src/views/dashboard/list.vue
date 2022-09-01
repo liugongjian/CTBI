@@ -45,6 +45,10 @@
           >移动到</el-button>
           <el-button
             type="text"
+            @click="batchDelete()"
+          >删除</el-button>
+          <el-button
+            type="text"
             @click="clearSelection()"
           >取消选择 </el-button>
         </div>
@@ -61,8 +65,7 @@
             row-key="_id"
             :load="loadDashboard"
             :tree-props="{ children: 'children', hasChildren: 'directory' }"
-            @select="handleSelectionChange"
-            @select-all="handleSelectAll"
+            @selection-change="handleSelectionChange"
           >
             <el-table-column
               type="selection"
@@ -223,10 +226,11 @@
               icon-class="warning"
               style="margin-right: 16px"
             />
+            <span v-if="!deleteOne">确定删除这 {{ multipleSelection.length }} 个仪表板吗？</span>
             <span
-              v-if="cureentData && cureentData.directory && cureentData.childNode.length > 0"
+              v-else-if="cureentData && cureentData.directory && cureentData.childNode.length > 0"
             >该文件夹下面有仪表板，请移除后再删除</span>
-            <span v-else>确定删除该{{ cureentData && cureentData.directory ? '文件夹' : '仪表板' }}吗？</span>
+            <span v-else>确定删除名为 {{ cureentData && cureentData.name }} 的{{ cureentData && cureentData.directory ? '文件夹' : '仪表板' }}吗？</span>
           </div>
           <div
             slot="footer"
@@ -415,7 +419,8 @@ export default {
         total: 0,
         pageNum: 1,
         pageSize: 10
-      }
+      },
+      deleteOne: false
     }
   },
   computed: {
@@ -512,7 +517,7 @@ export default {
     },
     // table options
     edit (val) {
-      if (this.batchSelection) return false
+      // if (this.batchSelection) return false
       if (val.directory) {
         this.cureentData = val
         this.folderDialogVisible = true
@@ -527,7 +532,7 @@ export default {
       }
     },
     preview (val) {
-      if (this.batchSelection) return false
+      // if (this.batchSelection) return false
       if (val.directory) {
         this.cureentData = val
         this.folderDialogVisible = true
@@ -546,7 +551,7 @@ export default {
       resolve(tree.childNode)
     },
     editDashboardAttribute (val) {
-      if (this.batchSelection) return false
+      // if (this.batchSelection) return false
       this.cureentData = val
       this.dashboardAttributeVisible = true
       this.dashboardAttr.name = val.name
@@ -591,26 +596,45 @@ export default {
       }
     },
     showMore () {
-      if (this.batchSelection) return false
+      // if (this.batchSelection) return false
       this.moreToolTipDisabled = false
     },
     deleteData (val) {
-      if (this.batchSelection) return false
+      // if (this.batchSelection) return false
+      console.log(val)
       this.cureentData = val
+      this.deleteDataVisible = true
+      this.deleteOne = true
+    },
+    batchDelete() {
+      this.deleteOne = false
       this.deleteDataVisible = true
     },
     async hanledeleteData () {
-      const { _id, directory, childNode } = this.cureentData
-      if (directory && childNode.length > 0) {
-        this.deleteDataVisible = false
-        this.cureentData = null
-        return
-      }
-      const params = {
-        resources: [{
+      let resources = []
+
+      if (this.deleteOne) {
+        const { _id, directory, childNode } = this.cureentData
+        if (directory && childNode.length > 0) {
+          this.deleteDataVisible = false
+          this.cureentData = null
+          return
+        }
+        resources = [{
           id: _id,
           directory: !!this.cureentData.directory
         }]
+      } else {
+        resources = this.multipleSelection.map(item => {
+          return {
+            id: item._id,
+            directory: false
+          }
+        })
+      }
+
+      const params = {
+        resources
       }
       try {
         const data = await batchDeleteResources(params)
