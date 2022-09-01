@@ -70,7 +70,8 @@
       slot="footer"
       class="dialog-footer"
     >
-      <el-button @click="close">取 消</el-button>
+      <el-button v-if="!currentData.shareUrl" @click="close">取 消</el-button>
+      <el-button v-else @click="close">关 闭</el-button>
       <el-button
         v-if="needShareAgain && currentData.shareUrl"
         type="primary"
