@@ -196,7 +196,7 @@ export default {
     // 联动改变 系列选择中的图表标签复选框值
     handleSeriesLabel (val) {
       store.state.app.layout.forEach(item => {
-        if (item.id === store.state.app.currentLayoutId) {
+        if (item.id === store.state.app.currentLayoutId && item.option.theme.SeriesSetting) {
           if (item.option.theme.SeriesSetting.SeriesSelect.SeriesChartLabel) {
             item.option.theme.SeriesSetting.SeriesSelect.seriesOption.map((item) => {
               item.showLabel = val
