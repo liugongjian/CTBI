@@ -1,7 +1,7 @@
 // 饼图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
-import { getLayoutOptionById, deepClone, formatDataValue } from '@/utils/optionUtils'
+import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import store from '@/store'
 export default {
   mixins: [baseMixins],
@@ -38,7 +38,7 @@ export default {
   methods: {
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
-      this.dataValue = formatDataValue(deepClone(this.chartData))
+      this.dataValue = this.formatDataValue(deepClone(this.chartData))
       // 拿到数据中的系列名字
       this.getSeriesOptions(this.dataValue)
       // 拿到数据的系列名字 并设置颜色
@@ -46,6 +46,49 @@ export default {
       // 拿到数据中的指标
       this.getIndicatorOptions(this.dataValue)
       this.getOption()
+    },
+    formatDataValue (chartData) {
+      const dataValue = []
+      const DimensionKey = []
+      const MeasureKey = []
+      const { data, fields } = chartData
+      console.log('www', chartData)
+      if (data && data.length > 0) {
+        for (const key in fields) {
+          if (Object.hasOwnProperty.call(fields, key)) {
+            const element = fields[key]
+            if (key === 'Dimension') {
+              element.fields.forEach(field => {
+                DimensionKey.push(field.displayColumn)
+              })
+            } else if (key === 'Measure') {
+              element.fields.forEach(field => {
+                MeasureKey.push(field.displayColumn)
+              })
+            }
+          }
+        }
+        dataValue.push([DimensionKey.join('-'), ...MeasureKey])
+        data.forEach(item => {
+          const dimensionData = []
+          const measureData = []
+
+          MeasureKey.forEach(mea => {
+            if (Number(item[mea]) < 0) {
+              measureData.push(0)
+            } else {
+              measureData.push(item[mea])
+              // measureData.push(item[mea].match(/\d+(?:\.\d+)?/g, ''))
+            }
+          })
+          DimensionKey.forEach(dim => {
+            dimensionData.push(item[dim])
+          })
+          dataValue.push([dimensionData.join('-'), ...measureData])
+        })
+      }
+      console.log('adz', dataValue)
+      return dataValue
     },
     // 拿到数据中的系列名字
     getSeriesOptions (val) {

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
+import { getLayoutOptionById, deepClone, getDataValueById } from '@/utils/optionUtils'
 import tableMixins from '@/components/Dashboard/mixins/tableMixins'
 import baseMixins from '@/components/Dashboard/mixins/baseMixins'
 import TableChart from '../RankTable'
@@ -67,7 +67,7 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        console.log(val, 'vavav')
+        console.log(val, 'val')
         this.sequenceName = val.theme.StyleConfig.Rank.title
         this.header = val.theme.StyleConfig.Rank.show
         this.colorOption = val.theme.StyleConfig.Rank.color
@@ -86,22 +86,35 @@ export default {
     },
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
-      this.dataValue = this.formatDataValue()
-      // this.dataValue = this.formatData(deepClone(getDataValueById(this.identify)))
-      console.log(this.dataValue)
+      // this.dataValue = this.formatDataValue()
+      this.dataValue = this.formatData(deepClone(getDataValueById(this.identify)))
+      // console.log(this.dataValue, 'ddddd')
     },
-    // formatData (dataValue) {
-    //   console.log(dataValue, '接收的数据')
-    // }
-    formatDataValue() {
-      const tableData = [{ 'name': '111', 'value': 3434 }, { 'name': 'Sam S Club', 'value': 10000 }, { 'name': 'a Club', 'value': 12122 }]
-      const maxNumber = Math.max.apply(Math, tableData.map(item => { return item.value }))
-      const columns = [{ prop: 'name', label: '姓名', width: '100' }, { prop: 'value', label: '价格', width: '100' }]
-      const dataValue = { tableData: tableData.sort(function (a, b) {
-        return (b.value - a.value)
-      }), total: tableData.length, columns, maxNumber }
-      return dataValue
+    formatData (dataValue) {
+      // console.log(dataValue, '接收的数据')
+      const key1 = dataValue.fields.Dimension.fields[0].column
+      const key2 = dataValue.fields.Measure.fields[0].column
+      const columns = []
+      const tableData = dataValue.data.map(item => { Object.values(item)[1] = Number(Object.values(item)[1]); return item })
+      columns.push({ prop: key1, label: key1, width: '100' })
+      columns.push({ prop: key2, label: key2, width: '100' })
+      const maxNumber = Math.max.apply(Math, tableData.map((item, index) => { return Object.values(item)[1] }))
+      const dataValues = { tableData: tableData.sort(function (a, b) {
+        return (Object.values(b)[1] - Object.values(a)[1])
+      }), total: tableData.length, columns, maxNumber
+      }
+      // console.log(tableData, 'ddddddd')
+      return dataValues
     }
+    // formatDataValue() {
+    //   const tableData = [{ 'name': '111', 'value': 3434 }, { 'name': 'Sam S Club', 'value': 10000 }, { 'name': 'a Club', 'value': 12122 }]
+    //   const maxNumber = Math.max.apply(Math, tableData.map(item => { return item.value }))
+    //   const columns = [{ prop: 'name', label: '姓名', width: '100' }, { prop: 'value', label: '价格', width: '100' }]
+    //   const dataValue = { tableData: tableData.sort(function (a, b) {
+    //     return (b.value - a.value)
+    //   }), total: tableData.length, columns, maxNumber }
+    //   return dataValue
+    // }
   }
 }
 </script>
