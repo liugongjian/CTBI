@@ -11,26 +11,69 @@
       @refresh="refresh"
     >
       <template #operation="{scope}">
-        <el-button type="text" @click.stop="handleEdit(scope.row)">属性</el-button>
-        <el-button type="text" @click.stop="handleEditTemplate(scope.row._id)">编辑</el-button>
-        <el-button type="text" @click.stop="handleDelete(scope.row._id)">删除</el-button>
+        <el-button
+          type="text"
+          @click.stop="handleEdit(scope.row)"
+        >属性</el-button>
+        <el-button
+          type="text"
+          @click.stop="handleEditTemplate(scope.row._id)"
+        >编辑</el-button>
+        <el-button
+          type="text"
+          @click.stop="handleDelete(scope.row._id)"
+        >删除</el-button>
       </template>
     </common-table>
 
-    <el-dialog title="属性" :visible.sync="templateAttributeVisible" width="480px" @close="hiddenTemplateAttribute">
+    <el-dialog
+      title="属性"
+      :visible.sync="templateAttributeVisible"
+      width="480px"
+      :close-on-click-modal="false"
+      @close="hiddenTemplateAttribute"
+    >
       <div class="data-set-dialog-main">
-        <el-form ref="attrForm" style="padding: 0px" :model="templateAttr" :rules="attrRules" label-width="40px">
-          <el-form-item label="名称" prop="name">
-            <el-input v-model="templateAttr.name" placeholder="请输入模板名称" style="width: 360px" />
+        <el-form
+          ref="attrForm"
+          style="padding: 0px"
+          :model="templateAttr"
+          :rules="attrRules"
+          label-width="40px"
+        >
+          <el-form-item
+            label="名称"
+            prop="name"
+          >
+            <el-input
+              v-model="templateAttr.name"
+              placeholder="请输入模板名称"
+              style="width: 360px"
+            />
           </el-form-item>
-          <el-form-item label="描述" prop="description" style="margin-top: 30px">
-            <el-input v-model="templateAttr.description" type="textarea" placeholder="请输入描述" style="width: 360px" />
+          <el-form-item
+            label="描述"
+            prop="description"
+            style="margin-top: 30px"
+          >
+            <el-input
+              v-model="templateAttr.description"
+              type="textarea"
+              placeholder="请输入描述"
+              style="width: 360px"
+            />
           </el-form-item>
         </el-form>
       </div>
-      <div slot="footer" class="dialog-footer">
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="hiddenTemplateAttribute">取 消</el-button>
-        <el-button type="primary" @click="handleTemplateAttribute">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="handleTemplateAttribute"
+        >确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -46,7 +89,7 @@ export default {
   components: {
     CommonTable
   },
-  data() {
+  data () {
     const validateName = (rule, value, callback) => {
       const name = value.trim()
       if (name === '') {
@@ -115,7 +158,7 @@ export default {
     this.getTemplateList()
   },
   methods: {
-    handleEdit(row) {
+    handleEdit (row) {
       this.templateAttributeVisible = true
       this.$nextTick(() => {
         this.templateAttr = _.pick(row, ['_id', 'name', 'description'])
@@ -131,7 +174,7 @@ export default {
         }
       })
     },
-    async updateTemplateAttribute() {
+    async updateTemplateAttribute () {
       const id = this.templateAttr._id
       const params = {
         id,
@@ -200,7 +243,7 @@ export default {
         }
       })
     },
-    handleEditTemplate(id) {
+    handleEditTemplate (id) {
       console.log(id)
       this.$router.push({
         path: '/dashboard',

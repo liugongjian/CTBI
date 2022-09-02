@@ -3,7 +3,10 @@
     <el-container>
       <el-container>
         <!-- 画布主体 -->
-        <el-main class="main-layout-preview" :style="layoutStyles">
+        <el-main
+          class="main-layout-preview"
+          :style="layoutStyles"
+        >
           <div
             id="content"
             @dragover="dragover"
@@ -17,6 +20,7 @@
     <el-dialog
       title="请输入分享密码"
       :visible.sync="passwordVisible"
+      :close-on-click-modal="false"
       width="480px"
     >
       <el-form
@@ -61,7 +65,7 @@ export default {
   components: {
     Widget
   },
-  data() {
+  data () {
     console.log(this.$route.params.id)
     const dashboardId = this.$route.query.id || ''
     this.timer = null
@@ -85,7 +89,7 @@ export default {
     layout () {
       return store.state.app.layout
     },
-    layoutStyles() {
+    layoutStyles () {
       return this.$store.state.settings.layoutStyles
     }
   },
@@ -116,7 +120,7 @@ export default {
     window.addEventListener('beforeunload', this.beforeunload)
     store.dispatch('app/updateDashboardMode', 'preview')
   },
-  destroyed() {
+  destroyed () {
     // if (this.timer) {
     //   console.log('destroyed')
     //   clearTimeout(this.timer)
@@ -130,7 +134,7 @@ export default {
     this.destroyedData()
   },
   methods: {
-    async getDashboardData() {
+    async getDashboardData () {
       // const params = {
       //   url: 'http://43.142.102.49:888/ctbiweb/dashboard/publish/RGvgccuxEsP5RLj' || window.location.href,
       //   password: this.dashboardAttr.password,
@@ -165,7 +169,7 @@ export default {
       }
     },
     // 触发 interReload事件，获取每个图表的渲染数据
-    getLayoutRenderData(layout) {
+    getLayoutRenderData (layout) {
       const idLimits = []
       layout.forEach((item, index) => {
         if (item.is !== 'TabChart') {
@@ -202,7 +206,7 @@ export default {
         y: domRec.y
       })
     },
-    beforeunload() {
+    beforeunload () {
       this.destroyedData()
     },
     confirmGetData () {
@@ -233,13 +237,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.tool-header{
-    position: relative;
+.tool-header {
+  position: relative;
 }
 ::v-deep .el-dialog__footer {
   padding: 0px;
 }
-.dialog-footer{
+.dialog-footer {
   padding-top: 10px;
 }
 .main-layout-preview {

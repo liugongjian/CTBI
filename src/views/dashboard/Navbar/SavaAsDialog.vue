@@ -12,7 +12,7 @@
         style="padding: 0px"
         :model="form"
         :rules="attrRules"
-        label-width="40px"
+        label-width="50px"
       >
         <el-form-item
           label="名称"

@@ -68,33 +68,36 @@ export const DataTypeOptions = [
 
   }
 ]
-
 export const FormatMap = {
   text: [],
   number: [
     {
+      label: '自动',
+      value: ''
+    },
+    {
       label: '整数',
-      value: '#,##0'
+      value: '###0'
     },
     {
       label: '保留1位小数',
-      value: '#,##0.0'
+      value: '###0.0'
     },
     {
       label: '保留2位小数',
-      value: '#,##0.00'
+      value: '###0.00'
     },
     {
       label: '百分比',
-      value: '#,##0%'
+      value: '###0%'
     },
     {
       label: '百分比1位小数',
-      value: '#,##0.0%'
+      value: '###0.0%'
     },
     {
       label: '百分比2位小数',
-      value: '#,##0.00%'
+      value: '###0.00%'
     }
   ],
   time: [
@@ -106,6 +109,7 @@ export const FormatMap = {
 }
 
 export const AggFunctionOptions = [
+  { label: '无', value: '' },
   { label: '求和', value: 'sum' },
   { label: '计数', value: 'count' },
   { label: '计数(去重)', value: 'distinct-count' },

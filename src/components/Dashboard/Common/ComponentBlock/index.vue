@@ -215,6 +215,14 @@ export default {
     })
   },
   methods: {
+    deleteBlock () {
+      console.log('触发了删除事件')
+      const id = store.state.app.currentLayoutId
+      if (id) {
+        // 删除vuex的layout中对应的组件信息
+        this.$store.dispatch('app/deleteLayoutById', id)
+      }
+    },
     getParameter,
     // 下拉菜单方法
     handleCommand (command) {

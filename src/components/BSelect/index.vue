@@ -2,6 +2,7 @@
   <el-dropdown
     trigger="click"
     placement="bottom-start"
+    :disabled="disabled"
     @command="handleCommand"
   >
 
@@ -26,7 +27,7 @@
     >
       <el-dropdown-item
         v-for="(data, index) in options"
-        :key="'b-select-'+data.value+ index"
+        :key="'b-select-' + index + getDate()"
         :command="data"
       >
         <template v-if="hasChildren(data)">
@@ -55,7 +56,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
                 v-for="child in data.children"
-                :key="child.label + child.value"
+                :key="child.label + getDate()"
                 :command="child"
               >
                 {{ child.label }}
@@ -91,6 +92,10 @@ export default {
     value: {
       type: String,
       default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -101,6 +106,17 @@ export default {
       }
     }
   },
+  watch: {
+    options: {
+      handler () {
+        const temp = this.recursiveOption(this.options)
+        if (temp) {
+          this.handleCommand(temp)
+        }
+      },
+      deep: true
+    }
+  },
   mounted () {
     const temp = this.recursiveOption(this.options)
     if (temp) {
@@ -108,6 +124,9 @@ export default {
     }
   },
   methods: {
+    getDate () {
+      return new Date().getTime()
+    },
     typeTransform (type) {
       return transformDataTypeIcon(type)
     },

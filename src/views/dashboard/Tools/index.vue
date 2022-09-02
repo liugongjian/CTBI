@@ -10,15 +10,15 @@
         />
       </div> -->
       <div class="tool-btn">
-        <el-dropdown>
+        <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
-            100%<i class="el-icon-arrow-down el-icon--right" />
+            {{ currentPercentage }}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>25%</el-dropdown-item>
-            <el-dropdown-item>50%</el-dropdown-item>
-            <el-dropdown-item>75%</el-dropdown-item>
-            <el-dropdown-item>100%</el-dropdown-item>
+            <el-dropdown-item command="0.25">25%</el-dropdown-item>
+            <el-dropdown-item command="0.5">50%</el-dropdown-item>
+            <el-dropdown-item command="0.75">75%</el-dropdown-item>
+            <el-dropdown-item command="1">100%</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -172,6 +172,11 @@ export default {
       set (n) {
         store.dispatch('app/updateLayout', n)
       }
+    },
+    currentPercentage() {
+      const scaleStyles = store.state.settings.scaleStyles
+      const num = scaleStyles.transform.slice(6, -1)
+      return num * 100 + '%'
     }
   },
   mounted () {
@@ -187,6 +192,15 @@ export default {
     store.dispatch('app/updateToolList', this.toolList)
   },
   methods: {
+    // 百分比切换
+    handleCommand(command) {
+      console.log('command', command)
+      const scaleStyles = {
+        transform: `scale(${command})`,
+        transformOrigin: 'center top'
+      }
+      store.dispatch('settings/changeSetting', { key: 'scaleStyles', value: scaleStyles })
+    },
     // 图标点击添加组件到画布
     addItem (name, item, submenu) {
       // 点击展开菜单的图标 收起菜单
