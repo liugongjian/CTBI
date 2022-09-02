@@ -10,8 +10,6 @@
     :prevent-collision="false"
     :is-bounded="true"
     :margin="[10, 10]"
-    @layout-mounted="layoutMountedEvent"
-    @layout-updated="layoutUpdatedEvent"
   >
     <div
       v-for="item in layout"

@@ -107,7 +107,7 @@ export default {
           const item0Temp = (item[0] + '-' + item[1]).split('-')
           item0Temp.forEach((j, idx) => {
             if (idx < item0Temp.length - 2) {
-              tempLinks.push({ source: item0Temp[idx], target: item0Temp[idx + 1], value: item0Temp[item0Temp.length - 1] })
+              tempLinks.push({ source: item0Temp[idx], target: item0Temp[idx + 1], value: Number(item0Temp[item0Temp.length - 1]) })
             }
           })
         }
@@ -115,7 +115,15 @@ export default {
       tempData1 = tempData1.join('-').split('-')
       const tempData2 = []
       tempData1.forEach((item, index) => {
-        tempData2.push({ name: item })
+        let sum = 0
+        dataValue.forEach((jtem, j) => {
+          if (j > 0) {
+            if (jtem[0].indexOf(item) > -1) {
+              sum += Number(jtem[1])
+            }
+          }
+        })
+        tempData2.push({ name: item, value: sum })
       })
 
       // tempData去重
@@ -133,7 +141,6 @@ export default {
           return
         }
       })
-
       if (!flag) {
         this.$message({
           message: '维度之间存在一样的value, 请重新选择维度! ',
@@ -143,6 +150,7 @@ export default {
         return { tempData, tempLinks }
       }
     },
+
     getOption () {
       const { ComponentOption } = this.storeOption.theme
       const color = ComponentOption.SankeyLine.lineColor
@@ -156,9 +164,13 @@ export default {
             focus: 'adjacency'
           },
           data: this.dataValue && this.dataValue.tempData,
+          label: {
+            show: ComponentOption.SankeyChartLabel.check,
+            formatter: ComponentOption.SankeyChartLabel.checkList === '维度字段名+度量值' ? '{b}: {c}' : '{b}'
+          },
           links: this.dataValue && this.dataValue.tempLinks,
           lineStyle: {
-            color: color === 2 ? 'source' : '',
+            color: color === 2 ? 'source' : 'gradient',
             opacity,
             curveness: curveness === 1 ? 0.5 : 0 // 0.5曲线
           }
