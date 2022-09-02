@@ -9,8 +9,6 @@
     :vertical-compact="true"
     :margin="[10, 10]"
     :use-css-transforms="true"
-    @layout-mounted="layoutMountedEvent"
-    @layout-updated="layoutUpdatedEvent"
   >
     <div
       v-for="item in layout"
@@ -70,12 +68,6 @@ export default {
     }
   },
   methods: {
-    layoutMountedEvent(newLayout) {
-      console.log('Mounted layout: ', newLayout)
-    },
-    layoutUpdatedEvent: function(newLayout) {
-      console.log('Updated layout: ', newLayout)
-    },
     clickHandler (id) {
       // 更新当前id
       console.log(id)
