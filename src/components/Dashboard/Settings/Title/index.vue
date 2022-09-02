@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-09-01 14:07:39
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-02 17:45:20
+ * @Description:
+-->
 <template>
   <div class="editor-object-container">
     <el-checkbox
@@ -9,7 +16,7 @@
       :class="{'box-disabled':!option.show}"
       style="display: flex"
     >
-      <el-input v-model="option.text" />
+      <el-input v-model="option.text" maxlength="50" type="text" />
       <el-color-picker v-model="option.color" />
     </div>
   </div>
