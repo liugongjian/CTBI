@@ -372,4 +372,9 @@ export default {
     word-break: break-word;
   }
 }
+svg {
+  touch-action: none;
+  user-select: none;
+  box-sizing: border-box;
+}
 </style>

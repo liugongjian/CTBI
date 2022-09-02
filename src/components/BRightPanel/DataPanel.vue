@@ -263,7 +263,7 @@ export default {
 
     // 跳转到编辑数据集页面
     editDataSet () {
-      const query = { _id: this.dataSet.id }
+      const query = { _id: this.dataSet.id, mode: 'window' }
       const newUrl = this.$router.resolve({
         path: '/dataManage/dataSet/edit',
         query

@@ -378,7 +378,14 @@ export default {
               message: '保存成功',
               type: 'success'
             })
-            this.$router.go(-1)
+            setTimeout(() => {
+              const mode = this.$route.query.mode
+              if (mode === 'window') {
+                window.close()
+              } else {
+                this.$router.go(-1)
+              }
+            }, 2500)
           }).finally(e => {
             this.saveBtnLoading = false
           })
