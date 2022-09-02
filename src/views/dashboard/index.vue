@@ -44,6 +44,7 @@
     <el-dialog
       title="恢复提示"
       :visible.sync="recoverVisible"
+      :close-on-click-modal="false"
       width="480px"
     >
       <div class="data-set-didlog-del">
@@ -67,6 +68,7 @@
     <el-dialog
       title="未保存"
       :visible.sync="unsavedVisible"
+      :close-on-click-modal="false"
       width="480px"
     >
       <div class="data-set-didlog-del">

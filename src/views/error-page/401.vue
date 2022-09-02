@@ -40,6 +40,7 @@
     </el-row>
     <el-dialog
       :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
       title="随便看"
     >
       <img

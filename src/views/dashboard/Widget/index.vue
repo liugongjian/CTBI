@@ -59,8 +59,8 @@ export default {
   mounted () {
     const that = this
     document.onkeydown = function (e) {
-      const { target: { tagName } } = e
-      if (e.code === 'Backspace' && tagName === 'BODY') {
+      const { target: { tagName, className } } = e
+      if ((e.code === 'Backspace' || e.code === 'Delete') && tagName === 'BODY' && !className) {
         const id = store.state.app.currentLayoutId
         if (id) {
           // 删除vuex的layout中对应的组件信息
