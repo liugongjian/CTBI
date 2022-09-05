@@ -63,7 +63,7 @@ export default {
       return getLayoutById(this.identify)
     },
     tabHeight() {
-      return this.layout.h * 100 - 65 + this.layout.h * 4
+      return this.layout.h * 100 - 85 + this.layout.h * 4
     },
     editableTabsValue() {
       if (this.userChooseTab) {
@@ -115,6 +115,10 @@ export default {
     },
     addTab() {
       const newTabName = Date.now() + ''
+      if (this.layout.tabPanels && this.layout.tabPanels.length > 9) {
+        this.$message.warning('最多只能添加10个Tab')
+        return
+      }
       const paneId = `${this.layout.i}-${newTabName}`
       this.layout.tabPanels.push({
         title: 'New Tab',
@@ -122,13 +126,11 @@ export default {
         paneId
       })
       this.layout.activeTabId = paneId
-      console.log(this.layout)
       this.userChooseTab = newTabName
     },
     changeTab (e) {
       this.userChooseTab = e.name
       const chooseTab = this.layout.tabPanels.find(item => item.name === e.name)
-      console.log(chooseTab.paneId)
       this.layout.activeTabId = chooseTab.paneId
     },
     dragover (event) {

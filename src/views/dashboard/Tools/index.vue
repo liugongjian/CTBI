@@ -225,10 +225,22 @@ export default {
       }
       // 当前选中的是tab或者tab内的组件，则吧新增的放入tab内的画板中
       if (currentLayout && currentLayout.is === 'TabChart') {
+        // 当前选中的是Tab组件，则新增的组件是该选中组件的子组件
+        // 检测仪表板Tab组件仅支持两层嵌套
+        if (newLayout.is === 'TabChart' && currentLayout.containerId) {
+          this.$message.warning('仪表板Tab组件仅支持两层嵌套')
+          return
+        }
         newLayout.containerId = currentLayout.activeTabId
         // 添加tab id链，以用于深层删除
         newLayout.tabIdChains = (currentLayout.tabIdChains || []).concat([currentLayoutId, currentLayout.activeTabId])
       } else if (currentLayout && currentLayout.containerId) {
+        // 当前选中的是位于Tab内的非Tab组件，则新增的组件是该选中组件的兄弟组件
+        // 检测仪表板Tab组件仅支持两层嵌套
+        if (newLayout.is === 'TabChart' && currentLayout.tabIdChains.length > 2) {
+          this.$message.warning('仪表板Tab组件仅支持两层嵌套')
+          return
+        }
         newLayout.containerId = currentLayout.containerId
         newLayout.tabIdChains = [...(currentLayout.tabIdChains || [])]
       }
@@ -371,6 +383,12 @@ export default {
         }
         if (mouseInTab) {
           const hitLayout = this.layout.find(obj => obj.i === mouseInTab)
+          // 检测仪表板Tab组件仅支持两层嵌套
+          if (newLayout.is === 'TabChart' && hitLayout.containerId) {
+            this.$message.warning('仪表板Tab组件仅支持两层嵌套')
+            return
+          }
+          console.log(hitLayout)
           newLayout.containerId = hitLayout.activeTabId
           // 添加tab id链，以用于深层删除
           newLayout.tabIdChains = (hitLayout.tabIdChains || []).concat([hitLayout.i, hitLayout.activeTabId])
