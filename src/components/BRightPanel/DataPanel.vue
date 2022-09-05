@@ -242,6 +242,22 @@ export default {
             type: 'warning'
           })
         } else {
+          const { limit, validate, name } = that.option[data.type]
+          if (limit) {
+            if (that.option[data.type].value.length === limit) {
+              that.$message.warning(`已超过[${name}]最多可添加项数量（${limit}）`)
+              return
+            }
+          }
+          // 自定义校验
+          if (validate && typeof validate === 'function') {
+            const { success, msg } = validate(data)
+            if (!success) {
+              that.$message.warning(msg)
+              return
+            }
+          }
+
           that.option[data.type].value.push(data)
         }
       }
