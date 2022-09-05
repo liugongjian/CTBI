@@ -23,7 +23,11 @@
         @refresh="refresh"
       />
     </div>
-    <div v-else>数据为空</div>
+    <svg-icon
+      v-else
+      icon-class="chart-empty-rank-list"
+      style="width:100%;height:100%;"
+    />
   </div>
 </template>
 
@@ -81,7 +85,7 @@ export default {
     this.dataOption = store.state.app.dataOption
   },
   methods: {
-    refresh() {
+    refresh () {
       console.log('重新请求数据')
     },
     // 图表重绘事件，继承于baseMixins
@@ -99,9 +103,10 @@ export default {
       columns.push({ prop: key1, label: key1, width: '100' })
       columns.push({ prop: key2, label: key2, width: '100' })
       const maxNumber = Math.max.apply(Math, tableData.map((item, index) => { return Object.values(item)[1] }))
-      const dataValues = { tableData: tableData.sort(function (a, b) {
-        return (Object.values(b)[1] - Object.values(a)[1])
-      }), total: tableData.length, columns, maxNumber
+      const dataValues = {
+        tableData: tableData.sort(function (a, b) {
+          return (Object.values(b)[1] - Object.values(a)[1])
+        }), total: tableData.length, columns, maxNumber
       }
       // console.log(tableData, 'ddddddd')
       return dataValues
