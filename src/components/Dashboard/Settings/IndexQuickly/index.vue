@@ -127,7 +127,7 @@
         <div class="editor-item-container">
           <div class="editor-item-title">图片类型</div>
           <el-radio-group v-model="option.type">
-            <el-radio label="img">图片字段</el-radio>
+            <!-- <el-radio label="img">图片字段</el-radio> -->
             <el-radio label="static">静态</el-radio>
           </el-radio-group>
         </div>

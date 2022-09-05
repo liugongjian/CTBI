@@ -57,6 +57,7 @@
               <el-input
                 v-model="imgUrl"
                 placeholder="请输入图片地址"
+                maxlength="50"
               /><span
                 class="btn"
                 @click="handlerClick(imgUrl)"
