@@ -38,6 +38,7 @@ export default {
           this.reloadImpl()
         } catch (e) {
           // do nothing
+          console.error(e)
         }
       }
     },
@@ -46,7 +47,7 @@ export default {
       const storeDataValue = getDataValueById(this.identify)
       if (storeDataValue && !isReload) {
         this.chartData = deepClone(storeDataValue)
-        throw new Error('未获取到数据，不做图表加载')
+        return
       }
 
       const params = getQueryParams(limit, this.identify)
