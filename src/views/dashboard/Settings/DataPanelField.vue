@@ -216,12 +216,11 @@ export default {
     },
     // 自动刷新
     handleRefresh (val) {
+      if (this.interVal) {
+        clearInterval(this.interVal)
+        this.interVal = null
+      }
       if (this.autoRefresh) {
-        if (this.interVal) {
-          clearInterval(this.interVal)
-          this.interVal = null
-        }
-
         if (val) {
           // 开启自动刷新的定时器
           const time = 1000 * this.time * (this.unit === 'minute' ? 60 : 1)

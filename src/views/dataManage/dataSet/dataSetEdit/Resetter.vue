@@ -405,8 +405,11 @@ export default {
       this.fieldsTree = getFieldsTree(fields)
       this.$nextTick(() => {
         this.$refs.vxeTable.refreshColumn()
-        console.log('刷新了表格字段')
-        this.$refs.vxeTable.reloadData(this.dimensionMeasureTableData)
+        if (this.dimensionMeasureTableData.length > 0) {
+          this.$refs.vxeTable.reloadData(this.dimensionMeasureTableData)
+        } else {
+          this.refreshPreview()
+        }
       })
     },
     typeTransform (data) {

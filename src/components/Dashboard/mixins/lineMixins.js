@@ -337,7 +337,7 @@ export default {
       if (!ComponentOption.TwisYAxis.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
-      const data = formatDataValue(deepClone(getDataValueById(this.identify)))
+      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'line',
@@ -346,7 +346,7 @@ export default {
             show: ComponentOption.ChartLabel.check, // 标签显示
             formatter: function (params) {
               const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
-              const isMeasure = that.checkList.includes('度量') ? `${data[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+              const isMeasure = that.checkList.includes('度量') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
               return isPercent + '\n' + isMeasure
             }
           },
