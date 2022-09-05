@@ -39,7 +39,7 @@
             <span v-show="option.IndicatorPic.check" class="round" :style="getRound(subItem.title)">
               <ImgIcon :data="getSvgIcon(subItem.title)" />
             </span>
-            <span :style="getTarget">{{ subItem.title }}</span>
+            <span v-show="option.IndicatorDisplay.indicators" :style="getTarget">{{ subItem.title }}</span>
             <div class="flex-align-center">
               <span style="fontSize: 12px">{{ getPrefix(subItem) }}</span>
               <span :style="getTargetVal" class="num">{{ getSeries(subItem) }}</span>
