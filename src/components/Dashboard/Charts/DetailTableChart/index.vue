@@ -19,7 +19,11 @@
         @refresh="refresh"
       />
     </div>
-    <svg-icon v-else icon-class="chart-empty-detail-table" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-detail-table"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -111,14 +115,14 @@ export default {
     this.dataOption = store.state.app.dataOption
   },
   methods: {
-    refresh() {
+    refresh () {
       console.log('重新请求数据')
     },
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
       this.dataValue = this.formatDataValue(deepClone(this.chartData))
     },
-    formatDataValue(data) {
+    formatDataValue (data) {
       const tableData = [{ 'name': 'Sam S Club', 'value': 10000 }, { 'name': 'a Club', 'value': 12122 }]
       const columns = [{ prop: 'name', label: '姓名' }, { prop: 'value', label: '价格' }]
       const dataValue = { tableData, total: tableData.length, columns }

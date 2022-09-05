@@ -329,6 +329,14 @@ export const getFieldsTable = (fields) => {
     if (!item.attributes[0].comment) {
       item.attributes[0].comment = ''
     }
+    // 默认展示格式
+    if (!item.attributes[0].format) {
+      item.attributes[0].format = ''
+    }
+    // 默认聚合方式
+    if (!item.attributes[0].aggregator) {
+      item.attributes[0].aggregator = 'sum'
+    }
     if (item.type === 'Dimension') {
       if (item.attributes[0].isHidden) {
         dimensionHiddenLength += 1

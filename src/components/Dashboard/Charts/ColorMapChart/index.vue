@@ -5,7 +5,11 @@
       :option="chartOption"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-color-map" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-color-map"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 

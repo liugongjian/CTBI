@@ -6,7 +6,11 @@
       autoresize
       :update-options="{notMerge:true}"
     />
-    <svg-icon v-else icon-class="chart-empty-san-key" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-san-key"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -65,7 +69,7 @@ export default {
       this.dataValue = this.formatDataValue(deepClone(this.chartData))
       this.getOption()
     },
-    formatDataValue(chartData) {
+    formatDataValue (chartData) {
       const dataValue = []
       const DimensionKey = []
       const MeasureKey = []
@@ -182,5 +186,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
