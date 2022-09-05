@@ -83,7 +83,6 @@ export default {
           color.push({ name: item, color: colorValue[idx].value, remark: item })
         }
       })
-      console.log(color, 'color折线图')
       this.storeOption.theme.ComponentOption.Color.color = color
     },
     // 拿到数据中的指标
@@ -223,7 +222,7 @@ export default {
           } else {
             item.symbol = 'circle'
             item.hoverAnimation = false
-            item.symbolSize = 1
+            item.symbolSize = 5
           }
         }
         return item

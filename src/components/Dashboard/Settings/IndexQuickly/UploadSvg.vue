@@ -153,7 +153,7 @@ export default {
       console.log(file)
       const imgType = ['image/svg+xml']
       const isType = imgType.includes(file.type)
-      const isLt1M = file.size / 1024 / 1024
+      const isLt1M = file.size / 1024 / 1024 < 1
       if (!isType) {
         this.$message.error('图片上传格式错误!')
       }

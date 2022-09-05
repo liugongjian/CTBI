@@ -194,7 +194,7 @@ export default {
       }
       if (!isLt1M) {
         this.$message({
-          message: '上传封面图片大小不能超过 2MB!',
+          message: '上传封面图片大小不能超过 1MB!',
           type: 'error'
         })
       }

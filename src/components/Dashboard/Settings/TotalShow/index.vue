@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-05-06 22:42:01
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-05 15:00:22
+ * @Description:
+-->
 <template>
   <div class="editor-object-container">
     <el-checkbox
@@ -11,6 +18,7 @@
         <el-input
           v-model="option.name"
           placeholder=""
+          maxlength="50"
         />
       </div>
     </div>
