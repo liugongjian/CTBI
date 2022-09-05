@@ -35,6 +35,9 @@
           v-model="selectedIndicator"
           :disabled="!getParameter(option, 'theme.FunctionalOption.ChartFilter.showFilter')"
           :multiple="getParameter(option, 'theme.FunctionalOption.ChartFilter.isMultiple')"
+          :class="{
+            disabled : selectedIndicator.length<=1,
+          }"
           @change="handleIndicator"
         >
           <el-option
@@ -42,6 +45,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
+            :disabled="selectedIndicator.length<=1 && selectedIndicator[0]==item.value"
           />
         </el-select>
 
@@ -372,4 +376,5 @@ export default {
     word-break: break-word;
   }
 }
+  ::v-deep .disabled .el-tag__close{ display: none !important;}
 </style>

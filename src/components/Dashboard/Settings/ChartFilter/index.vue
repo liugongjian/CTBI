@@ -18,14 +18,25 @@
         :disabled="!option.showFilter"
         :multiple="option.isMultiple"
         popper-class="setting-select"
+        :class="{
+          disabled : option.selectedIndicator.length<=1,
+        }"
+        @remove-tag="handleRemove"
       >
         <el-option
           v-for="item in option.indicatorOption"
           :key="item.value"
+          :disabled="option.selectedIndicator.length<=1 && option.selectedIndicator[0]==item.value"
           :label="item.label"
           :value="item.value"
         />
       </el-select>
+    </div>
+    <div style=" height: 30px;">
+      <p v-if="option.selectedIndicator.length<=1" style="padding:8px 24px;opacity: 0.7;" class="editor-item-title"><i
+        class="el-icon-warning-outline"
+        style="font-size:12px;margin: 0 8px 8px -3px;"
+      />最少选择一个</p>
     </div>
   </div>
 </template>
@@ -44,9 +55,18 @@ export default {
     return {
     }
   },
+  watch: {
+  },
+  mounted() {
+
+  },
   methods: {
+    handleRemove(e) {
+      console.log(111, e, this.option.selectedIndicator)
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
+  ::v-deep .disabled .el-tag__close{ display: none !important;}
 </style>
