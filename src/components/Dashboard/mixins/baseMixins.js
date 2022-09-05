@@ -14,13 +14,12 @@ export default {
   props: {
     identify: {
       type: String,
-      default: ''
+      default: store.state.app.currentLayoutId
     }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
     this.$bus.$on('interReload', this.interReload)
-    console.log(this.identify)
   },
   beforeDestroy () {
     this.$bus.$off('interReload', this.interReload)
