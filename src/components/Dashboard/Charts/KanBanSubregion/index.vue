@@ -7,10 +7,21 @@
 -->
 <template>
   <div style="width: 100%; height: 100%">
-    <div v-if="dataValue.length>0" class="kbs-wrap">
-      <subregion :data="dataValue" :option="getOption" :series="getKanBanSeries" />
+    <div
+      v-if="dataValue.length>0"
+      class="kbs-wrap"
+    >
+      <subregion
+        :data="dataValue"
+        :option="getOption"
+        :series="getKanBanSeries"
+      />
     </div>
-    <svg-icon v-else icon-class="chart-empty-kan-ban" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-kan-ban"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -40,10 +51,10 @@ export default {
     }
   },
   computed: {
-    getOption() {
+    getOption () {
       return this.storeOption.theme?.StyleConfig || {}
     },
-    getKanBanSeries() {
+    getKanBanSeries () {
       return this.storeOption.theme?.SeriesSetting?.IndicatorSeries || {}
     }
   },

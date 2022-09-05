@@ -7,7 +7,11 @@
       digit="2"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-funnel" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-funnel"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -98,7 +102,7 @@ export default {
             padding: [1, 15, 1, 15],
             color: 'black',
             borderRadius: that.borderRadius,
-            formatter: function(params) {
+            formatter: function (params) {
               const index = params.dataIndex / 2
               if (index === 0) return null
               return (index).toString().indexOf('.') < 0 ? that.lastData[index].value : ''
@@ -160,7 +164,7 @@ export default {
         label: {
           show: true,
           position: 'outside',
-          formatter: function(params) {
+          formatter: function (params) {
             return params.name || '未命名'
           }
         },
@@ -202,13 +206,13 @@ export default {
           show: false,
           length: -20
         },
-        labelLayout: function(params) {
+        labelLayout: function (params) {
           return {
             x: params.rect.x // 控制白色半圆数据框
           }
         },
         itemStyle: {
-          color: function(params) {
+          color: function (params) {
             if (params.data.isTransCol) {
               // 置灰
               return 'rgb(240, 241, 244)'
@@ -240,7 +244,7 @@ export default {
           position: 'left',
           backgroundColor: 'rgba(0,23,11,0.5)'
         },
-        labelLayout: function(p) {
+        labelLayout: function (p) {
           return {
             x: '30%'
           }
@@ -249,7 +253,7 @@ export default {
           show: false
         },
         itemStyle: {
-          color: function(params) {
+          color: function (params) {
             if (params.data.isTransCol) {
               // 置灰
               return 'rgb(240, 241, 244)'
@@ -320,11 +324,11 @@ export default {
         label: {
           color: 'balck',
           position: 'leftTop',
-          formatter: function(params) {
+          formatter: function (params) {
             return params.name ? params.name + '\n' + params.data.visiableVal : '未命名' + '\n' + params.data.visiableVal
           }
         },
-        labelLayout: function(params) {
+        labelLayout: function (params) {
           return {
             x: params.rect.x,
             y: params.rect.height + 40
@@ -354,11 +358,11 @@ export default {
           show: true,
           color: 'black',
           position: 'left',
-          formatter: function(params) {
+          formatter: function (params) {
             return params.name ? params.name + '\n' + params.data.visiableVal : '未命名' + '\n' + params.data.visiableVal
           }
         },
-        labelLayout: function(p) {
+        labelLayout: function (p) {
           return {
             x: '5%',
             y: p.rect.y + p.rect.height / 2
@@ -389,7 +393,7 @@ export default {
         label: {
           show: true,
           position: 'outside',
-          formatter: function(params) {
+          formatter: function (params) {
             return params.name || '未命名'
           }
         },
@@ -451,7 +455,7 @@ export default {
         animation: false,
         legend: {
           ...componentOption.Legend,
-          formatter: function(name) {
+          formatter: function (name) {
             return name || '未命名'
           }
         },

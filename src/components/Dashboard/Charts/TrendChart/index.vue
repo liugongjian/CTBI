@@ -6,7 +6,10 @@
       titleLinefeed : trendChartConfig.indicators=='linefeed'
     }"
   >
-    <div v-if="dataValue" style="width:100%;height:100%;">
+    <div
+      v-if="dataValue"
+      style="width:100%;height:100%;"
+    >
       <div
         v-if="dataValue && trendChartConfig.type == 'disperse'"
         class="trendTitle"
@@ -23,7 +26,13 @@
           ]"
           @click="changeTable(titleItem,index)"
         >
-          <trendTitle :is-select="titleItem.isSelect" :trend-chart-config="trendChartConfig" :trend-style-config="trendStyleConfig" :title-item="titleItem" :index="index" />
+          <trendTitle
+            :is-select="titleItem.isSelect"
+            :trend-chart-config="trendChartConfig"
+            :trend-style-config="trendStyleConfig"
+            :title-item="titleItem"
+            :index="index"
+          />
         </div>
       </div>
       <div
@@ -57,7 +66,12 @@
             {borderRight:trendChartConfig.type==='integration'?'1px solid #E5E5E5' :'' },
           ]"
         >
-          <trendTitle :trend-chart-config="trendChartConfig" :trend-style-config="trendStyleConfig" :title-item="titleList[key]" :index="key" />
+          <trendTitle
+            :trend-chart-config="trendChartConfig"
+            :trend-style-config="trendStyleConfig"
+            :title-item="titleList[key]"
+            :index="key"
+          />
           <v-chart
             :style="[
               {borderRight:trendChartConfig.type==='integration'?'1px solid #E5E5E5' :'' },
@@ -88,7 +102,11 @@
         />
       </div>
     </div>
-    <svg-icon v-else icon-class="chart-empty-trend" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-trend"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -123,14 +141,14 @@ export default {
   },
   methods: {
     // 指标带小趋势图 鼠标经过事件
-    handleMouseover(e, e2) {
+    handleMouseover (e, e2) {
       console.log(e, e2)
     },
-    handleClick(e) {
+    handleClick (e) {
       console.log(e)
     },
     // 更改表单
-    changeTable(item, index) {
+    changeTable (item, index) {
       // 如果是单选
       if (this.trendChartConfig.preview === 'radio') {
         console.log('单选')
@@ -439,48 +457,72 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.trendChartBox{ height: 100%; width: 100%; display: flex; padding:10px auto;}
-.trendTitle{
+.trendChartBox {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  padding: 10px auto;
+}
+.trendTitle {
   width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  &.notOpen{ height: 100%;justify-content: center;align-items: center;
-    .titleCont{ border-right: 1px solid #E5E5E5;
-    margin-right: -1px;
-    &:last-child{ border-right: none;}
-    .titleName{ font-size: 16px;}
-    .titleValue{ font-size: 32px; font-weight: bolid;}
-
+  &.notOpen {
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    .titleCont {
+      border-right: 1px solid #e5e5e5;
+      margin-right: -1px;
+      &:last-child {
+        border-right: none;
+      }
+      .titleName {
+        font-size: 16px;
+      }
+      .titleValue {
+        font-size: 32px;
+        font-weight: bolid;
+      }
     }
   }
 }
-  .titleLine{
-    .trendTitle{
-       display: block; width: auto; white-space:nowrap; overflow-x:auto ; overflow-y: hidden;
-      .titleCont{ display: inline-block;
-      }
-
-      &::-webkit-scrollbar-track-piece {
-        background-color: #FFF;
-      }
-      &::-webkit-scrollbar {
-        width: 6px;
-        height: 8px;
-      }
-      &::-webkit-scrollbar-thumb:horizontal {
-        width: 100px;
-        background-color: #999;
-        border-radius: 6px;
-        border-radius: 6px;
-      }
+.titleLine {
+  .trendTitle {
+    display: block;
+    width: auto;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    .titleCont {
+      display: inline-block;
     }
 
+    &::-webkit-scrollbar-track-piece {
+      background-color: #fff;
+    }
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 8px;
+    }
+    &::-webkit-scrollbar-thumb:horizontal {
+      width: 100px;
+      background-color: #999;
+      border-radius: 6px;
+      border-radius: 6px;
+    }
   }
-  .singleBox{  height: 100%; width: 100%; overflow-x: auto;display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    >div{height: 100%;
-    }
-    }
+}
+.singleBox {
+  height: 100%;
+  width: 100%;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  > div {
+    height: 100%;
+  }
+}
 </style>

@@ -263,7 +263,7 @@ export default {
           formatter: function (params) {
             let dataTotal = 0
             for (let i = 1; i < params.value.length; i++) {
-              dataTotal += params.value[i]
+              dataTotal += Number.parseFloat(params.value[i])
             }
             return dataTotal
           }

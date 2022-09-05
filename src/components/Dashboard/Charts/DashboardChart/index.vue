@@ -5,7 +5,11 @@
       :option="chartOption"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-dashboard" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-dashboard"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -149,7 +153,7 @@ export default {
       this.title.textStyle.fontSize = label.deputy.fontSize
       this.title.text = label.format ? `占比: ${(this.dataValue.value / data.max * 100).toFixed(label.deputy.decimal)}%` : `实际: ${this.dataValue.value}`
     },
-    setScale(scale) {
+    setScale (scale) {
       this.series[0].splitLine.show = scale.show
       this.series[0].axisLabel.show = scale.show
       this.series[0].axisLabel.formatter = (params) => {

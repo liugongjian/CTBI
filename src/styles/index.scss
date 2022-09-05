@@ -310,3 +310,8 @@ a {
 .vue-grid-item.vue-grid-placeholder {
   background: rgba(200, 201, 204, 0.5) !important;
 }
+
+.chart-empty-svg {
+  height: calc(100% - 40px) !important;
+  width: 100% !important;
+}

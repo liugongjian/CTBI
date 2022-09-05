@@ -6,7 +6,11 @@
       :update-options="{notMerge:true}"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-combine" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-combine"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -69,7 +73,7 @@ export default {
         this.getOption()
       }
     },
-    isHaveMeasure(chartData) {
+    isHaveMeasure (chartData) {
       const { data, fields } = chartData
       let flagMeasure = false
       let flagMeasureSecond = false
@@ -98,7 +102,7 @@ export default {
       }
     },
     // 组合图特有的 数据 转换方法
-    formatDataValue(chartData) {
+    formatDataValue (chartData) {
       const dataValue = []
       const DimensionKey = []
       const MeasureKey = []

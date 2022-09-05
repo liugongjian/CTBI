@@ -7,7 +7,11 @@
       autoresize
       :change-delay="500"
     />
-    <svg-icon v-else icon-class="chart-empty-pie" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-pie"
+      class="chart-empty-svg"
+    />
   </div>
 
 </template>

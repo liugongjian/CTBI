@@ -6,7 +6,11 @@
       autoresize
       :update-options="{notMerge:true}"
     />
-    <svg-icon v-else icon-class="chart-empty-percent-stacked-area" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-percent-stacked-area"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 

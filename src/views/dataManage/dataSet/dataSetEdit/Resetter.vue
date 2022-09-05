@@ -447,7 +447,7 @@ export default {
       // 默认展示格式
       row.attributes[0].format = ''
       // 默认聚合方式
-      row.attributes[0].aggregator = ''
+      row.attributes[0].aggregator = 'sum'
       if (!item) {
         item = this.getValueItem(value)
       }

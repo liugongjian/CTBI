@@ -1,12 +1,19 @@
 <template>
   <div style="width: 100%; height: 100%">
-    <div v-if="dataValue && dataValue.length > 0" class="box">
+    <div
+      v-if="dataValue && dataValue.length > 0"
+      class="box"
+    >
       <Progress
         :option="storeOption"
         :data-value="dataValue"
       />
     </div>
-    <svg-icon v-else icon-class="chart-empty-progress" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-progress"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 

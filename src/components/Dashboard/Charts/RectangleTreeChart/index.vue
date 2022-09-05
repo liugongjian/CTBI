@@ -6,7 +6,11 @@
       :update-options="{notMerge:true}"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-rectangle-tree" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-rectangle-tree"
+      class="chart-empty-svg"
+    />
   </div>
 
 </template>
@@ -64,7 +68,7 @@ export default {
       this.getColor()
       this.getOption()
     },
-    formatDataValue(chartData) {
+    formatDataValue (chartData) {
       const DimensionKey = []
       const MeasureKey = []
       const { data, fields } = chartData
@@ -114,7 +118,7 @@ export default {
         return dataValue
       }
     },
-    getColor() {
+    getColor () {
       const color = []
       const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
       this.dataValue.forEach((item, index) => {
