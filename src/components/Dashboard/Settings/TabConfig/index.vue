@@ -31,6 +31,10 @@ export default {
   },
   methods: {
     addTab() {
+      if (this.layout.tabPanels && this.layout.tabPanels.length > 9) {
+        this.$message.warning('最多只能添加10个Tab')
+        return
+      }
       const newTabName = Date.now() + ''
       const paneId = `${this.layout.i}-${newTabName}`
       this.layout.tabPanels.push({
