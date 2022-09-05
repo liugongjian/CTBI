@@ -50,7 +50,7 @@ export default {
   methods: {
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
-      console.log('图表重绘事件，继承于baseMixins')
+      console.log('图表重绘事件，继承于baseMixins', this.chartData)
       this.dataValue = formatDataValue(deepClone(this.chartData))
       // 拿到数据中的系列名字
       this.getSeriesOptions(this.dataValue)
@@ -75,7 +75,8 @@ export default {
       }
     },
     // 拿到数据的系列名字 并设置颜色 并拿到数据中展示标题
-    getColorAndTitle (val) {
+    getColorAndTitle () {
+      const val = this.dataValue
       var color = []
       var titleList = []
       const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
@@ -459,6 +460,22 @@ export default {
         })
       }
       return dataValue
+    },
+    // 标题筛选
+    filterTitleList(titleList, selectedIndicator) {
+      var res = titleList.filter(item => {
+        console.log(item.name, selectedIndicator.includes(item.name))
+        return selectedIndicator.includes(item.name)
+      })
+      // 默认选中
+      let s = 0
+      for (const i of res) {
+        if (!i.isSelect) s++
+      }
+      if (s === res.length) {
+        res[0].isSelect = true
+      }
+      return res
     }
   }
 }

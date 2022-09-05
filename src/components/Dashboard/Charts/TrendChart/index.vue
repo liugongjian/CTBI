@@ -61,6 +61,7 @@
         <div
           v-for="(chart,key) of chartList"
           :key="key"
+          style="margin-bottom:39px"
           :style="[
             {width:trendStyleConfig.lineNum?100/trendStyleConfig.lineNum-1+'%':'auto'},
             {borderRight:trendChartConfig.type==='integration'?'1px solid #E5E5E5' :'' },
@@ -128,6 +129,7 @@ export default {
   },
   data () {
     return {
+      loopTime: 0,
       selectedItem: '',
       dataValueItem: [],
       chartList: [],
@@ -180,14 +182,18 @@ export default {
       const { ComponentOption, FunctionalOption, trendChartConfig, trendStyleConfig, Axis } = this.storeOption.theme
       this.Axis = Axis
       //
-      this.titleList = trendChartConfig.trendChartConfig.titleList
       this.trendStyleConfig = trendStyleConfig.trendStyleConfig
       this.trendChartConfig = trendChartConfig.trendChartConfig
-      // // 双Y轴配置放在了别的地方，这里赋值一下
       // ComponentOption.TwisYAxis = trendChartConfig.trendChartConfig.twoY
       var series = null
       this.transformData(FunctionalOption.ChartFilter.selectedIndicator)
-      // 趋势图配置
+      // 开启了筛选
+      if (FunctionalOption.ChartFilter.showFilter) {
+        // 筛选标题
+        this.titleList = this.filterTitleList(trendChartConfig.trendChartConfig.titleList, FunctionalOption.ChartFilter.selectedIndicator)
+      } else {
+        this.titleList = trendChartConfig.trendChartConfig.titleList
+      }
       // 系列配置-图表标签相关
       this.setSeriesItem()
       // 获取颜色设置-使图例颜色与图形颜色对应
@@ -202,6 +208,13 @@ export default {
       // 如果设置了指标带小趋势图
       this.chartList = []
       var indicatorOption = this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption
+      // 如果是面积图隐藏 标记点功能
+      console.log(this.storeOption.theme.ComponentOption.SeriesMark.show)
+      if (this.trendChartConfig.chart === 'bar' && this.storeOption.theme.ComponentOption.SeriesMark.show) {
+        this.storeOption.theme.ComponentOption.SeriesMark.show = false
+      } else if (this.trendChartConfig.chart !== 'bar' && !this.storeOption.theme.ComponentOption.SeriesMark.show) {
+        this.storeOption.theme.ComponentOption.SeriesMark.show = true
+      }
       if (this.dataValue && this.dataValue[0].length > 1) {
         // 如果是单选
         if (this.trendChartConfig.preview === 'radio') {
@@ -340,6 +353,7 @@ export default {
           this.changeTable(this.titleList[0], 0)
         }
       }
+      console.log('123123123', this.titleList)
       this.$forceUpdate()
     },
     getSeries (ComponentOption, FunctionalOption, ctValueIndex) {
@@ -373,7 +387,7 @@ export default {
         type: chartType
       }
       // 面积图单独处理
-      if (this.trendChartConfig.chart === 'area') {
+      if (chartType === 'area') {
         seriesItem.type = 'line'
         seriesItem.areaStyle = {}
       }
@@ -428,7 +442,7 @@ export default {
             type: chartType
           }
           // 面积图单独处理
-          if (this.trendChartConfig.chart === 'area') {
+          if (chartType === 'area') {
             seriesItem.type = 'line'
             seriesItem.areaStyle = {}
           }
