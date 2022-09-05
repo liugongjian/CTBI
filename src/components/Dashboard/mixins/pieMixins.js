@@ -13,7 +13,7 @@ export default {
   },
   watch: {
     storeOption: {
-      handler (val) {
+      handler(val) {
         this.getOption()
       },
       deep: true
@@ -52,7 +52,6 @@ export default {
       const DimensionKey = []
       const MeasureKey = []
       const { data, fields } = chartData
-      console.log('www', chartData)
       if (data && data.length > 0) {
         for (const key in fields) {
           if (Object.hasOwnProperty.call(fields, key)) {
@@ -87,7 +86,6 @@ export default {
           dataValue.push([dimensionData.join('-'), ...measureData])
         })
       }
-      console.log('adz', dataValue)
       return dataValue
     },
     // 拿到数据中的系列名字
@@ -139,17 +137,17 @@ export default {
         // 取除维度以外的第1列为vlaue
         let data = []
         for (let i = 1; i < this.dataValue.length; i++) {
-          data.push({ name: this.dataValue[i][0], value: this.dataValue[i][indicatorIdx] })
+          data.push({ name: this.dataValue[i][0], value: Number(this.dataValue[i][indicatorIdx]) })
         }
         // 数据按数值从大到小排序
-        data = data.sort((a, b) => { return b.value - a.value })
+        data = data.sort((a, b) => { return Number(b.value) - Number(a.value) })
         const showCount = val // 单独显示的数据条数
         if (data.length > showCount) {
         // 数据大于9条时将前9条单独显示
           const dataTemp = data.splice(0, showCount)
           let leftSum = 0
           // 剩余数据合并
-          data.forEach(d => { leftSum += d.value })
+          data.forEach(d => { leftSum += Number(d.value) })
           data = dataTemp.concat({ name: '其他合计', value: leftSum })
         }
         const aTemp = []
@@ -158,7 +156,7 @@ export default {
         for (let i = 1; i < val + 2; i++) {
           aTemp[i] = [].concat([data[i - 1].name, data[i - 1].value])
         }
-        this.dataValue = aTemp
+        return aTemp
       }
     }
 

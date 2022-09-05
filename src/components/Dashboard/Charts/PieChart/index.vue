@@ -53,8 +53,11 @@ export default {
       // 合并数据为其他
       const { num } = ComponentOption.MergeOther
       const mergeShow = ComponentOption.MergeOther.show
-      if (mergeShow && num > 0) {
-        that.transformData(ComponentOption.MergeOther.num, FunctionalOption.ChartFilter.selectedIndicator)
+      let dataValue = []
+      if (mergeShow && num > 0 && num < SeriesSetting.SeriesSelect.seriesOption.length) {
+        dataValue = that.transformData(ComponentOption.MergeOther.num, FunctionalOption.ChartFilter.selectedIndicator)
+      } else {
+        dataValue = that.dataValue
       }
       // 取到颜色配置
       const color = ComponentOption.Color.color
@@ -64,8 +67,8 @@ export default {
       if (totalShow) {
         // 获取数据
         let sum = 0
-        for (let i = 1; i < that.dataValue.length; i++) {
-          sum += Number(that.dataValue[i][indicatorIdx])
+        for (let i = 1; i < dataValue.length; i++) {
+          sum += Number(dataValue[i][indicatorIdx])
         }
         ComponentOption.TotalShow.value = sum
       }
@@ -77,7 +80,7 @@ export default {
           trigger: 'item',
           formatter: (data) => {
             let nameTemp = ''
-            if (SeriesSetting) {
+            if (SeriesSetting && data.data[0] !== '其他合计') {
               SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
                 if (item.value === data.data[0]) {
                   nameTemp = item.remark
@@ -93,7 +96,7 @@ export default {
         legend: {
           ...ComponentOption.Legend,
           formatter: function (name) {
-            if (SeriesSetting) {
+            if (SeriesSetting && name !== '其他合计') {
               let nameTemp = ''
               SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
                 if (item.value === name) {
@@ -107,7 +110,7 @@ export default {
           }
         },
         dataset: {
-          source: that.dataValue
+          source: dataValue
         },
         series: [
           {
@@ -125,12 +128,16 @@ export default {
               shadowOffsetX: 0,
               shadowColor: 'rgba(0, 0, 0, 0.5)',
               color: (data) => {
-                if (color[0].name) {
+                if (color[0].name && data.data[0] !== '其他合计') {
                   const colorTemp = color.find((item) => { return data.data[0] === item.name })
                   return colorTemp ? colorTemp.color : 'red'
+                } else if (data.data[0] === '其他合计') {
+                  debugger
+                  console.log('1122', color, color[num].color)
+                  return color[color.length - 1].color
                 } else {
                   const index = (data.dataIndex) % color.length
-                  return color[index].value
+                  return color[index].color
                 }
               }
             },
@@ -140,7 +147,7 @@ export default {
               formatter: function (data) {
                 let formatter = ''
                 if (checkList.includes('维度')) {
-                  if (SeriesSetting) {
+                  if (SeriesSetting && data.data[0] !== '其他合计') {
                     let nameTemp = ''
                     SeriesSetting.SeriesSelect.seriesOption.forEach(item => {
                       if (item.value.trim() === data.data[0].trim()) {

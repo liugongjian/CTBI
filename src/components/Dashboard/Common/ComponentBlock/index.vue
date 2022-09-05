@@ -371,7 +371,7 @@ export default {
     flex-direction: column;
     white-space: pre-wrap;
     word-wrap: break-word;
-    word-break: break-word;
+    word-break: break-all;
   }
 }
 svg {

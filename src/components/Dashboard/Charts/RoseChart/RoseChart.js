@@ -58,10 +58,6 @@ export default {
         'color': colorTheme['官方'],
         'theme': '官方'
       },
-      'MergeOther': { // 合并数据为其他
-        'show': false, // 是否选中
-        'num': null
-      },
       'TotalShow': { // 显示总计
         'show': false, // 是否选中
         'name': '总计', // 自定义的总计名字
