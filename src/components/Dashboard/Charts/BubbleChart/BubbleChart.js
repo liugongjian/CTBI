@@ -34,7 +34,7 @@ export default {
         'type': 'scroll'
       },
       'Slider': { // 数据点大小
-        'symbolSize': 2, // 默认大小
+        'symbolSize': 5, // 默认大小
         'minSize': 1, // 最小值
         'maxSize': 40 // 最大值
       }
