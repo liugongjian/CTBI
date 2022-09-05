@@ -77,6 +77,7 @@
           <a
             v-show="getParameter(option, 'theme.Basic.TitleLink.openType')==='blank'"
             :href="getParameter(option, 'theme.Basic.TitleLink.url')"
+            :title="getParameter(option, 'theme.Basic.TitleLink.text')||`链接跳转`"
             target="blank"
             class="card-header-link"
           >
@@ -84,6 +85,7 @@
           <!-- 当打开方式为弹窗时 -->
           <a
             v-show="getParameter(option, 'theme.Basic.TitleLink.openType')==='dialog'"
+            :title="getParameter(option, 'theme.Basic.TitleLink.text')||`链接跳转`"
             class="card-header-link"
             @click="showDialog"
           >
