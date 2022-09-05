@@ -136,7 +136,7 @@
 </template>
 
 <script>
-const DragPos = { 'x': 1, 'y': 1, 'w': 24, 'h': 10, 'i': null }
+const DragPos = { 'x': 1, 'y': 1, 'w': 1, 'h': 1, 'i': null }
 const mouseXY = { 'x': 1, 'y': 1 }
 import store from '@/store'
 import { getToolList, getBriefToolList, getControlsList } from './getToolList'
@@ -151,7 +151,7 @@ export default {
   data () {
     // this.controls = [{ name: 'query', text: '查询控件' }, { name: 'TabChart', text: 'Tab控件' }, { name: 'text', text: '文本控件' }]
     return {
-      colNum: 24,
+      layoutIndex: 100,
       toolList: {},
       briefTooList: {},
       showPanel: false,
@@ -214,10 +214,10 @@ export default {
       const currentLayoutId = store.state.app.currentLayoutId
       const currentLayout = this.layout.find(item => item.i === currentLayoutId)
       const newLayout = {
-        x: (this.layout.length % 2) * this.colNum,
-        y: this.layout.length * this.colNum, // puts it at the bottom
-        w: DragPos.w,
-        h: DragPos.h,
+        x: (this.layout.length * 2) % (this.colNum || 12),
+        y: this.layout.length + (this.colNum || 12), // puts it at the bottom
+        w: 12,
+        h: 2,
         id: nanoId,
         i: nanoId,
         is: name,
@@ -233,6 +233,7 @@ export default {
         newLayout.tabIdChains = [...(currentLayout.tabIdChains || [])]
       }
       this.addLayout(newLayout)
+      this.layoutIndex++
     },
     addLayout (obj) {
       // tab组件类型添加一个含有一个tabpane的属性
@@ -278,12 +279,10 @@ export default {
             this.layout = this.layout.filter(obj => obj.i !== 'drop')
           }
           this.layout.push({
-            // x: this.layout.length > 0 ? (this.layout.length * 24) % (this.colNum || 48) : 0,
-            // y: this.layout.length > 0 ? this.layout.length + (this.colNum || 48) : 0, // puts it at the bottom
-            x: (this.layout.length % 2) * this.colNum,
-            y: this.layout.length * this.colNum, // puts it at the bottom
-            w: DragPos.w,
-            h: DragPos.h,
+            x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 12) : 0,
+            y: this.layout.length > 0 ? this.layout.length + (this.colNum || 12) : 0, // puts it at the bottom
+            w: 12,
+            h: 2,
             is: name,
             option,
             i: 'drop'
@@ -301,12 +300,10 @@ export default {
             this.layout = this.layout.filter(obj => obj.i !== 'drop')
           }
           const newLayout = {
-            // x: this.layout.length > 0 ? (this.layout.length * 24) % (this.colNum || 48) : 0,
-            // y: this.layout.length > 0 ? this.layout.length + (this.colNum || 48) : 0, // puts it at the bottom
-            x: 0,
-            y: 0,
-            w: DragPos.w,
-            h: DragPos.h,
+            x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 12) : 0,
+            y: this.layout.length > 0 ? this.layout.length + (this.colNum || 12) : 0, // puts it at the bottom
+            w: 12,
+            h: 2,
             is: name,
             option,
             i: 'drop'
@@ -325,7 +322,7 @@ export default {
         el.dragging = { 'top': mouseXY.y - parentRect.top, 'left': mouseXY.x - parentRect.left }
         const new_pos = el.calcXY(mouseXY.y - parentRect.top, mouseXY.x - parentRect.left)
         if (mouseInGrid === true) {
-          parentGridLayout.dragEvent('dragstart', 'drop', new_pos.x, new_pos.y, DragPos.h, DragPos.w)
+          parentGridLayout.dragEvent('dragstart', 'drop', new_pos.x, new_pos.y, 2, 12)
           DragPos.i = String(index)
           DragPos.x = this.layout[index].x
           DragPos.y = this.layout[index].y
@@ -365,8 +362,8 @@ export default {
         const newLayout = {
           x: DragPos.x,
           y: DragPos.y,
-          w: 24,
-          h: 10,
+          w: 12,
+          h: 2,
           i: nanoId,
           id: nanoId,
           is: name,
@@ -381,6 +378,9 @@ export default {
         this.addLayout(newLayout)
         parentGridLayout.dragEvent('dragend', nanoId, DragPos.x, DragPos.y, 2, 12)
       }
+    },
+    resolveDropdown (command) {
+      console.log('command:', command)
     },
     panelShow () {
       this.showPanel = !this.showPanel

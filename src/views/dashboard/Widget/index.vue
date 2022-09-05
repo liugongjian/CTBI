@@ -1,15 +1,16 @@
 <template>
   <grid-layout
     :layout.sync="layout"
-    :col-num="48"
-    :row-height="20"
+    :col-num="12"
+    :row-height="100"
     :is-draggable="true"
+    :is-resizable="true"
     :is-mirrored="false"
     :vertical-compact="true"
-    :use-css-transforms="true"
-    :prevent-collision="false"
-    :is-bounded="true"
     :margin="[10, 10]"
+    :use-css-transforms="true"
+    @layout-mounted="layoutMountedEvent"
+    @layout-updated="layoutUpdatedEvent"
   >
     <div
       v-for="item in layout"
@@ -22,7 +23,6 @@
         :w="item.w"
         :h="item.h"
         :i="item.i"
-        :resize-option="resizeOption"
       >
         <ComponentBlock
           :option="item"
@@ -47,45 +47,6 @@ export default {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem
   },
-  data () {
-    return {
-      resizeOption: {
-        edges: { left: true, right: true, top: false, bottom: true },
-        listeners: {
-          move: function (event) {
-            const { target: { dataset: { x, y } }, deltaRect, rect } = event
-            console.log(x, y, deltaRect, rect)
-            // console.log(x, y, event.deltaRect.left, event.deltaRect.top, event.target.dataset)
-
-            // x = (parseFloat(x) || 0) + event.deltaRect.left
-            // y = (parseFloat(y) || 0) + event.deltaRect.top
-
-            // Object.assign(event.target.style, {
-            //   width: `${event.rect.width}px`,
-            //   height: `${event.rect.height}px`,
-            //   transform: `translate(${x}px, ${y}px)`
-            // })
-
-            // Object.assign(event.target.dataset, { x, y })
-
-            // var endX = e.clientX
-            // var moveLen = resize[i].left + (endX - startX) // （endx-startx）=移动的距离。resize[i].left+移动的距离=左边区域最后的宽度
-            // var maxT = box[i].clientWidth - resize[i].offsetWidth // 容器宽度 - 左边区域的宽度 = 右边区域的宽度
-
-            // if (moveLen < 32) moveLen = 32 // 左边区域的最小宽度为32px
-            // if (moveLen > maxT - 150) moveLen = maxT - 150 // 右边区域最小宽度为150px
-
-            // resize[i].style.left = moveLen // 设置左侧区域的宽度
-
-            // for (let j = 0; j < left.length; j++) {
-            //   left[j].style.width = moveLen + 'px'
-            //   mid[j].style.width = (box[i].clientWidth - moveLen - 10) + 'px'
-            // }
-          }
-        }
-      }
-    }
-  },
   computed: {
     layout () {
       // 去除属于tab组件的layout
@@ -99,7 +60,7 @@ export default {
     const that = this
     document.onkeydown = function (e) {
       const { target: { tagName, className } } = e
-      if ((e.code === 'Backspace' || e.code === 'Delete') && ((tagName === 'BODY' && !className) || tagName === 'svg')) {
+      if ((e.code === 'Backspace' || e.code === 'Delete') && tagName === 'BODY' && !className) {
         const id = store.state.app.currentLayoutId
         if (id) {
           // 删除vuex的layout中对应的组件信息
