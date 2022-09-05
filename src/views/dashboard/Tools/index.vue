@@ -383,6 +383,12 @@ export default {
         }
         if (mouseInTab) {
           const hitLayout = this.layout.find(obj => obj.i === mouseInTab)
+          // 检测仪表板Tab组件仅支持两层嵌套
+          if (newLayout.is === 'TabChart' && hitLayout.containerId) {
+            this.$message.warning('仪表板Tab组件仅支持两层嵌套')
+            return
+          }
+          console.log(hitLayout)
           newLayout.containerId = hitLayout.activeTabId
           // 添加tab id链，以用于深层删除
           newLayout.tabIdChains = (hitLayout.tabIdChains || []).concat([hitLayout.i, hitLayout.activeTabId])
