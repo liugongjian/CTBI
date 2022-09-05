@@ -309,7 +309,7 @@ export default {
       if (ast === 'skip') {
         connectNulls = true
       } else if (ast === 'zero') {
-        this.dataValue = this.storeOption.dataSource.map(datas => {
+        this.dataValue = this.dataValue.map(datas => {
           return datas.map((data, index) => {
             connectNulls = false
             if ([null, undefined, NaN, '-'].includes(data)) {
