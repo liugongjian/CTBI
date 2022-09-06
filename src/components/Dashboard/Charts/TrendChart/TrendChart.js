@@ -267,11 +267,13 @@ export default {
     'Dimension': { // 维度
       'name': '类别轴/维度',
       'require': true,
+      'limit': 1,
       'value': []
     },
     'Measure': { // 度量
       'name': '值轴/度量',
       'require': true,
+      'limit': 20,
       'value': []
     }
   },
