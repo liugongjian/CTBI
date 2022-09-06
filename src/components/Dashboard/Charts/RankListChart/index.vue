@@ -1,7 +1,6 @@
 <template>
   <div style="width:100%;height:100%;">
-<<<<<<< HEAD
-    <!-- <div  class="rank-table"> -->
+
     <table-chart
       v-if="dataValue && dataValue.tableData"
       style="width:100%,height:100%"
@@ -24,38 +23,12 @@
       :position="position"
       @refresh="refresh"
     />
-    <!-- </div> -->
-    <div v-else>数据为空</div>
-=======
-    <div v-if="dataValue && dataValue.tableData">
-      <table-chart
-        style="width:100%,height:100%"
-        :table-columns="dataValue.columns"
-        :table-data="dataValue.tableData"
-        :page-num.sync="pageNum"
-        :page-size.sync="pageSize"
-        :total="dataValue.total"
-        :loading="tableLoading"
-        :is-show-pagination="isShowPagination"
-        :is-show-default-option="true"
-        :stripe="stripe"
-        :border="border"
-        :header="header"
-        :sequence="sequence"
-        :sequence-name="sequenceName"
-        :row-style="rowStyle"
-        :max-number="dataValue.maxNumber"
-        :color-option="colorOption"
-        :position="position"
-        @refresh="refresh"
-      />
-    </div>
+
     <svg-icon
       v-else
       icon-class="chart-empty-rank-list"
       style="width:100%;height:100%;"
     />
->>>>>>> master
   </div>
 </template>
 

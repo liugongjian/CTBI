@@ -154,7 +154,7 @@ export default {
 <style lang="scss" scoped>
 #screentables {
   overflow: scroll;
-  height: 95%;
+  height: 85%;
   background-color: transparent !important;
 }
 
