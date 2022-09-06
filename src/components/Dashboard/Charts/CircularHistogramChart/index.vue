@@ -1,7 +1,16 @@
 <template>
   <div style="width:100%;height:100%;">
-    <v-chart v-if="dataValue" :option="chartOption" :update-options="{ notMerge: true }" autoresize />
-    <div v-else>数据为空</div>
+    <v-chart
+      v-if="dataValue && dataValue.length > 0"
+      :option="chartOption"
+      :update-options="{ notMerge: true }"
+      autoresize
+    />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-circular-histogram"
+      style="width:100%;height:100%;"
+    />
   </div>
 </template>
 
@@ -35,7 +44,7 @@ export default {
       deep: true
     }
   },
-  mounted() {
+  mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
   },
   methods: {

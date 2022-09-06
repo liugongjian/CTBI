@@ -76,7 +76,7 @@ export default {
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
       // 为空时，进行初始化
-      if (this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption.length === 0) {
+      if (val && val.length > 0) {
         const seriesOption = []
         val[0].forEach((item, index) => {
           if (index) {
@@ -263,7 +263,7 @@ export default {
           formatter: function (params) {
             let dataTotal = 0
             for (let i = 1; i < params.value.length; i++) {
-              dataTotal += params.value[i]
+              dataTotal += Number.parseFloat(params.value[i])
             }
             return dataTotal
           }

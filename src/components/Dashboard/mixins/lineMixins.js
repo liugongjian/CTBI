@@ -60,16 +60,18 @@ export default {
       this.getOption()
     },
     // 拿到数据中的系列名字
-    getSeriesOptions (val) {
-      const seriesOption = []
-      val[0].forEach((item, index) => {
-        if (index) {
-          seriesOption.push({ value: item, label: item })
-        }
-      })
-      this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
-      this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
-      this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
+    getSeriesOptions(val) {
+      if (val && val.length > 0) {
+        const seriesOption = []
+        val[0].forEach((item, index) => {
+          if (index) {
+            seriesOption.push({ value: item, label: item })
+          }
+        })
+        this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
+        this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
+        this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
+      }
     },
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
@@ -81,7 +83,6 @@ export default {
           color.push({ name: item, color: colorValue[idx].value, remark: item })
         }
       })
-      console.log(color, 'color折线图')
       this.storeOption.theme.ComponentOption.Color.color = color
     },
     // 拿到数据中的指标
@@ -221,7 +222,7 @@ export default {
           } else {
             item.symbol = 'circle'
             item.hoverAnimation = false
-            item.symbolSize = 1
+            item.symbolSize = 5
           }
         }
         return item
@@ -250,7 +251,7 @@ export default {
       if (ast === 'skip') {
         connectNulls = true
       } else if (ast === 'zero') {
-        this.dataValue = this.storeOption.dataSource.map(datas => {
+        this.dataValue = this.dataValue.map(datas => {
           return datas.map((data, index) => {
             connectNulls = false
             if ([null, undefined, NaN, '-'].includes(data)) {
@@ -337,7 +338,7 @@ export default {
       if (!ComponentOption.TwisYAxis.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
-      const data = formatDataValue(deepClone(getDataValueById(this.identify)))
+      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'line',
@@ -346,7 +347,7 @@ export default {
             show: ComponentOption.ChartLabel.check, // 标签显示
             formatter: function (params) {
               const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
-              const isMeasure = that.checkList.includes('度量') ? `${data[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+              const isMeasure = that.checkList.includes('度量') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
               return isPercent + '\n' + isMeasure
             }
           },

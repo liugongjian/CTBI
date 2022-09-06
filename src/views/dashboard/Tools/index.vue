@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="header-tool"
-  >
+  <div class="header-tool">
     <div class="tools-container">
       <!-- <div class="tool-btn">
         <svg-icon
@@ -10,15 +8,15 @@
         />
       </div> -->
       <div class="tool-btn">
-        <el-dropdown>
+        <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
-            100%<i class="el-icon-arrow-down el-icon--right" />
+            {{ currentPercentage }}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>25%</el-dropdown-item>
-            <el-dropdown-item>50%</el-dropdown-item>
-            <el-dropdown-item>75%</el-dropdown-item>
-            <el-dropdown-item>100%</el-dropdown-item>
+            <el-dropdown-item command="0.25">25%</el-dropdown-item>
+            <el-dropdown-item command="0.5">50%</el-dropdown-item>
+            <el-dropdown-item command="0.75">75%</el-dropdown-item>
+            <el-dropdown-item command="1">100%</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -86,7 +84,10 @@
           />
         </el-tooltip>
       </div>
-      <div class="tool-btn horizontal chart-panel-controller" @click.stop="panelShow">
+      <div
+        class="tool-btn horizontal chart-panel-controller"
+        @click.stop="panelShow"
+      >
         <svg-icon
           :icon-class="'tools-more'"
           style="font-size: 22px;"
@@ -172,6 +173,11 @@ export default {
       set (n) {
         store.dispatch('app/updateLayout', n)
       }
+    },
+    currentPercentage () {
+      const scaleStyles = store.state.settings.scaleStyles
+      const num = scaleStyles.transform.slice(6, -1)
+      return num * 100 + '%'
     }
   },
   mounted () {
@@ -187,6 +193,15 @@ export default {
     store.dispatch('app/updateToolList', this.toolList)
   },
   methods: {
+    // 百分比切换
+    handleCommand (command) {
+      console.log('command', command)
+      const scaleStyles = {
+        transform: `scale(${command})`,
+        transformOrigin: 'center top'
+      }
+      store.dispatch('settings/changeSetting', { key: 'scaleStyles', value: scaleStyles })
+    },
     // 图标点击添加组件到画布
     addItem (name, item, submenu) {
       // 点击展开菜单的图标 收起菜单
@@ -210,10 +225,22 @@ export default {
       }
       // 当前选中的是tab或者tab内的组件，则吧新增的放入tab内的画板中
       if (currentLayout && currentLayout.is === 'TabChart') {
+        // 当前选中的是Tab组件，则新增的组件是该选中组件的子组件
+        // 检测仪表板Tab组件仅支持两层嵌套
+        if (newLayout.is === 'TabChart' && currentLayout.containerId) {
+          this.$message.warning('仪表板Tab组件仅支持两层嵌套')
+          return
+        }
         newLayout.containerId = currentLayout.activeTabId
         // 添加tab id链，以用于深层删除
         newLayout.tabIdChains = (currentLayout.tabIdChains || []).concat([currentLayoutId, currentLayout.activeTabId])
       } else if (currentLayout && currentLayout.containerId) {
+        // 当前选中的是位于Tab内的非Tab组件，则新增的组件是该选中组件的兄弟组件
+        // 检测仪表板Tab组件仅支持两层嵌套
+        if (newLayout.is === 'TabChart' && currentLayout.tabIdChains.length > 2) {
+          this.$message.warning('仪表板Tab组件仅支持两层嵌套')
+          return
+        }
         newLayout.containerId = currentLayout.containerId
         newLayout.tabIdChains = [...(currentLayout.tabIdChains || [])]
       }
@@ -356,6 +383,12 @@ export default {
         }
         if (mouseInTab) {
           const hitLayout = this.layout.find(obj => obj.i === mouseInTab)
+          // 检测仪表板Tab组件仅支持两层嵌套
+          if (newLayout.is === 'TabChart' && hitLayout.containerId) {
+            this.$message.warning('仪表板Tab组件仅支持两层嵌套')
+            return
+          }
+          console.log(hitLayout)
           newLayout.containerId = hitLayout.activeTabId
           // 添加tab id链，以用于深层删除
           newLayout.tabIdChains = (hitLayout.tabIdChains || []).concat([hitLayout.i, hitLayout.activeTabId])

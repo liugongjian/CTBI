@@ -6,7 +6,10 @@
       titleLinefeed : trendChartConfig.indicators=='linefeed'
     }"
   >
-    <div v-if="dataValue" style="width:100%;height:100%;">
+    <div
+      v-if="dataValue"
+      style="width:100%;height:90%;"
+    >
       <div
         v-if="dataValue && trendChartConfig.type == 'disperse'"
         class="trendTitle"
@@ -23,7 +26,13 @@
           ]"
           @click="changeTable(titleItem,index)"
         >
-          <trendTitle :is-select="titleItem.isSelect" :trend-chart-config="trendChartConfig" :trend-style-config="trendStyleConfig" :title-item="titleItem" :index="index" />
+          <trendTitle
+            :is-select="titleItem.isSelect"
+            :trend-chart-config="trendChartConfig"
+            :trend-style-config="trendStyleConfig"
+            :title-item="titleItem"
+            :index="index"
+          />
         </div>
       </div>
       <div
@@ -52,12 +61,18 @@
         <div
           v-for="(chart,key) of chartList"
           :key="key"
+          style="margin-bottom:39px"
           :style="[
             {width:trendStyleConfig.lineNum?100/trendStyleConfig.lineNum-1+'%':'auto'},
             {borderRight:trendChartConfig.type==='integration'?'1px solid #E5E5E5' :'' },
           ]"
         >
-          <trendTitle :trend-chart-config="trendChartConfig" :trend-style-config="trendStyleConfig" :title-item="titleList[key]" :index="key" />
+          <trendTitle
+            :trend-chart-config="trendChartConfig"
+            :trend-style-config="trendStyleConfig"
+            :title-item="titleList[key]"
+            :index="key"
+          />
           <v-chart
             :style="[
               {borderRight:trendChartConfig.type==='integration'?'1px solid #E5E5E5' :'' },
@@ -88,7 +103,11 @@
         />
       </div>
     </div>
-    <svg-icon v-else icon-class="chart-empty-trend" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-trend"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -110,6 +129,7 @@ export default {
   },
   data () {
     return {
+      loopTime: 0,
       selectedItem: '',
       dataValueItem: [],
       chartList: [],
@@ -123,14 +143,14 @@ export default {
   },
   methods: {
     // 指标带小趋势图 鼠标经过事件
-    handleMouseover(e, e2) {
+    handleMouseover (e, e2) {
       console.log(e, e2)
     },
-    handleClick(e) {
+    handleClick (e) {
       console.log(e)
     },
     // 更改表单
-    changeTable(item, index) {
+    changeTable (item, index) {
       // 如果是单选
       if (this.trendChartConfig.preview === 'radio') {
         console.log('单选')
@@ -162,14 +182,18 @@ export default {
       const { ComponentOption, FunctionalOption, trendChartConfig, trendStyleConfig, Axis } = this.storeOption.theme
       this.Axis = Axis
       //
-      this.titleList = trendChartConfig.trendChartConfig.titleList
       this.trendStyleConfig = trendStyleConfig.trendStyleConfig
       this.trendChartConfig = trendChartConfig.trendChartConfig
-      // // 双Y轴配置放在了别的地方，这里赋值一下
       // ComponentOption.TwisYAxis = trendChartConfig.trendChartConfig.twoY
       var series = null
       this.transformData(FunctionalOption.ChartFilter.selectedIndicator)
-      // 趋势图配置
+      // 开启了筛选
+      if (FunctionalOption.ChartFilter.showFilter) {
+        // 筛选标题
+        this.titleList = this.filterTitleList(trendChartConfig.trendChartConfig.titleList, FunctionalOption.ChartFilter.selectedIndicator)
+      } else {
+        this.titleList = trendChartConfig.trendChartConfig.titleList
+      }
       // 系列配置-图表标签相关
       this.setSeriesItem()
       // 获取颜色设置-使图例颜色与图形颜色对应
@@ -184,6 +208,13 @@ export default {
       // 如果设置了指标带小趋势图
       this.chartList = []
       var indicatorOption = this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption
+      // 如果是面积图隐藏 标记点功能
+      console.log(this.storeOption.theme.ComponentOption.SeriesMark.show)
+      if (this.trendChartConfig.chart === 'bar' && this.storeOption.theme.ComponentOption.SeriesMark.show) {
+        this.storeOption.theme.ComponentOption.SeriesMark.show = false
+      } else if (this.trendChartConfig.chart !== 'bar' && !this.storeOption.theme.ComponentOption.SeriesMark.show) {
+        this.storeOption.theme.ComponentOption.SeriesMark.show = true
+      }
       if (this.dataValue && this.dataValue[0].length > 1) {
         // 如果是单选
         if (this.trendChartConfig.preview === 'radio') {
@@ -322,6 +353,7 @@ export default {
           this.changeTable(this.titleList[0], 0)
         }
       }
+      console.log('123123123', this.titleList)
       this.$forceUpdate()
     },
     getSeries (ComponentOption, FunctionalOption, ctValueIndex) {
@@ -355,7 +387,7 @@ export default {
         type: chartType
       }
       // 面积图单独处理
-      if (this.trendChartConfig.chart === 'area') {
+      if (chartType === 'area') {
         seriesItem.type = 'line'
         seriesItem.areaStyle = {}
       }
@@ -410,7 +442,7 @@ export default {
             type: chartType
           }
           // 面积图单独处理
-          if (this.trendChartConfig.chart === 'area') {
+          if (chartType === 'area') {
             seriesItem.type = 'line'
             seriesItem.areaStyle = {}
           }
@@ -439,48 +471,72 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.trendChartBox{ height: 100%; width: 100%; display: flex; padding:10px auto;}
-.trendTitle{
+.trendChartBox {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  padding: 10px auto;
+}
+.trendTitle {
   width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  &.notOpen{ height: 100%;justify-content: center;align-items: center;
-    .titleCont{ border-right: 1px solid #E5E5E5;
-    margin-right: -1px;
-    &:last-child{ border-right: none;}
-    .titleName{ font-size: 16px;}
-    .titleValue{ font-size: 32px; font-weight: bolid;}
-
+  &.notOpen {
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    .titleCont {
+      border-right: 1px solid #e5e5e5;
+      margin-right: -1px;
+      &:last-child {
+        border-right: none;
+      }
+      .titleName {
+        font-size: 16px;
+      }
+      .titleValue {
+        font-size: 32px;
+        font-weight: bolid;
+      }
     }
   }
 }
-  .titleLine{
-    .trendTitle{
-       display: block; width: auto; white-space:nowrap; overflow-x:auto ; overflow-y: hidden;
-      .titleCont{ display: inline-block;
-      }
-
-      &::-webkit-scrollbar-track-piece {
-        background-color: #FFF;
-      }
-      &::-webkit-scrollbar {
-        width: 6px;
-        height: 8px;
-      }
-      &::-webkit-scrollbar-thumb:horizontal {
-        width: 100px;
-        background-color: #999;
-        border-radius: 6px;
-        border-radius: 6px;
-      }
+.titleLine {
+  .trendTitle {
+    display: block;
+    width: auto;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    .titleCont {
+      display: inline-block;
     }
 
+    &::-webkit-scrollbar-track-piece {
+      background-color: #fff;
+    }
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 8px;
+    }
+    &::-webkit-scrollbar-thumb:horizontal {
+      width: 100px;
+      background-color: #999;
+      border-radius: 6px;
+      border-radius: 6px;
+    }
   }
-  .singleBox{  height: 100%; width: 100%; overflow-x: auto;display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    >div{height: 100%;
-    }
-    }
+}
+.singleBox {
+  height: 100%;
+  width: 100%;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  > div {
+    height: 100%;
+  }
+}
 </style>

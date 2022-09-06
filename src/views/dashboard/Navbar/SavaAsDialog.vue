@@ -2,6 +2,7 @@
   <el-dialog
     title="另存为模板"
     :visible.sync="visible"
+    :close-on-click-modal="false"
     width="480px"
     @close="handleClose"
   >
@@ -11,7 +12,7 @@
         style="padding: 0px"
         :model="form"
         :rules="attrRules"
-        label-width="40px"
+        label-width="50px"
       >
         <el-form-item
           label="名称"
@@ -27,7 +28,11 @@
           prop="description"
           style="margin-top: 30px"
         >
-          <el-input v-model="form.description" type="textarea" placeholder="请输入模板描述" />
+          <el-input
+            v-model="form.description"
+            type="textarea"
+            placeholder="请输入模板描述"
+          />
         </el-form-item>
       </el-form>
     </div>
@@ -55,7 +60,7 @@ export default {
       default: false
     }
   },
-  data() {
+  data () {
     const validateName = (rule, value, callback) => {
       const name = value.trim()
       if (name === '') {
@@ -100,24 +105,24 @@ export default {
   },
   computed: {
     visible: {
-      get() {
+      get () {
         return this.templateVisible
       },
-      set(val) {
+      set (val) {
         this.$emit('update:templateVisible', val)
       }
     }
   },
   methods: {
-    handleClose() {
+    handleClose () {
       this.visible = false
       this.$refs.attrForm.resetFields()
     },
-    handleClick() {
+    handleClick () {
       this.loading = true
       this.$emit('handleSubmit', _.cloneDeep(this.form), this.cb)
     },
-    cb() {
+    cb () {
       this.loading = false
       this.handleClose()
     }
@@ -126,7 +131,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.dialog-footer{
+.dialog-footer {
   padding-top: 10px;
 }
 </style>

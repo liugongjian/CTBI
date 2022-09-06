@@ -6,7 +6,11 @@
         <div class="head-title">数据源</div>
         <div class="head-select">
           <el-dropdown @command="handleCommand">
-            <el-button type="primary" icon="el-icon-plus" class="new-button">
+            <el-button
+              type="primary"
+              icon="el-icon-plus"
+              class="new-button"
+            >
               <span class="newFile">新建数据源</span>
               <i class="el-icon-arrow-down el-icon--right" />
             </el-button>
@@ -26,35 +30,58 @@
         width="560px"
         class="dialog-new"
       >
-        <el-form ref="form" :rules="rules" :model="form" label-width="90px">
-          <el-form-item label="显示名称" prop="displayName">
+        <el-form
+          ref="form"
+          :rules="rules"
+          :model="form"
+          label-width="90px"
+        >
+          <el-form-item
+            label="显示名称"
+            prop="displayName"
+          >
             <el-input
               v-model="form.displayName"
               placeholder="请输入数据源配置列表显示名称"
             />
           </el-form-item>
-          <el-form-item label="数据库地址" prop="host">
+          <el-form-item
+            label="数据库地址"
+            prop="host"
+          >
             <el-input
               v-model="form.host"
               placeholder="请输入IP地址"
             />
           </el-form-item>
-          <el-form-item label="端口" prop="port">
+          <el-form-item
+            label="端口"
+            prop="port"
+          >
             <el-input v-model="form.port" />
           </el-form-item>
-          <el-form-item label="数据库" prop="db">
+          <el-form-item
+            label="数据库"
+            prop="db"
+          >
             <el-input
               v-model="form.db"
               placeholder="请输入数据库名称"
             />
           </el-form-item>
-          <el-form-item label="用户名" prop="username">
+          <el-form-item
+            label="用户名"
+            prop="username"
+          >
             <el-input
               v-model="form.username"
               placeholder="请输入用户名"
             />
           </el-form-item>
-          <el-form-item label="密码" prop="password">
+          <el-form-item
+            label="密码"
+            prop="password"
+          >
             <el-input
               v-model="form.password"
               type="password"
@@ -62,7 +89,11 @@
               show-password
             />
           </el-form-item>
-          <el-form-item v-if="role==='superUser'&&status === '添加'" label="类型" prop="mold">
+          <el-form-item
+            v-if="role==='superUser'&&status === '添加'"
+            label="类型"
+            prop="mold"
+          >
             <el-radio-group v-model="form.mold">
               <el-radio :label="1">私有</el-radio>
               <el-radio :label="2">公有</el-radio>
@@ -71,8 +102,14 @@
         </el-form>
         <span slot="footer">
           <el-button @click="close">关闭</el-button>
-          <el-button v-loading="connectLoading" @click="connect(form)">连接测试</el-button>
-          <el-button type="primary" @click="submit(form)">确定</el-button>
+          <el-button
+            v-loading="connectLoading"
+            @click="connect(form)"
+          >连接测试</el-button>
+          <el-button
+            type="primary"
+            @click="submit(form)"
+          >确定</el-button>
         </span>
       </el-dialog>
       <div class="data-source__table">
@@ -85,9 +122,7 @@
             highlight-current-row
             @current-change="handleCurrentChange"
           >
-            <el-table-column
-              label="我的数据源"
-            >
+            <el-table-column label="我的数据源">
               <template #header>
                 <div class="table-title">
                   <span>我的数据源</span>
@@ -106,19 +141,35 @@
                     <svg-icon :icon-class="scope.row.type" />
                   </div>
                   <div class="table-row__text">
-                    <div class="table-row__text-part1" :title="scope.row.displayName">{{ scope.row.displayName }}</div>
+                    <div
+                      class="table-row__text-part1"
+                      :title="scope.row.displayName"
+                    >{{ scope.row.displayName }}</div>
                     <div class="table-row__text-part2">
-                      <span :title="scope.row.creator && scope.row.creator.userName || '-'">所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}
+                      <span
+                        :title="scope.row.creator && scope.row.creator.userName || '-'">所有者：{{ scope.row.creator && scope.row.creator.userName || '-' }}
                       </span>
-                      <span v-if="scope.row.type!=='file'" style="margin-left: 10px">类型：{{ scope.row.mold===1 ?'私有': '公有' }}
+                      <span
+                        v-if="scope.row.type!=='file'"
+                        style="margin-left: 10px"
+                      >类型：{{ scope.row.mold===1 ?'私有': '公有' }}
                       </span>
                     </div>
                   </div>
-                  <div v-if="!(role==='simpleUser'&&scope.row.mold===2)" class="table-row__tools">
-                    <span v-if="scope.row.type!=='file'" @click.stop="editSource(scope.row)">
+                  <div
+                    v-if="!(role==='simpleUser'&&scope.row.mold===2)"
+                    class="table-row__tools"
+                  >
+                    <span
+                      v-if="scope.row.type!=='file'"
+                      @click.stop="editSource(scope.row)"
+                    >
                       <svg-icon icon-class="pencil" />
                     </span>
-                    <span v-if="scope.row.type!=='file'" @click="deleteSource(scope.row)">
+                    <span
+                      v-if="scope.row.type!=='file'"
+                      @click="deleteSource(scope.row)"
+                    >
                       <svg-icon icon-class="delete" />
                     </span>
                   </div>
@@ -127,8 +178,16 @@
             </el-table-column>
           </el-table>
         </div>
-        <dataFiles v-if="isShowDataFiles" ref="dataFiles" class="data-files__lists" :current-row="currentRow" />
-        <div v-else class="data-file__list">
+        <dataFiles
+          v-if="isShowDataFiles"
+          ref="dataFiles"
+          class="data-files__lists"
+          :current-row="currentRow"
+        />
+        <div
+          v-else
+          class="data-file__list"
+        >
           <div class="research-file">
             <el-input
               v-model="searchFile"
@@ -138,7 +197,10 @@
               @keyup.enter.native="searchFiles"
             />
             <span>
-              <el-button class="create-data" @click="toCreateDataSet(currentRow)">SQL创建数据集</el-button>
+              <el-button
+                class="create-data"
+                @click="toCreateDataSet(currentRow)"
+              >SQL创建数据集</el-button>
             </span>
           </div>
           <common-table
@@ -156,7 +218,12 @@
               {{ scope.row.name }}
             </template>
             <template #comment="{scope}">
-              <el-tooltip class="item" effect="dark" :content="scope.row.comment" placement="top">
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="scope.row.comment"
+                placement="top"
+              >
                 <span class="description">{{ scope.row.comment }} </span>
               </el-tooltip>
             </template>
@@ -172,11 +239,14 @@
           <el-dialog
             title="表详情"
             :visible.sync="detailVisible"
+            :close-on-click-modal="false"
             width="1000px"
             height="481px"
           >
-            <p class="part"><span class="table-title-name">表名称：</span><span class="table-content">{{ tableName }}</span></p>
-            <p class="part"><span class="table-title-name">表备注：</span><span class="table-content">{{ detailComment }}</span></p>
+            <p class="part"><span class="table-title-name">表名称：</span><span class="table-content">{{ tableName }}</span>
+            </p>
+            <p class="part"><span class="table-title-name">表备注：</span><span
+                class="table-content">{{ detailComment }}</span></p>
             <common-table
               :table-columns="comments"
               :table-data="detailColumns"
@@ -211,7 +281,7 @@ export default {
     CommonTable,
     dataFiles
   },
-  data() {
+  data () {
     return {
       tableListLoading: false,
       detailTable: {
@@ -334,21 +404,21 @@ export default {
     ...mapGetters([
       'role'
     ]),
-    filterdDatasources() {
+    filterdDatasources () {
       return this.dataSourceList?.list?.filter(item => {
         return this.search ? item.displayName.indexOf(this.search) >= 0 : true
       }) || []
     }
   },
-  mounted() {
+  mounted () {
     this.init()
   },
   methods: {
-    close() {
+    close () {
       this.$refs['form'].clearValidate()
       this.dialogVisible = false
     },
-    toCreateDataSet(dataSource) {
+    toCreateDataSet (dataSource) {
       const query = {
         dataSourceId: dataSource && dataSource._id || ''
       }
@@ -358,7 +428,7 @@ export default {
       })
     },
 
-    async detailSources() {
+    async detailSources () {
       try {
         this.tableName = this.detailInfo.name
         const params = {
@@ -374,7 +444,7 @@ export default {
         console.log(error)
       }
     },
-    async editSource(row) {
+    async editSource (row) {
       try {
         this.notEdit = false
         this.status = '编辑'
@@ -392,7 +462,7 @@ export default {
         console.log(error)
       }
     },
-    async getSourceFile(ids) {
+    async getSourceFile (ids) {
       try {
         this.tableListLoading = true
         const params = {
@@ -415,17 +485,17 @@ export default {
         this.tableListLoading = false
       }
     },
-    searchSource() {
+    searchSource () {
       this.init()
     },
-    searchFiles() {
+    searchFiles () {
       this.searchkey = this.searchFile
       this.refresh()
     },
-    refresh() {
+    refresh () {
       this.handleCurrentChange(this.currentRow)
     },
-    async handleCurrentChange(val) {
+    async handleCurrentChange (val) {
       try {
         if (!val) {
           return
@@ -445,18 +515,18 @@ export default {
         console.log(error)
       }
     },
-    detail(val) {
+    detail (val) {
       this.detailVisible = true
       this.detailInfo = val
       this.detailSources()
     },
-    async getDatasource() {
+    async getDatasource () {
       this.dataSourceLoading = true
       const res = await getDataSourceList({ searchkey: this.search })
       this.dataSourceList = res
       this.dataSourceLoading = false
     },
-    async init() {
+    async init () {
       try {
         this.form = {
           type: '',
@@ -480,7 +550,7 @@ export default {
         console.log(error)
       }
     },
-    async deleteSource(column) {
+    async deleteSource (column) {
       try {
         const id = column._id
         const name = column.displayName
@@ -499,7 +569,7 @@ export default {
         console.log(err)
       }
     },
-    handleCommand(command) {
+    handleCommand (command) {
       this.status = '添加'
       this.notEdit = true
       this.form = {
@@ -545,7 +615,7 @@ export default {
     //   }
     //   this.getSourceFile(this.currentRow._id)
     // },
-    async connect(form) {
+    async connect (form) {
       try {
         const valid = await this.$refs.form.validate()
         if (!valid) {
@@ -574,7 +644,7 @@ export default {
         console.log(error)
       }
     },
-    async submit(form) {
+    async submit (form) {
       try {
         const testForm = {
           displayName: form.displayName,
@@ -613,7 +683,7 @@ export default {
 ::v-deep .common-table .table.el-table th .cell {
   font-family: PingFangSC-Medium;
   font-size: 12px;
-  color: rgba(0,0,0,0.90);
+  color: rgba(0, 0, 0, 0.9);
   text-align: left;
   height: 32px;
   line-height: 32px;
@@ -636,7 +706,7 @@ export default {
 .new-button {
   width: 124px;
   height: 32px;
-  background: #FA8334;
+  background: #fa8334;
   border-radius: 2px;
 }
 ::v-deep .el-dropdown {
@@ -645,7 +715,7 @@ export default {
 .newFile {
   font-family: PingFangSC-Regular;
   font-size: 12px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: left;
   font-weight: 400;
 }
@@ -657,18 +727,18 @@ export default {
   height: 20px;
   font-family: PingFangSC-Regular;
   font-size: 12px;
-  color: rgba(0,0,0,0.90);
+  color: rgba(0, 0, 0, 0.9);
   font-weight: 400;
 }
 .table-content {
   font-family: PingFangSC-Regular;
   font-size: 12px;
-  color: rgba(0,0,0,0.65);
+  color: rgba(0, 0, 0, 0.65);
   line-height: 20px;
   font-weight: 400;
 }
 .operate {
-  color: #FA8334;
+  color: #fa8334;
   span {
     cursor: pointer;
   }
@@ -679,7 +749,7 @@ export default {
   height: 50px;
   margin-right: 10px;
   &__image {
-    width:32px;
+    width: 32px;
     margin-right: 15px;
     font-size: 32px;
   }
@@ -689,10 +759,10 @@ export default {
     overflow: hidden;
   }
   &__tools {
-    width:65px;
+    width: 65px;
     text-align: right;
-    span{
-      cursor:pointer;
+    span {
+      cursor: pointer;
       &:not(:last-of-type) {
         margin-right: 20px;
       }
@@ -705,17 +775,17 @@ export default {
     text-overflow: ellipsis;
     font-family: PingFangSC-Medium;
     font-size: 12px;
-    color: rgba(0,0,0,0.90);
+    color: rgba(0, 0, 0, 0.9);
     font-weight: 500;
   }
-   &__text-part2 {
+  &__text-part2 {
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     font-family: PingFangSC-Regular;
     font-size: 12px;
-    color: rgba(0,0,0,0.65);
+    color: rgba(0, 0, 0, 0.65);
     font-weight: 400;
   }
 }
@@ -732,7 +802,7 @@ export default {
   height: 50px;
   font-family: PingFangSC-Medium;
   font-size: 12px;
-  color: rgba(0,0,0,0.90);
+  color: rgba(0, 0, 0, 0.9);
   text-align: left;
   font-weight: 500;
 }
@@ -747,23 +817,23 @@ export default {
   line-height: 68px;
 }
 .create-data {
-  color: #FA8334;
+  color: #fa8334;
   margin: 0 0 0 12px;
 }
 ::v-deep .el-table td {
   height: 42px;
-  padding-left: 14px
+  padding-left: 14px;
 }
 ::v-deep .el-table th {
   height: 42px;
-  padding-left: 14px
+  padding-left: 14px;
 }
 ::v-deep .el-dialog__title {
   width: 155px;
   height: 22px;
   font-family: PingFangSC-Medium;
   font-size: 16px;
-  color: rgba(0,0,0,0.90);
+  color: rgba(0, 0, 0, 0.9);
   font-weight: 500;
 }
 
@@ -771,24 +841,24 @@ export default {
   height: 32px;
   font-family: PingFangSC-Regular;
   font-size: 12px;
-  color: rgba(0,0,0,0.90);
+  color: rgba(0, 0, 0, 0.9);
   line-height: 32px;
   font-weight: 400;
 }
 ::v-deep .dialog-new .el-dialog__body {
-  padding: 24px 24px 0 24px
+  padding: 24px 24px 0 24px;
 }
 ::v-deep .dialog-new .el-input__inner {
   width: 423px;
   height: 32px;
-  background: #FFFFFF;
-  border: 1px solid rgba(221,221,221,1);
+  background: #ffffff;
+  border: 1px solid rgba(221, 221, 221, 1);
   border-radius: 2px;
 }
 ::v-deep .dialog-new .el-input__inner::-webkit-input-placeholder {
   font-family: PingFangSC-Regular;
   font-size: 12px;
-  color: rgba(0,0,0,0.30);
+  color: rgba(0, 0, 0, 0.3);
   line-height: 32px;
   font-weight: 400;
 }
@@ -807,7 +877,7 @@ export default {
   &__header {
     position: relative;
     height: 68px;
-    border-bottom: 1px solid #EBEEF5;
+    border-bottom: 1px solid #ebeef5;
   }
 
   &__content {
@@ -824,27 +894,26 @@ export default {
   &__list {
     flex: 1;
     height: calc(100vh - 250px);
-    min-width:270px;
+    min-width: 270px;
     overflow: auto;
   }
 }
 .data-files__lists {
   flex: 2;
   padding-left: 10px;
-  border-left: 1px solid #EBEEF5;
+  border-left: 1px solid #ebeef5;
   height: calc(100vh - 250px);
   overflow: auto;
-
 }
 .data-file__list {
   flex: 2;
   padding: 0 24px 10px 15px;
-  border-left: 1px solid #EBEEF5;
+  border-left: 1px solid #ebeef5;
   height: calc(100vh - 250px);
   overflow: auto;
 }
 .data_file {
-  padding: 0
+  padding: 0;
 }
 .head-select {
   position: absolute;

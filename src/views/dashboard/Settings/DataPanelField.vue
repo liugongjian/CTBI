@@ -69,7 +69,7 @@
             @change="handleRefresh"
           />
           <el-input-number
-            v-if="autoRefresh"
+            v-show="autoRefresh"
             v-model="time"
             :min="1"
             :precision="0"
@@ -79,7 +79,7 @@
             @input="handleRefresh"
           />
           <el-select
-            v-if="autoRefresh"
+            v-show="autoRefresh"
             v-model="unit"
             popper-class="setting-select"
             placeholder="请选择"
@@ -139,36 +139,17 @@ export default {
         label: '秒'
       }],
       time: 10,
-      unit: 'minute',
+      unit: 'second',
       interVal: null
     }
   },
   computed: {
-    refreshMax() {
+    refreshMax () {
       if (this.unit === 'minute') {
         return 1440
       }
       return 60
     }
-  },
-  watch: {
-    time: {
-      handler (val) {
-        if (this.autoRefresh) {
-          // 开启自动刷新的定时器
-          const time = 1000 * val * (this.unit === 'minute' ? 60 : 1)
-          this.interVal = setInterval(() => {
-            this.refreshStore()
-          }, time)
-        } else {
-          clearInterval(this.interVal)
-          this.interVal = null
-        }
-      },
-      deep: true
-    }
-  },
-  mounted () {
   },
   beforeDestroy () {
     clearInterval(this.interVal)
@@ -239,13 +220,14 @@ export default {
         clearInterval(this.interVal)
         this.interVal = null
       }
-
-      if (val) {
-        // 开启自动刷新的定时器
-        const time = 1000 * this.time * (this.unit === 'minute' ? 60 : 1)
-        this.interVal = setInterval(() => {
-          this.refreshStore()
-        }, time)
+      if (this.autoRefresh) {
+        if (val) {
+          // 开启自动刷新的定时器
+          const time = 1000 * this.time * (this.unit === 'minute' ? 60 : 1)
+          this.interVal = setInterval(() => {
+            this.refreshStore()
+          }, time)
+        }
       }
     },
     selectUnit (val) {
@@ -278,6 +260,13 @@ export default {
         if (dataSource[key].value.length === 0 && dataSource[key].require) {
           this.$message({
             message: `${dataSource[key].name}缺少必填字段`,
+            type: 'error'
+          })
+          return
+        }
+        if (dataSource[key].least && dataSource[key].value.length < dataSource[key].least) {
+          this.$message({
+            message: `至少需要选择${dataSource[key].least}个${dataSource[key].name}`,
             type: 'error'
           })
           return

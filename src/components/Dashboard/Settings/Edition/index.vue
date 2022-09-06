@@ -3,13 +3,17 @@
     <span class="editor-item-title">版本切换</span>
     <div class="editor-item-container">
       <el-radio-group v-model="option.edition">
-        <el-radio label="newEdition" @change="dialogVisible = true">新版明细表</el-radio>
+        <el-radio
+          label="newEdition"
+          @change="dialogVisible = true"
+        >新版明细表</el-radio>
         <el-radio label="oldEdition">旧版</el-radio>
       </el-radio-group>
     </div>
     <el-dialog
       title="切换提示"
       :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
       width="30%"
     >
       <span>
@@ -21,9 +25,15 @@
         <p>5、其他样式上的调整差异</p>
         <p>以上差异，导致切换后需要重新配置相关内容，建议切换前手动另存为副本</p>
       </span>
-      <span slot="footer" class="dialog-footer">
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="visibleOp(true)">确定</el-button>
-        <el-button type="primary" @click="visibleOp()">取消</el-button>
+        <el-button
+          type="primary"
+          @click="visibleOp()"
+        >取消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -45,13 +55,13 @@ export default {
   },
   watch: {
     'option.edition': {
-      handler(val) {
+      handler (val) {
         val === 'oldEdition' && this.visibleOp()
       }
     }
   },
   methods: {
-    visibleOp(val = false) {
+    visibleOp (val = false) {
       this.dialogVisible = false
     }
   }

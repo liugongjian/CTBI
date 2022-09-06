@@ -124,16 +124,6 @@ export default {
     left: 250px;
     top: -10px;
   }
-
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 6px;
-    font-size: 16px;
-    color: #6A6A6A;
-    cursor: pointer;
-    user-select: none;
-  }
   .warn {
     display: inline-block;
     margin-top: 10%;

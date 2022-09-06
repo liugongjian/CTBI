@@ -18,6 +18,7 @@ export default {
   'order': 6,
   'version': '', // 版本号
   'field': {}, // 字段
+  'title': '来源去向图',
   'theme': {
     'Basic': {
       'Title': { // 标题组件

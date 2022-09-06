@@ -85,12 +85,12 @@ a {
 
   // 输入框样式
   .el-input--small {
-    height: 24px;
+    // height: 24px;
     padding-right: 8px;
   }
 
   .el-input--small .el-input__inner {
-    height: 24px !important;
+    height: 24px;
     background-color: transparent !important;
     border: 1px solid rgba(221, 221, 221, 0.25) !important;
     border-radius: 2px;
@@ -309,4 +309,9 @@ a {
 
 .vue-grid-item.vue-grid-placeholder {
   background: rgba(200, 201, 204, 0.5) !important;
+}
+
+.chart-empty-svg {
+  height: calc(100% - 40px) !important;
+  width: 100% !important;
 }

@@ -28,6 +28,7 @@
       class="form"
       :model="form"
       label-width="110px"
+      @submit.native.prevent
     >
       <el-form-item
         prop="file"
@@ -82,8 +83,16 @@ export default {
   },
   mixins: [dialogMixin],
   data () {
+    const validateUpload = (rule, value, callback) => {
+      if (this.flag) {
+        callback()
+      } else {
+        callback(new Error('请上传文件'))
+      }
+    }
     return {
       loading: false,
+      flag: false,
       fileList: [],
       form: {
         displayName: null,
@@ -97,7 +106,7 @@ export default {
           { validator: this.validateDisplayName, trigger: 'blur' }
         ],
         file: [
-          { required: true, message: '请选择文件' }
+          { required: true, validator: validateUpload, trigger: 'change' }
         ]
       })
     }
@@ -136,13 +145,13 @@ export default {
             const data = event.target.result
             const workbook = XLSX.read(data, { type: 'binary', codepage: 936 })
             const fileExcelData = this.excelToJson(workbook)
-            const [header] = fileExcelData
+            const [header = []] = fileExcelData
             if (fileExcelData.length > 10000) {
               resolve(false)
               this.$message.warning('文件行数大于10000!请重新上传')
-            } else if (header.length > 50) {
+            } else if (header.length > 200) {
               resolve(false)
-              this.$message.warning('文件列数大于50!请重新上传')
+              this.$message.warning('文件列数大于200!请重新上传')
             } else {
               resolve(true)
             }
@@ -172,12 +181,16 @@ export default {
         fileList.splice(0, 1)
       }
       this.form.file = file.raw
+      this.flag = true
+      this.$refs.form.clearValidate('file')
     },
     handleUploadErr () {
       this.$message.warning('文件上传失败!请重新上传')
     },
     handleRemove () {
       this.form.file = null
+      this.flag = false
+      this.$refs.form.validateField('file')
     },
     handleConfirm () {
       this.$refs.form.validate(async (valid) => {

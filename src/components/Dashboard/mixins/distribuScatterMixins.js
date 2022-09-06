@@ -52,16 +52,18 @@ export default {
       this.storeOption.theme.ComponentOption.Color.color = color
     },
     // 拿到数据中的系列名字
-    getSeriesOptions (val) {
-      const seriesOption = []
-      val[0].forEach((item, index) => {
-        if (index) {
-          seriesOption.push({ value: item, label: item })
-        }
-      })
-      this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
-      this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
-      this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
+    getSeriesOptions(val) {
+      if (val && val.length) {
+        const seriesOption = []
+        val[0].forEach((item, index) => {
+          if (index) {
+            seriesOption.push({ value: item, label: item })
+          }
+        })
+        this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
+        this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
+        this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
+      }
     },
     // 系列设置
     setSeriesItem () {

@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-07-25 15:36:37
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-18 14:32:30
+ * @LastEditTime: 2022-09-06 09:23:10
  * @Description:
  */
 /*
@@ -39,12 +39,10 @@ export default {
       }
     },
     'ComponentOption': {
-      'ChartLabel': { // 标签样式
+      'SankeyChartLabel': { // 标签样式
         'type': 'SankeyChart', // 饼图标签样式
         'check': true, // 选中显示标签
-        'checkList': ['维度字段名+度量值'],
-        'precisionShow': false, // 是否显示百分比设置组件
-        'labelShow': 0 // 0不显示 1 智能显示 2 全部显示
+        'checkList': '维度字段名+度量值'
       },
       'SankeyLine': { // 线条样式
         'lineType': 1, // 连线样式
@@ -59,6 +57,7 @@ export default {
       'name': '节点类别/维度',
       'require': false,
       'tooltip': '可添加2到20个维度',
+      'least': 2,
       'limit': 20,
       'value': []
     },

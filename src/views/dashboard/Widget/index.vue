@@ -9,6 +9,8 @@
     :vertical-compact="true"
     :margin="[10, 10]"
     :use-css-transforms="true"
+    @layout-mounted="layoutMountedEvent"
+    @layout-updated="layoutUpdatedEvent"
   >
     <div
       v-for="item in layout"
@@ -22,7 +24,10 @@
         :h="item.h"
         :i="item.i"
       >
-        <ComponentBlock :option="item" :style="chartsStyles">
+        <ComponentBlock
+          :option="item"
+          :style="chartsStyles"
+        >
           <component
             :is="item.is"
             :identify="item.i"
@@ -47,16 +52,15 @@ export default {
       // 去除属于tab组件的layout
       return store.state.app.layout.filter(item => !item.containerId)
     },
-    chartsStyles() {
+    chartsStyles () {
       return this.$store.state.settings.chartsStyles
     }
   },
   mounted () {
     const that = this
     document.onkeydown = function (e) {
-      const obj = e.target
-      const t = obj.type || obj.getAttribute('type')// 获取事件源类型
-      if (e.code === 'Backspace' && t !== 'password' && t !== 'text' && t !== 'textarea' && t !== 'number') {
+      const { target: { tagName, className } } = e
+      if ((e.code === 'Backspace' || e.code === 'Delete') && tagName === 'BODY' && !className) {
         const id = store.state.app.currentLayoutId
         if (id) {
           // 删除vuex的layout中对应的组件信息
@@ -66,6 +70,12 @@ export default {
     }
   },
   methods: {
+    layoutMountedEvent (newLayout) {
+      console.log('Mounted layout: ', newLayout)
+    },
+    layoutUpdatedEvent: function (newLayout) {
+      console.log('Updated layout: ', newLayout)
+    },
     clickHandler (id) {
       // 更新当前id
       console.log(id)

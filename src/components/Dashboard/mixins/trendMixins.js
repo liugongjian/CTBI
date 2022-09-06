@@ -50,7 +50,7 @@ export default {
   methods: {
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
-      console.log('图表重绘事件，继承于baseMixins')
+      console.log('图表重绘事件，继承于baseMixins', this.chartData)
       this.dataValue = formatDataValue(deepClone(this.chartData))
       // 拿到数据中的系列名字
       this.getSeriesOptions(this.dataValue)
@@ -61,19 +61,22 @@ export default {
       this.getOption()
     },
     // 拿到数据中的系列名字
-    getSeriesOptions (val) {
-      const seriesOption = []
-      val[0].forEach((item, index) => {
-        if (index) {
-          seriesOption.push({ value: item, label: item })
-        }
-      })
-      this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
-      this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
-      this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
+    getSeriesOptions(val) {
+      if (val && val.lenght > 0) {
+        const seriesOption = []
+        val[0].forEach((item, index) => {
+          if (index) {
+            seriesOption.push({ value: item, label: item })
+          }
+        })
+        this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
+        this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
+        this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
+      }
     },
     // 拿到数据的系列名字 并设置颜色 并拿到数据中展示标题
-    getColorAndTitle (val) {
+    getColorAndTitle () {
+      const val = this.dataValue
       var color = []
       var titleList = []
       const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
@@ -306,7 +309,7 @@ export default {
       if (ast === 'skip') {
         connectNulls = true
       } else if (ast === 'zero') {
-        this.dataValue = this.storeOption.dataSource.map(datas => {
+        this.dataValue = this.dataValue.map(datas => {
           return datas.map((data, index) => {
             connectNulls = false
             if ([null, undefined, NaN, '-'].includes(data)) {
@@ -457,6 +460,22 @@ export default {
         })
       }
       return dataValue
+    },
+    // 标题筛选
+    filterTitleList(titleList, selectedIndicator) {
+      var res = titleList.filter(item => {
+        console.log(item.name, selectedIndicator.includes(item.name))
+        return selectedIndicator.includes(item.name)
+      })
+      // 默认选中
+      let s = 0
+      for (const i of res) {
+        if (!i.isSelect) s++
+      }
+      if (s === res.length) {
+        res[0].isSelect = true
+      }
+      return res
     }
   }
 }
