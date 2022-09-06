@@ -1,8 +1,8 @@
 /*
  * @Author: qinruibin
  * @Date: 2022-08-04 14:13:56
- * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-18 14:31:46
+ * @LastEditors: qinruibin
+ * @LastEditTime: 2022-09-06 16:48:10
  * @Description:
  */
 /**
@@ -60,12 +60,12 @@ export default {
       }
     },
     'StyleConfig': { // 样式配置
-      'Rank': { // 区间设置 // 2022/04/18暂时先不做
+      'Rank': { // 区间设置
         'show': true,
         'title': '排序',
-        'format': 'all',
+        // 'format': 'all',
         'position': 'right',
-        'rank': true,
+        // 'rank': true,
         'color': '#1B7CFF',
         'type': 'original' // original percentage
       }

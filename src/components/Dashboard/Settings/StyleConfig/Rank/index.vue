@@ -1,7 +1,7 @@
 <template>
   <div class="editor-object-container">
     <el-checkbox v-model="option.show">显示列标题</el-checkbox>
-    <div class="flex-align-center m-t-12 editor-object-container" @keydown.8.stop="">
+    <!-- <div class="flex-align-center m-t-12 editor-object-container" @keydown.8.stop="">
       <div class="editor-item-title" style="width: 65px">top3样式</div>
       <el-select
         v-model="option.selectValue"
@@ -15,12 +15,12 @@
           :value="item.value"
         />
       </el-select>
-    </div>
+    </div> -->
     <div class="flex-align-center m-t-12 editor-object-container" @keydown.8.stop="">
       <div class="editor-item-title" style="width: 65px">排序列名称</div>
       <el-input v-model="option.title" style="flex: 1" />
     </div>
-    <div class="editor-object-container">
+    <!-- <div class="editor-object-container">
       <div class="editor-item-title">
         数据显示方式
       </div>
@@ -31,7 +31,7 @@
           <el-radio label="number" class="m-t-12">仅数字</el-radio>
         </el-radio-group>
       </div>
-    </div>
+    </div> -->
     <div class="editor-object-container">
       <div class="editor-item-title">
         数值显示位置
@@ -43,7 +43,7 @@
         </el-radio-group>
       </div>
     </div>
-    <div class="editor-object-container">
+    <!-- <div class="editor-object-container">
       <div class="editor-item-title">
         数据相同时并列处理
       </div>
@@ -89,7 +89,7 @@
           </el-tooltip>
         </el-radio-group>
       </div>
-    </div>
+    </div> -->
     <div class="flex-align-center">
       <div class="editor-item-title">
         数据条颜色
