@@ -71,7 +71,7 @@
               <div
                 slot="tip"
                 class="el-upload__tip"
-              >只支持jpg,png,gif格式最大1M</div>
+              >只支持jpg,png格式最大1M</div>
             </el-upload>
           </div>
           <div class="m-t-24">
@@ -187,9 +187,9 @@ export default {
     beforeUpload (file) {
       const isJPG = file.type
       const isLt1M = file.size / 1024 / 1024 < 1
-      if (isJPG !== 'image/jpeg' && isJPG !== 'image/png' && isJPG !== 'image/jpg') {
+      if (isJPG !== 'image/png' && isJPG !== 'image/jpg' && isJPG !== 'image/jpeg') {
         this.$message({
-          message: '图片只能是 jpg、png、jpeg 格式!',
+          message: '图片只能是 jpg、png 格式!',
           type: 'error'
         })
       }
@@ -203,7 +203,7 @@ export default {
     },
     // 上传附件
     saveload (data, val) {
-      if (data.file.type === 'image/jpeg' || data.file.type === 'image/png') {
+      if (data.file.type === 'image/jpeg' || data.file.type === 'image/png' || data.file.type === 'image/jpg') {
         const formData = new FormData()
         formData.append('img', data.file)
         // 发送http请求
