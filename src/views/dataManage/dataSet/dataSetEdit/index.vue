@@ -114,7 +114,7 @@
             </div>
             <div v-show="!toggleContent">
               <div class="side-top-label"><span>当前数据源</span></div>
-              <div><span class="side-top-text">{{ editDataInfo.displayName }}</span></div>
+              <div><span class="side-top-text">{{ currentDataSourceName }}</span></div>
             </div>
           </div>
           <!-- 收缩按钮 -->
@@ -243,6 +243,7 @@ export default {
       isErrorName: false,
       // 控制是否已保存过数据集
       isSaved: false,
+      currentDataSourceName: '', // 当前数据源
       errorInputText: '',
       // 回显&提交的数据
       dataInfo: {
@@ -526,6 +527,13 @@ export default {
       try {
         const { list } = await getDataSourceData()
         this.dataSourceOptions = list
+        const dataSourceId = this.editDataInfo && this.editDataInfo.dataSourceId
+        if (dataSourceId) {
+          const dataSource = list.find(item => item._id === dataSourceId)
+          if (dataSource) {
+            this.currentDataSourceName = dataSource.displayName
+          }
+        }
       } catch (error) {
         console.log(error)
       }
