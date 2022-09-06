@@ -1,5 +1,5 @@
 <template>
-  <div id="screentable" v-loading="loading" class="common-table">
+  <div id="screentables" v-loading="loading" class="common-table">
     <el-table
       ref="table"
       class="table"
@@ -11,11 +11,7 @@
       :row-style="rowStyle"
       v-on="$listeners"
     >
-      <el-table-column
-        type="index"
-        width="100"
-        :label="sequenceName"
-      />
+      <el-table-column type="index" width="100" :label="sequenceName" />
       <template v-for="(item, index) in cloneTableColumns">
         <el-table-column
           v-if="item.isShow"
@@ -49,7 +45,12 @@
       <el-table-column width="auto" :fixed="position">
         <template slot-scope="scope">
           <span v-for="(itm, ind) in tableData" :key="ind">
-            <SingleColumn v-if="ind === scope.$index" :color="colorOption" :data-value="`${Object.values(itm)[1]}`" :max="maxNumber" />
+            <SingleColumn
+              v-if="ind === scope.$index"
+              :color="colorOption"
+              :data-value="`${Object.values(itm)[1]}`"
+              :max="maxNumber"
+            />
           </span>
         </template>
       </el-table-column>
@@ -77,7 +78,7 @@ export default {
     },
     stripe: {
       type: Boolean,
-      default: true
+      default: false
     },
     border: {
       type: Boolean,
@@ -151,6 +152,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#screentables {
+  overflow: scroll;
+  height: 95%;
+  background-color: transparent !important;
+}
+
 .common-table {
   &:not(:root):-ms-full-screen {
     min-height: 100vh;
@@ -164,24 +171,28 @@ export default {
     overflow: auto;
     background: #f0f2f5;
   }
+
   &:not(:root):-webkit-full-screen {
     min-height: 100vh;
     padding: 20px;
     overflow: auto;
     background: #f0f2f5;
   }
+
   &:not(:root):fullscreen {
     min-height: 100vh;
     padding: 20px;
     overflow: auto;
     background: #f0f2f5;
   }
+
   .toolbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 15px 0;
     background: #fff;
+
     .toolbar-title {
       flex: 1 1;
       color: rgba(0, 0, 0, 0.85);
@@ -190,24 +201,30 @@ export default {
       line-height: 24px;
       opacity: 0.85;
     }
+
     .toolbar-option {
       display: flex;
       align-items: center;
       justify-content: flex-end;
       flex-basis: 100%;
+
       .default-option {
         display: flex;
         justify-content: flex-end;
         align-items: center;
+
         .default-option-item {
           margin: 0 8px;
+
           &:last-child {
             margin-right: 0;
           }
+
           .item {
             font-size: 12px;
             color: #333;
           }
+
           ::v-deep .dropdown-link,
           ::v-deep .svg-icon {
             cursor: pointer;
@@ -216,11 +233,13 @@ export default {
       }
     }
   }
+
   .table-alert {
     padding: 0 24px 0 14px;
     border-radius: 2px;
     background-color: #e6f7ff;
     border: 1px solid #91d5ff;
+
     .alert-info {
       position: relative;
       display: flex;
@@ -232,18 +251,22 @@ export default {
       line-height: 1.5715;
       list-style: none;
       word-wrap: break-word;
+
       .icon {
         color: #409eff;
       }
+
       .alert-info-content {
         display: flex;
         align-items: center;
         justify-content: space-between;
         flex: 1 1;
+
         .alert-info-message {
           display: flex;
           justify-content: flex-start;
           align-items: center;
+
           .alert-info-message-item {
             margin-right: 5px;
           }
@@ -251,51 +274,64 @@ export default {
       }
     }
   }
+
   ::v-deep .el-table {
     font-size: 12px;
   }
+
   .table-alert-top {
     padding: 0;
+
     .alert-info {
       padding: 0 25px;
     }
   }
+
   .table.el-table {
+
     ::v-deep td,
     ::v-deep th {
       padding: 6px 8px;
       height: 35.5px;
+
       .cell {
         padding: 0;
         color: #000;
         height: 100%;
-        >span{
+
+        >span {
           height: 100%;
         }
       }
+
       &:first-child {
         padding-left: 24px;
       }
     }
+
     ::v-deep th {
       // color: $mainTextColor-dark2;
       font-weight: 500;
       background: #fafafa;
     }
+
     ::v-deep .scroll-x .cell {
       position: relative;
       overflow-x: auto;
+
       &::-webkit-scrollbar {
         width: 5px;
         height: 5px;
         scrollbar-arrow-color: gray;
       }
+
       &::-webkit-scrollbar-thumb {
         border-radius: 5px;
         -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
         background: rgba(0, 0, 0, 0.2);
         scrollbar-arrow-color: gray;
       }
+
       &::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
         border-radius: 0;
@@ -303,19 +339,62 @@ export default {
       }
     }
   }
+
   .pagination {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     margin: 0;
   }
-  .them-color{
+
+  .them-color {
     // color: $mainColor;
   }
 }
-.el-table{
-    ::v-deep table{
-        border-collapse: collapse;
-    }
+
+.el-table {
+  background-color: transparent;
+
+  ::v-deep tbody {
+    background-color: transparent !important;
+
+  }
+
+  ::v-deep table {
+    border-collapse: collapse;
+    background-color: transparent !important;
+
+  }
+
+  ::v-deep tr {
+    background-color: transparent !important;
+
+  }
+
+  ::v-deep th {
+    background-color: transparent !important;
+
+  }
+
+  ::v-deep td {
+    background-color: transparent !important;
+  }
+
+  ::v-deep .cell {
+    background-color: transparent !important;
+  }
+
+  ::v-deep thead {
+    background-color: transparent !important;
+
+  }
+}
+
+.el-table::before {
+  //去除底部白线
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0px;
 }
 </style>
