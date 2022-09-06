@@ -1,8 +1,9 @@
 <template>
   <div style="width:100%;height:100%;">
     <v-chart
-      v-if="dataValue && dataValue.length > 0"
+      v-if="dataValue"
       :option="chartOption"
+      :update-options="{notMerge:true}"
       autoresize
     />
     <svg-icon
@@ -31,7 +32,7 @@ export default {
       storeOption: {},
       chartOption: {},
       dataOption: [],
-      dataValue: {},
+      dataValue: null,
       title: {
         x: 'center',
         y: '75%',
