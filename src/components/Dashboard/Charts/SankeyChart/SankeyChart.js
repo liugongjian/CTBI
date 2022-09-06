@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-07-25 15:36:37
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-02 16:15:52
+ * @LastEditTime: 2022-09-06 09:23:10
  * @Description:
  */
 /*
@@ -57,6 +57,7 @@ export default {
       'name': '节点类别/维度',
       'require': false,
       'tooltip': '可添加2到20个维度',
+      'least': 2,
       'limit': 20,
       'value': []
     },

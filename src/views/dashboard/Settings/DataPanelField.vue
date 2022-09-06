@@ -264,6 +264,13 @@ export default {
           })
           return
         }
+        if (dataSource[key].least && dataSource[key].value.length < dataSource[key].least) {
+          this.$message({
+            message: `至少需要选择${dataSource[key].least}个${dataSource[key].name}`,
+            type: 'error'
+          })
+          return
+        }
       }
       // 事件总线通知组件刷新数据
       this.$bus.$emit('interReload', [this.identify], this.limit)
