@@ -107,10 +107,10 @@ export default {
         })
         let sum = 0
         dataValueTemp.forEach((item) => {
-          sum += item.value
+          sum += Number(item.value)
         })
         const dataValue = dataValueTemp.map(item => {
-          item.percent = Number((item.value / sum * 100).toFixed(2))
+          item.percent = Number((Number(item.value) / sum * 100).toFixed(2))
           return item
         })
         this.MeasureKey = MeasureKey + ''
@@ -206,7 +206,10 @@ export default {
           {
             name: this.MeasureKey, // 度量的值
             type: 'treemap',
-            data: this.dataValue
+            data: this.dataValue,
+            breadcrumb: {
+              show: false
+            }
           }
         ]
       }
