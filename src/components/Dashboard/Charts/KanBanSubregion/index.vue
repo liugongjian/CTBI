@@ -67,7 +67,7 @@ export default {
 
 <style scoped>
 .kbs-wrap {
-  height: 98%;
+  height: calc( 98% - 18px );
   overflow: auto;
 }
 .kbs-item {
