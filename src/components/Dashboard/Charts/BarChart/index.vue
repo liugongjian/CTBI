@@ -103,7 +103,7 @@ export default {
       this.setAxis()
 
       // 双Y轴设置
-      this.twisYAxisConfig(componentOption)
+      // this.twisYAxisConfig(componentOption)
 
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
@@ -118,7 +118,7 @@ export default {
           },
           itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
         })
-        if (componentOption.TwisYAxis.check) {
+        if (componentOption.TwisYAxis?.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
         }

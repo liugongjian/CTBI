@@ -214,7 +214,7 @@ export default {
       }
       this.yAxis.push(itemLeft)
       // 如果设置双Y轴 并且不能是单独图表
-      if (this.storeOption.theme.ComponentOption.TwisYAxis.check && this.trendChartConfig.type === 'disperse') {
+      if (this.storeOption.theme.ComponentOption.TwisYAxis?.check && this.trendChartConfig.type === 'disperse') {
         const { Y1Axis } = this.storeOption.theme.Axis
         itemRight = {
           axisLine: {
@@ -367,7 +367,7 @@ export default {
           connectNulls: this.resolveNull(FunctionalOption),
           itemStyle: this.getItemStyle(ComponentOption)// 图形样式配置-颜色
         })
-        if (ComponentOption.TwisYAxis.check) {
+        if (ComponentOption.TwisYAxis?.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
@@ -389,7 +389,7 @@ export default {
       this.setAxis()
       this.valueToPercent()
       const that = this
-      if (!ComponentOption.TwisYAxis.check) {
+      if (!ComponentOption.TwisYAxis?.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
       const data = formatDataValue(deepClone(getDataValueById(this.identify)))
@@ -413,7 +413,7 @@ export default {
           connectNulls: this.resolveNull(FunctionalOption),
           itemStyle: this.getItemStyle(ComponentOption)// 图形样式配置-颜色
         })
-        if (ComponentOption.TwisYAxis.check) {
+        if (ComponentOption.TwisYAxis?.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'

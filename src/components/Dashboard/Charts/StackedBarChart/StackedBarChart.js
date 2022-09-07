@@ -80,11 +80,11 @@ export default {
         'color': colorTheme['官方'],
         'theme': '官方'
       },
-      'TwisYAxis': { // 双Y轴
-        'show': true, // 是否必须显示双y轴的复选框
-        'check': false, // 是否显示双Y轴
-        'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
-      },
+      // 'TwisYAxis': { // 双Y轴
+      //   'show': true, // 是否必须显示双y轴的复选框
+      //   'check': false, // 是否显示双Y轴
+      //   'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
+      // },
       'PercentStack': { // 百分比与堆积类型选择
         'isPercent': false, // 是否为百分比类型
         'isStack': true// 是否为堆积类型

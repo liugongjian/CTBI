@@ -39,14 +39,14 @@ export default {
         })
       }
 
-      // if (this.storeOption.theme.ComponentOption.TwisYAxis.show) {
+      // if (this.storeOption.theme.ComponentOption.TwisYAxis?.show) {
       // // 最大值和最小值暂时固定，后续需要修改
-      //   const minData1 = this.storeOption.theme.ComponentOption.TwisYAxis.twisType === 'syncAll' ? minData2 : -10
+      //   const minData1 = this.storeOption.theme.ComponentOption.TwisYAxis?.twisType === 'syncAll' ? minData2 : -10
       //   const minData2 = 0
       //   const maxData2 = 100
-      //   const maxData1 = this.storeOption.theme.ComponentOption.TwisYAxis.twisType === 'syncAll' ? maxData2 : 100
-      //   const intervalNum1 = this.storeOption.theme.ComponentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData1 - minData1) / 5 : null
-      //   const intervalNum2 = this.storeOption.theme.ComponentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null
+      //   const maxData1 = this.storeOption.theme.ComponentOption.TwisYAxis?.twisType === 'syncAll' ? maxData2 : 100
+      //   const intervalNum1 = this.storeOption.theme.ComponentOption.TwisYAxis?.twisType === 'syncTicksNum' ? (maxData1 - minData1) / 5 : null
+      //   const intervalNum2 = this.storeOption.theme.ComponentOption.TwisYAxis?.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null
 
       //   // let minData1, minData2, maxData1, maxData2
       //   // const that = this
@@ -56,8 +56,8 @@ export default {
       //   //   return minData1
       //   // }
       //   // const calcData2 = function (value) {
-      //   //   minData2 = that.storeOption.theme.ComponentOption.TwisYAxis.twisType === 'syncAll' ? minData1 : Math.floor(value.min / 12) * 10
-      //   //   maxData2 = that.storeOption.theme.ComponentOption.TwisYAxis.twisType === 'syncAll' ? maxData1 : Math.ceil(value.max / 9.5) * 10
+      //   //   minData2 = that.storeOption.theme.ComponentOption.TwisYAxis?.twisType === 'syncAll' ? minData1 : Math.floor(value.min / 12) * 10
+      //   //   maxData2 = that.storeOption.theme.ComponentOption.TwisYAxis?.twisType === 'syncAll' ? maxData1 : Math.ceil(value.max / 9.5) * 10
       //   //   return minData2
       //   // }
       //   this.yAxis[0] = {
@@ -73,7 +73,7 @@ export default {
       //     axisLine: {
       //       show: true
       //     },
-      //     // interval: that.storeOption.theme.ComponentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData1 - minData1) / 5 : null,
+      //     // interval: that.storeOption.theme.ComponentOption.TwisYAxis?.twisType === 'syncTicksNum' ? (maxData1 - minData1) / 5 : null,
       //     interval: intervalNum1,
       //     splitLine: {
       //       show: false
@@ -87,7 +87,7 @@ export default {
       //     },
       //     // min: calcData2,
       //     // max: maxData2,
-      //     // interval: that.storeOption.theme.ComponentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null,
+      //     // interval: that.storeOption.theme.ComponentOption.TwisYAxis?.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null,
       //     interval: intervalNum2,
       //     splitLine: {
       //       show: false
