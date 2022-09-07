@@ -25,7 +25,7 @@
           />
         </el-select>
       </div>
-      <div v-if="data.type === 2" class="flex-align-center">
+      <div v-if="data.type === 2" class="flex-align-center m-t-12">
         <div class="editor-item-title">聚合方式</div>
         <el-select v-model="data.aggregation" popper-class="setting-select" class="w-select" placeholder="请选择">
           <el-option

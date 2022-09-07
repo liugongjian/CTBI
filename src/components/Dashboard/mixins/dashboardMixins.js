@@ -1,15 +1,19 @@
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-08-04 12:46:01
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-07 14:17:14
+ * @Description:
+ */
 // 仪表盘的混入
 import baseMixins from './baseMixins'
-import { getDataValueById, formatDataValue, deepClone } from '@/utils/optionUtils'
+import { formatDataValue, deepClone } from '@/utils/optionUtils'
 export default {
   mixins: [baseMixins],
   watch: {
     storeOption: {
       handler (val) {
-        if (JSON.stringify(this.dataValue) !== '{}') {
-          this.dataValue = this.formatData(formatDataValue(getDataValueById(this.identify)))
-          this.getOption()
-        }
+        this.getOption()
       },
       deep: true
     },
@@ -21,18 +25,6 @@ export default {
         })
         if (isData !== -1) {
           this.$bus.$emit('interReload', [this.identify], 100, false)
-        }
-      },
-      deep: true
-    },
-    dataOption: {
-      handler(val) {
-        const isData = val.findIndex(item => {
-          return item.i === this.identify
-        })
-        if (isData !== -1) {
-          this.dataValue = this.formatData(formatDataValue(getDataValueById(this.identify)))
-          this.getOption()
         }
       },
       deep: true
@@ -51,7 +43,7 @@ export default {
         if (index === 0) {
           obj.name = data[index][1]
         } else {
-          obj.value += data[index][1]
+          obj.value += Number(data[index][1])
         }
       }
       return obj

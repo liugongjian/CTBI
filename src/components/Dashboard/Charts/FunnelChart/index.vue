@@ -65,6 +65,8 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
+        if (val.dataSource.Dimension.value.length === 0 || val.dataSource.Measure.value.length === 0) return
+        // this.reloadImpl()
         this.getOption()
       },
       deep: true
@@ -72,17 +74,16 @@ export default {
   },
   methods: {
     reloadImpl () {
-      if (this.chartData) {
-        this.formatDataValue(this.chartData)
-        this.getOption()
-      }
+      if (this.chartData.data.length === 0) return
+      this.formatDataValue(this.chartData)
+      this.getOption()
     },
     formatDataValue (chartData) {
       const data = []
       const dataTrans = []
       const dataLabel = []
-      const measureName = chartData.fields?.Measure.fields[0].column
-      const dimensionName = chartData.fields?.Dimension.fields[0].column
+      const measureName = chartData.fields.Measure.fields[0].displayColumn
+      const dimensionName = chartData.fields.Dimension.fields[0].displayColumn
       const that = this
       // 标准数据渲染
       chartData.data.forEach(item => {
@@ -482,7 +483,6 @@ export default {
     },
     // 静态样式初始化
     displayStyleHandler (item) {
-      console.log('dadadada2')
       if (item.horizontal) {
         this.transStyle = 'horizontal'
         this.borderRadius = [0, 20, 20, 0]
