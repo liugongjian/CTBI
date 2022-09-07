@@ -14,13 +14,12 @@ export default {
   props: {
     identify: {
       type: String,
-      default: ''
+      default: store.state.app.currentLayoutId
     }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
     this.$bus.$on('interReload', this.interReload)
-    console.log(this.identify)
   },
   beforeDestroy () {
     this.$bus.$off('interReload', this.interReload)
@@ -39,6 +38,7 @@ export default {
           this.reloadImpl()
         } catch (e) {
           // do nothing
+          console.error(e)
         }
       }
     },
@@ -47,7 +47,7 @@ export default {
       const storeDataValue = getDataValueById(this.identify)
       if (storeDataValue && !isReload) {
         this.chartData = deepClone(storeDataValue)
-        throw new Error('未获取到数据，不做图表加载')
+        return
       }
 
       const params = getQueryParams(limit, this.identify)

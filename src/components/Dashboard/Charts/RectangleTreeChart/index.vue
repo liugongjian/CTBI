@@ -6,7 +6,11 @@
       :update-options="{notMerge:true}"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-rectangle-tree" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-rectangle-tree"
+      class="chart-empty-svg"
+    />
   </div>
 
 </template>
@@ -64,7 +68,7 @@ export default {
       this.getColor()
       this.getOption()
     },
-    formatDataValue(chartData) {
+    formatDataValue (chartData) {
       const DimensionKey = []
       const MeasureKey = []
       const { data, fields } = chartData
@@ -103,10 +107,10 @@ export default {
         })
         let sum = 0
         dataValueTemp.forEach((item) => {
-          sum += item.value
+          sum += Number(item.value)
         })
         const dataValue = dataValueTemp.map(item => {
-          item.percent = Number((item.value / sum * 100).toFixed(2))
+          item.percent = Number((Number(item.value) / sum * 100).toFixed(2))
           return item
         })
         this.MeasureKey = MeasureKey + ''
@@ -114,7 +118,7 @@ export default {
         return dataValue
       }
     },
-    getColor() {
+    getColor () {
       const color = []
       const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
       this.dataValue.forEach((item, index) => {
@@ -202,7 +206,10 @@ export default {
           {
             name: this.MeasureKey, // 度量的值
             type: 'treemap',
-            data: this.dataValue
+            data: this.dataValue,
+            breadcrumb: {
+              show: false
+            }
           }
         ]
       }

@@ -216,12 +216,11 @@ export default {
     },
     // 自动刷新
     handleRefresh (val) {
+      if (this.interVal) {
+        clearInterval(this.interVal)
+        this.interVal = null
+      }
       if (this.autoRefresh) {
-        if (this.interVal) {
-          clearInterval(this.interVal)
-          this.interVal = null
-        }
-
         if (val) {
           // 开启自动刷新的定时器
           const time = 1000 * this.time * (this.unit === 'minute' ? 60 : 1)
@@ -261,6 +260,13 @@ export default {
         if (dataSource[key].value.length === 0 && dataSource[key].require) {
           this.$message({
             message: `${dataSource[key].name}缺少必填字段`,
+            type: 'error'
+          })
+          return
+        }
+        if (dataSource[key].least && dataSource[key].value.length < dataSource[key].least) {
+          this.$message({
+            message: `至少需要选择${dataSource[key].least}个${dataSource[key].name}`,
             type: 'error'
           })
           return

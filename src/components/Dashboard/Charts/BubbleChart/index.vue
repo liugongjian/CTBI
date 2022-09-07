@@ -5,7 +5,11 @@
       :option="chartOption"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-bubble" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-bubble"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -87,6 +91,10 @@ export default {
           },
           formatter: '{b}<br />{a}: {c}'
         },
+        grid: {
+          top: '30%',
+          bottom: '10%'
+        },
         legend: Legend,
         xAxis: [{
           type: 'category',
@@ -152,7 +160,10 @@ export default {
         },
         series: Array(measureLen).fill({
           symbolSize: function (data) {
-            return Math.sqrt(data[1]) * 0.1 * Slider.symbolSize
+            if (data[1] > 1000) {
+              return Math.log10(data[1]) * 0.3 * Slider.symbolSize + 5
+            }
+            return Math.sqrt(data[1]) * 0.3 * Slider.symbolSize + 5 // 加5防止气泡图最小值显示不清
           },
           type: 'scatter'
         })

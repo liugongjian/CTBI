@@ -60,16 +60,18 @@ export default {
       this.getOption()
     },
     // 拿到数据中的系列名字
-    getSeriesOptions (val) {
-      const seriesOption = []
-      val[0].forEach((item, index) => {
-        if (index) {
-          seriesOption.push({ value: item, label: item })
-        }
-      })
-      this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
-      this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
-      this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
+    getSeriesOptions(val) {
+      if (val && val.length > 0) {
+        const seriesOption = []
+        val[0].forEach((item, index) => {
+          if (index) {
+            seriesOption.push({ value: item, label: item })
+          }
+        })
+        this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
+        this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
+        this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
+      }
     },
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
@@ -81,7 +83,6 @@ export default {
           color.push({ name: item, color: colorValue[idx].value, remark: item })
         }
       })
-      console.log(color, 'color折线图')
       this.storeOption.theme.ComponentOption.Color.color = color
     },
     // 拿到数据中的指标
@@ -221,7 +222,7 @@ export default {
           } else {
             item.symbol = 'circle'
             item.hoverAnimation = false
-            item.symbolSize = 1
+            item.symbolSize = 5
           }
         }
         return item
@@ -250,7 +251,7 @@ export default {
       if (ast === 'skip') {
         connectNulls = true
       } else if (ast === 'zero') {
-        this.dataValue = this.storeOption.dataSource.map(datas => {
+        this.dataValue = this.dataValue.map(datas => {
           return datas.map((data, index) => {
             connectNulls = false
             if ([null, undefined, NaN, '-'].includes(data)) {
@@ -278,7 +279,6 @@ export default {
         })
         data.unshift([this.dataValue[0][0], ...indicator])
         this.dataValue = data
-        console.log(data)
       }
     },
     // 获取堆积图
@@ -294,7 +294,7 @@ export default {
       }
       this.setAxis()
       // 双Y轴设置
-      this.twisYAxisConfig(ComponentOption)
+      // this.twisYAxisConfig(ComponentOption)
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'line',
@@ -310,7 +310,7 @@ export default {
           connectNulls: this.resolveNull(FunctionalOption),
           itemStyle: this.getItemStyle(ComponentOption)// 图形样式配置-颜色
         })
-        if (ComponentOption.TwisYAxis.check) {
+        if (ComponentOption.TwisYAxis?.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
@@ -331,13 +331,13 @@ export default {
       }
       this.setAxis()
       // 双Y轴设置
-      this.twisYAxisConfig(ComponentOption)
+      // this.twisYAxisConfig(ComponentOption)
       this.valueToPercent()
       const that = this
-      if (!ComponentOption.TwisYAxis.check) {
+      if (!ComponentOption.TwisYAxis?.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
-      const data = formatDataValue(deepClone(getDataValueById(this.identify)))
+      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'line',
@@ -346,7 +346,7 @@ export default {
             show: ComponentOption.ChartLabel.check, // 标签显示
             formatter: function (params) {
               const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
-              const isMeasure = that.checkList.includes('度量') ? `${data[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+              const isMeasure = that.checkList.includes('度量') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
               return isPercent + '\n' + isMeasure
             }
           },
@@ -358,7 +358,7 @@ export default {
           connectNulls: this.resolveNull(FunctionalOption),
           itemStyle: this.getItemStyle(ComponentOption)// 图形样式配置-颜色
         })
-        if (ComponentOption.TwisYAxis.check) {
+        if (ComponentOption.TwisYAxis?.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
@@ -368,16 +368,16 @@ export default {
     // 双y轴设置
     twisYAxisConfig (componentOption) {
       // 双y轴设置与坐标轴设置相关联，其中关于y轴模块暂时固定，后续需切换成坐标轴设置的值
-      if (componentOption.TwisYAxis.check) {
+      if (componentOption.TwisYAxis?.check) {
         const formatter = this.type === 'PercentStackedBarChart' ? '{value}%' : '{value}'
 
         // 最大值和最小值暂时固定，后续需要修改 TODO
-        const minData1 = componentOption.TwisYAxis.twisType === 'syncAll' ? minData2 : -10
+        const minData1 = componentOption.TwisYAxis?.twisType === 'syncAll' ? minData2 : -10
         const minData2 = 0
         const maxData2 = 100
-        const maxData1 = componentOption.TwisYAxis.twisType === 'syncAll' ? maxData2 : 100
-        const intervalNum1 = componentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData1 - minData1) / 5 : null
-        const intervalNum2 = componentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null
+        const maxData1 = componentOption.TwisYAxis?.twisType === 'syncAll' ? maxData2 : 100
+        const intervalNum1 = componentOption.TwisYAxis?.twisType === 'syncTicksNum' ? (maxData1 - minData1) / 5 : null
+        const intervalNum2 = componentOption.TwisYAxis?.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null
         this.yAxis = [
           {
             type: 'value',

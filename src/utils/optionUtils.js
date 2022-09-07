@@ -230,7 +230,7 @@ export const formatDataValue = function (chartData) {
         dimensionData.push(item[dim])
       })
       MeasureKey.forEach(mea => {
-        measureData.push(item[mea].match(/\d+(?:\.\d+)?/g, ''))
+        measureData.push(item[mea]?.toString().match(/\d+(?:\.\d+)?/g, ''))
       })
       dataValue.push([dimensionData.join('-'), ...measureData])
     })
@@ -328,6 +328,14 @@ export const getFieldsTable = (fields) => {
     // 赋值描述字段
     if (!item.attributes[0].comment) {
       item.attributes[0].comment = ''
+    }
+    // 默认展示格式
+    if (!item.attributes[0].format) {
+      item.attributes[0].format = ''
+    }
+    // 默认聚合方式
+    if (!item.attributes[0].aggregator) {
+      item.attributes[0].aggregator = 'sum'
     }
     if (item.type === 'Dimension') {
       if (item.attributes[0].isHidden) {

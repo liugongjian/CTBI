@@ -8,7 +8,11 @@
  * 渲染TabPane时，就是渲染GridLayout，GridLayout的layout的值就是store中所有containerId是该TabPane的tabId的layout的集合
  */
 <template>
-  <div :id="layout.i" style="width:100%;height:100%;" class="tab-chart-wrap">
+  <div
+    :id="layout.i"
+    style="width:100%;height:100%;"
+    class="tab-chart-wrap"
+  >
     <div class="tab-header">
       <div
         v-for="item in layout.tabPanels"
@@ -18,20 +22,38 @@
         @click="() => changeTab(item)"
       >
         <p>{{ item.title }}</p>
-        <div v-if="isEdit" class="close" @click.stop="() => removeTab(item.name)"><i class="el-icon-close" /></div>
+        <div
+          v-if="isEdit"
+          class="close"
+          @click.stop="() => removeTab(item.name)"
+        ><i class="el-icon-close" /></div>
       </div>
-      <div v-if="!isEdit" class="tab-header-border" />
-      <div v-if="isEdit" class="tab-header-add" @click="addTab"><i class="el-icon-plus" /></div>
+      <div
+        v-if="!isEdit"
+        class="tab-header-border"
+      />
+      <div
+        v-if="isEdit"
+        class="tab-header-add"
+        @click="addTab"
+      ><i class="el-icon-plus" /></div>
     </div>
     <div class="tab-content">
       <div
         v-for="item in layout.tabPanels"
         :key="item.name"
       >
-        <div v-show="item.name === editableTabsValue" :style="{height: tabHeight + 'px'}" class="gridWrap"><tab-panel :id="item.paneId" /></div>
+        <div
+          v-show="item.name === editableTabsValue"
+          :style="{height: tabHeight + 'px'}"
+          class="gridWrap"
+        >
+          <tab-panel :id="item.paneId" />
+        </div>
       </div>
     </div>
-  </div></template>
+  </div>
+</template>
 
 <script>
 // import barMixins from '@/components/Dashboard/mixins/barMixins'
@@ -62,10 +84,10 @@ export default {
       // 去除属于tab组件的layout
       return getLayoutById(this.identify)
     },
-    tabHeight() {
-      return this.layout.h * 100 - 65 + this.layout.h * 4
+    tabHeight () {
+      return this.layout.h * 100 - 85 + this.layout.h * 4
     },
-    editableTabsValue() {
+    editableTabsValue () {
       if (this.userChooseTab) {
         return this.userChooseTab
       }
@@ -74,15 +96,15 @@ export default {
       }
       return '1'
     },
-    activeTab() {
+    activeTab () {
       return this.layout.tabPanels.find(tab => tab.name === this.editableTabsValue)
     },
-    isEdit() {
+    isEdit () {
       return store.state.app.dashboardMode === 'edit'
     }
   },
   methods: {
-    removeTab(targetName) {
+    removeTab (targetName) {
       const tabs = [...this.layout.tabPanels]
       let activeName = this.editableTabsValue
       let activeTabId = this.layout.activeTabId
@@ -113,8 +135,12 @@ export default {
       const allLayout = [...store.state.app.layout].filter(item => !(item.tabIdChains || []).includes(removeTab.paneId))
       store.dispatch('app/updateLayout', allLayout)
     },
-    addTab() {
+    addTab () {
       const newTabName = Date.now() + ''
+      if (this.layout.tabPanels && this.layout.tabPanels.length > 9) {
+        this.$message.warning('最多只能添加10个Tab')
+        return
+      }
       const paneId = `${this.layout.i}-${newTabName}`
       this.layout.tabPanels.push({
         title: 'New Tab',
@@ -122,13 +148,11 @@ export default {
         paneId
       })
       this.layout.activeTabId = paneId
-      console.log(this.layout)
       this.userChooseTab = newTabName
     },
     changeTab (e) {
       this.userChooseTab = e.name
       const chooseTab = this.layout.tabPanels.find(item => item.name === e.name)
-      console.log(chooseTab.paneId)
       this.layout.activeTabId = chooseTab.paneId
     },
     dragover (event) {
@@ -139,7 +163,7 @@ export default {
     clearCurrentLayoutId () {
       this.$store.state.app.currentLayoutId = ''
     },
-    itemTitle(item) {
+    itemTitle (item) {
       let result = item.i
       if (item.static) {
         result += ' - Static'
@@ -151,29 +175,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tab-chart-wrap{
+.tab-chart-wrap {
   background: #fff;
 }
-.tab-header{
+.tab-header {
   background: #fff;
   display: flex;
   margin-top: -20px;
   overflow: auto;
-  .tab-header-btn{
+  .tab-header-btn {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 40px;
-    background: #F4F5F6;
-    border: 1px solid rgba(221,221,221,1);
+    background: #f4f5f6;
+    border: 1px solid rgba(221, 221, 221, 1);
     border-right: 0px;
     box-sizing: border-box;
     font-size: 12px;
-    color: rgba(0,0,0,0.65);
+    color: rgba(0, 0, 0, 0.65);
     font-weight: 400;
     padding: 0px 20px;
     cursor: pointer;
-    .close{
+    .close {
       width: 0px;
       height: 14px;
       border-radius: 7px;
@@ -184,49 +208,49 @@ export default {
       overflow: hidden;
     }
   }
-  .tab-header-btn:hover{
-    color: #FA8334;
-    background: rgba(255,255,255,0.6);
-    .close{
+  .tab-header-btn:hover {
+    color: #fa8334;
+    background: rgba(255, 255, 255, 0.6);
+    .close {
       width: 14px;
-      &:hover{
-        background: rgba(0,0,0,0.25);
+      &:hover {
+        background: rgba(0, 0, 0, 0.25);
         color: #fff;
       }
     }
   }
-  .tab-header-active{
-    color: #FA8334;
-    background: #FFFFFF;
+  .tab-header-active {
+    color: #fa8334;
+    background: #ffffff;
   }
-  .tab-header-border{
+  .tab-header-border {
     width: 1px;
     height: 40px;
-    background: rgba(221,221,221,1);
+    background: rgba(221, 221, 221, 1);
   }
-  .tab-header-add{
-     display: flex;
+  .tab-header-add {
+    display: flex;
     justify-content: center;
     align-items: center;
     height: 40px;
-    background: #F4F5F6;
-    border: 1px solid rgba(221,221,221,1);
+    background: #f4f5f6;
+    border: 1px solid rgba(221, 221, 221, 1);
     font-size: 12px;
-    color: rgba(0,0,0,0.65);
+    color: rgba(0, 0, 0, 0.65);
     font-weight: 700;
     padding: 0px 20px;
     cursor: pointer;
     box-sizing: border-box;
-    &:hover{
-      color: #FA8334;
-      background: rgba(255,255,255,0.80);;
+    &:hover {
+      color: #fa8334;
+      background: rgba(255, 255, 255, 0.8);
     }
   }
 }
-.tab-content{
-  background: #EFF2F5;
+.tab-content {
+  background: #eff2f5;
 }
-.gridWrap{
+.gridWrap {
   overflow-x: hidden;
   overflow-y: auto;
 }

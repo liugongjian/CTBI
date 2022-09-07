@@ -35,6 +35,9 @@
           v-model="selectedIndicator"
           :disabled="!getParameter(option, 'theme.FunctionalOption.ChartFilter.showFilter')"
           :multiple="getParameter(option, 'theme.FunctionalOption.ChartFilter.isMultiple')"
+          :class="{
+            disabled : selectedIndicator.length<=1,
+          }"
           @change="handleIndicator"
         >
           <el-option
@@ -42,6 +45,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
+            :disabled="selectedIndicator.length<=1 && selectedIndicator[0]==item.value"
           />
         </el-select>
 
@@ -77,6 +81,7 @@
           <a
             v-show="getParameter(option, 'theme.Basic.TitleLink.openType')==='blank'"
             :href="getParameter(option, 'theme.Basic.TitleLink.url')"
+            :title="getParameter(option, 'theme.Basic.TitleLink.text')||`链接跳转`"
             target="blank"
             class="card-header-link"
           >
@@ -84,6 +89,7 @@
           <!-- 当打开方式为弹窗时 -->
           <a
             v-show="getParameter(option, 'theme.Basic.TitleLink.openType')==='dialog'"
+            :title="getParameter(option, 'theme.Basic.TitleLink.text')||`链接跳转`"
             class="card-header-link"
             @click="showDialog"
           >
@@ -100,8 +106,8 @@
         v-if="getParameter(option, 'theme.ComponentOption.TotalShow.show')"
         class="rich-text-content"
       >
-        <span style="margin-right: 20px">{{ getParameter(option, 'theme.ComponentOption.TotalShow.name') }}</span>
-        <span>{{ getParameter(option, 'theme.ComponentOption.TotalShow.value') }}</span>
+        <div style="margin-right: 20px">{{ getParameter(option, 'theme.ComponentOption.TotalShow.name') }}</div>
+        <div>{{ getParameter(option, 'theme.ComponentOption.TotalShow.value') }}</div>
       </div>
     </div>
 
@@ -110,7 +116,7 @@
       class="rich-text-editor"
       style="max-height:100px;min-height: 18px;"
     >
-      <div
+      <span
         v-show="getParameter(option, 'theme.Basic.Mark.show') && getParameter(option, 'theme.Basic.Mark.position') === 'onChart'"
         class="rich-text-content"
         v-html="getParameter(option, 'theme.Basic.Mark.text')"
@@ -118,14 +124,15 @@
     </div>
     <slot v-if="onLoad" />
     <!-- 尾注内容 -->
-    <div class="rich-text-footer">
+    <div
+      v-show="getParameter(option, 'theme.Basic.Footer.show')"
+      class="rich-text-footer"
+    >
       <div
         class="rich-text-editor"
         style="max-height:100px;min-height: 18px;"
       >
-
-        <div
-          v-show="getParameter(option, 'theme.Basic.Footer.show')"
+        <span
           class="rich-text-content"
           v-html="getParameter(option, 'theme.Basic.Footer.text')"
         />
@@ -364,12 +371,18 @@ export default {
 }
 .rich-text-editor {
   overflow: auto;
+  flex-shrink: 0;
+
   &.rich-text-content {
-    display: flex;
-    flex-direction: column;
     white-space: pre-wrap;
     word-wrap: break-word;
-    word-break: break-word;
+    word-break: break-all;
   }
 }
+svg {
+  touch-action: none;
+  user-select: none;
+  box-sizing: border-box;
+}
+::v-deep .disabled .el-tag__close{ display: none !important;}
 </style>
