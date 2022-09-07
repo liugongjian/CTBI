@@ -222,7 +222,7 @@ export default {
     },
     'FunctionalOption': {
       'DataZoom': {
-        'showDataZoom': 'hide'
+        'showDataZoom': 'auto'
       },
       'LabelShowType': {
         'axisShowType': 'auto'

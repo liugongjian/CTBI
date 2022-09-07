@@ -45,10 +45,11 @@ export default {
 
       // 设置图例与图表距离
       this.setGrid(componentOption.Legend)
+      const legendLayout = this.getLegendLayout(componentOption.Legend)
       this.chartOption = {
         'grid': this.grid,
         'color': colorOption,
-        'legend': componentOption.Legend,
+        'legend': legendLayout,
         'xAxis': this.xAxis,
         'tooltip': {
           trigger: 'axis',

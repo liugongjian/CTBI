@@ -48,6 +48,7 @@ export default {
       })
       // 设置图例与图表距离
       this.setGrid(componentOption.Legend)
+      const legendLayout = this.getLegendLayout(componentOption.Legend)
 
       // 获取指标筛选中的图例数据
       const legendData = []
@@ -62,7 +63,7 @@ export default {
         'grid': this.grid,
         'color': colorOption,
         'legend': {
-          ...componentOption.Legend,
+          ...legendLayout,
           data: legendData
         },
         'xAxis': this.xAxis,

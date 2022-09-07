@@ -367,9 +367,10 @@ export default {
           // 轴标签
           'axisLabel': {
             'show': XAxis.showAxisLabel,
-            'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
-            'interval': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
-            'width': 300,
+            'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? -90 : 0,
+            'interval': 'auto',
+            'width': 100,
+            'height': 100,
             'overflow': 'truncate'
           },
           'position': this.storeOption.theme.ComponentOption.ChartAlign.align === 'left' ? 'left' : 'right',
@@ -405,6 +406,8 @@ export default {
           'max': YAxis.autoMax ? null : YAxis.max,
           'axisLabel': {
             'show': YAxis.showAxisLabel,
+            'width': 100,
+            'height': 100,
             formatter: (value, index) => {
               return this.formatYLabel(value, YAxis)
             }

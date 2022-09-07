@@ -71,9 +71,13 @@ export default {
         radiusAxis: {
           type: 'category',
           axisLabel: {
-            rotate: 10,
             showMaxLabel: true,
-            interval: 0,
+            // auto 智能显示 sparse 强制稀疏 condense 最多展示
+            rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? -90 : 10,
+            // interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
+            'width': 100,
+            'height': 100,
+            interval: 'auto',
             fontSize: 10
           },
           axisTick: { show: false },

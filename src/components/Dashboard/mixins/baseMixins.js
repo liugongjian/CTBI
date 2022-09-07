@@ -116,6 +116,28 @@ export default {
           right: 120
         }
       }
+
+      // 缩略轴
+      const sdz = this.storeOption.theme.FunctionalOption?.DataZoom?.showDataZoom
+      // 是否最多展示
+      if (this.storeOption.theme.FunctionalOption?.LabelShowType?.axisShowType === 'condense') {
+        if (sdz === 'show' && legend.top === 'bottom') {
+          this.grid.bottom = 200
+        } else if (sdz === 'show') {
+          this.grid.bottom = 150
+        }
+      }
+    },
+    // 图例定位
+    getLegendLayout(legend) {
+      const temp = Object.assign({}, legend)
+      if (temp.top === 'bottom' && temp.left === 'center') {
+        return Object.assign({}, temp, {
+          top: 'auto',
+          bottom: 50
+        })
+      }
+      return temp
     }
   }
 }

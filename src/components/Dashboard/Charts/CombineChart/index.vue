@@ -335,14 +335,17 @@ export default {
       const option = {
         axisLabel: {
           rotate: 0,
+          'width': 100,
+          'height': 100,
           interval: 'auto'
         }
       }
       if (ast === 'condense') { // 最多显示
-        option.axisLabel.rotate = 90
-      } else if (ast === 'sparse') { // 强制悉数
-        option.axisLabel.interval = 3
+        option.axisLabel.rotate = -90
       }
+      // else if (ast === 'sparse') { // 强制悉数
+      //   option.axisLabel.interval = 3
+      // }
       return option
     }
   }

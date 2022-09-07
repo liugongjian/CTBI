@@ -41,7 +41,10 @@
                       :icon-class="typeTransform(el.attributes)"
                     />
                     <span class="field-caption">
-                      {{ el.displayColumn }}({{ el.attributes[0].aggregator | aggregatorFilter }})
+                      {{ el.displayColumn }}
+                      <span v-if="el.type === 'Measure'">
+                        ({{ el.attributes[0].aggregator | aggregatorFilter }})
+                      </span>
                     </span>
                     <div class="right-hover-icons">
                       <span

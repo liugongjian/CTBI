@@ -94,7 +94,7 @@ export default {
     },
     'FunctionalOption': { // 功能配置
       'DataZoom': { // 缩略轴
-        'showDataZoom': 'hide' // 显示方式：1.auto 智能适配；2.show 显示；3.hide 不显示
+        'showDataZoom': 'auto' // 显示方式：1.auto 智能适配；2.show 显示；3.hide 不显示
       },
       'LabelShowType': { // 坐标轴维度显示
         'axisShowType': 'auto' // 1.auto 智能显示；2.sparse 强制稀疏；3.condense 最多显示
