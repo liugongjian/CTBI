@@ -32,7 +32,10 @@
             @dragover="dragover"
             @click="clearCurrentLayoutId"
           >
-            <widget ref="gridLayout" :class="{ gridLayoutExtra: mode === 'edit'}" />
+            <widget
+              ref="gridLayout"
+              :class="{ gridLayoutExtra: mode === 'edit'}"
+            />
           </div>
         </el-main>
       </el-container>
@@ -132,7 +135,7 @@ export default {
     layoutStyles () {
       return this.$store.state.settings.layoutStyles
     },
-    scaleStyles() {
+    scaleStyles () {
       return this.$store.state.settings.scaleStyles
     }
   },
@@ -156,11 +159,11 @@ export default {
     this.setStoreMode(this.$route.query.mode === '1' ? 'preview' : 'edit')
     window.addEventListener('beforeunload', this.beforeunload)
   },
-  beforeDestroy() {
+  beforeDestroy () {
     // 百分比重置 默认为100%
     store.dispatch('settings/changeSetting', { key: 'scaleStyles', value: { transform: 'scale(1)', transformOrigin: 'center top' } })
   },
-  destroyed() {
+  destroyed () {
     // if (this.timer) {
     //   console.log('destroyed')
     //   clearTimeout(this.timer)
@@ -268,7 +271,6 @@ export default {
         this.mode = data
         this.setStoreMode(data)
       }
-      console.log(action, data)
       if (action === 'saveSuccess') {
         if (!this.dashboardId) {
           localStorage.removeItem(this.saveName)
@@ -292,11 +294,13 @@ export default {
       const saveData = localStorage.getItem(this.saveName)
       if (saveTag !== 'saved' && saveData) {
         if (this.testNewEmpty()) {
+          this.$store.dispatch('app/updateLayoutId', '')
           this.$router.go(-1)
           return
         }
         this.unsavedVisible = true
       } else {
+        this.$store.dispatch('app/updateLayoutId', '')
         this.$router.go(-1)
       }
     },
@@ -423,6 +427,6 @@ export default {
   height: calc(100vh - 60px);
 }
 .gridLayoutExtra {
-  padding-bottom: 300px
+  padding-bottom: 300px;
 }
 </style>

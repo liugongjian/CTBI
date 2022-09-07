@@ -102,7 +102,7 @@
               draggable
               @node-drag-start="handleDragStart"
             >
-              <span
+              <div
                 slot-scope="{ node, data }"
                 class="custom-tree-node"
                 style="width:100%;"
@@ -117,12 +117,12 @@
                     :content="data.attributes[0].comment"
                     placement="top"
                   >
-                    <span>{{ data.displayColumn }}</span>
+                    <span>{{ data.displayColumn }}({{ data.attributes[0].aggregator | aggregatorFilter }})</span>
                   </el-tooltip>
 
                 </span>
-                <span v-else>{{ data.displayColumn }}</span>
-              </span>
+                <span v-else>{{ data.displayColumn }}({{ data.attributes[0].aggregator | aggregatorFilter }})</span>
+              </div>
             </el-tree>
           </div>
         </div>

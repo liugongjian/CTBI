@@ -20,6 +20,7 @@
  *    other: 其他
  *  }
  * */
+import { defaultDataLimit } from '@/constants/constants'
 export default {
   type: 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   isShow: false, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -64,6 +65,7 @@ export default {
   dataSource: {}, // 数据集
   'dataSet': { // 当前正在使用的数据集
     'id': '', // 数据集ID
-    'name': '' // 数据集名称
+    'name': '', // 数据集名称
+    'limit': defaultDataLimit // 结果展示字段限制
   }
 }

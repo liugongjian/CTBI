@@ -184,7 +184,7 @@ export default {
         }
         for (let i = 1; i < this.dataValue[0].length; i++) {
           for (let j = 0; j < sumArr.length; j++) {
-            sumArr[j] += this.dataValue[j + 1][i]
+            sumArr[j] += Number.parseFloat(this.dataValue[j + 1][i])
           }
         }
         for (let i = 1; i < this.dataValue[0].length; i++) {

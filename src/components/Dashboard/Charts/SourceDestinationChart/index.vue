@@ -7,10 +7,21 @@
 -->
 <template>
   <div style="width: 100%; height: 100%">
-    <div v-if="dataValue.directionList" style="width: 100%; height: 100%">
-      <sourceCharts :center-data="dataValue.centerData" :source-list="dataValue.sourceList" :direction-list="dataValue.directionList" />
+    <div
+      v-if="dataValue.directionList"
+      style="width: 100%; height: 100%"
+    >
+      <sourceCharts
+        :center-data="dataValue.centerData"
+        :source-list="dataValue.sourceList"
+        :direction-list="dataValue.directionList"
+      />
     </div>
-    <div v-else>数据为空</div>
+    <svg-icon
+      v-else
+      icon-class="chart-empty-san-key"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -31,7 +42,7 @@ export default {
       default: ''
     }
   },
-  data() {
+  data () {
     return {
       storeOption: {},
       chartOption: {},
@@ -66,7 +77,7 @@ export default {
       this.formatDataValue()
       // this.dataValue = this.formatData(deepClone(getDataValueById(this.identify)))
     },
-    formatDataValue() {
+    formatDataValue () {
       this.dataValue.centerData = {
         name: '中心点',
         num: 24
