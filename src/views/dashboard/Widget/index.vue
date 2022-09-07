@@ -134,4 +134,9 @@ export default {
   box-sizing: border-box;
   cursor: pointer;
 }
+::v-deep .self-chart-content {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
 </style>

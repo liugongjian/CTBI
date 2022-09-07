@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%;height:100%;">
+  <div class="self-chart-content">
     <v-chart
       v-if="dataValue"
       :option="chartOption"
@@ -89,6 +89,7 @@ export default {
         }
         // 若没有度量 则计算出现的频次 作为datavalue的value值
         if (MeasureKey.length === 0) {
+          this.MeasureKey = '频次'
           const dataValue = data.map(item => {
             for (const key in item) {
               if (Object.hasOwnProperty.call(item, key)) {
@@ -121,7 +122,7 @@ export default {
                 if (MeasureKey.indexOf(key) > -1) {
                   const temp = item[key]
                   delete item[key]
-                  item.value = temp
+                  item.value = Number(temp)
                 }
               }
             }
@@ -143,10 +144,10 @@ export default {
       const isMaxValue = ComponentOption.WordCloudTextSize.isMaxValue
       // value求和
       if (this.dataValue) {
-        const sum = this.dataValue.reduce((sumTemp, item) => sumTemp + item.value, 0)
+        const sum = this.dataValue.reduce((sumTemp, item) => sumTemp + Number(item.value), 0)
 
         if (isMaxValue) {
-          this.maxValue = (Math.max.apply(Math, this.dataValue.map(function (o) { return o.value })) / sum) * 60
+          this.maxValue = parseInt((Math.max.apply(Math, this.dataValue.map(function (o) { return Number(o.value) })) * 100 / sum) * 60)
           this.maxValue = this.maxValue - 60 > 0 ? 60 : this.maxValue
         } else {
           this.maxValue = ComponentOption.WordCloudTextSize.maxValue - 60 > 0 ? 60 : ComponentOption.WordCloudTextSize.maxValue
@@ -157,7 +158,7 @@ export default {
 
         const isMinValue = ComponentOption.WordCloudTextSize.isMinValue
         if (isMinValue) {
-          this.minValue = (Math.min.apply(Math, this.dataValue.map(function (o) { return o.value })) / sum) * 12
+          this.minValue = parseInt((Math.min.apply(Math, this.dataValue.map(function (o) { return Number(o.value) })) * 100 / sum) * 12)
           this.minValue = this.minValue - 12 > 0 ? this.minValue : 12
         } else {
           this.minValue = ComponentOption.WordCloudTextSize.minValue - 12 > 0 ? ComponentOption.WordCloudTextSize.minValue : 12
@@ -168,6 +169,10 @@ export default {
       } else {
         return
       }
+      if (this.maxValue < this.minValue) {
+        this.maxValue = this.minValue
+      }
+      console.log('33322', this.minValue, this.maxValue)
 
       this.chartOption = {
         tooltip: {

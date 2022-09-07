@@ -116,3 +116,6 @@ export const AggFunctionOptions = [
   { label: '最小值', value: 'min' },
   { label: '平均数', value: 'avg' }
 ]
+
+// 默认字段更新值
+export const defaultDataLimit = 100

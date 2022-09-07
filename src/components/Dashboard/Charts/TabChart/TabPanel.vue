@@ -62,7 +62,6 @@ export default {
   methods: {
     clickHandler (id) {
       // 更新当前id
-      console.log(id)
       this.$store.dispatch('app/updateLayoutId', id)
     }
   }

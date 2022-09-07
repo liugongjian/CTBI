@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%;height:100%;">
+  <div class="self-chart-content">
     <v-chart
       v-if="dataValue"
       :option="chartOption"
@@ -169,10 +169,13 @@ export default {
       const { Basic: { VisualStyle: { style } }, ComponentOption, StyleConfig } = this.storeOption.theme
       const { ConfigSize } = ComponentOption
       const { Label, Scale } = StyleConfig
-      this.setStyle(style)
-      this.setConfigSize(ConfigSize)
-      this.setConfigLabel(Label)
-      this.setScale(Scale)
+      if (this.dataValue?.length > 0) {
+        this.setStyle(style)
+        this.setConfigSize(ConfigSize)
+        this.setConfigLabel(Label)
+        this.setScale(Scale)
+      }
+
       this.series[0].data[0] = this.dataValue
       this.chartOption = {
         tooltip: {

@@ -7,12 +7,12 @@
 
     <div class="card-header-wrapper">
       <div
-        v-show="getParameter(option, 'theme.Basic.Title.show')"
+        v-if="getParameter(option, 'theme.Basic.Title.show')"
         :style="{color: getParameter(option, 'theme.Basic.Title.color') || '#333' }"
       >{{ getParameter(option, 'theme.Basic.Title.text') }}
         <!-- 当备注位置选择为紧跟标题时 -->
         <el-tooltip
-          v-show="getParameter(option, 'theme.Basic.Mark.show') && getParameter(option, 'theme.Basic.Mark.position') === 'afterTitle'"
+          v-if="getParameter(option, 'theme.Basic.Mark.show') && getParameter(option, 'theme.Basic.Mark.position') === 'afterTitle'"
           placement="bottom"
           effect="light"
         >
@@ -74,12 +74,12 @@
 
         <!-- 链接跳转模块 -->
         <div
-          v-show="getParameter(option, 'theme.Basic.TitleLink.show') && getParameter(option, 'theme.Basic.TitleLink.url')"
+          v-if="getParameter(option, 'theme.Basic.TitleLink.show') && getParameter(option, 'theme.Basic.TitleLink.url')"
           class="card-header-link-wrapper"
         >
           <!-- 当打开方式为新窗口时 -->
           <a
-            v-show="getParameter(option, 'theme.Basic.TitleLink.openType')==='blank'"
+            v-if="getParameter(option, 'theme.Basic.TitleLink.openType')==='blank'"
             :href="getParameter(option, 'theme.Basic.TitleLink.url')"
             :title="getParameter(option, 'theme.Basic.TitleLink.text')||`链接跳转`"
             target="blank"
@@ -88,7 +88,7 @@
             {{ getParameter(option, 'theme.Basic.TitleLink.text')||`链接跳转` }}</a>
           <!-- 当打开方式为弹窗时 -->
           <a
-            v-show="getParameter(option, 'theme.Basic.TitleLink.openType')==='dialog'"
+            v-if="getParameter(option, 'theme.Basic.TitleLink.openType')==='dialog'"
             :title="getParameter(option, 'theme.Basic.TitleLink.text')||`链接跳转`"
             class="card-header-link"
             @click="showDialog"
@@ -101,11 +101,11 @@
     </div>
 
     <!-- 是否展示总计 -->
-    <div style="max-height:100px">
-      <div
-        v-if="getParameter(option, 'theme.ComponentOption.TotalShow.show')"
-        class="rich-text-content"
-      >
+    <div
+      v-if="getParameter(option, 'theme.ComponentOption.TotalShow.show')"
+      style="max-height:100px"
+    >
+      <div class="rich-text-content">
         <div style="margin-right: 20px">{{ getParameter(option, 'theme.ComponentOption.TotalShow.name') }}</div>
         <div>{{ getParameter(option, 'theme.ComponentOption.TotalShow.value') }}</div>
       </div>
@@ -113,19 +113,21 @@
 
     <!-- 当备注位置选择为图表上方时 -->
     <div
+      v-if="getParameter(option, 'theme.Basic.Mark.show') && getParameter(option, 'theme.Basic.Mark.position') === 'onChart'"
       class="rich-text-editor"
       style="max-height:100px;min-height: 18px;"
     >
       <span
-        v-show="getParameter(option, 'theme.Basic.Mark.show') && getParameter(option, 'theme.Basic.Mark.position') === 'onChart'"
         class="rich-text-content"
         v-html="getParameter(option, 'theme.Basic.Mark.text')"
       />
     </div>
-    <slot v-if="onLoad" />
+    <div style="position: relative;height: 100%;width: 100%;">
+      <slot v-if="onLoad" />
+    </div>
     <!-- 尾注内容 -->
     <div
-      v-show="getParameter(option, 'theme.Basic.Footer.show')"
+      v-if="getParameter(option, 'theme.Basic.Footer.show')"
       class="rich-text-footer"
     >
       <div
@@ -223,7 +225,6 @@ export default {
   },
   methods: {
     deleteBlock () {
-      console.log('触发了删除事件')
       const id = store.state.app.currentLayoutId
       if (id) {
         // 删除vuex的layout中对应的组件信息
@@ -264,6 +265,11 @@ export default {
       newLayout.x = layoutLength > 0 ? (layoutLength * 2) % 12 : 0
       newLayout.y = layoutLength > 0 ? layoutLength + 12 : 0
       store.dispatch('app/addLayout', newLayout)
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.$bus.$emit('interReload', [nanoId], 100, true)
+        }, 500)
+      })
     },
 
     sql () {
@@ -384,5 +390,7 @@ svg {
   user-select: none;
   box-sizing: border-box;
 }
-::v-deep .disabled .el-tag__close{ display: none !important;}
+::v-deep .disabled .el-tag__close {
+  display: none !important;
+}
 </style>

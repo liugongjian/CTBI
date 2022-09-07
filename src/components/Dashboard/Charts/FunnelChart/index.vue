@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%;height:100%;">
+  <div class="self-chart-content">
     <v-chart
       v-if="dataValue && dataValue.length > 0"
       :option="chartOption"
@@ -65,18 +65,19 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        if (val.dataSource.Dimension.value.length === 0) return
-        this.reloadImpl()
+        if (val.dataSource.Dimension.value.length === 0  || val.dataSource.Measure.value.length === 0) return
+        // this.reloadImpl()
+        this.getOption()
       },
       deep: true
     }
   },
   methods: {
     reloadImpl () {
-      if (this.chartData) {
-        this.formatDataValue(this.chartData)
-        this.getOption()
-      }
+      if (this.chartData.data.length === 0) return
+      this.formatDataValue(this.chartData)
+      this.getOption()
+      
     },
     formatDataValue (chartData) {
       const data = []
@@ -84,12 +85,13 @@ export default {
       const dataLabel = []
       const measureName = chartData.fields.Measure.fields[0].column
       const dimensionName = chartData.fields.Dimension.fields[0].column
+      const that = this
       // 标准数据渲染
       chartData.data.forEach(item => {
         data.push({
           // 'name': item.type,
           'name': item[dimensionName],
-          'value': item[measureName],
+          'value': Number(item[measureName]),
           'isTrans': false
         })
       })
@@ -97,7 +99,7 @@ export default {
       chartData.data.forEach((item, index) => {
         dataTrans.push({
           'name': item[dimensionName],
-          'value': item[measureName],
+          'value': Number(item[measureName]),
           'label': {
             show: true,
             backgroundColor: '#ffffff',
@@ -127,7 +129,7 @@ export default {
         if (index !== chartData.data.length - 1) {
           dataTrans.push({
             'name': item[dimensionName],
-            'value': item[measureName],
+            'value': Number(item[measureName]),
             'isTransCol': true,
             'tooltip': {
               show: false,
@@ -138,7 +140,7 @@ export default {
         } else {
           dataTrans.push({
             'name': item[dimensionName],
-            'value': item[measureName],
+            'value': Number(item[measureName]),
             'isTransCol': true,
             'itemStyle': {
               opacity: 0
@@ -378,8 +380,11 @@ export default {
     },
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
-      this.dataTransformer()
+      if (this.dataValue.length > 0) {
+        this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
+        this.dataTransformer()
+      }
+
       // 更新dataValueTmp
       this.dataValueTmp = {
         name: '漏斗图',

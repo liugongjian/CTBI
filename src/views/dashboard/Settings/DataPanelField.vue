@@ -40,7 +40,9 @@
                       style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 2px;"
                       :icon-class="typeTransform(el.attributes)"
                     />
-                    <span class="field-caption">{{ el.displayColumn }}</span>
+                    <span class="field-caption">
+                      {{ el.displayColumn }}({{ el.attributes[0].aggregator | aggregatorFilter }})
+                    </span>
                     <div class="right-hover-icons">
                       <span
                         style="cursor:pointer;margin-left:3px;"
@@ -97,7 +99,7 @@
           <span class="m-r-8">结果展示</span>
           <div>
             <input
-              v-model="limit"
+              v-model="option.dataSet.limit"
               type="number"
               class="limit-input"
             >

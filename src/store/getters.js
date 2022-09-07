@@ -13,6 +13,7 @@ const getters = {
   routes: state => state.user.routes,
   showSettings: state => state.settings.showSettings,
   tagsView: state => state.settings.tagsView,
-  visiableStyle: state => state.funnel.visiableStyle
+  visiableStyle: state => state.funnel.visiableStyle,
+  currentLayoutId: state => state.app.currentLayoutId
 }
 export default getters

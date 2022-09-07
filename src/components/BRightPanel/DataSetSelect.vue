@@ -93,7 +93,10 @@
             :expand-on-click-node="false"
             @node-click="clickTreeNode"
           >
-            <div slot-scope="{ node, data }" class="w-100p">
+            <div
+              slot-scope="{ node, data }"
+              class="w-100p"
+            >
               <div class="d-f w-100p">
                 <div>
                   <svg-icon
@@ -106,7 +109,10 @@
                   :content="data.name"
                   width="100px"
                 />
-                <span v-if="data.mold" style="font-size: 12px;flex:1;text-align:right;margin-right:10px">{{ data.mold===1?'类型: 私有':'类型: 公开' }}</span>
+                <span
+                  v-if="data.mold"
+                  style="font-size: 12px;flex:1;text-align:right;margin-right:10px"
+                >{{ data.mold===1?'类型: 私有':'类型: 公开' }}</span>
               </div>
             </div>
           </el-tree>
@@ -188,18 +194,13 @@ export default {
     filterText (val) {
       this.$refs.tree.filter(val)
     },
-    dataSet: {
+    'dataSet.id': {
       handler (val) {
+        this.$emit('refreshValue', val)
+        this.defaultExpand = []
+        this.$refs.tree?.setCurrentKey(val)
         if (val) {
-          this.$emit('refreshValue', val.id)
-          this.defaultExpand = []
-          this.defaultExpand.push(val.id)
-          if (this.$refs.tree) {
-            const id = val.id.length > 0 ? val.id : []
-            this.$refs.tree.setCurrentKey(id)
-          }
-        } else {
-          console.error('DataSetSelect: line 195 缺失参数【dataSet】', val)
+          this.defaultExpand.push(val)
         }
       },
       immediate: true,
@@ -245,7 +246,6 @@ export default {
     },
     // 点击树节点
     clickTreeNode (node) {
-      console.log(111, node)
       // 判断是否点击的不是文件夹
       if (!node.isFolder) {
         this.dataSet.id = node._id
