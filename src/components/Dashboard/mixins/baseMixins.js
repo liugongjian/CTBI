@@ -123,15 +123,22 @@ export default {
       if (this.storeOption.theme.FunctionalOption?.LabelShowType?.axisShowType === 'condense') {
         if (sdz !== 'hide' && legend.top === 'bottom') {
           this.grid.bottom = 200
-        } else if (sdz !== 'hide') {
+        } else {
           this.grid.bottom = 150
         }
+      } else {
+        if (sdz !== 'hide' && legend.top === 'bottom') {
+          this.grid.bottom = 100
+        }
       }
+      console.log(this.grid)
     },
     // 图例定位
     getLegendLayout(legend) {
       const temp = Object.assign({}, legend)
-      if (temp.top === 'bottom' && temp.left === 'center') {
+      // 缩略轴
+      const sdz = this.storeOption.theme.FunctionalOption?.DataZoom?.showDataZoom
+      if (temp.top === 'bottom' && temp.left === 'center' && sdz !== 'hide') {
         return Object.assign({}, temp, {
           top: 'auto',
           bottom: 50
