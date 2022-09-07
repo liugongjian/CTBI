@@ -8,13 +8,16 @@
     <div class="main-table">
       <el-table :data="data">
         <template v-for="(item, index) in columns">
-          <el-table-column :key="index" show-overflow-tooltip :label="item.name" :prop="item.name" />
+          <el-table-column
+            :key="index"
+            show-overflow-tooltip
+            :label="item.name"
+            :prop="item.name"
+          />
         </template>
       </el-table>
     </div>
-    <span
-      slot="footer"
-    >
+    <span slot="footer">
       <el-button @click="closeSilence()">关 闭</el-button>
       <el-button
         type="primary"
@@ -32,24 +35,24 @@ import { getCurrentLayout, isEmpty, getQueryParams } from '@/utils/optionUtils'
 export default {
   name: 'ShowDataDialog',
   mixins: [dialogMixin],
-  data() {
+  data () {
     return {
       data: '',
       columns: [],
       loading: false
     }
   },
-  mounted() {
+  mounted () {
     this.showData()
   },
   methods: {
-    async showData() {
+    async showData () {
       const currentLayout = getCurrentLayout()
       if (isEmpty(currentLayout)) {
         return
       }
       this.loading = true
-      const params = getQueryParams(100)
+      const params = getQueryParams()
       try {
         const body = { query: params.query }
         const dataSetId = params.dataSetId
@@ -68,7 +71,7 @@ export default {
 
 <style lang="scss" scoped>
 span {
-      white-space: break-spaces;
+  white-space: break-spaces;
 }
 
 .main-table {

@@ -45,13 +45,12 @@ export default {
     // 获取详细数据
     async getData(isReload = true) {
       const storeDataValue = getDataValueById(this.identify)
-      const limit = this.storeOption.dataSet.limit
       if (storeDataValue && !isReload) {
         this.chartData = deepClone(storeDataValue)
         return
       }
 
-      const params = getQueryParams(limit, this.identify)
+      const params = getQueryParams(this.identify)
       const { dataSetId, query: { dimension, measure } } = params
       // 纬度度量一个格子 拆分维度度量两个list去传参
       const DselectionsTemp = params.query.dimension.selections.filter((item) =>

@@ -366,14 +366,16 @@ export const getFieldsTable = (fields) => {
 }
 
 // 获取数据集查询数据接口的参数
-export const getQueryParams = (limit = 1000, identify) => {
+export const getQueryParams = (identify) => {
   let option = {}
   if (identify) {
     option = getLayoutOptionById(identify)
   } else {
     option = getCurrentLayoutOption()
   }
-  const { dataSource } = option
+
+  const { dataSource, dataSet } = option
+  const limit = dataSet.limit
   // 维表字段
   const dimension = { selections: [] }
   // 度量字段字段

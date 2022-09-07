@@ -42,7 +42,7 @@ export default {
         return
       }
       this.loading = true
-      const params = getQueryParams(100)
+      const params = getQueryParams()
       try {
         const body = { query: params.query }
         const dataSetId = params.dataSetId
