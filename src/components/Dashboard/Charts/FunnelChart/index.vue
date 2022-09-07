@@ -65,6 +65,7 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
+        if (val.dataSource.Dimension.value.length === 0) return
         this.reloadImpl()
       },
       deep: true
@@ -83,7 +84,6 @@ export default {
       const dataLabel = []
       const measureName = chartData.fields.Measure.fields[0].column
       const dimensionName = chartData.fields.Dimension.fields[0].column
-      const that = this
       // 标准数据渲染
       chartData.data.forEach(item => {
         data.push({
