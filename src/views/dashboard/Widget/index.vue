@@ -23,6 +23,7 @@
         :w="item.w"
         :h="item.h"
         :i="item.i"
+        drag-allow-from=".card-header-wrapper"
       >
         <ComponentBlock
           :option="item"
