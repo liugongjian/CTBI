@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="17px" viewBox="0 0 24 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 24</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FEC08B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-2">
+            <stop stop-color="#E5E5E7" offset="0%"></stop>
+            <stop stop-color="#C7C6CA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-3">
+            <stop stop-color="#C7C6CA" offset="0%"></stop>
+            <stop stop-color="#E5E5E7" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="页面设置/主题" transform="translate(-247.000000, -196.000000)" fill-rule="nonzero">
+            <g id="编组-106" transform="translate(0.000000, 92.000000)">
+                <g id="编组-146备份-2" transform="translate(247.000000, 104.000000)">
+                    <g id="编组-24" transform="translate(0.312500, 1.000000)">
+                        <path d="M5.9375,-5.74724942 C9.12953098,-5.81744518 12.0391152,-4.53943821 14.1330267,-2.4455267 C16.1721442,-0.406409227 17.4375,2.40625 17.4375,5.5 C17.4375,8.59375 16.1721442,11.4064092 14.1330267,13.4455267 C12.0391152,15.5394382 9.12953098,16.8174452 5.9375,16.7472494 L5.9375,16.7472494 L5.9375,14.0463804 C8.38698797,14.1172535 10.6213408,13.1426058 12.2257233,11.5382233 C13.7753558,9.98859077 14.7375,7.85124999 14.7375,5.5 C14.7375,3.14875001 13.7753558,1.01140923 12.2257233,-0.538223292 C10.6213408,-2.14260575 8.38698797,-3.1172535 5.9375,-3.0463804 L5.9375,-3.0463804 Z" id="路径" stroke="url(#linearGradient-1)" stroke-width="0.5" fill="url(#linearGradient-1)" transform="translate(11.687500, 5.500000) rotate(-90.000000) translate(-11.687500, -5.500000) "></path>
+                        <polygon id="路径备份-39" fill="url(#linearGradient-2)" transform="translate(11.500000, 14.062500) rotate(90.000000) translate(-11.500000, -14.062500) " points="10.5 2.5625 12.5 2.5625 12.5 25.5625 10.5 25.5625"></polygon>
+                        <path d="M8.35833333,1.14331253 C10.2434602,1.03595118 11.9702581,1.80210435 13.1992816,3.09257902 C14.3457787,4.29640092 15.0583333,5.95659295 15.0583333,7.78333333 C15.0583333,9.61007371 14.3457787,11.2702657 13.1992816,12.4740876 C11.9702581,13.7645623 10.2434602,14.5307155 8.35833333,14.4233541 L8.35833333,14.4233541 L8.35833333,12.4589862 C9.71731019,12.5702307 10.9636987,12.0266997 11.8448851,11.101454 C12.655888,10.2499009 13.1583333,9.07509295 13.1583333,7.78333333 C13.1583333,6.49157372 12.655888,5.31676575 11.8448851,4.46521265 C10.9636987,3.53996701 9.71731019,2.99643597 8.35833333,3.10768042 L8.35833333,3.10768042 Z" id="路径备份-38" stroke="url(#linearGradient-3)" stroke-width="0.7" fill="url(#linearGradient-3)" transform="translate(11.708333, 7.783333) rotate(-90.000000) translate(-11.708333, -7.783333) "></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

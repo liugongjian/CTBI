@@ -106,6 +106,8 @@ export default {
         } else if (Number(labelShow) === 1) {
           if (index === 0) {
             item.label.normal.show = true
+          } else {
+            item.label.normal.show = false
           }
         } else {
           item.label.normal.show = true

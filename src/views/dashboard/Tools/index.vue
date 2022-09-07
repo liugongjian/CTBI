@@ -35,7 +35,7 @@
       >
         <el-tooltip
           effect="dark"
-          :content="item.name"
+          :content="item.title"
           placement="top"
         >
           <img

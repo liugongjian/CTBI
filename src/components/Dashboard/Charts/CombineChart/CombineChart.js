@@ -76,11 +76,11 @@ export default {
       'LineStyle': { // 线条样式
         'type': 2 // 1曲线 2直线
       },
-      'TwisYAxis': { // 双Y轴
-        'show': false, // 是否显示双y轴复选框
-        'check': true, // 是否显示双Y轴
-        'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
-      },
+      // 'TwisYAxis': { // 双Y轴
+      //   'show': false, // 是否显示双y轴复选框
+      //   'check': true, // 是否显示双Y轴
+      //   'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
+      // },
       'Color': { // 颜色设置
         'title': '配色设置',
         'color': colorTheme['官方'],

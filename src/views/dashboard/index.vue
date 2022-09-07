@@ -309,7 +309,6 @@ export default {
       this.$router.go(-1)
     },
     saveDashboardToLocal () {
-      console.log('saveDashboardToLocal')
       const saveName = this.saveName
       this.timer = setTimeout(() => {
         if (!this.recoverVisible) {
@@ -321,19 +320,16 @@ export default {
           const saveData = localStorage.getItem(saveName)
           if (saveData) {
             if (!_.isEqual(JSON.parse(nextData), JSON.parse(saveData))) {
-              console.log('saveDashboardToLocal12345')
               this.updateLocalStorage('unsaved')
             }
           } else {
             const setting = this.dashboard.setting
             if (setting) {
               if (!_.isEqual(JSON.parse(nextData), JSON.parse(setting))) {
-                console.log('123saveDashboardToLocal')
                 this.updateLocalStorage('unsaved')
               }
             } else {
               this.updateLocalStorage('unsaved')
-              console.log('67723saveDashboardToLocal')
             }
           }
         }

@@ -6,10 +6,7 @@
       titleLinefeed : trendChartConfig.indicators=='linefeed'
     }"
   >
-    <div
-      v-if="dataValue"
-      style="width:100%;height:90%;"
-    >
+    <div v-if="dataValue" style="width:100%;height:90%;">
       <div
         v-if="dataValue && trendChartConfig.type == 'disperse'"
         class="trendTitle"
@@ -99,7 +96,7 @@
           autoresize
           :update-options="{notMerge:true}"
           @click="handleClick"
-          @mouseover="handleMouseover"
+          @mouseOver="handleMouseover"
         />
       </div>
     </div>
@@ -233,7 +230,7 @@ export default {
               var chartItemItem = [item[0], item[ctValueIndex]]
               ctDataValue.push(chartItemItem)
             })
-            series = this.getSeries(ComponentOption, FunctionalOption, ctValueIndex)
+            series = this.getSeriesSingle(ComponentOption, FunctionalOption, ctValueIndex)
             var chartItemOption = {
               index: ctValueIndex - 1,
               name: this.dataValue[0][ctValueIndex],
@@ -280,7 +277,7 @@ export default {
           }
         } else {
           // 如果是多选模式
-          series = this.getSeriess(ComponentOption, FunctionalOption)
+          series = this.getSeries(ComponentOption, FunctionalOption)
           var lineIds = []
           var lineNames = []
           // var dataValueIncludesKeys = []
@@ -353,10 +350,9 @@ export default {
           this.changeTable(this.titleList[0], 0)
         }
       }
-      console.log('123123123', this.titleList)
       this.$forceUpdate()
     },
-    getSeries (ComponentOption, FunctionalOption, ctValueIndex) {
+    getSeriesSingle (ComponentOption, FunctionalOption, ctValueIndex) {
       var series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {
@@ -368,8 +364,6 @@ export default {
       }
       this.setAxis()
       // 双Y轴设置
-      // this.twisYAxisConfig(ComponentOption)
-      // for (let i = 0; i < seriesLength; i++) {
       var i = 0
       var chartType = this.trendChartConfig.chart
       var seriesItem = {
@@ -395,7 +389,7 @@ export default {
         seriesItem.type = 'line'
       }
       series.push(seriesItem)
-      if (ComponentOption.TwisYAxis.check) {
+      if (ComponentOption.TwisYAxis?.check) {
         const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
         series[i].yAxisIndex = yAxisIndex
       }
@@ -409,7 +403,7 @@ export default {
       return series
       // }
     },
-    getSeriess (ComponentOption, FunctionalOption, index) {
+    getSeries (ComponentOption, FunctionalOption, index) {
       const dataValue = deepClone(this.dataValue)
       var series = []
       let seriesLength = 0
@@ -450,7 +444,7 @@ export default {
             seriesItem.type = 'line'
           }
           series.push(seriesItem)
-          if (ComponentOption.TwisYAxis.check) {
+          if (ComponentOption.TwisYAxis?.check) {
             const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
             series[i].yAxisIndex = yAxisIndex
           }

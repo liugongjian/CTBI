@@ -152,13 +152,13 @@ export default {
         'title': '配色设置',
         'color': colorTheme['官方'],
         'theme': '官方'
-      },
-
-      'TwisYAxis': { // 双Y轴
-        'show': true, // 是否必须显示双y轴
-        'check': false, // 是否显示双Y轴
-        'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
       }
+
+      // 'TwisYAxis': { // 双Y轴
+      //   'show': true, // 是否必须显示双y轴
+      //   'check': false, // 是否显示双Y轴
+      //   'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
+      // }
     },
     // 'StyleConfig': { // 样式配置
     //   'TrendStyleConfig': {
@@ -268,11 +268,13 @@ export default {
     'Dimension': { // 维度
       'name': '类别轴/维度',
       'require': true,
+      'limit': 1,
       'value': []
     },
     'Measure': { // 度量
       'name': '值轴/度量',
       'require': true,
+      'limit': 20,
       'value': []
     }
   },

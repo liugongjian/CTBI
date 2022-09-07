@@ -279,7 +279,6 @@ export default {
         })
         data.unshift([this.dataValue[0][0], ...indicator])
         this.dataValue = data
-        console.log(data)
       }
     },
     // 获取堆积图
@@ -295,7 +294,7 @@ export default {
       }
       this.setAxis()
       // 双Y轴设置
-      this.twisYAxisConfig(ComponentOption)
+      // this.twisYAxisConfig(ComponentOption)
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'line',
@@ -311,7 +310,7 @@ export default {
           connectNulls: this.resolveNull(FunctionalOption),
           itemStyle: this.getItemStyle(ComponentOption)// 图形样式配置-颜色
         })
-        if (ComponentOption.TwisYAxis.check) {
+        if (ComponentOption.TwisYAxis?.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
@@ -332,10 +331,10 @@ export default {
       }
       this.setAxis()
       // 双Y轴设置
-      this.twisYAxisConfig(ComponentOption)
+      // this.twisYAxisConfig(ComponentOption)
       this.valueToPercent()
       const that = this
-      if (!ComponentOption.TwisYAxis.check) {
+      if (!ComponentOption.TwisYAxis?.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
       this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
@@ -359,7 +358,7 @@ export default {
           connectNulls: this.resolveNull(FunctionalOption),
           itemStyle: this.getItemStyle(ComponentOption)// 图形样式配置-颜色
         })
-        if (ComponentOption.TwisYAxis.check) {
+        if (ComponentOption.TwisYAxis?.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
@@ -369,16 +368,16 @@ export default {
     // 双y轴设置
     twisYAxisConfig (componentOption) {
       // 双y轴设置与坐标轴设置相关联，其中关于y轴模块暂时固定，后续需切换成坐标轴设置的值
-      if (componentOption.TwisYAxis.check) {
+      if (componentOption.TwisYAxis?.check) {
         const formatter = this.type === 'PercentStackedBarChart' ? '{value}%' : '{value}'
 
         // 最大值和最小值暂时固定，后续需要修改 TODO
-        const minData1 = componentOption.TwisYAxis.twisType === 'syncAll' ? minData2 : -10
+        const minData1 = componentOption.TwisYAxis?.twisType === 'syncAll' ? minData2 : -10
         const minData2 = 0
         const maxData2 = 100
-        const maxData1 = componentOption.TwisYAxis.twisType === 'syncAll' ? maxData2 : 100
-        const intervalNum1 = componentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData1 - minData1) / 5 : null
-        const intervalNum2 = componentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null
+        const maxData1 = componentOption.TwisYAxis?.twisType === 'syncAll' ? maxData2 : 100
+        const intervalNum1 = componentOption.TwisYAxis?.twisType === 'syncTicksNum' ? (maxData1 - minData1) / 5 : null
+        const intervalNum2 = componentOption.TwisYAxis?.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null
         this.yAxis = [
           {
             type: 'value',

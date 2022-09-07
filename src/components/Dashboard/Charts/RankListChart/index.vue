@@ -1,28 +1,29 @@
 <template>
   <div style="width:100%;height:100%;">
-    <div v-if="dataValue && dataValue.tableData">
-      <table-chart
-        style="width:100%,height:100%"
-        :table-columns="dataValue.columns"
-        :table-data="dataValue.tableData"
-        :page-num.sync="pageNum"
-        :page-size.sync="pageSize"
-        :total="dataValue.total"
-        :loading="tableLoading"
-        :is-show-pagination="isShowPagination"
-        :is-show-default-option="true"
-        :stripe="stripe"
-        :border="border"
-        :header="header"
-        :sequence="sequence"
-        :sequence-name="sequenceName"
-        :row-style="rowStyle"
-        :max-number="dataValue.maxNumber"
-        :color-option="colorOption"
-        :position="position"
-        @refresh="refresh"
-      />
-    </div>
+
+    <table-chart
+      v-if="dataValue && dataValue.tableData"
+      style="width:100%,height:100%"
+      :table-columns="dataValue.columns"
+      :table-data="dataValue.tableData"
+      :page-num.sync="pageNum"
+      :page-size.sync="pageSize"
+      :total="dataValue.total"
+      :loading="tableLoading"
+      :is-show-pagination="isShowPagination"
+      :is-show-default-option="true"
+      :stripe="stripe"
+      :border="border"
+      :header="header"
+      :sequence="sequence"
+      :sequence-name="sequenceName"
+      :row-style="rowStyle"
+      :max-number="dataValue.maxNumber"
+      :color-option="colorOption"
+      :position="position"
+      @refresh="refresh"
+    />
+
     <svg-icon
       v-else
       icon-class="chart-empty-rank-list"
@@ -58,7 +59,7 @@ export default {
       tableLoading: false,
       storeOption: {},
       dataOption: [],
-      stripe: true, // 斑马线
+      stripe: false, // 斑马线
       border: false, // 线框
       header: true, // 不显示列头
       sequence: false, // 是否展示序号
@@ -71,7 +72,7 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        console.log(val, 'val')
+        // console.log(val, 'val')
         this.sequenceName = val.theme.StyleConfig.Rank.title
         this.header = val.theme.StyleConfig.Rank.show
         this.colorOption = val.theme.StyleConfig.Rank.color

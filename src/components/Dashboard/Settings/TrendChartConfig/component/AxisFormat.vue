@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-09-01 14:07:40
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-07 11:26:10
+ * @Description:
+-->
 <template>
   <div>
     <span>轴标签显示格式设置</span>
@@ -5,7 +12,7 @@
       <el-radio-group v-model="data.type" class="box_type">
         <el-radio label="auto">自动适配</el-radio>
         <el-radio label="hand">手动输入</el-radio>
-        <el-radio label="custom">自定义适配</el-radio>
+        <!-- <el-radio label="custom">自定义适配</el-radio> -->
       </el-radio-group>
     </div>
     <el-select v-if="data.type === 'auto'" v-model="data.auto" class="box" placeholder="请选择">

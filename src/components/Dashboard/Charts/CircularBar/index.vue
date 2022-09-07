@@ -1,27 +1,72 @@
 <template>
-  <div class="self-chart-content">
+  <div style="width:100%;height:100%;">
     <v-chart
       v-if="dataValue"
       :option="chartOption"
       :update-options="{notMerge:true}"
       autoresize
     />
-    <svg-icon
-      v-else
-      icon-class="chart-empty-bar"
-      class="chart-empty-svg"
-    />
+    <div v-else>数据为空</div>
   </div>
 </template>
 
 <script>
 import barMixins from '@/components/Dashboard/mixins/barMixins'
 export default {
-  name: 'BarChart',
+  name: 'CircularBar',
   mixins: [barMixins],
   data () {
     return {
-      type: 'BarChart'// 图表类型 1.柱图；2.堆积柱状图；3.百分比堆积柱状图
+      type: 'CircularBar' // 图表类型 环形柱状图
+      // option: {
+      //   title: [
+      //     {
+      //       text: 'Tangential Polar Bar Label Position (middle)'
+      //     }
+      //   ],
+      //   polar: {
+      //     radius: [30, '80%']
+      //   },
+      //   angleAxis: {
+      //     max: function(v) {
+      //       return 1.25 * v.max
+      //     },
+      //     axisLine: {
+      //       show: false // 外圆线隐藏
+      //     },
+      //     axisLabel: {
+      //       show: false // 外围刻度隐藏
+      //     },
+      //     axisTick: {
+      //       show: false // 刻度单位隐藏
+      //     },
+      //     splitLine: {
+      //       show: false // 刻度线隐藏
+      //     }
+      //     // startAngle: 90
+      //   },
+      //   radiusAxis: {
+      //     type: 'category',
+      //     axisLine: {
+      //       show: false
+      //     },
+      //     axisTick: {
+      //       show: false // 刻度单位隐藏
+      //     },
+      //     data: ['a', 'b', 'c', 'd']// 从类别轴、维度中的数据提取出每个数值的name
+      //   },
+      //   tooltip: {
+      //     formatter: '{b}换行  值轴/度量： {c}'
+      //   },
+      //   series: {
+      //     type: 'bar',
+      //     data: [2, 1.2, 2.4, 3.6],
+      //     coordinateSystem: 'polar',
+      //     label: {
+      //       show: false
+      //     }
+      //   }
+      // }
     }
   },
   methods: {
@@ -54,10 +99,6 @@ export default {
       this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
         legendData.push({ name: item.value })
       })
-
-      // 获取y轴配置信息，用于提取单位信息
-      const { Axis: { YAxis } } = this.storeOption.theme
-
       this.chartOption = {
         'grid': this.grid,
         'color': colorOption,
@@ -66,13 +107,8 @@ export default {
           data: legendData
         },
         'xAxis': this.xAxis,
-        tooltip: {
-          axisPointer: {
-            type: 'shadow'
-          },
-          formatter: (params) => {
-            return params.name + '</br>' + params.marker + ' ' + params.seriesName + '：' + params.value[params.seriesIndex + 1] + (YAxis.unit || '')
-          }
+        'tooltip': {
+          trigger: 'axis'
         },
         'yAxis': this.yAxis,
         'markPoint': this.markPoint,
@@ -103,7 +139,7 @@ export default {
       this.setAxis()
 
       // 双Y轴设置
-      // this.twisYAxisConfig(componentOption)
+      this.twisYAxisConfig(componentOption)
 
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
@@ -118,7 +154,7 @@ export default {
           },
           itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
         })
-        if (componentOption.TwisYAxis?.check) {
+        if (componentOption.TwisYAxis.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
         }

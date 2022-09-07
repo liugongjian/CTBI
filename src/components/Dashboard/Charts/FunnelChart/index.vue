@@ -65,7 +65,7 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        this.reloadImpl()
+        this.getOption()
       },
       deep: true
     }
@@ -81,21 +81,23 @@ export default {
       const data = []
       const dataTrans = []
       const dataLabel = []
-      const key = chartData.fields.Measure.fields[0].column
+      const measureName = chartData.fields?.Measure.fields[0].column
+      const dimensionName = chartData.fields?.Dimension.fields[0].column
       const that = this
       // 标准数据渲染
       chartData.data.forEach(item => {
         data.push({
-          'name': item.type,
-          'value': item[key],
+          // 'name': item.type,
+          'name': item[dimensionName],
+          'value': Number(item[measureName]),
           'isTrans': false
         })
       })
       // 转化分析数据渲染
       chartData.data.forEach((item, index) => {
         dataTrans.push({
-          'name': item.type,
-          'value': item[key],
+          'name': item[dimensionName],
+          'value': Number(item[measureName]),
           'label': {
             show: true,
             backgroundColor: '#ffffff',
@@ -124,8 +126,8 @@ export default {
         }
         if (index !== chartData.data.length - 1) {
           dataTrans.push({
-            'name': item.type,
-            'value': item[key],
+            'name': item[dimensionName],
+            'value': Number(item[measureName]),
             'isTransCol': true,
             'tooltip': {
               show: false,
@@ -135,8 +137,8 @@ export default {
           })
         } else {
           dataTrans.push({
-            'name': item.type,
-            'value': item[key],
+            'name': item[dimensionName],
+            'value': Number(item[measureName]),
             'isTransCol': true,
             'itemStyle': {
               opacity: 0
@@ -269,9 +271,9 @@ export default {
       }
       chartData.data.forEach((item, index) => {
         dataLabel.push({
-          'name': item.type,
+          'name': item[dimensionName],
           'value': 0,
-          'visiableVal': item[key],
+          'visiableVal': item[measureName],
           'isTransCol': false,
           'label': {
             show: true,
@@ -280,9 +282,9 @@ export default {
         })
         if (index !== chartData.data.length - 1) {
           dataLabel.push({
-            'name': item.type,
+            'name': item[dimensionName],
             'value': 0,
-            'visiableVal': item[key],
+            'visiableVal': item[measureName],
             'isTransCol': true,
             'label': {
               show: false
@@ -291,9 +293,9 @@ export default {
           })
         } else {
           dataLabel.push({
-            'name': item.type,
+            'name': item[dimensionName],
             'value': 0,
-            'visiableVal': item[key],
+            'visiableVal': item[measureName],
             'isFinal': true,
             'label': {
               show: false
@@ -376,8 +378,11 @@ export default {
     },
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
-      this.dataTransformer()
+      if (this.dataValue.length > 0) {
+        this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
+        this.dataTransformer()
+      }
+
       // 更新dataValueTmp
       this.dataValueTmp = {
         name: '漏斗图',
@@ -465,7 +470,7 @@ export default {
             // 转化分析中lastData，firstData数据没有对齐
             // 转化分析隔开 tooltip
             const index = that.storeOption.theme?.Basic?.VisualStyle.VisualStyle === 'funnel-horizontal' && (index / 2).toString().indexOf('.') < 0 ? (params.dataIndex / 2) : params.dataIndex
-            const firstline = that.lastData[index]['name'] ? that.lastData[index]['name'] + ' : ' + that.dataValue[index]['value'] : '未命名' + ' : ' + that.dataValue[index]['value']
+            const firstline = that.lastData[index]['name'] ? that.lastData[index]['name'] + ' : ' + (that.dataValue[index]['value']).toFixed(3) : '未命名' + ' : ' + (that.dataValue[index]['value']).toFixed(3)
             const secondline = '占上一层的百分比 : ' + that.lastData[index]['value'] + '%'
             const thirdline = '占第一层的百分比 : ' + that.firstData[index]['value'] + '%'
             const tip = firstline + '<br/>' + secondline + '<br/>' + thirdline
@@ -477,6 +482,7 @@ export default {
     },
     // 静态样式初始化
     displayStyleHandler (item) {
+      console.log('dadadada2')
       if (item.horizontal) {
         this.transStyle = 'horizontal'
         this.borderRadius = [0, 20, 20, 0]
@@ -529,12 +535,14 @@ export default {
           // 占上一层的百分比
           for (let i = 1; i < tmp.length; i++) {
             tmp[i]['value'] = (this.transTmpData[i]['value'] / this.transTmpData[i - 1]['value']).toFixed(3) * 100
+            tmp[i]['value'] = +(tmp[i]['value']).toFixed(3)
           }
           tmp[0]['value'] = 100
         } else if (item.calcMethod === 'first') {
           // 占第一层的百分比
           tmp.map((item, index) => {
             tmp[index].value = ((item.value / tmp[0]['value'])).toFixed(3) * 100
+            tmp[index].value = +(tmp[index].value).toFixed(3)
           })
         }
         this.calcData = tmp
@@ -554,7 +562,7 @@ export default {
         } else if (item.dataLabel === 'coMe') {
           // 转化率加度量值
           for (let i = 0; i < tmpPercent.length; i++) {
-            this.calcData[i]['value'] = tmpValue[i]['value'] + ' (' + tmpPercent[i]['value'] + '%)'
+            this.calcData[i]['value'] = +(tmpValue[i]['value']).toFixed(3) + ' (' + (tmpPercent[i]['value']).toFixed(3) + '%)'
           }
           this.labelFormatter = '{c}'
         }
@@ -567,12 +575,14 @@ export default {
       // 占上一层的百分比
       for (let i = 1; i < tmpLast.length; i++) {
         tmpLast[i]['value'] = (this.transTmpData[i]['value'] / this.transTmpData[i - 1]['value']).toFixed(3) * 100
+        tmpLast[i]['value'] = +(tmpLast[i]['value']).toFixed(3)
       }
       tmpLast[0]['value'] = 100
       this.lastData = tmpLast
       // 占第一层的百分比
       tmpFirst.map((item, index) => {
         tmpFirst[index].value = ((item.value / tmpFirst[0]['value'])).toFixed(3) * 100
+        tmpFirst[index].value = +(tmpFirst[index].value).toFixed(3)
       })
       this.firstData = tmpFirst
     }
