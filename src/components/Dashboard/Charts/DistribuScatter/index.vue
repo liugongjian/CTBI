@@ -49,7 +49,6 @@ export default {
           return item.i === this.identify
         })
         if (isData !== -1) {
-          console.log(val, 'dataO')
           this.dataValue = this.formatData(deepClone(getDataValueById(this.identify)))
           this.getOption()
         }
@@ -100,15 +99,15 @@ export default {
         for (const key in fields) {
           // 获取Y轴/度量
           if (key === 'MeasureSecond') {
-            MeasureSecondKey = fields[key]['fields'][0].column
-            data.forEach((item) => { MeasureSecond.push(item[MeasureSecondKey]) })
+            MeasureSecondKey = fields[key]['fields'][0].displayColumn
+            data.forEach((item) => { MeasureSecond.push(Number(item[MeasureSecondKey])) })
           }
           // 获取x轴
           if (key === 'Measure') {
             fields[key]['fields'].forEach((field, index) => {
               obj[index] = {
-                x: field.column,
-                data: data.map(item => [item[field.column]])
+                x: field.displayColumn,
+                data: data.map(item => [item[field.displayColumn]])
               }
             })
           }
@@ -116,7 +115,7 @@ export default {
         obj.forEach(item => {
           item.y = MeasureSecondKey
           item.data.forEach((items, index) => {
-            items[1] = MeasureSecond[index]
+            items[1] = Number(MeasureSecond[index])
           })
         })
       }

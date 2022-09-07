@@ -169,7 +169,7 @@ export default {
       const { Basic: { VisualStyle: { style } }, ComponentOption, StyleConfig } = this.storeOption.theme
       const { ConfigSize } = ComponentOption
       const { Label, Scale } = StyleConfig
-      if (this.dataValue?.length > 0) {
+      if (this.dataValue) {
         this.setStyle(style)
         this.setConfigSize(ConfigSize)
         this.setConfigLabel(Label)

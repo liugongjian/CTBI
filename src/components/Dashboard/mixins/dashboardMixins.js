@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-04 12:46:01
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-07 12:04:26
+ * @LastEditTime: 2022-09-07 14:17:14
  * @Description:
  */
 // 仪表盘的混入
@@ -43,7 +43,7 @@ export default {
         if (index === 0) {
           obj.name = data[index][1]
         } else {
-          obj.value += data[index][1]
+          obj.value += Number(data[index][1])
         }
       }
       return obj
