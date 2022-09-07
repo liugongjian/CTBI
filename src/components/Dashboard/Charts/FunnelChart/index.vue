@@ -65,7 +65,7 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        this.reloadImpl()
+        this.getOption()
       },
       deep: true
     }
@@ -81,15 +81,15 @@ export default {
       const data = []
       const dataTrans = []
       const dataLabel = []
-      const measureName = chartData.fields.Measure.fields[0].column
-      const dimensionName = chartData.fields.Dimension.fields[0].column
+      const measureName = chartData.fields?.Measure.fields[0].column
+      const dimensionName = chartData.fields?.Dimension.fields[0].column
       const that = this
       // 标准数据渲染
       chartData.data.forEach(item => {
         data.push({
           // 'name': item.type,
           'name': item[dimensionName],
-          'value': item[measureName],
+          'value': Number(item[measureName]),
           'isTrans': false
         })
       })
@@ -97,7 +97,7 @@ export default {
       chartData.data.forEach((item, index) => {
         dataTrans.push({
           'name': item[dimensionName],
-          'value': item[measureName],
+          'value': Number(item[measureName]),
           'label': {
             show: true,
             backgroundColor: '#ffffff',
@@ -127,7 +127,7 @@ export default {
         if (index !== chartData.data.length - 1) {
           dataTrans.push({
             'name': item[dimensionName],
-            'value': item[measureName],
+            'value': Number(item[measureName]),
             'isTransCol': true,
             'tooltip': {
               show: false,
@@ -138,7 +138,7 @@ export default {
         } else {
           dataTrans.push({
             'name': item[dimensionName],
-            'value': item[measureName],
+            'value': Number(item[measureName]),
             'isTransCol': true,
             'itemStyle': {
               opacity: 0
@@ -378,8 +378,11 @@ export default {
     },
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
-      this.dataTransformer()
+      if (this.dataValue.length > 0) {
+        this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
+        this.dataTransformer()
+      }
+
       // 更新dataValueTmp
       this.dataValueTmp = {
         name: '漏斗图',
@@ -479,6 +482,7 @@ export default {
     },
     // 静态样式初始化
     displayStyleHandler (item) {
+      console.log('dadadada2')
       if (item.horizontal) {
         this.transStyle = 'horizontal'
         this.borderRadius = [0, 20, 20, 0]
