@@ -118,12 +118,13 @@ export default {
       }
 
       // 缩略轴
+      debugger
       const sdz = this.storeOption.theme.FunctionalOption?.DataZoom?.showDataZoom
       // 是否最多展示
       if (this.storeOption.theme.FunctionalOption?.LabelShowType?.axisShowType === 'condense') {
-        if (sdz === 'show' && legend.top === 'bottom') {
+        if (sdz !== 'hide' && legend.top === 'bottom') {
           this.grid.bottom = 200
-        } else if (sdz === 'show') {
+        } else if (sdz !== 'hide') {
           this.grid.bottom = 150
         }
       }
