@@ -118,7 +118,6 @@ export default {
       }
 
       // 缩略轴
-      debugger
       const sdz = this.storeOption.theme.FunctionalOption?.DataZoom?.showDataZoom
       // 是否最多展示
       if (this.storeOption.theme.FunctionalOption?.LabelShowType?.axisShowType === 'condense') {
