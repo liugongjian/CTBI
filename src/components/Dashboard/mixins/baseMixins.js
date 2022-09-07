@@ -34,7 +34,7 @@ export default {
     async interReload (ids, limit, isReload) {
       if (ids && ids.indexOf(this.identify) > -1) {
         try {
-          await this.getData(limit, isReload)
+          await this.getData(isReload)
           this.reloadImpl()
         } catch (e) {
           // do nothing
@@ -43,8 +43,9 @@ export default {
       }
     },
     // 获取详细数据
-    async getData(limit = 1000, isReload = true) {
+    async getData(isReload = true) {
       const storeDataValue = getDataValueById(this.identify)
+      const limit = this.storeOption.dataSet.limit
       if (storeDataValue && !isReload) {
         this.chartData = deepClone(storeDataValue)
         return

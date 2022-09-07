@@ -230,7 +230,8 @@ export const formatDataValue = function (chartData) {
         dimensionData.push(item[dim])
       })
       MeasureKey.forEach(mea => {
-        measureData.push(item[mea]?.toString().match(/\d+(?:\.\d+)?/g, ''))
+        const m = item[mea]?.toString().search(/-?(0|[1-9]\d*)(\.\d+)?/g, '')
+        measureData.push(m[0] || item[mea])
       })
       dataValue.push([dimensionData.join('-'), ...measureData])
     })
@@ -365,7 +366,7 @@ export const getFieldsTable = (fields) => {
 }
 
 // 获取数据集查询数据接口的参数
-export const getQueryParams = (limit, identify) => {
+export const getQueryParams = (limit = 1000, identify) => {
   let option = {}
   if (identify) {
     option = getLayoutOptionById(identify)
