@@ -1,7 +1,15 @@
 <template>
   <div style="width: 100%; height: 100%">
-    <v-chart v-if="dataValue && dataValue.length > 0" :option="chartOption" autoresize />
-    <svg-icon v-else icon-class="chart-empty-distribute-scatter" style="width:100%;height:100%;" />
+    <v-chart
+      v-if="dataValue && dataValue.length > 0"
+      :option="chartOption"
+      autoresize
+    />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-distribute-scatter"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -18,7 +26,7 @@ export default {
       default: ''
     }
   },
-  data() {
+  data () {
     return {
       storeOption: {},
       chartOption: {},
@@ -27,7 +35,7 @@ export default {
   },
   watch: {
     storeOption: {
-      handler(val) {
+      handler (val) {
         if (this.dataValue.length > 0) {
           this.dataValue = this.formatData(deepClone(getDataValueById(this.identify)))
           this.getOption()
@@ -36,12 +44,11 @@ export default {
       deep: true
     },
     dataOption: {
-      handler(val) {
+      handler (val) {
         const isData = val.findIndex(item => {
           return item.i === this.identify
         })
         if (isData !== -1) {
-          console.log(val, 'dataO')
           this.dataValue = this.formatData(deepClone(getDataValueById(this.identify)))
           this.getOption()
         }
@@ -49,12 +56,12 @@ export default {
       deep: true
     }
   },
-  mounted() {
+  mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
     this.dataOption = store.state.app.dataOption
   },
   methods: {
-    getOption() {
+    getOption () {
       const { Legend } = this.storeOption.theme.ComponentOption
       const { XAxis, YAxis } = this.storeOption.theme.Axis
       const { SeriesSelect } = this.storeOption.theme.SeriesSetting
@@ -83,7 +90,7 @@ export default {
         series: this.getSeries()
       }
     },
-    formatData(dataValue) {
+    formatData (dataValue) {
       const obj = []
       const MeasureSecond = []
       let MeasureSecondKey = ''
@@ -92,15 +99,15 @@ export default {
         for (const key in fields) {
           // 获取Y轴/度量
           if (key === 'MeasureSecond') {
-            MeasureSecondKey = fields[key]['fields'][0].column
-            data.forEach((item) => { MeasureSecond.push(item[MeasureSecondKey]) })
+            MeasureSecondKey = fields[key]['fields'][0].displayColumn
+            data.forEach((item) => { MeasureSecond.push(Number(item[MeasureSecondKey])) })
           }
           // 获取x轴
           if (key === 'Measure') {
             fields[key]['fields'].forEach((field, index) => {
               obj[index] = {
-                x: field.column,
-                data: data.map(item => [item[field.column]])
+                x: field.displayColumn,
+                data: data.map(item => [item[field.displayColumn]])
               }
             })
           }
@@ -108,13 +115,13 @@ export default {
         obj.forEach(item => {
           item.y = MeasureSecondKey
           item.data.forEach((items, index) => {
-            items[1] = MeasureSecond[index]
+            items[1] = Number(MeasureSecond[index])
           })
         })
       }
       return obj
     },
-    getXAxis(XAxis, SeriesSelect) {
+    getXAxis (XAxis, SeriesSelect) {
       const array = []
       this.dataValue.forEach((item, index) => {
         const name = SeriesSelect.selectValue === item.x ? (SeriesSelect.remark || item.x) : item.x
@@ -163,7 +170,7 @@ export default {
       })
       return array
     },
-    getYAxis(YAxis) {
+    getYAxis (YAxis) {
       const array = []
       this.dataValue.forEach((item, index) => {
         const name = YAxis.title ? YAxis.title : item.y
@@ -206,7 +213,7 @@ export default {
       })
       return array
     },
-    getSeries() {
+    getSeries () {
       const array = []
       this.dataValue.forEach((item, index) => {
         array.push({
@@ -220,7 +227,7 @@ export default {
       })
       return array
     },
-    getGrid() {
+    getGrid () {
       const array = []
       this.dataValue.forEach((item, index) => {
         const width = (1 / this.dataValue.length * 90).toFixed(0)

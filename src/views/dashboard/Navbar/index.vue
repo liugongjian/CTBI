@@ -455,7 +455,6 @@ export default {
       })
     },
     async saveTemplate () {
-      console.log(this.dashboard)
       const tip = this.testNameValid()
       if (tip) {
         this.$message.warning(tip)

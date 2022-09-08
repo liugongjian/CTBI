@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="194px" height="215px" viewBox="0 0 194 215" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-60备份" transform="translate(2.000000, 0.000000)" fill-rule="nonzero">
+            <g id="编组-32备份-4" transform="translate(52.000000, 0.000000)">
+                <polygon id="路径" fill-opacity="0.85" fill="#ECECEC" points="0 4 5.68811115 4 5.68811115 9.94690265 0 9.94690265"></polygon>
+                <text id="Order-number" font-family="Helvetica" font-size="12" font-weight="normal" fill="#DCDCDC">
+                    <tspan x="11" y="11">Order number</tspan>
+                </text>
+            </g>
+            <g id="编组-59" transform="translate(0.000000, 23.000000)">
+                <text id="type1" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="55" y="11">type1</tspan>
+                </text>
+                <text id="type2" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="55" y="28.6666667">type2</tspan>
+                </text>
+                <text id="type3" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="55" y="46.3333333">type3</tspan>
+                </text>
+                <text id="type4" font-family="Helvetica" font-size="12" font-weight="normal" fill="#E0E0E0">
+                    <tspan x="55" y="64">type4</tspan>
+                </text>
+                <path d="M96,53 C118.246806,53 136.634331,70.4070298 137.927868,92.6921091 C139.221404,114.977188 122.972158,134.408476 100.875777,137 L99.4569599,124.819751 C115.123447,122.982342 126.644275,109.205425 125.727149,93.4051489 C124.810022,77.6048733 111.77314,65.2631686 96,65.2631686 L96,53 Z" id="路径" stroke="#FFFFFF" stroke-width="3" fill="#C2C2C2"></path>
+                <path d="M95.6257953,34 C119.088798,34 140.426818,47.5094759 150.342711,68.6422427 C160.258605,89.7750095 156.956259,114.703188 141.874531,132.565374 C126.792804,150.427561 102.66352,157.988291 80,151.953297 L83.2118274,140.040964 C101.216941,144.835487 120.386535,138.828838 132.368266,124.638161 C144.349997,110.447485 146.973558,90.643206 139.095841,73.8542053 C131.218125,57.0652046 114.26606,46.332554 95.6257953,46.332554 L95.6257953,34 Z" id="路径" stroke="#FFFFFF" stroke-width="3" fill="#D1D1D1"></path>
+                <path d="M96.4096344,17 C137.508154,17 171.477077,49.0102312 173.866743,89.9908322 C176.25641,130.971433 146.237721,166.704123 105.417095,171.469743 C64.5964691,176.235363 27.136683,148.380474 20,107.954066 L32.140749,105.815849 C38.1434823,139.818894 69.6512722,163.247911 103.985897,159.239502 C138.320522,155.231093 163.569532,125.17598 161.559561,90.7067986 C159.549589,56.2376172 130.977998,29.3135009 96.4096344,29.3135009 L96.4096344,17 Z" id="路径" stroke="#FFFFFF" stroke-width="3" fill="#E5E5E5"></path>
+                <path d="M95,0 C147.467051,0 190,42.5329488 190,95 C190,147.467051 147.467051,190 95,190 C42.5329488,190 0,147.467051 0,95 L12.3021583,95 C12.3021583,140.672757 49.3272432,177.697842 95,177.697842 C140.672757,177.697842 177.697842,140.672757 177.697842,95 C177.697842,49.3272432 140.672757,12.3021583 95,12.3021583 L95,0 Z" id="路径" stroke="#FFFFFF" stroke-width="3" fill="#F1F1F1"></path>
+            </g>
+        </g>
+    </g>
+</svg>

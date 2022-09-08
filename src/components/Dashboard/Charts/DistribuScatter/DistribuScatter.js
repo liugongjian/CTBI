@@ -2,6 +2,7 @@
 * 分布散点图
 * */
 import { colorTheme } from '@/constants/color.js'
+import { defaultDataLimit } from '@/constants/constants'
 export default {
   'type': 'relation', // 组件类型, 用于管理组件类型集合,例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -117,6 +118,7 @@ export default {
   }, // 数据集
   'dataSet': {
     'id': '',
-    'name': ''
+    'name': '', // 数据集名称
+    'limit': defaultDataLimit // 结果展示字段限制
   }
 }

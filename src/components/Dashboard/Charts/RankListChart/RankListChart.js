@@ -1,8 +1,8 @@
 /*
  * @Author: qinruibin
  * @Date: 2022-08-04 14:13:56
- * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-18 14:31:46
+ * @LastEditors: qinruibin
+ * @LastEditTime: 2022-09-06 16:48:10
  * @Description:
  */
 /**
@@ -22,6 +22,7 @@
  *    other: 其他
  *  }
  * */
+import { defaultDataLimit } from '@/constants/constants'
 export default {
   'type': 'comparator', // 组件类型, 用于管理组件类型集合，例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -60,12 +61,12 @@ export default {
       }
     },
     'StyleConfig': { // 样式配置
-      'Rank': { // 区间设置 // 2022/04/18暂时先不做
+      'Rank': { // 区间设置
         'show': true,
         'title': '排序',
-        'format': 'all',
+        // 'format': 'all',
         'position': 'right',
-        'rank': true,
+        // 'rank': true,
         'color': '#1B7CFF',
         'type': 'original' // original percentage
       }
@@ -88,6 +89,7 @@ export default {
   }, // 数据集
   'dataSet': { // 当前正在使用的数据集
     'id': '', // 数据集ID
-    'name': '' // 数据集名称
+    'name': '', // 数据集名称
+    'limit': defaultDataLimit // 结果展示字段限制
   }
 }

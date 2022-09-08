@@ -114,7 +114,7 @@
             </div>
             <div v-show="!toggleContent">
               <div class="side-top-label"><span>当前数据源</span></div>
-              <div><span class="side-top-text">{{ editDataInfo.displayName }}</span></div>
+              <div><span class="side-top-text">{{ currentDataSourceName }}</span></div>
             </div>
           </div>
           <!-- 收缩按钮 -->
@@ -241,6 +241,9 @@ export default {
       regex: regex,
       // 数据集名称是否错误
       isErrorName: false,
+      // 控制是否已保存过数据集
+      isSaved: false,
+      currentDataSourceName: '', // 当前数据源
       errorInputText: '',
       // 回显&提交的数据
       dataInfo: {
@@ -326,6 +329,9 @@ export default {
   },
   methods: {
     beforeunloadHandler (e) {
+      if (this.isSaved) {
+        return
+      }
       e = e || window.event
       if (e) {
         e.returnValue = '你所做的更改可能未保存。'
@@ -374,11 +380,19 @@ export default {
           }
           this.saveBtnLoading = true
           updateDataSet(body._id, body).then(res => {
+            this.isSaved = true
             this.$message({
               message: '保存成功',
               type: 'success'
             })
-            this.$router.go(-1)
+            setTimeout(() => {
+              const mode = this.$route.query.mode
+              if (mode === 'window') {
+                window.close()
+              } else {
+                this.$router.go(-1)
+              }
+            }, 2500)
           }).finally(e => {
             this.saveBtnLoading = false
           })
@@ -481,9 +495,14 @@ export default {
       this.editLoading = false
     },
     checkExit () {
-      this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内容将不被保存，请问您是否确认返回？', title: '提示' }, () => {
-        this.$router.go(-1)
-      })
+      const mode = this.$route.query.mode
+      if (mode === 'window') {
+        window.close()
+      } else {
+        this.$dialog.show('TipDialog', { content: '您还未对此次代码的编辑进行确认，若此时返回，本次编辑内容将不被保存，请问您是否确认返回？', title: '提示' }, () => {
+          this.$router.go(-1)
+        })
+      }
     },
     handlerToggleContent () {
       // 判断数据是否发生变更
@@ -508,6 +527,13 @@ export default {
       try {
         const { list } = await getDataSourceData()
         this.dataSourceOptions = list
+        const dataSourceId = this.editDataInfo && this.editDataInfo.dataSourceId
+        if (dataSourceId) {
+          const dataSource = list.find(item => item._id === dataSourceId)
+          if (dataSource) {
+            this.currentDataSourceName = dataSource.displayName
+          }
+        }
       } catch (error) {
         console.log(error)
       }

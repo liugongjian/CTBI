@@ -15,6 +15,7 @@
  * */
 
 import { colorTheme } from '@/constants/color.js'
+import { defaultDataLimit } from '@/constants/constants'
 export default {
   'type': 'trend', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -83,12 +84,12 @@ export default {
         'title': '配色设置',
         'color': colorTheme['官方'],
         'theme': '官方'
-      },
-      'TwisYAxis': { // 双Y轴
-        'show': true, // 是否必须显示双y轴
-        'check': false, // 是否显示双Y轴
-        'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
       }
+      // 'TwisYAxis': { // 双Y轴
+      //   'show': true, // 是否必须显示双y轴
+      //   'check': false, // 是否显示双Y轴
+      //   'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
+      // }
     },
     'Axis': { // 轴设置
       'XAxis': { // X轴设置
@@ -137,7 +138,7 @@ export default {
     },
     'FunctionalOption': {
       'DataZoom': {
-        'showDataZoom': 'hide'
+        'showDataZoom': 'auto'
       },
       'LabelShowType': {
         'axisShowType': 'auto'
@@ -193,6 +194,7 @@ export default {
   }, // 数据集
   'dataSet': { // 当前正在使用的数据集
     'id': '', // 数据集ID
-    'name': '' // 数据集名称
+    'name': '', // 数据集名称
+    'limit': defaultDataLimit // 结果展示字段限制
   }
 }

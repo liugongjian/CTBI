@@ -230,7 +230,8 @@ export const formatDataValue = function (chartData) {
         dimensionData.push(item[dim])
       })
       MeasureKey.forEach(mea => {
-        measureData.push(item[mea].match(/\d+(?:\.\d+)?/g, ''))
+        const m = item[mea]?.toString().search(/-?(0|[1-9]\d*)(\.\d+)?/g, '')
+        measureData.push(m[0] || item[mea])
       })
       dataValue.push([dimensionData.join('-'), ...measureData])
     })
@@ -244,11 +245,14 @@ export const formatDataValue = function (chartData) {
  * @returns {String}
  */
 export const transformDataTypeIcon = function (data) {
-  let type = data
+  let type = ''
+  if (typeof data === 'string') {
+    type = data
+  } else {
+    type = data[0].granularity || data[0].dataType
+  }
+
   if (type) {
-    if (typeof type !== 'string') {
-      type = data[0].dataType || ''
-    }
     if (type.indexOf('text') > -1 ||
       type.indexOf('char') > -1 ||
       type.indexOf('varChar') > -1 ||
@@ -329,6 +333,14 @@ export const getFieldsTable = (fields) => {
     if (!item.attributes[0].comment) {
       item.attributes[0].comment = ''
     }
+    // 默认展示格式
+    if (!item.attributes[0].format) {
+      item.attributes[0].format = ''
+    }
+    // 默认聚合方式
+    if (!item.attributes[0].aggregator) {
+      item.attributes[0].aggregator = 'sum'
+    }
     if (item.type === 'Dimension') {
       if (item.attributes[0].isHidden) {
         dimensionHiddenLength += 1
@@ -357,14 +369,16 @@ export const getFieldsTable = (fields) => {
 }
 
 // 获取数据集查询数据接口的参数
-export const getQueryParams = (limit, identify) => {
+export const getQueryParams = (identify) => {
   let option = {}
   if (identify) {
     option = getLayoutOptionById(identify)
   } else {
     option = getCurrentLayoutOption()
   }
-  const { dataSource } = option
+
+  const { dataSource, dataSet } = option
+  const limit = dataSet.limit
   // 维表字段
   const dimension = { selections: [] }
   // 度量字段字段

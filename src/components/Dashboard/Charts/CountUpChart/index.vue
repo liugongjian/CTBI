@@ -7,22 +7,53 @@
 -->
 <template>
   <div style="width: 100%; height: 100%">
-    <div v-if="dataValue.length>0" class="count-wrap">
-      <div class="count-box" :style="getPosition">
-        <div class="count-name" :style="getMeasure">
-          <div v-show="storeOption.theme.StyleConfig.IndicatorPic.check" class="round" :style="getRound(dataValue[0].title)">
+    <div
+      v-if="dataValue.length>0"
+      class="count-wrap"
+    >
+      <div
+        class="count-box"
+        :style="getPosition"
+      >
+        <div
+          class="count-name"
+          :style="getMeasure"
+        >
+          <div
+            v-show="storeOption.theme.StyleConfig.IndicatorPic.check"
+            class="round"
+            :style="getRound(dataValue[0].title)"
+          >
             <ImgIcon :data="getSvgIcon(dataValue[0].title)" />
           </div>
           {{ dataValue[0].title }}
         </div>
-        <div class="count-content" :style="getContent">
-          <span class="prefix" :style="getPrefixOrSuffix">{{ getPrefix(dataValue[0]) }}</span>
-          <CountTo :start-val="startVal" :end-val="Number(dataValue[0].value)" :duration="2500" class="count-number" />
-          <span class="suffix" :style="getPrefixOrSuffix">{{ getSuffix(dataValue[0]) }}</span>
+        <div
+          class="count-content"
+          :style="getContent"
+        >
+          <span
+            class="prefix"
+            :style="getPrefixOrSuffix"
+          >{{ getPrefix(dataValue[0]) }}</span>
+          <CountTo
+            :start-val="startVal"
+            :end-val="Number(dataValue[0].value)"
+            :duration="2500"
+            class="count-number"
+          />
+          <span
+            class="suffix"
+            :style="getPrefixOrSuffix"
+          >{{ getSuffix(dataValue[0]) }}</span>
         </div>
       </div>
     </div>
-    <div v-else class="empty">数据为空</div>
+    <svg-icon
+      v-else
+      icon-class="chart-empty-count-up"
+      style="width:100%;height:100%;"
+    />
   </div>
 </template>
 
@@ -55,20 +86,20 @@ export default {
     }
   },
   computed: {
-    getPrefix() {
+    getPrefix () {
       const { IndicatorSeries } = this.storeOption.theme.SeriesSetting
-      return function({ title, value }) {
+      return function ({ title, value }) {
         return IndicatorSeries.dataSeries?.find(item => item.title === title)?.prefix || ''
       }
     },
-    getSuffix() {
+    getSuffix () {
       const { IndicatorSeries } = this.storeOption.theme.SeriesSetting
-      return function({ title, value }) {
+      return function ({ title, value }) {
         return IndicatorSeries.dataSeries?.find(item => item.title === title)?.suffix || ''
       }
     },
     // 指标块内位置
-    getPosition() {
+    getPosition () {
       const { position, align } = this.storeOption.theme.StyleConfig.IndicatorPosition
       const data = {}
       if (position === 'left') {
@@ -82,20 +113,20 @@ export default {
     },
     getSvgIcon () {
       const { setSvg } = this.storeOption.theme.StyleConfig.IndicatorPic
-      return function(name) {
+      return function (name) {
         return setSvg?.find(item => item.name === name)?.svg
       }
     },
     // 度量值title前面的图片的样式
-    getRound() {
+    getRound () {
       const { color } = this.storeOption.theme.StyleConfig.IndicatorPic.Color
       const { fontSize } = this.storeOption.theme.StyleConfig.FontStyle.data[0] || {}
-      return function(name) {
+      return function (name) {
         return { 'background-color': color?.find(item => item.name === name)?.color, 'border-color': color?.find(item => item.name === name)?.color, 'width': fontSize * 2 + 'px', 'height': fontSize * 2 + 'px' }
       }
     },
     // 度量值title的字体样式
-    getMeasure() {
+    getMeasure () {
       const { color, fontSize } = this.storeOption.theme.StyleConfig.FontStyle.data[0] || {}
       return {
         color,
@@ -103,7 +134,7 @@ export default {
       }
     },
     // 度量值vaule的字体样式
-    getContent() {
+    getContent () {
       const { color, fontSize } = this.storeOption.theme.StyleConfig.FontStyle.data[1] || {}
       return {
         color,
@@ -111,7 +142,7 @@ export default {
       }
     },
     // 度量值vaule 前缀或者后缀的字体样式
-    getPrefixOrSuffix() {
+    getPrefixOrSuffix () {
       const { fontSize } = this.storeOption.theme.StyleConfig.FontStyle.data[0] || {}
       return {
         fontSize: `${fontSize / 2}px`
@@ -123,7 +154,7 @@ export default {
     this.dataOption = store.state.app.dataOption
   },
   methods: {
-    getOption() {
+    getOption () {
       console.log('datavale', this.dataValue)
       console.log('????')
     }
@@ -140,10 +171,10 @@ export default {
   justify-content: center;
   overflow: auto;
 }
-.count-box{
+.count-box {
   max-width: 100%;
 }
-.count-name{
+.count-name {
   display: flex;
   align-items: center;
 }

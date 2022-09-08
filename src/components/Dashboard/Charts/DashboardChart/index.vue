@@ -1,11 +1,16 @@
 <template>
-  <div style="width:100%;height:100%;">
+  <div class="self-chart-content">
     <v-chart
-      v-if="dataValue && dataValue.length > 0"
+      v-if="dataValue"
       :option="chartOption"
+      :update-options="{notMerge:true}"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-dashboard" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-dashboard"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -27,7 +32,7 @@ export default {
       storeOption: {},
       chartOption: {},
       dataOption: [],
-      dataValue: {},
+      dataValue: null,
       title: {
         x: 'center',
         y: '75%',
@@ -149,7 +154,7 @@ export default {
       this.title.textStyle.fontSize = label.deputy.fontSize
       this.title.text = label.format ? `占比: ${(this.dataValue.value / data.max * 100).toFixed(label.deputy.decimal)}%` : `实际: ${this.dataValue.value}`
     },
-    setScale(scale) {
+    setScale (scale) {
       this.series[0].splitLine.show = scale.show
       this.series[0].axisLabel.show = scale.show
       this.series[0].axisLabel.formatter = (params) => {
@@ -164,10 +169,13 @@ export default {
       const { Basic: { VisualStyle: { style } }, ComponentOption, StyleConfig } = this.storeOption.theme
       const { ConfigSize } = ComponentOption
       const { Label, Scale } = StyleConfig
-      this.setStyle(style)
-      this.setConfigSize(ConfigSize)
-      this.setConfigLabel(Label)
-      this.setScale(Scale)
+      if (this.dataValue) {
+        this.setStyle(style)
+        this.setConfigSize(ConfigSize)
+        this.setConfigLabel(Label)
+        this.setScale(Scale)
+      }
+
       this.series[0].data[0] = this.dataValue
       this.chartOption = {
         tooltip: {

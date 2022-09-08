@@ -13,7 +13,7 @@
               <div>
                 图片类型
                 <el-radio-group v-model="option.type">
-                  <el-radio label="img">图片字段</el-radio>
+                  <!-- <el-radio label="img">图片字段</el-radio> -->
                   <el-radio label="static">静态</el-radio>
                 </el-radio-group>
               </div>

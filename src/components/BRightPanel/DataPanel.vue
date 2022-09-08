@@ -102,7 +102,7 @@
               draggable
               @node-drag-start="handleDragStart"
             >
-              <span
+              <div
                 slot-scope="{ node, data }"
                 class="custom-tree-node"
                 style="width:100%;"
@@ -117,12 +117,12 @@
                     :content="data.attributes[0].comment"
                     placement="top"
                   >
-                    <span>{{ data.displayColumn }}</span>
+                    <span>{{ data.displayColumn }}({{ data.attributes[0].aggregator | aggregatorFilter }})</span>
                   </el-tooltip>
 
                 </span>
-                <span v-else>{{ data.displayColumn }}</span>
-              </span>
+                <span v-else>{{ data.displayColumn }}({{ data.attributes[0].aggregator | aggregatorFilter }})</span>
+              </div>
             </el-tree>
           </div>
         </div>
@@ -242,6 +242,22 @@ export default {
             type: 'warning'
           })
         } else {
+          const { limit, validate, name } = that.option[data.type]
+          if (limit) {
+            if (that.option[data.type].value.length === limit) {
+              that.$message.warning(`已超过[${name}]最多可添加项数量（${limit}）`)
+              return
+            }
+          }
+          // 自定义校验
+          if (validate && typeof validate === 'function') {
+            const { success, msg } = validate(data)
+            if (!success) {
+              that.$message.warning(msg)
+              return
+            }
+          }
+
           that.option[data.type].value.push(data)
         }
       }
@@ -263,7 +279,7 @@ export default {
 
     // 跳转到编辑数据集页面
     editDataSet () {
-      const query = { _id: this.dataSet.id }
+      const query = { _id: this.dataSet.id, mode: 'window' }
       const newUrl = this.$router.resolve({
         path: '/dataManage/dataSet/edit',
         query

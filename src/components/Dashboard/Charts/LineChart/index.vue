@@ -1,12 +1,16 @@
 <template>
-  <div style="width:100%;height:100%;">
+  <div class="self-chart-content">
     <v-chart
       v-if="dataValue"
       :option="chartOption"
       autoresize
       :update-options="{notMerge:true}"
     />
-    <svg-icon v-else icon-class="chart-empty-line" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-line"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -47,6 +51,7 @@ export default {
       })
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
+      const legendLayout = this.getLegendLayout(ComponentOption.Legend)
 
       // 获取y轴配置信息，用于提取单位信息
       const { Axis: { YAxis } } = this.storeOption.theme
@@ -54,9 +59,8 @@ export default {
       this.chartOption = {
         grid: this.grid,
         color: colorOption,
-        // legend: ComponentOption.Legend,
         legend: {
-          ...ComponentOption.Legend,
+          ...legendLayout,
           data: legendData
         },
         xAxis: this.xAxis,
@@ -65,7 +69,7 @@ export default {
             type: 'shadow'
           },
           formatter: (params) => {
-            return params.name + '</br>' + params.marker + ' ' + params.seriesName + '：' + params.value[1] + (YAxis.unit || '')
+            return params.name + '</br>' + params.marker + ' ' + params.seriesName + '：' + params.value[params.seriesIndex + 1] + (YAxis.unit || '')
           }
         },
         yAxis: this.yAxis,
@@ -97,7 +101,7 @@ export default {
       this.setAxis()
 
       // 双Y轴设置
-      this.twisYAxisConfig(ComponentOption)
+      // this.twisYAxisConfig(ComponentOption)
 
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
@@ -114,7 +118,7 @@ export default {
           connectNulls: this.resolveNull(FunctionalOption),
           itemStyle: this.getItemStyle(ComponentOption)// 图形样式配置-颜色
         })
-        if (ComponentOption.TwisYAxis.check) {
+        if (ComponentOption.TwisYAxis?.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
         }

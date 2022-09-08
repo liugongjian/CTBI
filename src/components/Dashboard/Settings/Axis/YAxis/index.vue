@@ -36,7 +36,7 @@
           <el-radio-group v-model="option.formatType" size="small">
             <el-radio label="1">自动适配</el-radio>
             <el-radio label="2">自定义适配</el-radio>
-            <el-radio label="3" class="m-t-12">手动输入</el-radio>
+            <!-- <el-radio label="3" class="m-t-12">手动输入</el-radio> -->
           </el-radio-group>
         </div>
       </div>

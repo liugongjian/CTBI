@@ -11,10 +11,7 @@
           :icon-class="typeTransform(item.columnType)"
         />
         <div class="column-name">
-          <b-tooltip
-            :width="'70px'"
-            :content="item.columnName"
-          />
+          <b-tooltip :content="item.columnName" />
         </div>
         <div class="column-des">
           <b-tooltip
@@ -72,6 +69,7 @@ export default {
       }
 
       .column-name {
+        flex: 1;
         font-size: 12px;
       }
 

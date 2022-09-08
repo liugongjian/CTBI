@@ -26,6 +26,7 @@
       <div style="flex: 1">
         <el-input
           v-model="option.remark"
+          maxlength="50"
           @input="(e)=>{setSeriesOption(e,'remark')}"
         />
       </div>

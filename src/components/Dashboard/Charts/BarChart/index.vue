@@ -1,12 +1,16 @@
 <template>
-  <div style="width:100%;height:100%;">
+  <div class="self-chart-content">
     <v-chart
       v-if="dataValue"
       :option="chartOption"
       :update-options="{notMerge:true}"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-bar" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-bar"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -44,6 +48,7 @@ export default {
       })
       // 设置图例与图表距离
       this.setGrid(componentOption.Legend)
+      const legendLayout = this.getLegendLayout(componentOption.Legend)
 
       // 获取指标筛选中的图例数据
       const legendData = []
@@ -58,7 +63,7 @@ export default {
         'grid': this.grid,
         'color': colorOption,
         'legend': {
-          ...componentOption.Legend,
+          ...legendLayout,
           data: legendData
         },
         'xAxis': this.xAxis,
@@ -99,7 +104,7 @@ export default {
       this.setAxis()
 
       // 双Y轴设置
-      this.twisYAxisConfig(componentOption)
+      // this.twisYAxisConfig(componentOption)
 
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
@@ -114,7 +119,7 @@ export default {
           },
           itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
         })
-        if (componentOption.TwisYAxis.check) {
+        if (componentOption.TwisYAxis?.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
         }

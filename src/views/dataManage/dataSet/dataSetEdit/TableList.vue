@@ -7,7 +7,7 @@
     >
       <div
         v-for="(table, i) in tableList"
-        :key="`table-list-${i}`+ getDate()"
+        :key="`table-list-${table.name}-${i}`"
         style="display: flex;justify-content: space-between;align-items: center;"
         class="main-list"
       >
@@ -56,7 +56,7 @@
               slot="reference"
               icon-class="point"
               class="h-c-p"
-              @click="handleTableInfo(table.name)"
+              @click="showTableInfo(table.name)"
             />
           </el-popover>
         </span>
@@ -128,9 +128,6 @@ export default {
     }
   },
   methods: {
-    getDate () {
-      return new Date().getTime()
-    },
     // 复制数据源列表
     handleCopy (val, event) {
       Clipboard(val, event, () => {
@@ -146,7 +143,7 @@ export default {
         this.$emit('reloadTableList')
       }
     },
-    async handleTableInfo (tableName) {
+    async showTableInfo (tableName) {
       const id = this.dataSourceId
       this.currentTableInfo = {}
       try {

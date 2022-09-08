@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-08-04 12:46:01
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-07 10:44:39
+ * @Description:
+-->
 <template>
   <div class="editor-object-container">
     <div class="editor-item-title">
@@ -6,36 +13,36 @@
     <div
       class="editor-item-container"
     >
-      <div style="display: flex; align-items: center">
-        <span class="m-r-8">最大值</span>
-        <div>
+      <div class="m-r-2">最大值</div>
+      <div style="display: flex; align-items: center" class="m-t-12">
+        <div class="m-r-8">
           <input
             v-model="option.maxValue"
             type="number"
             :disabled="option.isMaxValue"
-            class="number-input m-r-8"
+            class="number-input"
             :class="option.isMaxValue ? 'box-disabled' : ''"
           >
         </div>
         <el-checkbox
           v-model="option.isMaxValue"
-          label="取频次最多"
+          label="取度量最多"
         />
       </div>
+      <div class="m-t-12">最小值</div>
       <div style="display: flex;align-items: center;" class="m-t-12">
-        <span class="m-r-8">最小值</span>
-        <div>
+        <div class="m-r-8">
           <input
             v-model="option.minValue"
             type="number"
             :disabled="option.isMinValue"
-            class="number-input m-r-8"
+            class="number-input"
             :class="option.isMinValue ? 'box-disabled' : ''"
           >
         </div>
         <el-checkbox
           v-model="option.isMinValue"
-          label="取频次最少"
+          label="取度量最少"
         />
       </div>
     </div>
@@ -86,7 +93,7 @@ export default {
   background: rgba(0, 0, 0, .1);
   color: #fff;
   padding: 0 8px;
-  width: 50px;
+  width: 100px;
   height: 24px;
   line-height: 24px;
   overflow: hidden;

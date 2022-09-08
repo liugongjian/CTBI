@@ -1,12 +1,16 @@
 <template>
-  <div style="width:100%;height:100%;">
+  <div class="self-chart-content">
     <v-chart
       v-if="dataValue"
       :option="chartOption"
       autoresize
       :update-options="{notMerge:true}"
     />
-    <svg-icon v-else icon-class="chart-empty-stacked-area" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-stacked-area"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -59,6 +63,7 @@ export default {
       })
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
+      const legendLayout = this.getLegendLayout(ComponentOption.Legend)
 
       // 获取指标筛选中的图例数据
       const legendData = []
@@ -73,27 +78,31 @@ export default {
         grid: this.grid,
         color: colorOption,
         legend: {
-          ...ComponentOption.Legend,
+          ...legendLayout,
           data: legendData
         },
         xAxis: this.xAxis,
         tooltip: {
+          show: true,
           trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#6a7985'
-            }
-          },
           formatter: (params) => {
             let result = ''
+            let Total = 0
             params.forEach((item, index) => {
-              const { data, seriesName, marker, color, name } = item
-              result += `<div>${name}</div><div style="line-height: 25px;">${marker}</span>
+              const { data, seriesName, marker, color } = item
+              if (seriesName !== '总计') {
+                if (index === 0) {
+                  result += '<div>' + data[0] + '</div>'
+                }
+
+                result += `<div style="line-height: 25px;">${marker}</span>
                   <span style="color: ${color};">${seriesName}</span>
                   <span style="float: right;margin-left: 20px;">${data[index + 1]}${(YAxis.unit || '')}</span>
                 </div>`
+                Total += Number.parseFloat(data[index + 1])
+              }
             })
+            result += `<div style="line-height: 25px;font-weight: 700;">总计<span style="float: right;font-weight: 700;">${Total}${(YAxis.unit || '')}</span></div>`
             return result
           }
         },

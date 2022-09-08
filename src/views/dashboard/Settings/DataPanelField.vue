@@ -40,7 +40,12 @@
                       style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 2px;"
                       :icon-class="typeTransform(el.attributes)"
                     />
-                    <span class="field-caption">{{ el.displayColumn }}</span>
+                    <span class="field-caption">
+                      {{ el.displayColumn }}
+                      <span v-if="el.type === 'Measure'">
+                        ({{ el.attributes[0].aggregator | aggregatorFilter }})
+                      </span>
+                    </span>
                     <div class="right-hover-icons">
                       <span
                         style="cursor:pointer;margin-left:3px;"
@@ -97,7 +102,7 @@
           <span class="m-r-8">结果展示</span>
           <div>
             <input
-              v-model="limit"
+              v-model="option.dataSet.limit"
               type="number"
               class="limit-input"
             >
@@ -216,12 +221,11 @@ export default {
     },
     // 自动刷新
     handleRefresh (val) {
+      if (this.interVal) {
+        clearInterval(this.interVal)
+        this.interVal = null
+      }
       if (this.autoRefresh) {
-        if (this.interVal) {
-          clearInterval(this.interVal)
-          this.interVal = null
-        }
-
         if (val) {
           // 开启自动刷新的定时器
           const time = 1000 * this.time * (this.unit === 'minute' ? 60 : 1)
@@ -261,6 +265,13 @@ export default {
         if (dataSource[key].value.length === 0 && dataSource[key].require) {
           this.$message({
             message: `${dataSource[key].name}缺少必填字段`,
+            type: 'error'
+          })
+          return
+        }
+        if (dataSource[key].least && dataSource[key].value.length < dataSource[key].least) {
+          this.$message({
+            message: `至少需要选择${dataSource[key].least}个${dataSource[key].name}`,
             type: 'error'
           })
           return

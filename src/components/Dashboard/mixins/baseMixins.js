@@ -14,13 +14,12 @@ export default {
   props: {
     identify: {
       type: String,
-      default: ''
+      default: store.state.app.currentLayoutId
     }
   },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
     this.$bus.$on('interReload', this.interReload)
-    console.log(this.identify)
   },
   beforeDestroy () {
     this.$bus.$off('interReload', this.interReload)
@@ -35,22 +34,23 @@ export default {
     async interReload (ids, limit, isReload) {
       if (ids && ids.indexOf(this.identify) > -1) {
         try {
-          await this.getData(limit, isReload)
+          await this.getData(isReload)
           this.reloadImpl()
         } catch (e) {
           // do nothing
+          console.error(e)
         }
       }
     },
     // 获取详细数据
-    async getData(limit = 1000, isReload = true) {
+    async getData(isReload = true) {
       const storeDataValue = getDataValueById(this.identify)
       if (storeDataValue && !isReload) {
         this.chartData = deepClone(storeDataValue)
-        throw new Error('未获取到数据，不做图表加载')
+        return
       }
 
-      const params = getQueryParams(limit, this.identify)
+      const params = getQueryParams(this.identify)
       const { dataSetId, query: { dimension, measure } } = params
       // 纬度度量一个格子 拆分维度度量两个list去传参
       const DselectionsTemp = params.query.dimension.selections.filter((item) =>
@@ -116,6 +116,34 @@ export default {
           right: 120
         }
       }
+
+      // 缩略轴
+      const sdz = this.storeOption.theme.FunctionalOption?.DataZoom?.showDataZoom
+      // 是否最多展示
+      if (this.storeOption.theme.FunctionalOption?.LabelShowType?.axisShowType === 'condense') {
+        if (sdz !== 'hide' && legend.top === 'bottom') {
+          this.grid.bottom = 200
+        } else {
+          this.grid.bottom = 150
+        }
+      } else {
+        if (sdz !== 'hide' && legend.top === 'bottom') {
+          this.grid.bottom = 100
+        }
+      }
+    },
+    // 图例定位
+    getLegendLayout(legend) {
+      const temp = Object.assign({}, legend)
+      // 缩略轴
+      const sdz = this.storeOption.theme.FunctionalOption?.DataZoom?.showDataZoom
+      if (temp.top === 'bottom' && temp.left === 'center' && sdz !== 'hide') {
+        return Object.assign({}, temp, {
+          top: 'auto',
+          bottom: 50
+        })
+      }
+      return temp
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%;height:100%;">
+  <div class="self-chart-content">
     <v-chart
       v-if="dataValue && dataValue.length > 0"
       :option="chartOption"
@@ -7,7 +7,11 @@
       digit="2"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-funnel" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-funnel"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -61,44 +65,47 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        this.reloadImpl()
+        if (val.dataSource.Dimension.value.length === 0 || val.dataSource.Measure.value.length === 0) return
+        // this.reloadImpl()
+        this.getOption()
       },
       deep: true
     }
   },
   methods: {
     reloadImpl () {
-      if (this.chartData) {
-        this.formatDataValue(this.chartData)
-        this.getOption()
-      }
+      if (this.chartData.data.length === 0) return
+      this.formatDataValue(this.chartData)
+      this.getOption()
     },
     formatDataValue (chartData) {
       const data = []
       const dataTrans = []
       const dataLabel = []
-      const key = chartData.fields.Measure.fields[0].column
+      const measureName = chartData.fields.Measure.fields[0].displayColumn
+      const dimensionName = chartData.fields.Dimension.fields[0].displayColumn
       const that = this
       // 标准数据渲染
       chartData.data.forEach(item => {
         data.push({
-          'name': item.type,
-          'value': item[key],
+          // 'name': item.type,
+          'name': item[dimensionName],
+          'value': Number(item[measureName]),
           'isTrans': false
         })
       })
       // 转化分析数据渲染
       chartData.data.forEach((item, index) => {
         dataTrans.push({
-          'name': item.type,
-          'value': item[key],
+          'name': item[dimensionName],
+          'value': Number(item[measureName]),
           'label': {
             show: true,
             backgroundColor: '#ffffff',
             padding: [1, 15, 1, 15],
             color: 'black',
             borderRadius: that.borderRadius,
-            formatter: function(params) {
+            formatter: function (params) {
               const index = params.dataIndex / 2
               if (index === 0) return null
               return (index).toString().indexOf('.') < 0 ? that.lastData[index].value : ''
@@ -120,8 +127,8 @@ export default {
         }
         if (index !== chartData.data.length - 1) {
           dataTrans.push({
-            'name': item.type,
-            'value': item[key],
+            'name': item[dimensionName],
+            'value': Number(item[measureName]),
             'isTransCol': true,
             'tooltip': {
               show: false,
@@ -131,8 +138,8 @@ export default {
           })
         } else {
           dataTrans.push({
-            'name': item.type,
-            'value': item[key],
+            'name': item[dimensionName],
+            'value': Number(item[measureName]),
             'isTransCol': true,
             'itemStyle': {
               opacity: 0
@@ -160,7 +167,7 @@ export default {
         label: {
           show: true,
           position: 'outside',
-          formatter: function(params) {
+          formatter: function (params) {
             return params.name || '未命名'
           }
         },
@@ -202,13 +209,13 @@ export default {
           show: false,
           length: -20
         },
-        labelLayout: function(params) {
+        labelLayout: function (params) {
           return {
             x: params.rect.x // 控制白色半圆数据框
           }
         },
         itemStyle: {
-          color: function(params) {
+          color: function (params) {
             if (params.data.isTransCol) {
               // 置灰
               return 'rgb(240, 241, 244)'
@@ -240,7 +247,7 @@ export default {
           position: 'left',
           backgroundColor: 'rgba(0,23,11,0.5)'
         },
-        labelLayout: function(p) {
+        labelLayout: function (p) {
           return {
             x: '30%'
           }
@@ -249,7 +256,7 @@ export default {
           show: false
         },
         itemStyle: {
-          color: function(params) {
+          color: function (params) {
             if (params.data.isTransCol) {
               // 置灰
               return 'rgb(240, 241, 244)'
@@ -265,9 +272,9 @@ export default {
       }
       chartData.data.forEach((item, index) => {
         dataLabel.push({
-          'name': item.type,
+          'name': item[dimensionName],
           'value': 0,
-          'visiableVal': item[key],
+          'visiableVal': item[measureName],
           'isTransCol': false,
           'label': {
             show: true,
@@ -276,9 +283,9 @@ export default {
         })
         if (index !== chartData.data.length - 1) {
           dataLabel.push({
-            'name': item.type,
+            'name': item[dimensionName],
             'value': 0,
-            'visiableVal': item[key],
+            'visiableVal': item[measureName],
             'isTransCol': true,
             'label': {
               show: false
@@ -287,9 +294,9 @@ export default {
           })
         } else {
           dataLabel.push({
-            'name': item.type,
+            'name': item[dimensionName],
             'value': 0,
-            'visiableVal': item[key],
+            'visiableVal': item[measureName],
             'isFinal': true,
             'label': {
               show: false
@@ -320,11 +327,11 @@ export default {
         label: {
           color: 'balck',
           position: 'leftTop',
-          formatter: function(params) {
+          formatter: function (params) {
             return params.name ? params.name + '\n' + params.data.visiableVal : '未命名' + '\n' + params.data.visiableVal
           }
         },
-        labelLayout: function(params) {
+        labelLayout: function (params) {
           return {
             x: params.rect.x,
             y: params.rect.height + 40
@@ -354,11 +361,11 @@ export default {
           show: true,
           color: 'black',
           position: 'left',
-          formatter: function(params) {
+          formatter: function (params) {
             return params.name ? params.name + '\n' + params.data.visiableVal : '未命名' + '\n' + params.data.visiableVal
           }
         },
-        labelLayout: function(p) {
+        labelLayout: function (p) {
           return {
             x: '5%',
             y: p.rect.y + p.rect.height / 2
@@ -372,8 +379,11 @@ export default {
     },
     getOption () {
       const componentOption = this.storeOption.theme.ComponentOption
-      this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
-      this.dataTransformer()
+      if (this.dataValue.length > 0) {
+        this.displayStyleHandler(this.storeOption.theme.ComponentOption.DisplayStyle)
+        this.dataTransformer()
+      }
+
       // 更新dataValueTmp
       this.dataValueTmp = {
         name: '漏斗图',
@@ -389,7 +399,7 @@ export default {
         label: {
           show: true,
           position: 'outside',
-          formatter: function(params) {
+          formatter: function (params) {
             return params.name || '未命名'
           }
         },
@@ -451,7 +461,7 @@ export default {
         animation: false,
         legend: {
           ...componentOption.Legend,
-          formatter: function(name) {
+          formatter: function (name) {
             return name || '未命名'
           }
         },
@@ -461,7 +471,7 @@ export default {
             // 转化分析中lastData，firstData数据没有对齐
             // 转化分析隔开 tooltip
             const index = that.storeOption.theme?.Basic?.VisualStyle.VisualStyle === 'funnel-horizontal' && (index / 2).toString().indexOf('.') < 0 ? (params.dataIndex / 2) : params.dataIndex
-            const firstline = that.lastData[index]['name'] ? that.lastData[index]['name'] + ' : ' + that.dataValue[index]['value'] : '未命名' + ' : ' + that.dataValue[index]['value']
+            const firstline = that.lastData[index]['name'] ? that.lastData[index]['name'] + ' : ' + (that.dataValue[index]['value']).toFixed(3) : '未命名' + ' : ' + (that.dataValue[index]['value']).toFixed(3)
             const secondline = '占上一层的百分比 : ' + that.lastData[index]['value'] + '%'
             const thirdline = '占第一层的百分比 : ' + that.firstData[index]['value'] + '%'
             const tip = firstline + '<br/>' + secondline + '<br/>' + thirdline
@@ -525,12 +535,14 @@ export default {
           // 占上一层的百分比
           for (let i = 1; i < tmp.length; i++) {
             tmp[i]['value'] = (this.transTmpData[i]['value'] / this.transTmpData[i - 1]['value']).toFixed(3) * 100
+            tmp[i]['value'] = +(tmp[i]['value']).toFixed(3)
           }
           tmp[0]['value'] = 100
         } else if (item.calcMethod === 'first') {
           // 占第一层的百分比
           tmp.map((item, index) => {
             tmp[index].value = ((item.value / tmp[0]['value'])).toFixed(3) * 100
+            tmp[index].value = +(tmp[index].value).toFixed(3)
           })
         }
         this.calcData = tmp
@@ -550,7 +562,7 @@ export default {
         } else if (item.dataLabel === 'coMe') {
           // 转化率加度量值
           for (let i = 0; i < tmpPercent.length; i++) {
-            this.calcData[i]['value'] = tmpValue[i]['value'] + ' (' + tmpPercent[i]['value'] + '%)'
+            this.calcData[i]['value'] = +(tmpValue[i]['value']).toFixed(3) + ' (' + (tmpPercent[i]['value']).toFixed(3) + '%)'
           }
           this.labelFormatter = '{c}'
         }
@@ -563,12 +575,14 @@ export default {
       // 占上一层的百分比
       for (let i = 1; i < tmpLast.length; i++) {
         tmpLast[i]['value'] = (this.transTmpData[i]['value'] / this.transTmpData[i - 1]['value']).toFixed(3) * 100
+        tmpLast[i]['value'] = +(tmpLast[i]['value']).toFixed(3)
       }
       tmpLast[0]['value'] = 100
       this.lastData = tmpLast
       // 占第一层的百分比
       tmpFirst.map((item, index) => {
         tmpFirst[index].value = ((item.value / tmpFirst[0]['value'])).toFixed(3) * 100
+        tmpFirst[index].value = +(tmpFirst[index].value).toFixed(3)
       })
       this.firstData = tmpFirst
     }

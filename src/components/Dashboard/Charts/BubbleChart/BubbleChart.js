@@ -1,6 +1,7 @@
 /*
 * 气泡图
 * */
+import { defaultDataLimit } from '@/constants/constants'
 export default {
   'type': 'relation', // 组件类型, 用于管理组件类型集合,例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -34,7 +35,7 @@ export default {
         'type': 'scroll'
       },
       'Slider': { // 数据点大小
-        'symbolSize': 2, // 默认大小
+        'symbolSize': 5, // 默认大小
         'minSize': 1, // 最小值
         'maxSize': 40 // 最大值
       }
@@ -101,6 +102,7 @@ export default {
   }, // 数据集
   'dataSet': { // 当前正在使用的数据集
     'id': '', // 数据集ID
-    'name': '' // 数据集名称
+    'name': '', // 数据集名称
+    'limit': defaultDataLimit // 结果展示字段限制
   }
 }

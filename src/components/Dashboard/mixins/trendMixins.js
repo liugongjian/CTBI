@@ -50,7 +50,7 @@ export default {
   methods: {
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
-      console.log('图表重绘事件，继承于baseMixins')
+      console.log('图表重绘事件，继承于baseMixins', this.chartData)
       this.dataValue = formatDataValue(deepClone(this.chartData))
       // 拿到数据中的系列名字
       this.getSeriesOptions(this.dataValue)
@@ -61,19 +61,22 @@ export default {
       this.getOption()
     },
     // 拿到数据中的系列名字
-    getSeriesOptions (val) {
-      const seriesOption = []
-      val[0].forEach((item, index) => {
-        if (index) {
-          seriesOption.push({ value: item, label: item })
-        }
-      })
-      this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
-      this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
-      this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
+    getSeriesOptions(val) {
+      if (val && val.lenght > 0) {
+        const seriesOption = []
+        val[0].forEach((item, index) => {
+          if (index) {
+            seriesOption.push({ value: item, label: item })
+          }
+        })
+        this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
+        this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
+        this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
+      }
     },
     // 拿到数据的系列名字 并设置颜色 并拿到数据中展示标题
-    getColorAndTitle (val) {
+    getColorAndTitle () {
+      const val = this.dataValue
       var color = []
       var titleList = []
       const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
@@ -152,9 +155,11 @@ export default {
           axisLabel: {
             show: XAxis.showAxisLabel,
             // auto 智能显示 sparse 强制稀疏 condense 最多展示
-            rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
-            interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
-            width: 300,
+            rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? -90 : 10,
+            // interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
+            interval: 'auto',
+            'width': 100,
+            'height': 100,
             overflow: 'truncate'
           },
           // 轴刻度线
@@ -211,7 +216,7 @@ export default {
       }
       this.yAxis.push(itemLeft)
       // 如果设置双Y轴 并且不能是单独图表
-      if (this.storeOption.theme.ComponentOption.TwisYAxis.check && this.trendChartConfig.type === 'disperse') {
+      if (this.storeOption.theme.ComponentOption.TwisYAxis?.check && this.trendChartConfig.type === 'disperse') {
         const { Y1Axis } = this.storeOption.theme.Axis
         itemRight = {
           axisLine: {
@@ -306,7 +311,7 @@ export default {
       if (ast === 'skip') {
         connectNulls = true
       } else if (ast === 'zero') {
-        this.dataValue = this.storeOption.dataSource.map(datas => {
+        this.dataValue = this.dataValue.map(datas => {
           return datas.map((data, index) => {
             connectNulls = false
             if ([null, undefined, NaN, '-'].includes(data)) {
@@ -364,7 +369,7 @@ export default {
           connectNulls: this.resolveNull(FunctionalOption),
           itemStyle: this.getItemStyle(ComponentOption)// 图形样式配置-颜色
         })
-        if (ComponentOption.TwisYAxis.check) {
+        if (ComponentOption.TwisYAxis?.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
@@ -386,7 +391,7 @@ export default {
       this.setAxis()
       this.valueToPercent()
       const that = this
-      if (!ComponentOption.TwisYAxis.check) {
+      if (!ComponentOption.TwisYAxis?.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
       const data = formatDataValue(deepClone(getDataValueById(this.identify)))
@@ -410,7 +415,7 @@ export default {
           connectNulls: this.resolveNull(FunctionalOption),
           itemStyle: this.getItemStyle(ComponentOption)// 图形样式配置-颜色
         })
-        if (ComponentOption.TwisYAxis.check) {
+        if (ComponentOption.TwisYAxis?.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
@@ -457,6 +462,22 @@ export default {
         })
       }
       return dataValue
+    },
+    // 标题筛选
+    filterTitleList(titleList, selectedIndicator) {
+      var res = titleList.filter(item => {
+        console.log(item.name, selectedIndicator.includes(item.name))
+        return selectedIndicator.includes(item.name)
+      })
+      // 默认选中
+      let s = 0
+      for (const i of res) {
+        if (!i.isSelect) s++
+      }
+      if (s === res.length) {
+        res[0].isSelect = true
+      }
+      return res
     }
   }
 }

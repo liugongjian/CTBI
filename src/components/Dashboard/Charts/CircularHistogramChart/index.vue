@@ -1,7 +1,16 @@
 <template>
-  <div style="width:100%;height:100%;">
-    <v-chart v-if="dataValue" :option="chartOption" :update-options="{ notMerge: true }" autoresize />
-    <div v-else>数据为空</div>
+  <div class="self-chart-content">
+    <v-chart
+      v-if="dataValue && dataValue.length > 0"
+      :option="chartOption"
+      :update-options="{ notMerge: true }"
+      autoresize
+    />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-circular-histogram"
+      style="width:100%;height:100%;"
+    />
   </div>
 </template>
 
@@ -35,7 +44,7 @@ export default {
       deep: true
     }
   },
-  mounted() {
+  mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
   },
   methods: {
@@ -47,6 +56,7 @@ export default {
       const componentOption = this.storeOption.theme.ComponentOption
       // 设置图例与图表距离
       this.setGrid(componentOption.Legend)
+      const legendLayout = this.getLegendLayout(componentOption.Legend)
       this.chartOption = {
         polar: {
           radius: [10, '80%']
@@ -62,9 +72,13 @@ export default {
         radiusAxis: {
           type: 'category',
           axisLabel: {
-            rotate: 10,
             showMaxLabel: true,
-            interval: 0,
+            // auto 智能显示 sparse 强制稀疏 condense 最多展示
+            rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? -90 : 10,
+            // interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
+            'width': 100,
+            'height': 100,
+            interval: 'auto',
             fontSize: 10
           },
           axisTick: { show: false },
@@ -72,7 +86,7 @@ export default {
           data: this.dataValue.xData
         },
         legend: {
-          ...componentOption.Legend,
+          ...legendLayout,
           itemHeight: 10,
           itemWidth: 10
         },

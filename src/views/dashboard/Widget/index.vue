@@ -9,6 +9,8 @@
     :vertical-compact="true"
     :margin="[10, 10]"
     :use-css-transforms="true"
+    @layout-mounted="layoutMountedEvent"
+    @layout-updated="layoutUpdatedEvent"
   >
     <div
       v-for="item in layout"
@@ -21,6 +23,7 @@
         :w="item.w"
         :h="item.h"
         :i="item.i"
+        drag-allow-from=".card-header-wrapper"
       >
         <ComponentBlock
           :option="item"
@@ -68,6 +71,12 @@ export default {
     }
   },
   methods: {
+    layoutMountedEvent (newLayout) {
+      console.log('Mounted layout: ', newLayout)
+    },
+    layoutUpdatedEvent: function (newLayout) {
+      console.log('Updated layout: ', newLayout)
+    },
     clickHandler (id) {
       // 更新当前id
       console.log(id)
@@ -125,5 +134,10 @@ export default {
   background-origin: content-box;
   box-sizing: border-box;
   cursor: pointer;
+}
+::v-deep .self-chart-content {
+  position: absolute;
+  height: 100%;
+  width: 100%;
 }
 </style>

@@ -29,6 +29,7 @@
         :model="dashboardAttr"
         :rules="attrRules"
         label-width="60px"
+        @submit.native.prevent
       >
         <el-form-item
           label="密码"
@@ -37,6 +38,7 @@
           <el-input
             v-model="dashboardAttr.password"
             placeholder="请输入分享密码"
+            @keyup.enter.native="confirmGetData"
           />
         </el-form-item>
       </el-form>

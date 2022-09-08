@@ -1,7 +1,7 @@
 // 柱图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
-import { deepClone, formatDataValue } from '@/utils/optionUtils'
+import { deepClone, formatDataValue, getDataValueById } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 import store from '@/store'
 export default {
@@ -74,7 +74,7 @@ export default {
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
       // 为空时，进行初始化
-      if (this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption.length === 0) {
+      if (val && val.length > 0) {
         const seriesOption = []
         val[0].forEach((item, index) => {
           if (index) {
@@ -130,7 +130,7 @@ export default {
     // 双y轴设置
     twisYAxisConfig (componentOption) {
       // 双y轴设置与坐标轴设置相关联，其中关于y轴模块暂时固定，后续需切换成坐标轴设置的值
-      if (componentOption.TwisYAxis.check) {
+      if (componentOption.TwisYAxis?.check) {
         const formatter = this.type === 'PercentStackedBarChart' ? '{value}%' : '{value}'
 
         // 最大值和最小值暂时固定，后续需要修改
@@ -184,7 +184,7 @@ export default {
         }
         for (let i = 1; i < this.dataValue[0].length; i++) {
           for (let j = 0; j < sumArr.length; j++) {
-            sumArr[j] += this.dataValue[j + 1][i]
+            sumArr[j] += Number.parseFloat(this.dataValue[j + 1][i])
           }
         }
         for (let i = 1; i < this.dataValue[0].length; i++) {
@@ -216,7 +216,8 @@ export default {
     },
 
     // 获取堆积柱状图
-    getStackSeries (componentOption) {
+    getStackSeries(componentOption) {
+      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       this.series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {
@@ -228,7 +229,7 @@ export default {
       }
       this.setAxis()
       // 双Y轴设置
-      this.twisYAxisConfig(componentOption)
+      // this.twisYAxisConfig(componentOption)
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'bar',
@@ -242,7 +243,7 @@ export default {
           },
           itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
         })
-        if (componentOption.TwisYAxis.check) {
+        if (componentOption.TwisYAxis?.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
@@ -276,7 +277,8 @@ export default {
     },
 
     // 获取百分比堆积柱状图
-    getPercentStackSeries (componentOption) {
+    getPercentStackSeries(componentOption) {
+      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       this.series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {
@@ -288,10 +290,10 @@ export default {
       }
       this.setAxis()
       // 双Y轴设置
-      this.twisYAxisConfig(componentOption)
+      // this.twisYAxisConfig(componentOption)
       this.valueToPercent()
       const that = this
-      if (!componentOption.TwisYAxis.check) {
+      if (!componentOption.TwisYAxis?.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
       for (let i = 0; i < seriesLength; i++) {
@@ -312,7 +314,7 @@ export default {
           },
           itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
         })
-        if (componentOption.TwisYAxis.check) {
+        if (componentOption.TwisYAxis?.check) {
           const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].yAxisIndex = yAxisIndex
           this.series[i].stack = yAxisIndex === 1 ? 'other' : 'Total'
@@ -365,9 +367,10 @@ export default {
           'axisLabel': {
             'show': XAxis.showAxisLabel,
             // auto 智能显示 sparse 强制稀疏 condense 最多展示
-            'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
-            'interval': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
-            'width': 300,
+            'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? -90 : 0,
+            'interval': 'auto',
+            'width': 100,
+            'height': 100,
             'overflow': 'truncate'
           },
           // 轴刻度线

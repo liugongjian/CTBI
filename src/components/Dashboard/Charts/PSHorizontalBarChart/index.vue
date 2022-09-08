@@ -1,12 +1,23 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-09-07 12:06:00
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-08 09:19:37
+ * @Description:
+-->
 <template>
-  <div style="width:100%;height:100%;">
+  <div class="self-chart-content">
     <v-chart
       v-if="dataValue"
       :option="chartOption"
       :update-options="{notMerge:true}"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-percent-stacked-horizontal-bar" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-percent-stacked-horizontal-bar"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -41,12 +52,18 @@ export default {
 
       // 设置图例与图表距离
       this.setGrid(componentOption.Legend)
+      const legendLayout = this.getLegendLayout(componentOption.Legend)
       this.chartOption = {
         'grid': this.grid,
         'color': colorOption,
-        'legend': componentOption.Legend,
+        'legend': legendLayout,
         'xAxis': this.xAxis,
-        'tooltip': this.tooltip,
+        'tooltip': {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+          }
+        },
         'yAxis': this.yAxis,
         'dataset': {
           'source': this.dataValue

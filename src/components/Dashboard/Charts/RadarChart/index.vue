@@ -1,11 +1,15 @@
 <template>
-  <div style="width:100%;height:100%;">
+  <div class="self-chart-content">
     <v-chart
       v-if="JSON.stringify(dataValue) !== '{}'"
       :option="chartOption"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-radar" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-radar"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -102,6 +106,8 @@ export default {
         } else if (Number(labelShow) === 1) {
           if (index === 0) {
             item.label.normal.show = true
+          } else {
+            item.label.normal.show = false
           }
         } else {
           item.label.normal.show = true

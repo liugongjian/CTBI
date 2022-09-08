@@ -76,7 +76,7 @@ export default {
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
       // 为空时，进行初始化
-      if (this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption.length === 0) {
+      if (val && val.length > 0) {
         const seriesOption = []
         val[0].forEach((item, index) => {
           if (index) {
@@ -132,16 +132,16 @@ export default {
     // 双y轴设置
     twisYAxisConfig (componentOption) {
       // 双y轴设置与坐标轴设置相关联，其中关于y轴模块暂时固定，后续需切换成坐标轴设置的值
-      if (componentOption.TwisYAxis.check) {
+      if (componentOption.TwisYAxis?.check) {
         const formatter = this.type === 'PSHorizontalBarChart' ? '{value}%' : '{value}'
 
         // 最大值和最小值暂时固定，后续需要修改
-        const minData1 = componentOption.TwisYAxis.twisType === 'syncAll' ? minData2 : -10
+        const minData1 = componentOption.TwisYAxis?.twisType === 'syncAll' ? minData2 : -10
         const minData2 = 0
         const maxData2 = 100
-        const maxData1 = componentOption.TwisYAxis.twisType === 'syncAll' ? maxData2 : 100
-        const intervalNum1 = componentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData1 - minData1) / 5 : null
-        const intervalNum2 = componentOption.TwisYAxis.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null
+        const maxData1 = componentOption.TwisYAxis?.twisType === 'syncAll' ? maxData2 : 100
+        const intervalNum1 = componentOption.TwisYAxis?.twisType === 'syncTicksNum' ? (maxData1 - minData1) / 5 : null
+        const intervalNum2 = componentOption.TwisYAxis?.twisType === 'syncTicksNum' ? (maxData2 - minData2) / 5 : null
         this.xAxis = [
           {
             type: 'value',
@@ -186,7 +186,7 @@ export default {
         }
         for (let i = 1; i < this.dataValue[0].length; i++) {
           for (let j = 0; j < sumArr.length; j++) {
-            sumArr[j] += this.dataValue[j + 1][i]
+            sumArr[j] += Number.parseFloat(this.dataValue[j + 1][i])
           }
         }
         for (let i = 1; i < this.dataValue[0].length; i++) {
@@ -218,7 +218,8 @@ export default {
     },
 
     // 获取堆积条形图
-    getStackSeries (componentOption) {
+    getStackSeries(componentOption) {
+      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       this.series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {
@@ -230,7 +231,7 @@ export default {
       }
       this.setAxis()
       // 双Y轴设置
-      this.twisYAxisConfig(componentOption)
+      // this.twisYAxisConfig(componentOption)
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'bar',
@@ -244,7 +245,7 @@ export default {
           },
           itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
         })
-        if (componentOption.TwisYAxis.check) {
+        if (componentOption.TwisYAxis?.check) {
           const xAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].xAxisIndex = xAxisIndex
           this.series[i].stack = xAxisIndex === 1 ? 'other' : 'Total'
@@ -263,7 +264,7 @@ export default {
           formatter: function (params) {
             let dataTotal = 0
             for (let i = 1; i < params.value.length; i++) {
-              dataTotal += params.value[i]
+              dataTotal += Number.parseFloat(params.value[i])
             }
             return dataTotal
           }
@@ -277,7 +278,8 @@ export default {
     },
 
     // 获取百分比堆积条形图
-    getPercentStackSeries (componentOption) {
+    getPercentStackSeries(componentOption) {
+      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       this.series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {
@@ -289,13 +291,12 @@ export default {
       }
       this.setAxis()
       // 双Y轴设置
-      this.twisYAxisConfig(componentOption)
+      // this.twisYAxisConfig(componentOption)
       this.valueToPercent()
       const that = this
-      if (!componentOption.TwisYAxis.check) {
+      if (!componentOption.TwisYAxis?.check) {
         this.xAxis[0].axisLabel.formatter = '{value}%'
       }
-      const data = getDataValueById(this.identify)
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'bar',
@@ -304,7 +305,7 @@ export default {
             show: componentOption.ChartLabel.check, // 标签显示
             formatter: function (params) {
               const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
-              const isMeasure = that.checkList.includes('度量') ? `${data[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+              const isMeasure = that.checkList.includes('度量') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
               return isPercent + '\n' + isMeasure
             }
           },
@@ -314,7 +315,7 @@ export default {
           },
           itemStyle: this.getItemStyle(componentOption) // 图形样式配置-颜色
         })
-        if (componentOption.TwisYAxis.check) {
+        if (componentOption.TwisYAxis?.check) {
           const xAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
           this.series[i].xAxisIndex = xAxisIndex
           this.series[i].stack = xAxisIndex === 1 ? 'other' : 'Total'
@@ -367,9 +368,10 @@ export default {
           // 轴标签
           'axisLabel': {
             'show': XAxis.showAxisLabel,
-            'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? 90 : 0,
-            'interval': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
-            'width': 300,
+            'rotate': this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? -90 : 0,
+            'interval': 'auto',
+            'width': 100,
+            'height': 100,
             'overflow': 'truncate'
           },
           'position': this.storeOption.theme.ComponentOption.ChartAlign.align === 'left' ? 'left' : 'right',
@@ -405,6 +407,8 @@ export default {
           'max': YAxis.autoMax ? null : YAxis.max,
           'axisLabel': {
             'show': YAxis.showAxisLabel,
+            'width': 100,
+            'height': 100,
             formatter: (value, index) => {
               return this.formatYLabel(value, YAxis)
             }

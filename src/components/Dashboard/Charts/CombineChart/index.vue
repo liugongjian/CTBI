@@ -1,12 +1,16 @@
 <template>
-  <div style="width:100%;height:100%;">
+  <div class="self-chart-content">
     <v-chart
       v-if="dataValue"
       :option="chartOption"
       :update-options="{notMerge:true}"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-combine" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-combine"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -69,7 +73,7 @@ export default {
         this.getOption()
       }
     },
-    isHaveMeasure(chartData) {
+    isHaveMeasure (chartData) {
       const { data, fields } = chartData
       let flagMeasure = false
       let flagMeasureSecond = false
@@ -98,7 +102,7 @@ export default {
       }
     },
     // 组合图特有的 数据 转换方法
-    formatDataValue(chartData) {
+    formatDataValue (chartData) {
       const dataValue = []
       const DimensionKey = []
       const MeasureKey = []
@@ -153,11 +157,12 @@ export default {
         color.push(item.color)
       })
       this.setGrid(ComponentOption.Legend)
+      const legendLayout = this.getLegendLayout(ComponentOption.Legend)
 
       this.chartOption = {
         color: color, // 图例颜色
         grid: this.grid,
-        legend: ComponentOption.Legend,
+        legend: legendLayout,
         // xAxis: ComponentOption.ChartDirection.direction === 1 ? xAxis : yAxis,
         xAxis: ComponentOption.ChartDirection.direction === 1 ? { ...this.generateAxisOptions('X', Axis), ...this.getAxisShowTypeOption() } : { ...this.generateAxisOptions('X', Axis), ...this.getAxisShowTypeOption() },
         tooltip: {
@@ -331,14 +336,17 @@ export default {
       const option = {
         axisLabel: {
           rotate: 0,
+          'width': 100,
+          'height': 100,
           interval: 'auto'
         }
       }
       if (ast === 'condense') { // 最多显示
-        option.axisLabel.rotate = 90
-      } else if (ast === 'sparse') { // 强制悉数
-        option.axisLabel.interval = 3
+        option.axisLabel.rotate = -90
       }
+      // else if (ast === 'sparse') { // 强制悉数
+      //   option.axisLabel.interval = 3
+      // }
       return option
     }
   }

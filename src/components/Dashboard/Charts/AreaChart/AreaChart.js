@@ -21,6 +21,8 @@
  *  }
  * */
 import { colorTheme } from '@/constants/color.js'
+import { defaultDataLimit } from '@/constants/constants'
+
 export default {
   'type': 'trend', // 组件类型, 用于管理组件类型集合，例如：指标、表格、趋势
   'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
@@ -82,11 +84,11 @@ export default {
         'color': colorTheme['官方'],
         'theme': '官方'
       },
-      'TwisYAxis': { // 双Y轴
-        'show': true, // 是否必须显示双y轴的复选框
-        'check': false, // 是否显示双Y轴
-        'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
-      },
+      // 'TwisYAxis': { // 双Y轴
+      //   'show': true, // 是否必须显示双y轴的复选框
+      //   'check': false, // 是否显示双Y轴
+      //   'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
+      // },
       'PercentStack': { // 百分比与堆积类型选择
         'isPercent': false, // 是否为百分比类型
         'isStack': false// 是否为堆积类型
@@ -94,7 +96,7 @@ export default {
     },
     'FunctionalOption': { // 功能配置
       'DataZoom': { // 缩略轴
-        'showDataZoom': 'hide' // 显示方式：1.auto 智能适配；2.show 显示；3.hide 不显示
+        'showDataZoom': 'auto' // 显示方式：1.auto 智能适配；2.show 显示；3.hide 不显示
       },
       'LabelShowType': { // 坐标轴维度显示
         'axisShowType': 'auto' // 1.auto 智能显示；2.sparse 强制稀疏；3.condense 最多显示
@@ -186,7 +188,8 @@ export default {
   }, // 数据集
   'dataSet': { // 当前正在使用的数据集
     'id': '', // 数据集ID
-    'name': '' // 数据集名称
+    'name': '', // 数据集名称
+    'limit': defaultDataLimit
   }
 }
 

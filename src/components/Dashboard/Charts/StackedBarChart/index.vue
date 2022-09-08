@@ -1,12 +1,16 @@
 <template>
-  <div style="width:100%;height:100%;">
+  <div class="self-chart-content">
     <v-chart
       v-if="dataValue"
       :option="chartOption"
       :update-options="{notMerge:true}"
       autoresize
     />
-    <svg-icon v-else icon-class="chart-empty-stacked-bar" style="width:100%;height:100%;" />
+    <svg-icon
+      v-else
+      icon-class="chart-empty-stacked-bar"
+      class="chart-empty-svg"
+    />
   </div>
 </template>
 
@@ -45,6 +49,7 @@ export default {
       })
       // 设置图例与图表距离
       this.setGrid(componentOption.Legend)
+      const legendLayout = this.getLegendLayout(componentOption.Legend)
 
       // 获取指标筛选中的图例数据
       const legendData = []
@@ -59,7 +64,7 @@ export default {
         'grid': this.grid,
         'color': colorOption,
         'legend': {
-          ...componentOption.Legend,
+          ...legendLayout,
           data: legendData
         },
         'xAxis': this.xAxis,
@@ -80,7 +85,7 @@ export default {
                   <span style="color: ${color};">${seriesName}</span>
                   <span style="float: right;margin-left: 20px;">${data[index + 1]}${(YAxis.unit || '')}</span>
                 </div>`
-                Total += Number.parseInt(data[index + 1])
+                Total += Number.parseFloat(data[index + 1])
               }
             })
             result += `<div style="line-height: 25px;font-weight: 700;">总计<span style="float: right;font-weight: 700;">${Total}${(YAxis.unit || '')}</span></div>`
