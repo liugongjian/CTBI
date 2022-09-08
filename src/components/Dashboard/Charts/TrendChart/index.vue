@@ -62,6 +62,7 @@
           :style="[
             {width:trendStyleConfig.lineNum?100/trendStyleConfig.lineNum-1+'%':'auto'},
             {borderRight:trendChartConfig.type==='integration'?'1px solid #E5E5E5' :'' },
+            {marginBottom:FunctionalOption.DataZoom.showDataZoom==='hide'?'39px' :'90px' },
           ]"
         >
           <trendTitle
@@ -132,6 +133,7 @@ export default {
       chartList: [],
       titleList: [], // 标题
       titleListTemp: [],
+      FunctionalOption: null,
       Axis: {},
       type: 'TrendChart', // 图表类型 1.线图；2.面积图; 3.堆叠面积图；4.百分比堆叠图
       // 趋势图配置
@@ -178,6 +180,7 @@ export default {
     getOption () {
       const { ComponentOption, FunctionalOption, trendChartConfig, trendStyleConfig, Axis } = this.storeOption.theme
       this.Axis = Axis
+      this.FunctionalOption = FunctionalOption
       //
       this.trendStyleConfig = trendStyleConfig.trendStyleConfig
       this.trendChartConfig = trendChartConfig.trendChartConfig
