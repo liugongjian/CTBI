@@ -413,8 +413,7 @@ export default {
       })
     },
     typeTransform (data) {
-      const temp = this.resetDataType(data)
-      return transformDataTypeIcon(temp)
+      return transformDataTypeIcon(data)
     },
     handlerBlur (newVal, oldVal, index) {
       if (regex.DATASET_NAME_REGEX.test(newVal)) {

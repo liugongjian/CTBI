@@ -50,6 +50,13 @@ export default {
         'url': '', // 链接地址
         'show': false, // 是否展示链接地址
         'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
+      },
+      'CustomBackgroundEnable': { // 自定义背景填充
+        'color': '', // 卡片颜色
+        'show': false, // 是否使用自定义背景填充
+        'showImg': false, // 是否使用背景图片
+        'imgUrl': '', // 背景图片地址
+        'imgSize': 'containRight' // 背景图片尺寸位置
       }
       // MapStyleTemplates: { // 样式模板
       //   type: 'defaultMap'// 模板类型 1.defaultMap 默认；2.simpleMap 极简底图； 3.3DMap 3D填充
@@ -61,13 +68,6 @@ export default {
         'checkList': ['维度'], // 标签格式 1. 维度；2. 度量；
         'type': 'BarChart', // 图表类型
         'labelShow': 1 // 数据标签展示方式 1 智能显示；2 全量显示
-      },
-      'Legend': { // 图例
-        'show': true,
-        'top': 'auto',
-        'left': 'center',
-        'orient': 'horizontal',
-        'type': 'scroll'
       }
     }
   },

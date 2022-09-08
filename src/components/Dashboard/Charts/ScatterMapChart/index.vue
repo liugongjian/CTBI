@@ -1,10 +1,6 @@
 <template>
   <div class="self-chart-content">
     <v-chart
-      :option="chartOption"
-      autoresize
-    />
-    <!-- <v-chart
       v-if="dataValue"
       :option="chartOption"
       autoresize
@@ -13,135 +9,209 @@
       v-else
       icon-class="chart-empty-scatter-map"
       class="chart-empty-svg"
-    /> -->
+    />
   </div>
 </template>
 
 <script>
 import mapMixins from '@/components/Dashboard/mixins/mapMixins'
+import { deepClone, getParameter } from '@/utils/optionUtils'
+
 export default {
   name: 'ScatterMapChart',
   mixins: [mapMixins],
-  props: {
-    identify: {
-      type: String,
-      default: ''
-    }
-  },
   data () {
     return {
       chartOption: {}
     }
   },
-  mounted () {
-    this.getOption()
-  },
   methods: {
     getOption () {
-      // const componentOption = this.storeOption.theme.ComponentOption
-      this.chartOption = {
-        title: {
-          text: '',
-          subtext: '',
-          x: 'center',
-          textStyle: {
-            color: '#fff'
-          }
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: function (params) {
-            return params.name + ' : ' + params.value[2]
-          }
-        },
-        visualMap: {
-          min: 0,
-          max: 200,
-          show: false,
-          calculable: false,
-          inRange: {
-            color: ['#FFAC2E']
-          },
-          textStyle: {
-            color: '#fff'
-          }
-        },
-        geo: {
-          map: 'china',
-          layoutCenter: ['50%', '50%'],
-          layoutSize: 630,
-          label: {
-            emphasis: {
-              show: false
+      const seriesOption = this.getSeriesOption()
+      if (seriesOption) {
+        const min = Number.parseFloat(seriesOption.min)
+        const max = Number.parseFloat(seriesOption.max)
+        const labelShow = getParameter(this.storeOption, 'theme.ComponentOption.ChartLabel.labelShow')
+
+        this.chartOption = {
+          tooltip: {
+            trigger: 'item',
+            formatter: function ({ data, marker }) {
+              let temp = []
+              if (data) {
+                temp = data.text.map(item => {
+                  return `${item.name} ${item.value}`
+                })
+                return [
+                  `${marker} ${data.name}`,
+                  ...temp
+                ].join('<br \>')
+              }
+              return ''
             }
           },
-          itemStyle: {
-            normal: {
-              areaColor: '#EBEDF0',
-              borderColor: '#fff'
+          geo: {
+            map: 'china',
+            layoutCenter: ['50%', '50%'],
+            layoutSize: 630,
+            // 是否开启鼠标缩放和平移漫游。
+            roam: true,
+            zoom: 1.2,
+            visualMap: {
+              show: true,
+              orient: 'horizontal',
+              type: 'continuous',
+              // visualMapContinuous 组件两端文本
+              text: [seriesOption.max, seriesOption.min],
+              // 指定 visualMapContinuous 组件的允许的最小值。'min' 必须用户指定。
+              min,
+              // 指定 visualMapContinuous 组件的允许的最大值。'max' 必须用户指定
+              max,
+              realtime: true,
+              calculable: true,
+              color: ['#FFAC2E', '#FFE4B5']
             },
-            emphasis: {
-              areaColor: '#ECF0F3'
-            }
-          },
-          regions: [
-            {
-              name: '南海诸岛',
-              value: 0,
-              show: false,
-              itemStyle: {
-                normal: {
-                  opacity: 0,
-                  label: {
-                    show: false
-                  },
-                  color: '#71D4E7'
+            itemStyle: {
+              normal: {
+                areaColor: '#EBEDF0',
+                borderColor: '#fff'
+              }
+            },
+            label: {
+              show: getParameter(this.storeOption, 'theme.ComponentOption.ChartLabel.check'),
+              position: 'right',
+              formatter: ({ value, name }) => {
+                if (labelShow === 1) {
+                  if (value) {
+                    return name
+                  }
+                  return ''
+                } else {
+                  return name
                 }
               }
+            },
+            emphasis: {
+              label: {
+                show: false,
+                position: 'right'
+              },
+              itemStyle: {
+                normal: {
+                  areaColor: '#FFAC2E',
+                  borderColor: '#fff'
+                }
+              }
+
+            },
+            regions: [
+              {
+                name: '南海诸岛',
+                value: 0,
+                show: false,
+                itemStyle: {
+                  normal: {
+                    opacity: 0,
+                    label: {
+                      show: false
+                    },
+                    color: '#71D4E7'
+                  }
+                }
+              }
+            ]
+          },
+          series: [
+            {
+              type: 'effectScatter',
+              // 该系列使用的坐标系
+              coordinateSystem: 'geo',
+              symbolSize: function (val) {
+                return val[2] / 30
+              },
+              itemStyle: {
+                normal: {
+                  color: '#FFAC2E'
+                }
+              },
+              label: {
+                show: getParameter(this.storeOption, 'theme.ComponentOption.ChartLabel.check'),
+                position: 'right',
+                formatter: ({ value, name }) => {
+                  if (labelShow === 1) {
+                    if (value) {
+                      return name
+                    }
+                    return ''
+                  } else {
+                    return name
+                  }
+                }
+              },
+              data: seriesOption.data,
+              // 配置何时显示特效'render' 绘制完成后显示特效。'emphasis' 高亮（hover）的时候显示特效。
+              showEffectOn: 'render',
+              // 目前只有ripple这一种
+              effectType: 'ripple',
+              // 涟漪特效相关配置。
+              rippleEffect: {
+                // 动画的时间
+                period: 4,
+                // 动画中波纹的最大缩放比例
+                scale: 4,
+                // 波纹的绘制方式可选 'stroke' 和 'fill'
+                brushType: 'stroke'
+              },
+              // Scatter才有这个属性,是否开启鼠标 hover 的提示动画效果
+              hoverAnimation: true
             }
           ]
-        },
-        series: [
-          {
-            name: 'pm2.5',
-            type: 'effectScatter',
-            scaling: 1.7,
-            // 该系列使用的坐标系
-            coordinateSystem: 'geo',
-            symbolSize: function (val) {
-              return val[2] / 10
-            },
-            data: [
-              { name: '合肥', value: [117.29, 32.0581, 134] },
-              { name: '上海', value: [121.4648, 31.2891, 90] },
-              { name: '北京', value: [116.4551, 40.2539, 210] },
-              { name: '杭州', value: [119.5313, 29.8773, 30] },
-              { name: '乌鲁木齐', value: [87.9236, 43.5883, 230] },
-              { name: '长沙市', value: [113.0823, 28.2568, 21] },
-              { name: '广州', value: [113.5107, 23.2196, 90] },
-              { name: '南京', value: [118.8062, 31.9208, 55] },
-              { name: '成都', value: [103.9526, 30.7617, 33] },
-              { name: '武汉', value: [114.3896, 30.6628, 66] },
-              { name: '中山', value: [113.4229, 22.478, 21] }
-            ],
-            // 配置何时显示特效'render' 绘制完成后显示特效。'emphasis' 高亮（hover）的时候显示特效。
-            showEffectOn: 'render',
-            // 目前只有ripple这一种
-            effectType: 'ripple',
-            // 涟漪特效相关配置。
-            rippleEffect: {
-              // 动画的时间
-              period: 4,
-              // 动画中波纹的最大缩放比例
-              scale: 4,
-              // 波纹的绘制方式可选 'stroke' 和 'fill'
-              brushType: 'stroke'
-            },
-            // Scatter才有这个属性,是否开启鼠标 hover 的提示动画效果
-            hoverAnimation: true
-          }
-        ]
+        }
       }
+    },
+    getSeriesOption () {
+      const { data, fields } = this.chartData
+      if (data && data.length > 0) {
+        // 最小值
+        let min = null
+        // 最大值
+        let max = null
+        // 维度， 度量
+        const { Dimension, Measure } = fields
+        // 维度，只会有一条
+        const dimensionField = Dimension.fields[0].displayColumn
+        // 度量，最多5条数据
+        // 仅截取第一个度量作为地图的展示值，其他值放在tooltip中展示
+        const measureFields = Measure.fields
+        const firstMeasureField = Measure.fields[0].displayColumn
+        const result = data.map(item => {
+          let value = []
+          const text = []
+          measureFields.forEach(field => {
+            text.push({
+              name: field.displayColumn,
+              value: item[field.displayColumn]
+            })
+            value = value.concat(this.getCenter(item[dimensionField]))
+            value.push(item[field.displayColumn])
+          })
+
+          min = this.getMin(min, item[firstMeasureField])
+          max = this.getMax(max, item[firstMeasureField])
+
+          return {
+            name: item[dimensionField],
+            value,
+            text
+          }
+        })
+        return {
+          min,
+          max,
+          data: deepClone(result)
+        }
+      }
+      return null
     }
   }
 }
