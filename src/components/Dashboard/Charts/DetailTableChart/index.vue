@@ -1,6 +1,6 @@
 <template>
   <div style="width:100%;height:100%;">
-    <div v-if="dataValue && dataValue.tableData">
+    <div v-if="dataValue && dataValue.tableData" style="width:100%;height:90%;">
       <table-chart
         :table-columns="dataValue.columns"
         :table-data="dataValue.tableData"
@@ -50,7 +50,7 @@ export default {
       columns: [],
       isShowPagination: true,
       pageNum: 1,
-      pageSize: 20,
+      pageSize: 10,
       tableLoading: false,
       storeOption: {},
       dataOption: [],
@@ -115,17 +115,46 @@ export default {
     this.dataOption = store.state.app.dataOption
   },
   methods: {
-    refresh () {
-      console.log('重新请求数据')
+    refresh (val) {
+      this.dataValue = this.formatDataValue(deepClone(this.chartData), val)
     },
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
       this.dataValue = this.formatDataValue(deepClone(this.chartData))
     },
-    formatDataValue (data) {
-      const tableData = [{ 'name': 'Sam S Club', 'value': 10000 }, { 'name': 'a Club', 'value': 12122 }]
-      const columns = [{ prop: 'name', label: '姓名' }, { prop: 'value', label: '价格' }]
-      const dataValue = { tableData, total: tableData.length, columns }
+    formatDataValue (chartData, val = { pageNum: 1, pageSize: 10 }) {
+      const { data, fields } = chartData
+      const columns = []
+      for (const key in fields) {
+        if (Object.hasOwnProperty.call(fields, key)) {
+          const element = fields[key]
+          element.fields.forEach(field => {
+            columns.push({ prop: field.column, label: field.displayColumn })
+          })
+        }
+      }
+      const tableDataTmep = []
+      data.forEach(item => {
+        const obj = {}
+        for (const key in item) {
+          if (Object.hasOwnProperty.call(item, key)) {
+            const element = item[key]
+            columns.forEach(jtem => {
+              if (key === jtem.label) {
+                obj[`${jtem.prop}`] = element
+              }
+            })
+          }
+        }
+        tableDataTmep.push(obj)
+      })
+      this.pageSize = val.pageSize
+      this.pageNum = val.pageNum
+      const tableData = tableDataTmep.slice(
+        (val.pageNum - 1) * val.pageSize,
+        val.pageNum * val.pageSize
+      )
+      const dataValue = { tableData, total: tableDataTmep.length, columns }
       return dataValue
     }
   }

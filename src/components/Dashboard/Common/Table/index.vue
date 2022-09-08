@@ -49,25 +49,33 @@
         </el-table-column>
       </template>
     </el-table>
-    <Pagination
+    <!-- <Pagination
       v-if="isShowPagination"
       class="pagination"
       v-bind="$attrs"
       v-on="$listeners"
       @pagination="handlePageChange"
+    /> -->
+    <el-pagination
+      v-if="isShowPagination"
+      class="pagination"
+      background
+      style="float: right;margin-top: 6px;"
+      :current-page.sync="currentPage"
+      :page-size="limit"
+      :page-sizes="pageSizes"
+      :layout="paginationLayout"
+      :total="total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
     />
   </div>
 </template>
 
 <script>
-import Pagination from '@/components/Pagination/index.vue'
-// import ColumnSetting from './components/ColumnSetting'
 
 export default {
   name: 'CommonTable',
-  components: {
-    Pagination
-  },
   props: {
     tableColumns: {
       required: true,
@@ -109,6 +117,10 @@ export default {
       type: Number,
       required: true
     },
+    total: {
+      type: Number,
+      required: true
+    },
     sequenceName: {
       type: String,
       default: '序号'
@@ -120,7 +132,27 @@ export default {
   },
   data () {
     return {
-      cloneTableColumns: []
+      cloneTableColumns: [],
+      pageSizes: [10, 20, 30, 50],
+      paginationLayout: 'total, prev, pager, next, sizes, jumper'
+    }
+  },
+  computed: {
+    currentPage: {
+      get () {
+        return this.pageNum
+      },
+      set (val) {
+        this.$emit('update:pageNum', val)
+      }
+    },
+    limit: {
+      get () {
+        return this.pageSize
+      },
+      set (val) {
+        this.$emit('update:pageSize', val)
+      }
     }
   },
   watch: {
@@ -145,8 +177,12 @@ export default {
         return item
       })
     },
-    handlePageChange (page) {
-      this.$emit('refresh', page)
+    handleCurrentChange(val) {
+      this.$emit('refresh', { pageNum: val, pageSize: this.pageSize })
+    },
+    handleSizeChange(val) {
+      this.currentPage = 1
+      this.$emit('refresh', { pageNum: 1, pageSize: val })
     },
     indexMethod(index) {
       const page = this.pageNum // 当前页码
@@ -159,6 +195,9 @@ export default {
 
 <style lang="scss" scoped>
 .common-table {
+  height: 100%;
+  margin-top: 10px;
+  overflow-y: auto;
   &:not(:root):-ms-full-screen {
     min-height: 100vh;
     padding: 20px;
