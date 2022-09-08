@@ -233,7 +233,8 @@ export default {
       const that = this
       const addData = function () { // 添加字段
         // 判断是否已经存在
-        const dataIndex = that.option[data.type].value.findIndex(el => {
+        const value = that.option[data.type] || that.option.DimensionOrMeasure
+        const dataIndex = value.value.findIndex(el => {
           return el._id === data._id
         })
         if (dataIndex !== -1) {
@@ -242,9 +243,9 @@ export default {
             type: 'warning'
           })
         } else {
-          const { limit, validate, name } = that.option[data.type]
+          const { limit, validate, name } = value
           if (limit) {
-            if (that.option[data.type].value.length === limit) {
+            if (value.value.length === limit) {
               that.$message.warning(`已超过[${name}]最多可添加项数量（${limit}）`)
               return
             }
@@ -258,18 +259,22 @@ export default {
             }
           }
 
-          that.option[data.type].value.push(data)
+          value.value.push(data)
         }
       }
 
       if (this.option.Dimension) {
         addData()
       } else { // 当维度不存在时
-        if (data.type === 'Dimension') {
-          this.$message({
-            message: `不支持添加维度到[${this.option.Measure.name}]上`,
-            type: 'warning'
-          })
+        if (!this.option.DimensionOrMeasure) {
+          if (data.type === 'Dimension') {
+            this.$message({
+              message: `不支持添加维度到[${this.option.Measure.name}]上`,
+              type: 'warning'
+            })
+          } else {
+            addData()
+          }
         } else {
           addData()
         }
