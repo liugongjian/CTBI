@@ -107,12 +107,12 @@ export default {
         }
         for (let i = 1; i < this.dataValue[0].length; i++) {
           for (let j = 0; j < sumArr.length; j++) {
-            sumArr[j] += Number(this.dataValue[j + 1][i])
+            sumArr[j] += Number.parseFloat(this.dataValue[j + 1][i])
           }
         }
         for (let i = 1; i < this.dataValue[0].length; i++) {
           for (let j = 0; j < sumArr.length; j++) {
-            this.dataValue[j + 1][i] = (Number(this.dataValue[j + 1][i]) / sumArr[j] * 100).toFixed(2)
+            this.dataValue[j + 1][i] = (this.dataValue[j + 1][i] / sumArr[j] * 100).toFixed(2)
           }
         }
       }
@@ -284,7 +284,8 @@ export default {
       }
     },
     // 获取堆积图
-    getStackSeries (ComponentOption, FunctionalOption) {
+    getStackSeries(ComponentOption, FunctionalOption) {
+      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       this.series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {
@@ -321,7 +322,8 @@ export default {
     },
 
     // 获取百分比堆积柱状图
-    getPercentStackSeries (ComponentOption, FunctionalOption) {
+    getPercentStackSeries(ComponentOption, FunctionalOption) {
+      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       this.series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {
@@ -339,7 +341,7 @@ export default {
       if (!ComponentOption.TwisYAxis?.check) {
         this.yAxis[0].axisLabel.formatter = '{value}%'
       }
-      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
+
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'line',

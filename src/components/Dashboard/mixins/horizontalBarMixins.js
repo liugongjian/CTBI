@@ -218,7 +218,8 @@ export default {
     },
 
     // 获取堆积条形图
-    getStackSeries (componentOption) {
+    getStackSeries(componentOption) {
+      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       this.series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {
@@ -277,7 +278,8 @@ export default {
     },
 
     // 获取百分比堆积条形图
-    getPercentStackSeries (componentOption) {
+    getPercentStackSeries(componentOption) {
+      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       this.series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {
@@ -295,7 +297,6 @@ export default {
       if (!componentOption.TwisYAxis?.check) {
         this.xAxis[0].axisLabel.formatter = '{value}%'
       }
-      const data = getDataValueById(this.identify)
       for (let i = 0; i < seriesLength; i++) {
         this.series.push({
           type: 'bar',
@@ -304,7 +305,7 @@ export default {
             show: componentOption.ChartLabel.check, // 标签显示
             formatter: function (params) {
               const isPercent = that.checkList.includes('百分比') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}%` : ''
-              const isMeasure = that.checkList.includes('度量') ? `${data[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
+              const isMeasure = that.checkList.includes('度量') ? `${that.dataValue[params.dataIndex + 1][params.seriesIndex + 1]}` : ''
               return isPercent + '\n' + isMeasure
             }
           },

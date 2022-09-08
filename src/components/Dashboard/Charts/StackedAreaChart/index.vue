@@ -83,22 +83,26 @@ export default {
         },
         xAxis: this.xAxis,
         tooltip: {
+          show: true,
           trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#6a7985'
-            }
-          },
           formatter: (params) => {
             let result = ''
+            let Total = 0
             params.forEach((item, index) => {
-              const { data, seriesName, marker, color, name } = item
-              result += `<div>${name}</div><div style="line-height: 25px;">${marker}</span>
+              const { data, seriesName, marker, color } = item
+              if (seriesName !== '总计') {
+                if (index === 0) {
+                  result += '<div>' + data[0] + '</div>'
+                }
+
+                result += `<div style="line-height: 25px;">${marker}</span>
                   <span style="color: ${color};">${seriesName}</span>
                   <span style="float: right;margin-left: 20px;">${data[index + 1]}${(YAxis.unit || '')}</span>
                 </div>`
+                Total += Number.parseFloat(data[index + 1])
+              }
             })
+            result += `<div style="line-height: 25px;font-weight: 700;">总计<span style="float: right;font-weight: 700;">${Total}${(YAxis.unit || '')}</span></div>`
             return result
           }
         },

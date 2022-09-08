@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-09-07 12:06:00
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-08 09:18:46
+ * @LastEditTime: 2022-09-08 10:08:13
  * @Description:
 -->
 <template>
@@ -75,11 +75,21 @@ export default {
         xAxis: this.xAxis,
         tooltip: {
           trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#6a7985'
-            }
+          formatter: (params) => {
+            let result = ''
+            params.forEach((item, index) => {
+              const { data, seriesName, marker, color, name } = item
+              if (index === 0) {
+                result += `<div>${name}</div>`
+                result += '<div>总计：100%</div>'
+              }
+
+              result += `<div style="line-height: 25px;">${marker}</span>
+                  <span style="color: ${color};">${seriesName}</span>
+                  <span style="float: right;margin-left: 20px;">${data[index + 1]}%</span>
+                </div>`
+            })
+            return result
           }
         },
         yAxis: this.yAxis,

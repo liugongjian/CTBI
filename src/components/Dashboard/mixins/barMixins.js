@@ -1,7 +1,7 @@
 // 柱图的混入
 import baseMixins from './baseMixins'
 import { colorTheme } from '@/constants/color.js'
-import { deepClone, formatDataValue } from '@/utils/optionUtils'
+import { deepClone, formatDataValue, getDataValueById } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 import store from '@/store'
 export default {
@@ -216,7 +216,8 @@ export default {
     },
 
     // 获取堆积柱状图
-    getStackSeries (componentOption) {
+    getStackSeries(componentOption) {
+      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       this.series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {
@@ -276,7 +277,8 @@ export default {
     },
 
     // 获取百分比堆积柱状图
-    getPercentStackSeries (componentOption) {
+    getPercentStackSeries(componentOption) {
+      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       this.series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {
