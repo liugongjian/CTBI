@@ -157,11 +157,12 @@ export default {
         color.push(item.color)
       })
       this.setGrid(ComponentOption.Legend)
+      const legendLayout = this.getLegendLayout(ComponentOption.Legend)
 
       this.chartOption = {
         color: color, // 图例颜色
         grid: this.grid,
-        legend: ComponentOption.Legend,
+        legend: legendLayout,
         // xAxis: ComponentOption.ChartDirection.direction === 1 ? xAxis : yAxis,
         xAxis: ComponentOption.ChartDirection.direction === 1 ? { ...this.generateAxisOptions('X', Axis), ...this.getAxisShowTypeOption() } : { ...this.generateAxisOptions('X', Axis), ...this.getAxisShowTypeOption() },
         tooltip: {

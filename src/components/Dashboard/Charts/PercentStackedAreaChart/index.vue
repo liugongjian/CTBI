@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-09-07 12:06:00
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-08 10:08:13
+ * @Description:
+-->
 <template>
   <div class="self-chart-content">
     <v-chart
@@ -59,19 +66,30 @@ export default {
       })
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
+      const legendLayout = this.getLegendLayout(ComponentOption.Legend)
 
       this.chartOption = {
         grid: this.grid,
         color: colorOption,
-        legend: ComponentOption.Legend,
+        legend: legendLayout,
         xAxis: this.xAxis,
         tooltip: {
           trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#6a7985'
-            }
+          formatter: (params) => {
+            let result = ''
+            params.forEach((item, index) => {
+              const { data, seriesName, marker, color, name } = item
+              if (index === 0) {
+                result += `<div>${name}</div>`
+                result += '<div>总计：100%</div>'
+              }
+
+              result += `<div style="line-height: 25px;">${marker}</span>
+                  <span style="color: ${color};">${seriesName}</span>
+                  <span style="float: right;margin-left: 20px;">${data[index + 1]}%</span>
+                </div>`
+            })
+            return result
           }
         },
         yAxis: this.yAxis,

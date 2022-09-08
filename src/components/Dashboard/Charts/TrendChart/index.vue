@@ -202,6 +202,7 @@ export default {
       var legendData = []
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
+      const legendLayout = this.getLegendLayout(ComponentOption.Legend)
       // 如果设置了指标带小趋势图
       this.chartList = []
       var indicatorOption = this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption
@@ -302,7 +303,7 @@ export default {
             grid: this.grid,
             color: colorOption,
             legend: {
-              ...ComponentOption.Legend,
+              ...legendLayout,
               data: legendData
             },
             xAxis: this.xAxis,
