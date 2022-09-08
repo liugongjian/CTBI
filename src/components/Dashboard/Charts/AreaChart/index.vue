@@ -68,6 +68,7 @@ export default {
       })
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
+      const legendLayout = this.getLegendLayout(ComponentOption.Legend)
       // 获取指标筛选中的图例数据
       const legendData = []
       this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
@@ -81,7 +82,7 @@ export default {
         grid: this.grid,
         color: colorOption,
         legend: {
-          ...ComponentOption.Legend,
+          ...legendLayout,
           data: legendData
         },
         xAxis: this.xAxis,

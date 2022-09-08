@@ -63,6 +63,7 @@ export default {
       }
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
+      const legendLayout = this.getLegendLayout(ComponentOption.Legend)
       // 设置图表的option
       that.chartOption = {
         tooltip: {
@@ -73,7 +74,7 @@ export default {
         },
         grid: this.grid,
         legend: {
-          ...ComponentOption.Legend,
+          ...legendLayout,
           formatter: (name) => {
             if (SeriesSetting && name === SeriesSetting.SeriesSelect.selectValue) {
               return SeriesSetting.SeriesSelect.remark

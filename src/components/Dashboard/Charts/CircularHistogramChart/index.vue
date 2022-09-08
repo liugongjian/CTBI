@@ -56,6 +56,7 @@ export default {
       const componentOption = this.storeOption.theme.ComponentOption
       // 设置图例与图表距离
       this.setGrid(componentOption.Legend)
+      const legendLayout = this.getLegendLayout(componentOption.Legend)
       this.chartOption = {
         polar: {
           radius: [10, '80%']
@@ -85,7 +86,7 @@ export default {
           data: this.dataValue.xData
         },
         legend: {
-          ...componentOption.Legend,
+          ...legendLayout,
           itemHeight: 10,
           itemWidth: 10
         },

@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-09-07 12:06:00
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-08 09:18:46
+ * @Description:
+-->
 <template>
   <div class="self-chart-content">
     <v-chart
@@ -59,11 +66,12 @@ export default {
       })
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
+      const legendLayout = this.getLegendLayout(ComponentOption.Legend)
 
       this.chartOption = {
         grid: this.grid,
         color: colorOption,
-        legend: ComponentOption.Legend,
+        legend: legendLayout,
         xAxis: this.xAxis,
         tooltip: {
           trigger: 'axis',
