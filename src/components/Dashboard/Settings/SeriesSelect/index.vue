@@ -1,6 +1,6 @@
 <template>
   <div
-    class="editor-object-container"
+    class="editor-object-container editor-fix"
     style="padding-bottom: 0px"
   >
     <div class="editor-item-title">请选择系列</div>
