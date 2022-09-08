@@ -58,7 +58,12 @@ export default {
         'color': colorOption,
         'legend': legendLayout,
         'xAxis': this.xAxis,
-        'tooltip': this.tooltip,
+        'tooltip': {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+          }
+        },
         'yAxis': this.yAxis,
         'dataset': {
           'source': this.dataValue

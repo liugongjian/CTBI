@@ -131,7 +131,6 @@ export default {
           this.grid.bottom = 100
         }
       }
-      console.log(this.grid)
     },
     // 图例定位
     getLegendLayout(legend) {
