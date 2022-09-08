@@ -21,8 +21,7 @@ export default {
   mixins: [mapMixins],
   data () {
     return {
-      chartOption: {},
-      dataValue: null
+      chartOption: {}
     }
   },
   methods: {
@@ -30,7 +29,6 @@ export default {
       const componentOption = this.storeOption.theme.ComponentOption
       const seriesOption = this.getSeriesOption()
       if (seriesOption) {
-        this.dataValue = seriesOption.data
         const min = Number.parseFloat(seriesOption.min)
         const max = Number.parseFloat(seriesOption.max)
 
@@ -77,7 +75,7 @@ export default {
                 areaColor: '#EBEDF0',
                 borderColor: '#fff'
               },
-              data: this.dataValue
+              data: seriesOption.data
             }
           ]
         }
@@ -99,10 +97,12 @@ export default {
         const measureFields = Measure.fields
         const firstMeasureField = Measure.fields[0].displayColumn
         const result = data.map(item => {
-          const text = measureFields.map(field => {
-            return {
-              name: field.displayColumn,
-              value: item[field.displayColumn]
+          const text = measureFields.map((field, index) => {
+            if (index > 0) {
+              return {
+                name: field.displayColumn,
+                value: item[field.displayColumn]
+              }
             }
           })
 

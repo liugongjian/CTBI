@@ -245,11 +245,14 @@ export const formatDataValue = function (chartData) {
  * @returns {String}
  */
 export const transformDataTypeIcon = function (data) {
-  let type = data
+  let type = ''
+  if (typeof data === 'string') {
+    type = data
+  } else {
+    type = data[0].granularity || data[0].dataType
+  }
+
   if (type) {
-    if (typeof type !== 'string') {
-      type = data[0].dataType || ''
-    }
     if (type.indexOf('text') > -1 ||
       type.indexOf('char') > -1 ||
       type.indexOf('varChar') > -1 ||

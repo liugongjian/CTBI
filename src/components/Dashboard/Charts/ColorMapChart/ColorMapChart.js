@@ -50,10 +50,10 @@ export default {
         'url': '', // 链接地址
         'show': false, // 是否展示链接地址
         'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
-      },
-      MapStyleTemplates: { // 样式模板
-        type: 'defaultMap'// 模板类型 1.defaultMap 默认；2.simpleMap 极简底图； 3.3DMap 3D填充
       }
+      // MapStyleTemplates: { // 样式模板
+      //   type: 'defaultMap'// 模板类型 1.defaultMap 默认；2.simpleMap 极简底图； 3.3DMap 3D填充
+      // }
     },
     'ComponentOption': { // 图表样式
       'ChartLabel': { // 图表标签
@@ -82,17 +82,16 @@ export default {
       // 自定义字段规则校验
       // 返回{success: true, msg: ''}
       'validate': function (field) {
-        // const { attributes } = field
+        const { attributes } = field
         // 验证二级字段类型是不是[地理]
-        // if (attributes && attributes.length > 0) {
-        //   const attr = attributes[0]
-        //   const { secondeDataType } = attr
-        //   if (secondeDataType && secondeDataType === 'granularity') {
-        //     return { success: true, msg: '' }
-        //   }
-        // }
-        // return { success: false, msg: '不支持添加该类型字段到[地理区域/维度]，需要[地理]类型的字段' }
-        return { success: true, msg: '' }
+        if (attributes && attributes.length > 0) {
+          const attr = attributes[0]
+          const { secondeDataType } = attr
+          if (secondeDataType && secondeDataType === 'granularity') {
+            return { success: true, msg: '' }
+          }
+        }
+        return { success: false, msg: '不支持添加该类型字段到[地理区域/维度]，需要[地理]类型的字段' }
       },
       'value': []
     },
