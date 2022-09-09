@@ -6,8 +6,8 @@ const brief = [
   'LineChart',
   'BarChart',
   'PieChart',
-  'FunnelChart'
-  // 'ColorMapChart'
+  'FunnelChart',
+  'ColorMapChart'
 ]
 
 // 布局控件

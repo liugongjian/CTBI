@@ -83,8 +83,8 @@ export default {
         // 验证二级字段类型是不是[地理]
         if (attributes && attributes.length > 0) {
           const attr = attributes[0]
-          const { secondeDataType } = attr
-          if (secondeDataType && secondeDataType === 'granularity') {
+          const { granularity } = attr
+          if (granularity) {
             return { success: true, msg: '' }
           }
         }
