@@ -1,8 +1,15 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-08-04 12:46:01
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-13 14:13:38
+ * @Description:
+-->
 <template>
   <div v-if="visible" class="editor-object-container">
     <span class="editor-item-title">列宽调整</span>
     <el-radio-group v-model="option.type">
-      <el-radio label="selfadapting ">按容器自适应</el-radio>
+      <el-radio label="selfadapting">按容器自适应</el-radio>
       <el-radio label="selfdefine">自定义</el-radio>
     </el-radio-group>
     <div>

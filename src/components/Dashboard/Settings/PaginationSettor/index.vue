@@ -1,8 +1,15 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-08-04 12:46:01
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-13 11:32:36
+ * @Description:
+-->
 <template>
   <div class="editor-object-container">
     <el-checkbox v-model="option.show">显示分页</el-checkbox>
     <div class="pag-select editor-item-container">
-      <el-select v-model.number="option.pageSize" :disabled="!option.show">
+      <el-select v-model.number="option.pageSize" :disabled="!option.show" popper-class="setting-select">
         <el-option value="10" label="10" />
         <el-option value="20" label="20" />
         <el-option value="30" label="30" />

@@ -1,5 +1,5 @@
 <template>
-  <div id="screentable" v-loading="loading" class="common-table">
+  <div id="screentable" v-loading="loading" class="table-chart">
 
     <el-table
       ref="table"
@@ -10,6 +10,8 @@
       :data="tableData"
       v-bind="$attrs"
       :row-style="rowStyle"
+      :header-row-style="headerRowStyle"
+      :cell-style="cellStyle"
       v-on="$listeners"
     >
       <el-table-column
@@ -17,6 +19,7 @@
         type="index"
         :index="indexMethod"
         :label="sequenceName"
+        width="100"
       />
       <template v-for="(item, index) in cloneTableColumns">
         <el-table-column
@@ -49,25 +52,26 @@
         </el-table-column>
       </template>
     </el-table>
-    <Pagination
+    <el-pagination
       v-if="isShowPagination"
       class="pagination"
-      v-bind="$attrs"
-      v-on="$listeners"
-      @pagination="handlePageChange"
+      background
+      style="float: right;margin-top: 6px;"
+      :current-page.sync="currentPage"
+      :page-size="limit"
+      :page-sizes="pageSizes"
+      :layout="paginationLayout"
+      :total="total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
     />
   </div>
 </template>
 
 <script>
-import Pagination from '@/components/Pagination/index.vue'
-// import ColumnSetting from './components/ColumnSetting'
 
 export default {
   name: 'CommonTable',
-  components: {
-    Pagination
-  },
   props: {
     tableColumns: {
       required: true,
@@ -109,6 +113,10 @@ export default {
       type: Number,
       required: true
     },
+    total: {
+      type: Number,
+      required: true
+    },
     sequenceName: {
       type: String,
       default: '序号'
@@ -116,11 +124,39 @@ export default {
     rowStyle: {
       type: Object,
       default: null
+    },
+    headerRowStyle: {
+      type: Object,
+      default: null
+    },
+    cellStyle: {
+      type: Object,
+      default: null
     }
   },
   data () {
     return {
-      cloneTableColumns: []
+      cloneTableColumns: [],
+      pageSizes: [10, 20, 30, 50, 80, 100],
+      paginationLayout: 'total, prev, pager, next, sizes, jumper'
+    }
+  },
+  computed: {
+    currentPage: {
+      get () {
+        return this.pageNum
+      },
+      set (val) {
+        this.$emit('update:pageNum', val)
+      }
+    },
+    limit: {
+      get () {
+        return this.pageSize
+      },
+      set (val) {
+        this.$emit('update:pageSize', val)
+      }
     }
   },
   watch: {
@@ -145,8 +181,12 @@ export default {
         return item
       })
     },
-    handlePageChange (page) {
-      this.$emit('refresh', page)
+    handleCurrentChange(val) {
+      this.$emit('refresh', { pageNum: val, pageSize: this.pageSize })
+    },
+    handleSizeChange(val) {
+      this.currentPage = 1
+      this.$emit('refresh', { pageNum: 1, pageSize: val })
     },
     indexMethod(index) {
       const page = this.pageNum // 当前页码
@@ -158,7 +198,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.common-table {
+.table-chart {
+  height: 100%;
+  margin-top: 10px;
+  overflow-y: auto;
   &:not(:root):-ms-full-screen {
     min-height: 100vh;
     padding: 20px;
@@ -267,7 +310,7 @@ export default {
       padding: 0 25px;
     }
   }
-  .table.el-table {
+  .el-table {
     ::v-deep td,
     ::v-deep th {
       padding: 6px 8px;
@@ -279,10 +322,11 @@ export default {
         padding-left: 24px;
       }
     }
+    ::v-deep th.el-table__cell{
+      background-color: transparent;
+    }
     ::v-deep th {
-      // color: $mainTextColor-dark2;
       font-weight: 500;
-      background: #fafafa;
     }
     ::v-deep .scroll-x .cell {
       position: relative;
@@ -311,13 +355,10 @@ export default {
     align-items: center;
     margin: 0;
   }
-  .them-color{
-    // color: $mainColor;
-  }
 }
 .el-table{
-    ::v-deep table{
-        border-collapse: collapse;
-    }
+  ::v-deep table{
+    border-collapse: collapse;
+  }
 }
 </style>

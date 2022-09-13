@@ -49,7 +49,8 @@ export default {
       'TableTheme': {
         'colorType': 'themeColor',
         'show': false,
-        'active': 'stripe' // stripe 斑马 border 线框 simple 简版 verySimple 极简
+        'active': 'stripe', // stripe 斑马 border 线框 simple 简版 verySimple 极简
+        'color': ''
       },
       'TableThemeSimple': {
         'show': true,
@@ -83,14 +84,15 @@ export default {
       'PaginationSettor': {
         'disable': false,
         'show': true,
-        'pageSize': 10
-      },
-      'IndicatorGroup': {
-        'show': false
+        'pageSize': 20
       },
       'ColumnWidth': {
         'type': 'selfadapting'
       }
+      // 'IndicatorGroup': {
+      //   'show': false
+      // },
+
     }
   },
   'advance': {}, // 高级

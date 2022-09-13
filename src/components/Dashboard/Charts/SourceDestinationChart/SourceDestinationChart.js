@@ -1,3 +1,10 @@
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-09-01 14:07:39
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-01 14:25:00
+ * @Description:
+ */
 /**
  * type: {
  *    indicator: 指标,
