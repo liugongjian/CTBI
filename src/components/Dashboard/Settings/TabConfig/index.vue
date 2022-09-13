@@ -6,7 +6,7 @@
       <el-button type="primary" icon="el-icon-plus" style="width:100%;" @click="addTab">新增Tab标签</el-button>
     </div>
     <div v-for="item in tabs" :key="item.name" class="inputWrap">
-      <el-input v-model="item.title" placeholder="请输入Tab名称" style="width:100%" @blur="() => testTitle(item)" />
+      <el-input v-model="item.title" placeholder="请输入Tab名称,不超过30个字符" maxlength="30" style="width:100%" @blur="() => testTitle(item)" />
     </div>
   </div>
 </template>

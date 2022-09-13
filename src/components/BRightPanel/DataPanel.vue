@@ -190,10 +190,13 @@ export default {
             this.Measure = []
             dataList.forEach(item => {
               item.dataSetID = id
-              if (item.type === 'Dimension') {
-                this.Dimension.push(item)
-              } else {
-                this.Measure.push(item)
+              const attr = item.attributes && item.attributes[0] || {}
+              if (!attr.isHidden) {
+                if (item.type === 'Dimension') {
+                  this.Dimension.push(item)
+                } else {
+                  this.Measure.push(item)
+                }
               }
             })
           }
