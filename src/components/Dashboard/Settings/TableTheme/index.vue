@@ -75,7 +75,6 @@
 </template>
 
 <script>
-import store from '@/store'
 import Edition from '@/components/Dashboard/mixins/EditionMixins'
 
 export default {
@@ -87,26 +86,6 @@ export default {
       default: () => { }
     }
   },
-  // watch: {
-  //   'option.colorType': {
-  //     handler (val) {
-  //       store.state.app.layout.forEach(item => {
-  //         if (item.id === store.state.app.currentLayoutId) {
-  //           item.option.theme.DisplayConfig.Color.show = this.option.active !== 'verySimple' && val === 'custom'
-  //         }
-  //       })
-  //     }
-  //   },
-  //   'option.active': {
-  //     handler (val) {
-  //       store.state.app.layout.forEach(item => {
-  //         if (item.id === store.state.app.currentLayoutId) {
-  //           item.option.theme.DisplayConfig.Color.show = val !== 'verySimple' && this.option.colorType === 'custom'
-  //         }
-  //       })
-  //     }
-  //   }
-  // },
   methods: {
     handleType (val) {
       this.option.active = val
