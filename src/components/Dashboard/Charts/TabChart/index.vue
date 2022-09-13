@@ -183,7 +183,7 @@ export default {
 .tab-header {
   background: #fff;
   display: flex;
-  margin-top: -20px;
+  margin-top: 0px;
   overflow: auto;
   .tab-header-btn {
     display: flex;

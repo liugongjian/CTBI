@@ -22,8 +22,9 @@ export default {
       },
       'Mark': { // 备注
         'show': false, // 是否显示备注
-        'position': 'onChart', // 备注出现位置
-        'text': ''// 备注信息
+        'position': 'afterTitle', // 备注出现位置
+        'text': '', // 备注信息
+        'hidePosition': true // 不显示出现未知
       },
       'CustomBackgroundEnable': { // 自定义背景填充
         'color': '', // 卡片颜色

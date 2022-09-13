@@ -15,7 +15,7 @@
           @click="showDialog"
         />
       </div>
-      <div style="display: flex;align-items: center;margin-top: 12px">
+      <div v-if="!option.hidePosition" style="display: flex;align-items: center;margin-top: 12px">
         <span style="margin-right: 8px">位置</span>
         <el-radio-group v-model="option.position">
           <el-radio label="afterTitle">紧跟标题</el-radio>
