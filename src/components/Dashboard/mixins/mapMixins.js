@@ -1,6 +1,7 @@
 // 地图的混入
 import baseMixins from './baseMixins'
 import chinaJson from './china.json'
+import { MapVisualColorOptions } from '@/constants/constants'
 import { deepClone, formatDataValue, getParameter } from '@/utils/optionUtils'
 export default {
   mixins: [baseMixins],
@@ -78,6 +79,11 @@ export default {
         itemStyle.borderColor = borderColor
       }
       return itemStyle
+    },
+    getVisualMap() {
+      const { colorClass } = getParameter(this.storeOption, 'theme.ComponentOption.VisualMap')
+      const { value } = MapVisualColorOptions.find(item => { return item.label === colorClass })
+      return value || MapVisualColorOptions.find(item => { return item.label === 'default' })
     }
 
   }

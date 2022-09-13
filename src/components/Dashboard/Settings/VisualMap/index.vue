@@ -1,37 +1,16 @@
 <template>
   <div class="editor-object-container">
     <div class="editor-item-title">主题色填充</div>
-    <!-- <el-popover
-        placement="bottom-end"
-        trigger="click"
-      >
-        <color-inner :option="option" />
-        <div
-          slot="reference"
-          class="color-container"
-          @click="handleArrow"
-        >
-          <div class="color-block">
-            <span v-for="(item, index) in colorTheme[option.theme]" :key="index" class="color-row" :style="`background-color: ${item.value}`" />
-          </div>
-          <span class="label">{{ option.theme }}</span>
-          <i
-            v-if="arrowDown"
-            class="el-icon-arrow-down el-icon--right"
-          />
-          <i
-            v-else
-            class="el-icon-arrow-up el-icon--right"
-          />
-        </div>
-      </el-popover> -->
-    <!-- <el-select
+    <el-select
       v-model="option.colorClass"
       placeholder="请输入内容"
       popper-class="setting-select"
     >
+      <div slot="prefix">
+        <div ref="selectedColor" class="selected-block" />
+      </div>
       <el-option
-        v-for="(item,index) in selectOptions"
+        v-for="(item,index) in MapVisualColorOptions"
         :key="index"
         class="select-option"
         :label="item.label"
@@ -39,7 +18,7 @@
       >
         <div class="option-block" :style="{background: `linear-gradient(90deg, ${item.value[0]} 0%, ${item.value[1]} 100%)`}" />
       </el-option>
-    </el-select> -->
+    </el-select>
   </div>
 </template>
 
@@ -54,18 +33,37 @@ export default {
       default: () => { }
     }
   },
-  computed: {
-    selectOptions() {
-      return MapVisualColorOptions
+  data() {
+    return {
+      MapVisualColorOptions,
+      arrowDown: false
     }
   },
-  methods: {
+  watch: {
+    'option.colorClass': {
+      handler(val) {
+        this.$nextTick(() => {
+          const { value } = this.MapVisualColorOptions.find(item => { return item.label === val })
+          if (value && value.length > 1) {
+            this.$refs.selectedColor.style.background = `linear-gradient(90deg, ${value[0]} 0%, ${value[1]} 100%)`
+          }
+        })
+      },
+      deep: true,
+      immediate: true
+    }
   }
 
 }
 </script>
 
 <style lang="scss" scoped>
+.selected-block {
+  width: 187px;
+    height: 18px;
+    top: 4px;
+    position: absolute;
+}
 .select-option {
 height: 24px;
 

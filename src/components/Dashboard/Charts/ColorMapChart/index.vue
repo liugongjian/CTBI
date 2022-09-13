@@ -29,6 +29,7 @@ export default {
       const seriesOption = this.getSeriesOption()
       // 获取总计
       this.setTotal()
+      const visualMapColor = this.getVisualMap()
       const itemStyle = this.getItemStyle()
       if (seriesOption) {
         const min = Number.parseFloat(seriesOption.min)
@@ -47,7 +48,7 @@ export default {
             max,
             realtime: true,
             calculable: true,
-            color: ['#FFAC2E', '#FFE4B5']
+            color: visualMapColor
           },
           tooltip: {
             trigger: 'item',

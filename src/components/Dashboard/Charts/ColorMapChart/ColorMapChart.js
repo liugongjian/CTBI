@@ -75,7 +75,7 @@ export default {
         'borderColor': '#fff'
       },
       'VisualMap': { // 地图底色与轮廓填充
-        'colorClass': ''
+        'colorClass': 'default'
       },
       'TotalShow': { // 显示总计
         'show': false, // 是否选中
