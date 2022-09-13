@@ -114,13 +114,8 @@ export default {
           this.handleCommand(temp)
         }
       },
-      deep: true
-    }
-  },
-  mounted () {
-    const temp = this.recursiveOption(this.options)
-    if (temp) {
-      this.handleCommand(temp)
+      deep: true,
+      immediate: true
     }
   },
   methods: {

@@ -340,7 +340,11 @@ export const getFieldsTable = (fields) => {
     }
     // 默认聚合方式
     if (!item.attributes[0].aggregator) {
-      item.attributes[0].aggregator = 'sum'
+      if (item.attributes[0].dataType === 'text') {
+        item.attributes[0].aggregator = ''
+      } else {
+        item.attributes[0].aggregator = 'sum'
+      }
     }
     if (item.type === 'Dimension') {
       if (item.attributes[0].isHidden) {
