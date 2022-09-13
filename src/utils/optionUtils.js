@@ -249,7 +249,8 @@ export const transformDataTypeIcon = function (data) {
   if (typeof data === 'string') {
     type = data
   } else {
-    type = data[0].granularity || data[0].dataType
+    const temp = data.attributes || data
+    type = temp[0].granularity || temp[0].dataType
   }
 
   if (type) {

@@ -10,14 +10,51 @@ export default {
     }
   },
   mounted () {
-    console.log('地图混入加载')
     this.$echarts.registerMap('china', chinaJson)
+  },
+  watch: {
+    storeOption: {
+      handler (val) {
+        this.getOption()
+      },
+      deep: true
+    }
   },
   methods: {
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
       this.dataValue = formatDataValue(deepClone(this.chartData))
       this.getOption()
+    },
+    getCenter(name) {
+      const { features } = chinaJson
+      const result = features.find(item => {
+        return item.properties.name === name
+      })
+      if (result) {
+        return result.properties.center
+      }
+      return []
+    },
+    getMin (originValue, value) {
+      let temp = originValue
+      if (!temp) {
+        temp = value
+      }
+      if (Number.parseFloat(temp) > Number.parseFloat(value)) {
+        temp = value
+      }
+      return temp
+    },
+    getMax (originValue, value) {
+      let temp = originValue
+      if (!temp) {
+        temp = value
+      }
+      if (Number.parseFloat(temp) < Number.parseFloat(value)) {
+        temp = value
+      }
+      return temp
     }
   }
 }

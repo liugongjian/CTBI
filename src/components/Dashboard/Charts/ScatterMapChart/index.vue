@@ -14,113 +14,204 @@
 </template>
 
 <script>
-import chinaJson from '../../mixins/china.json'
-import { getLayoutOptionById } from '@/utils/optionUtils'
 import mapMixins from '@/components/Dashboard/mixins/mapMixins'
+import { deepClone, getParameter } from '@/utils/optionUtils'
+
 export default {
   name: 'ScatterMapChart',
   mixins: [mapMixins],
-  props: {
-    identify: {
-      type: String,
-      default: ''
-    }
-  },
   data () {
     return {
-      storeOption: {},
-      chartOption: {},
-      dataValue: [
-        { name: '北京市', value: [116.405285, 39.904989, 24] },
-        { name: '天津市', value: [117.190182, 39.125596, 60] },
-        { name: '上海市', value: [121.472644, 31.231706, 24] },
-        { name: '重庆市', value: [106.504962, 29.533155, 2] },
-        { name: '河北省', value: [114.502461, 38.045474, 56] },
-        { name: '河南省', value: [113.665412, 34.757975, 5] },
-        { name: '云南省', value: [102.712251, 25.040609, 30] },
-        { name: '辽宁省', value: [123.429096, 41.796767, 59] },
-        { name: '黑龙江省', value: [126.642464, 45.756967, 73] },
-        { name: '湖南省', value: [112.982279, 28.19409, 99] },
-        { name: '安徽省', value: [117.283042, 31.86119, 24] },
-        { name: '山东省', value: [117.000923, 36.675807, 10] },
-        { name: '新疆维吾尔族自治区', value: [87.617733, 43.792818, 87] },
-        { name: '江苏省', value: [118.767413, 32.041544, 51] },
-        { name: '浙江省', value: [120.153576, 30.287459, 37] },
-        { name: '江西省', value: [115.892151, 28.676493, 48] },
-        { name: '湖北省', value: [114.298572, 30.584355, 17] },
-        { name: '广西壮族自治区', value: [108.320004, 22.82402, 26] },
-        { name: '甘肃省', value: [103.823557, 36.058039, 37] },
-        { name: '山西省', value: [112.549248, 37.857014, 18] },
-        { name: '内蒙古', value: [111.670801, 40.818311, 34] },
-        { name: '陕西省', value: [108.948024, 34.263161, 64] },
-        { name: '吉林省', value: [125.3245, 43.886841, 4] },
-        { name: '福建省', value: [119.306239, 26.075302, 41] },
-        { name: '贵州省', value: [106.713478, 26.578343, 20] },
-        { name: '广东省', value: [113.280637, 23.125178, 10] },
-        { name: '青海省', value: [101.778916, 36.623178, 3] },
-        { name: '西藏自治区', value: [91.132212, 29.660361, 4] },
-        { name: '四川省', value: [104.065735, 30.659462, 41] },
-        { name: '宁夏回族自治区', value: [106.278179, 38.46637, 8] },
-        { name: '海南省', value: [110.33119, 20.031971, 4] }
-      ]
+      chartOption: {}
     }
-  },
-  watch: {
-    storeOption: {
-      handler (val) {
-        if (JSON.stringify(val.dataSource) !== '{}') {
-          this.dataValue = val.dataSource
-          this.getOption()
-        }
-      },
-      deep: true
-    }
-  },
-  mounted () {
-    this.$echarts.registerMap('china', chinaJson)
-    this.storeOption = getLayoutOptionById(this.identify)
-    this.getOption()
   },
   methods: {
     getOption () {
-      const componentOption = this.storeOption.theme.ComponentOption
-      this.chartOption = {
-        legend: componentOption.Legend,
-        geo: {
-          map: 'china',
-          roam: true,
-          // 图形上的文本标签
-          // 地图区域的多边形 图形样式
-          itemStyle: {
-            areaColor: '#eee', // 地图区域的颜色
-            borderColor: 'gray' // 图形的描边颜色 支持的颜色格式同 color，不支持回调函数
-          },
-          // 高亮状态下的多边形和标签样式
-          emphasis: {
-            label: {
-              show: true, // 是否显示标签
-              color: '#fff' // 文字的颜色 如果设置为 'auto'，则为视觉映射得到的颜色，如系列色
-            },
-            itemStyle: {
-              areaColor: 'rgba(238, 238, 238, 1)' // 地图区域的颜色
+      const seriesOption = this.getSeriesOption()
+      if (seriesOption) {
+        const min = Number.parseFloat(seriesOption.min)
+        const max = Number.parseFloat(seriesOption.max)
+        const labelShow = getParameter(this.storeOption, 'theme.ComponentOption.ChartLabel.labelShow')
+
+        this.chartOption = {
+          tooltip: {
+            trigger: 'item',
+            formatter: function ({ data, marker }) {
+              let temp = []
+              if (data) {
+                temp = data.text.map(item => {
+                  return `${item.name} ${item.value}`
+                })
+                return [
+                  `${marker} ${data.name}`,
+                  ...temp
+                ].join('<br \>')
+              }
+              return ''
             }
-          }
-        },
-        series: [
-          {
-            type: 'scatter',
-            coordinateSystem: 'geo', // 该系列使用的坐标系 可选: 'cartesian2d','polar','geo'
-            // 标记的图形, 标记类型包括 'circle', 'rect', 'roundRect', 'triangle', 'diamond',
-            symbol: 'circle',
-            symbolSize: 8, // 标记的大小
-            // 图形的样式
-            itemStyle: {
-              color: 'purple'
+          },
+          geo: {
+            map: 'china',
+            layoutCenter: ['50%', '50%'],
+            layoutSize: 630,
+            // 是否开启鼠标缩放和平移漫游。
+            roam: true,
+            zoom: 1.2,
+            visualMap: {
+              show: true,
+              orient: 'horizontal',
+              type: 'continuous',
+              // visualMapContinuous 组件两端文本
+              text: [seriesOption.max, seriesOption.min],
+              // 指定 visualMapContinuous 组件的允许的最小值。'min' 必须用户指定。
+              min,
+              // 指定 visualMapContinuous 组件的允许的最大值。'max' 必须用户指定
+              max,
+              realtime: true,
+              calculable: true,
+              color: ['#FFAC2E', '#FFE4B5']
             },
-            data: this.dataValue
-          }
-        ]
+            itemStyle: {
+              normal: {
+                areaColor: '#EBEDF0',
+                borderColor: '#fff'
+              }
+            },
+            label: {
+              show: getParameter(this.storeOption, 'theme.ComponentOption.ChartLabel.check'),
+              position: 'right',
+              formatter: ({ value, name }) => {
+                if (labelShow === 1) {
+                  if (value) {
+                    return name
+                  }
+                  return ''
+                } else {
+                  return name
+                }
+              }
+            },
+            emphasis: {
+              label: {
+                show: false,
+                position: 'right'
+              },
+              itemStyle: {
+                normal: {
+                  areaColor: '#FFAC2E',
+                  borderColor: '#fff'
+                }
+              }
+
+            },
+            regions: [
+              {
+                name: '南海诸岛',
+                value: 0,
+                show: false,
+                itemStyle: {
+                  normal: {
+                    opacity: 0,
+                    label: {
+                      show: false
+                    },
+                    color: '#71D4E7'
+                  }
+                }
+              }
+            ]
+          },
+          series: [
+            {
+              type: 'effectScatter',
+              // 该系列使用的坐标系
+              coordinateSystem: 'geo',
+              symbolSize: function (val) {
+                return val[2] / 30
+              },
+              itemStyle: {
+                normal: {
+                  color: '#FFAC2E'
+                }
+              },
+              label: {
+                show: getParameter(this.storeOption, 'theme.ComponentOption.ChartLabel.check'),
+                position: 'right',
+                formatter: ({ value, name }) => {
+                  if (labelShow === 1) {
+                    if (value) {
+                      return name
+                    }
+                    return ''
+                  } else {
+                    return name
+                  }
+                }
+              },
+              data: seriesOption.data,
+              // 配置何时显示特效'render' 绘制完成后显示特效。'emphasis' 高亮（hover）的时候显示特效。
+              showEffectOn: 'render',
+              // 目前只有ripple这一种
+              effectType: 'ripple',
+              // 涟漪特效相关配置。
+              rippleEffect: {
+                // 动画的时间
+                period: 4,
+                // 动画中波纹的最大缩放比例
+                scale: 4,
+                // 波纹的绘制方式可选 'stroke' 和 'fill'
+                brushType: 'stroke'
+              },
+              // Scatter才有这个属性,是否开启鼠标 hover 的提示动画效果
+              hoverAnimation: true
+            }
+          ]
+        }
       }
+    },
+    getSeriesOption () {
+      const { data, fields } = this.chartData
+      if (data && data.length > 0) {
+        // 最小值
+        let min = null
+        // 最大值
+        let max = null
+        // 维度， 度量
+        const { Dimension, Measure } = fields
+        // 维度，只会有一条
+        const dimensionField = Dimension.fields[0].displayColumn
+        // 度量，最多5条数据
+        // 仅截取第一个度量作为地图的展示值，其他值放在tooltip中展示
+        const measureFields = Measure.fields
+        const firstMeasureField = Measure.fields[0].displayColumn
+        const result = data.map(item => {
+          let value = []
+          const text = []
+          measureFields.forEach(field => {
+            text.push({
+              name: field.displayColumn,
+              value: item[field.displayColumn]
+            })
+            value = value.concat(this.getCenter(item[dimensionField]))
+            value.push(item[field.displayColumn])
+          })
+
+          min = this.getMin(min, item[firstMeasureField])
+          max = this.getMax(max, item[firstMeasureField])
+
+          return {
+            name: item[dimensionField],
+            value,
+            text
+          }
+        })
+        return {
+          min,
+          max,
+          data: deepClone(result)
+        }
+      }
+      return null
     }
   }
 }

@@ -413,8 +413,7 @@ export default {
       })
     },
     typeTransform (data) {
-      const temp = this.resetDataType(data)
-      return transformDataTypeIcon(temp)
+      return transformDataTypeIcon(data)
     },
     handlerBlur (newVal, oldVal, index) {
       if (regex.DATASET_NAME_REGEX.test(newVal)) {
@@ -435,9 +434,12 @@ export default {
     resetDataType (row) {
       const { attributes } = row
       if (attributes) {
-        const { granularity, dataType } = attributes[0]
+        const { granularity, dataType, dataFormat } = attributes[0]
         if (granularity) {
           return granularity
+        }
+        if (dataFormat) {
+          return dataFormat
         }
         return dataType
       }
@@ -448,18 +450,25 @@ export default {
       row.attributes[0].format = ''
       // 默认聚合方式
       row.attributes[0].aggregator = 'sum'
+      // 重置，防止选择了地理再选时间时值没有清空
+      row.attributes[0].granularity = ''
+      row.attributes[0].dataFormat = ''
       if (!item) {
         item = this.getValueItem(value)
       }
       const { originValue, parentValue } = item
       if (originValue) {
-        row.attributes[0].dataType = originValue
+        // row.attributes[0].dataType = originValue
+        this.$set(row.attributes[0], 'dataType', originValue)
       } else {
-        row.attributes[0].dataType = value
+        // row.attributes[0].dataType = value
+        this.$set(row.attributes[0], 'dataType', value)
       }
       if (parentValue) {
-        row.attributes[0].secondeDataType = parentValue
-        row.attributes[0][parentValue] = value
+        this.$set(row.attributes[0], 'secondeDataType', parentValue)
+        this.$set(row.attributes[0], parentValue, value)
+        // row.attributes[0].secondeDataType = parentValue
+        // row.attributes[0][parentValue] = value
       }
     },
     handleBlur (val, item) {

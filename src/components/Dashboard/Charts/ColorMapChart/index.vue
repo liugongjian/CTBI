@@ -15,7 +15,7 @@
 
 <script>
 import mapMixins from '@/components/Dashboard/mixins/mapMixins'
-import { deepClone } from '@/utils/optionUtils'
+import { deepClone, getParameter } from '@/utils/optionUtils'
 export default {
   name: 'ColorMapChart',
   mixins: [mapMixins],
@@ -26,14 +26,12 @@ export default {
   },
   methods: {
     getOption () {
-      const componentOption = this.storeOption.theme.ComponentOption
       const seriesOption = this.getSeriesOption()
       if (seriesOption) {
         const min = Number.parseFloat(seriesOption.min)
         const max = Number.parseFloat(seriesOption.max)
-
+        const labelShow = getParameter(this.storeOption, 'theme.ComponentOption.ChartLabel.labelShow')
         this.chartOption = {
-          legend: componentOption.Legend,
           visualMap: {
             show: true,
             orient: 'horizontal',
@@ -69,6 +67,25 @@ export default {
               type: 'map',
               map: 'china',
               // 是否开启鼠标缩放和平移漫游。
+              label: {
+                show: getParameter(this.storeOption, 'theme.ComponentOption.ChartLabel.check'),
+                formatter: ({ value, name }) => {
+                  if (labelShow === 1) {
+                    if (value) {
+                      return name
+                    }
+                    return ''
+                  } else {
+                    return name
+                  }
+                }
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  color: '#000'
+                }
+              },
               roam: true,
               zoom: 1.2,
               itemStyle: {
@@ -98,11 +115,9 @@ export default {
         const firstMeasureField = Measure.fields[0].displayColumn
         const result = data.map(item => {
           const text = measureFields.map((field, index) => {
-            if (index > 0) {
-              return {
-                name: field.displayColumn,
-                value: item[field.displayColumn]
-              }
+            return {
+              name: field.displayColumn,
+              value: item[field.displayColumn]
             }
           })
 
@@ -122,26 +137,6 @@ export default {
         }
       }
       return null
-    },
-    getMin (originValue, value) {
-      let temp = originValue
-      if (!temp) {
-        temp = value
-      }
-      if (Number.parseFloat(temp) > Number.parseFloat(value)) {
-        temp = value
-      }
-      return temp
-    },
-    getMax (originValue, value) {
-      let temp = originValue
-      if (!temp) {
-        temp = value
-      }
-      if (Number.parseFloat(temp) < Number.parseFloat(value)) {
-        temp = value
-      }
-      return temp
     }
   }
 }

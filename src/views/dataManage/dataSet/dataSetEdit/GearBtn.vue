@@ -45,6 +45,45 @@
               icon="el-icon-delete"
               @click.native="deleteDimensionMeasure(data)"
             >删除</el-dropdown-item>
+
+            <el-dropdown
+              placement="right"
+              class="w-100p"
+            >
+              <div class="el-dropdown-menu__item">
+                <svg-icon
+                  icon-class="el-icon-sort"
+                  style="margin-right: 5px;"
+                />
+                <span>排序</span>
+              </div>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item @click.native="toggleSort('', data)">
+                  不排序
+                  <svg-icon
+                    v-if="!data.attributes[0].sort || data.attributes[0].sort.sortType === ''"
+                    icon-class="el-icon-check"
+                    style="margin-right: 5px;"
+                  />
+                </el-dropdown-item>
+                <el-dropdown-item @click.native="toggleSort('ASC', data)">
+                  升序
+                  <svg-icon
+                    v-if="data.attributes[0].sort && data.attributes[0].sort.sortType === 'ASC'"
+                    icon-class="el-icon-check"
+                    style="margin-right: 5px;"
+                  />
+                </el-dropdown-item>
+                <el-dropdown-item @click.native="toggleSort('DESC', data)">
+                  降序
+                  <svg-icon
+                    v-if="data.attributes[0].sort && data.attributes[0].sort.sortType === 'DESC'"
+                    icon-class="el-icon-check"
+                    style="margin-right: 5px;"
+                  />
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -158,6 +197,12 @@ export default {
       } else if (type === 'Dimension') {
         return '转换为' + constants.DatasetType.Measure
       }
+    },
+    toggleSort (sort, data) {
+      if (!data.attributes[0].sort) {
+        this.$set(data.attributes[0], 'sort', { sortType: '' })
+      }
+      this.$set(data.attributes[0].sort, 'sortType', sort)
     }
   }
 }

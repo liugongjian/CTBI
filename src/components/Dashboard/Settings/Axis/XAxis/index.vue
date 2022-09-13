@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-object-container">
+  <div class="editor-object-container editor-fix">
     <div class="flex-align-center m-t-12" @keydown.8.stop="">
       <div class="editor-item-title" style="width: 36px">轴标题</div>
       <el-input v-model="option.title" style="flex: 1" />
@@ -19,7 +19,7 @@
       class="m-t-12"
       label="显示坐标轴"
     />
-    <div class="color-row m-t-12">
+    <div class="color-row m-t-12" :class="!option.show ? 'box-disabled' : ''">
       <el-dropdown :disabled="!option.show" trigger="click" placement="bottom" @command="handleAxisType">
         <div class="dropdown-link" :class="!option.show ? 'disabled' : ''">
           <svg-icon
@@ -130,9 +130,9 @@ export default {
   }
   .el-dropdown{
     min-width: 50px;
-    .disabled{
-      background: #F5F7FA;
-    }
+    // .disabled{
+    //   background: #F5F7FA;
+    // }
   }
   .dropdown-link{
     display: flex;

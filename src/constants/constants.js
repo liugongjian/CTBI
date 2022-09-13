@@ -64,7 +64,79 @@ export const DataTypeOptions = [
   {
     value: 'time',
     label: '时间',
-    icon: 'data-type-option-date'
+    icon: 'data-type-option-date',
+    children: [
+      {
+        value: 'YYYY',
+        parentValue: 'dataFormat',
+        originValue: 'time',
+        label: 'YYYY',
+        icon: 'data-type-option-date'
+      },
+      // {
+      //   value: 'YYYYMM',
+      //   parentValue: 'dataFormat',
+      //   originValue: 'time',
+      //   label: 'YYYYMM',
+      //   icon: 'data-type-option-date'
+      // },
+      // {
+      //   value: 'YYYY/MM',
+      //   parentValue: 'dataFormat',
+      //   originValue: 'time',
+      //   label: 'YYYY/MM',
+      //   icon: 'data-type-option-date'
+      // },
+      // {
+      //   value: 'YYYY-MM',
+      //   parentValue: 'dataFormat',
+      //   originValue: 'time',
+      //   label: 'YYYY-MM',
+      //   icon: 'data-type-option-date'
+      // },
+      // {
+      //   value: 'YYYYMMDD',
+      //   parentValue: 'dataFormat',
+      //   originValue: 'time',
+      //   label: 'YYYYMMDD',
+      //   icon: 'data-type-option-date'
+      // },
+      // {
+      //   value: 'YYYY/MM/DD',
+      //   parentValue: 'dataFormat',
+      //   originValue: 'time',
+      //   label: 'YYYY/MM/DD',
+      //   icon: 'data-type-option-date'
+      // },
+      // {
+      //   value: 'YYYY-MM-DD',
+      //   parentValue: 'dataFormat',
+      //   originValue: 'time',
+      //   label: 'YYYY-MM-DD',
+      //   icon: 'data-type-option-date'
+      // },
+      // {
+      //   value: 'YYYYMMDD HH:mm:ss',
+      //   parentValue: 'dataFormat',
+      //   originValue: 'time',
+      //   label: 'YYYYMMDD HH:mm:ss',
+      //   icon: 'data-type-option-date'
+      // },
+      // {
+      //   value: 'YYYY/MM/DD HH:mm:ss',
+      //   parentValue: 'dataFormat',
+      //   originValue: 'time',
+      //   label: 'YYYY/MM/DD HH:mm:ss',
+      //   icon: 'data-type-option-date'
+      // },
+      {
+        value: 'YYYY-MM-DD HH:mm:ss',
+        parentValue: 'dataFormat',
+        originValue: 'time',
+        label: 'YYYY-MM-DD HH:mm:ss',
+        icon: 'data-type-option-date'
+      }
+    ]
 
   }
 ]
