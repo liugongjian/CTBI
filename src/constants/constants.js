@@ -189,5 +189,13 @@ export const AggFunctionOptions = [
   { label: '平均数', value: 'avg' }
 ]
 
+export const MapVisualColorOptions = [
+  { label: 'default', value: ['#FFAC2E', '#FFE4B5'] },
+  { label: 'blue', value: ['#C2E1FF', '#0024CC'] },
+  { label: 'red', value: ['#FFD1C2', '#CC0000'] },
+  { label: 'green', value: ['#64F9F1', '#139EB9'] },
+  { label: 'purple', value: ['#E7CCF5', '#4F23A9'] }
+]
+
 // 默认字段更新值
 export const defaultDataLimit = 100

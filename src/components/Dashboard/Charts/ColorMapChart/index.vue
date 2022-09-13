@@ -27,6 +27,9 @@ export default {
   methods: {
     getOption () {
       const seriesOption = this.getSeriesOption()
+      // 获取总计
+      this.setTotal()
+      const itemStyle = this.getItemStyle()
       if (seriesOption) {
         const min = Number.parseFloat(seriesOption.min)
         const max = Number.parseFloat(seriesOption.max)
@@ -88,10 +91,7 @@ export default {
               },
               roam: true,
               zoom: 1.2,
-              itemStyle: {
-                areaColor: '#EBEDF0',
-                borderColor: '#fff'
-              },
+              itemStyle,
               data: seriesOption.data
             }
           ]
