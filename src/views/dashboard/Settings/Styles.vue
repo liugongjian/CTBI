@@ -65,9 +65,24 @@
         </div>
       </el-collapse-item>
       <el-collapse-item
+        v-if="option['NumberSetting']"
+        title="数值设置"
+        name="3"
+      >
+        <div
+          v-for="(item,name,key) in option['NumberSetting']"
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['NumberSetting'][name]"
+          />
+        </div>
+      </el-collapse-item>
+      <el-collapse-item
         v-if="option['Axis']"
         title="坐标轴"
-        name="3"
+        name="4"
       >
         <el-tabs v-if="!option['Axis']['RadarAxis']" v-model="activeName" class="axis-tab">
           <el-tab-pane
@@ -96,7 +111,7 @@
       <el-collapse-item
         v-if="option['DisplayConfig']"
         title="展示型配置"
-        name="4"
+        name="5"
       >
         <div
           v-for="(item,name,key) in option['DisplayConfig']"
@@ -111,7 +126,7 @@
       <el-collapse-item
         v-if="option['SeriesSetting']"
         title="系列设置"
-        name="5"
+        name="6"
       >
         <div
           v-for="(item,name,key) in option['SeriesSetting']"
@@ -126,7 +141,7 @@
       <el-collapse-item
         v-if="option['FunctionalOption']"
         title="功能设置"
-        name="6"
+        name="7"
       >
         <component
           :is="'FunctionalOption'"
@@ -136,7 +151,7 @@
       <el-collapse-item
         v-if="option['StyleConfig']"
         title="样式配置"
-        name="7"
+        name="8"
       >
         <div
           v-for="(item,name,key) in option['StyleConfig']"

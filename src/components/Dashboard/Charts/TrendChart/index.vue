@@ -6,7 +6,7 @@
       titleLinefeed : trendChartConfig.indicators=='linefeed'
     }"
   >
-    <div v-if="dataValue" style="width:100%;height:90%;">
+    <div v-if="dataValue" style="width:100%;height:calc(100% - 90px);">
       <div
         v-if="dataValue && trendChartConfig.type == 'disperse'"
         class="trendTitle"

@@ -269,6 +269,19 @@ export default {
       'name': '类别轴/维度',
       'require': true,
       'limit': 1,
+      // 自定义字段规则校验
+      'validate': function (field) {
+        const { attributes } = field
+        // 验证二级字段类型是不是[地理]
+        if (attributes && attributes.length > 0) {
+          const attr = attributes[0]
+          const { granularity } = attr
+          if (granularity) {
+            return { success: true, msg: '' }
+          }
+        }
+        return { success: false, msg: '不支持添加该类型字段到[地理区域/维度]，需要[地理]类型的字段' }
+      },
       'value': []
     },
     'Measure': { // 度量

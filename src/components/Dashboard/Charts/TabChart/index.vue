@@ -21,7 +21,9 @@
         :class="{'tab-header-active': item.name === editableTabsValue}"
         @click="() => changeTab(item)"
       >
-        <p>{{ item.title }}</p>
+        <el-tooltip effect="dark" :content="item.title" placement="top">
+          <p class="tab-header-title">{{ item.title }}</p>
+        </el-tooltip>
         <div
           v-if="isEdit"
           class="close"
@@ -181,7 +183,7 @@ export default {
 .tab-header {
   background: #fff;
   display: flex;
-  margin-top: -20px;
+  margin-top: 0px;
   overflow: auto;
   .tab-header-btn {
     display: flex;
@@ -206,6 +208,12 @@ export default {
       align-items: center;
       margin-left: 4px;
       overflow: hidden;
+    }
+    .tab-header-title{
+      max-width: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
   .tab-header-btn:hover {

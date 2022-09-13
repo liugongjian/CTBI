@@ -65,13 +65,16 @@
           </el-radio-group>
         </div>
       </div>
+      <div v-if="option.active!=='verySimple'&&option.colorType === 'custom'" class="flex-align-center m-t-12 editor-item-container">
+        <div class="editor-item-title">配色设置</div>
+        <el-color-picker v-model="option.color" :disabled="!option.show" />
+      </div>
 
     </div>
   </div>
 </template>
 
 <script>
-import store from '@/store'
 import Edition from '@/components/Dashboard/mixins/EditionMixins'
 
 export default {
@@ -81,17 +84,6 @@ export default {
     option: {
       type: Object,
       default: () => { }
-    }
-  },
-  watch: {
-    'option.colorType': {
-      handler (val) {
-        store.state.app.layout.forEach(item => {
-          if (item.id === store.state.app.currentLayoutId) {
-            item.option.theme.DisplayConfig.Color.show = val === 'custom'
-          }
-        })
-      }
     }
   },
   methods: {
