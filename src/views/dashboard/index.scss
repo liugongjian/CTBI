@@ -365,10 +365,27 @@
       background-color: inherit;
     }
   }
+    // 滚动条样式优化
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+  
+    // 外层轨道
+    ::-webkit-scrollbar-track {
+      background: #383B47;
+    }
+  
+    // 滚动的滑块
+    ::-webkit-scrollbar-thumb {
+      background: rgba(221, 221, 221, 0.25);
+      border-radius: 6px;
+    }
 }
 
 .tree-wrapper {
-  height: calc(100% - 33px);
+  height: calc( 100vh - 160px );
+  overflow-y: auto;
 
   .filter-tree {
     box-sizing: border-box;
@@ -383,8 +400,6 @@
     flex-direction: column;
     position: relative;
     border-bottom: 1px solid hsla(0, 0%, 85%, .15);
-    height: 50%;
-    max-height: calc(100% - 30px);
     .el-tree-node__content{
       margin: 1px;
     }
@@ -399,8 +414,6 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    height: 50%;
-    min-height: 30px;
     .el-tree-node__content{
       margin: 1px;
     }
