@@ -16,6 +16,8 @@
         :sequence="sequence"
         :sequence-name="sequenceName"
         :row-style="rowStyle"
+        :header-row-style="headerRowStyle"
+        :cell-style="cellStyle"
         @refresh="refresh"
       />
     </div>
@@ -48,9 +50,7 @@ export default {
     return {
       dataValue: null,
       columns: [],
-      isShowPagination: true,
       pageNum: 1,
-      pageSize: 10,
       tableLoading: false,
       storeOption: {},
       dataOption: [],
@@ -59,7 +59,22 @@ export default {
       header: false, // 不显示列头
       sequence: false, // 是否展示序号
       sequenceName: '序号',
-      rowStyle: {}
+      rowStyle: {},
+      headerRowStyle: {},
+      cellStyle: {}
+    }
+  },
+  computed: {
+    isShowPagination() {
+      return this.storeOption.theme.DisplayConfig.PaginationSettor.show
+    },
+    pageSize: {
+      get() {
+        return this.storeOption.theme.DisplayConfig.PaginationSettor.pageSize
+      },
+      set(v) {
+        this.storeOption.theme.DisplayConfig.PaginationSettor.pageSize = v
+      }
     }
   },
   watch: {
@@ -69,8 +84,26 @@ export default {
           this.stripe = val.theme.DisplayConfig.TableTheme.active === 'stripe'
           this.border = val.theme.DisplayConfig.TableTheme.active === 'border'
           const colorType = val.theme.DisplayConfig.TableTheme.colorType
-          const color = colorType === 'gray' ? colorType : (colorType === 'themeColor' ? 'blue' : val.theme.DisplayConfig.Color.color[0].color)
-          this.rowStyle = val.theme.DisplayConfig.TableTheme.active === 'simple' ? { 'border-bottom': `3px ${color} solid` } : {}
+          const color = colorType === 'gray' ? '#f5f5fa' : (colorType === 'themeColor' ? '#468cff' : val.theme.DisplayConfig.TableTheme.color)
+          if (val.theme.DisplayConfig.TableTheme.active === 'stripe') {
+            // 斑马线
+            this.headerRowStyle = { 'border-bottom': `2px ${color} solid` }
+          } else if (val.theme.DisplayConfig.TableTheme.active === 'border') {
+            // 线框
+            this.rowStyle = {}
+            this.cellStyle = { 'border-bottom': `1px #dfe6ec solid` }
+            this.headerRowStyle = { 'border': `0px ${color} solid`, 'background-color': `${color} !important` }
+          } else if (val.theme.DisplayConfig.TableTheme.active === 'simple') {
+            // 简版
+            this.cellStyle = { 'border-bottom': `0px ${color} solid` }
+            this.stripe = false
+            this.border = false
+            this.headerRowStyle = { 'border-bottom': `2px ${color} solid`, 'border-top': `3px ${color} solid`, 'background-color': 'transparent', 'color': '#fff' }
+          } else if (val.theme.DisplayConfig.TableTheme.active === 'verySimple') {
+            // 极简
+            this.rowStyle = {}
+            this.headerRowStyle = {}
+          }
         } else {
           if (val.theme.DisplayConfig.TableThemeSimple.show) {
             switch (val.theme.DisplayConfig.TableThemeSimple.type) {
@@ -122,7 +155,7 @@ export default {
     reloadImpl () {
       this.dataValue = this.formatDataValue(deepClone(this.chartData))
     },
-    formatDataValue (chartData, val = { pageNum: 1, pageSize: 10 }) {
+    formatDataValue (chartData, val = { pageNum: 1, pageSize: 20 }) {
       const { data, fields } = chartData
       const columns = []
       for (const key in fields) {

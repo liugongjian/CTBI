@@ -1,5 +1,5 @@
 <template>
-  <div id="screentable" v-loading="loading" class="common-table">
+  <div id="screentable" v-loading="loading" class="table-chart">
 
     <el-table
       ref="table"
@@ -10,6 +10,8 @@
       :data="tableData"
       v-bind="$attrs"
       :row-style="rowStyle"
+      :header-row-style="headerRowStyle"
+      :cell-style="cellStyle"
       v-on="$listeners"
     >
       <el-table-column
@@ -17,6 +19,7 @@
         type="index"
         :index="indexMethod"
         :label="sequenceName"
+        width="100"
       />
       <template v-for="(item, index) in cloneTableColumns">
         <el-table-column
@@ -49,13 +52,6 @@
         </el-table-column>
       </template>
     </el-table>
-    <!-- <Pagination
-      v-if="isShowPagination"
-      class="pagination"
-      v-bind="$attrs"
-      v-on="$listeners"
-      @pagination="handlePageChange"
-    /> -->
     <el-pagination
       v-if="isShowPagination"
       class="pagination"
@@ -128,12 +124,20 @@ export default {
     rowStyle: {
       type: Object,
       default: null
+    },
+    headerRowStyle: {
+      type: Object,
+      default: null
+    },
+    cellStyle: {
+      type: Object,
+      default: null
     }
   },
   data () {
     return {
       cloneTableColumns: [],
-      pageSizes: [10, 20, 30, 50],
+      pageSizes: [10, 20, 30, 50, 80, 100],
       paginationLayout: 'total, prev, pager, next, sizes, jumper'
     }
   },
@@ -194,7 +198,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.common-table {
+.table-chart {
   height: 100%;
   margin-top: 10px;
   overflow-y: auto;
@@ -306,7 +310,7 @@ export default {
       padding: 0 25px;
     }
   }
-  .table.el-table {
+  .el-table {
     ::v-deep td,
     ::v-deep th {
       padding: 6px 8px;
@@ -318,10 +322,11 @@ export default {
         padding-left: 24px;
       }
     }
+    ::v-deep th.el-table__cell{
+      background-color: transparent;
+    }
     ::v-deep th {
-      // color: $mainTextColor-dark2;
       font-weight: 500;
-      background: #fafafa;
     }
     ::v-deep .scroll-x .cell {
       position: relative;
@@ -350,13 +355,10 @@ export default {
     align-items: center;
     margin: 0;
   }
-  .them-color{
-    // color: $mainColor;
-  }
 }
 .el-table{
-    ::v-deep table{
-        border-collapse: collapse;
-    }
+  ::v-deep table{
+    border-collapse: collapse;
+  }
 }
 </style>
