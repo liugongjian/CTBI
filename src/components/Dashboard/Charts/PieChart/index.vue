@@ -137,8 +137,6 @@ export default {
                   const colorTemp = color.find((item) => { return data.data[0] === item.name })
                   return colorTemp ? colorTemp.color : 'red'
                 } else if (data.data[0] === '其他合计') {
-                  debugger
-                  console.log('1122', color, color[num].color)
                   return color[color.length - 1].color
                 } else {
                   const index = (data.dataIndex) % color.length
