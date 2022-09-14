@@ -102,7 +102,6 @@ export default {
       //   }
       //   titleList.push(titleItem)
       // }
-      console.log('titleList', titleList)
     },
     // 拿到数据中的指标
     getIndicatorOptions (val) {
@@ -278,7 +277,6 @@ export default {
               ]
             }
           }
-          console.log('showMark', showMark)
           if (showMark) {
             item.symbol = markType
             item.symbolSize = 5
@@ -428,8 +426,6 @@ export default {
 
     // 多选模式获取数据
     formatDataValueMulti (chartData, keyList) {
-      console.log(11121, keyList)
-      console.log(1111, chartData)
       const dataValue = []
       const DimensionKey = []
       const MeasureKey = []
@@ -469,7 +465,6 @@ export default {
     // 标题筛选
     filterTitleList(titleList, selectedIndicator) {
       var res = titleList.filter(item => {
-        console.log(item.name, selectedIndicator.includes(item.name))
         return selectedIndicator.includes(item.name)
       })
       // 默认选中

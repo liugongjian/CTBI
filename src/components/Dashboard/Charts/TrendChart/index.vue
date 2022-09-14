@@ -152,7 +152,6 @@ export default {
     changeTable (item, index) {
       // 如果是单选
       if (this.trendChartConfig.preview === 'radio') {
-        console.log('单选')
         this.titleList.map(item => {
           item.isSelect = item.index === index
         })
@@ -197,7 +196,6 @@ export default {
       }
 
       const { SeriesSelect } = this.storeOption.theme.SeriesSetting
-      console.log('SeriesSelect', SeriesSelect)
       // 获取颜色设置-使图例颜色与图形颜色对应
       const colorOption = []
       ComponentOption.Color.color.forEach(item => {
@@ -212,7 +210,6 @@ export default {
       this.chartList = []
       var indicatorOption = this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption
       // 如果是面积图隐藏 标记点功能
-      console.log(this.storeOption.theme.ComponentOption.SeriesMark.show)
       if (this.trendChartConfig.chart === 'bar' && this.storeOption.theme.ComponentOption.SeriesMark.show) {
         this.storeOption.theme.ComponentOption.SeriesMark.show = false
       } else if (this.trendChartConfig.chart !== 'bar' && !this.storeOption.theme.ComponentOption.SeriesMark.show) {
@@ -402,21 +399,16 @@ export default {
         series[i].yAxisIndex = yAxisIndex
       }
 
-      console.log('ComponentOption.SeriesMark.check', ComponentOption.SeriesMark.markType)
       if (ComponentOption.SeriesMark.check) {
         series[i].symbol = 'circle'
         series[i].hoverAnimation = false
         series[i].symbolSize = 1
       } else {
-        console.log(222)
         series[i].symbol = ComponentOption.SeriesMark.markType
       }
 
       // 最值显示
-
-      console.log(series)
       var newSeries = this.setSeriesItem(series)
-      console.log('newSeries', newSeries)
       return newSeries
       // }
     },

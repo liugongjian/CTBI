@@ -269,12 +269,12 @@ export default {
         // 验证二级字段类型是不是[地理]
         if (attributes && attributes.length > 0) {
           const attr = attributes[0]
-          const { granularity } = attr
-          if (granularity) {
+          const { dataType } = attr
+          if (dataType === 'time') {
             return { success: true, msg: '' }
           }
         }
-        return { success: false, msg: '不支持添加该类型字段到[地理区域/维度]，需要[地理]类型的字段' }
+        return { success: false, msg: '不支持添加该类型字段到[类别轴/维度]，需要[时间]类型的字段' }
       },
       'value': []
     },

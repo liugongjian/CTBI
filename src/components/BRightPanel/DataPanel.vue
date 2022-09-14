@@ -243,7 +243,7 @@ export default {
             type: 'warning'
           })
         } else {
-          console.log('value', value)
+          console.log('value', value, data)
           const { limit, validate, name } = value
           if (limit) {
             if (value.value.length === limit) {
