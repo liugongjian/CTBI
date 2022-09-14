@@ -16,7 +16,7 @@
             @click.native="changeChart"
           />
           <!-- 非图表组件仅显示名称 -->
-          <span v-if="!isCommonChart">{{ chartName }}</span>
+          <span v-if="!isCommonChart && showWrapper">{{ chartName }}</span>
           <span
             class="panel-icon"
             @click="toggleWrapperFold"

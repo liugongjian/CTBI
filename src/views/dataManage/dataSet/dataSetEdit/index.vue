@@ -489,6 +489,13 @@ export default {
           type: 'success'
         })
         this.toggleContent = false
+        const dataSourceId = this.editDataInfo && this.editDataInfo.dataSourceId
+        if (dataSourceId) {
+          const dataSource = this.dataSourceOptions.find(item => item._id === dataSourceId)
+          if (dataSource) {
+            this.currentDataSourceName = dataSource.displayName
+          }
+        }
       } catch (error) {
         console.error(error)
       }
