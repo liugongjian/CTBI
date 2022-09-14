@@ -27,6 +27,8 @@
 
 <script>
 import { chartCategory } from '../getToolList'
+import { deepClone } from '@/utils/optionUtils'
+
 export default {
   name: 'ChartListPanel',
   components: {},
@@ -59,7 +61,7 @@ export default {
     },
     filterTools(toolList, category) {
       const list = []
-      const res = JSON.parse(JSON.stringify(toolList))
+      const res = deepClone(toolList)
       Object.keys(res).forEach(item => {
         if (res[item].type !== category.category) {
           delete res[item]
