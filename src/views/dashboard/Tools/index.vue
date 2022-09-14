@@ -136,6 +136,7 @@
 </template>
 
 <script>
+// x: x轴定位，y: y轴定位， w：宽度占额， h： 高度占额 i：id，
 const DragPos = { 'x': 1, 'y': 1, 'w': 1, 'h': 1, 'i': null }
 const mouseXY = { 'x': 1, 'y': 1 }
 import store from '@/store'

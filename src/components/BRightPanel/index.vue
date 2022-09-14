@@ -126,23 +126,29 @@ export default {
     ChartSwitcher
   },
   props: {
+    // 是否展示图例切换组件
     showSwitchHeader: {
       type: Boolean,
       default: false
     },
+    // 当前仪表盘组件ID
     currentLayoutId: {
       type: String,
       default: ''
     },
+    // 当前选中组件类型
     optionType: { type: String, default: '' },
+    // 数据源配置项
     dataSourceOptions: {
       type: Object,
       default: () => {}
     },
+    // 数据集配置项
     dataSetOptions: {
       type: Object,
       default: () => {}
     },
+    // 当前选中组件名称
     chartName: {
       type: String,
       default: ''
