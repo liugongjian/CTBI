@@ -7,7 +7,7 @@
 -->
 <template>
   <div>
-    <div class="editor-object-container">
+    <div class="editor-object-container editor-fix">
       <div
         v-if="option.show"
         style="display: flex"

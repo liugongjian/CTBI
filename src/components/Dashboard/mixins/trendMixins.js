@@ -61,17 +61,17 @@ export default {
       this.getOption()
     },
     // 拿到数据中的系列名字
-    getSeriesOptions(val) {
-      if (val && val.lenght > 0) {
+    getSeriesOptions (val) {
+      // 为空时，进行初始化
+      if (val && val.length > 0) {
         const seriesOption = []
         val[0].forEach((item, index) => {
           if (index) {
-            seriesOption.push({ value: item, label: item })
+            seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false, showMark: false })
           }
         })
         this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
         this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
-        this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
       }
     },
     // 拿到数据的系列名字 并设置颜色 并拿到数据中展示标题
@@ -155,7 +155,7 @@ export default {
           axisLabel: {
             show: XAxis.showAxisLabel,
             // auto 智能显示 sparse 强制稀疏 condense 最多展示
-            rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? -90 : 10,
+            rotate: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'condense' ? -90 : 0,
             // interval: this.storeOption.theme.FunctionalOption.LabelShowType.axisShowType === 'sparse' ? 3 : 0,
             interval: 'auto',
             'width': 100,
@@ -252,22 +252,23 @@ export default {
         this.yAxis.push(itemRight)
       }
     },
-    // 系列设置
-    setSeriesItem () {
-      const { SeriesSelect } = this.storeOption.theme.SeriesSetting
 
-      this.series = this.series.map((item) => {
+    // 系列设置
+    setSeriesItem (series) {
+      const { SeriesSelect } = this.storeOption.theme.SeriesSetting
+      var newSeries = series.map((item) => {
         const option = SeriesSelect.seriesOption.find(ele => {
           return ele.value === item.name
         })
-        if (option) {
-          const { labelColor, showLabel, showMax, showMark, markType, lineType } = option
+        let condition = false
+        if (item.name === option.label) {
+          condition = true
+        }
+        if (option && condition) {
+          const { labelColor, showLabel, showMax, showMark, markType } = option
           const ChartLabel = this.storeOption.theme.ComponentOption.ChartLabel
-          item.label.show = item.label.show = ChartLabel.type === 'StackedBarChart' ? (this.checkList.includes('度量') && ChartLabel.check) || showLabel : ChartLabel.check || showLabel
+          item.label.show = ChartLabel.type === 'StackedBarChart' ? (this.checkList.includes('度量') && ChartLabel.check) || showLabel : ChartLabel.check || showLabel
           item.label.color = labelColor
-          item.lineStyle = {
-            type: lineType
-          }
           if (showMax) {
             item.markPoint = {
               symbol: 'pin',
@@ -277,16 +278,19 @@ export default {
               ]
             }
           }
+          console.log('showMark', showMark)
           if (showMark) {
             item.symbol = markType
+            item.symbolSize = 5
           } else {
             item.symbol = 'circle'
             item.hoverAnimation = false
-            item.symbolSize = 1
+            item.symbolSize = 0
           }
         }
         return item
       })
+      return newSeries
     },
     // 获取图形对应的样式配置-颜色
     getItemStyle (ComponentOption) {
@@ -339,7 +343,6 @@ export default {
         })
         data.unshift([this.dataValue[0][0], ...indicator])
         this.dataValue = data
-        console.log(data)
       }
     },
     // 获取堆积图

@@ -178,6 +178,7 @@ export default {
     // },
 
     getOption () {
+      console.log('getOption')
       const { ComponentOption, FunctionalOption, trendChartConfig, trendStyleConfig, Axis } = this.storeOption.theme
       this.Axis = Axis
       this.FunctionalOption = FunctionalOption
@@ -194,8 +195,9 @@ export default {
       } else {
         this.titleList = trendChartConfig.trendChartConfig.titleList
       }
-      // 系列配置-图表标签相关
-      this.setSeriesItem()
+
+      const { SeriesSelect } = this.storeOption.theme.SeriesSetting
+      console.log('SeriesSelect', SeriesSelect)
       // 获取颜色设置-使图例颜色与图形颜色对应
       const colorOption = []
       ComponentOption.Color.color.forEach(item => {
@@ -241,8 +243,10 @@ export default {
               grid: this.grid,
               color: colorOption,
               legend: {
-                ...ComponentOption.Legend,
+                ...legendLayout,
                 data: legendData
+                // ...ComponentOption.Legend,
+                // data: legendData
               },
               xAxis: this.xAxis,
               tooltip: {
@@ -397,14 +401,23 @@ export default {
         const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
         series[i].yAxisIndex = yAxisIndex
       }
-      if (!ComponentOption.SeriesMark.check) {
+
+      console.log('ComponentOption.SeriesMark.check', ComponentOption.SeriesMark.markType)
+      if (ComponentOption.SeriesMark.check) {
         series[i].symbol = 'circle'
         series[i].hoverAnimation = false
         series[i].symbolSize = 1
       } else {
+        console.log(222)
         series[i].symbol = ComponentOption.SeriesMark.markType
       }
-      return series
+
+      // 最值显示
+
+      console.log(series)
+      var newSeries = this.setSeriesItem(series)
+      console.log('newSeries', newSeries)
+      return newSeries
       // }
     },
     getSeries (ComponentOption, FunctionalOption, index) {
@@ -462,7 +475,8 @@ export default {
           i++
         }
       }
-      return series
+      var newSeries = this.setSeriesItem(series)
+      return newSeries
     }
   }
 }

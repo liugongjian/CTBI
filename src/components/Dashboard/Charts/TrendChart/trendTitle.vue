@@ -37,7 +37,7 @@
             {color:trendChartConfig.open&&trendStyleConfig.style?trendStyleConfig.fontSizeStyle[1].color :'#333' },
             {fontSize:trendChartConfig.open&&trendStyleConfig.style?trendStyleConfig.fontSizeStyle[1].size+'px' :'' }
           ]"
-        >{{ titleItem.value[0]?titleItem.value[0]:titleItem.value }}</div>
+        >{{ titleItem.value }}</div>
       </div>
     </div>
   </div>
