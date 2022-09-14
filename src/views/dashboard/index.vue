@@ -101,11 +101,11 @@ import Widget from './Widget/index.vue'
 import Tools from './Tools'
 import Navbar from './Navbar'
 import store from '@/store'
-import _ from 'lodash'
 // 导入样式
 import '@/views/dashboard/index.scss'
 import { getDashboardDetail } from '@/api/dashboard'
 import { getTemplateDetail } from '@/api/template'
+import { compareSettingEqual } from '@/utils/optionUtils'
 export default {
   name: 'DashBoard',
   components: {
@@ -319,13 +319,13 @@ export default {
           const nextData = JSON.stringify(data)
           const saveData = localStorage.getItem(saveName)
           if (saveData) {
-            if (!_.isEqual(JSON.parse(nextData), JSON.parse(saveData))) {
+            if (!compareSettingEqual(JSON.parse(nextData), JSON.parse(saveData))) {
               this.updateLocalStorage('unsaved')
             }
           } else {
             const setting = this.dashboard.setting
             if (setting) {
-              if (!_.isEqual(JSON.parse(nextData), JSON.parse(setting))) {
+              if (!compareSettingEqual(JSON.parse(nextData), JSON.parse(setting))) {
                 this.updateLocalStorage('unsaved')
               }
             } else {
