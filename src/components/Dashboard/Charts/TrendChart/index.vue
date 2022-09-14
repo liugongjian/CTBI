@@ -194,8 +194,6 @@ export default {
       } else {
         this.titleList = trendChartConfig.trendChartConfig.titleList
       }
-
-      const { SeriesSelect } = this.storeOption.theme.SeriesSetting
       // 获取颜色设置-使图例颜色与图形颜色对应
       const colorOption = []
       ComponentOption.Color.color.forEach(item => {
