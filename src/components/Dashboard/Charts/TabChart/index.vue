@@ -87,7 +87,7 @@ export default {
       return getLayoutById(this.identify)
     },
     tabHeight () {
-      return this.layout.h * 100 - 85 + this.layout.h * 4
+      return (this.layout.height || 300) - 80
     },
     editableTabsValue () {
       if (this.userChooseTab) {
