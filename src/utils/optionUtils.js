@@ -1,5 +1,6 @@
 import store from '@/store'
 import { customAlphabet } from 'nanoid'
+import _ from 'lodash'
 
 // 生成nanoId
 export const createNanoId = function () {
@@ -415,4 +416,16 @@ export const getQueryParams = (identify) => {
   // sql-参数配置中的
   const param = { configs: [] }
   return { query: { limit, dimension, measure, filter, order, offset, placeholder, param }, dataSetId: option.dataSet?.id, transformFields }
+}
+
+// 比较两个setting是否一致
+export const compareSettingEqual = (setting1, setting2) => {
+  const omitItems = ['width', 'height', 'activeTabId']
+  setting1.layout = setting1.layout.map(item => {
+    return _.omit(item, omitItems)
+  })
+  setting2.layout = setting2.layout.map(item => {
+    return _.omit(item, omitItems)
+  })
+  return _.isEqual(setting1, setting2)
 }
