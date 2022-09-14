@@ -91,12 +91,9 @@ export default {
     },
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
-      // this.dataValue = this.formatDataValue()
       this.dataValue = this.formatData(deepClone(getDataValueById(this.identify)))
-      // console.log(this.dataValue, 'ddddd')
     },
     formatData (dataValue) {
-      // console.log(dataValue, '接收的数据')
       const key1 = dataValue.fields.Dimension.fields[0].displayColumn || dataValue.fields.Dimension.fields[0].column
       const key2 = dataValue.fields.Measure.fields[0].displayColumn || dataValue.fields.Measure.fields[0].column
       const columns = []
