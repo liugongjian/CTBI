@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-19 11:32:45
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-29 15:05:18
+ * @LastEditTime: 2022-09-14 22:37:38
  * @Description:
  */
 // 水波纹的混入
@@ -78,15 +78,16 @@ export default {
       return array
     },
     // 拿到数据的系列名字 并设置颜色
-    getColor (val) {
-      const color = []
-      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-      val.forEach((item, index) => {
-        const idx = (index) % colorValue.length
-        color.push({ name: item.name, color: colorValue[idx].value, remark: item.name })
-      })
-
-      this.storeOption.theme.ComponentOption.Color.color = color
+    getColor(val) {
+      if (val.length !== this.storeOption.theme.ComponentOption.Color.color.length) {
+        const color = []
+        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
+        val.forEach((item, index) => {
+          const idx = (index) % colorValue.length
+          color.push({ name: item.name, color: colorValue[idx].value, remark: item.name })
+        })
+        this.storeOption.theme.ComponentOption.Color.color = color
+      }
     },
     // 获取设置目标值
     getCfgTargetOption (val) {

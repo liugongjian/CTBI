@@ -104,17 +104,18 @@ export default {
       }
     },
     // 拿到数据的系列名字 并设置颜色
-    getColor (val) {
-      const color = []
-      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-      val.forEach((item, index) => {
-        if (index) {
-          const idx = (index) % colorValue.length
-          color.push({ name: item[0], color: colorValue[idx].value, remark: item[0] })
-        }
-      })
-
-      this.storeOption.theme.ComponentOption.Color.color = color
+    getColor(val) {
+      if (val.length - 1 !== this.storeOption.theme.ComponentOption.Color.color.length) {
+        const color = []
+        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
+        val.forEach((item, index) => {
+          if (index) {
+            const idx = (index) % colorValue.length
+            color.push({ name: item[0], color: colorValue[idx].value, remark: item[0] })
+          }
+        })
+        this.storeOption.theme.ComponentOption.Color.color = color
+      }
     },
 
     // 拿到数据中的指标

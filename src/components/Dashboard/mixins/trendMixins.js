@@ -77,19 +77,22 @@ export default {
     // 拿到数据的系列名字 并设置颜色 并拿到数据中展示标题
     getColorAndTitle () {
       const val = this.dataValue
-      var color = []
-      var titleList = []
-      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-      val[0].forEach((item, index) => {
-        if (index) {
-          const idx = (index - 1) % colorValue.length
-          color.push({ name: item, color: colorValue[idx].value, remark: item })
-          titleList.push({ name: item, color: colorValue[idx].value, isSelect: !idx, value: val[val.length - 1][index], index: idx })
-        }
-      })
-      this.storeOption.theme.ComponentOption.Color.color = color
-      this.storeOption.theme.trendChartConfig.trendChartConfig.titleList = titleList
-      this.selectedItem = ''
+      if (val[0].length - 1 !== this.storeOption.theme.ComponentOption.Color.color.length) {
+        var titleList = []
+        var color = []
+        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
+        val[0].forEach((item, index) => {
+          if (index) {
+            const idx = (index - 1) % colorValue.length
+            color.push({ name: item, color: colorValue[idx].value, remark: item })
+            titleList.push({ name: item, color: colorValue[idx].value, isSelect: !idx, value: val[val.length - 1][index], index: idx })
+          }
+        })
+        this.storeOption.theme.ComponentOption.Color.color = color
+        this.storeOption.theme.trendChartConfig.trendChartConfig.titleList = titleList
+        this.selectedItem = ''
+      }
+
       // const len = val[0].length
       // var titleList = []
       // // 获取每个表的内容

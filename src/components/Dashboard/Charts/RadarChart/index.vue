@@ -55,7 +55,7 @@ export default {
   methods: {
     setData () {
       const { data = [], fields } = this.dataValue
-      const { Color } =
+      const { Color: { color } } =
         this.storeOption.theme.ComponentOption
       if (data && data.length > 0) {
         for (const key in fields) {
@@ -77,9 +77,9 @@ export default {
                 },
                 itemStyle: {
                   normal: {
-                    color: Color['theme'][index].value,
+                    color: color[index].value,
                     lineStyle: {
-                      color: Color['theme'][index].value
+                      color: color[index].value
                     }
                   }
                 },

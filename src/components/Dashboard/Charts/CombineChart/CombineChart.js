@@ -13,7 +13,6 @@
  *    other: 其他
  *  }
  * */
-import { colorTheme } from '@/constants/color.js'
 import { defaultDataLimit } from '@/constants/constants'
 export default {
   'type': 'trend', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
@@ -84,7 +83,7 @@ export default {
       // },
       'Color': { // 颜色设置
         'title': '配色设置',
-        'color': colorTheme['官方'],
+        'color': [],
         'theme': '官方'
       },
       'Legend': { // 图例

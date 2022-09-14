@@ -20,7 +20,7 @@
  *    other: 其他
  *  }
  * */
-import { colorTheme } from '@/constants/color.js'
+// import { colorTheme } from '@/constants/color.js'
 import { defaultDataLimit } from '@/constants/constants'
 
 export default {
@@ -80,7 +80,8 @@ export default {
       },
       'Color': { // 颜色设置
         'title': '配色设置',
-        'color': colorTheme['官方'],
+        // 'color': colorTheme['官方'],
+        'color': [],
         'theme': '官方'
       },
       // 'TwisYAxis': { // 双Y轴

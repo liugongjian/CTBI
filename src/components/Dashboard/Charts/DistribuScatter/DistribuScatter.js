@@ -1,7 +1,6 @@
 /*
 * 分布散点图
 * */
-import { colorTheme } from '@/constants/color.js'
 import { defaultDataLimit } from '@/constants/constants'
 export default {
   'type': 'relation', // 组件类型, 用于管理组件类型集合,例如：指标、表格、趋势
@@ -31,7 +30,7 @@ export default {
     'ComponentOption': {
       'Color': { // 颜色设置
         'title': '数据设置',
-        'color': colorTheme['官方'],
+        'color': [],
         'theme': '官方'
       },
       'Legend': { // 图例
