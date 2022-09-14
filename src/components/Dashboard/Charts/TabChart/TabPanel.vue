@@ -1,8 +1,8 @@
 <template>
   <grid-layout
     :layout.sync="layout"
-    :col-num="12"
-    :row-height="100"
+    :col-num="48"
+    :row-height="20"
     :is-draggable="true"
     :is-resizable="true"
     :is-mirrored="false"
@@ -21,6 +21,9 @@
         :w="item.w"
         :h="item.h"
         :i="item.i"
+        @resize="resizedEvent"
+        @resized="resizedEvent"
+        @container-resized="containerResizedEvent"
       >
         <ComponentBlock
           :option="item"
@@ -60,6 +63,21 @@ export default {
     }
   },
   methods: {
+    resizedEvent (i, newX, newY, newHPx, newWPx) {
+      const msg = 'RESIZED i=' + i + ', X=' + newX + ', Y=' + newY + ', H(px)=' + newHPx + ', W(px)=' + newWPx
+      this.updateLayoutSize(i, newHPx, newWPx)
+      console.log(msg)
+    },
+    containerResizedEvent: function (i, newH, newW, newHPx, newWPx) {
+      const msg = 'CONTAINER RESIZED i=' + i + ', H=' + newH + ', W=' + newW + ', H(px)=' + newHPx + ', W(px)=' + newWPx
+      this.updateLayoutSize(i, newHPx, newWPx)
+      console.log(msg)
+    },
+    updateLayoutSize(i, newHPx, newWPx) {
+      const hit = store.state.app.layout.find(item => item.id === i)
+      hit.width = typeof newWPx === 'number' ? newWPx : parseInt(newWPx)
+      hit.height = typeof newHPx === 'number' ? newHPx : parseInt(newHPx)
+    },
     clickHandler (id) {
       // 更新当前id
       this.$store.dispatch('app/updateLayoutId', id)

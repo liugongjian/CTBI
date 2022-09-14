@@ -8,8 +8,16 @@
     <div class="card-header-wrapper">
       <div
         v-if="getParameter(option, 'theme.Basic.Title.show')"
-        :style="{color: getParameter(option, 'theme.Basic.Title.color') || '#333' }"
-      >{{ getParameter(option, 'theme.Basic.Title.text') }}
+        style="display: flex;"
+        :style="{width: ((option.width || 200) - 90) + 'px' , color: getParameter(option, 'theme.Basic.Title.color') || '#333', fontSize: (getParameter(option, 'theme.Basic.Title.size') || 14) + 'px', lineHeight: (getParameter(option, 'theme.Basic.Title.size') || 14) + 'px'}"
+      >
+        <el-tooltip
+          :content="getParameter(option, 'theme.Basic.Title.text')"
+          placement="top"
+          effect="dark"
+        >
+          <p style="overflow: hidden;   white-space: nowrap; text-overflow: ellipsis;" :style="{maxWidth: ((option.width || 200) - 60) + 'px'}">{{ getParameter(option, 'theme.Basic.Title.text') }}</p>
+        </el-tooltip>
         <!-- 当备注位置选择为紧跟标题时 -->
         <el-tooltip
           v-if="getParameter(option, 'theme.Basic.Mark.show') && getParameter(option, 'theme.Basic.Mark.position') === 'afterTitle'"
@@ -20,7 +28,7 @@
             slot="content"
             v-html="getParameter(option, 'theme.Basic.Mark.text')"
           />
-          <i class="el-icon-warning-outline m-l-10" />
+          <i style="font-size: 14px;" class="el-icon-warning-outline m-l-10" />
         </el-tooltip>
       </div>
       <!-- 隐藏模块，用于解决标题不显示出现的布局问题 -->

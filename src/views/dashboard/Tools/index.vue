@@ -215,10 +215,12 @@ export default {
       const currentLayoutId = store.state.app.currentLayoutId
       const currentLayout = this.layout.find(item => item.i === currentLayoutId)
       const newLayout = {
-        x: (this.layout.length * 2) % (this.colNum || 12),
-        y: this.layout.length + (this.colNum || 12), // puts it at the bottom
-        w: 12,
-        h: 2,
+        x: (this.layout.length * 2) % (this.colNum || 48),
+        y: this.layout.length + (this.colNum || 48), // puts it at the bottom
+        w: 48,
+        h: 10,
+        width: 900,
+        height: 200,
         id: nanoId,
         i: nanoId,
         is: name,
@@ -292,10 +294,12 @@ export default {
             this.layout = this.layout.filter(obj => obj.i !== 'drop')
           }
           this.layout.push({
-            x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 12) : 0,
-            y: this.layout.length > 0 ? this.layout.length + (this.colNum || 12) : 0, // puts it at the bottom
-            w: 12,
-            h: 2,
+            x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 48) : 0,
+            y: this.layout.length > 0 ? this.layout.length + (this.colNum || 48) : 0, // puts it at the bottom
+            w: 48,
+            h: 10,
+            width: 900,
+            height: 200,
             is: name,
             option,
             i: 'drop'
@@ -313,10 +317,12 @@ export default {
             this.layout = this.layout.filter(obj => obj.i !== 'drop')
           }
           const newLayout = {
-            x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 12) : 0,
-            y: this.layout.length > 0 ? this.layout.length + (this.colNum || 12) : 0, // puts it at the bottom
-            w: 12,
-            h: 2,
+            x: this.layout.length > 0 ? (this.layout.length * 2) % (this.colNum || 48) : 0,
+            y: this.layout.length > 0 ? this.layout.length + (this.colNum || 48) : 0, // puts it at the bottom
+            w: 48,
+            h: 10,
+            width: 900,
+            height: 200,
             is: name,
             option,
             i: 'drop'

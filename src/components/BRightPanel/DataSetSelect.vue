@@ -107,7 +107,7 @@
                 </div>
                 <b-tooltip
                   :content="data.name"
-                  width="100px"
+                  width="180px"
                 />
                 <span
                   v-if="data.mold"

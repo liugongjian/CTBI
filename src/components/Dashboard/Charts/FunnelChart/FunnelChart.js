@@ -33,6 +33,7 @@ export default {
       'Title': { // 标题组件
         'text': '漏斗图', // 标题名称
         'color': '#333', // 标题颜色
+        'size': 14, // 标题大小
         'show': true // 是否显示标题
       },
       'Mark': { // 备注

@@ -61,7 +61,7 @@
 // import barMixins from '@/components/Dashboard/mixins/barMixins'
 // import { GridLayout, GridItem } from 'vue-grid-layout'
 import TabPanel from './TabPanel'
-import { getLayoutById } from '@/utils/optionUtils'
+import { getLayoutById, getParameter } from '@/utils/optionUtils'
 import store from '@/store'
 export default {
   name: 'TabChart',
@@ -87,7 +87,8 @@ export default {
       return getLayoutById(this.identify)
     },
     tabHeight () {
-      return this.layout.h * 100 - 85 + this.layout.h * 4
+      const titleHight = getParameter(this.layout, 'theme.Basic.Title.show') ? (getParameter(this.layout, 'theme.Basic.Title.size') || 14) : 14
+      return (this.layout.height || 300) - (80 + titleHight)
     },
     editableTabsValue () {
       if (this.userChooseTab) {
@@ -183,7 +184,7 @@ export default {
 .tab-header {
   background: #fff;
   display: flex;
-  margin-top: 0px;
+  margin-top: 5px;
   overflow: auto;
   .tab-header-btn {
     display: flex;
