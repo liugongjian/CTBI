@@ -54,7 +54,7 @@ export default {
         'color': ''
       },
       'TableThemeSimple': {
-        'show': true,
+        'show': false,
         'type': 'default'
       },
       'ListHeader': {
@@ -75,7 +75,7 @@ export default {
       },
       'Freeze': {
         'show': false,
-        'freezeChoose': 'arrange',
+        'freezeChoose': 'head',
         'positive': 0,
         'reverse': 0
       },
