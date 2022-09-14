@@ -18,6 +18,7 @@ export default {
       'Title': { // 标题组件
         'text': 'Tab组件', // 标题名称
         'color': '#000', // 标题颜色
+        'size': 14, // 标题大小
         'show': true // 是否显示标题
       },
       'Mark': { // 备注

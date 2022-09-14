@@ -8,7 +8,7 @@
     <div class="card-header-wrapper">
       <div
         v-if="getParameter(option, 'theme.Basic.Title.show')"
-        :style="{color: getParameter(option, 'theme.Basic.Title.color') || '#333' }"
+        :style="{color: getParameter(option, 'theme.Basic.Title.color') || '#333', fontSize: '14' }"
       >{{ getParameter(option, 'theme.Basic.Title.text') }}
         <!-- 当备注位置选择为紧跟标题时 -->
         <el-tooltip

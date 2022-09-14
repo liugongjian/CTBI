@@ -35,6 +35,7 @@ export default {
         // 标题组件
         text: '看板_汇总', // 标题名称
         color: '#333', // 标题颜色
+        'size': 14, // 标题大小
         show: true // 是否显示标题
       },
       Mark: {

@@ -19,6 +19,15 @@
       <el-input v-model="option.text" maxlength="50" type="text" />
       <el-color-picker v-model="option.color" />
     </div>
+    <div
+      class="editor-item-size"
+    >
+      <div>尺寸：</div>
+      <el-input-number v-model="option.size" style="width: 120px;" :precision="0" controls-position="right" label="标题尺寸" :min="14" :max="32">
+        <template slot="append">.com</template>
+      </el-input-number>
+      <div style="margin-left: 10px;font-size: 14px;">px</div>
+    </div>
   </div>
 </template>
 
@@ -35,4 +44,13 @@ export default {
 </script>
 
 <style>
+.editor-item-size{
+  display: flex;
+  font-size: 12px;
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+  align-items: center;
+  padding-left: 20px;
+}
 </style>
