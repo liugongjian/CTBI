@@ -154,12 +154,6 @@ export default {
         'color': colorTheme['官方'],
         'theme': '官方'
       }
-
-      // 'TwisYAxis': { // 双Y轴
-      //   'show': true, // 是否必须显示双y轴
-      //   'check': false, // 是否显示双Y轴
-      //   'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
-      // }
     },
     // 'StyleConfig': { // 样式配置
     //   'TrendStyleConfig': {
@@ -223,10 +217,10 @@ export default {
     },
     'FunctionalOption': {
       'DataZoom': {
-        'showDataZoom': 'auto'
+        'showDataZoom': 'auto' // 显示缩略轴
       },
       'LabelShowType': {
-        'axisShowType': 'auto'
+        'axisShowType': 'auto' // 坐标轴维值显示
       },
       'NullProcess': {
         'emptyResolve': 'skip'
@@ -244,7 +238,7 @@ export default {
         'selectValue': '', // 默认选择的系列名字 第一个元素
         'remarkShow': false, // 是否显示别名
         'remark': '', // 别名默认是选择的系列名字 第一个元素
-        'seriesOption': [{ label: '价格', value: '价格-0' }, { label: '数量', value: '数量-0' }, { label: '温度', value: '温度-1' }], // 从数据中拿到系列的名字
+        'seriesOption': [], // 从数据中拿到系列的名字
         'SeriesChartLabel': { // 某个系列显示图表标签
           'check': false, // 默认未选中
           'color': '' // 颜色
@@ -276,12 +270,12 @@ export default {
         // 验证二级字段类型是不是[地理]
         if (attributes && attributes.length > 0) {
           const attr = attributes[0]
-          const { granularity } = attr
-          if (granularity) {
+          const { dataType } = attr
+          if (dataType === 'time') {
             return { success: true, msg: '' }
           }
         }
-        return { success: false, msg: '不支持添加该类型字段到[地理区域/维度]，需要[地理]类型的字段' }
+        return { success: false, msg: '不支持添加该类型字段到[类别轴/维度]，需要[时间]类型的字段' }
       },
       'value': []
     },
