@@ -32,7 +32,10 @@ export default {
         const min = Number.parseFloat(seriesOption.min)
         const max = Number.parseFloat(seriesOption.max)
         const labelShow = getParameter(this.storeOption, 'theme.ComponentOption.ChartLabel.labelShow')
-
+        // 获取总计
+        this.setTotal()
+        const visualMapColor = this.getVisualMap()
+        const itemStyle = this.getItemStyle()
         this.chartOption = {
           tooltip: {
             trigger: 'item',
@@ -69,12 +72,12 @@ export default {
               max,
               realtime: true,
               calculable: true,
-              color: ['#FFAC2E', '#FFE4B5']
+              color: visualMapColor
             },
             itemStyle: {
               normal: {
-                areaColor: '#EBEDF0',
-                borderColor: '#fff'
+                areaColor: itemStyle.areaColor,
+                borderColor: itemStyle.borderColor
               }
             },
             label: {
@@ -95,14 +98,7 @@ export default {
               label: {
                 show: false,
                 position: 'right'
-              },
-              itemStyle: {
-                normal: {
-                  areaColor: '#FFAC2E',
-                  borderColor: '#fff'
-                }
               }
-
             },
             regions: [
               {
@@ -131,7 +127,7 @@ export default {
               },
               itemStyle: {
                 normal: {
-                  color: '#FFAC2E'
+                  color: visualMapColor[0]
                 }
               },
               label: {

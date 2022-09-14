@@ -68,6 +68,19 @@ export default {
         'checkList': ['维度'], // 标签格式 1. 维度；2. 度量；
         'type': 'BarChart', // 图表类型
         'labelShow': 1 // 数据标签展示方式 1 智能显示；2 全量显示
+      },
+      'MapItemStyle': { // 地图底色与轮廓填充
+        'show': false,
+        'areaColor': '#EBEDF0',
+        'borderColor': '#fff'
+      },
+      'VisualMap': { // 地图底色与轮廓填充
+        'colorClass': 'default'
+      },
+      'TotalShow': { // 显示总计
+        'show': false, // 是否选中
+        'name': '总计', // 自定义的总计名字
+        'value': null // 总计数量
       }
     }
   },

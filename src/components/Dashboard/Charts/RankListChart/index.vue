@@ -97,8 +97,8 @@ export default {
     },
     formatData (dataValue) {
       // console.log(dataValue, '接收的数据')
-      const key1 = dataValue.fields.Dimension.fields[0].column
-      const key2 = dataValue.fields.Measure.fields[0].column
+      const key1 = dataValue.fields.Dimension.fields[0].displayColumn || dataValue.fields.Dimension.fields[0].column
+      const key2 = dataValue.fields.Measure.fields[0].displayColumn || dataValue.fields.Measure.fields[0].column
       const columns = []
       const tableData = dataValue.data.map(item => { Object.values(item)[1] = Number(Object.values(item)[1]); return item })
       columns.push({ prop: key1, label: key1, width: '100' })
@@ -109,7 +109,7 @@ export default {
           return (Object.values(b)[1] - Object.values(a)[1])
         }), total: tableData.length, columns, maxNumber
       }
-      // console.log(tableData, 'ddddddd')
+      // console.log(dataValues, 'ddddddd')
       return dataValues
     }
     // formatDataValue() {

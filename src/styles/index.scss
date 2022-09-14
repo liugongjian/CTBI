@@ -89,7 +89,8 @@ a {
     padding-right: 8px;
   }
 
-  .el-input--small .el-input__inner {
+  .el-input--small .el-input__inner,
+  .block {
     height: 24px;
     background-color: transparent !important;
     border: 1px solid rgba(221, 221, 221, 0.25) !important;
@@ -316,4 +317,6 @@ a {
   width: 100% !important;
 }
 
-.editor-fix  .el-input__inner{ height: 24px !important;}
+.editor-fix .el-input__inner {
+  height: 24px !important;
+}

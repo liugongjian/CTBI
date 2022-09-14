@@ -188,6 +188,7 @@
           <el-table-column
             label="名称字段"
             prop="displayColumn"
+            fixed="left"
             min-width="360"
           >
             <template slot-scope="scope">
@@ -225,7 +226,7 @@
                 <!-- value选中值， valueItem选中值对象 -->
                 <el-cascader
                   :value="resetDataType(scope.row)"
-                  :show-all-levels="false"
+                  :show-all-levels="true"
                   :options="getDataTypeOptions(scope.row.type)"
                   :props="{emitPath: false}"
                   @change="(value, valueItem) => {handleChangeDataType(value, valueItem, scope.row);}"
@@ -448,8 +449,17 @@ export default {
     handleChangeDataType (value, item, row) {
       // 默认展示格式
       row.attributes[0].format = ''
-      // 默认聚合方式
-      row.attributes[0].aggregator = 'sum'
+
+      // 字段类型选择数字，默认聚合会自动填充为求和。
+      // 把字段类型变更为文本，默认聚合方式应该自动填充为无
+      if (value === 'text') {
+        // 默认聚合方式
+        row.attributes[0].aggregator = ''
+      } else {
+        // 默认聚合方式
+        row.attributes[0].aggregator = 'sum'
+      }
+
       // 重置，防止选择了地理再选时间时值没有清空
       row.attributes[0].granularity = ''
       row.attributes[0].dataFormat = ''
@@ -458,17 +468,13 @@ export default {
       }
       const { originValue, parentValue } = item
       if (originValue) {
-        // row.attributes[0].dataType = originValue
         this.$set(row.attributes[0], 'dataType', originValue)
       } else {
-        // row.attributes[0].dataType = value
         this.$set(row.attributes[0], 'dataType', value)
       }
       if (parentValue) {
         this.$set(row.attributes[0], 'secondeDataType', parentValue)
         this.$set(row.attributes[0], parentValue, value)
-        // row.attributes[0].secondeDataType = parentValue
-        // row.attributes[0][parentValue] = value
       }
     },
     handleBlur (val, item) {
