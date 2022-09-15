@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-22 09:15:11
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-25 15:38:04
+ * @LastEditTime: 2022-09-15 12:26:18
  * @Description:
  */
 // 折线图配置项信息
@@ -87,6 +87,10 @@ export default {
       'Section': { // 区间设置 // 2022/04/18暂时先不做
         'show': true,
         'type': 'original' // original percentage
+      },
+      'DashboardColor': {
+        'color': '',
+        'title': '区块颜色配置'
       }
     }
   },
