@@ -392,7 +392,7 @@ export default {
         seriesItem.type = 'line'
       }
       series.push(seriesItem)
-      if (ComponentOption.TwisYAxis?.check) {
+      if (ComponentOption?.TwisYAxis?.check) {
         const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
         series[i].yAxisIndex = yAxisIndex
       }
@@ -451,7 +451,7 @@ export default {
             seriesItem.type = 'line'
           }
           series.push(seriesItem)
-          if (ComponentOption.TwisYAxis?.check) {
+          if (ComponentOption?.TwisYAxis?.check) {
             const yAxisIndex = i + 1 > Math.round(seriesLength / 2) ? 1 : 0
             series[i].yAxisIndex = yAxisIndex
           }

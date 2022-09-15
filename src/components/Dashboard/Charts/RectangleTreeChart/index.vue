@@ -119,14 +119,15 @@ export default {
       }
     },
     getColor () {
-      const color = []
-      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-      this.dataValue.forEach((item, index) => {
-        const idx = (index) % colorValue.length
-        color.push({ name: item.name, color: colorValue[idx].value, remark: item.name })
-      })
-
-      this.storeOption.theme.ComponentOption.Color.color = color
+      if (this.dataValue.length !== this.storeOption.theme.ComponentOption.Color.color.length) {
+        const color = []
+        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
+        this.dataValue.forEach((item, index) => {
+          const idx = (index) % colorValue.length
+          color.push({ name: item.name, color: colorValue[idx].value, remark: item.name })
+        })
+        this.storeOption.theme.ComponentOption.Color.color = color
+      }
     },
     getOption () {
       const { ComponentOption } = this.storeOption.theme

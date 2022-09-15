@@ -114,17 +114,19 @@ export default {
       }
     },
     // 拿到数据的系列名字 并设置颜色
-    getColor (val) {
-      const color = []
-      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-      val[0].forEach((item, index) => {
-        if (index) {
-          const idx = (index - 1) % colorValue.length
-          color.push({ name: item.split('-')[0], color: colorValue[idx].value, remark: item[0] })
-        }
-      })
+    getColor(val) {
+      if (val[0].length - 1 !== this.storeOption.theme.ComponentOption.Color.color.length) {
+        const color = []
+        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
+        val[0].forEach((item, index) => {
+          if (index) {
+            const idx = (index - 1) % colorValue.length
+            color.push({ name: item.split('-')[0], color: colorValue[idx].value, remark: item[0] })
+          }
+        })
 
-      this.storeOption.theme.ComponentOption.Color.color = color
+        this.storeOption.theme.ComponentOption.Color.color = color
+      }
     }
   }
 }
