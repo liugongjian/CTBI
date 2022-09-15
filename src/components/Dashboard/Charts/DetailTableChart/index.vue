@@ -2,8 +2,8 @@
   <div style="width:100%;height:100%;">
     <div v-if="dataValue && dataValue.tableData" style="width:100%;height:100%;">
       <table-chart
-        :table-columns="dataValue?.columns"
-        :table-data="dataValue?.tableData"
+        :table-columns="dataValue && dataValue.columns"
+        :table-data="dataValue && dataValue.tableData"
         :page-num.sync="pageNum"
         :page-size.sync="pageSize"
         :total="dataValue.total"
