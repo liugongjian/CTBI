@@ -102,7 +102,6 @@ export default {
   watch: {
     option: {
       handler() {
-        console.log('2222', this.option)
         this.activeName = 'left'
       }
     }

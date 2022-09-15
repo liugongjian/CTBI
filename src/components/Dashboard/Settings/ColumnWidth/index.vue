@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-04 12:46:01
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-15 17:07:15
+ * @LastEditTime: 2022-09-15 17:54:49
  * @Description:
 -->
 <template>
@@ -73,7 +73,6 @@ export default {
   },
   methods: {
     handleAuto(val, boolean) {
-      console.log('daddd', val, boolean)
       this.$nextTick(() => {
         this.dimensionArrTemp = this.dimensionArr.map((item) => {
           if (item.displayColumn === val) {

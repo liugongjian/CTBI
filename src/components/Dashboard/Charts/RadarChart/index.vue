@@ -77,9 +77,9 @@ export default {
                 },
                 itemStyle: {
                   normal: {
-                    color: color[index].value,
+                    color: color[index].color,
                     lineStyle: {
-                      color: color[index].value
+                      color: color[index].color
                     }
                   }
                 },

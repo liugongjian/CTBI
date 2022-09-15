@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-04 12:46:01
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-31 17:53:12
+ * @LastEditTime: 2022-09-15 17:54:45
  * @Description:
 -->
 <template>
@@ -62,7 +62,6 @@ export default {
   },
   methods: {
     handleRemove(e) {
-      console.log(111, e, this.option.selectedIndicator)
     }
   }
 }
