@@ -70,7 +70,7 @@ export default {
       return this.storeOption.theme.DisplayConfig.PaginationSettor.show
     },
     isMergeRow() {
-      return this.storeOption.theme.DisplayConfig.MergeForm.show
+      return this.storeOption.theme.DisplayConfig.MergeForm.check
     },
     pageSize: {
       get() {
@@ -205,7 +205,7 @@ export default {
       }
     },
     getColumnsOption() {
-      const { DisplayConfig: { Freeze, NewLine } } = this.storeOption.theme
+      const { DisplayConfig: { Freeze, NewLine, ColumnWidth } } = this.storeOption.theme
       const positive = Freeze.positive
       const reverse = Freeze.reverse
       if (positive > this.dataValue.columns?.length || reverse > this.dataValue.columns?.length) {
@@ -249,6 +249,16 @@ export default {
           return item
         })
         this.dataValue.columns = columns
+      }
+
+      if (ColumnWidth.dimensionArr?.length > 0) {
+        ColumnWidth.dimensionArr.forEach(item => {
+          this.dataValue.columns.forEach(jtem => {
+            if (item.displayColumn === jtem.prop && !item.auto && Number(item.width > 0)) {
+              jtem.width = item.width
+            }
+          })
+        })
       }
     }
   }

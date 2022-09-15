@@ -190,7 +190,6 @@ export default {
       }
     },
     setColor(val) {
-      console.log('daa', val)
       if (val.color) {
         this.series[0].axisLine.lineStyle.color = [
           [0.33, val.color],
