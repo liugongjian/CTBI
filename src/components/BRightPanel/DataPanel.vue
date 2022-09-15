@@ -77,11 +77,25 @@
                     :content="data.attributes[0].comment"
                     placement="top"
                   >
-                    <span>{{ data.displayColumn }}</span>
+                    <el-tooltip
+                      :content="data.displayColumn"
+                      placement="bottom"
+                      effect="light"
+                    >
+                      <span class="tree-node-content">{{ data.displayColumn }}</span>
+                    </el-tooltip>
                   </el-tooltip>
 
                 </span>
-                <span v-else>{{ data.displayColumn }}</span>
+                <span v-else>
+                  <el-tooltip
+                    :content="data.displayColumn"
+                    placement="bottom"
+                    effect="light"
+                  >
+                    <span class="tree-node-content">{{ data.displayColumn }}</span>
+                  </el-tooltip>
+                </span>
               </span>
             </el-tree>
           </div>
@@ -117,11 +131,26 @@
                     :content="data.attributes[0].comment"
                     placement="top"
                   >
-                    <span>{{ data.displayColumn }}({{ data.attributes[0].aggregator | aggregatorFilter }})</span>
+                    <el-tooltip
+                      :content="data.assembleColumn"
+                      placement="left"
+                      effect="light"
+                    >
+                      <span class="tree-node-content">{{ data.displayColumn }}({{ data.attributes[0].aggregator | aggregatorFilter }})</span>
+                    </el-tooltip>
                   </el-tooltip>
 
                 </span>
-                <span v-else>{{ data.displayColumn }}({{ data.attributes[0].aggregator | aggregatorFilter }})</span>
+
+                <span v-else>
+                  <el-tooltip
+                    :content="data.assembleColumn"
+                    placement="left"
+                    effect="light"
+                  >
+                    <span class="tree-node-content">{{ data.displayColumn }}({{ data.attributes[0].aggregator | aggregatorFilter }})</span>
+                  </el-tooltip>
+                </span>
               </div>
             </el-tree>
           </div>
@@ -137,6 +166,7 @@ import DataSetSelect from './DataSetSelect.vue'
 import { getDataSet } from '@/api/dataSet'
 import { transformDataTypeIcon } from '@/utils/optionUtils'
 import { mapGetters } from 'vuex'
+import { aggregatorFilter } from '@/filters/str.filter'
 export default {
   name: 'DataPanel',
   components: { DataSetSelect },
@@ -195,6 +225,7 @@ export default {
                 if (item.type === 'Dimension') {
                   this.Dimension.push(item)
                 } else {
+                  item.assembleColumn = item.displayColumn + '(' + aggregatorFilter(item.attributes[0].aggregator) + ')'
                   this.Measure.push(item)
                 }
               }
@@ -332,5 +363,15 @@ export default {
       right: 0px;
     }
   }
+}
+.tree-node-content{
+  display: inline-block;
+  width: 100px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 0;
+  padding: 0;
+  margin-bottom: -5px;
 }
 </style>
