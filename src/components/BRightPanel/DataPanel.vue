@@ -267,7 +267,7 @@ export default {
       const that = this
       const addData = function () { // 添加字段
         // 判断是否已经存在
-        const value = that.option[data.type] || that.option.DimensionOrMeasure
+        const value = that.option[data.type] || that.option.DimensionOrMeasure || that.option.MeasureSecond
         const dataIndex = value.value.findIndex(el => {
           return el._id === data._id
         })

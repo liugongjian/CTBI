@@ -151,7 +151,8 @@ export default {
           axisLabel: {
             show: XAxis.showAxisLabel,
             width: XAxis.lineWidth,
-            padding: [0, 12, 0, index * 10]
+            padding: [0, 12, 0, index * 10],
+            showMinLabel: index && false
           },
           // 轴刻度线
           axisTick: {
