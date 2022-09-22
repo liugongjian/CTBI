@@ -36,7 +36,7 @@ export default {
     }
   },
   mounted() {
-    const mapJsons = require.context('../../mapJson', false, /\.js/)
+    const mapJsons = require.context('../../mapJson', false, /\.json/)
     mapJsons.keys().forEach(file_name => {
       const label = file_name.replace('./', '').replace('.json', '')
       this.selectOptions.push({ label })
