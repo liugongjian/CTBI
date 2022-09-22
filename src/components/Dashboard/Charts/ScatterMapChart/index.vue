@@ -36,6 +36,9 @@ export default {
         this.setTotal()
         const visualMapColor = this.getVisualMap()
         const itemStyle = this.getItemStyle()
+        const area = getParameter(this.storeOption, 'theme.ComponentOption.MapAreaSelect.area')
+        const areaJson = this.getAreaJson(area)
+        this.$echarts.registerMap('areaJson', areaJson)
         this.chartOption = {
           tooltip: {
             trigger: 'item',
@@ -54,7 +57,7 @@ export default {
             }
           },
           geo: {
-            map: 'china',
+            map: 'areaJson',
             layoutCenter: ['50%', '50%'],
             layoutSize: 630,
             // 是否开启鼠标缩放和平移漫游。
