@@ -14,20 +14,28 @@
       </el-select>
     </div>
     <div v-if="option.selected" class="box">
-      <p v-if="quickStyle.styleType !== 'all'" class="title-box formatting-title">快捷样式</p>
+      <p v-if="quickStyle.styleType == 'all'" class="title-box formatting-title">快捷样式</p>
       <!-- 如果是显示三种 -->
-      <div v-if="quickStyle.styleType == 'all'">
+      <div v-if="quickStyle.styleType !== 'all'">
         <el-tabs tab-position="left" style="height: 200px;" class="formattingTabs">
           <el-tab-pane label="对比">
-            <div>
+            <div class="quickStyleTab">
               <div class="reverseBox">颜色翻转 <el-switch v-model="quickStyle.reverse" active-color="#13ce66" inactive-color="#393F4D" :width="30" /></div>
               <div v-if="quickStyle">
                 <quickStyleContrast :option.sync="quickStyle" />
               </div>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="数据条">TODO</el-tab-pane>
-          <el-tab-pane label="色阶">TODO</el-tab-pane>
+          <el-tab-pane label="数据条">
+            <div class="quickStyleTab">
+              <quickStyleBar :option.sync="quickStyle" />
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="色阶">
+            <div class="quickStyleTab">
+              <quickStyleColorScale :option.sync="quickStyle" />
+            </div>
+          </el-tab-pane>
         </el-tabs>
       </div>
       <!-- 只显示箭头 -->
@@ -43,11 +51,13 @@
 </template>
 
 <script>
+import quickStyleColorScale from './quickStyleColorScale'
+import quickStyleBar from './quickStyleBar'
 import quickStyleContrast from './quickStyleContrast'
 import Title from './formattingTitle'
 export default {
   name: 'Formatting',
-  components: { Title, quickStyleContrast },
+  components: { Title, quickStyleContrast, quickStyleBar, quickStyleColorScale },
   props: {
     option: {
       type: Object,
@@ -103,4 +113,5 @@ export default {
 .el-popper .popper__arrow{ display: none;}
 .preset-style-selector-subitem{ height: 20px; width: 100%; display: flex; align-items: center; justify-content:space-between; }
 .subtitle{ color: #FFFF; line-height: 28px; padding: 0 10px;}
+.quickStyleTab{ padding-left: 10px;}
 </style>
