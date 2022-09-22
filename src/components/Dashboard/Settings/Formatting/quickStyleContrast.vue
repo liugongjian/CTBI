@@ -90,7 +90,6 @@ export default {
   methods: {
     // 检查多选状态
     changeSelected(val) {
-      console.log(val)
       this.$emit('update:option', {
         ...this.option,
         selected: val

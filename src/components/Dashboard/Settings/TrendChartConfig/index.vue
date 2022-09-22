@@ -9,11 +9,11 @@
       <div class="editor-item-container">
         <SwitchIcon :icon-options="chartOption" :type.sync="option.chart" :disabled="!option.open" />
       </div>
-      <div v-if="option.titleColor" class="editor-item-container color">
+      <!-- <div v-if="option.titleColor" class="editor-item-container titleColor">
         <Color
           :option="option.titleColor"
         />
-      </div>
+      </div> -->
 
       <!-- <ColorConfig
         :color-data.sync="option.color"
@@ -44,14 +44,14 @@
         <el-slider v-model="option.barWidth" class="editorBar" />
         <el-input-number v-model="option.barWidth" style="width:61px" class="number number-box " controls-position="right" step-strictly :step="1" :min="1" :max="100" />
       </div>
-
-      <!-- <div class="editor-item-container pl0">
+      <div class="editor-item-container pl0">
         <span>多指标展示形式</span>
         <el-radio-group v-model="option.indicators">
           <el-radio label="line">左右滑动</el-radio>
           <el-radio label="linefeed">换行平铺</el-radio>
         </el-radio-group>
       </div>
+      <!--
       <div class="editor-item-container pl0">
         <p>22{{ option.twoY[activeName] }}</p>
         <div v-if="option.preview == 'multi'">
@@ -79,14 +79,14 @@
 
 <script>
 import SwitchIcon from './component/SwitchIcon'
-import Color from '@/components/Dashboard/Settings/Color'
+// import Color from '@/components/Dashboard/Settings/Color'
 // import Axis from './component/Axis'
 // import AxisFormat from './component/AxisFormat'
 export default {
   name: 'TrendChartConfig',
   components: {
-    SwitchIcon,
-    Color
+    SwitchIcon
+    // Color
     // AxisFormat,
     // Axis
   },
@@ -161,4 +161,5 @@ export default {
 ::v-deep .editorBarFix .el-slider__button{ width:10px; height: 10px;}
 ::v-deep .editorBarFix .el-slider__button-wrapper{ top: -16px;}
 ::v-deep .editorBarFix .el-slider__button:hover, ::v-deep .editorBarFix .el-slider__button.hover, ::v-deep .editorBarFix .el-slider__button.dragging{ transform: scale(1);}
+.editor-item-container.titleColor{ padding-left: 0;}
 </style>

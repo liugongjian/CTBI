@@ -33,22 +33,6 @@
           />
         </div>
       </el-collapse-item>
-      <!-- 指标趋势图 功能型配置配置 -->
-      <el-collapse-item
-        v-if="option['Formatting']"
-        title="功能型配置"
-        name="10"
-      >
-        <div
-          v-for="(item,name,key) in option['Formatting']"
-          :key="key"
-        >
-          <component
-            :is="name"
-            :option="option['Formatting'][name]"
-          />
-        </div>
-      </el-collapse-item>
       <!-- 指标趋势图 指标块样式配置 -->
       <el-collapse-item
         v-if="option['trendStyleConfig']"
@@ -62,6 +46,22 @@
           <component
             :is="name"
             :option="option['trendStyleConfig'][name]"
+          />
+        </div>
+      </el-collapse-item>
+      <!-- 指标趋势图 功能型配置配置 -->
+      <el-collapse-item
+        v-if="option['Formatting']"
+        title="功能型配置"
+        name="10"
+      >
+        <div
+          v-for="(item,name,key) in option['Formatting']"
+          :key="key"
+        >
+          <component
+            :is="name"
+            :option="option['Formatting'][name]"
           />
         </div>
       </el-collapse-item>

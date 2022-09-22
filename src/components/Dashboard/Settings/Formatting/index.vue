@@ -61,11 +61,9 @@ export default {
   computed: {
     quickStyle: {
       get() {
-        console.log('111')
         return this.option.field.find(item => item.name === this.option.selected.name)?.quickStyle || ''
       },
       set(value) {
-        console.log(value)
         const data = this.option.field.find(item => item.name === this.option.selected.name)
         data.quickStyle = value
       }
@@ -94,7 +92,6 @@ export default {
   }
     // ::v-deep .el-input__prefix { left: 0; width: calc(100% - 28px);}
 .editor-formatting .box{ border-bottom: 1px solid #4B4E59; padding-bottom: 10px; margin-bottom: 10px;}
-.editor-formatting .box .title-box{}
 .formattingTabs { color: #FFF;}
 .formattingTabs  .el-tabs__item{ height: 20px; line-height: 20px; font-size: 12px !important; padding-left: 10px;}
 .formattingTabs  .el-tabs__header{ padding: 0 !important;}

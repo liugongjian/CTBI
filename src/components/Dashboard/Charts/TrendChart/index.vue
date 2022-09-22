@@ -198,13 +198,24 @@ export default {
       } else {
         this.titleList = trendChartConfig.trendChartConfig.titleList
       }
+      console.log(ComponentOption.Color.color)
       // 功能性配置二次筛选标题
       this.titleList = this.titleList.map(item => {
+        console.log('item', item)
         const field = this.Formatting.find(fitem => {
           return fitem.name === item.name
         })
         item.formatting = field
-        console.log(item)
+        const bgColor = ComponentOption.Color.color.find(ccitem => {
+          console.log('field', ccitem.color, item.color)
+          if (ccitem.name === item.name) {
+            return ccitem.color
+          } else {
+            return item.color
+          }
+        }).color
+        console.log(111, bgColor)
+        item.color = bgColor
         return item
       })
       // 获取颜色设置-使图例颜色与图形颜色对应
