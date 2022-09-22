@@ -110,12 +110,6 @@ export default {
       'limit': 10,
       'value': []
     }
-    // 'Dimension': {
-    //   'name': '颜色图例维度',
-    //   'require': false,
-    //   'limit': 1,
-    //   'value': []
-    // }
   }, // 数据集
   'dataSet': {
     'id': '',

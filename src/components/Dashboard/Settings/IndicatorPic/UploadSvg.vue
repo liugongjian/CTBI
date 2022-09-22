@@ -5,8 +5,8 @@
         label="使用素材"
         name="1"
       >
-        <div class="material-content">
-          <span>背景元素</span>
+        <div class="svg-content">
+          <span>指标修饰图</span>
           <ul>
             <li
               v-for="(item,index) in imgList"
@@ -14,12 +14,8 @@
               :class="[{'img-item-selected': item.url === option.imgUrl},'img-item']"
               @click="handlerClick(item)"
             >
-              <div class="img-url">
+              <div class="svg-img-url">
                 <SvgIcon :icon-class="item" />
-                <!-- <img
-                  :src="item.url"
-                  style="max-width:100%;height:100%;"
-                > -->
               </div>
             </li>
           </ul>
@@ -36,9 +32,9 @@
               action="#"
               :before-upload="beforeUpload"
               :show-file-list="false"
-              :on-change="getLocalImg"
-              :on-success="onSuccess"
-              :file-list="fileList"
+              accept="image/png, image/jpg, image/jpeg, image/gif"
+              :http-request="(params) =>saveload(params,'imgaddr')"
+              class="avatar-uploader"
             >
               <el-button
                 size="small"
@@ -48,11 +44,11 @@
               <div
                 slot="tip"
                 class="el-upload__tip"
-              >只支持svg,png,gif格式最大1M</div>
+              >只支持jpg,png,gif格式最大1M</div>
             </el-upload>
           </div>
-          <div>
-            <div style="margin-bottom:12px;">或 通过图片链接上传</div>
+          <div class="m-t-24">
+            <div class="title">或 通过图片链接上传</div>
             <div class="img-url">
               <el-input
                 v-model="imgUrl"
@@ -67,35 +63,11 @@
         </div>
       </el-tab-pane>
     </el-tabs>
-
-    <!-- <div class="footer">
-      <div>显示方式</div>
-      <div>
-        <el-select
-          v-model="value"
-          placeholder="请选择"
-          @change="changeImgSize"
-        >
-          <el-tooltip
-            v-for="item in imgSizeOptions"
-            :key="item.value"
-            class="item"
-            effect="dark"
-            :content="item.label"
-            placement="top-start"
-          >
-            <el-option
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-tooltip>
-        </el-select>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
+import { uploadImg } from '@/api/dataSource'
 import SvgIcon from '@/components/SvgIcon/index.vue'
 export default {
   name: 'UploadImgInner',
@@ -121,17 +93,6 @@ export default {
     }
   },
   mounted() {
-    // 初始化图片数据
-    // this.imgList = [
-    //   {
-    //     name: 'background_one',
-    //     url: require('./image/background_one.png')
-    //   },
-    //   {
-    //     name: 'background_two',
-    //     url: require('./image/background_two.png')
-    //   }
-    // ]
     this.imgList = [
       'earth',
       'footprints',
@@ -152,7 +113,7 @@ export default {
     // 上传图片前钩子
     beforeUpload(file) {
       console.log(file)
-      const imgType = ['image/svg+xml']
+      const imgType = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
       const isType = imgType.includes(file.type)
       const isLt1M = file.size / 1024 / 1024 < 1
       if (!isType) {
@@ -161,24 +122,37 @@ export default {
       if (!isLt1M) {
         this.$message.error('图片上传大小最大为1M!')
       }
-      // return isType && isLt1M
-      return false // 有后端接口时删除，换成上面代码
+      return isType && isLt1M
     },
-    // 获取上传图片的本地路径，有后端接口时需删除
-    getLocalImg(event) {
-      let url = ''
-      if (window.createObjectURL !== undefined) {
-        url = window.createObjectURL(event.raw)
-      } else if (window.URL !== undefined) {
-        url = window.URL.createObjectURL(event.raw)
-      } else if (window.webkitURL !== undefined) {
-        url = window.webkitURL.createObjectURL(event.raw)
+    // 上传附件
+    saveload (data, val) {
+      if (data.file.type === 'image/jpeg' || data.file.type === 'image/png' || data.file.type === 'image/jpg' || data.file.type === 'image/gif') {
+        const formData = new FormData()
+        formData.append('img', data.file)
+        // 发送http请求
+        uploadImg(formData, ({ total, loaded }) => {
+          // 文件进度条控制
+          data.onProgress({ percent: Math.round(loaded / total * 100) })
+        }).then((res) => {
+          if (res) {
+            if (val === 'imgaddr') {
+              this.option.setSvg.forEach(item => {
+                if (item.name === this.svgValue) {
+                  item.svg = process.env.VUE_APP_BASE_API + `/dataFiles/img?path=${res}`
+                }
+              })
+              this.isUpload = true
+            }
+          }
+        }).catch(res => {
+          this.loading = false
+          this.$message.error({
+            type: 'error',
+            message: `上传图片失败`,
+            duration: 500
+          })
+        })
       }
-      this.handlerClick(url)
-    },
-    // 图片上传成功后
-    onSuccess(res) {
-      this.isUpload = true
     },
     // 选择背景图片尺寸
     changeImgSize() {
@@ -192,13 +166,58 @@ export default {
 .upload-img-inner {
   display: flex;
   flex-direction: column;
-  height: 286px;
+  margin: -12px;
+  ::v-deep  .el-tabs__header{
+    margin: 0px !important;
+  }
+  ::v-deep .el-tabs__nav-wrap{
+    padding: 8px 24px 0px 24px !important;
+  }
+  ::v-deep .el-tabs__content{
+    padding: 24px;
+  }
   .material-content {
-    padding: 8px;
-    overflow: auto;
-    height: 204px;
     box-sizing: border-box;
+    span{
+      font-size: 12px;
+      color: rgba(0,0,0,0.90);
+      line-height: 20px;
+      font-weight: 400;
+    }
     ul {
+      display: flex;
+      .img-item {
+        width: 116px;
+        height: 57px;
+        background-color: #fff;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        .img-url {
+          height: 48px;
+          width: 107px;
+          background: #383B47;
+          border-radius: 2px;
+          text-align: center;
+        }
+        &.img-item-selected {
+          border: 1px solid rgba(250,131,52,1);
+        }
+      }
+    }
+  }
+  .svg-content {
+    max-height: 204px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    span{
+      font-size: 12px;
+      color: rgba(0,0,0,.65);
+    }
+    ul {
+      margin-top: 8px;
       display: flex;
       flex-wrap: wrap;
       .img-item {
@@ -211,7 +230,7 @@ export default {
         justify-content: center;
         margin-right: 5px;
         cursor: pointer;
-        .img-url {
+        .svg-img-url {
           width: 100%;
           line-height: 40px;
           border-radius: 2px;
@@ -227,30 +246,74 @@ export default {
   .upload-img-card {
     font-size: 12px;
     overflow: auto;
-    height: 204px;
-    padding: 24px;
+    max-height: 204px;
+    overflow-y: auto;
     box-sizing: border-box;
+    min-width: 348px;
+    .el-upload__tip{
+      display: inline;
+      font-size: 12px;
+      color: rgba(0,0,0,0.45);
+      line-height: 20px;
+      font-weight: 400;
+      margin-left: 12px;
+    }
+    .title{
+      font-size: 12px;
+      color: rgba(0,0,0,0.90);
+      line-height: 20px;
+      font-weight: 400;
+    }
     .img-url {
       display: flex;
+      margin-top: 12px;
       .btn {
-        padding: 0 8px;
+        width: 50px;
         display: flex;
         align-items: center;
-        border-radius: 2px;
-        background-color: #565b67;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 500;
+        color: #FFFFFF;
         cursor: pointer;
-        color: #fff;
-        opacity: 0.5;
+        background: #AEAEAE;
+        border-radius: 0px 2px 2px 0px;
+      }
+      .btn.active{
+        background: #FA8334;
+        border-radius: 0px 2px 2px 0px;
+        border-left: 0px;
+      }
+      .el-input--small{
+        border-right: 0px;
       }
     }
   }
-  .footer {
-    height: 34px;
-    padding: 0 12px;
-    border-top: 1px solid #dfdfdf;
-    color: rgba(0, 0, 0, 0.65);
+  .show-type{
+    font-size: 12px;
+    color: rgba(0,0,0,0.90);
+    line-height: 20px;
+    font-weight: 400;
+    margin-top: 18px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    ::v-deep .el-select--small, ::v-deep .el-input--small{
+      width: 220px;
+    }
+    ::v-deep .el-input__inner{
+      font-size: 12px;
+      color: rgba(0,0,0,0.65);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
+.img-select{
+  .item{
+    font-size: 12px;
+    width: 220px;
   }
 }
 </style>

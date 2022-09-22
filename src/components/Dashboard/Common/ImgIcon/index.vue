@@ -1,3 +1,10 @@
+<!--
+ * @Author: 黄璐璐
+ * @Date: 2022-08-03 16:36:04
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-20 16:45:34
+ * @Description:
+-->
 <template>
   <div class="img-box">
     <svg-icon v-if="isUrl" :icon-class="data" />
@@ -16,7 +23,7 @@ export default {
   },
   computed: {
     isUrl() {
-      return this.data.search('blob:http:') === -1
+      return !(this.data.indexOf('/api') > -1 || this.data.indexOf('/ctbibackend') > -1)
     }
   }
 }

@@ -196,12 +196,19 @@ export default {
           [0.67, val.color],
           [1, val.color]
         ]
+      } else {
+        this.series[0].axisLine.lineStyle.color = [
+          [0.33, '#1a7dff'],
+          [0.67, '#ff751a'],
+          [1, '#16cad6']
+        ]
       }
     },
     getOption () {
       const { Basic: { VisualStyle: { style } }, ComponentOption, StyleConfig } = this.storeOption.theme
       const { ConfigSize } = ComponentOption
       const { Label, Scale, DashboardColor } = StyleConfig
+      console.log('aaaa', DashboardColor)
       if (this.dataValue) {
         this.setStyle(style)
         this.setConfigSize(ConfigSize)

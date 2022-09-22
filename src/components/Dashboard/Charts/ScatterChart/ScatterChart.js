@@ -89,7 +89,7 @@ export default {
   },
   'advance': {}, // 高级
   'dataSource': {
-    'Dimension': { // 维度
+    'DimensionOrMeasure': { // 维度
       'name': 'X轴/维度或度量',
       'require': true,
       'limit': 1,
