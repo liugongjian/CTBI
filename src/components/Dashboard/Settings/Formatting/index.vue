@@ -14,9 +14,9 @@
       </el-select>
     </div>
     <div v-if="option.selected" class="box">
-      <p v-if="quickStyle.styleType == 'all'" class="title-box formatting-title">快捷样式</p>
+      <p v-if="quickStyle.styleType !== 'all'" class="title-box formatting-title">快捷样式</p>
       <!-- 如果是显示三种 -->
-      <div v-if="quickStyle.styleType !== 'all'">
+      <div v-if="quickStyle.styleType == 'all'">
         <el-tabs tab-position="left" style="height: 200px;" class="formattingTabs">
           <el-tab-pane label="对比">
             <div class="quickStyleTab">
