@@ -73,6 +73,7 @@ export default {
         'splitWidth': 1,
         'splitColor': '#000',
         'splitType': 'solid',
+        'auto': true, // 最大值、最小值的设置是否显示
         'min': 0,
         'max': 0,
         'autoMin': true,
@@ -109,12 +110,6 @@ export default {
       'limit': 10,
       'value': []
     }
-    // 'Dimension': {
-    //   'name': '颜色图例维度',
-    //   'require': false,
-    //   'limit': 1,
-    //   'value': []
-    // }
   }, // 数据集
   'dataSet': {
     'id': '',

@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import chinaJson from '../../mixins/china.json'
+import chinaJson from '../../mapJson/全国地图.json'
 import mapMixins from '@/components/Dashboard/mixins/mapMixins'
 export default {
   name: 'LineMapChart',

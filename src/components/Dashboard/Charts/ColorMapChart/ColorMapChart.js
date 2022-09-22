@@ -64,6 +64,9 @@ export default {
       // }
     },
     'ComponentOption': { // 图表样式
+      'MapAreaSelect': { // 地图区域选择
+        area: '全国地图'
+      },
       'ChartLabel': { // 图表标签
         'check': false, // 是否展示图表标签
         'checkList': ['维度'], // 标签格式 1. 维度；2. 度量；

@@ -71,7 +71,8 @@ export default {
         'name': '序号'
       },
       'MergeForm': {
-        'show': false
+        'check': false, // 是否选中
+        'show': false // 是否显示
       },
       'Freeze': {
         'show': false,
@@ -88,7 +89,8 @@ export default {
         'pageSize': 20
       },
       'ColumnWidth': {
-        'type': 'selfadapting'
+        'type': 'selfadapting',
+        'dimensionArr': []
       }
       // 'IndicatorGroup': {
       //   'show': false

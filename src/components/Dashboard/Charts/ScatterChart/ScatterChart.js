@@ -73,6 +73,7 @@ export default {
         'splitWidth': 1,
         'splitColor': '#000',
         'splitType': 'solid',
+        'auto': true, // 最大值、最小值的设置是否显示
         'min': 0,
         'max': 0,
         'autoMin': true,
@@ -88,7 +89,7 @@ export default {
   },
   'advance': {}, // 高级
   'dataSource': {
-    'Dimension': { // 维度
+    'DimensionOrMeasure': { // 维度
       'name': 'X轴/维度或度量',
       'require': true,
       'limit': 1,

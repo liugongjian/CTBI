@@ -35,6 +35,9 @@ export default {
         const min = Number.parseFloat(seriesOption.min)
         const max = Number.parseFloat(seriesOption.max)
         const labelShow = getParameter(this.storeOption, 'theme.ComponentOption.ChartLabel.labelShow')
+        const area = getParameter(this.storeOption, 'theme.ComponentOption.MapAreaSelect.area')
+        const areaJson = this.getAreaJson(area)
+        this.$echarts.registerMap('areaJson', areaJson)
         this.chartOption = {
           visualMap: {
             show: true,
@@ -69,7 +72,7 @@ export default {
           series: [
             {
               type: 'map',
-              map: 'china',
+              map: 'areaJson',
               // 是否开启鼠标缩放和平移漫游。
               label: {
                 show: getParameter(this.storeOption, 'theme.ComponentOption.ChartLabel.check'),

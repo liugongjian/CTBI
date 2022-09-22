@@ -1,7 +1,7 @@
 <template>
   <x-axis :option="option">
     <template v-slot:unit>
-      <div class="flex-align-center row m-t-12" @keydown.8.stop="">
+      <div v-if="option.auto" class="flex-align-center row m-t-12" @keydown.8.stop="">
         <div class="editor-item-title" style="width: 36px" :class="option.autoMax ? 'box-disabled' : ''">最大值</div>
         <el-input v-model="option.max" :disabled="option.autoMax" :class="option.autoMax ? 'box-disabled' : ''" />
         <el-checkbox
@@ -11,7 +11,7 @@
           :class="option.autoEnlarge ? 'box-disabled' : ''"
         />
       </div>
-      <div class="flex-align-center row m-t-12" @keydown.8.stop="">
+      <div v-if="option.auto" class="flex-align-center row m-t-12" @keydown.8.stop="">
         <div class="editor-item-title" style="width: 36px" :class="option.autoMin ? 'box-disabled' : ''">最小值</div>
         <el-input v-model="option.min" :disabled="option.autoMin" :class="option.autoMin ? 'box-disabled' : ''" />
         <el-checkbox

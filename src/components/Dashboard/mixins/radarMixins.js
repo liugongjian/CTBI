@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-04 12:46:01
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-14 22:43:32
+ * @LastEditTime: 2022-09-15 17:51:35
  * @Description:
  */
 // 雷达图的混入
@@ -35,6 +35,7 @@ export default {
     },
     getColor(val) {
       const data = val.fields.Measure.fields
+      console.log('ddddd', data.length, this.storeOption.theme.ComponentOption.Color.color.length)
       if (data && data.length !== this.storeOption.theme.ComponentOption.Color.color.length) {
         const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
         const color = []

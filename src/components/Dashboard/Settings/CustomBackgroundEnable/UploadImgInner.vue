@@ -228,24 +228,6 @@ export default {
       }
     },
 
-    // // 获取上传图片的本地路径，有后端接口时需删除
-    // getLocalImg (event) {
-    //   let url = ''
-    //   if (window.createObjectURL !== undefined) {
-    //     url = window.createObjectURL(event.raw)
-    //   } else if (window.URL !== undefined) {
-    //     url = window.URL.createObjectURL(event.raw)
-    //   } else if (window.webkitURL !== undefined) {
-    //     url = window.webkitURL.createObjectURL(event.raw)
-    //   }
-    //   this.option.imgUrl = url
-    // },
-
-    // // 图片上传成功后
-    // onSuccess (res) {
-    //   this.isUpload = true
-    // },
-
     // 选择背景图片尺寸
     changeImgSize () {
       this.option.imgSize = this.value

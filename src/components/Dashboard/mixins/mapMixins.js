@@ -1,6 +1,5 @@
 // 地图的混入
 import baseMixins from './baseMixins'
-import chinaJson from './china.json'
 import { MapVisualColorOptions } from '@/constants/constants'
 import { deepClone, formatDataValue, getParameter } from '@/utils/optionUtils'
 export default {
@@ -9,9 +8,6 @@ export default {
     return {
       dataValue: null
     }
-  },
-  mounted () {
-    this.$echarts.registerMap('china', chinaJson)
   },
   watch: {
     storeOption: {
@@ -27,8 +23,14 @@ export default {
       this.dataValue = formatDataValue(deepClone(this.chartData))
       this.getOption()
     },
+    getAreaJson(area) {
+      const name = area || '全国地图'
+      const mapJson = require(`../mapJson/${name}.json`)
+      return mapJson
+    },
     getCenter(name) {
-      const { features } = chinaJson
+      const area = getParameter(this.storeOption, 'theme.ComponentOption.MapAreaSelect.area')
+      const { features } = this.getAreaJson(area)
       const result = features.find(item => {
         return item.properties.name === name
       })
