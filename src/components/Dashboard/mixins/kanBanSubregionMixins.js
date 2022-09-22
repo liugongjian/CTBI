@@ -52,22 +52,30 @@ export default {
       return obj
     },
     // 拿到数据的系列名字 并设置颜色
-    getColor (val) {
-      const color = []
-      const colorValue = colorTheme[this.storeOption.theme.StyleConfig.IndicatorPic.Color.theme]
-      // 有维度的话
+    getColor(val) {
+      let dataTemp = []
       if (this.storeOption.dataSource.Dimension.value.length > 0) {
-        val.forEach((item, index) => {
-          const idx = (index) % colorValue.length
-          color.push({ name: item.name, color: colorValue[idx].value, remark: item.name })
-        })
+        // 有维度的话
+        dataTemp = val
       } else {
-        val[0].data.forEach((item, index) => {
-          const idx = (index) % colorValue.length
-          color.push({ name: item.title, color: colorValue[idx].value, remark: item.title })
-        })
+        dataTemp = val[0].data
       }
-      this.storeOption.theme.StyleConfig.IndicatorPic.Color.color = color
+      if (dataTemp.length !== this.storeOption.theme.StyleConfig.IndicatorPic.Color.color.length) {
+        const color = []
+        const colorValue = colorTheme[this.storeOption.theme.StyleConfig.IndicatorPic.Color.theme]
+        if (this.storeOption.dataSource.Dimension.value.length > 0) {
+          dataTemp.forEach((item, index) => {
+            const idx = (index) % colorValue.length
+            color.push({ name: item.name, color: colorValue[idx].value, remark: item.name })
+          })
+        } else {
+          dataTemp.forEach((item, index) => {
+            const idx = (index) % colorValue.length
+            color.push({ name: item.title, color: colorValue[idx].value, remark: item.title })
+          })
+        }
+        this.storeOption.theme.StyleConfig.IndicatorPic.Color.color = color
+      }
     },
     getNameSvg(val) {
       const svg = []

@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-04 12:46:01
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-29 16:32:36
+ * @LastEditTime: 2022-09-15 17:51:35
  * @Description:
  */
 // 雷达图的混入
@@ -33,15 +33,18 @@ export default {
       this.getColor(this.dataValue)
       this.getOption()
     },
-    getColor (val) {
+    getColor(val) {
       const data = val.fields.Measure.fields
-      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-      const color = []
-      data.forEach((item, index) => {
-        const idx = (index) % colorValue.length
-        color.push({ name: item.column, color: colorValue[idx].value, remark: item.column })
-      })
-      this.storeOption.theme.ComponentOption.Color.color = color
+      console.log('ddddd', data.length, this.storeOption.theme.ComponentOption.Color.color.length)
+      if (data && data.length !== this.storeOption.theme.ComponentOption.Color.color.length) {
+        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
+        const color = []
+        data.forEach((item, index) => {
+          const idx = (index) % colorValue.length
+          color.push({ name: item.column, color: colorValue[idx].value, remark: item.column })
+        })
+        this.storeOption.theme.ComponentOption.Color.color = color
+      }
     }
   }
 }

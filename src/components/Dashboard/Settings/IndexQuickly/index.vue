@@ -231,7 +231,6 @@ export default {
     // 监听数据变化 变化后触发radar组件变化
     colorData: {
       handler (val) {
-        console.log(this.color)
         this.option.color = val
       },
       deep: true
@@ -242,7 +241,6 @@ export default {
       store.state.app.layout.forEach(item => {
         if (item.id === store.state.app.currentLayoutId) {
           this.colorData = item.option.theme.StyleConfig.IndexQuickly.color
-          console.log(this.colorData, 'hah')
         }
       })
     },

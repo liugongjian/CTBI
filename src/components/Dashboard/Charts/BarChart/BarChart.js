@@ -20,7 +20,7 @@
  *    other: 其他
  *  }
  * */
-import { colorTheme } from '@/constants/color.js'
+// import { colorTheme } from '@/constants/color.js'
 import { defaultDataLimit } from '@/constants/constants'
 
 export default {
@@ -35,6 +35,7 @@ export default {
       'Title': { // 标题组件
         'text': '柱图', // 标题名称
         'color': '#000', // 标题颜色
+        'size': 14, // 标题大小
         'show': true // 是否显示标题
       },
       'Mark': { // 备注
@@ -79,11 +80,12 @@ export default {
       },
       'Color': { // 颜色设置
         'title': '配色设置',
-        'color': colorTheme['官方'],
+        // 'color': colorTheme['官方'],
+        'color': [],
         'theme': '官方'
       },
       // 'TwisYAxis': { // 双Y轴
-      //   'show': true, // 是否必须显示双y轴的复选框
+      //   'show': false, // 是否必须显示双y轴的复选框
       //   'check': false, // 是否显示双Y轴
       //   'twisType': 'syncTicksNum' // 双Y轴类型 1.syncNull 不同步；2.syncTicksNum 刻度数量一致；3.syncAll 刻度数量&数值一致
       // },
@@ -138,6 +140,7 @@ export default {
         'splitWidth': 1,
         'splitColor': '#000',
         'splitType': 'solid',
+        'auto': true, // 最大值、最小值的设置是否显示
         'min': 0,
         'max': 0,
         'autoMin': true,

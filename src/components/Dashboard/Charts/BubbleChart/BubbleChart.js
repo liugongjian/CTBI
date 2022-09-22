@@ -14,6 +14,7 @@ export default {
       'Title': { // 标题组件
         'text': '气泡图', // 标题名称
         'color': '#333', // 标题颜色
+        'size': 14, // 标题大小
         'show': true // 是否显示标题
       },
       'Mark': { // 备注
@@ -72,6 +73,7 @@ export default {
         'splitWidth': 1,
         'splitColor': '#000',
         'splitType': 'solid',
+        'auto': true, // 最大值、最小值的设置是否显示
         'min': 0,
         'max': 0,
         'autoMin': true,

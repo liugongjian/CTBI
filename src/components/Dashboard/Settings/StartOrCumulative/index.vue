@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-05 16:06:54
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-01 17:29:07
+ * @LastEditTime: 2022-09-20 14:22:12
  * @Description:
 -->
 <template>
@@ -46,11 +46,13 @@
         />
       </div>
     </div>
-    <el-checkbox
+    <!-- <el-checkbox
       v-model="option.tipsCheck"
+      :disabled="!option.startValueCheck&&!option.cumulativeValueCheck"
       label="显示起始值/累计值Tips"
+      :class="!option.startValueCheck&&!option.cumulativeValueCheck ? 'box-disabled' : ''"
       class="m-t-12"
-    />
+    /> -->
   </div>
 </template>
 

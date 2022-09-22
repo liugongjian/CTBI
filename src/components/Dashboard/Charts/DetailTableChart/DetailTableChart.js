@@ -27,6 +27,7 @@ export default {
       'Title': { // 标题组件
         'text': '明细表', // 标题名称
         'color': '#333', // 标题颜色
+        'size': 14, // 标题大小
         'show': true // 是否显示标题
       },
       'Mark': { // 备注
@@ -53,7 +54,7 @@ export default {
         'color': ''
       },
       'TableThemeSimple': {
-        'show': true,
+        'show': false,
         'type': 'default'
       },
       'ListHeader': {
@@ -70,11 +71,12 @@ export default {
         'name': '序号'
       },
       'MergeForm': {
-        'show': false
+        'check': false, // 是否选中
+        'show': false // 是否显示
       },
       'Freeze': {
         'show': false,
-        'freezeChoose': 'arrange',
+        'freezeChoose': 'head',
         'positive': 0,
         'reverse': 0
       },
@@ -87,7 +89,8 @@ export default {
         'pageSize': 20
       },
       'ColumnWidth': {
-        'type': 'selfadapting'
+        'type': 'selfadapting',
+        'dimensionArr': []
       }
       // 'IndicatorGroup': {
       //   'show': false

@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-07-05 09:22:46
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-18 14:32:04
+ * @LastEditTime: 2022-09-14 22:33:19
  * @Description:
  */
 // 玫瑰图配置项信息
@@ -20,7 +20,6 @@
  *    other: 其他
  *  }
  * */
-import { colorTheme } from '@/constants/color.js'
 import { defaultDataLimit } from '@/constants/constants'
 export default {
   'type': 'distribution', // 组件类型, 用于管理组件类型集合,例如：指标、表格、趋势
@@ -34,6 +33,7 @@ export default {
       'Title': { // 标题组件
         'text': '矩形树图', // 标题名称
         'color': '#333', // 标题颜色
+        'size': 14, // 标题大小
         'show': true // 是否显示标题
       },
       'Mark': { // 备注
@@ -62,7 +62,7 @@ export default {
       },
       'Color': { // 颜色设置
         'title': '配色设置',
-        'color': colorTheme['官方'],
+        'color': [],
         'theme': '官方'
       },
       'TotalShow': { // 显示总计

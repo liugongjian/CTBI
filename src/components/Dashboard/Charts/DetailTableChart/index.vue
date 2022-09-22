@@ -1,9 +1,9 @@
 <template>
   <div style="width:100%;height:100%;">
-    <div v-if="dataValue && dataValue.tableData" style="width:100%;height:90%;">
+    <div v-if="dataValue && dataValue.tableData" style="width:100%;height:100%;">
       <table-chart
-        :table-columns="dataValue.columns"
-        :table-data="dataValue.tableData"
+        :table-columns="dataValue && dataValue.columns"
+        :table-data="dataValue && dataValue.tableData"
         :page-num.sync="pageNum"
         :page-size.sync="pageSize"
         :total="dataValue.total"
@@ -18,6 +18,7 @@
         :row-style="rowStyle"
         :header-row-style="headerRowStyle"
         :cell-style="cellStyle"
+        :is-merge-row="isMergeRow"
         @refresh="refresh"
       />
     </div>
@@ -68,6 +69,9 @@ export default {
     isShowPagination() {
       return this.storeOption.theme.DisplayConfig.PaginationSettor.show
     },
+    isMergeRow() {
+      return this.storeOption.theme.DisplayConfig.MergeForm.check
+    },
     pageSize: {
       get() {
         return this.storeOption.theme.DisplayConfig.PaginationSettor.pageSize
@@ -80,53 +84,7 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        if (val.theme.DisplayConfig.TableTheme.show) {
-          this.stripe = val.theme.DisplayConfig.TableTheme.active === 'stripe'
-          this.border = val.theme.DisplayConfig.TableTheme.active === 'border'
-          const colorType = val.theme.DisplayConfig.TableTheme.colorType
-          const color = colorType === 'gray' ? '#f5f5fa' : (colorType === 'themeColor' ? '#468cff' : val.theme.DisplayConfig.TableTheme.color)
-          if (val.theme.DisplayConfig.TableTheme.active === 'stripe') {
-            // 斑马线
-            this.headerRowStyle = { 'border-bottom': `2px ${color} solid` }
-          } else if (val.theme.DisplayConfig.TableTheme.active === 'border') {
-            // 线框
-            this.rowStyle = {}
-            this.cellStyle = { 'border-bottom': `1px #dfe6ec solid` }
-            this.headerRowStyle = { 'border': `0px ${color} solid`, 'background-color': `${color} !important` }
-          } else if (val.theme.DisplayConfig.TableTheme.active === 'simple') {
-            // 简版
-            this.cellStyle = { 'border-bottom': `0px ${color} solid` }
-            this.stripe = false
-            this.border = false
-            this.headerRowStyle = { 'border-bottom': `2px ${color} solid`, 'border-top': `3px ${color} solid`, 'background-color': 'transparent', 'color': '#fff' }
-          } else if (val.theme.DisplayConfig.TableTheme.active === 'verySimple') {
-            // 极简
-            this.rowStyle = {}
-            this.headerRowStyle = {}
-          }
-        } else {
-          if (val.theme.DisplayConfig.TableThemeSimple.show) {
-            switch (val.theme.DisplayConfig.TableThemeSimple.type) {
-              case 'simple-no-head':
-                this.stripe = true
-                val.theme.DisplayConfig.ListHeader.head = true
-                this.border = false
-                break
-              case 'simple':
-                this.stripe = false
-                val.theme.DisplayConfig.ListHeader.head = false
-                this.border = true
-                break
-              default:
-                this.stripe = true
-                val.theme.DisplayConfig.ListHeader.head = false
-                this.border = false
-            }
-          }
-        }
-        this.header = val.theme.DisplayConfig.ListHeader.head
-        this.sequence = val.theme.DisplayConfig.Sequence.show
-        this.sequenceName = val.theme.DisplayConfig.Sequence.name
+        this.getOption()
       },
       deep: true
     },
@@ -154,6 +112,9 @@ export default {
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
       this.dataValue = this.formatDataValue(deepClone(this.chartData))
+      if (this.dataValue) {
+        this.getOption()
+      }
     },
     formatDataValue (chartData, val = { pageNum: 1, pageSize: 20 }) {
       const { data, fields } = chartData
@@ -162,7 +123,7 @@ export default {
         if (Object.hasOwnProperty.call(fields, key)) {
           const element = fields[key]
           element.fields.forEach(field => {
-            columns.push({ prop: field.column, label: field.displayColumn })
+            columns.push({ prop: field.column, label: field.displayColumn, fixed: false, ellipsis: true })
           })
         }
       }
@@ -189,6 +150,116 @@ export default {
       )
       const dataValue = { tableData, total: tableDataTmep.length, columns }
       return dataValue
+    },
+    getOption() {
+      const { DisplayConfig: { TableTheme, ListHeader, Sequence, TableThemeSimple } } = this.storeOption.theme
+      if (TableTheme.show) {
+        this.stripe = TableTheme.active === 'stripe'
+        this.border = TableTheme.active === 'border'
+        const colorType = TableTheme.colorType
+        const color = colorType === 'gray' ? '#f5f5fa' : (colorType === 'themeColor' ? '#468cff' : TableTheme.color)
+        if (TableTheme.active === 'stripe') {
+          // 斑马线
+          this.headerRowStyle = { 'border-bottom': `2px ${color} solid` }
+        } else if (TableTheme.active === 'border') {
+          // 线框
+          this.rowStyle = {}
+          this.cellStyle = { 'border-bottom': `1px #dfe6ec solid` }
+          this.headerRowStyle = { 'border': `0px ${color} solid`, 'background-color': `${color} !important` }
+        } else if (TableTheme.active === 'simple') {
+          // 简版
+          this.cellStyle = { 'border-bottom': `0px ${color} solid` }
+          this.stripe = false
+          this.border = false
+          this.headerRowStyle = { 'border-bottom': `2px ${color} solid`, 'border-top': `3px ${color} solid`, 'background-color': 'transparent', 'color': '#fff' }
+        } else if (TableTheme.active === 'verySimple') {
+          // 极简
+          this.rowStyle = {}
+          this.headerRowStyle = {}
+        }
+      } else {
+        if (TableThemeSimple.show) {
+          switch (TableThemeSimple.type) {
+            case 'simple-no-head':
+              this.stripe = true
+              ListHeader.head = true
+              this.border = false
+              break
+            case 'simple':
+              this.stripe = false
+              ListHeader.head = false
+              this.border = true
+              break
+            default:
+              this.stripe = true
+              ListHeader.head = false
+              this.border = false
+          }
+        }
+      }
+      this.header = ListHeader.head
+      this.sequence = Sequence.show
+      this.sequenceName = Sequence.name
+      if (this.dataValue && this.dataValue.columns?.length > 0) {
+        this.getColumnsOption()
+      }
+    },
+    getColumnsOption() {
+      const { DisplayConfig: { Freeze, NewLine, ColumnWidth } } = this.storeOption.theme
+      const positive = Freeze.positive
+      const reverse = Freeze.reverse
+      if (positive > this.dataValue.columns?.length || reverse > this.dataValue.columns?.length) {
+        this.$message.warning(`不得超过总列数, 总列数为${this.dataValue.columns?.length}`)
+        return
+      }
+      if (positive + reverse >= this.dataValue.columns?.length) {
+        const columns = this.dataValue.columns?.map((item) => {
+          item.fixed = true
+          return item
+        })
+        this.dataValue.columns = columns
+      }
+      if (positive > 0) {
+        const columns = this.dataValue.columns?.map((item, index) => {
+          if (index <= positive) {
+            item.fixed = true
+          }
+          return item
+        })
+        this.dataValue.columns = columns
+      }
+      if (reverse > 0) {
+        const columns = this.dataValue.columns?.map((item, index) => {
+          if (index >= reverse) {
+            item.fixed = true
+          }
+          return item
+        })
+        this.dataValue.columns = columns
+      }
+      if (NewLine.show) {
+        const columns = this.dataValue.columns?.map((item, index) => {
+          item.ellipsis = false
+          return item
+        })
+        this.dataValue.columns = columns
+      } else {
+        const columns = this.dataValue.columns?.map((item, index) => {
+          item.ellipsis = true
+          return item
+        })
+        this.dataValue.columns = columns
+      }
+
+      if (ColumnWidth.dimensionArr?.length > 0) {
+        ColumnWidth.dimensionArr.forEach(item => {
+          this.dataValue.columns.forEach(jtem => {
+            if (item.displayColumn === jtem.prop && !item.auto && Number(item.width > 0)) {
+              jtem.width = item.width
+            }
+          })
+        })
+      }
     }
   }
 }

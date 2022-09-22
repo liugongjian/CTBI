@@ -1,7 +1,6 @@
 /*
 * 分布散点图
 * */
-import { colorTheme } from '@/constants/color.js'
 import { defaultDataLimit } from '@/constants/constants'
 export default {
   'type': 'relation', // 组件类型, 用于管理组件类型集合,例如：指标、表格、趋势
@@ -15,6 +14,7 @@ export default {
       'Title': { // 标题组件
         'text': '分面散点图', // 标题名称
         'color': '#333', // 标题颜色
+        'size': 14, // 标题大小
         'show': true // 是否显示标题
       },
       'Mark': { // 备注
@@ -30,7 +30,7 @@ export default {
     'ComponentOption': {
       'Color': { // 颜色设置
         'title': '数据设置',
-        'color': colorTheme['官方'],
+        'color': [],
         'theme': '官方'
       },
       'Legend': { // 图例
@@ -73,6 +73,7 @@ export default {
         'splitWidth': 1,
         'splitColor': '#000',
         'splitType': 'solid',
+        'auto': true, // 最大值、最小值的设置是否显示
         'min': 0,
         'max': 0,
         'autoMin': true,

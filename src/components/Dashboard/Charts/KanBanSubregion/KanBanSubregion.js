@@ -13,7 +13,6 @@
  *    other: 其他
  *  }
  * */
-import { colorTheme } from '@/constants/color.js'
 import { defaultDataLimit } from '@/constants/constants'
 export default {
   'type': 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
@@ -30,6 +29,7 @@ export default {
         // 标题组件
         'text': '指标看板', // 标题名称
         'color': '#333', // 标题颜色
+        'size': 14, // 标题大小
         'show': true // 是否显示标题
       },
       'Mark': {
@@ -79,7 +79,7 @@ export default {
         'check': false,
         'Color': { // 颜色设置
           'title': '配色设置',
-          'color': colorTheme['官方'],
+          'color': [],
           'theme': '官方'
         },
         'type': 'static', // img static

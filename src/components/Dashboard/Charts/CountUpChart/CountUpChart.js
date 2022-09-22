@@ -2,10 +2,9 @@
  * @Author: 黄璐璐
  * @Date: 2022-07-29 10:27:13
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-18 21:46:25
+ * @LastEditTime: 2022-09-14 22:22:18
  * @Description:
  */
-import { colorTheme } from '@/constants/color.js'
 import { defaultDataLimit } from '@/constants/constants'
 export default {
   'type': 'indicator', // 组件类型, 用于管理组件类型集合, 例如：指标、表格、趋势
@@ -22,6 +21,7 @@ export default {
         // 标题组件
         'text': '翻牌器', // 标题名称
         'color': '#333', // 标题颜色
+        'size': 14, // 标题大小
         'show': true // 是否显示标题
       },
       'Mark': {
@@ -65,7 +65,7 @@ export default {
         'label': '显示指标修饰图',
         'Color': { // 颜色设置
           'title': '配色设置',
-          'color': colorTheme['官方'],
+          'color': [],
           'theme': '官方'
         },
         'pic': false, // 是否有图片的设置

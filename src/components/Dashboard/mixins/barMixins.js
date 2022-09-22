@@ -87,16 +87,17 @@ export default {
     },
     // 拿到数据的系列名字 并设置颜色
     getColor (val) {
-      const color = []
-      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-      val[0].forEach((item, index) => {
-        if (index) {
-          const idx = (index - 1) % colorValue.length
-          color.push({ name: item, color: colorValue[idx].value, remark: item })
-        }
-      })
-
-      this.storeOption.theme.ComponentOption.Color.color = color
+      if (val[0].length - 1 !== this.storeOption.theme.ComponentOption.Color.color.length) {
+        const color = []
+        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
+        val[0].forEach((item, index) => {
+          if (index) {
+            const idx = (index - 1) % colorValue.length
+            color.push({ name: item, color: colorValue[idx].value, remark: item })
+          }
+        })
+        this.storeOption.theme.ComponentOption.Color.color = color
+      }
     },
     // 获取图形对应的样式配置-颜色
     getItemStyle (componentOption) {
@@ -130,7 +131,7 @@ export default {
     // 双y轴设置
     twisYAxisConfig (componentOption) {
       // 双y轴设置与坐标轴设置相关联，其中关于y轴模块暂时固定，后续需切换成坐标轴设置的值
-      if (componentOption.TwisYAxis?.check) {
+      if (componentOption?.TwisYAxis?.check) {
         const formatter = this.type === 'PercentStackedBarChart' ? '{value}%' : '{value}'
 
         // 最大值和最小值暂时固定，后续需要修改

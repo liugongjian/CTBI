@@ -102,6 +102,9 @@ export default {
               fontSize: 16
             }
           },
+          pointer: {
+            length: '80%'
+          },
           data: [
             // {
             //   'value': 50,
@@ -111,6 +114,26 @@ export default {
         }
 
       ]
+    }
+  },
+  watch: {
+    storeOption: {
+      handler (val) {
+        this.getOption()
+      },
+      deep: true
+    },
+    // 图表类型切换
+    'storeOption.is': {
+      handler (val) {
+        const isData = this.dataOption.findIndex(item => {
+          return item.id === this.identify
+        })
+        if (isData !== -1) {
+          this.$bus.$emit('interReload', [this.identify], 100, false)
+        }
+      },
+      deep: true
     }
   },
   mounted () {
@@ -128,8 +151,9 @@ export default {
       if (style === 'standard') {
         data.axisTick.show = false
       } else if (style === 'fan') {
-        data.startAngle = 520
-        data.endAngle = -700
+        data.startAngle = 170
+        data.endAngle = 10
+        data.pointer.length = '50%'
         data.axisTick.show = false
         data.axisLine.lineStyle.width = 50
         data.axisLabel.distance = 55
@@ -165,15 +189,25 @@ export default {
         }
       }
     },
+    setColor(val) {
+      if (val.color) {
+        this.series[0].axisLine.lineStyle.color = [
+          [0.33, val.color],
+          [0.67, val.color],
+          [1, val.color]
+        ]
+      }
+    },
     getOption () {
       const { Basic: { VisualStyle: { style } }, ComponentOption, StyleConfig } = this.storeOption.theme
       const { ConfigSize } = ComponentOption
-      const { Label, Scale } = StyleConfig
+      const { Label, Scale, DashboardColor } = StyleConfig
       if (this.dataValue) {
         this.setStyle(style)
         this.setConfigSize(ConfigSize)
         this.setConfigLabel(Label)
         this.setScale(Scale)
+        this.setColor(DashboardColor)
       }
 
       this.series[0].data[0] = this.dataValue
