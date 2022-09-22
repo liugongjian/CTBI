@@ -2,7 +2,8 @@
   <div id="container" class="container">
     <div id="screentable" v-loading="loading" class="table-chart">
       <el-table
-        ref="table"
+        ref="tablesss"
+        :fit="true"
         class="table"
         :stripe="stripe"
         :border="border"
@@ -29,8 +30,6 @@
             :type="item.type && item.type !== 'selection' ? item.type : ''"
             :prop="item.prop"
             :label="item.label"
-            :width="item.width"
-            :min-width="item.minWidth"
             :sortable="item.sortable"
             :show-overflow-tooltip="item.ellipsis"
             :fixed="item.fixed"
@@ -235,6 +234,7 @@ export default {
         one: spanOneArr
       }
     },
+    // 刷新表格
     reset () {
       this.cloneTableColumns = this.tableColumns.map((item) => {
         item.fixed = item.fixed ? item.fixed : false
@@ -242,6 +242,10 @@ export default {
         item.class = item.class ? item.class : ''
         return item
       })
+      console.log(document.getElementsByClassName('table'))
+      setTimeout(() => {
+        this.adjustColumnWidth(this.$refs.tablesss)
+      }, 1000)
     },
     handleCurrentChange(val) {
       this.$emit('refresh', { pageNum: val, pageSize: this.pageSize })
@@ -254,6 +258,36 @@ export default {
       const page = this.pageNum // 当前页码
       const pagesize = this.pageSize // 每页条数
       return index + 1 + (page - 1) * pagesize
+    },
+    // 宽度设置
+    adjustColumnWidth(table) {
+      const colgroup = table.querySelector('.el-table__row')
+      const colDefs = [...colgroup.querySelectorAll('col')]
+      colDefs.forEach((col) => {
+        const clsName = col.getAttribute('name')
+        const cells = [
+          ...table.querySelectorAll(`td.${clsName}`),
+          ...table.querySelectorAll(`th.${clsName}`)
+        ]
+        // 忽略加了"leave-alone"类的列
+        if (cells[0]?.classList?.contains?.('leave-alone')) {
+          return
+        }
+        const widthList = cells.map((el) => {
+          return el.querySelector('.cell')?.scrollWidth || 0
+        })
+        const max = Math.max(...widthList)
+        const padding = 20
+        table.querySelectorAll(`col[name=${clsName}]`).forEach((el) => {
+          el.setAttribute('width', max + padding)
+        })
+      })
+      const scrollingBody = table.querySelectorAll('div.is-scrolling-none')
+      if (scrollingBody[0]?.classList?.contains?.('is-scrolling-none')) {
+        scrollingBody[0].classList.remove('is-scrolling-none')
+        scrollingBody[0].classList.add('is-scrolling-left')
+        scrollingBody[0].style.overflowX = 'auto'
+      }
     }
   }
 }
@@ -354,4 +388,12 @@ export default {
   }
 }
 
+</style>
+<style>
+  /* .el-table .cell, .el-table th > .cell {
+  display: inline-block;
+  white-space: nowrap;
+  width: auto;
+  overflow: auto;
+} */
 </style>
