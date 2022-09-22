@@ -30,7 +30,7 @@
           <span class="preset-sample-title-element"><i :style="{'color':option.reverse?'#F65252': '#26BF6A'}"><svg-icon icon-class="markDown" /></i></span>
         </span>
       </el-option>
-      <el-option value="bgNum">
+      <el-option v-if="option.styleType!=='contrast'" value="bgNum">
         <span class="preset-sample-title">
           <span class="preset-sample-title-element">
             <span class="text-bg-item" style="background-color: rgb(246, 82, 82);"><i>1</i></span>
