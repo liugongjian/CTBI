@@ -180,6 +180,7 @@ export default {
 <style lang="scss" scoped>
 .tab-chart-wrap {
   background: #fff;
+  overflow: auto;
 }
 .tab-header {
   background: #fff;

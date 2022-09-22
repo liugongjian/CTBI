@@ -216,7 +216,7 @@ export default {
       const currentLayout = this.layout.find(item => item.i === currentLayoutId)
       const newLayout = {
         x: (this.layout.length * 2) % (this.colNum || 48),
-        y: this.layout.length + (this.colNum || 48), // puts it at the bottom
+        y: this.layout.length * 10 + (this.colNum || 48), // puts it at the bottom
         w: 48,
         h: 10,
         width: 900,
@@ -381,8 +381,8 @@ export default {
         const newLayout = {
           x: DragPos.x,
           y: DragPos.y,
-          w: 12,
-          h: 2,
+          w: 48,
+          h: 10,
           i: nanoId,
           id: nanoId,
           is: name,
