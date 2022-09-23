@@ -75,17 +75,73 @@ export default {
     },
     // 拿到数据的系列名字 并设置颜色
     getColor(val) {
-      if (val[0].length - 1 !== this.storeOption.theme.ComponentOption.Color.color.length) {
-        const color = []
-        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-        val[0].forEach((item, index) => {
-          if (index) {
-            const idx = (index - 1) % colorValue.length
-            color.push({ name: item, color: colorValue[idx].value, remark: item })
-          }
-        })
-        this.storeOption.theme.ComponentOption.Color.color = color
+      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
+      const oldColorList = deepClone(this.storeOption.theme.ComponentOption.Color.color)
+      const titleList = val[0].slice(1)
+      var newColorList = []
+      // 新旧对比控制显示隐藏
+      for (const item of oldColorList) {
+        item.isShow = false
       }
+      for (var tn of titleList) {
+        for (var titem of oldColorList) {
+          if (titem.name === tn) {
+            titem.isShow = true
+          }
+        }
+      }
+      var length = 0
+      if (oldColorList.length >= titleList.length) {
+        length = oldColorList.length
+      } else {
+        length = titleList.length
+      }
+      console.log(length)
+      for (var idx = 0; idx < length; idx++) {
+        console.log(length)
+        const name = titleList[idx]
+        console.log(name)
+        // 先从旧的数据中寻找
+        const oldItem = oldColorList.find(oitem => {
+          if (oitem.name === name && oitem.isShow && oitem.isCustom) {
+            oitem.show = true // for isShow
+            return oitem
+          } else if (!oitem.isShow && oitem.isCustom) {
+            oitem.show = false
+            return oitem
+          }
+          return undefined
+        })
+        if (oldItem && oldItem.show) {
+          console.log('1111', oldItem)
+          newColorList.push(oldItem)
+        } else if (oldItem && !oldItem.show) {
+          console.log('2222', oldItem)
+          newColorList.push(oldItem)
+        } else {
+          console.log('3333', oldItem)
+          const newColorItem = { name: name, color: colorValue[idx].value, remark: name, isShow: true, isCustom: false }
+          newColorList.push(newColorItem)
+        }
+      }
+      // 列表中删掉的隐藏
+      // for (var ditem of oldColorList) {
+      //   console.log(ditem.d)
+      // }
+      console.log('颜色配置', oldColorList, titleList, newColorList)
+      this.storeOption.theme.ComponentOption.Color.color = newColorList
+
+      // if (val[0].length - 1 !== this.storeOption.theme.ComponentOption.Color.color.length) {
+      //   const color = []
+      //   const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
+      //   val[0].forEach((item, index) => {
+      //     if (index) {
+      //       const idx = (index - 1) % colorValue.length
+      //       color.push({ name: item, color: colorValue[idx].value, remark: item, isShow: true, isCustom: false })
+      //     }
+      //   })
+      // this.storeOption.theme.ComponentOption.Color.color = newColorList
+      // }
     },
     // 拿到数据中的指标
     getIndicatorOptions (val) {
