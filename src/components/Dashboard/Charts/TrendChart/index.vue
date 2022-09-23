@@ -28,6 +28,7 @@
             :trend-chart-config="trendChartConfig"
             :trend-style-config="trendStyleConfig"
             :title-item="titleItem"
+            :bg-color="trendChartConfig.titleColor.color[index].color"
             :index="index"
           />
         </div>
@@ -69,6 +70,7 @@
             :trend-chart-config="trendChartConfig"
             :trend-style-config="trendStyleConfig"
             :title-item="titleList[key]"
+            :bg-color="trendChartConfig.titleColor.color[key].color"
             :index="key"
           />
           <v-chart
@@ -135,6 +137,7 @@ export default {
       titleListTemp: [],
       FunctionalOption: null,
       Axis: {},
+      Formatting: {},
       type: 'TrendChart', // 图表类型 1.线图；2.面积图; 3.堆叠面积图；4.百分比堆叠图
       // 趋势图配置
       trendChartConfig: {}
@@ -178,7 +181,8 @@ export default {
 
     getOption () {
       console.log('getOption')
-      const { ComponentOption, FunctionalOption, trendChartConfig, trendStyleConfig, Axis } = this.storeOption.theme
+      const { ComponentOption, FunctionalOption, trendChartConfig, trendStyleConfig, Axis, Formatting } = this.storeOption.theme
+      this.Formatting = Formatting.Formatting.field
       this.Axis = Axis
       this.FunctionalOption = FunctionalOption
       //
@@ -194,6 +198,26 @@ export default {
       } else {
         this.titleList = trendChartConfig.trendChartConfig.titleList
       }
+      console.log(ComponentOption.Color.color)
+      // 功能性配置二次筛选标题
+      this.titleList = this.titleList.map(item => {
+        console.log('item', item)
+        const field = this.Formatting.find(fitem => {
+          return fitem.name === item.name
+        })
+        item.formatting = field
+        const bgColor = ComponentOption.Color.color.find(ccitem => {
+          console.log('field', ccitem.color, item.color)
+          if (ccitem.name === item.name) {
+            return ccitem.color
+          } else {
+            return item.color
+          }
+        }).color
+        console.log(111, bgColor)
+        item.color = bgColor
+        return item
+      })
       // 获取颜色设置-使图例颜色与图形颜色对应
       const colorOption = []
       ComponentOption.Color.color.forEach(item => {
@@ -388,6 +412,10 @@ export default {
         seriesItem.type = 'line'
         seriesItem.areaStyle = {}
       }
+      // 设置柱状图宽度
+      if (chartType === 'bar') {
+        seriesItem.barWidth = `${this.trendChartConfig.barWidth}%`
+      }
       if (this.trendChartConfig.open === false) {
         seriesItem.type = 'line'
       }
@@ -446,6 +474,10 @@ export default {
           if (chartType === 'area') {
             seriesItem.type = 'line'
             seriesItem.areaStyle = {}
+          }
+          // 设置柱状图宽度
+          if (chartType === 'bar') {
+            seriesItem.barWidth = `${this.trendChartConfig.barWidth}%`
           }
           if (this.trendChartConfig.open === false) {
             seriesItem.type = 'line'

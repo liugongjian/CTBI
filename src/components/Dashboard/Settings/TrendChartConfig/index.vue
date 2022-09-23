@@ -1,14 +1,20 @@
 <template>
   <div class="editor-object-container">
-    <el-checkbox v-model="option.open">开启日期趋势展示</el-checkbox>
+    <el-checkbox v-model="option.open">开启日期趋势图展示</el-checkbox>
     <div class="editor-item-container">
       <SwitchIcon :icon-options="typeOption" :type.sync="option.type" :disabled="!option.open" @checekType="checekType" />
     </div>
     <template v-if="option.open">
+      <span class="editor-item-title" style="margin:20px 0 -5px 0">图表类型切换</span>
       <div class="editor-item-container">
-        <span class="editor-item-title">图标切换</span>
         <SwitchIcon :icon-options="chartOption" :type.sync="option.chart" :disabled="!option.open" />
       </div>
+      <!-- <div v-if="option.titleColor" class="editor-item-container titleColor">
+        <Color
+          :option="option.titleColor"
+        />
+      </div> -->
+
       <!-- <ColorConfig
         :color-data.sync="option.color"
         title="自定义趋势图颜色"
@@ -33,13 +39,19 @@
           <el-radio label="multi">多选</el-radio>
         </el-radio-group>
       </div>
-      <!-- <div class="editor-item-container pl0">
+      <div v-if="option.chart == 'bar'" class="editor-item-container pl0 editorBarFix">
+        <span class="inline">柱体宽度</span>
+        <el-slider v-model="option.barWidth" class="editorBar" />
+        <el-input-number v-model="option.barWidth" style="width:61px" class="number number-box " controls-position="right" step-strictly :step="1" :min="1" :max="100" />
+      </div>
+      <div class="editor-item-container pl0">
         <span>多指标展示形式</span>
         <el-radio-group v-model="option.indicators">
           <el-radio label="line">左右滑动</el-radio>
           <el-radio label="linefeed">换行平铺</el-radio>
         </el-radio-group>
       </div>
+      <!--
       <div class="editor-item-container pl0">
         <p>22{{ option.twoY[activeName] }}</p>
         <div v-if="option.preview == 'multi'">
@@ -67,14 +79,14 @@
 
 <script>
 import SwitchIcon from './component/SwitchIcon'
-// import ColorConfig from '@/components/Dashboard/Common/ColorConfig'
+// import Color from '@/components/Dashboard/Settings/Color'
 // import Axis from './component/Axis'
 // import AxisFormat from './component/AxisFormat'
 export default {
   name: 'TrendChartConfig',
   components: {
     SwitchIcon
-    // ColorConfig,
+    // Color
     // AxisFormat,
     // Axis
   },
@@ -136,5 +148,18 @@ export default {
     flex:1;
   }
 }
-::v-deep .ytabs  .el-tabs__header{ padding:0 !important}
+.editorBarFix{
+  display:flex;align-items: center;
+  .editorBar{ width: 70px; margin: 0 10px;}
+  .number-box{ width: 60px;}
+}
+::v-deep .editorBarFix .ytabs  .el-tabs__header{ padding:0 !important}
+::v-deep .editorBarFix .el-input-number.is-controls-right[class*=small] [class*=increase], ::v-deep .editorBarFix .el-input-number.is-controls-right[class*=small] [class*=decrease]{ width:20px}
+::v-deep .editorBarFix .el-input-number.is-controls-right .el-input__inner{ padding:0  21px 0 0;}
+::v-deep .editorBarFix .el-slider__bar{ height: 3px;}
+::v-deep .editorBarFix .el-slider__runway{ height: 3px;}
+::v-deep .editorBarFix .el-slider__button{ width:10px; height: 10px;}
+::v-deep .editorBarFix .el-slider__button-wrapper{ top: -16px;}
+::v-deep .editorBarFix .el-slider__button:hover, ::v-deep .editorBarFix .el-slider__button.hover, ::v-deep .editorBarFix .el-slider__button.dragging{ transform: scale(1);}
+.editor-item-container.titleColor{ padding-left: 0;}
 </style>

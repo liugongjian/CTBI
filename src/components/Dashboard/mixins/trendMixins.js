@@ -52,6 +52,8 @@ export default {
     reloadImpl () {
       console.log('图表重绘事件，继承于baseMixins', this.chartData)
       this.dataValue = formatDataValue(deepClone(this.chartData))
+      // 拿到数据中的功能性配置
+      this.getFormattingOptions(this.dataValue)
       // 拿到数据中的系列名字
       this.getSeriesOptions(this.dataValue)
       // 拿到数据的系列名字 并设置颜色
@@ -59,6 +61,56 @@ export default {
       // 拿到数据中的指标
       this.getIndicatorOptions(this.dataValue)
       this.getOption()
+    },
+    // 获取功能性配置
+    getFormattingOptions(data) {
+      const field = data[0].slice(1)
+      var newField = []
+      for (var j of field) {
+        const item = this.storeOption.theme.Formatting.Formatting.field.find(item => {
+          console.log(item)
+          return item.name === j
+        })
+        var fieldItme = null
+        // 如果包含就使用旧的数据
+        if (item && item.name === j) {
+          fieldItme = item
+        } else {
+          fieldItme = {
+            'name': j, // 获取维度或者度量的名称
+            'type': 'measure', // measure 度量 dimension 维度 用于区分渲染不同样式
+            'styleCustomType': false, // 是否开启自定义样式
+            // 快捷样式
+            'quickStyle': {
+              'styleType': 'contrast', // 快捷样式 contrast 只显示对比 // all 所有三个
+              'reverse': false, // 是否反转颜色
+              'type': 'contrast', // contrast 对比 dataBar 数据条 colorScale色阶
+              'selected': '' // num 数字 arraw 箭头 caret 插入符号箭头 // bgNum 有背景色的数字（指标趋势图没有这个选项，要做例外） // 其它type再添加
+            },
+            // 自定义样式
+            'customStyle': [
+              // 可以选择多种类型
+              {
+                'isSelect': false,
+                'type': 'textBg', // 对比方式 文本/背景  图标 色阶 数据条
+                'isShow': true, // 是否在自定义弹窗中显示
+                'list': [ // 可以混合多种对比方式，现在只做一个，数据格式留好
+                  {
+                    'id': 1, // 排序
+                    'color': '', // 文本颜色
+                    'value': [], // 对比数值 数组 有可能是1个有可能是2个
+                    'valueType': '>' // 对比方式 ≥ = ≤ < ≠ // 介于 <, ≤ // ≤, < //  <, < // ≤, ≤
+                  }
+                ]
+              }
+            ]
+          }
+        }
+        newField.push(fieldItme)
+      }
+      this.storeOption.theme.Formatting.Formatting.selected = deepClone(fieldItme) // 默认选中不然报错
+      this.storeOption.theme.Formatting.Formatting.field = newField
+      console.log('newField', this.storeOption.theme.Formatting.Formatting)
     },
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
@@ -80,15 +132,25 @@ export default {
       if (val[0].length - 1 !== this.storeOption.theme.ComponentOption.Color.color.length) {
         var titleList = []
         var color = []
+        var titleColor = {
+          // 自定义趋势图颜色
+          'title': '背景颜色',
+          'color': [],
+          'theme': '官方'
+        }
         const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
         val[0].forEach((item, index) => {
           if (index) {
             const idx = (index - 1) % colorValue.length
-            color.push({ name: item, color: colorValue[idx].value, remark: item })
+            const el = { name: item, color: colorValue[idx].value, remark: item }
+            color.push(el)
+            titleColor.color.push(el)
             titleList.push({ name: item, color: colorValue[idx].value, isSelect: !idx, value: val[val.length - 1][index], index: idx })
           }
         })
+        console.log(this.storeOption.theme.trendChartConfig)
         this.storeOption.theme.ComponentOption.Color.color = color
+        this.storeOption.theme.trendChartConfig.trendChartConfig.titleColor = deepClone(titleColor)
         this.storeOption.theme.trendChartConfig.trendChartConfig.titleList = titleList
         this.selectedItem = ''
       }

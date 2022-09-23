@@ -27,6 +27,7 @@ export default {
     'trendChartConfig': {
       'trendChartConfig': {
         'open': true, // 开启日期趋势展示
+        'barWidth': 50, // 开启日期趋势展示
         'type': 'disperse', // disperse // integration 展示方式，趋势图/小趋势图
         'chart': 'line', // 类型切换
         'dateRange': '', // 日期区间设定
@@ -66,7 +67,12 @@ export default {
 
         },
         'showChart': {},
-        'dataLabel': {}
+        'dataLabel': {},
+        'titleColor': {
+          'title': '背景颜色',
+          'color': [],
+          'theme': '官方'
+        }
       }
     },
     // 指标块样式配置
@@ -89,6 +95,43 @@ export default {
         'fontSize': '12',
         'position': 'left',
         'align': 'left'
+      }
+    },
+    // 条件格式配置
+    'Formatting': {
+      'Formatting': {
+        'selected': null,
+        'field': [ // 有多少个维度数量，这个列表有几个 点更新的时候更新
+          // {
+          //   'name': '', // 获取维度或者度量的名称
+          //   'type': 'measure', // measure 度量 dimension 维度 用于区分渲染不同样式
+          //   'styleCustomType': false, // 是否开启自定义样式
+          //   // 快捷样式
+          //   'quickStyle': {
+          //     'styleType': 'contrast', // 快捷样式 contrast 只显示对比 // all 所有三个
+          //     'reverse': false, // 是否反转颜色
+          //     'type': 'contrast', // contrast 对比 dataBar 数据条 colorScale色阶
+          //     'selected': '' // num 数字 arraw 箭头 caret 插入符号箭头 // bgNum有背景色的数字（指标趋势图没有这个选项，要做例外） // 其它type再添加
+          //   },
+          //   // 自定义样式
+          //   'customStyle': [
+          //     // 可以选择多种类型
+          //     {
+          //       'isSelect': false,
+          //       'type': 'textBg', // 对比方式 文本/背景  图标 色阶 数据条
+          //       'isShow': true, // 是否在自定义弹窗中显示
+          //       'list': [ // 可以混合多种对比方式，现在只做一个，数据格式留好
+          //         {
+          //           'id': 1, // 排序
+          //           'color': '', // 文本颜色
+          //           'value': [], // 对比数值 数组 有可能是1个有可能是2个
+          //           'valueType': '>' // 对比方式 ≥ = ≤ < ≠ // 介于 <, ≤ // ≤, < //  <, < // ≤, ≤
+          //         }
+          //       ]
+          //     }
+          //   ]
+          // }
+        ]
       }
     },
     'Basic': { // 基础属性
