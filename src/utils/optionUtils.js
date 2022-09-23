@@ -231,7 +231,7 @@ export const formatDataValue = function (chartData) {
         dimensionData.push(item[dim])
       })
       MeasureKey.forEach(mea => {
-        const m = item[mea]?.toString().search(/-?(0|[1-9]\d*)(\.\d+)?/g, '')
+        const m = (item[mea] + '').match(/-?(0|[1-9]\d*)(\.\d+)?/g)
         measureData.push(m[0] || item[mea])
       })
       dataValue.push([dimensionData.join('-'), ...measureData])
