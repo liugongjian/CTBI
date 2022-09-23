@@ -73,7 +73,7 @@
                   :icon-class="typeTransform(data.attributes)"
                 />
                 <span v-if="data.attributes[0].comment">
-                  <el-tooltip
+                  <!-- <el-tooltip
                     :content="data.attributes[0].comment"
                     placement="top"
                   >
@@ -84,14 +84,19 @@
                     >
                       <span class="tree-node-content">{{ data.displayColumn }}</span>
                     </el-tooltip>
+                  </el-tooltip> -->
+                  <el-tooltip
+                    :content="data.displayColumn"
+                    placement="top"
+                  >
+                    <span class="tree-node-content">{{ data.displayColumn }}</span>
                   </el-tooltip>
 
                 </span>
                 <span v-else>
                   <el-tooltip
                     :content="data.displayColumn"
-                    placement="bottom"
-                    effect="light"
+                    placement="top"
                   >
                     <span class="tree-node-content">{{ data.displayColumn }}</span>
                   </el-tooltip>
@@ -127,7 +132,7 @@
                   :icon-class="typeTransform(data.attributes)"
                 />
                 <span v-if="data.attributes[0].comment">
-                  <el-tooltip
+                  <!-- <el-tooltip
                     :content="data.attributes[0].comment"
                     placement="top"
                   >
@@ -138,6 +143,12 @@
                     >
                       <span class="tree-node-content">{{ data.displayColumn }}({{ data.attributes[0].aggregator | aggregatorFilter }})</span>
                     </el-tooltip>
+                  </el-tooltip> -->
+                  <el-tooltip
+                    :content="data.assembleColumn"
+                    placement="top"
+                  >
+                    <span class="tree-node-content">{{ data.displayColumn }}({{ data.attributes[0].aggregator | aggregatorFilter }})</span>
                   </el-tooltip>
 
                 </span>
@@ -145,8 +156,7 @@
                 <span v-else>
                   <el-tooltip
                     :content="data.assembleColumn"
-                    placement="left"
-                    effect="light"
+                    placement="top"
                   >
                     <span class="tree-node-content">{{ data.displayColumn }}({{ data.attributes[0].aggregator | aggregatorFilter }})</span>
                   </el-tooltip>
