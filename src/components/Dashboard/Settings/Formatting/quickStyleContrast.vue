@@ -101,10 +101,11 @@ export default {
 
 <style lang="scss">
 
-.quickStyleContrast{background: #424550; border-color: #6A6C74; width:240px; margin-left: -89px;
+.quickStyleContrast{background: #424550 !important; border-color: #6A6C74 !important; width:240px !important; margin-left: -89px !important;
   .el-select-dropdown__item{ height: 24px;line-height: 24px;  padding: 0 10px; display: flex; align-items: center; width: 100%;justify-content:space-between; }
   .el-select-dropdown__item.hover, .el-select-dropdown__item:hover{background: #50525D; }
   .subtitle{ display: flex; justify-content: space-between;}
+  .popper__arrow{ display: none    !important;}
 }
 .text-bg-item {display:inline-block;width:32px;height:12px;color:#fff;font-size:12px;line-height:12px;text-align:center;}
 .text-bg-item i{ transform: scale(.7);display: inline-block;}

@@ -95,13 +95,11 @@ export default {
 </style>
 <style lang="scss">
 .formatting-title{ padding: 5px 0; width:90px}
-  .formattingSelect{background: #424550; border-color: #6A6C74; margin-top: -20px;
+  .formattingSelect{background: #424550 !important; border-color: #6A6C74 !important; margin-top: -20px;
     .title{display:flex; align-items:center; height: 30px;}
     .el-select-dropdown__item{ height: 30px; line-height: 30px; padding: 0 10px;}
-    // .el-select-dropdown__item.selected{ background: #50525D; }
     .el-select-dropdown__item.hover, .el-select-dropdown__item:hover{background: #50525D; }
   }
-    // ::v-deep .el-input__prefix { left: 0; width: calc(100% - 28px);}
 .editor-formatting .box{ border-bottom: 1px solid #4B4E59; padding-bottom: 10px; margin-bottom: 10px;}
 .formattingTabs { color: #FFF;}
 .formattingTabs  .el-tabs__item{ height: 20px; line-height: 20px; font-size: 12px !important; padding-left: 10px;}
