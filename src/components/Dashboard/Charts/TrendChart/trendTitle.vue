@@ -28,7 +28,6 @@
           ]"
         >
           {{ titleItem.name }}
-
         </div>
         <div
           class="titleValue"

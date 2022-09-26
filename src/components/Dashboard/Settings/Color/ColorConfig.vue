@@ -6,7 +6,7 @@
         placement="bottom-end"
         trigger="click"
       >
-        <color-inner :option="option" />
+        <color-inner :option.sync="option" />
         <div
           slot="reference"
           class="color-container"
