@@ -1,6 +1,5 @@
 // 组合图的混入
 import baseMixins from './baseMixins'
-import { colorTheme } from '@/constants/color.js'
 export default {
   mixins: [baseMixins],
   data: function () {
@@ -113,20 +112,13 @@ export default {
         this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
       }
     },
-    // 拿到数据的系列名字 并设置颜色
-    getColor(val) {
-      if (val[0].length - 1 !== this.storeOption.theme.ComponentOption.Color.color.length) {
-        const color = []
-        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-        val[0].forEach((item, index) => {
-          if (index) {
-            const idx = (index - 1) % colorValue.length
-            color.push({ name: item.split('-')[0], color: colorValue[idx].value, remark: item[0] })
-          }
-        })
-
-        this.storeOption.theme.ComponentOption.Color.color = color
-      }
+    getNameList(val) {
+      // 取到度量的名字数组
+      const titleList = val[0].slice(1).map((j) => {
+        return j.split('-')[0]
+      })
+      // baseMixins中的方法
+      this.getColor(titleList)
     }
   }
 }

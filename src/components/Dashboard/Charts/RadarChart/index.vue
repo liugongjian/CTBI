@@ -31,18 +31,12 @@ export default {
       storeOption: {},
       chartOption: {},
       dataOption: [],
-      indicator: [],
-      dataValue: {},
-      series: [
-      ]
+      dataValue: {}
     }
   },
   watch: {
     storeOption: {
       handler (val) {
-        if (JSON.stringify(this.dataValue) !== '{}') {
-          this.dataValue = val.dataSource
-        }
         this.getOption()
       },
       deep: true
@@ -58,17 +52,19 @@ export default {
       const { Color: { color } } =
         this.storeOption.theme.ComponentOption
       if (data && data.length > 0) {
+        let indicator = []
+        const series = []
         for (const key in fields) {
           if (key === 'Dimension') {
             // 维度只有一个
-            const column = fields[key]['fields'][0].column
-            this.indicator = data.map(item => { return { name: item[column] } })
+            const displayColumn = fields[key]['fields'][0].displayColumn
+            indicator = data.map(item => { return { name: item[displayColumn] } })
           } else if (key === 'Measure') {
             fields[key]['fields'].forEach((field, index) => {
-              const column = field.column
-              this.series.push({
-                value: data.map(item => item[column]),
-                name: column,
+              const displayColumn = field.displayColumn
+              series.push({
+                value: data.map(item => item[displayColumn]),
+                name: displayColumn,
                 areaStyle: {
                   normal: {
                     width: 1,
@@ -95,11 +91,12 @@ export default {
             })
           }
         }
+        return { indicator, series }
       }
     },
     // 面积填充
-    setRadarConfig (areaStyle, labelShow) {
-      this.series.forEach((item, index) => {
+    setRadarConfig (areaStyle, labelShow, series) {
+      series?.forEach((item, index) => {
         item.areaStyle.normal.opacity = areaStyle ? 0.5 : 0
         if (Number(labelShow) === 0) {
           item.label.normal.show = false
@@ -114,8 +111,8 @@ export default {
         }
       })
     },
-    setColor (color) {
-      this.series.forEach(item => {
+    setColor (color, series) {
+      series?.forEach(item => {
         const data = color.find((data) => { return data.name === item.name })
         if (data) {
           item.itemStyle.normal.color = data.color
@@ -125,15 +122,15 @@ export default {
     getOption () {
       const { Legend, RadarChartShape, RadarLabel: { labelShow, areaStyle }, Color: { color } } =
         this.storeOption.theme.ComponentOption
-      this.setRadarConfig(areaStyle, labelShow)
-      this.setColor(color)
-      this.setData()
+      const value = this.setData()
+      this.setRadarConfig(areaStyle, labelShow, value?.series)
+      this.setColor(color, value?.series)
       const shape = RadarChartShape.shape
       this.chartOption = {
         legend: Legend,
         radar: {
           indicator: [
-            ...this.indicator
+            ...value?.indicator
           ],
           axisLabel: {
             color: '#333',
@@ -157,7 +154,7 @@ export default {
           {
             name: 'Budget vs spending',
             type: 'radar',
-            data: this.series
+            data: value?.series
           }
         ]
       }

@@ -69,7 +69,7 @@ export default {
         // 拿到数据中的系列名字
         this.getSeriesOptions(this.dataValue)
         // 拿到数据的系列名字 并设置颜色
-        this.getColor(this.dataValue)
+        this.getNameList(this.dataValue)
         this.getOption()
       }
     },

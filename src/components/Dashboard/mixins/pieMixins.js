@@ -1,6 +1,5 @@
 // 饼图的混入
 import baseMixins from './baseMixins'
-import { colorTheme } from '@/constants/color.js'
 import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import store from '@/store'
 export default {
@@ -42,7 +41,7 @@ export default {
       // 拿到数据中的系列名字
       this.getSeriesOptions(this.dataValue)
       // 拿到数据的系列名字 并设置颜色
-      this.getColor(this.dataValue)
+      this.getNameList(this.dataValue)
       // 拿到数据中的指标
       this.getIndicatorOptions(this.dataValue)
       this.getOption()
@@ -104,18 +103,15 @@ export default {
       }
     },
     // 拿到数据的系列名字 并设置颜色
-    getColor(val) {
-      if (val.length - 1 !== this.storeOption.theme.ComponentOption.Color.color.length) {
-        const color = []
-        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-        val.forEach((item, index) => {
-          if (index) {
-            const idx = (index) % colorValue.length
-            color.push({ name: item[0], color: colorValue[idx].value, remark: item[0] })
-          }
-        })
-        this.storeOption.theme.ComponentOption.Color.color = color
-      }
+    getNameList(val) {
+      const titleList = []
+      val.forEach((j, index) => {
+        if (index > 0) {
+          titleList.push(j[0])
+        }
+      })
+      // baseMixins中的方法
+      this.getColor(titleList)
     },
 
     // 拿到数据中的指标

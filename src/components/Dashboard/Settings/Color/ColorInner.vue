@@ -37,7 +37,7 @@
     <div class="color-innner-content">
       <div v-for="(item,index) in option.color" :key="index">
         <div v-if="item.name" class="item">
-          <el-color-picker v-model="item.color" />
+          <el-color-picker v-model="item.color" @change="changeColorCustom(item,index)" />
           <span class="label">{{ item.name }}</span>
         </div>
       </div>
@@ -66,6 +66,9 @@ export default {
   methods: {
     handleArrow() {
       this.arrowDown = !this.arrowDown
+    },
+    changeColorCustom(item, index) {
+      item.isCustom = true
     },
     // 改变主题
     changeTheme (key) {
@@ -118,6 +121,8 @@ export default {
   }
   .color-innner-content{
     padding: 8px 16px;
+    max-height: 200px;
+    overflow-y: auto;
     .item{
       display: flex;
       flex-direction: row;

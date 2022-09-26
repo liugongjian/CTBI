@@ -19,7 +19,6 @@
 import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import baseMixins from '@/components/Dashboard/mixins/baseMixins'
 import store from '@/store'
-import { colorTheme } from '@/constants/color.js'
 export default {
   name: 'RectangleTreeChart',
   mixins: [baseMixins],
@@ -65,7 +64,7 @@ export default {
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
       this.dataValue = this.formatDataValue(deepClone(this.chartData))
-      this.getColor()
+      this.getNameList()
       this.getOption()
     },
     formatDataValue (chartData) {
@@ -118,16 +117,13 @@ export default {
         return dataValue
       }
     },
-    getColor () {
-      if (this.dataValue.length !== this.storeOption.theme.ComponentOption.Color.color.length) {
-        const color = []
-        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-        this.dataValue.forEach((item, index) => {
-          const idx = (index) % colorValue.length
-          color.push({ name: item.name, color: colorValue[idx].value, remark: item.name })
-        })
-        this.storeOption.theme.ComponentOption.Color.color = color
-      }
+    getNameList() {
+      // 取到度量的名字数组
+      const titleList = this.dataValue.map((j) => {
+        return j.name
+      })
+      // baseMixins中的方法
+      this.getColor(titleList)
     },
     getOption () {
       const { ComponentOption } = this.storeOption.theme

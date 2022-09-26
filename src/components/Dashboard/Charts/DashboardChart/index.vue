@@ -208,7 +208,6 @@ export default {
       const { Basic: { VisualStyle: { style } }, ComponentOption, StyleConfig } = this.storeOption.theme
       const { ConfigSize } = ComponentOption
       const { Label, Scale, DashboardColor } = StyleConfig
-      console.log('aaaa', DashboardColor)
       if (this.dataValue) {
         this.setStyle(style)
         this.setConfigSize(ConfigSize)

@@ -1,5 +1,11 @@
+/*
+ * @Author: 黄璐璐
+ * @Date: 2022-09-26 09:08:05
+ * @LastEditors: 黄璐璐
+ * @LastEditTime: 2022-09-26 15:06:31
+ * @Description:
+ */
 import baseMixins from './baseMixins'
-import { colorTheme } from '@/constants/color.js'
 import store from '@/store'
 import { getLayoutOptionById, deepClone, formatDataValue } from '@/utils/optionUtils'
 export default {
@@ -34,24 +40,16 @@ export default {
       // 拿到数据中的系列名字
       this.getSeriesOptions(data)
       // 拿到数据的系列名字 并设置颜色
-      this.getColor(data)
+      this.getNameList(data)
       // 拿到数据中的指标
       // this.getIndicatorOptions(data)
       this.getOption()
     },
-    // 拿到数据的系列名字 并设置颜色
-    getColor(val) {
-      if (val[0].length - 1 !== this.storeOption.theme.ComponentOption.Color.color.length) {
-        const color = []
-        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-        val[0].forEach((item, index) => {
-          if (index) {
-            const idx = (index - 1) % colorValue.length
-            color.push({ name: item, color: colorValue[idx].value, remark: item })
-          }
-        })
-        this.storeOption.theme.ComponentOption.Color.color = color
-      }
+    getNameList(val) {
+      // 取到度量的名字数组
+      const titleList = val[0].slice(1)
+      // baseMixins中的方法
+      this.getColor(titleList)
     },
     // 拿到数据中的系列名字
     getSeriesOptions(val) {

@@ -23,7 +23,7 @@ export default {
     reloadImpl () {
       this.dataValue = this.formatData(deepClone(this.chartData))
       this.getNameSvg(this.dataValue)
-      this.getColor(this.dataValue)
+      this.getNameList(this.dataValue)
       this.getDataSeries(this.dataValue)
     },
     formatData(dataValue) {
@@ -51,31 +51,64 @@ export default {
       }
       return obj
     },
-    // 拿到数据的系列名字 并设置颜色
-    getColor(val) {
+    getNameList(val) {
       let dataTemp = []
+      let titleList = []
       if (this.storeOption.dataSource.Dimension.value.length > 0) {
         // 有维度的话
         dataTemp = val
+        // 取到度量的名字数组
+        titleList = dataTemp.map((j) => {
+          return j.name
+        })
       } else {
         dataTemp = val[0].data
+        // 取到度量的名字数组
+        titleList = dataTemp.map((j) => {
+          return j.title
+        })
       }
-      if (dataTemp.length !== this.storeOption.theme.StyleConfig.IndicatorPic.Color.color.length) {
-        const color = []
-        const colorValue = colorTheme[this.storeOption.theme.StyleConfig.IndicatorPic.Color.theme]
-        if (this.storeOption.dataSource.Dimension.value.length > 0) {
-          dataTemp.forEach((item, index) => {
-            const idx = (index) % colorValue.length
-            color.push({ name: item.name, color: colorValue[idx].value, remark: item.name })
-          })
-        } else {
-          dataTemp.forEach((item, index) => {
-            const idx = (index) % colorValue.length
-            color.push({ name: item.title, color: colorValue[idx].value, remark: item.title })
-          })
+      this.getColor(titleList)
+    },
+    getColor(titleList) {
+      const colorValue = colorTheme[this.storeOption.theme.StyleConfig.IndicatorPic.Color.theme]
+      const oldColorList = deepClone(this.storeOption.theme.StyleConfig.IndicatorPic.Color.color)
+      var newColorList = []
+      // 新旧对比控制显示隐藏 isShow false指的是一开始添加了字段 后来被删除
+      for (const item of oldColorList) {
+        item.isShow = false
+      }
+      for (var tn of titleList) {
+        for (var titem of oldColorList) {
+          if (titem.name === tn) {
+            titem.isShow = true
+          }
         }
-        this.storeOption.theme.StyleConfig.IndicatorPic.Color.color = color
       }
+      var length = 0
+      if (oldColorList.length >= titleList.length) {
+        length = oldColorList.length
+      } else {
+        length = titleList.length
+      }
+      for (var idx = 0; idx < length; idx++) {
+        const name = titleList[idx]
+        // 先从旧的数据中寻找
+        const oldItem = oldColorList.find(oitem => {
+          if (oitem.name === name && oitem.isShow && oitem.isCustom) {
+            return oitem
+          }
+          return undefined
+        })
+        if (oldItem) {
+          newColorList.push(oldItem)
+        } else {
+          const num = (idx) % colorValue.length
+          const newColorItem = { name: name, color: colorValue[num].value, remark: name, isShow: true, isCustom: false }
+          newColorList.push(newColorItem)
+        }
+      }
+      this.storeOption.theme.StyleConfig.IndicatorPic.Color.color = newColorList
     },
     getNameSvg(val) {
       const svg = []

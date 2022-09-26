@@ -2,12 +2,11 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-19 11:32:45
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-14 22:37:38
+ * @LastEditTime: 2022-09-26 14:56:31
  * @Description:
  */
-// 水波纹的混入
+// 进度条水波纹的混入
 import baseMixins from './baseMixins'
-import { colorTheme } from '@/constants/color.js'
 import { formatDataValue, deepClone, getDataValueById } from '@/utils/optionUtils'
 export default {
   mixins: [baseMixins],
@@ -40,7 +39,7 @@ export default {
         if (isData !== -1) {
           this.dataValue = this.formatData(formatDataValue(getDataValueById(this.identify)))
           // 拿到数据的系列名字 并设置颜色
-          this.getColor(this.dataValue)
+          this.getNameList(this.dataValue)
           // 获取目标值
           this.getCfgTargetOption(this.dataValue)
         }
@@ -53,7 +52,7 @@ export default {
     reloadImpl () {
       this.dataValue = this.formatData(formatDataValue(deepClone(this.chartData)))
       // 拿到数据的系列名字 并设置颜色
-      this.getColor(this.dataValue)
+      this.getNameList(this.dataValue)
       // 获取目标值
       this.getCfgTargetOption(this.dataValue)
     },
@@ -77,17 +76,13 @@ export default {
       })
       return array
     },
-    // 拿到数据的系列名字 并设置颜色
-    getColor(val) {
-      if (val.length !== this.storeOption.theme.ComponentOption.Color.color.length) {
-        const color = []
-        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-        val.forEach((item, index) => {
-          const idx = (index) % colorValue.length
-          color.push({ name: item.name, color: colorValue[idx].value, remark: item.name })
-        })
-        this.storeOption.theme.ComponentOption.Color.color = color
-      }
+    getNameList(val) {
+      // 取到度量的名字数组
+      const titleList = val.map((j) => {
+        return j.name
+      })
+      // baseMixins中的方法
+      this.getColor(titleList)
     },
     // 获取设置目标值
     getCfgTargetOption (val) {

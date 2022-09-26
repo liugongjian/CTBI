@@ -2,12 +2,11 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-04 12:46:01
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-15 17:51:35
+ * @LastEditTime: 2022-09-26 21:18:25
  * @Description:
  */
 // 雷达图的混入
 import baseMixins from './baseMixins'
-import { colorTheme } from '@/constants/color.js'
 import { deepClone } from '@/utils/optionUtils'
 export default {
   mixins: [baseMixins],
@@ -30,21 +29,17 @@ export default {
     reloadImpl () {
       this.dataValue = deepClone(this.chartData)
       // 拿到数据的系列名字 并设置颜色
-      this.getColor(this.dataValue)
+      this.getNameList(this.dataValue)
       this.getOption()
     },
-    getColor(val) {
+    // 拿到数据的系列名字 并设置颜色
+    getNameList(val) {
       const data = val.fields.Measure.fields
-      console.log('ddddd', data.length, this.storeOption.theme.ComponentOption.Color.color.length)
-      if (data && data.length !== this.storeOption.theme.ComponentOption.Color.color.length) {
-        const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
-        const color = []
-        data.forEach((item, index) => {
-          const idx = (index) % colorValue.length
-          color.push({ name: item.column, color: colorValue[idx].value, remark: item.column })
-        })
-        this.storeOption.theme.ComponentOption.Color.color = color
-      }
+      const titleList = data.map((j) => {
+        return j.displayColumn
+      })
+      // baseMixins中的方法
+      this.getColor(titleList)
     }
   }
 }

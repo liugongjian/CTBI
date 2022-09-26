@@ -1,4 +1,5 @@
 import store from '@/store'
+import { colorTheme } from '@/constants/color.js'
 import { getDataSetData, getDataSetShareData } from '@/api/dataSet'
 import { getLayoutOptionById, getDataValueById, deepClone, getQueryParams } from '@/utils/optionUtils'
 // 图表组件的公共混入
@@ -144,6 +145,47 @@ export default {
         })
       }
       return temp
+    },
+    // 设置颜色
+    getColor(titleList) {
+      const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
+      const oldColorList = deepClone(this.storeOption.theme.ComponentOption.Color.color)
+      var newColorList = []
+      // 新旧对比控制显示隐藏 isShow false指的是一开始添加了字段 后来被删除
+      for (const item of oldColorList) {
+        item.isShow = false
+      }
+      for (var tn of titleList) {
+        for (var titem of oldColorList) {
+          if (titem.name === tn) {
+            titem.isShow = true
+          }
+        }
+      }
+      var length = 0
+      if (oldColorList.length >= titleList.length) {
+        length = oldColorList.length
+      } else {
+        length = titleList.length
+      }
+      for (var idx = 0; idx < length; idx++) {
+        const name = titleList[idx]
+        // 先从旧的数据中寻找
+        const oldItem = oldColorList.find(oitem => {
+          if (oitem.name === name && oitem.isShow && oitem.isCustom) {
+            return oitem
+          }
+          return undefined
+        })
+        if (oldItem) {
+          newColorList.push(oldItem)
+        } else {
+          const num = (idx) % colorValue.length
+          const newColorItem = { name: name, color: colorValue[num].value, remark: name, isShow: true, isCustom: false }
+          newColorList.push(newColorItem)
+        }
+      }
+      this.storeOption.theme.ComponentOption.Color.color = newColorList
     }
   }
 }

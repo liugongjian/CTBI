@@ -2,11 +2,10 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-01 14:25:01
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-14 22:28:25
+ * @LastEditTime: 2022-09-26 15:30:31
  * @Description: 翻牌器的混入
  */
 import baseMixins from './baseMixins'
-import { colorTheme } from '@/constants/color.js'
 import { deepClone } from '@/utils/optionUtils'
 export default {
   mixins: [baseMixins],
@@ -29,7 +28,7 @@ export default {
     reloadImpl () {
       this.dataValue = this.formatData(deepClone(this.chartData))
       this.getNameSvg(this.dataValue)
-      this.getColor(this.dataValue)
+      this.getNameList(this.dataValue)
       this.getDataSeries(this.dataValue)
     },
     formatData(dataValue) {
@@ -47,17 +46,13 @@ export default {
       return obj
     },
     // 拿到数据的系列名字 并设置颜色
-    getColor(val) {
-      if (val.length !== this.storeOption.theme.StyleConfig.IndicatorPic.Color.color.length) {
-        const color = []
-        const colorValue = colorTheme[this.storeOption.theme.StyleConfig.IndicatorPic.Color.theme]
-        val.forEach((item, index) => {
-          const idx = (index) % colorValue.length
-          color.push({ name: item.title, color: colorValue[idx].value, remark: item.title })
-        })
-
-        this.storeOption.theme.StyleConfig.IndicatorPic.Color.color = color
-      }
+    getNameList(val) {
+      // 取到度量的名字数组
+      const titleList = val.map((j) => {
+        return j.title
+      })
+      // baseMixins中的方法
+      this.getColor(titleList)
     },
     getNameSvg(val) {
       const svg = []
