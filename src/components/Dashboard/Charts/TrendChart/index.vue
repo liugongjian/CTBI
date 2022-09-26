@@ -180,7 +180,6 @@ export default {
     // },
 
     getOption () {
-      console.log('getOption')
       const { ComponentOption, FunctionalOption, trendChartConfig, trendStyleConfig, Axis, Formatting } = this.storeOption.theme
       this.Formatting = Formatting.Formatting.field
       this.Axis = Axis

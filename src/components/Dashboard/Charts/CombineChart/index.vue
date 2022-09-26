@@ -202,12 +202,12 @@ export default {
           shadowOffsetX: 0,
           shadowColor: 'rgba(0, 0, 0, 0.5)',
           color: (data) => {
-            if (color[0].name) {
+            if (color[0]?.name) {
               const colorTemp = color.find((item) => { return data.seriesName === item.name })
               return colorTemp ? colorTemp.color : 'red'
             } else {
               const index = (data.dataIndex) % color.length
-              return color[index].value
+              return color[index]?.value
             }
           }
         }

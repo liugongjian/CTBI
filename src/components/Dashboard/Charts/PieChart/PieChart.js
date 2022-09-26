@@ -44,6 +44,13 @@ export default {
         'show': false, // 是否展示链接地址
         'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
       },
+      'CustomBackgroundEnable': { // 自定义背景填充
+        'color': '', // 卡片颜色
+        'show': false, // 是否使用自定义背景填充
+        'showImg': false, // 是否使用背景图片
+        'imgUrl': '', // 背景图片地址
+        'imgSize': 'containRight' // 背景图片尺寸位置
+      },
       'VisualStyle': { // 可视化样式
         'style1': { 'name': '饼形', value: 'pie' }, // pie 饼形 ring 环形
         'style2': { 'name': '环形', value: 'ring' }, // pie 饼形 ring 环形

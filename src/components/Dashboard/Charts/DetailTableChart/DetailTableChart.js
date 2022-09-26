@@ -42,6 +42,13 @@ export default {
       'TitleLink': {
         'show': false
       },
+      'CustomBackgroundEnable': { // 自定义背景填充
+        'color': '', // 卡片颜色
+        'show': false, // 是否使用自定义背景填充
+        'showImg': false, // 是否使用背景图片
+        'imgUrl': '', // 背景图片地址
+        'imgSize': 'containRight' // 背景图片尺寸位置
+      },
       'Edition': {
         'edition': 'newEdition' // 版本切换
       }

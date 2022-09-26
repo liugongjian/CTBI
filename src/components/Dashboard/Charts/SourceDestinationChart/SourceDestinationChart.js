@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-09-01 14:07:39
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-01 14:25:00
+ * @LastEditTime: 2022-09-23 17:24:19
  * @Description:
  */
 /**
@@ -46,6 +46,19 @@ export default {
       'Footer': { // 尾注
         'show': false, // 是否显示尾注
         'text': ''// 尾注信息
+      },
+      'TitleLink': { // 链接跳转组件
+        'text': '', // 文案
+        'url': '', // 链接地址
+        'show': false, // 是否展示链接地址
+        'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
+      },
+      'CustomBackgroundEnable': { // 自定义背景填充
+        'color': '', // 卡片颜色
+        'show': false, // 是否使用自定义背景填充
+        'showImg': false, // 是否使用背景图片
+        'imgUrl': '', // 背景图片地址
+        'imgSize': 'containRight' // 背景图片尺寸位置
       }
     },
     'ComponentOption': {

@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-04 12:48:45
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-29 14:43:52
+ * @LastEditTime: 2022-09-23 17:37:14
  * @Description:
  */
 export default {
@@ -43,7 +43,7 @@ export default {
     },
     getColor () {
       // name可能会出现重名,后期更换成id
-      return this.color.color.find(item => item.name === this.data.name).color
+      return this.color.color.find(item => item.name === this.data.name)?.color
     },
     styleProgress () {
       return {

@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-22 09:15:11
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-15 12:26:18
+ * @LastEditTime: 2022-09-23 17:19:57
  * @Description:
  */
 // 折线图配置项信息
@@ -50,6 +50,13 @@ export default {
         'url': '', // 链接地址
         'show': false, // 是否展示链接地址
         'openType': 'blank' // 打开方式:1.blank 新窗口;2.dialog 弹窗
+      },
+      'CustomBackgroundEnable': { // 自定义背景填充
+        'color': '', // 卡片颜色
+        'show': false, // 是否使用自定义背景填充
+        'showImg': false, // 是否使用背景图片
+        'imgUrl': '', // 背景图片地址
+        'imgSize': 'containRight' // 背景图片尺寸位置
       },
       'VisualStyle': { // 可视化样式
         'style1': { 'name': '标准', value: 'standard' },

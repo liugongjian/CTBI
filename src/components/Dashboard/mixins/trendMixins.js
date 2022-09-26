@@ -50,7 +50,6 @@ export default {
   methods: {
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
-      console.log('图表重绘事件，继承于baseMixins', this.chartData)
       this.dataValue = formatDataValue(deepClone(this.chartData))
       // 拿到数据中的功能性配置
       this.getFormattingOptions(this.dataValue)
