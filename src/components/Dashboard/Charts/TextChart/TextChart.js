@@ -2,7 +2,7 @@
  * @Author: sihaiyang
  * @Date: 2022-09-28 10:34:49
  * @Last Modified by: sihaiyang
- * @Last Modified time: 2022-09-28 15:40:05
+ * @Last Modified time: 2022-09-28 17:37:28
  */
 
 /**
@@ -31,7 +31,8 @@ export default {
       'Mark': { // 备注
         'show': false, // 是否显示备注
         'position': 'afterTitle', // 备注出现位置
-        'text': ''// 备注信息
+        'text': '', // 备注信息
+        'hidePosition': true
       },
       'CustomBackgroundEnable': { // 自定义背景填充
         'color': '', // 卡片颜色
@@ -39,6 +40,12 @@ export default {
         'showImg': false, // 是否使用背景图片
         'imgUrl': '', // 背景图片地址
         'imgSize': 'containRight' // 背景图片尺寸位置
+      },
+      'TextAreaStyle': { // 自定义文体样式
+        'show': false, // 是否
+        'color': '#000', // 标题颜色
+        'size': 14, // 标题大小
+        'background': '#fff' // 标题大小
       }
     }
   },

@@ -3,8 +3,7 @@
     <el-input
       v-model="textarea"
       type="textarea"
-      :style="{'height': height}"
-      style="color: red;"
+      :style="customizeStyle"
       resize="none"
       :rows="5"
       placeholder="请输入内容"
@@ -21,6 +20,8 @@ export default {
   mixins: [baseMixins],
   data () {
     return {
+      // colorFromScript: 'red',
+      // customizeStyle: {},
       textarea: '',
       type: 'TextChart'// 图表类型 1.柱图；2.堆积柱状图；3.百分比堆积柱状图
     }
@@ -33,6 +34,22 @@ export default {
       const titleSize = this.storeOption.theme ? (this.storeOption.theme.Basic.Title.size) || 14 : 14
       const data = (this.layout.height || 200) - 55 - (titleSize - 14)
       return data + 'px'
+    },
+    customizeStyle() {
+      const style = this.storeOption.theme ? this.storeOption.theme.Basic.TextAreaStyle : {}
+      const { show, color, size, background } = style
+      let result = {}
+      if (show) {
+        result = {
+          color,
+          background,
+          fontSize: size + 'px'
+        }
+      }
+      return {
+        height: this.height,
+        ...result
+      }
     }
   },
   mounted() {
@@ -48,6 +65,12 @@ export default {
     },
     initContent() {
       this.textarea = this.storeOption.content
+      this.customizeStyle1 = {
+        height: this.height,
+        color: 'red',
+        background: 'gray',
+        fontSize: '50px'
+      }
     },
     changeContent() {
       this.storeOption.content = this.textarea
@@ -59,5 +82,7 @@ export default {
 <style lang="scss" scoped>
 ::v-deep .el-textarea__inner  {
   height: 100%;
+  color: inherit;
+  background: inherit;
 }
 </style>
