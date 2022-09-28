@@ -2,7 +2,7 @@
  * @Author: sihaiyang
  * @Date: 2022-09-28 10:34:49
  * @Last Modified by: sihaiyang
- * @Last Modified time: 2022-09-28 17:37:28
+ * @Last Modified time: 2022-09-28 17:50:23
  */
 
 /**
@@ -42,7 +42,7 @@ export default {
         'imgSize': 'containRight' // 背景图片尺寸位置
       },
       'TextAreaStyle': { // 自定义文体样式
-        'show': false, // 是否
+        'show': true, // 是否
         'color': '#000', // 标题颜色
         'size': 14, // 标题大小
         'background': '#fff' // 标题大小
