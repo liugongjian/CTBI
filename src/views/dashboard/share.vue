@@ -174,7 +174,7 @@ export default {
     getLayoutRenderData (layout) {
       const idLimits = []
       layout.forEach((item, index) => {
-        if (item.is !== 'TabChart') {
+        if (item.is !== 'TabChart' && item.is !== 'TextChart') {
           idLimits.push({ id: item.i, limit: (item.option && item.option.limit || 100) + index })
         }
       })

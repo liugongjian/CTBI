@@ -3,8 +3,8 @@
     :layout.sync="layout"
     :col-num="48"
     :row-height="20"
-    :is-draggable="true"
-    :is-resizable="true"
+    :is-draggable="isEdit"
+    :is-resizable="isEdit"
     :is-mirrored="false"
     :vertical-compact="true"
     :margin="[10, 10]"
@@ -58,6 +58,9 @@ export default {
     },
     chartsStyles () {
       return this.$store.state.settings.chartsStyles
+    },
+    isEdit () {
+      return store.state.app.dashboardMode === 'edit'
     }
   },
   mounted () {

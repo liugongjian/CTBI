@@ -21,11 +21,10 @@
     </div>
     <div
       class="editor-item-size"
+      :class="{'box-disabled':!option.show}"
     >
       <div>尺寸：</div>
-      <el-input-number v-model="option.size" style="width: 120px;" :precision="0" controls-position="right" label="标题尺寸" :min="14" :max="32">
-        <template slot="append">.com</template>
-      </el-input-number>
+      <el-input-number v-model="option.size" style="width: 120px;" :precision="0" controls-position="right" label="标题尺寸" :min="14" :max="32" />
       <div style="margin-left: 10px;font-size: 14px;">px</div>
     </div>
   </div>

@@ -12,7 +12,8 @@ const brief = [
 
 // 布局控件
 const control = [
-  'TabChart'
+  'TabChart',
+  'TextChart'
 ]
 
 /**
