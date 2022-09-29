@@ -6,6 +6,8 @@
       :style="customizeStyle"
       resize="none"
       :rows="5"
+      :readonly="!isEdit"
+      :class="{'non-edit': !isEdit || !isChoose}"
       placeholder="请输入内容"
       @blur="changeContent"
     />
@@ -14,6 +16,7 @@
 
 <script>
 import baseMixins from '@/components/Dashboard/mixins/baseMixins'
+import store from '@/store'
 import { getLayoutById, formatDataValue, deepClone } from '@/utils/optionUtils'
 export default {
   name: 'TextChart',
@@ -50,6 +53,12 @@ export default {
         height: this.height,
         ...result
       }
+    },
+    isEdit () {
+      return store.state.app.dashboardMode === 'edit'
+    },
+    isChoose () {
+      return store.state.app.currentLayoutId === this.identify
     }
   },
   mounted() {
@@ -84,5 +93,10 @@ export default {
   height: 100%;
   color: inherit;
   background: inherit;
+}
+.non-edit{
+  ::v-deep .el-textarea__inner  {
+    border: 0px;
+  }
 }
 </style>
