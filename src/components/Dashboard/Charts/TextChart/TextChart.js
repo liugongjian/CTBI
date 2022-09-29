@@ -2,14 +2,11 @@
  * @Author: sihaiyang
  * @Date: 2022-09-28 10:34:49
  * @Last Modified by: sihaiyang
- * @Last Modified time: 2022-09-28 17:50:23
+ * @Last Modified time: 2022-09-29 10:19:37
  */
 
-/**
- * */
 // 文本配置项信息
 
-// import { colorTheme } from '@/constants/color.js'
 import { defaultDataLimit } from '@/constants/constants'
 
 export default {

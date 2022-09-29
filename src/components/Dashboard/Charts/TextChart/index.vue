@@ -23,8 +23,6 @@ export default {
   mixins: [baseMixins],
   data () {
     return {
-      // colorFromScript: 'red',
-      // customizeStyle: {},
       textarea: '',
       type: 'TextChart'// 图表类型 1.柱图；2.堆积柱状图；3.百分比堆积柱状图
     }
@@ -74,12 +72,6 @@ export default {
     },
     initContent() {
       this.textarea = this.storeOption.content
-      this.customizeStyle1 = {
-        height: this.height,
-        color: 'red',
-        background: 'gray',
-        fontSize: '50px'
-      }
     },
     changeContent() {
       this.storeOption.content = this.textarea
