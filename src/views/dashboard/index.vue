@@ -417,7 +417,7 @@ export default {
 }
 .main-layout-edit {
   padding: 0px;
-  height: calc(100vh - 190px);
+  height: calc(100vh - 98px);
 }
 .main-layout-preview {
   padding: 0px;
