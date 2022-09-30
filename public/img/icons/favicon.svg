@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="56px" height="56px" viewBox="0 0 56 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组</title>
+    <defs>
+        <linearGradient x1="44.5118438%" y1="19.3837606%" x2="44.5118438%" y2="86.7346873%" id="linearGradient-1">
+            <stop stop-color="#FCBD3B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="52.9246387%" y1="52.9324503%" x2="80.6013822%" y2="45.0489659%" id="linearGradient-2">
+            <stop stop-color="#FA8334" offset="0%"></stop>
+            <stop stop-color="#BD5C1B" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="9.30360776%" x2="50%" y2="87.5319624%" id="linearGradient-3">
+            <stop stop-color="#FCBD3B" offset="0%"></stop>
+            <stop stop-color="#FA8334" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="CTBI-logo" transform="translate(-192.000000, -45.000000)">
+            <g id="编组" transform="translate(192.000000, 45.000000)">
+                <rect id="矩形" x="0" y="0" width="56" height="56"></rect>
+                <g id="编组-3" transform="translate(2.400000, 0.000000)">
+                    <path d="M12.0425329,7.029 L12.0429045,35.1396151 L12.0455329,35.137 L12.0463333,36.1389998 L0.399296497,41.9625182 L0.398532859,41.93 L9.03474996,36.9028407 L9.03546033,8.78337029 L12.0425329,7.029 Z M7.02702774,24.3245585 L7.02702774,35.7484979 L2.00772221,38.6697337 L2.00772221,27.2528213 L7.02702774,24.3245585 Z M7.02702774,12.2694996 L7.02702774,21.6857167 L2.00772221,24.6069525 L2.00772221,15.1977624 L7.02702774,12.2694996 Z M24.0926666,0 L24.0926666,14.0540555 L14.0535329,19.91 L14.0535329,5.856 L24.0926666,0 Z" id="形状结合" fill="url(#linearGradient-1)"></path>
+                    <path d="M14.0496484,33.9565795 L26.108,40.8455795 L36.2014177,35.0270277 L48.3101689,41.9459445 L36.2638356,48.9729723 L24.2175024,56 L12.1087512,49.0810832 L1.85594595e-13,42.1621665 L14.0496484,33.9565795 Z" id="形状结合" fill="url(#linearGradient-2)"></path>
+                    <path d="M48.1853331,42.1621665 L36.1389998,49.1891942 L36.1389998,30.1158332 L48.1853331,23.0888054 L48.1853331,42.1621665 Z" id="形状结合" fill="url(#linearGradient-3)"></path>
+                    <polygon id="矩形备份-110" fill="#FCBD3B" transform="translate(41.663233, 23.047254) scale(-1, 1) translate(-41.663233, -23.047254) " points="32.1293413 15.4656934 51.1994414 26.6133224 51.1995245 30.6288153 32.126942 19.4797353"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

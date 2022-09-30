@@ -26,11 +26,11 @@
         class="sidebar-logo-link"
         to="/"
       >
-        <!-- <img
+        <img
           v-if="logo"
           :src="logo"
           class="sidebar-logo"
-        > -->
+        >
         <h1 class="sidebar-title">{{ title }} </h1>
       </router-link>
     </transition>
@@ -49,7 +49,7 @@ export default {
   data () {
     return {
       title: 'BI报表工具',
-      logo: require('@/assets/logo.png')
+      logo: require('@/assets/bi_logo.svg')
     }
   }
 }
@@ -73,7 +73,6 @@ $bg: #424550;
   line-height: 50px;
   border-bottom: 1px solid #565a62;
   background: $bg;
-  text-align: center;
   overflow: hidden;
 
   & .sidebar-logo-link {
@@ -81,8 +80,9 @@ $bg: #424550;
     width: 100%;
 
     & .sidebar-logo {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
+      margin-left: 18px;
       vertical-align: middle;
       margin-right: 12px;
     }
