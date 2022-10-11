@@ -295,18 +295,36 @@ export default {
       if (saveTag !== 'saved' && saveData) {
         if (this.testNewEmpty()) {
           this.$store.dispatch('app/updateLayoutId', '')
-          this.$router.go(-1)
+          if (window.history.length <= 1) {
+            this.$router.push({
+              path: '/dashboardList'
+            })
+          } else {
+            this.$router.go(-1)
+          }
           return
         }
         this.unsavedVisible = true
       } else {
         this.$store.dispatch('app/updateLayoutId', '')
-        this.$router.go(-1)
+        if (window.history.length <= 1) {
+          this.$router.push({
+            path: '/dashboardList'
+          })
+        } else {
+          this.$router.go(-1)
+        }
       }
     },
     confirmBack () {
       this.unsavedVisible = false
-      this.$router.go(-1)
+      if (window.history.length <= 1) {
+        this.$router.push({
+          path: '/dashboardList'
+        })
+      } else {
+        this.$router.go(-1)
+      }
     },
     saveDashboardToLocal () {
       const saveName = this.saveName
