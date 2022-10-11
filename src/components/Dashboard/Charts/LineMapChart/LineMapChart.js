@@ -24,7 +24,7 @@
 import { defaultDataLimit } from '@/constants/constants'
 export default {
   'type': 'space', // 组件类型, 用于管理组件类型集合,例如：指标、表格、趋势
-  'isShow': true, // 是否展示该组件, 用于控制该组件是否在tools中显示
+  'isShow': false, // 是否展示该组件, 用于控制该组件是否在tools中显示
   'order': 5, // 在tools中排序
   'version': '', // 版本号
   'field': {}, // 字段
