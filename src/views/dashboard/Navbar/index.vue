@@ -284,7 +284,7 @@ export default {
         }
 
         if (!flag) {
-          this.$message.warning('模板中不能存在私有数据集')
+          this.$message.warning('私有数据集不能用于创建模板')
           return
         }
         const data = {

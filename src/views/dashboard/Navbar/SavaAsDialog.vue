@@ -12,7 +12,7 @@
         style="padding: 0px"
         :model="form"
         :rules="attrRules"
-        label-width="50px"
+        label-width="60px"
       >
         <el-form-item
           label="名称"
@@ -42,7 +42,7 @@
     >
       <el-button @click="handleClose">取 消</el-button>
       <el-button
-        v-loading="loading"
+        :loading="loading"
         type="primary"
         @click="handleClick"
       >确 定</el-button>
@@ -95,10 +95,10 @@ export default {
       loading: false,
       attrRules: {
         name: [
-          { validator: validateName, trigger: 'blur' }
+          { required: true, validator: validateName, trigger: 'blur' }
         ],
         description: [
-          { validator: validateDescription, trigger: 'blur' }
+          { required: true, validator: validateDescription, trigger: 'blur' }
         ]
       }
     }
@@ -119,8 +119,15 @@ export default {
       this.$refs.attrForm.resetFields()
     },
     handleClick () {
-      this.loading = true
-      this.$emit('handleSubmit', _.cloneDeep(this.form), this.cb)
+      this.$refs.attrForm.validate((valid) => {
+        if (valid) {
+          this.loading = true
+          this.$emit('handleSubmit', _.cloneDeep(this.form), this.cb)
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     cb () {
       this.loading = false

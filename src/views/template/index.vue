@@ -39,7 +39,7 @@
           style="padding: 0px"
           :model="templateAttr"
           :rules="attrRules"
-          label-width="40px"
+          label-width="60px"
         >
           <el-form-item
             label="名称"
@@ -146,10 +146,10 @@ export default {
       },
       attrRules: {
         name: [
-          { validator: validateName, trigger: 'blur' }
+          { required: true, validator: validateName, trigger: 'blur' }
         ],
         description: [
-          { validator: validateDescription, trigger: 'blur' }
+          { required: true, validator: validateDescription, trigger: 'blur' }
         ]
       }
     }
