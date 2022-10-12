@@ -2,6 +2,7 @@
   <div class="self-chart-content">
     <v-chart
       v-if="dataValue"
+      ref="scatterMap"
       :option="chartOption"
       autoresize
     />
@@ -38,7 +39,11 @@ export default {
         const itemStyle = this.getItemStyle()
         const area = getParameter(this.storeOption, 'theme.ComponentOption.MapAreaSelect.area')
         const areaJson = this.getAreaJson(area)
-        this.$echarts.registerMap('areaJson', areaJson)
+        const chart = this.$refs.scatterMap && this.$refs.scatterMap.chart
+        if (chart) {
+          chart.clear()
+        }
+        this.$echarts.registerMap(this.identify || 'scatterMap', areaJson)
         this.chartOption = {
           tooltip: {
             trigger: 'item',
@@ -57,12 +62,12 @@ export default {
             }
           },
           geo: {
-            map: 'areaJson',
-            layoutCenter: ['50%', '50%'],
-            layoutSize: 630,
+            map: this.identify || 'scatterMap',
+            // layoutCenter: ['50%', '50%'],
+            // layoutSize: this.height || 230,
             // 是否开启鼠标缩放和平移漫游。
             roam: true,
-            zoom: 1.2,
+            zoom: 1,
             visualMap: {
               show: true,
               orient: 'horizontal',

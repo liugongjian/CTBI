@@ -2,6 +2,7 @@
   <div class="self-chart-content">
     <v-chart
       v-if="dataValue"
+      ref="colorMap"
       :option="chartOption"
       autoresize
     />
@@ -37,7 +38,11 @@ export default {
         const labelShow = getParameter(this.storeOption, 'theme.ComponentOption.ChartLabel.labelShow')
         const area = getParameter(this.storeOption, 'theme.ComponentOption.MapAreaSelect.area')
         const areaJson = this.getAreaJson(area)
-        this.$echarts.registerMap('areaJson', areaJson)
+        this.$echarts.registerMap(this.identify || 'areaJson', areaJson)
+        const chart = this.$refs.colorMap && this.$refs.colorMap.chart
+        if (chart) {
+          chart.clear()
+        }
         this.chartOption = {
           visualMap: {
             show: true,
@@ -72,7 +77,7 @@ export default {
           series: [
             {
               type: 'map',
-              map: 'areaJson',
+              map: this.identify || 'areaJson',
               // 是否开启鼠标缩放和平移漫游。
               label: {
                 show: getParameter(this.storeOption, 'theme.ComponentOption.ChartLabel.check'),

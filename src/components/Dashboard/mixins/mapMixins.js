@@ -1,7 +1,7 @@
 // 地图的混入
 import baseMixins from './baseMixins'
 import { MapVisualColorOptions } from '@/constants/constants'
-import { deepClone, formatDataValue, getParameter } from '@/utils/optionUtils'
+import { deepClone, formatDataValue, getParameter, getLayoutById } from '@/utils/optionUtils'
 export default {
   mixins: [baseMixins],
   data () {
@@ -17,6 +17,16 @@ export default {
       deep: true
     }
   },
+  computed: {
+    layout() {
+      return getLayoutById(this.identify)
+    },
+    height() {
+      const titleSize = this.storeOption.theme ? (this.storeOption.theme.Basic.Title.size) || 14 : 14
+      const data = (this.layout.height || 200) - 55 - (titleSize - 14)
+      return data
+    }
+  },
   methods: {
     // 图表重绘事件，继承于baseMixins
     reloadImpl () {
@@ -25,6 +35,7 @@ export default {
     },
     getAreaJson(area) {
       const name = area || '全国地图'
+      console.log(name + this.identify)
       const mapJson = require(`../mapJson/${name}.json`)
       return mapJson
     },
