@@ -90,7 +90,7 @@ export default {
       border-color: #f0914b
     }
     .el-input__inner::-webkit-input-placeholder {
-      width: 84px;
+      width: 140px;
       height: 20px;
       font-family: PingFangSC-Medium;
       font-size: 14px;
