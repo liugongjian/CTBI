@@ -179,10 +179,14 @@ export default {
     },
     // 切换维度或者度量
     transformType (data) {
+      console.log(data)
       if (data.type === 'Measure') {
         data.type = 'Dimension'
       } else if (data.type === 'Dimension') {
         data.type = 'Measure'
+        if (data.attributes && data.attributes[0]) {
+          data.attributes[0].aggregator = 'count'
+        }
       }
       // 将字段放到最后
       const index = this.fields.findIndex(field => { return data.index === field.index })

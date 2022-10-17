@@ -522,7 +522,7 @@ export default {
     getAggFunctions (row) {
       if (row.attributes[0].dataType === 'text') {
         return [
-          { label: '无', value: '' },
+          // { label: '无', value: '' },
           { label: '计数', value: 'count' },
           { label: '计数(去重)', value: 'distinct-count' }
         ]
