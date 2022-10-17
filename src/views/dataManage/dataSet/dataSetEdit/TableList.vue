@@ -16,8 +16,8 @@
           style="margin-right: 8px; height: 32px; width: 20px;"
         />
         <b-tooltip
-          :title="`${table.name}<br><span style='line-height: 20px; color: rgba(0, 0, 0, 0.3);'>${table.comment || ''}</span>`"
-          :content="`${table.name}<span style='margin-left: 8px; color: rgba(0, 0, 0, 0.3);'>${table.comment || ''}</span>`"
+          :title="`${table.name}<br><span style='line-height: 20px; color: rgba(0, 0, 0, 0.3);'>${table.displayName || ''}</span>`"
+          :content="`${table.name}<span style='margin-left: 8px; color: rgba(0, 0, 0, 0.3);'>${table.displayName || ''}</span>`"
           class="h-c-p table-name"
         />
         <span class="table-btn">
