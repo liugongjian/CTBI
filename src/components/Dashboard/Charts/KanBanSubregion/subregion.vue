@@ -72,6 +72,10 @@ export default {
     series: {
       type: Object,
       default: () => ({})
+    },
+    layout: {
+      type: Object,
+      default: () => ({})
     }
   },
   computed: {
@@ -103,6 +107,7 @@ export default {
     },
     getItem() {
       const data = {}
+      console.log(this.layout)
       if (this.option.IndicatorPosition.position === 'left') {
         data.float = 'left'
       } else {
@@ -156,8 +161,15 @@ export default {
       }
     },
     getBox() {
+      let finalWidth = '200px'
+      if (this.option.IndicatorDisplay.moreRelation !== 'line') {
+        const maxNum = this.option.IndicatorDisplay.lineNum || 4
+        const containerWidth = (this.layout.width || 900) - 45
+        const num = containerWidth / maxNum > 200 ? this.option.IndicatorDisplay.lineNum : parseInt(containerWidth / 200)
+        finalWidth = `${(1 / num * 100).toFixed(0)}%`
+      }
       return {
-        width: this.option.IndicatorDisplay.moreRelation === 'line' ? '' : `${(1 / this.option.IndicatorDisplay.lineNum * 100).toFixed(0)}%`
+        'min-width': finalWidth
       }
     },
     getMoreRelation() {
