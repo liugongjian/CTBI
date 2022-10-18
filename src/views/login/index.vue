@@ -68,7 +68,7 @@ export default {
     font: 44px "PingFang SC"
   }
   .form {
-    width: 330px;
+    width: 380px;
   }
     .el-input {
       display: inline-block;
