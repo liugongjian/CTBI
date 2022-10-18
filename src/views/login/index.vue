@@ -84,7 +84,7 @@ export default {
       border-right-width: 0px;
       border-bottom-width: 1px;
       border-radius: 0;
-      font-size: 1.3em;
+      font-size: 1.2em;
       }
     .el-input__inner:focus {
       border-color: #f0914b

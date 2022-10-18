@@ -38,6 +38,15 @@ module.exports = {
     }
   },
 
+  // elementui icon 乱码修复
+  css: {
+    loaderOptions: {
+      sass: {
+        sassOptions: { outputStyle: 'expanded' }
+      }
+    }
+  },
+
   devServer: {
     port: port,
     open: true,
