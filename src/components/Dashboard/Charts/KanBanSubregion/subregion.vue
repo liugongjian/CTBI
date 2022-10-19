@@ -9,26 +9,21 @@
           </span>
           {{ item.name }}
         </div>
-        <div v-for="(subItem, i) in item.data" :key="i" class="measure">
-          <!-- 主副 第一个指标-->
-          <template v-if="i === 0 && option.IndicatorDisplay.relation === 'deputy'">
-            <div class="flex-align-center">
-              <span v-show="!item.name&&option.IndicatorPic.check" class="round" :style="getRound(subItem.title)">
-                <ImgIcon :data="getSvgIcon(subItem.title)" />
-              </span>
-            </div>
-            <span v-show="option.IndicatorDisplay.indicators" :style="getMainTarget">{{ subItem.title }}</span>
+        <!-- 主副 第一个指标-->
+        <template v-if="option.IndicatorDisplay.relation === 'deputy'">
+          <span v-show="option.IndicatorDisplay.indicators" :style="getMainTarget">{{ item.data[0].title }}</span>
 
-            <div class="flex-align-center">
-              <span style="fontSize: 12px">{{ getPrefix(subItem) }}</span>
-              <span :style="getTargetVal">{{ getSeries(subItem) }}</span>
-              <span style="fontSize: 12px">{{ getSuffix(subItem) }}</span>
-            </div>
-          </template>
+          <div class="flex-align-center">
+            <span style="fontSize: 12px">{{ getPrefix(item.data[0]) }}</span>
+            <span :style="getTargetVal">{{ getSeries(item.data[0]) }}</span>
+            <span style="fontSize: 12px">{{ getSuffix(item.data[0]) }}</span>
+          </div>
+        </template>
+        <div v-for="(subItem, i) in item.data" :key="i" class="measure">
           <!-- 主副 大于第一个的指标-->
           <template v-if="i > 0 && option.IndicatorDisplay.relation === 'deputy'">
-            <span :style="getSecTarget">{{ subItem.title }}</span>
-            <div class="flex-align-center">
+            <div :style="getSecTarget">{{ subItem.title }}</div>
+            <div class="flex-align-center" style="padding-left: 10px">
               <span style="fontSize: 12px">{{ getPrefix(subItem) }}</span>
               <span :style="getSecTargetVal">{{ getSeries(subItem) }}</span>
               <span style="fontSize: 12px">{{ getSuffix(subItem) }}</span>
@@ -36,11 +31,8 @@
           </template>
           <!-- 并列 -->
           <template v-if="option.IndicatorDisplay.relation !== 'deputy'">
-            <span v-show="option.IndicatorPic.check" class="round" :style="getRound(subItem.title)">
-              <ImgIcon :data="getSvgIcon(subItem.title)" />
-            </span>
-            <span v-show="option.IndicatorDisplay.indicators" :style="getTarget">{{ subItem.title }}</span>
-            <div class="flex-align-center">
+            <div v-show="option.IndicatorDisplay.indicators" :style="getTarget">{{ subItem.title }}</div>
+            <div class="flex-align-center" style="padding-left: 10px">
               <span style="fontSize: 12px">{{ getPrefix(subItem) }}</span>
               <span :style="getTargetVal" class="num">{{ getSeries(subItem) }}</span>
               <span style="fontSize: 12px">{{ getSuffix(subItem) }}</span>
@@ -106,15 +98,9 @@ export default {
       }
     },
     getItem() {
-      const data = {}
-      console.log(this.layout)
-      if (this.option.IndicatorPosition.position === 'left') {
-        data.float = 'left'
-      } else {
-        data.margin = '0 auto'
-        data['text-align'] = this.option.IndicatorPosition.align
+      return {
+        'align-items': this.option.IndicatorPosition.position === 'center' && this.option.IndicatorPosition.align === 'center' ? 'center' : 'flex-start'
       }
-      return data
     },
     getTargetVal() {
       const { valColor, valFontSize } = this.option.FontStyle?.target || {}
@@ -147,8 +133,6 @@ export default {
     },
     getMainTarget() {
       return {
-        width: this.option.IndicatorDisplay.relation === 'deputy' ? '100%' : '',
-        textAlign: 'left',
         fontSize: `${this.option.FontStyle.target.nameFontSize}px`,
         color: this.option.FontStyle.target.nameColor
       }
@@ -161,15 +145,16 @@ export default {
       }
     },
     getBox() {
-      let finalWidth = '200px'
+      let finalWidth = '180px'
       if (this.option.IndicatorDisplay.moreRelation !== 'line') {
         const maxNum = this.option.IndicatorDisplay.lineNum || 4
         const containerWidth = (this.layout.width || 900) - 45
-        const num = containerWidth / maxNum > 200 ? this.option.IndicatorDisplay.lineNum : parseInt(containerWidth / 200)
+        const num = containerWidth / maxNum > 180 ? this.option.IndicatorDisplay.lineNum : parseInt(containerWidth / 180)
         finalWidth = `${(1 / num * 100).toFixed(0)}%`
       }
       return {
-        'min-width': finalWidth
+        'min-width': finalWidth,
+        'justify-content': this.option.IndicatorPosition.position === 'left' ? 'flex-start' : 'center'
       }
     },
     getMoreRelation() {
@@ -186,14 +171,23 @@ export default {
   display: flex;
   .box {
     position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
     // min-width: 160px;
     border-bottom: 1px solid #e5e5e5;
+    flex-basis: auto;
   }
   .item {
     padding: 5px;
     padding-bottom: 5px;
     margin: 5px;
-    // width: 150px;
+    border: 0px solid red;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    // align-items: center;
+    //min-width: 150px;
     &:before {
       content: '';
       position: absolute;
@@ -208,7 +202,7 @@ export default {
   .measure {
     display: flex;
     justify-content:space-between;
-    flex-wrap: wrap;
+    width: 100%;
   }
 }
 .round {
