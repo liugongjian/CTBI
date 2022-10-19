@@ -53,6 +53,15 @@ export default {
       }
       this.loading = true
       const params = getQueryParams()
+      const { query: { dimension, measure } } = params
+      // 纬度度量一个格子 拆分维度度量两个list去传参
+      const DselectionsTemp = dimension.selections.filter((item) =>
+        item.type === 'Dimension')
+      params.query.dimension.selections = DselectionsTemp
+      const MselectionsTemp = measure.selections.filter((item) =>
+        item.type === 'Measure'
+      )
+      params.query.measure.selections = MselectionsTemp
       try {
         const body = { query: params.query }
         const dataSetId = params.dataSetId

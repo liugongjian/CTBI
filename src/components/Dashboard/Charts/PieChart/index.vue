@@ -146,7 +146,7 @@ export default {
             },
             label: {
               show: check,
-              alignTo: 'labelLine',
+              // alignTo: 'labelLine',
               formatter: function (data) {
                 let formatter = ''
                 if (checkList.includes('维度')) {
