@@ -100,19 +100,19 @@ export default {
     },
     // 设置图例与图表距离
     setGrid (legend) {
-      if (legend.top === 'auto' && legend.left === 'center') { // 图例在上
+      if (legend.show && legend.top === 'auto' && legend.left === 'center') { // 图例在上
         this.grid = {
           top: 50
         }
-      } else if (legend.top === 'bottom' && legend.left === 'center') { // 图例在下
+      } else if (legend.show && legend.top === 'bottom' && legend.left === 'center') { // 图例在下
         this.grid = {
           bottom: 50
         }
-      } else if (legend.top === 'center' && legend.left === 'auto') { // 图例在左
+      } else if (legend.show && legend.top === 'center' && legend.left === 'auto') { // 图例在左
         this.grid = {
           left: 120
         }
-      } else if (legend.top === 'center' && legend.left === 'right') { // 图例在右
+      } else if (legend.show && legend.top === 'center' && legend.left === 'right') { // 图例在右
         this.grid = {
           right: 120
         }
@@ -122,13 +122,13 @@ export default {
       const sdz = this.storeOption.theme.FunctionalOption?.DataZoom?.showDataZoom
       // 是否最多展示
       if (this.storeOption.theme.FunctionalOption?.LabelShowType?.axisShowType === 'condense') {
-        if (sdz !== 'hide' && legend.top === 'bottom') {
+        if (sdz && sdz !== 'hide' && legend.top === 'bottom') {
           this.grid.bottom = 200
         } else {
           this.grid.bottom = 150
         }
       } else {
-        if (sdz !== 'hide' && legend.top === 'bottom') {
+        if (sdz && sdz !== 'hide' && legend.top === 'bottom') {
           this.grid.bottom = 100
         }
       }
@@ -138,7 +138,7 @@ export default {
       const temp = Object.assign({}, legend)
       // 缩略轴
       const sdz = this.storeOption.theme.FunctionalOption?.DataZoom?.showDataZoom
-      if (temp.top === 'bottom' && temp.left === 'center' && sdz !== 'hide') {
+      if (temp.top === 'bottom' && temp.left === 'center' && sdz && sdz !== 'hide') {
         return Object.assign({}, temp, {
           top: 'auto',
           bottom: 50

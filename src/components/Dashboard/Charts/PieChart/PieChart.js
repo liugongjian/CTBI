@@ -82,7 +82,7 @@ export default {
         'value': null // 总计数量
       },
       'Legend': { // 图例
-        'show': true,
+        'show': false,
         'top': 'auto',
         'left': 'center',
         'orient': 'horizontal',
