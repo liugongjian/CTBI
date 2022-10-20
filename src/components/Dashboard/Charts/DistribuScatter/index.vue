@@ -63,6 +63,8 @@ export default {
   methods: {
     getOption () {
       const { Legend } = this.storeOption.theme.ComponentOption
+      console.log(this.dataValue)
+      console.log(this.chartData)
       const { XAxis, YAxis } = this.storeOption.theme.Axis
       const { SeriesSelect } = this.storeOption.theme.SeriesSetting
       // 系列配置-图表标签相关

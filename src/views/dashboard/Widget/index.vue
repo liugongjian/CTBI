@@ -24,6 +24,7 @@
         :h="item.h"
         :i="item.i"
         :min-h="2"
+        :min-w="4"
         drag-allow-from=".card-header-wrapper"
         @resize="resizedEvent"
         @resized="resizedEvent"

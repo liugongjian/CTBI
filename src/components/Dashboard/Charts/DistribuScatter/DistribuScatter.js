@@ -122,6 +122,12 @@ export default {
       'require': true,
       'limit': 10,
       'value': []
+    },
+    'Dimension': { // 维度
+      'name': '颜色图例/维度',
+      'require': false,
+      'limit': 1,
+      'value': []
     }
   }, // 数据集
   'dataSet': {
