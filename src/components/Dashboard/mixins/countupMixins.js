@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-08-01 14:25:01
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-26 15:30:31
+ * @LastEditTime: 2022-10-20 11:05:10
  * @Description: 翻牌器的混入
  */
 import baseMixins from './baseMixins'
@@ -38,8 +38,8 @@ export default {
         for (const key in fields) {
           // 比较特殊 这个度量就一个
           fields[key]['fields'].forEach((field, index) => {
-            const column = field.column
-            obj.push({ title: field.column, value: data[index][column] })
+            const displayColumn = field.displayColumn
+            obj.push({ title: field.displayColumn, value: data[index][displayColumn] })
           })
         }
       }
@@ -73,6 +73,7 @@ export default {
       val.forEach(item => {
         data.push({ title: item.title, prefix: '', suffix: '' })
       })
+      console.log('kkkk', val)
       this.storeOption.theme.SeriesSetting.IndicatorSeries.dataSeries = data
       this.storeOption.theme.SeriesSetting.IndicatorSeries.series = data[0].title
     }

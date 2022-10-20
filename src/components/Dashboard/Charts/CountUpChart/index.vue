@@ -2,7 +2,7 @@
  * @Author: 黄璐璐
  * @Date: 2022-07-29 10:26:53
  * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-08-03 16:31:03
+ * @LastEditTime: 2022-10-20 11:09:21
  * @Description: 翻牌器
 -->
 <template>
@@ -59,10 +59,11 @@
 
 <script>
 import CountTo from 'vue-count-to'
-import { getLayoutOptionById } from '@/utils/optionUtils'
+import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
 import countupMixins from '@/components/Dashboard/mixins/countupMixins'
 import store from '@/store'
 import ImgIcon from '@/components/Dashboard/Common/ImgIcon'
+import { colorTheme } from '@/constants/color.js'
 export default {
   name: 'CountUpChart',
   components: {
@@ -156,7 +157,46 @@ export default {
   methods: {
     getOption () {
       console.log('datavale', this.dataValue)
-      console.log('????')
+    },
+    getColor(titleList) {
+      const colorValue = colorTheme[this.storeOption.theme.StyleConfig.IndicatorPic.Color.theme]
+      const oldColorList = deepClone(this.storeOption.theme.StyleConfig.IndicatorPic.Color.color)
+      var newColorList = []
+      // 新旧对比控制显示隐藏 isShow false指的是一开始添加了字段 后来被删除
+      for (const item of oldColorList) {
+        item.isShow = false
+      }
+      for (var tn of titleList) {
+        for (var titem of oldColorList) {
+          if (titem.name === tn) {
+            titem.isShow = true
+          }
+        }
+      }
+      var length = 0
+      if (oldColorList.length >= titleList.length) {
+        length = oldColorList.length
+      } else {
+        length = titleList.length
+      }
+      for (var idx = 0; idx < length; idx++) {
+        const name = titleList[idx]
+        // 先从旧的数据中寻找
+        const oldItem = oldColorList.find(oitem => {
+          if (oitem.name === name && oitem.isShow && oitem.isCustom) {
+            return oitem
+          }
+          return undefined
+        })
+        if (oldItem) {
+          newColorList.push(oldItem)
+        } else {
+          const num = (idx) % colorValue.length
+          const newColorItem = { name: name, color: colorValue[num].value, remark: name, isShow: true, isCustom: false }
+          newColorList.push(newColorItem)
+        }
+      }
+      this.storeOption.theme.StyleConfig.IndicatorPic.Color.color = newColorList
     }
   }
 }
