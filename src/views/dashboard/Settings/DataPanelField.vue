@@ -76,7 +76,7 @@
           <el-input-number
             v-show="autoRefresh"
             v-model="time"
-            :min="1"
+            :min="10"
             :precision="0"
             :max="refreshMax"
             :controls="false"

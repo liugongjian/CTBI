@@ -76,8 +76,12 @@ export default {
       const { Legend, Slider } = this.storeOption.theme.ComponentOption
       const { XAxis, YAxis } = this.storeOption.theme.Axis
       let measureLen = 1
+      let type = 'category'
       if (this.chartData?.fields?.Measure) {
         measureLen = this.chartData.fields.Measure?.fields?.length
+      }
+      if (this.chartData?.fields?.DimensionOrMeasure?.fields?.length) {
+        type = this.chartData.fields.DimensionOrMeasure.fields[0].attributes && this.chartData.fields.DimensionOrMeasure.fields[0].attributes[0].dataType === 'number' ? 'value' : type
       }
       this.chartOption = {
         tooltip: {
@@ -92,7 +96,7 @@ export default {
         'legend': Legend,
         xAxis: [
           {
-            type: 'category',
+            type,
             // 轴线显示与样式
             'axisLine': {
               'show': XAxis.show,

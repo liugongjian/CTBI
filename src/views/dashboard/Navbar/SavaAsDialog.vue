@@ -20,6 +20,7 @@
         >
           <el-input
             v-model="form.name"
+            :maxlength="50"
             placeholder="仅支持中英文和数字,长度不超过50"
           />
         </el-form-item>
@@ -30,6 +31,9 @@
         >
           <el-input
             v-model="form.description"
+            :show-word-limit="true"
+            :maxlength="100"
+            :rows="4"
             type="textarea"
             placeholder="仅支持中英文和数字,长度不超过100"
           />

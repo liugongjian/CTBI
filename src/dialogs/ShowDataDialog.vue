@@ -6,7 +6,7 @@
     width="30%"
   >
     <div class="main-table">
-      <el-table :data="data">
+      <el-table v-loading="loading" :data="data">
         <template v-for="(item, index) in columns">
           <el-table-column
             :key="index"

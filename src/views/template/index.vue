@@ -47,6 +47,7 @@
           >
             <el-input
               v-model="templateAttr.name"
+              :maxlength="50"
               placeholder="仅支持中英文和数字,长度不超过50"
               style="width: 360px"
             />
@@ -58,6 +59,9 @@
           >
             <el-input
               v-model="templateAttr.description"
+              :show-word-limit="true"
+              :maxlength="100"
+              :rows="4"
               type="textarea"
               placeholder="仅支持中英文和数字,长度不超过100"
               style="width: 360px"
