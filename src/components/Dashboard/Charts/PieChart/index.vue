@@ -78,8 +78,20 @@ export default {
       }
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
+      const legend = ComponentOption.Legend
+      let gap = {}
+      if (legend.show && legend.top === 'auto' && legend.left === 'center') { // 图例在上
+        gap = {
+          top: 30
+        }
+      } else if (legend.show && legend.top === 'bottom' && legend.left === 'center') { // 图例在下
+        gap = {
+          bottom: 30
+        }
+      }
       const legendLayout = this.getLegendLayout(ComponentOption.Legend)
       // 设置图表的option
+      console.log(this.grid)
       that.chartOption = {
         tooltip: {
           trigger: 'item',
@@ -121,6 +133,7 @@ export default {
           {
             type: 'pie',
             radius: radius,
+            ...gap,
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
