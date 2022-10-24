@@ -12,7 +12,9 @@ export default {
   mixins: [baseMixins],
   data() {
     return {
-      series: []
+      series: [],
+      dimensionLegend: [],
+      xList: []
     }
   },
   watch: {
@@ -48,8 +50,19 @@ export default {
     getNameList(val) {
       // 取到度量的名字数组
       const titleList = val[0].slice(1)
+      let dimensionLegend = []
+      if (this.chartData?.fields?.Dimension?.fields?.length) {
+        const dimensionName = this.chartData.fields.Dimension.fields[0] && this.chartData.fields.Dimension.fields[0].displayColumn
+        const names = new Set()
+        this.chartData.data.forEach(item => {
+          names.add(item[dimensionName])
+        })
+        dimensionLegend = Array.from(names)
+      }
+      this.dimensionLegend = dimensionLegend
+      this.xList = titleList
       // baseMixins中的方法
-      this.getColor(titleList)
+      this.getColor(dimensionLegend.length > 0 ? dimensionLegend : titleList)
     },
     // 拿到数据中的系列名字
     getSeriesOptions(val) {
