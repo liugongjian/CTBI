@@ -2,6 +2,7 @@
   <div class="self-chart-content">
     <v-chart
       v-if="dataValue"
+      ref="scatter"
       :option="chartOption"
       autoresize
     />
@@ -83,6 +84,10 @@ export default {
       if (this.chartData?.fields?.DimensionOrMeasure?.fields?.length) {
         type = this.chartData.fields.DimensionOrMeasure.fields[0].attributes && this.chartData.fields.DimensionOrMeasure.fields[0].attributes[0].dataType === 'number' ? 'value' : type
       }
+      const chart = this.$refs.scatter && this.$refs.scatter.chart
+      if (chart) {
+        chart.clear()
+      }
       this.chartOption = {
         tooltip: {
           show: true,
@@ -91,7 +96,10 @@ export default {
             type: 'cross',
             show: true
           },
-          formatter: '{b}<br />{a}: {c}'
+          formatter: function(params) {
+            const { dimensionNames, data } = params
+            return `${dimensionNames[0]}: ${data[0]}<br />${dimensionNames[1]}: ${data[1]}`
+          }
         },
         'legend': Legend,
         xAxis: [

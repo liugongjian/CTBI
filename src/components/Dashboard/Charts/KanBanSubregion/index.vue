@@ -53,7 +53,6 @@ export default {
   },
   computed: {
     layout() {
-      console.log(this.identify)
       return getLayoutById(this.identify)
     },
     getOption () {

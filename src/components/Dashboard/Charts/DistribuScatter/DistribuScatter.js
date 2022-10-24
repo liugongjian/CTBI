@@ -98,16 +98,16 @@ export default {
         'kSeperator': false,
         'formatRegx': ''
       }
-    },
-    'SeriesSetting': { // 系列设置
-      'SeriesSelect': { // 选择系列
-        'label': '请选择系列',
-        'selectValue': '', // 默认选择的系列名字 第一个元素
-        'remarkShow': true, // 是否显示别名
-        'remark': '', // 别名默认是选择的系列名字 第一个元素
-        'seriesOption': []
-      }
     }
+    // 'SeriesSetting': { // 系列设置
+    //   'SeriesSelect': { // 选择系列
+    //     'label': '请选择系列',
+    //     'selectValue': '', // 默认选择的系列名字 第一个元素
+    //     'remarkShow': true, // 是否显示别名
+    //     'remark': '', // 别名默认是选择的系列名字 第一个元素
+    //     'seriesOption': []
+    //   }
+    // }
   },
   'advance': {}, // 高级
   'dataSource': {
@@ -121,6 +121,12 @@ export default {
       'name': 'X轴/度量',
       'require': true,
       'limit': 10,
+      'value': []
+    },
+    'Dimension': { // 维度
+      'name': '颜色图例/维度',
+      'require': false,
+      'limit': 1,
       'value': []
     }
   }, // 数据集
