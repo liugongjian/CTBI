@@ -121,6 +121,19 @@ export default {
         })
         this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
         this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
+
+        // if (index) {
+        //   const oldItem = this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption.find(sub => {
+        //     return sub.label === item
+        //   })
+        //   console.log('oldItem', oldItem)
+        //   if (oldItem) {
+        //     // seriesOption.push(deepClone(oldItem))
+        //     seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false, showMark: false, lineType: 'solid' })
+        //   } else {
+        //     seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false, showMark: false, lineType: 'solid' })
+        //   }
+        // }
       }
     },
     // 拿到数据的系列名字 并设置颜色 并拿到数据中展示标题
@@ -429,7 +442,9 @@ export default {
             show: ComponentOption.ChartLabel.check && this.checkList.includes('度量') // 标签显示
           },
           stack: 'Total',
-          areaStyle: {},
+          areaStyle: {
+            color: ''
+          },
           labelLayout: {
             hideOverlap: ComponentOption.ChartLabel.labelShow === 1 // 1.智能显示，2.全量显示 标签
           },

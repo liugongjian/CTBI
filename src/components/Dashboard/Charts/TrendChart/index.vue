@@ -207,7 +207,6 @@ export default {
           }
         }).color
         item.color = bgColor
-        console.log(1111111, item)
         return item
       })
       // 获取颜色设置-使图例颜色与图形颜色对应
@@ -220,7 +219,6 @@ export default {
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
       const legendLayout = this.getLegendLayout(ComponentOption.Legend)
-      console.log(legendLayout)
       // 如果设置了指标带小趋势图
       this.chartList = []
       var indicatorOption = this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption
@@ -249,8 +247,11 @@ export default {
               ctDataValue.push(chartItemItem)
             })
             series = this.getSeriesSingle(ComponentOption, FunctionalOption, SeriesSetting, ctValueIndex)
-            series[0].lineStyle.color = this.titleList[ctValueIndex - 1].color
-            series[0].areaStyle.color = this.titleList[ctValueIndex - 1].color
+            const tcolor = this.titleList[ctValueIndex - 1].color
+            series[0].lineStyle.color = tcolor
+            if (series[0].areaStyle) {
+              series[0].areaStyle.color = tcolor
+            }
             var chartItemOption = {
               index: ctValueIndex - 1,
               name: this.dataValue[0][ctValueIndex],
@@ -259,7 +260,7 @@ export default {
               legend: {
                 ...legendLayout,
                 itemStyle: {
-                  color: this.titleList[ctValueIndex - 1].color
+                  color: tcolor
                 },
                 data: legendData
               },
@@ -333,9 +334,6 @@ export default {
             color: newColorOption,
             legend: {
               ...legendLayout,
-              // itemStyle: {
-              //   color: '#333'
-              // },
               data: legendData
             },
             xAxis: this.xAxis,
@@ -409,7 +407,9 @@ export default {
       // 面积图单独处理
       if (chartType === 'area') {
         seriesItem.type = 'line'
-        seriesItem.areaStyle = {}
+        seriesItem.areaStyle = {
+          color: ''
+        }
       }
       // 设置柱状图宽度
       if (chartType === 'bar') {
@@ -471,7 +471,9 @@ export default {
           // 面积图单独处理
           if (chartType === 'area') {
             seriesItem.type = 'line'
-            seriesItem.areaStyle = {}
+            seriesItem.areaStyle = {
+              color: this.titleList[s].color
+            }
           }
           // 设置柱状图宽度
           if (chartType === 'bar') {
