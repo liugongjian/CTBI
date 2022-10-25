@@ -1,3 +1,4 @@
+<!-- 功能型配置 -->
 <template>
   <div class="editor-object-container editor-formatting">
     <div class="box">
@@ -101,6 +102,7 @@ export default {
     .el-select-dropdown__item.hover, .el-select-dropdown__item:hover{background: #50525D; }
   }
 .editor-formatting .box{ border-bottom: 1px solid #4B4E59; padding-bottom: 10px; margin-bottom: 10px;}
+.editor-formatting  .el-input--small .el-input__inner{ color:transparent; }
 .formattingTabs { color: #FFF;}
 .formattingTabs  .el-tabs__item{ height: 20px; line-height: 20px; font-size: 12px !important; padding-left: 10px;}
 .formattingTabs  .el-tabs__header{ padding: 0 !important;}

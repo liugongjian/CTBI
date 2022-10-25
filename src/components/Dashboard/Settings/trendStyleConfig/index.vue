@@ -1,3 +1,6 @@
+<!--
+  指标趋势图配置
+ -->
 <template>
   <div class="editor-object-container">
     <div class="box">
@@ -24,7 +27,7 @@
       <div class="editor-item-container">
         <el-radio-group v-model="option.position">
           <el-radio label="left">横向居左</el-radio>
-          <el-radio label="center">航向居中</el-radio>
+          <el-radio label="center">横向居中</el-radio>
         </el-radio-group>
       </div>
     </div>
@@ -33,7 +36,7 @@
       <div class="editor-item-container">
         <el-radio-group v-model="option.align">
           <el-radio label="left">横向居左</el-radio>
-          <el-radio label="center">航向居中</el-radio>
+          <el-radio label="center">横向居中</el-radio>
         </el-radio-group>
       </div>
     </div>
