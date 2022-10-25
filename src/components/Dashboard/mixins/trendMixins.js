@@ -116,24 +116,19 @@ export default {
         const seriesOption = []
         val[0].forEach((item, index) => {
           if (index) {
-            seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false, showMark: false, lineType: 'solid' })
+            const oldItem = this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption.find(sub => {
+              return sub.label === item
+            })
+            console.log('oldItem', oldItem)
+            if (oldItem) {
+              seriesOption.push(deepClone(oldItem))
+            } else {
+              seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false, showMark: false, lineType: 'solid' })
+            }
           }
         })
         this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
         this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
-
-        // if (index) {
-        //   const oldItem = this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption.find(sub => {
-        //     return sub.label === item
-        //   })
-        //   console.log('oldItem', oldItem)
-        //   if (oldItem) {
-        //     // seriesOption.push(deepClone(oldItem))
-        //     seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false, showMark: false, lineType: 'solid' })
-        //   } else {
-        //     seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false, showMark: false, lineType: 'solid' })
-        //   }
-        // }
       }
     },
     // 拿到数据的系列名字 并设置颜色 并拿到数据中展示标题

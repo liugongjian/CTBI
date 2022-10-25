@@ -186,6 +186,15 @@ export default {
   },
   computed: {
   },
+  watch: {
+    option: {
+      handler () {
+        this.selectSeries()
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   mounted () {
   },
   methods: {

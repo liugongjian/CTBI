@@ -6,7 +6,7 @@
       titleLinefeed : trendChartConfig.indicators=='linefeed'
     }"
   >
-    <div v-if="dataValue" style="width:100%;height:100%;overflow-y: auto;">
+    <div v-if="dataValue" class="dataBox">
       <div
         v-if="dataValue && trendChartConfig.type == 'disperse'"
         class="trendTitle"
@@ -505,10 +505,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dataBox{
+  width:100%;height:100%;overflow-y: auto; overflow-x: hidden;
+  &::-webkit-scrollbar-track-piece {
+    border-radius: 6px;
+    background-color: #FFF;
+  }
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb:vertical {
+    background-color: #ccc;
+    border-radius: 6px;
+  }
+}
 .trendChartBox {
   height: calc(100% - 120px);
   width: 100%;
   margin: 1% auto;
+  max-height: 400px;
+  min-height: 200px;
+
 }
 .trendTitle {
   width: 100%;
@@ -550,13 +568,12 @@ export default {
       background-color: #fff;
     }
     &::-webkit-scrollbar {
-      width: 6px;
-      height: 8px;
+      width: 4px;
+      height: 6px;
     }
     &::-webkit-scrollbar-thumb:horizontal {
       width: 100px;
-      background-color: #999;
-      border-radius: 6px;
+      background-color: #aaa;
       border-radius: 6px;
     }
   }
