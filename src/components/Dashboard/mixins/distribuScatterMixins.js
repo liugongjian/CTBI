@@ -40,7 +40,7 @@ export default {
       this.dataValue = this.formatData(deepClone(this.chartData))
       const data = formatDataValue(deepClone(this.chartData))
       // 拿到数据中的系列名字
-      this.getSeriesOptions(data)
+      // this.getSeriesOptions(data)
       // 拿到数据的系列名字 并设置颜色
       this.getNameList(data)
       // 拿到数据中的指标

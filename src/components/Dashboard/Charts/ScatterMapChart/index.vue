@@ -171,10 +171,12 @@ export default {
             }
           ]
         }
+        console.log(this.chartOption)
       }
     },
     getSeriesOption () {
       const { data, fields } = this.chartData
+      console.log(this.chartData)
       if (data && data.length > 0) {
         // 最小值
         let min = null
@@ -188,25 +190,29 @@ export default {
         // 仅截取第一个度量作为地图的展示值，其他值放在tooltip中展示
         const measureFields = Measure.fields
         const firstMeasureField = Measure.fields[0].displayColumn
-        const result = data.map(item => {
+        const result = []
+        data.forEach(item => {
           let value = []
           const text = []
-          measureFields.forEach(field => {
-            text.push({
-              name: field.displayColumn,
-              value: item[field.displayColumn]
+          const cor = this.getCenter(item[dimensionField])
+          // 去除没有获取坐标的数据
+          if (cor.length > 0) {
+            measureFields.forEach(field => {
+              text.push({
+                name: field.displayColumn,
+                value: item[field.displayColumn]
+              })
+              value = value.concat(cor)
+              value.push(item[field.displayColumn])
             })
-            value = value.concat(this.getCenter(item[dimensionField]))
-            value.push(item[field.displayColumn])
-          })
 
-          min = this.getMin(min, item[firstMeasureField])
-          max = this.getMax(max, item[firstMeasureField])
-
-          return {
-            name: item[dimensionField],
-            value,
-            text
+            min = this.getMin(min, item[firstMeasureField])
+            max = this.getMax(max, item[firstMeasureField])
+            result.push({
+              name: item[dimensionField],
+              value,
+              text
+            })
           }
         })
         return {
