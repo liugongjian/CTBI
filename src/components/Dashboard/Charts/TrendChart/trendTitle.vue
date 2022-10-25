@@ -6,16 +6,14 @@
       'subindicator-center' : trendStyleConfig.align == 'center'
     }"
     :style="[
-      {minWidth:trendStyleConfig.lineNum?100/trendStyleConfig.lineNum+'%':'auto'},
+      {minWidth:'100%'},
     ]"
   >
-    {{ titleItem.color.color }}
     <div
       style="margin:10px;"
       :style="[
         {
           backgroundColor:trendChartConfig.open&&isSelect&&trendChartConfig.type == 'disperse'?titleItem.color:!trendChartConfig.open?'':trendChartConfig.type==='disperse'?'#F5F5F5':'',
-
         }
       ]"
     >

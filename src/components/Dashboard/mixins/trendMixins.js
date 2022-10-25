@@ -67,7 +67,6 @@ export default {
       var newField = []
       for (var j of field) {
         const item = this.storeOption.theme.Formatting.Formatting.field.find(item => {
-          console.log(item)
           return item.name === j
         })
         var fieldItme = null
@@ -109,7 +108,6 @@ export default {
       }
       this.storeOption.theme.Formatting.Formatting.selected = deepClone(fieldItme) // 默认选中不然报错
       this.storeOption.theme.Formatting.Formatting.field = newField
-      console.log('newField', this.storeOption.theme.Formatting.Formatting)
     },
     // 拿到数据中的系列名字
     getSeriesOptions (val) {
@@ -118,7 +116,7 @@ export default {
         const seriesOption = []
         val[0].forEach((item, index) => {
           if (index) {
-            seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false, showMark: false })
+            seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false, showMark: false, lineType: 'solid' })
           }
         })
         this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
@@ -128,7 +126,7 @@ export default {
     // 拿到数据的系列名字 并设置颜色 并拿到数据中展示标题
     getColorAndTitle () {
       const val = this.dataValue
-      if (val[0].length - 1 !== this.storeOption.theme.ComponentOption.Color.color.length) {
+      if (val[0]) {
         var titleList = []
         var color = []
         var titleColor = {
@@ -147,7 +145,6 @@ export default {
             titleList.push({ name: item, color: colorValue[idx].value, isSelect: !idx, value: val[val.length - 1][index], index: idx })
           }
         })
-        console.log(this.storeOption.theme.trendChartConfig)
         this.storeOption.theme.ComponentOption.Color.color = color
         this.storeOption.theme.trendChartConfig.trendChartConfig.titleColor = deepClone(titleColor)
         this.storeOption.theme.trendChartConfig.trendChartConfig.titleList = titleList
@@ -319,7 +316,8 @@ export default {
     // 系列设置
     setSeriesItem (series) {
       const { SeriesSelect } = this.storeOption.theme.SeriesSetting
-      var newSeries = series.map((item) => {
+
+      var newSeries = series.map(item => {
         const option = SeriesSelect.seriesOption.find(ele => {
           return ele.value === item.name
         })
@@ -328,10 +326,13 @@ export default {
           condition = true
         }
         if (option && condition) {
-          const { labelColor, showLabel, showMax, showMark, markType } = option
+          const { labelColor, showLabel, showMax, showMark, markType, lineType } = option
           const ChartLabel = this.storeOption.theme.ComponentOption.ChartLabel
           item.label.show = ChartLabel.type === 'StackedBarChart' ? (this.checkList.includes('度量') && ChartLabel.check) || showLabel : ChartLabel.check || showLabel
           item.label.color = labelColor
+          item.lineStyle = {
+            type: 'solid'
+          }
           if (showMax) {
             item.markPoint = {
               symbol: 'pin',
@@ -349,6 +350,7 @@ export default {
             item.hoverAnimation = false
             item.symbolSize = 0
           }
+          item.lineStyle.type = lineType
         }
         return item
       })

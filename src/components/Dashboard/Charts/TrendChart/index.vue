@@ -6,7 +6,7 @@
       titleLinefeed : trendChartConfig.indicators=='linefeed'
     }"
   >
-    <div v-if="dataValue" style="width:100%;height:calc(100% - 90px);">
+    <div v-if="dataValue" style="width:100%;height:100%;overflow-y: auto;">
       <div
         v-if="dataValue && trendChartConfig.type == 'disperse'"
         class="trendTitle"
@@ -17,9 +17,9 @@
         <div
           v-for="(titleItem, index) in titleList"
           :key="index"
-          style="display:inline"
+          style="display:inline-block"
           :style="[
-            {minWidth:trendStyleConfig.lineNum?100/trendStyleConfig.lineNum+'%':'auto'},
+            {minWidth:trendStyleConfig.lineNum? titleList.length <= trendStyleConfig.lineNum ? 100/titleList.length+'%':100/trendStyleConfig.lineNum+'%':'auto'},
           ]"
           @click="changeTable(titleItem,index)"
         >
@@ -35,7 +35,7 @@
       </div>
       <div
         v-if="trendChartConfig.open && trendChartConfig.type == 'disperse' && trendChartConfig.preview == 'radio'"
-        class="trendChartBox"
+        class="trendChartBox "
       >
         <v-chart
           v-if="selectedItem"
@@ -51,17 +51,15 @@
       <!-- 单独小指标图 -->
       <div
         v-if="trendChartConfig.open && trendChartConfig.type == 'integration'"
-        class="trendChartBox"
-        :class="{
-          singleBox : trendChartConfig.indicators=='line',
-        }"
+        class="trendChartBox trendChartAllBox"
       >
         <div
           v-for="(chart,key) of chartList"
           :key="key"
-          style="margin-bottom:39px"
           :style="[
-            {width:trendStyleConfig.lineNum?100/trendStyleConfig.lineNum-1+'%':'auto'},
+            {float:trendChartConfig.open && trendChartConfig.type == 'integration'?'left':''},
+            {height:trendChartConfig.open && trendChartConfig.type == 'integration' && trendChartConfig.indicators=='linefeed'?'48%':'77%'},
+            {width:trendStyleConfig.lineNum? titleList.length <= trendStyleConfig.lineNum ? 100/titleList.length-0.1+'%': 100/trendStyleConfig.lineNum-0.1+'%':'auto'},
             {borderRight:trendChartConfig.type==='integration'?'1px solid #E5E5E5' :'' },
             {marginBottom:FunctionalOption.DataZoom.showDataZoom==='hide'?'39px' :'90px' },
           ]"
@@ -180,7 +178,7 @@ export default {
     // },
 
     getOption () {
-      const { ComponentOption, FunctionalOption, trendChartConfig, trendStyleConfig, Axis, Formatting } = this.storeOption.theme
+      const { ComponentOption, FunctionalOption, trendChartConfig, trendStyleConfig, Axis, Formatting, SeriesSetting } = this.storeOption.theme
       this.Formatting = Formatting.Formatting.field
       this.Axis = Axis
       this.FunctionalOption = FunctionalOption
@@ -197,24 +195,19 @@ export default {
       } else {
         this.titleList = trendChartConfig.trendChartConfig.titleList
       }
-      console.log(ComponentOption.Color.color)
       // 功能性配置二次筛选标题
       this.titleList = this.titleList.map(item => {
-        console.log('item', item)
         const field = this.Formatting.find(fitem => {
           return fitem.name === item.name
         })
         item.formatting = field
         const bgColor = ComponentOption.Color.color.find(ccitem => {
-          console.log('field', ccitem.color, item.color)
           if (ccitem.name === item.name) {
             return ccitem.color
-          } else {
-            return item.color
           }
         }).color
-        console.log(111, bgColor)
         item.color = bgColor
+        console.log(1111111, item)
         return item
       })
       // 获取颜色设置-使图例颜色与图形颜色对应
@@ -227,6 +220,7 @@ export default {
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
       const legendLayout = this.getLegendLayout(ComponentOption.Legend)
+      console.log(legendLayout)
       // 如果设置了指标带小趋势图
       this.chartList = []
       var indicatorOption = this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption
@@ -254,7 +248,9 @@ export default {
               var chartItemItem = [item[0], item[ctValueIndex]]
               ctDataValue.push(chartItemItem)
             })
-            series = this.getSeriesSingle(ComponentOption, FunctionalOption, ctValueIndex)
+            series = this.getSeriesSingle(ComponentOption, FunctionalOption, SeriesSetting, ctValueIndex)
+            series[0].lineStyle.color = this.titleList[ctValueIndex - 1].color
+            series[0].areaStyle.color = this.titleList[ctValueIndex - 1].color
             var chartItemOption = {
               index: ctValueIndex - 1,
               name: this.dataValue[0][ctValueIndex],
@@ -262,9 +258,10 @@ export default {
               color: colorOption,
               legend: {
                 ...legendLayout,
+                itemStyle: {
+                  color: this.titleList[ctValueIndex - 1].color
+                },
                 data: legendData
-                // ...ComponentOption.Legend,
-                // data: legendData
               },
               xAxis: this.xAxis,
               tooltip: {
@@ -323,12 +320,22 @@ export default {
           })
           // 获取表的内容
           const dataValue = this.formatDataValueMulti(deepClone(this.chartData), lineNames)
-
+          // color 需要遍历修改
+          const newColorOption = []
+          series.forEach((item, index) => {
+            const sitem = this.titleList.find(seriesItem => {
+              return seriesItem.name === item.name
+            })
+            newColorOption.push(sitem.color)
+          })
           this.chartOption = {
             grid: this.grid,
-            color: colorOption,
+            color: newColorOption,
             legend: {
               ...legendLayout,
+              // itemStyle: {
+              //   color: '#333'
+              // },
               data: legendData
             },
             xAxis: this.xAxis,
@@ -356,14 +363,6 @@ export default {
             },
             series: series
           }
-          // this.dataValue.forEach((item, in dex) => {
-          //   dataValueNames.forEach((vName, vKey) => {
-          //     if (lineNames.includes(vName)) {
-          //     var data = [[vName]]
-          //       console.log(vName)
-          //     }
-          //   })
-          // })
         }
       }
       // 多选切换时显示多个的bug
@@ -378,7 +377,7 @@ export default {
       }
       this.$forceUpdate()
     },
-    getSeriesSingle (ComponentOption, FunctionalOption, ctValueIndex) {
+    getSeriesSingle (ComponentOption, FunctionalOption, SeriesSetting, ctValueIndex) {
       var series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {
@@ -403,6 +402,7 @@ export default {
         },
         smooth: ComponentOption.LineStyle.type === 1,
         connectNulls: this.resolveNull(FunctionalOption),
+        lineStyle: {},
         itemStyle: this.getItemStyle(ComponentOption), // 图形样式配置-颜色
         type: chartType
       }
@@ -431,7 +431,6 @@ export default {
       } else {
         series[i].symbol = ComponentOption.SeriesMark.markType
       }
-
       // 最值显示
       var newSeries = this.setSeriesItem(series)
       return newSeries
@@ -505,10 +504,9 @@ export default {
 
 <style lang="scss" scoped>
 .trendChartBox {
-  height: 100%;
+  height: calc(100% - 120px);
   width: 100%;
-  display: flex;
-  padding: 10px auto;
+  margin: 1% auto;
 }
 .trendTitle {
   width: 100%;
@@ -571,5 +569,9 @@ export default {
   > div {
     height: 100%;
   }
+}
+.titleLine .trendChartAllBox{
+  overflow-x: auto ; width: auto ; white-space: nowrap; height: calc(98% - 40px) ;
+  >div{ display: inline-block; float:none !important;}
 }
 </style>
