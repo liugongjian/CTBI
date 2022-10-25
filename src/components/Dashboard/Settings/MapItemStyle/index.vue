@@ -12,7 +12,7 @@
     >
       <div class="editor-item-title">区块底色</div>
       <div class="flex-align-center">
-        <el-color-picker v-model="option.areaColor" />
+        <el-color-picker v-model="option.areaColor" @change="changeBg" />
       </div>
     </div>
 
@@ -23,7 +23,7 @@
     >
       <div class="editor-item-title">轮廓线</div>
       <div class="flex-align-center">
-        <el-color-picker v-model="option.borderColor" />
+        <el-color-picker v-model="option.borderColor" @change="changeBorder" />
       </div>
     </div>
 
@@ -40,6 +40,16 @@ export default {
     }
   },
   methods: {
+    changeBg(color) {
+      if (!color) {
+        this.option.areaColor = '#EBEDF0'
+      }
+    },
+    changeBorder(color) {
+      if (!color) {
+        this.option.borderColor = '#FFFFFF'
+      }
+    }
   }
 
 }

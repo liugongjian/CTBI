@@ -47,7 +47,8 @@
           >
             <el-input
               v-model="templateAttr.name"
-              placeholder="请输入模板名称"
+              :maxlength="50"
+              placeholder="仅支持中英文和数字,长度不超过50"
               style="width: 360px"
             />
           </el-form-item>
@@ -58,8 +59,11 @@
           >
             <el-input
               v-model="templateAttr.description"
+              :show-word-limit="true"
+              :maxlength="100"
+              :rows="4"
               type="textarea"
-              placeholder="请输入描述"
+              placeholder="仅支持中英文和数字,长度不超过100"
               style="width: 360px"
             />
           </el-form-item>
@@ -95,9 +99,12 @@ export default {
       if (name === '') {
         callback(new Error('请输入模板名称'))
       } else {
-        const reg = /^[\u4e00-\u9fa5\w]{1,50}$/
+        // const reg = /^[\u4e00-\u9fa5\w]{1,50}$/
+        const reg = /^[\u4e00-\u9fa5\w]+$/
         if (!reg.test(name)) {
-          callback(new Error('仅支持中英文和数字,长度不超过50'))
+          callback(new Error('仅支持中英文和数字,不能含有特殊字符'))
+        } else if (name.length > 50) {
+          callback(new Error('字符长度不超过50'))
         } else {
           callback()
         }
@@ -108,9 +115,12 @@ export default {
       if (description === '') {
         callback(new Error('请输入模板描述'))
       } else {
-        const reg = /^[\u4e00-\u9fa5\w]{1,100}$/
+        // const reg = /^[\u4e00-\u9fa5\w]{1,100}$/
+        const reg = /^[\u4e00-\u9fa5\w]+$/
         if (!reg.test(description)) {
-          callback(new Error('仅支持中英文和数字,长度不超过100'))
+          callback(new Error('仅支持中英文和数字,不能含有特殊字符'))
+        } else if (description.length > 100) {
+          callback(new Error('字符长度不超过100'))
         } else {
           callback()
         }

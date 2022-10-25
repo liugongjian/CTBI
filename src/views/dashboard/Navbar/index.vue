@@ -355,6 +355,18 @@ export default {
       }
       return ''
     },
+    testTemplateNameValid () {
+      const name = this.name.trim()
+      if (name === '') {
+        return '请输入模板名称'
+      } else {
+        const reg = /^[\u4e00-\u9fa5\w]{1,50}$/
+        if (!reg.test(name)) {
+          return '模板名称错误，支持中英文、数字, 长度不超过50'
+        }
+      }
+      return ''
+    },
     async showDashboardAttribute () {
       await this.getFolders()
       this.dashboardAttributeVisible = true
@@ -455,7 +467,7 @@ export default {
       })
     },
     async saveTemplate () {
-      const tip = this.testNameValid()
+      const tip = this.testTemplateNameValid()
       if (tip) {
         this.$message.warning(tip)
       } else {

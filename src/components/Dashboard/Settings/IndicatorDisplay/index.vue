@@ -11,6 +11,7 @@
     <div v-if="getRelationShow" class="editor-item-container">
       <el-radio-group
         v-model="option.relation"
+        @change="changeRelatiion"
       >
         <el-radio label="parataxis">并列</el-radio>
         <el-radio label="deputy">主副</el-radio>
@@ -51,6 +52,10 @@ export default {
     option: {
       type: Object,
       default: () => { }
+    },
+    styleOption: {
+      type: Object,
+      default: () => { }
     }
   },
   data () {
@@ -66,6 +71,16 @@ export default {
     }
   },
   methods: {
+    changeRelatiion(data) {
+      console.log(this.styleOption)
+      if (data === 'deputy') {
+        this.styleOption.FontStyle.target.nameFontSize = 12
+        this.styleOption.FontStyle.target.valFontSize = 24
+      } else {
+        this.styleOption.FontStyle.target.nameFontSize = 12
+        this.styleOption.FontStyle.target.valFontSize = 12
+      }
+    }
   }
 }
 </script>

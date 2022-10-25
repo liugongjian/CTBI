@@ -77,7 +77,8 @@ export default {
         'top': 'auto',
         'left': 'center',
         'orient': 'horizontal',
-        'type': 'scroll'
+        'type': 'scroll',
+        'padding': [50, 50, 50, 50]
       },
       'Color': { // 颜色设置
         'title': '配色设置',

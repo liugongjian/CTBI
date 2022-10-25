@@ -175,6 +175,7 @@
         >
           <component
             :is="name"
+            :style-option="option['StyleConfig']"
             :option="option['StyleConfig'][name]"
           />
         </div>

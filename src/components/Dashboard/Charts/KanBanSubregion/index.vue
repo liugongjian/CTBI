@@ -15,6 +15,7 @@
         :data="dataValue"
         :option="getOption"
         :series="getKanBanSeries"
+        :layout="layout"
       />
     </div>
     <svg-icon
@@ -26,7 +27,7 @@
 </template>
 
 <script>
-import { getLayoutOptionById } from '@/utils/optionUtils'
+import { getLayoutOptionById, getLayoutById } from '@/utils/optionUtils'
 import KanBanSubregionMixins from '@/components/Dashboard/mixins/kanBanSubregionMixins'
 import subregion from './subregion.vue'
 import store from '@/store'
@@ -51,6 +52,9 @@ export default {
     }
   },
   computed: {
+    layout() {
+      return getLayoutById(this.identify)
+    },
     getOption () {
       return this.storeOption.theme?.StyleConfig || {}
     },

@@ -212,7 +212,7 @@ export const formatDataValue = function (chartData) {
     for (const key in fields) {
       if (Object.hasOwnProperty.call(fields, key)) {
         const element = fields[key]
-        if (key === 'Dimension') {
+        if (key === 'Dimension' || key === 'DimensionOrMeasure') {
           element.fields.forEach(field => {
             DimensionKey.push(field.displayColumn)
           })

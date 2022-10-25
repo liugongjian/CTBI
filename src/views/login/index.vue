@@ -68,7 +68,7 @@ export default {
     font: 44px "PingFang SC"
   }
   .form {
-    width: 330px;
+    width: 380px;
   }
     .el-input {
       display: inline-block;
@@ -84,13 +84,13 @@ export default {
       border-right-width: 0px;
       border-bottom-width: 1px;
       border-radius: 0;
-      font-size: 1.3em;
+      font-size: 1.2em;
       }
     .el-input__inner:focus {
       border-color: #f0914b
     }
     .el-input__inner::-webkit-input-placeholder {
-      width: 84px;
+      width: 140px;
       height: 20px;
       font-family: PingFangSC-Medium;
       font-size: 14px;

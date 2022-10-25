@@ -74,10 +74,8 @@ export default {
       this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
         legendData.push({ name: item.value })
       })
-
       // 获取y轴配置信息，用于提取单位信息
       const { Axis: { YAxis } } = this.storeOption.theme
-
       this.chartOption = {
         grid: this.grid,
         color: colorOption,

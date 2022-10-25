@@ -105,45 +105,16 @@ export default {
     }
   },
   mounted () {
-    // 获取本地数据，进行画布初始化
-    // if (localStorage.getItem('layout')) {
-    //   const layout = JSON.parse(localStorage.getItem('layout'))
-    //   this.$store.state.app.layout = layout
-    // }
-    // if (localStorage.getItem('dataOption')) {
-    //   const dataOption = JSON.parse(localStorage.getItem('dataOption'))
-    //   this.$store.state.app.dataOption = dataOption
-    // }
-    // if (localStorage.getItem('layoutStyles')) {
-    //   const layoutStyles = JSON.parse(localStorage.getItem('layoutStyles'))
-    //   this.$store.state.settings.layoutStyles = layoutStyles
-    // }
-    // this.getDashboardData()
     window.addEventListener('beforeunload', this.beforeunload)
     store.dispatch('app/updateDashboardMode', 'preview')
   },
   destroyed () {
-    // if (this.timer) {
-    //   console.log('destroyed')
-    //   clearTimeout(this.timer)
-    // }
-    // console.log('destroyed')
-    // localStorage.removeItem(this.saveName)
-    // localStorage.removeItem(this.saveTagName)
-    // this.updateStoreData({ layout: [], layoutStyles: [] })
-    // this.mode = 'edit'
-    // window.removeEventListener('beforeunload', this.beforeunload)
     this.destroyedData()
   },
   methods: {
     async getDashboardData () {
-      // const params = {
-      //   url: 'http://43.142.102.49:888/ctbiweb/dashboard/publish/RGvgccuxEsP5RLj' || window.location.href,
-      //   password: this.dashboardAttr.password,
-      //   date: moment().format('YYYY-MM-DD')
-      // }
       const params = {
-        url: window.location.href,
+        url: window.location.origin + window.location.pathname,
         password: this.dashboardAttr.password ? encryptAesForShare(this.dashboardAttr.password) : ''
         // date: moment().format('YYYY-MM-DD')
       }

@@ -38,6 +38,15 @@ module.exports = {
     }
   },
 
+  // elementui icon 乱码修复
+  css: {
+    loaderOptions: {
+      sass: {
+        sassOptions: { outputStyle: 'expanded' }
+      }
+    }
+  },
+
   devServer: {
     port: port,
     open: true,
@@ -53,6 +62,7 @@ module.exports = {
         target: 'http://43.142.102.49:888/ctbibackend/',
         // target: 'http://172.21.65.214:888/ctbibackend/',
         // target: 'http://127.0.0.1:7040/',
+        // target: 'http://172.21.65.214:888/ctbibackend/',
         // target: 'http://172.24.12.104:7040/',
         changeOrigin: true,
         pathRewrite: {

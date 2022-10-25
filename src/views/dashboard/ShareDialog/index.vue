@@ -217,7 +217,6 @@ export default {
         }
         const info = await shareDashboard(params)
         this.$message.success('发布成功')
-        console.log(info)
         this.currentData = { ...this.currentData, ...info }
         this.needShareAgain = false
         this.oldShareInfo = { ...this.currentShareInfo }
