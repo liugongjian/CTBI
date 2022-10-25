@@ -74,9 +74,10 @@ export default {
     getOption () {
       const { Legend } = this.storeOption.theme.ComponentOption
       const { XAxis, YAxis } = this.storeOption.theme.Axis
-      const { SeriesSelect } = this.storeOption.theme.SeriesSetting
+      // const { SeriesSelect } = this.storeOption.theme.SeriesSetting
+      const SeriesSelect = {}
       // 系列配置-图表标签相关
-      this.setSeriesItem()
+      // this.setSeriesItem()
       // 获取颜色设置-使图例颜色与图形颜色对应
       const colorOption = []
       const chart = this.$refs.distribuScatter && this.$refs.distribuScatter.chart
@@ -87,7 +88,7 @@ export default {
         colorOption.push(item.color)
       })
       const self = this
-      const yName = this.storeOption.dataSource.MeasureSecond.value[0].displayColumn
+      const yName = this.storeOption.dataSource.MeasureSecond.value && this.storeOption.dataSource.MeasureSecond.value[0] && this.storeOption.dataSource.MeasureSecond.value[0].displayColumn
       this.chartOption = {
         legend: { ...Legend },
         tooltip: {
