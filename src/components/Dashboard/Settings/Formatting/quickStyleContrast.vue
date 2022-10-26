@@ -2,7 +2,10 @@
   <div class="preset-sample-box">
     <el-select v-model="val" placeholder="请选择" popper-class="quickStyleContrast" @change="changeSelected">
       <div class="subtitle">
-        与0对比
+        <el-radio-group v-model="option.contrastType" class="quickStyleContrastType" @change="changeContrastType">
+          <el-radio-button value="zero" label="zero">与0对比</el-radio-button>
+          <el-radio-button value="average" label="average">与均值对比</el-radio-button>
+        </el-radio-group>
         <div class="reverseBox">颜色翻转 <el-switch v-model="option.reverse" active-color="#13ce66" inactive-color="#393F4D" :width="30" /></div></div>
       <el-option value="">
         <span class="preset-style-selector-subitem">
@@ -94,18 +97,31 @@ export default {
         ...this.option,
         selected: val
       })
+    },
+    changeContrastType(val) {
+      this.$emit('update:option', {
+        ...this.option,
+        contrastType: val
+      })
     }
   }
 }
 </script>
 
 <style lang="scss">
-
 .quickStyleContrast{background: #424550 !important; border-color: #6A6C74 !important; width:240px !important; margin-left: -89px !important;
   .el-select-dropdown__item{ height: 24px;line-height: 24px;  padding: 0 10px; display: flex; align-items: center; width: 100%;justify-content:space-between; }
   .el-select-dropdown__item.hover, .el-select-dropdown__item:hover{background: #50525D; }
-  .subtitle{ display: flex; justify-content: space-between;}
+  .subtitle{ display: flex; justify-content: space-between; align-items: center;}
   .popper__arrow{ display: none    !important;}
+  .el-input__inner{ background: #424550;  border-color: #6A6C74; height: 22px; width:100px;
+    &:hover{border-color: #6A6C74; }
+  }
+  .quickStyleContrastType{
+    .el-radio-button__inner{ background: #424550;border-color: #6A6C74; color: rgba(255, 255, 255, 0.75); }
+    .el-radio-button .el-radio-button__inner{padding: 2px 3px; height:14px; line-height: 14px; box-sizing: content-box;}
+    .is-active .el-radio-button__inner{ background: #FA8334; }
+  }
 }
 .text-bg-item {display:inline-block;width:32px;height:12px;color:#fff;font-size:12px;line-height:12px;text-align:center;}
 .text-bg-item i{ transform: scale(.7);display: inline-block;}
