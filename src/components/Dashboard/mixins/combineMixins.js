@@ -1,5 +1,6 @@
 // 组合图的混入
 import baseMixins from './baseMixins'
+import { deepClone } from '@/utils/optionUtils'
 export default {
   mixins: [baseMixins],
   data: function () {
@@ -102,8 +103,18 @@ export default {
       if (val && val.length > 0) {
         const seriesOption = []
         val[0].forEach((item, index) => {
+          // if (index) {
+          //   seriesOption.push({ value: item, label: item.split('-')[0] })
+          // }
           if (index) {
-            seriesOption.push({ value: item, label: item.split('-')[0] })
+            const oldItem = this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption.find(sub => {
+              return sub.label === item.split('-')[0]
+            })
+            if (oldItem) {
+              seriesOption.push(deepClone(oldItem))
+            } else {
+              seriesOption.push({ value: item, label: item.split('-')[0], showLabel: false, labelColor: null, showMax: false, showMark: false, lineType: 'solid' })
+            }
           }
         })
 
