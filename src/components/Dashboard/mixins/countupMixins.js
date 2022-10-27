@@ -29,7 +29,6 @@ export default {
       this.dataValue = this.formatData(deepClone(this.chartData))
       this.getNameSvg(this.dataValue)
       this.getNameList(this.dataValue)
-      this.getDataSeries(this.dataValue)
     },
     formatData(dataValue) {
       const obj = []
@@ -67,15 +66,6 @@ export default {
         svg.push({ name: item.title, svg: data[index] || 'eyes' })
       })
       this.storeOption.theme.StyleConfig.IndicatorPic.setSvg = svg
-    },
-    getDataSeries(val) {
-      const data = []
-      val.forEach(item => {
-        data.push({ title: item.title, prefix: '', suffix: '' })
-      })
-      console.log('kkkk', val)
-      this.storeOption.theme.SeriesSetting.IndicatorSeries.dataSeries = data
-      this.storeOption.theme.SeriesSetting.IndicatorSeries.series = data[0].title
     }
 
   }
