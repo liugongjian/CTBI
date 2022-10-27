@@ -56,10 +56,11 @@
         <div
           v-for="(chart,key) of chartList"
           :key="key"
+          style="min-height:200px"
           :style="[
             {float:trendChartConfig.open && trendChartConfig.type == 'integration'?'left':''},
-            {height:trendChartConfig.open && trendChartConfig.type == 'integration' && trendChartConfig.indicators=='linefeed'?'48%':'77%'},
-            {width:trendStyleConfig.lineNum? titleList.length <= trendStyleConfig.lineNum ? 100/titleList.length-0.1+'%': 100/trendStyleConfig.lineNum-0.1+'%':'auto'},
+            {height:trendChartConfig.open && trendChartConfig.type == 'integration' && trendChartConfig.indicators=='linefeed'?'49%':'70%'},
+            {width:trendStyleConfig.lineNum? titleList.length <= trendStyleConfig.lineNum ? 100/titleList.length-0.5+'%': 100/trendStyleConfig.lineNum-0.1+'%':'auto'},
             {borderRight:trendChartConfig.type==='integration'?'1px solid #E5E5E5' :'' },
             {marginBottom:FunctionalOption.DataZoom.showDataZoom==='hide'?'39px' :'90px' },
           ]"
@@ -182,7 +183,6 @@ export default {
       this.Formatting = Formatting.Formatting.field
       this.Axis = Axis
       this.FunctionalOption = FunctionalOption
-      //
       this.trendStyleConfig = trendStyleConfig.trendStyleConfig
       this.trendChartConfig = trendChartConfig.trendChartConfig
       // ComponentOption.TwisYAxis = trendChartConfig.trendChartConfig.twoY

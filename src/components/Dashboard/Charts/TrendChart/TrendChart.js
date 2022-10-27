@@ -108,6 +108,7 @@ export default {
           //   'styleCustomType': false, // 是否开启自定义样式
           //   // 快捷样式
           //   'quickStyle': {
+          //      'contrastType': 'zero', // 对比方式 zero 与0对比 ；average 平均
           //     'styleType': 'contrast', // 快捷样式 contrast 只显示对比 // all 所有三个
           //     'reverse': false, // 是否反转颜色
           //     'type': 'contrast', // contrast 对比 dataBar 数据条 colorScale色阶
