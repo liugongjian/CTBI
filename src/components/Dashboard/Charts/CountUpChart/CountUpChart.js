@@ -76,7 +76,8 @@ export default {
     'SeriesSetting': {
       'IndicatorSeries': { // 指标里面的系列选择组件
         'dataSeries': [],
-        'series': '' // 所选系列
+        'series': '', // 所选系列
+        'hiddenSelect': true // 翻牌器不需要显示选择框
       }
     }
   },
