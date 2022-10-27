@@ -1,8 +1,8 @@
 /*
  * @Author: 黄璐璐
  * @Date: 2022-09-01 14:07:39
- * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-23 17:24:19
+ * @LastEditors: qinruibin
+ * @LastEditTime: 2022-10-26 13:45:39
  * @Description:
  */
 /**
@@ -72,6 +72,18 @@ export default {
   'dataSource': {
     'Dimension': { // 维度
       'name': '中心节点/维度',
+      'require': true,
+      'limit': 1,
+      'value': []
+    },
+    'DimensionType': {
+      'name': '节点类型/维度',
+      'require': true,
+      'limit': 1,
+      'value': []
+    },
+    'DimensionName': {
+      'name': '节点名称/维度',
       'require': true,
       'limit': 1,
       'value': []
