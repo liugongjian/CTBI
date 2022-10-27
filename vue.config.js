@@ -2,7 +2,7 @@
 const path = require('path')
 const defaultSettings = require('./src/config/settings.js')
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
@@ -80,10 +80,21 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
+    },
+    module: {
+      rules: [
+        {
+          test: require('path').resolve(__dirname, 'node_modules/leader-line/'),
+          use: [{
+            loader: 'skeleton-loader',
+            options: { procedure: content => `${content}export default LeaderLine` }
+          }]
+        }
+      ]
     }
   },
 
-  chainWebpack(config) {
+  chainWebpack (config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload
     config.plugin('preload').tap(() => [
       {
