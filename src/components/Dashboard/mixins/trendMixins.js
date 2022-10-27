@@ -80,6 +80,7 @@ export default {
             'styleCustomType': false, // 是否开启自定义样式
             // 快捷样式
             'quickStyle': {
+              'contrastType': 'zero',
               'styleType': 'contrast', // 快捷样式 contrast 只显示对比 // all 所有三个
               'reverse': false, // 是否反转颜色
               'type': 'contrast', // contrast 对比 dataBar 数据条 colorScale色阶
@@ -119,7 +120,6 @@ export default {
             const oldItem = this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption.find(sub => {
               return sub.label === item
             })
-            console.log('oldItem', oldItem)
             if (oldItem) {
               seriesOption.push(deepClone(oldItem))
             } else {
@@ -134,7 +134,9 @@ export default {
     // 拿到数据的系列名字 并设置颜色 并拿到数据中展示标题
     getColorAndTitle () {
       const val = this.dataValue
+      console.log(val)
       if (val[0]) {
+        var length = val.length - 1
         var titleList = []
         var color = []
         var titleColor = {
@@ -146,11 +148,19 @@ export default {
         const colorValue = colorTheme[this.storeOption.theme.ComponentOption.Color.theme]
         val[0].forEach((item, index) => {
           if (index) {
+            // 计算平均值
+            var sum = 0
+            val.forEach((numItem, numIndex) => {
+              if (numIndex) {
+                const n = parseFloat(numItem[index])
+                !isNaN(n) ? sum += n : 0
+              }
+            })
             const idx = (index - 1) % colorValue.length
             const el = { name: item, color: colorValue[idx].value, remark: item }
             color.push(el)
             titleColor.color.push(el)
-            titleList.push({ name: item, color: colorValue[idx].value, isSelect: !idx, value: val[val.length - 1][index], index: idx })
+            titleList.push({ name: item, color: colorValue[idx].value, isSelect: !idx, value: val[length][index], index: idx, average: (sum / length).toFixed(2) })
           }
         })
         this.storeOption.theme.ComponentOption.Color.color = color
@@ -158,19 +168,6 @@ export default {
         this.storeOption.theme.trendChartConfig.trendChartConfig.titleList = titleList
         this.selectedItem = ''
       }
-
-      // const len = val[0].length
-      // var titleList = []
-      // // 获取每个表的内容
-      // for (var index = 1; index < len; index++) {
-      //   const titleItem = {
-      //     name: val[0][index],
-      //     isSelect: false,
-      //     color: color[index-1].,
-      //     value: val[len - 1][index]
-      //   }
-      //   titleList.push(titleItem)
-      // }
     },
     // 拿到数据中的指标
     getIndicatorOptions (val) {

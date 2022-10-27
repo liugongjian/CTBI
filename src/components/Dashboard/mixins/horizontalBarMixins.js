@@ -78,10 +78,21 @@ export default {
       if (val && val.length > 0) {
         const seriesOption = []
         val[0].forEach((item, index) => {
+          // if (index) {
+          //   seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false, showMark: false, lineType: 'solid' })
+          // }
           if (index) {
-            seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false })
+            const oldItem = this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption.find(sub => {
+              return sub.label === item
+            })
+            if (oldItem) {
+              seriesOption.push(deepClone(oldItem))
+            } else {
+              seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false, showMark: false, lineType: 'solid' })
+            }
           }
         })
+        console.log(seriesOption)
         this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
         this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
       }
