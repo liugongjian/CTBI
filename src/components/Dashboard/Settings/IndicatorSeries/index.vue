@@ -7,7 +7,7 @@
 -->
 <template>
   <div class="editor-object-container editor-fix">
-    <div>
+    <div v-if="!option.hiddenSelect">
       <div class="editor-item-title">请选择系列</div>
       <el-select v-model="option.series" placeholder="请选择" class="m-t-12" popper-class="setting-select">
         <el-option
