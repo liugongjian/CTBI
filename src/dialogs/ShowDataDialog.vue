@@ -3,7 +3,7 @@
     title="查看数据"
     :visible.sync="dialogVisible"
     :close-on-click-modal="false"
-    width="30%"
+    width="60%"
   >
     <div class="main-table">
       <el-table v-loading="loading" :data="data">
