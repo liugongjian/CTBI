@@ -98,7 +98,7 @@
             />
           </el-select>
         </div>
-        <div class="result-display">
+        <div v-if="option.dataSet" class="result-display">
           <span class="m-r-8">结果展示</span>
           <div>
             <input
@@ -187,7 +187,7 @@ export default {
           this.$message.warning(`已存在该对象 ${data.displayColumn}`)
         } else {
           // 限制数量
-          if (item.limit) {
+          if (item && item.limit) {
             if (item.value.length === item.limit) {
               this.$message.warning(`已超过[${itemName}]最多可添加项数量（${item.limit}）`)
               return

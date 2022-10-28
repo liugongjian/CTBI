@@ -203,20 +203,21 @@ export default {
 
     // 根据筛选的指标获取对应数据
     transformData (indicator) {
-      if (this.dataValue && this.dataValue.length > 0) {
+      const originValue = formatDataValue(deepClone(this.chartData))
+      if (originValue && originValue.length > 0) {
         const data = []
-        for (let i = 1; i < this.dataValue.length; i++) {
-          data.push([this.dataValue[i][0]])
+        for (let i = 1; i < originValue.length; i++) {
+          data.push([originValue[i][0]])
         }
         indicator.forEach(item => {
         // 取到指标的下标 如 2015年 index为1
-          const indicatorIdx = this.dataValue[0].indexOf(item) > -1 ? this.dataValue[0].indexOf(item) : 1
+          const indicatorIdx = originValue[0].indexOf(item) > -1 ? originValue[0].indexOf(item) : 1
           // 取除维度以外的第1列为vlaue
-          for (let i = 1; i < this.dataValue.length; i++) {
-            data[i - 1].push(this.dataValue[i][indicatorIdx])
+          for (let i = 1; i < originValue.length; i++) {
+            data[i - 1].push(originValue[i][indicatorIdx])
           }
         })
-        data.unshift([this.dataValue[0][0], ...indicator])
+        data.unshift([originValue[0][0], ...indicator])
         this.dataValue = data
       }
     },
