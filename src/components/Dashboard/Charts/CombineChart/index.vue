@@ -268,6 +268,7 @@ export default {
         }
         return item
       })
+      this.setSeriesItem()
     },
     // 显示缩略轴
     getDataZoomOption () {

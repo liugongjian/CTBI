@@ -130,6 +130,43 @@ export default {
       })
       // baseMixins中的方法
       this.getColor(titleList)
+    },
+    // 系列设置
+    setSeriesItem () {
+      const { SeriesSelect } = this.storeOption.theme.SeriesSetting
+      console.log(SeriesSelect)
+      console.log(this.series)
+      this.series = this.series.map((item) => {
+        const option = SeriesSelect.seriesOption.find(ele => {
+          return ele.value === item.name
+        })
+        if (option) {
+          const { labelColor, showLabel, showMax, showMark, markType, lineType } = option
+          const ChartLabel = this.storeOption.theme.ComponentOption.ChartLabel
+          item.label.show = item.label.show = ChartLabel.type === 'StackedBarChart' ? (this.checkList.includes('度量') && ChartLabel.check) || showLabel : ChartLabel.check || showLabel
+          item.label.color = labelColor
+          item.lineStyle = {
+            type: lineType
+          }
+          if (showMax) {
+            item.markPoint = {
+              symbol: 'pin',
+              data: [
+                { type: 'max', name: '最大值' },
+                { type: 'min', name: '最小值' }
+              ]
+            }
+          }
+          if (showMark) {
+            item.symbol = markType
+          } else {
+            item.symbol = 'circle'
+            item.hoverAnimation = false
+            item.symbolSize = 5
+          }
+        }
+        return item
+      })
     }
   }
 }
