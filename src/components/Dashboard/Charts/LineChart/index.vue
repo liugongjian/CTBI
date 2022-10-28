@@ -55,7 +55,7 @@ export default {
 
       // 获取y轴配置信息，用于提取单位信息
       const { Axis: { YAxis } } = this.storeOption.theme
-
+      const self = this
       this.chartOption = {
         grid: this.grid,
         color: colorOption,
@@ -69,11 +69,13 @@ export default {
             type: 'shadow'
           },
           formatter: (params) => {
+            if (params.componentType === 'markPoint') {
+              return params.name + '</br>' + params.marker + ' ' + self.series[params.seriesIndex].name + '：' + params.value + (YAxis.unit || '')
+            }
             return params.name + '</br>' + params.marker + ' ' + params.seriesName + '：' + params.value[params.seriesIndex + 1] + (YAxis.unit || '')
           }
         },
         yAxis: this.yAxis,
-        markPoint: this.markPoint,
         dataset: {
           source: this.dataValue
         },

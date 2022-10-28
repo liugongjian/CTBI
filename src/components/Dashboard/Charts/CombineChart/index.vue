@@ -185,11 +185,9 @@ export default {
     },
     // 拿到option设置里面的series设置
     getOptionSeries () {
-      const { ComponentOption, SeriesSetting, FunctionalOption } = this.storeOption.theme
-      const { SeriesSelect } = SeriesSetting
-      const { SeriesChartLabel, SeriesMark, SeriesLine, SeriesMaximum } = SeriesSelect
+      const { ComponentOption, FunctionalOption } = this.storeOption.theme
       // 选择系列 设置标记样式、线条样式 以及标签字体颜色
-      const { check, labelShow } = ComponentOption.ChartLabel
+      const { labelShow } = ComponentOption.ChartLabel
       // 取到颜色配置
       const color = ComponentOption.Color.color
 
@@ -228,43 +226,11 @@ export default {
         item.labelLayout = {
           hideOverlap: labelShow === 1
         }
-        // 图表样式的标记点
-        if (!ComponentOption.SeriesMark.check && item.type === 'line') {
-          item.symbol = 'circle'
-          item.hoverAnimation = false
-          item.symbolSize = 1
-        } else if (ComponentOption.SeriesMark.check && item.type === 'line') {
-          item.symbol = ComponentOption.SeriesMark.markType
-        }
-        item.label = {
-          show: check
-        }
         // 图表样式曲线
         if (ComponentOption.LineStyle.type === 1) {
           item.smooth = true
         } else {
           item.smooth = false
-        }
-
-        // 系列设置里的标记点
-        if (SeriesMark?.check && SeriesMark?.markType && item.type === 'line') {
-          item.symbol = SeriesMark.markType
-          item.lineStyle = {
-            type: SeriesLine.lineType
-          }
-        }
-        if (SeriesSelect?.selectValue.split('-')[0] === item.name) {
-          item.label.show = SeriesChartLabel.check && check
-          item.label.color = SeriesChartLabel.color
-          if (SeriesMaximum?.check) {
-            item.markPoint = {
-              symbol: 'pin',
-              data: [
-                { type: 'max', name: '最大值' },
-                { type: 'min', name: '最小值' }
-              ]
-            }
-          }
         }
         return item
       })

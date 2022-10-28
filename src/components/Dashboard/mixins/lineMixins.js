@@ -221,6 +221,7 @@ export default {
           }
           if (showMark) {
             item.symbol = markType
+            item.symbolSize = 5
           } else {
             item.symbol = 'circle'
             item.hoverAnimation = false

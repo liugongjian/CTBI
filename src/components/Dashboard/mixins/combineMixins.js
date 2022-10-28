@@ -134,16 +134,15 @@ export default {
     // 系列设置
     setSeriesItem () {
       const { SeriesSelect } = this.storeOption.theme.SeriesSetting
-      console.log(SeriesSelect)
-      console.log(this.series)
       this.series = this.series.map((item) => {
         const option = SeriesSelect.seriesOption.find(ele => {
-          return ele.value === item.name
+          return ele.value.split('-')[0] === item.name
         })
         if (option) {
           const { labelColor, showLabel, showMax, showMark, markType, lineType } = option
           const ChartLabel = this.storeOption.theme.ComponentOption.ChartLabel
-          item.label.show = item.label.show = ChartLabel.type === 'StackedBarChart' ? (this.checkList.includes('度量') && ChartLabel.check) || showLabel : ChartLabel.check || showLabel
+          item.label = item.label || {}
+          item.label.show = item.label.show = ChartLabel.check || showLabel
           item.label.color = labelColor
           item.lineStyle = {
             type: lineType
@@ -159,6 +158,7 @@ export default {
           }
           if (showMark) {
             item.symbol = markType
+            item.symbolSize = 5
           } else {
             item.symbol = 'circle'
             item.hoverAnimation = false
