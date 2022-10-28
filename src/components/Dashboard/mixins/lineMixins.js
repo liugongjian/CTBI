@@ -64,7 +64,14 @@ export default {
         const seriesOption = []
         val[0].forEach((item, index) => {
           if (index) {
-            seriesOption.push({ value: item, label: item })
+            const oldItem = this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption.find(sub => {
+              return sub.label === item
+            })
+            if (oldItem) {
+              seriesOption.push(deepClone(oldItem))
+            } else {
+              seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false, showMark: false, lineType: 'solid' })
+            }
           }
         })
         this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
@@ -191,7 +198,6 @@ export default {
     // 系列设置
     setSeriesItem () {
       const { SeriesSelect } = this.storeOption.theme.SeriesSetting
-
       this.series = this.series.map((item) => {
         const option = SeriesSelect.seriesOption.find(ele => {
           return ele.value === item.name
