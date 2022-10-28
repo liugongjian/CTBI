@@ -42,6 +42,7 @@ export default {
     this.$nextTick(() => {
       // 初始化富文本
       this.init()
+      this.editorData = this.text
     })
   },
   methods: {
