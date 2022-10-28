@@ -339,6 +339,9 @@ export default {
   flex-direction: column;
   box-sizing: border-box;
   touch-action: none;
+   ::v-deep h1{
+    font-size:2em !important;
+  }
   .card-header-wrapper {
     display: flex;
     justify-content: space-between;

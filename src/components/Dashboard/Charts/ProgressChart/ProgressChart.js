@@ -1,8 +1,8 @@
 /*
  * @Author: 黄璐璐
  * @Date: 2022-08-22 09:15:11
- * @LastEditors: 黄璐璐
- * @LastEditTime: 2022-09-14 22:35:28
+ * @LastEditors: qinruibin
+ * @LastEditTime: 2022-10-28 09:49:59
  * @Description:
  */
 // 折线图配置项信息
@@ -60,7 +60,7 @@ export default {
       },
       'VisualStyle': { // 可视化样式 value与组件name绑定
         'style1': { 'name': '条形', value: 'barType' },
-        'style2': { 'name': '环形', value: 'ring' },
+        'style2': { 'name': '环形', value: 'annularType' },
         'style3': { 'name': '水波图', value: 'waterWave' },
         'style': 'barType' // 默认配置
       }
