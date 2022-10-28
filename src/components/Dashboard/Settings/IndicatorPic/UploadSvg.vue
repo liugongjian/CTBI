@@ -11,7 +11,7 @@
             <li
               v-for="(item,index) in imgList"
               :key="index"
-              :class="[{'img-item-selected': item.url === option.imgUrl},'img-item']"
+              :class="[{'img-item-selected': item === getSvgVal},'img-item']"
               @click="handlerClick(item)"
             >
               <div class="svg-img-url">
@@ -39,8 +39,8 @@
               <el-button
                 size="small"
                 type="primary"
-                :icon="isUpload?'el-icon-refresh':'el-icon-upload2'"
-              >{{ isUpload?'重新上传':'上传本地图片' }}</el-button>
+                :icon="getIsUpload ?'el-icon-refresh':'el-icon-upload2'"
+              >{{ getIsUpload ?'重新上传':'上传本地图片' }}</el-button>
               <div
                 slot="tip"
                 class="el-upload__tip"
@@ -92,6 +92,19 @@ export default {
       value: this.option.imgSize
     }
   },
+  computed: {
+    getSvgVal () {
+      return this.option.setSvg.find(item => item.name === this.svgValue)?.svg || ''
+    },
+    getIsUpload () {
+      const url = this.option.setSvg.find(item => item.name === this.svgValue)?.svg || ''
+      if (url) {
+        return url.includes('/dataFiles/img')
+      } else {
+        return false
+      }
+    }
+  },
   mounted() {
     this.imgList = [
       'earth',
@@ -112,7 +125,6 @@ export default {
     },
     // 上传图片前钩子
     beforeUpload(file) {
-      console.log(file)
       const imgType = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
       const isType = imgType.includes(file.type)
       const isLt1M = file.size / 1024 / 1024 < 1

@@ -129,7 +129,9 @@ export default {
           svg.push({ name: item.title, svg: data[index] || 'eyes' })
         })
       }
-      this.storeOption.theme.StyleConfig.IndicatorPic.setSvg = svg
+      if (!(this.storeOption.theme.StyleConfig.IndicatorPic.setSvg && this.storeOption.theme.StyleConfig.IndicatorPic.setSvg.length === svg.length)) {
+        this.storeOption.theme.StyleConfig.IndicatorPic.setSvg = svg
+      }
     },
     getDataSeries(val) {
       const data = []
