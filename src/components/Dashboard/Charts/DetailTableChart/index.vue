@@ -157,7 +157,8 @@ export default {
         this.stripe = TableTheme.active === 'stripe'
         this.border = TableTheme.active === 'border'
         const colorType = TableTheme.colorType
-        const color = colorType === 'gray' ? '#f5f5fa' : (colorType === 'themeColor' ? '#468cff' : TableTheme.color)
+        console.log(colorType, 'cccc')
+        const color = colorType === 'gray' ? '#f5f5fa' : (colorType === 'themeColor' ? '#468cff' : (TableTheme.color ? TableTheme.color : '#fff'))
         if (TableTheme.active === 'stripe') {
           // 斑马线
           this.headerRowStyle = { 'border-bottom': `2px ${color} solid` }

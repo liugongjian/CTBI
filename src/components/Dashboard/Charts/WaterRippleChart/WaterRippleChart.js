@@ -53,7 +53,7 @@ export default {
       },
       'VisualStyle': { // 可视化样式 value与组件name绑定
         'style1': { 'name': '条形', value: 'barType' },
-        'style2': { 'name': '环形', value: 'ring' },
+        'style2': { 'name': '环形', value: 'annularType' },
         'style3': { 'name': '水波图', value: 'waterWave' },
         'style': 'waterWave' // 默认配置
       }
