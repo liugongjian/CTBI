@@ -84,13 +84,18 @@ export default {
       if (chart) {
         chart.clear()
       }
+      const legendVertical = Legend.show && Legend.orient === 'vertical'
+      const legendText = legendVertical ? { textStyle: {
+        width: 60,
+        overflow: 'breakAll'
+      } } : {}
       this.storeOption.theme.ComponentOption.Color.color.forEach((item) => {
         colorOption.push(item.color)
       })
       const self = this
       const yName = this.storeOption.dataSource.MeasureSecond.value && this.storeOption.dataSource.MeasureSecond.value[0] && this.storeOption.dataSource.MeasureSecond.value[0].displayColumn
       this.chartOption = {
-        legend: { ...Legend },
+        legend: { ...Legend, ...legendText },
         tooltip: {
           show: true,
           trigger: 'item',
@@ -117,6 +122,7 @@ export default {
         yAxis: this.getYAxis(YAxis),
         series: this.getSeries()
       }
+      console.log(this.chartOption.legend)
     },
     formatData (dataValue) {
       const obj = []
@@ -287,16 +293,22 @@ export default {
       return array
     },
     getGrid () {
+      const componentOption = this.storeOption.theme.ComponentOption
+      let legendX = ''
+      if (componentOption.Legend.show && componentOption.Legend.orient === 'vertical') {
+        legendX = componentOption.Legend.left
+      }
       const array = []
       const minWidth = 250
       const offsetX = 50
-      const containerWidth = (this.layout.width || 900) - 45 - (offsetX * 2)
+      const legendWidth = legendX ? 60 : 0
+      const containerWidth = (this.layout.width || 900) - 45 - (offsetX * 2) - legendWidth
       const chartWidth = (containerWidth / this.dataValue.length).toFixed(0)
       const finalWidth = chartWidth < minWidth ? minWidth : chartWidth
       this.chartWidth = {
-        width: (offsetX * 2 + finalWidth * this.dataValue.length) + 'px'
+        width: (offsetX * 2 + legendWidth + finalWidth * this.dataValue.length) + 'px'
       }
-      const finalOffsetX = offsetX * 1.5
+      const finalOffsetX = legendX === 'auto' ? (legendWidth + offsetX * 1.8) : offsetX * 1.5
       this.dataValue.forEach((item, index) => {
         const x = index === 0 ? finalOffsetX : index * finalWidth + finalOffsetX
         array.push({ x, width: finalWidth })
