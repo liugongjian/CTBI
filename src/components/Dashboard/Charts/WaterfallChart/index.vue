@@ -154,10 +154,6 @@ export default {
         const placeholderData = [0]
         measureDataTemp.forEach((item, index) => {
           if (index >= 1 && index < measureDataTemp.length - 1) {
-            // let sum = 0
-            // for (let i = 0; i < index; i++) {
-            //   sum += measureDataTemp[i]
-            // }
             const sum = measureDataTemp[index - 1] + placeholderData[index - 1]
             placeholderData.push(sum)
           } else if (index === measureDataTemp.length - 1) {
