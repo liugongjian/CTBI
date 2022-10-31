@@ -6,12 +6,9 @@
     width="50%"
     @closed="destroyEditor"
   >
-    <div>
-      <div ref="editor">
-        <!-- 富文本的初始值 -->
-        <div v-html="text" />
-      </div>
-    </div>
+
+    <!-- 富文本的初始值 -->
+    <div ref="editor" v-html="text" />
 
     <span
       slot="footer"
