@@ -34,7 +34,7 @@ export default {
     dimensionArr() {
       const temp = []
       store.state.app.layout.forEach(item => {
-        if (item.id === store.state.app.currentLayoutId) {
+        if (item.id === this.identify) {
           if (item.option.dataSource.Measure.value) {
             item.option.dataSource.Measure.value.forEach(j => {
               temp.push({ displayColumn: j.displayColumn })
