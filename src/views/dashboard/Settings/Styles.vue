@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="option"
     class="tab-pane-content"
   >
     <el-collapse v-model="activeNames">

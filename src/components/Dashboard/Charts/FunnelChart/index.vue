@@ -457,10 +457,16 @@ export default {
         this.isTrans = false
         this.seriesData = [this.dataValueTmp, this.calcDataTmp]
       }
+      const legendVertical = componentOption.Legend.show && componentOption.Legend.orient === 'vertical'
+      const legendText = legendVertical ? { textStyle: {
+        width: 60,
+        overflow: 'breakAll'
+      } } : {}
       this.chartOption = {
         animation: false,
         legend: {
           ...componentOption.Legend,
+          ...legendText,
           formatter: function (name) {
             return name || '未命名'
           }
@@ -513,16 +519,21 @@ export default {
         this.orient = 'vertical'
         this.labelPosition = 'left'
       }
+      const componentOption = this.storeOption.theme.ComponentOption
+      let legendX = ''
+      if (componentOption.Legend.show && componentOption.Legend.orient === 'vertical') {
+        legendX = componentOption.Legend.left
+      }
       // 显示类别标签的位置
       if (item.labelPos) {
         if (item.labelPos === 'left') {
           this.left = '30%'
           this.insideLeft = '58%'
-          this.labelPos = '6%'
+          this.labelPos = legendX === 'auto' ? 120 : '6%'
         } else if (item.labelPos === 'right') {
-          this.left = '5%'
-          this.insideLeft = '33%'
-          this.labelPos = '90%'
+          this.left = legendX === 'auto' ? '12%' : '5%'
+          this.insideLeft = legendX === 'auto' ? '39%' : '33%'
+          this.labelPos = legendX === 'right' ? '80%' : '90%'
         }
       }
       // 底部梯形 or 三角形

@@ -232,7 +232,7 @@ export const formatDataValue = function (chartData) {
       })
       MeasureKey.forEach(mea => {
         const m = (item[mea] + '').match(/-?(0|[1-9]\d*)(\.\d+)?/g)
-        measureData.push(m[0] || item[mea])
+        measureData.push(m && m[0] || item[mea])
       })
       dataValue.push([dimensionData.join('-'), ...measureData])
     })
