@@ -8,7 +8,7 @@
   >
 
     <!-- 富文本的初始值 -->
-    <div ref="editor" v-html="text" />
+    <div ref="editor" style="caret-color:transparent" v-html="text" />
 
     <span
       slot="footer"
@@ -45,6 +45,7 @@ export default {
   methods: {
     init () {
       this.editor = new E(this.$refs.editor)
+      console.log(this.editor, 'dddd')
       this.editor.config.height = 200 // 设置富文本编辑器的高度。
       this.editor.config.zIndex = 100 // 设置富文本编辑器的页面高度。
       this.editor.config.onchange = (html) => {
