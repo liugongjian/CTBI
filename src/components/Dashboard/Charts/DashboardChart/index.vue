@@ -28,6 +28,14 @@ export default {
     }
   },
   data () {
+    this.configSize = {
+      'dynamicStart': {
+        'field': '', 'type': 'sum'
+      },
+      'dynamicEnd': {
+        'field': '', 'type': 'sum'
+      }
+    }
     return {
       storeOption: {},
       chartOption: {},
@@ -116,26 +124,26 @@ export default {
       ]
     }
   },
-  watch: {
-    storeOption: {
-      handler (val) {
-        this.getOption()
-      },
-      deep: true
-    },
-    // 图表类型切换
-    'storeOption.is': {
-      handler (val) {
-        const isData = this.dataOption.findIndex(item => {
-          return item.id === this.identify
-        })
-        if (isData !== -1) {
-          this.$bus.$emit('interReload', [this.identify], 100, false)
-        }
-      },
-      deep: true
-    }
-  },
+  // watch: {
+  //   storeOption: {
+  //     handler (val) {
+  //       this.getOption()
+  //     },
+  //     deep: true
+  //   },
+  //   // 图表类型切换
+  //   'storeOption.is': {
+  //     handler (val) {
+  //       const isData = this.dataOption.findIndex(item => {
+  //         return item.id === this.identify
+  //       })
+  //       if (isData !== -1) {
+  //         this.$bus.$emit('interReload', [this.identify], 100, false)
+  //       }
+  //     },
+  //     deep: true
+  //   }
+  // },
   mounted () {
     this.storeOption = getLayoutOptionById(this.identify)
     this.dataOption = store.state.app.dataOption
@@ -215,6 +223,7 @@ export default {
         this.setScale(Scale)
         this.setColor(DashboardColor)
       }
+      console.log(JSON.parse(JSON.stringify(this.storeOption)))
 
       this.series[0].data[0] = this.dataValue
       this.chartOption = {
@@ -225,6 +234,35 @@ export default {
         title: this.title,
         series: this.series
       }
+    },
+    handleOptionChange() {
+      const currentconfigSize = this.storeOption.theme.ComponentOption.ConfigSize
+      let needReloadData = false // 更改起始值终点值后是否要更新数据
+      if (currentconfigSize) {
+        // console.log(JSON.parse(JSON.stringify(currentconfigSize)))
+        // console.log(JSON.parse(JSON.stringify(this.configSize)))
+        const { startType, endType, dynamicStart, dynamicEnd, measureOptions } = currentconfigSize
+        let temp1 = false
+        let temp2 = false
+        if (startType === 'dynamic') {
+          const hit = measureOptions.find(item => item._id === dynamicStart.field)
+          temp1 = hit ? !(startType === this.configSize.startType && dynamicStart.field === this.configSize.dynamicStart.field && dynamicStart.type === this.configSize.dynamicStart.type) : false
+        }
+        if (endType === 'dynamic') {
+          const hit = measureOptions.find(item => item._id === dynamicEnd.field)
+          temp2 = hit ? !(endType === this.configSize.endType && dynamicEnd.field === this.configSize.dynamicEnd.field && dynamicEnd.type === this.configSize.dynamicEnd.type) : false
+        }
+        needReloadData = temp1 || temp2
+        this.configSize = JSON.parse(JSON.stringify(currentconfigSize))
+      }
+      if (needReloadData) {
+        console.log(needReloadData)
+        this.interReload([this.identify])
+      } else {
+        this.getOption()
+      }
+
+      this.getOption()
     }
   }
 }

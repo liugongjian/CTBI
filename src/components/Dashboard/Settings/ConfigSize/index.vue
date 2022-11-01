@@ -22,19 +22,19 @@
         style="width: 100px"
       />
       <template v-else>
-        <el-select v-model="value" popper-class="setting-select" placeholder="请选择">
+        <el-select v-model="option.dynamicStart.field" popper-class="setting-select" placeholder="请选择">
           <el-option
             v-for="item in fieldOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item._id"
+            :label="item.displayColumn"
+            :value="item._id"
           />
         </el-select>
         <el-select v-model="option.dynamicStart.type" popper-class="setting-select" placeholder="请选择" class="m-t-12">
           <el-option
             v-for="item in aggregationOptions"
             :key="item.value"
-            :label="item.name"
+            :label="item.label"
             :value="item.value"
           />
         </el-select>
@@ -58,19 +58,19 @@
           style="width: 100px"
         />
         <template v-else>
-          <el-select v-model="value" popper-class="setting-select" placeholder="请选择">
+          <el-select v-model="option.dynamicEnd.field" popper-class="setting-select" placeholder="请选择">
             <el-option
               v-for="item in fieldOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item._id"
+              :label="item.displayColumn"
+              :value="item._id"
             />
           </el-select>
           <el-select v-model="option.dynamicEnd.type" popper-class="setting-select" placeholder="请选择" class="m-t-12">
             <el-option
               v-for="item in aggregationOptions"
               :key="item.value"
-              :label="item.name"
+              :label="item.label"
               :value="item.value"
             />
           </el-select>
@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import { AggFunctionOptions } from '@/constants/constants'
 export default {
   name: 'ConfigSize',
   props: {
@@ -91,16 +92,16 @@ export default {
   },
   data () {
     return {
-      fieldOptions: [],
       coordinatesIcon: 'packup',
       aggregationOptions: [
-        { name: '求和', value: 1 },
-        { name: '最大值', value: 2 },
-        { name: '最小值', value: 3 },
-        { name: '平均值', value: 4 },
-        { name: '计数', value: 5 }
+        ...AggFunctionOptions
       ],
       value: ''
+    }
+  },
+  computed: {
+    fieldOptions() {
+      return this.option.measureOptions || []
     }
   },
   methods: {

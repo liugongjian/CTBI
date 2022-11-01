@@ -120,6 +120,7 @@
 
 <script>
 import { deepClone, transformDataTypeIcon } from '@/utils/optionUtils'
+import store from '@/store'
 export default {
   name: 'DataPanelField',
   props: {
@@ -154,6 +155,12 @@ export default {
         return 1440
       }
       return 60
+    },
+    chartSetting () {
+      const temp = store.state.app.layout.find(item => {
+        return item.id === this.identify
+      })
+      return temp || {}
     }
   },
   beforeDestroy () {
@@ -177,6 +184,7 @@ export default {
      */
     handleTargetDrop (e, name, item, itemName) {
       const data = JSON.parse(e.dataTransfer.getData('data'))
+      const measure = JSON.parse(e.dataTransfer.getData('options'))
       // 判断拖拽元素是否在对应元素上 副值轴 name是Measure1 data.type是Measure
       if (name.indexOf(data.type) > -1) {
         // 判断是否已经存在
@@ -204,6 +212,7 @@ export default {
           }
 
           item.value.push(data)
+          this.changeRelatedOption(measure)
         }
       } else {
         if (data.type !== 'DimensionOrMeasure') {
@@ -279,6 +288,15 @@ export default {
       }
       // 事件总线通知组件刷新数据
       this.$bus.$emit('interReload', [this.identify], this.limit)
+    },
+    // 改变关联的设置
+    changeRelatedOption(measure) {
+      console.log(measure)
+      const { is, option } = this.chartSetting
+      // 当类型是 仪表盘时，设置动态值取值范围
+      if (is === 'DashboardChart') {
+        option.theme.ComponentOption.ConfigSize.measureOptions = [...measure]
+      }
     }
 
   }

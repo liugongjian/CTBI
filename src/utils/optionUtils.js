@@ -383,7 +383,7 @@ export const getQueryParams = (identify) => {
     option = getCurrentLayoutOption()
   }
 
-  const { dataSource, dataSet } = option
+  const { dataSource, dataSet, theme } = option
   const limit = dataSet.limit
   // 维表字段
   const dimension = { selections: [] }
@@ -415,6 +415,7 @@ export const getQueryParams = (identify) => {
   const placeholder = { configs: [] }
   // sql-参数配置中的
   const param = { configs: [] }
+  specialMeasures(measure, identify, theme)
   return { query: { limit, dimension, measure, filter, order, offset, placeholder, param }, dataSetId: option.dataSet?.id, transformFields }
 }
 
@@ -428,4 +429,25 @@ export const compareSettingEqual = (setting1, setting2) => {
     return _.omit(item, omitItems)
   })
   return _.isEqual(setting1, setting2)
+}
+
+function specialMeasures(measure, identify, theme) {
+  const layout = getLayoutById(identify)
+
+  if (layout.is === 'DashboardChart') {
+    const configSize = theme.ComponentOption.ConfigSize
+    const { startType, endType, dynamicStart, dynamicEnd, measureOptions } = configSize
+    if (startType === 'dynamic') {
+      const hit = measureOptions.find(item => item._id === dynamicStart.field)
+      if (hit) {
+        measure.selections.push({ ...hit, fieldId: hit._id, attributeId: hit.attributes[0]._id })
+      }
+    }
+    if (endType === 'dynamic') {
+      const hit = measureOptions.find(item => item._id === dynamicEnd.field)
+      if (hit) {
+        measure.selections.push({ ...hit, fieldId: hit._id, attributeId: hit.attributes[0]._id })
+      }
+    }
+  }
 }

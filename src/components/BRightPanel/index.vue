@@ -105,6 +105,7 @@
           style="height:calc(100vh - 98px)"
           :option="dataSourceOptions"
           :data-set="dataSetOptions"
+          :chart-setting="chartSetting"
           @changeActiveName="showItem"
         />
       </div>
@@ -168,6 +169,12 @@ export default {
         return item.id === this.currentLayoutId
       })
       return temp ? temp.is : ''
+    },
+    chartSetting () {
+      const temp = store.state.app.layout.find(item => {
+        return item.id === this.currentLayoutId
+      })
+      return temp || {}
     },
     isCommonChart () {
       const temp = store.state.app.layout.find(item => {

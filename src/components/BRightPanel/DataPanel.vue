@@ -188,6 +188,10 @@ export default {
     dataSet: {
       type: Object,
       default: () => { }
+    },
+    chartSetting: {
+      type: Object,
+      default: () => { }
     }
   },
   data () {
@@ -271,6 +275,7 @@ export default {
       const dt = ev.dataTransfer
       ev.dataTransfer.effectAllowed = 'copy'
       dt.setData('data', JSON.stringify(node.data))
+      dt.setData('options', JSON.stringify(this.Measure))
     },
     // 添加字段
     addItem (data) {
@@ -303,7 +308,7 @@ export default {
               return
             }
           }
-
+          that.changeRelatedOption()
           value.value.push(data)
         }
       }
@@ -335,6 +340,14 @@ export default {
         query
       })
       window.open(newUrl.href, '_blank')
+    },
+    // 改变关联的设置
+    changeRelatedOption() {
+      const { is, option } = this.chartSetting
+      // 当类型是 仪表盘时，设置动态值取值范围
+      if (is === 'DashboardChart') {
+        option.theme.ComponentOption.ConfigSize.measureOptions = [...this.Measure]
+      }
     }
   }
 }

@@ -71,11 +71,12 @@ export default {
         'endType': 'fixed',
         'start': 0,
         'end': 100,
+        'measureOptions': [], // 动态值选项
         'dynamicStart': {
-          'field': 1, 'type': 1
+          'field': '', 'type': 'sum'
         },
         'dynamicEnd': {
-          'field': 1, 'type': 1
+          'field': '', 'type': 'sum'
         }
       }
     },

@@ -13,7 +13,8 @@ export default {
   watch: {
     storeOption: {
       handler (val) {
-        this.getOption()
+        // this.getOption()
+        this.handleOptionChange()
       },
       deep: true
     },
