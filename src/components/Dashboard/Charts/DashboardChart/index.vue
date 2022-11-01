@@ -36,6 +36,7 @@ export default {
         'field': '', 'type': 'sum'
       }
     }
+    this.configSizeValue = {}
     return {
       storeOption: {},
       chartOption: {},
@@ -170,8 +171,9 @@ export default {
       }
     },
     setConfigSize (ConfigSize) {
-      this.series[0].min = ConfigSize.start
-      this.series[0].max = ConfigSize.end
+      const { startType, endType } = ConfigSize
+      this.series[0].min = startType === 'dynamic' ? this.configSizeValue.start : ConfigSize.start
+      this.series[0].max = endType === 'dynamic' ? this.configSizeValue.end : ConfigSize.end
     },
     setConfigLabel (label) {
       const data = this.series[0]
@@ -239,7 +241,7 @@ export default {
       const currentconfigSize = this.storeOption.theme.ComponentOption.ConfigSize
       let needReloadData = false // 更改起始值终点值后是否要更新数据
       if (currentconfigSize) {
-        // console.log(JSON.parse(JSON.stringify(currentconfigSize)))
+        console.log(JSON.parse(JSON.stringify(currentconfigSize)))
         // console.log(JSON.parse(JSON.stringify(this.configSize)))
         const { startType, endType, dynamicStart, dynamicEnd, measureOptions } = currentconfigSize
         let temp1 = false
@@ -256,7 +258,6 @@ export default {
         this.configSize = JSON.parse(JSON.stringify(currentconfigSize))
       }
       if (needReloadData) {
-        console.log(needReloadData)
         this.interReload([this.identify])
       } else {
         this.getOption()
