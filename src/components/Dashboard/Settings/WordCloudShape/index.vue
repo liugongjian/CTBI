@@ -42,7 +42,7 @@ export default {
           value: 'rectangle'
         }, {
           name: '椭圆',
-          value: 'oval'
+          value: 'diamond'
         }, {
           name: '三角形',
           value: 'triangle'

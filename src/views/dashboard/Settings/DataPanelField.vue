@@ -37,7 +37,7 @@
                     class="base-field-box"
                   >
                     <svg-icon
-                      style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 2px;"
+                      style="width: 20px;height: 18px;margin-right: 2px;position: relative;top: 2px; flex-shrink: 0;"
                       :icon-class="typeTransform(el.attributes)"
                     />
                     <span class="field-caption">
