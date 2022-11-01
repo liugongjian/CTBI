@@ -160,3 +160,17 @@ export function parseTime(time, cFormat) {
   return timeStr
 }
 
+/**
+ * 将数字转为多少精度的值
+ * @param {*} num
+ * @param {*} digits
+ * @param {*} base ，大于该值才转换
+ * @returns
+ */
+export function numToFixed (num, digits, base) {
+  if (base) {
+    return num > base ? num.toFixed(digits) : num
+  }
+  return num.toFixed(digits)
+}
+

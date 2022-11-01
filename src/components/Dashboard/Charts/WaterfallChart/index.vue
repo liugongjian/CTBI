@@ -12,6 +12,7 @@
 
 <script>
 import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
+import { numToFixed } from '@/utils/numberUtils'
 import baseMixins from '@/components/Dashboard/mixins/baseMixins'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 import store from '@/store'
@@ -33,7 +34,7 @@ export default {
     dimensionArr() {
       const temp = []
       store.state.app.layout.forEach(item => {
-        if (item.id === store.state.app.currentLayoutId) {
+        if (item.id === this.identify) {
           if (item.option.dataSource.Measure.value) {
             item.option.dataSource.Measure.value.forEach(j => {
               temp.push({ displayColumn: j.displayColumn })
@@ -128,7 +129,7 @@ export default {
       }
     },
     getOption () {
-      const { ComponentOption } = this.storeOption.theme
+      const { ComponentOption, NumberSetting, FunctionalOption } = this.storeOption.theme
       const { BarColor: { increaseValueColor, decreaseValueColor } } = ComponentOption
 
       if (this.dataValue) {
@@ -152,21 +153,20 @@ export default {
 
         const placeholderData = [0]
         measureDataTemp.forEach((item, index) => {
-          if (index >= 2 && index < measureDataTemp.length - 1) {
-            let sum = 0
-            for (let i = 0; i < index; i++) {
-              sum += measureDataTemp[i]
-            }
+          if (index >= 1 && index < measureDataTemp.length - 1) {
+            const sum = measureDataTemp[index - 1] + placeholderData[index - 1]
             placeholderData.push(sum)
-          } else if (index === 1) {
-            placeholderData.push(measureDataTemp[0])
           } else if (index === measureDataTemp.length - 1) {
-            placeholderData.push(0)
+            if (NumberSetting.StartOrCumulative.cumulativeValueCheck) {
+              placeholderData.push(0)
+            } else {
+              const sum = measureDataTemp[index - 1] + placeholderData[index - 1]
+              placeholderData.push(sum)
+            }
           } else {
             return
           }
         })
-        console.log('dada', incomeData, expressData, placeholderData)
         // 获取Series
         this.getSeries(incomeData, expressData, placeholderData)
       }
@@ -187,11 +187,24 @@ export default {
           color: decreaseValueColor || '#89c369'
         }
       }]
+      const legendVertical = ComponentOption.Legend.show && ComponentOption.Legend.orient === 'vertical'
+      const legendText = legendVertical ? { textStyle: {
+        width: 60,
+        overflow: 'breakAll'
+      } } : {}
+      if (legendVertical && ComponentOption.Legend.left === 'auto') {
+        this.grid.left = 160
+      }
+      let dataZoomBottom = 12
+      if (ComponentOption.Legend.show && ComponentOption.Legend.orient !== 'vertical' && ComponentOption.Legend.top === 'bottom') {
+        dataZoomBottom = 40
+      }
 
       this.chartOption = {
         'grid': this.grid,
         'legend': {
           ...ComponentOption.Legend,
+          ...legendText,
           data: legendData
         },
         'xAxis': this.xAxis,
@@ -213,18 +226,18 @@ export default {
                 if (index !== params.length - 1) {
                   result += `<div style="line-height: 25px;"><div>${axisValue}</div>
                   <span>${seriesName}</span>
-                  <span style="float: right;margin-left: 20px;">${sum}</span>
+                  <span style="float: right;margin-left: 20px;">${numToFixed(sum, 3)}</span>
                 </div>`
                 } else {
                   result += `<div style="line-height: 25px;"><div>${axisValue}</div>
                   <span>${seriesName}</span>
-                  <span style="float: right;margin-left: 20px;">${item.data}</span>
+                  <span style="float: right;margin-left: 20px;">${numToFixed(item.data, 3)}</span>
                 </div>`
                 }
               } else if (item.data !== '-') {
                 result += `<div style="line-height: 25px;">
                   <span>${seriesName}</span>
-                  <span style="float: right;margin-left: 20px;">${item.data}</span>
+                  <span style="float: right;margin-left: 20px;">${numToFixed(item.data, 3)}</span>
                 </div>`
               }
             })
@@ -232,11 +245,21 @@ export default {
           }
         },
         'yAxis': this.yAxis,
-        'series': this.series
+        'series': this.series,
+        dataZoom: {
+          type: 'slider',
+          show: FunctionalOption && FunctionalOption.DataZoom.showDataZoom !== 'hide',
+          realtime: true,
+          start: 0,
+          end: 100,
+          xAxisIndex: [0, 1],
+          bottom: dataZoomBottom
+        }
       }
     },
     setAxis () {
       const { XAxis, YAxis } = this.storeOption.theme.Axis
+      const dimensionData = this.dataValue && this.dataValue.dimensionData || []
       this.xAxis = [
         {
           type: 'category',
@@ -272,6 +295,7 @@ export default {
               width: XAxis.splitWidth
             }
           },
+          data: [...dimensionData],
           // 轴标题和单位
           name: XAxis.showTitle ? (XAxis.unit ? `${XAxis.title}(${XAxis.unit})` : XAxis.title) : ''
         }

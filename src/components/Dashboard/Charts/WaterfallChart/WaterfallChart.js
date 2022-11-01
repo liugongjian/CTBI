@@ -128,6 +128,11 @@ export default {
         'kSeperator': false,
         'formatRegx': ''
       }
+    },
+    'FunctionalOption': {
+      'DataZoom': {
+        'showDataZoom': 'auto'
+      }
     }
   },
   'advance': {}, // 高级
