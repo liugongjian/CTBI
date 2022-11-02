@@ -47,6 +47,7 @@
 
 <script>
 import ImgIcon from '@/components/Dashboard/Common/ImgIcon'
+import { numToFixed } from '@/utils/numberUtils'
 export default {
   name: 'Subregion',
   components: {
@@ -73,7 +74,7 @@ export default {
   computed: {
     getSeries() {
       return function({ value }) {
-        return `${value}`
+        return `${numToFixed(value, 3)}`
       }
     },
     getPrefix() {

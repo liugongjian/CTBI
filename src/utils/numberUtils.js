@@ -1,3 +1,5 @@
+import Big from 'big.js'
+
 function reverseStr (str) {
   return str.split('').reverse().join('')
 }
@@ -168,9 +170,10 @@ export function parseTime(time, cFormat) {
  * @returns
  */
 export function numToFixed (num, digits, base) {
+  const bn = new Big(num)
   if (base) {
-    return num > base ? num.toFixed(digits) : num
+    return num > base ? parseFloat(bn.toFixed(digits, 1)) : num
   }
-  return num.toFixed(digits)
+  return parseFloat(bn.toFixed(digits, 1))
 }
 

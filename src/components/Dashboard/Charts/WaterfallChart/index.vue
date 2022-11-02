@@ -137,7 +137,7 @@ export default {
 
         const incomeData = measureDataTemp.map((item) => {
           if (item >= 0) {
-            return item
+            return numToFixed(item, 3)
           } else {
             return '-'
           }
@@ -145,7 +145,7 @@ export default {
 
         const expressData = measureDataTemp.map((item) => {
           if (item < 0) {
-            return -(-item)
+            return -(-numToFixed(item, 3))
           } else {
             return '-'
           }
@@ -155,13 +155,13 @@ export default {
         measureDataTemp.forEach((item, index) => {
           if (index >= 1 && index < measureDataTemp.length - 1) {
             const sum = measureDataTemp[index - 1] + placeholderData[index - 1]
-            placeholderData.push(sum)
+            placeholderData.push(numToFixed(sum, 3))
           } else if (index === measureDataTemp.length - 1) {
             if (NumberSetting.StartOrCumulative.cumulativeValueCheck) {
               placeholderData.push(0)
             } else {
               const sum = measureDataTemp[index - 1] + placeholderData[index - 1]
-              placeholderData.push(sum)
+              placeholderData.push(numToFixed(sum, 3))
             }
           } else {
             return
@@ -256,6 +256,7 @@ export default {
           bottom: dataZoomBottom
         }
       }
+      console.log(JSON.parse(JSON.stringify(this.series)))
     },
     setAxis () {
       const { XAxis, YAxis } = this.storeOption.theme.Axis

@@ -16,6 +16,7 @@
 
 <script>
 import { getLayoutOptionById } from '@/utils/optionUtils'
+import { numToFixed } from '@/utils/numberUtils'
 import dashboardMixins from '@/components/Dashboard/mixins/dashboardMixins'
 import store from '@/store'
 export default {
@@ -193,7 +194,7 @@ export default {
       this.series[0].axisLabel.show = scale.show
       this.series[0].axisLabel.formatter = (params) => {
         if (scale.type === 'original') {
-          return params
+          return numToFixed(params, 3)
         } else {
           return (params / this.series[0].max * 100).toFixed(0) + '%'
         }
@@ -225,7 +226,6 @@ export default {
         this.setScale(Scale)
         this.setColor(DashboardColor)
       }
-      console.log(JSON.parse(JSON.stringify(this.storeOption)))
 
       this.series[0].data[0] = this.dataValue
       this.chartOption = {
@@ -236,6 +236,7 @@ export default {
         title: this.title,
         series: this.series
       }
+      console.log(JSON.parse(JSON.stringify(this.series)))
     },
     handleOptionChange() {
       const currentconfigSize = this.storeOption.theme.ComponentOption.ConfigSize
