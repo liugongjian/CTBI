@@ -38,7 +38,7 @@
           v-show="multipleSelection && multipleSelection.length > 0"
           class="data-set-multiple"
         >
-          <span>已选{{ multipleSelection.length }}项</span>
+          <span :style="{color: theme}">已选{{ multipleSelection.length }}项</span>
           <el-button
             type="text"
             @click="moveTo()"
@@ -152,6 +152,7 @@
               <template slot-scope="scope">
                 <div
                   class="data-set-main-table-options"
+                  :style="{color: theme}"
                   :class="{ 'no-allowed': batchSelection }"
                 >
                   <span @click="edit(scope.row)">编辑</span>
@@ -185,6 +186,7 @@
                   />
                   <el-dropdown
                     v-if="!scope.row.directory"
+                    :style="{color: theme}"
                     class="data-more"
                   >
                     <span>更多</span>
@@ -351,6 +353,7 @@ import ShareDialog from './ShareDialog'
 import NewCreateDialog from './NewCreateDialog'
 import Pagination from '@/components/Pagination/index.vue'
 import moment from 'moment'
+import store from '@/store'
 export default {
   name: 'DataSet',
   components: {
@@ -426,6 +429,9 @@ export default {
   computed: {
     batchSelection: function () {
       return this.multipleSelection.filter((item) => !item.isFolder).length > 0
+    },
+    theme: function() {
+      return store.state.settings.theme
     }
   },
   mounted () {
@@ -773,7 +779,6 @@ export default {
   line-height: 40px;
   padding: 0 16px;
   font-size: 12px;
-  color: #fa8334;
   font-weight: 400;
 }
 
@@ -785,7 +790,6 @@ export default {
 .data-set-main {
   &-table {
     &-options {
-      color: #fa8334;
       text-align: left;
       font-weight: 400;
     }
@@ -828,7 +832,6 @@ export default {
 .data-more {
   font-size: 12px;
   & > span {
-    color: #fa8334;
     text-align: left;
     font-weight: 400;
     cursor: pointer;

@@ -20,6 +20,7 @@
         <div
           class="pc"
           :class="{'choosed-pc': device === 'pc'}"
+          :style="{background: device === 'pc' ? theme : 'transparent'}"
           @click="() => changeDevice('pc')"
         >
           <img
@@ -30,6 +31,7 @@
         <div
           class="mobile"
           :class="{'choosed-mobile': device === 'mobile'}"
+          :style="{background: device === 'mobile' ? theme : 'transparent'}"
           @click="() => changeDevice('mobile')"
         >
           <img
@@ -42,16 +44,19 @@
         <div class="divider" />
         <button
           class="bi-header-btn default"
+          :style="{borderColor: theme}"
           @click="changeMode"
         >{{ mode === 'edit' ?'预览' : '编辑' }}</button>
         <button
           v-if="operation !== 'editTemplate'"
           class="bi-header-btn default"
+          :style="{borderColor: theme}"
           @click="save"
         >保存</button>
         <button
           v-if="operation !== 'editTemplate'"
           class="bi-header-btn default primary"
+          :style="{background: theme}"
           @click="saveAndShare"
         >保存并发布</button>
         <button
@@ -242,6 +247,9 @@ export default {
   computed: {
     role () {
       return this.$store.state.user.userData.role
+    },
+    theme: function() {
+      return store.state.settings.theme
     }
   },
   watch: {
