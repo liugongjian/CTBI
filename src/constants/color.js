@@ -9,8 +9,8 @@
 export const colorTheme = {
   '官方': [
     { name: '', value: '#3369FF', remark: '' },
-    { name: '', value: '#49B0F5', remark: '' },
     { name: '', value: '#35D2B8', remark: '' },
+    { name: '', value: '#49B0F5', remark: '' },
     { name: '', value: '#8B8AE6', remark: '' },
     { name: '', value: '#47B359', remark: '' },
     { name: '', value: '#FFD119', remark: '' },
@@ -23,8 +23,8 @@ export const colorTheme = {
   ],
   '商务': [
     { name: '', value: '#4886FF', remark: '' },
-    { name: '', value: '#49B0F5', remark: '' },
     { name: '', value: '#47B359', remark: '' },
+    { name: '', value: '#49B0F5', remark: '' },
     { name: '', value: '#83EEF4', remark: '' },
     { name: '', value: '#4987E9', remark: '' },
     { name: '', value: '#F8D300', remark: '' },
@@ -37,8 +37,8 @@ export const colorTheme = {
   ],
   '经典': [
     { name: '', value: '#2F8AE6', remark: '' },
-    { name: '', value: '#35AEE4', remark: '' },
     { name: '', value: '#19D8E6', remark: '' },
+    { name: '', value: '#35AEE4', remark: '' },
     { name: '', value: '#3ECC9C', remark: '' },
     { name: '', value: '#8ADD7A', remark: '' },
     { name: '', value: '#BFE673', remark: '' },

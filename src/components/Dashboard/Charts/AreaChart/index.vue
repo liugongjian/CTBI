@@ -68,7 +68,7 @@ export default {
       })
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
-      const legendLayout = this.getLegendLayout(ComponentOption.Legend)
+      // const legendLayout = this.getLegendLayout(ComponentOption.Legend)
       // 获取指标筛选中的图例数据
       const legendData = []
       this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
@@ -76,12 +76,30 @@ export default {
       })
       // 获取y轴配置信息，用于提取单位信息
       const { Axis: { YAxis } } = this.storeOption.theme
+
+      const legendVertical = ComponentOption.Legend.show && ComponentOption.Legend.orient === 'vertical'
+      const legendText = legendVertical ? { textStyle: {
+        width: 60,
+        overflow: 'breakAll'
+      } } : {}
+      if (legendVertical && ComponentOption.Legend.left === 'auto') {
+        this.grid.left = 140
+      }
+      if (legendVertical && ComponentOption.Legend.left === 'right') {
+        this.grid.right = 120
+      }
+      let dataZoomBottom = 12
+      if (ComponentOption.Legend.show && ComponentOption.Legend.orient !== 'vertical' && ComponentOption.Legend.top === 'bottom') {
+        dataZoomBottom = 40
+      }
+
       this.chartOption = {
         grid: this.grid,
         color: colorOption,
         legend: {
-          ...legendLayout,
-          data: legendData
+          ...ComponentOption.Legend,
+          data: legendData,
+          ...legendText
         },
         xAxis: this.xAxis,
         tooltip: {
@@ -115,10 +133,12 @@ export default {
           realtime: true,
           start: 0,
           end: 100,
-          xAxisIndex: [0, 1]
+          xAxisIndex: [0, 1],
+          bottom: dataZoomBottom
         },
         series: this.series
       }
+      console.log(JSON.parse(JSON.stringify(this.chartOption)))
     },
     getSeries (ComponentOption, FunctionalOption) {
       this.series = []

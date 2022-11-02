@@ -85,7 +85,7 @@
 
 <script>
 import CommonTable from '@/components/CommonTable/index.vue'
-import { getTemplateList, deleteTemplate, updateTemplateAttribute } from '@/api/template'
+import { getTemplateSimpleist, deleteTemplate, updateTemplateAttribute } from '@/api/template'
 import _ from 'lodash'
 
 export default {
@@ -216,7 +216,7 @@ export default {
           page: this.pageNum,
           limit: this.pageSize
         }
-        const data = await getTemplateList(params)
+        const data = await getTemplateSimpleist(params)
         this.tableData = data.result
         this.total = data.pageInfo.totalItems
       } catch (error) {

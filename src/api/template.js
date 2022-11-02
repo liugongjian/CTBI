@@ -4,6 +4,10 @@ import { http } from '@/config/request'
 export function getTemplateList(params) {
   return http.get(`/template/list`, params)
 }
+// 获取模板列表,不含缩略图
+export function getTemplateSimpleist(params) {
+  return http.get(`/template/simpleList`, params)
+}
 
 // 新增模板
 export function addTemplate (data) {
