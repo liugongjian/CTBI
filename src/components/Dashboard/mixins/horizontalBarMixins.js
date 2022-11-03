@@ -1,6 +1,6 @@
 // 条形图的混入
 import baseMixins from './baseMixins'
-import { getLayoutOptionById, getDataValueById } from '@/utils/optionUtils'
+import { getLayoutOptionById } from '@/utils/optionUtils'
 import { deepClone, formatDataValue } from '@/utils/optionUtils'
 import YAxis from '@/components/Dashboard/mixins/YAxisMixins'
 import store from '@/store'
@@ -203,7 +203,7 @@ export default {
 
     // 根据筛选的指标获取对应数据
     transformData (indicator) {
-      const originValue = formatDataValue(deepClone(this.chartData))
+      const originValue = formatDataValue(deepClone(this.chartData || {}))
       if (originValue && originValue.length > 0) {
         const data = []
         for (let i = 1; i < originValue.length; i++) {
@@ -224,7 +224,7 @@ export default {
 
     // 获取堆积条形图
     getStackSeries(componentOption) {
-      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
+      // this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       this.series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {
@@ -284,7 +284,7 @@ export default {
 
     // 获取百分比堆积条形图
     getPercentStackSeries(componentOption) {
-      this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
+      // this.dataValue = formatDataValue(deepClone(getDataValueById(this.identify)))
       this.series = []
       let seriesLength = 0
       if (this.dataValue && this.dataValue.length > 0) {

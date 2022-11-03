@@ -89,6 +89,7 @@ export default {
         },
         series: this.series
       }
+      console.log(JSON.parse(JSON.stringify(this.chartOption)))
     },
     getSeries (ComponentOption, FunctionalOption) {
       this.series = []

@@ -53,9 +53,15 @@ export default {
 
       // 获取指标筛选中的图例数据
       const legendData = []
-      this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
-        legendData.push({ name: item.value })
-      })
+      if (this.storeOption.theme.FunctionalOption.ChartFilter.showFilter) {
+        this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator.forEach(item => {
+          legendData.push({ name: item })
+        })
+      } else {
+        this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
+          legendData.push({ name: item.value })
+        })
+      }
 
       // 获取y轴配置信息，用于提取单位信息
       const { Axis: { YAxis } } = this.storeOption.theme
@@ -106,6 +112,8 @@ export default {
         },
         'series': this.series
       }
+      console.log(JSON.parse(JSON.stringify(this.chartOption)))
+      console.log(JSON.parse(JSON.stringify(this.storeOption.theme.FunctionalOption.ChartFilter)))
     }
 
   }

@@ -58,8 +58,6 @@
 </template>
 
 <script>
-// import barMixins from '@/components/Dashboard/mixins/barMixins'
-// import { GridLayout, GridItem } from 'vue-grid-layout'
 import TabPanel from './TabPanel'
 import { getLayoutById, getParameter } from '@/utils/optionUtils'
 import store from '@/store'
@@ -68,7 +66,6 @@ export default {
   components: {
     TabPanel
   },
-  // mixins: [barMixins],
   props: {
     identify: {
       type: String,
