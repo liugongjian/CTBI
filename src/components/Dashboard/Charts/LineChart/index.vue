@@ -41,14 +41,23 @@ export default {
       this.setSeriesItem()
       // 获取颜色设置-使图例颜色与图形颜色对应
       const colorOption = []
-      ComponentOption.Color.color.forEach(item => {
-        colorOption.push(item.color)
+      this.series.forEach(item => {
+        const color = ComponentOption.Color.color.find(c => c.name === item.name)
+        if (color) {
+          colorOption.push(color.color)
+        }
       })
       // 获取指标筛选中的图例数据
       const legendData = []
-      this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
-        legendData.push({ name: item.value })
-      })
+      if (this.storeOption.theme.FunctionalOption.ChartFilter.showFilter) {
+        this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator.forEach(item => {
+          legendData.push({ name: item })
+        })
+      } else {
+        this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
+          legendData.push({ name: item.value })
+        })
+      }
       // 设置图例与图表距离
       this.setGrid(ComponentOption.Legend)
       const legendLayout = this.getLegendLayout(ComponentOption.Legend)

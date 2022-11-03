@@ -44,10 +44,13 @@ export default {
       this.getPercentStackSeries(componentOption)
       // 系列配置
       this.setSeriesItem()
-      // 获取颜色设置
+      // 获取颜色设置-使图例颜色与图形颜色对应
       const colorOption = []
-      componentOption.Color.color.forEach(item => {
-        colorOption.push(item.color)
+      this.series.forEach(item => {
+        const color = componentOption.Color.color.find(c => c.name === item.name)
+        if (color) {
+          colorOption.push(color.color)
+        }
       })
 
       // 设置图例与图表距离

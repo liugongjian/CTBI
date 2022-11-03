@@ -49,10 +49,13 @@ export default {
 
       // 系列配置
       this.setSeriesItem()
-      // 获取颜色设置
+      // 获取颜色设置-使图例颜色与图形颜色对应
       const colorOption = []
-      componentOption.Color.color.forEach(item => {
-        colorOption.push(item.color)
+      this.series.forEach(item => {
+        const color = componentOption.Color.color.find(c => c.name === item.name)
+        if (color) {
+          colorOption.push(color.color)
+        }
       })
       // 设置图例与图表距离
       this.setGrid(componentOption.Legend)
@@ -60,9 +63,15 @@ export default {
 
       // 获取指标筛选中的图例数据
       const legendData = []
-      this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
-        legendData.push({ name: item.value })
-      })
+      if (this.storeOption.theme.FunctionalOption.ChartFilter.showFilter) {
+        this.storeOption.theme.FunctionalOption.ChartFilter.selectedIndicator.forEach(item => {
+          legendData.push({ name: item })
+        })
+      } else {
+        this.storeOption.theme.FunctionalOption.ChartFilter.indicatorOption.forEach(item => {
+          legendData.push({ name: item.value })
+        })
+      }
       this.chartOption = {
         'grid': this.grid,
         'color': colorOption,
