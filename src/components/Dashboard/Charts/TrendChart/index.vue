@@ -151,13 +151,13 @@ export default {
       console.log(e)
     },
     // 更改表单
-    changeTable (item, index) {
+    changeTable (data, index) {
       // 如果是单选
       if (this.trendChartConfig.preview === 'radio') {
         this.titleList.map(item => {
-          item.isSelect = item.index === index
+          item.isSelect = item.name === data.name
         })
-        this.selectedItem = this.chartList[index]
+        this.selectedItem = this.chartList.find(item => item.name === data.name)
       } else {
         // 获取 true的数量，只有一个的时候不让取消
         let num = 0
@@ -195,6 +195,7 @@ export default {
       } else {
         this.titleList = trendChartConfig.trendChartConfig.titleList
       }
+      console.log(JSON.parse(JSON.stringify(this.titleList)))
       // 功能性配置二次筛选标题
       this.titleList = this.titleList.map(item => {
         const field = this.Formatting.find(fitem => {
@@ -235,19 +236,22 @@ export default {
           const ctValueLength = this.dataValue[0].length - 1
           // 获取每个表的内容
           for (var ctValueIndex = 1; ctValueIndex <= ctValueLength; ctValueIndex++) {
+            const hitData = this.titleList[ctValueIndex - 1]
             legendData = [
               {
-                name: indicatorOption[ctValueIndex - 1].value
+                name: hitData.name
               }
             ]
             var ctDataValue = []
             // 获取单独表的内容
+            const zeroData = this.dataValue && this.dataValue[0] || []
+            const hitIndex = zeroData.findIndex(i => i === hitData.name)
             this.dataValue.forEach(item => {
-              var chartItemItem = [item[0], item[ctValueIndex]]
+              var chartItemItem = [item[0], item[hitIndex]]
               ctDataValue.push(chartItemItem)
             })
             series = this.getSeriesSingle(ComponentOption, FunctionalOption, SeriesSetting, ctValueIndex)
-            const tcolor = this.titleList[ctValueIndex - 1].color
+            const tcolor = hitData.color
             series[0].lineStyle.color = tcolor
             if (series[0].areaStyle) {
               series[0].areaStyle.color = tcolor
@@ -256,7 +260,7 @@ export default {
               index: ctValueIndex - 1,
               name: this.dataValue[0][ctValueIndex],
               grid: this.grid,
-              color: colorOption,
+              color: [tcolor],
               legend: {
                 ...legendLayout,
                 itemStyle: {
@@ -290,14 +294,17 @@ export default {
               series: series
             }
             // 赋值 避免切换类型不更新的bug
-            const oldSelectedItem = deepClone(this.selectedItem)
-            if (ctValueIndex === 1 && !this.selectedItem) {
-              this.selectedItem = chartItemOption
-            }
-            if (oldSelectedItem.index === chartItemOption.index) {
-              this.selectedItem = chartItemOption
-            }
+            // const oldSelectedItem = deepClone(this.selectedItem)
+            // if (ctValueIndex === 1 && !this.selectedItem) {
+            //   this.selectedItem = chartItemOption
+            // }
+            // if (oldSelectedItem.index === chartItemOption.index) {
+            //   this.selectedItem = chartItemOption
+            // }
             this.chartList.push(chartItemOption)
+          }
+          if (!this.titleList.find(item => item.name === this.selectedItem.name)) {
+            this.changeTable(this.titleList[0])
           }
         } else {
           // 如果是多选模式
