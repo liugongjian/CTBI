@@ -158,7 +158,6 @@ export default {
       })
       this.setGrid(ComponentOption.Legend)
       const legendLayout = this.getLegendLayout(ComponentOption.Legend)
-
       this.chartOption = {
         color: color, // 图例颜色
         grid: this.grid,

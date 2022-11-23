@@ -97,7 +97,7 @@ export default {
       const key1 = dataValue.fields.Dimension.fields[0].displayColumn || dataValue.fields.Dimension.fields[0].column
       const key2 = dataValue.fields.Measure.fields[0].displayColumn || dataValue.fields.Measure.fields[0].column
       const columns = []
-      const tableData = dataValue.data.map(item => { Object.values(item)[1] = Number(Object.values(item)[1]); return item })
+      const tableData = dataValue.data.map(item => { item[Object.keys(item)[1]] = parseFloat(Object.values(item)[1]); return item })
       columns.push({ prop: key1, label: key1, width: '100' })
       columns.push({ prop: key2, label: key2, width: '100' })
       const maxNumber = Math.max.apply(Math, tableData.map((item, index) => { return Object.values(item)[1] }))
@@ -106,7 +106,7 @@ export default {
           return (Object.values(b)[1] - Object.values(a)[1])
         }), total: tableData.length, columns, maxNumber
       }
-      // console.log(dataValues, 'ddddddd')
+      console.log(dataValues)
       return dataValues
     }
     // formatDataValue() {

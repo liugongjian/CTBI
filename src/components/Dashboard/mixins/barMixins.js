@@ -71,17 +71,24 @@ export default {
       }
     },
     // 拿到数据中的系列名字
-    getSeriesOptions (val) {
-      // 为空时，进行初始化
+    getSeriesOptions(val) {
       if (val && val.length > 0) {
         const seriesOption = []
         val[0].forEach((item, index) => {
           if (index) {
-            seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false })
+            const oldItem = this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption.find(sub => {
+              return sub.label === item
+            })
+            if (oldItem) {
+              seriesOption.push(deepClone(oldItem))
+            } else {
+              seriesOption.push({ value: item, label: item, showLabel: false, labelColor: null, showMax: false, showMark: false, lineType: 'solid' })
+            }
           }
         })
         this.storeOption.theme.SeriesSetting.SeriesSelect.seriesOption = seriesOption
         this.storeOption.theme.SeriesSetting.SeriesSelect.selectValue = seriesOption[0].value
+        this.storeOption.theme.SeriesSetting.SeriesSelect.remark = seriesOption[0].value
       }
     },
     // 拿到数据的系列名字 并设置颜色

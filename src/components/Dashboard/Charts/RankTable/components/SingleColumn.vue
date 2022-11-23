@@ -2,6 +2,7 @@
   <div class="self-chart-content">
     <v-chart
       v-if="dataValue"
+      ref="singleColumn"
       :option="chartOption"
       autoresize
     />
@@ -45,6 +46,10 @@ export default {
   },
   methods: {
     getOption () {
+      const chart = this.$refs.singleColumn && this.$refs.singleColumn.chart
+      if (chart) {
+        chart.clear()
+      }
       this.chartOption = {
         xAxis: {
           type: 'value',

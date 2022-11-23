@@ -67,7 +67,7 @@ export default {
 
       // 获取y轴配置信息，用于提取单位信息
       const { Axis: { YAxis } } = this.storeOption.theme
-
+      const self = this
       this.chartOption = {
         'grid': this.grid,
         'color': colorOption,
@@ -80,7 +80,14 @@ export default {
           axisPointer: {
             type: 'shadow'
           },
+          // formatter: (params) => {
+          //   return params.name + '</br>' + params.marker + ' ' + params.seriesName + '：' + params.value[params.seriesIndex + 1] + (YAxis.unit || '')
+          // }
           formatter: (params) => {
+            if (params.componentType === 'markPoint') {
+              return params.name + '</br>' + params.marker + ' ' + self.series[params.seriesIndex].name + '：' + params.value + (YAxis.unit || '')
+            }
+            console.log(JSON.parse(JSON.stringify(params)))
             return params.name + '</br>' + params.marker + ' ' + params.seriesName + '：' + params.value[params.seriesIndex + 1] + (YAxis.unit || '')
           }
         },

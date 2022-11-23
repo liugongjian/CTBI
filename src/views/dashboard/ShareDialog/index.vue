@@ -42,7 +42,7 @@
           @click="randomPwd"
         >随机生成</el-button>
       </el-form-item>
-      <el-form-item
+      <!-- <el-form-item
         label="白名单"
         prop="whiteList"
       >
@@ -54,7 +54,7 @@
           placeholder="多个IP地址以英文逗号分隔"
           @input="shareChange"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item v-if="currentData.shareUrl">
         <div class="d-f">
           <p class="shareCopyUrl">{{ currentData.shareUrl }}</p>
