@@ -90,13 +90,13 @@ export default {
     getPrefix () {
       const { IndicatorSeries } = this.storeOption.theme.SeriesSetting
       return function ({ title, value }) {
-        return IndicatorSeries.dataSeries?.find(item => item.title === title)?.prefix || ''
+        return IndicatorSeries.dataSeries[0]
       }
     },
     getSuffix () {
       const { IndicatorSeries } = this.storeOption.theme.SeriesSetting
       return function ({ title, value }) {
-        return IndicatorSeries.dataSeries?.find(item => item.title === title)?.suffix || ''
+        return IndicatorSeries.dataSeries[1]
       }
     },
     // 指标块内位置

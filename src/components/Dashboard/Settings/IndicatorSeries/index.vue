@@ -44,20 +44,34 @@ export default {
   computed: {
     suffix: {
       get() {
+        if (this.option.hiddenSelect) {
+          return this.option.dataSeries[1]
+        }
         return this.option.dataSeries.find(item => item.title === this.option.series)?.suffix || ''
       },
       set(value) {
-        const data = this.option.dataSeries.find(item => item.title === this.option.series)
-        data.suffix = value
+        if (this.option.hiddenSelect) {
+          this.option.dataSeries.splice(1, 1, value)
+        } else {
+          const data = this.option.dataSeries.find(item => item.title === this.option.series)
+          data.suffix = value
+        }
       }
     },
     prefix: {
       get() {
+        if (this.option.hiddenSelect) {
+          return this.option.dataSeries[0]
+        }
         return this.option.dataSeries.find(item => item.title === this.option.series)?.prefix || ''
       },
       set(value) {
-        const data = this.option.dataSeries.find(item => item.title === this.option.series)
-        data.prefix = value
+        if (this.option.hiddenSelect) {
+          this.option.dataSeries.splice(0, 1, value)
+        } else {
+          const data = this.option.dataSeries.find(item => item.title === this.option.series)
+          data.prefix = value
+        }
       }
     }
   }
