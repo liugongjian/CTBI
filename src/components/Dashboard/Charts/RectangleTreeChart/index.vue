@@ -17,6 +17,7 @@
 
 <script>
 import { getLayoutOptionById, deepClone } from '@/utils/optionUtils'
+import { numToFixed } from '@/utils/numberUtils'
 import baseMixins from '@/components/Dashboard/mixins/baseMixins'
 import store from '@/store'
 export default {
@@ -136,13 +137,13 @@ export default {
 
       // // 显示总计
       const totalShow = ComponentOption.TotalShow.show
-      if (totalShow) {
+      if (totalShow && this.dataValue) {
         // 获取数据
         let sum = 0
         for (let i = 1; i < this.dataValue.length; i++) {
-          sum += this.dataValue[i].value
+          sum += parseFloat(this.dataValue[i].value)
         }
-        ComponentOption.TotalShow.value = sum
+        ComponentOption.TotalShow.value = numToFixed(sum, 3)
       }
 
       this.dataValue = this.dataValue && this.dataValue.map((item) => {
